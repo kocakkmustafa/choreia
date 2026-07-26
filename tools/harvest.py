@@ -180,22 +180,29 @@ def fetch_and_extract(step: str, *, keep_media: bool = False) -> int:
         # honest provenance immediately after extraction. Leaving invented
         # values in place would be worse than useless — threshold calibration
         # groups takes by exactly these fields. See M-C-13.
-        staged = media / (f"{step}__yt{vid.lower().replace('-', '')}"
-                          f"__bilateral__frontal__bright__tight__0__t01.mp4")
+        # One video per staging directory. The extractor walks whichever
+        # directory it is given and exits non-zero if ANY file in it breaks the
+        # naming contract, so a shared directory makes one bad neighbour look
+        # like a failure of every take beside it.
+        stage_dir = media / f"_stage_{vid}"
+        stage_dir.mkdir(parents=True, exist_ok=True)
+        staged = stage_dir / (f"{step}__yt{vid.lower().replace('-', '')}"
+                              f"__bilateral__frontal__bright__tight__0__t01.mp4")
         if staged.exists():
             staged.unlink()
         mp4.rename(staged)
 
         ex = subprocess.run(
-            [str(venv_py), str(extractor), "--input", str(media),
+            [str(venv_py), str(extractor), "--input", str(stage_dir),
              "--output", str(fixtures), "--variant", "heavy",
              "--app", "choreia", "--overwrite"],
             capture_output=True, text=True, timeout=3600)
         produced = fixtures / f"{staged.stem}.heavy.json"
-        if ex.returncode != 0 or not produced.exists():
+        if not produced.exists():
             tail = (ex.stderr or ex.stdout or "").strip().splitlines()
             print(f"    extraction failed: {tail[-1][:160] if tail else '?'}")
             staged.rename(mp4)
+            stage_dir.rmdir()
             continue
 
         doc = json.loads(produced.read_text(encoding="utf-8"))
@@ -229,11 +236,14 @@ def fetch_and_extract(step: str, *, keep_media: bool = False) -> int:
 
         print(f"    extracted {len(doc.get('frames', []))} frames -> {final.name}")
         ok += 1
-        mp4 = staged
 
         if not keep_media:
-            mp4.unlink(missing_ok=True)
+            staged.unlink(missing_ok=True)
+            stage_dir.rmdir()
             print("    media deleted (C-024: only derived data is retained)")
+        else:
+            staged.rename(mp4)
+            stage_dir.rmdir()
 
     print(f"\n{ok}/{len(rows)} takes extracted for {step}")
     return 0 if ok else 1

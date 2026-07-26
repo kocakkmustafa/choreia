@@ -59,3 +59,15 @@ R1'in CV-risk bulgusuna dayanır: düşük-genlikli tek-segment izolasyonlar poz
 R1'in hip-hop hata listesi bu şartı karşılamıyor: "temelleri atlamak", "sabırsız olmak", "müziği kafayla analiz etmek" pedagojik öğütlerdir — doğru olabilirler ama **kameradan görülemezler**. Bunlar ders metnine girer, hata koduna girmez.
 
 Karşılaştırma için ölçülebilir olan: "ağırlık aktarılmadı" (yük taşıyan bacağın diz/kalça açısı değişmedi), "beat'te yukarı çıkmış" (bounce fazı ters), "gövde çökmüş" (diz yerine gövde bükülüyor).
+
+### Kimlik anlaşmazlığı — bağımsız V1-dışı bırakma gerekçesi (C-038)
+
+**Kaynaklar bir adımın ne olduğunda anlaşamıyorsa, o adım V1'e alınmaz — genlik/tier analizinden bağımsız olarak.**
+
+Gerekçe: topluluk dokümantasyonu *"bu hangi harekettir"* sorusunda ayrışıyorsa, elimizde tek bir kodlanabilir hareket değil, sahneye ve döneme göre farklı şeylere takılan **gevşek bir etiket** vardır. Böyle bir adımı "doğru" diye öğretmek, kullanıcıyı keyfî olarak seçtiğimiz bir versiyona göre skorlamak demektir.
+
+Gözlenen örnekler: Reebok (üç kaynak, üç farklı hareket) · Wop (üç kaynak, üç farklı ana sürücü) · Monastery (ayak-topuk illüzyonu mu, mekân-adı/Chicken-Head benzeri mi) · Gucci (bağımsız tarifi yok; Reebok/Troop/Skeletor ile aynı aile).
+
+**Bu kuralı uygulamak için ayrı bir araç gerekmiyor.** Referans hattı zaten ölçüyor: eğitmenler ayrışıyorsa `CanonicalReference` dispersiyonu yükselir ve `unreliableJoints()` o eklemleri işaretler. Aynalamayı konsensüsle çözen mekanizma, *"bu tek bir hareket mi"* sorusunu da aynı veriyle cevaplıyor.
+
+**İlgili tuzak — isim çeşitliliği ≠ hareket çeşitliliği:** Bankhead Bounce ≈ BK Bounce (kaynağın kendi ifadesiyle "aynı yapı", yalnız köken farklı) ve Gucci ≈ Reebok/Troop/Skeletor. Bunlar müfredat adım sayısına **ayrı ayrı sayılamaz**; ayrı öğretip aynı skorlamak dürüstlük ihlalidir.
