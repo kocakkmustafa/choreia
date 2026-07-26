@@ -1,4 +1,5 @@
 # Choreia — Kapsam Özeti (brief)
+> ⛔ **SÜPERSEDE EDİLDİ — 2026-07-26.** Tam ürün planı yazıldı ve kurucu tarafından ONAYLANDI (`choreia-plan.md`, aile M-F-02). Bu dosya yalnız tarihsel tohum kaydıdır; **çelişkide plan kazanır**, bu dosyaya göre iş yapılmaz.
 > Tam ürün planı DEĞİL — kurucunun 2026-07-25 tarifinden damıtılmış tohum. Tam plan (M-009) diğer 4 planın şablonunda yazılacak; çelişkide tam plan kazanır.
 
 ## Ürün

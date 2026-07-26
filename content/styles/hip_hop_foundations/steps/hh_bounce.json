@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "id": "hh_bounce",
+  "style": "hip_hop_foundations",
+  "name": { "en": "Bounce" },
+  "level": 1,
+  "beats": 1,
+  "countLabels": ["1"],
+  "note": "Foundational groove. Every other hip-hop step in the curriculum sits on top of this one, so it is taught first and drilled longest.",
+
+  "measurability": {
+    "tier": "A",
+    "rationale": "Large-amplitude, two-segment (both knees), driven by knee flexion which is among the most reliably tracked angles. No dependence on toe-ground contact timing.",
+    "riskFlags": []
+  },
+
+  "scoring": {
+    "focusJoints": ["left_knee", "right_knee", "left_hip", "right_hip", "trunk_tilt"],
+    "freeJoints": [
+      "left_upper_arm", "right_upper_arm", "left_forearm", "right_forearm",
+      "left_elbow", "right_elbow", "left_shoulder", "right_shoulder"
+    ],
+    "freeJointsRationale": "Arm styling over a bounce is personal expression, not technique. Scoring it would penalise the learner for having a style — plan C-014.",
+    "toleranceProfile": "beginner"
+  },
+
+  "phases": [
+    {
+      "id": "top",
+      "enter": { "metric": "knee_flexion_mean", "op": ">", "valueDeg": 168 },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "timeoutMs": 2000
+    },
+    {
+      "id": "drop",
+      "enter": { "metric": "knee_flexion_mean", "op": "decreasing", "minRateDegPerSec": 40 },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "timeoutMs": 800
+    },
+    {
+      "id": "bottom",
+      "enter": { "metric": "knee_flexion_mean", "op": "localMinimum" },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "minDurationMs": 30,
+      "timeoutMs": 600
+    },
+    {
+      "id": "rise",
+      "enter": { "metric": "knee_flexion_mean", "op": "increasing", "minRateDegPerSec": 40 },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "timeoutMs": 800,
+      "isTerminal": true
+    }
+  ],
+
+  "scoredMoments": [
+    {
+      "id": "bounce_bottom",
+      "phase": "bottom",
+      "beat": 0,
+      "label": "down"
+    }
+  ],
+
+  "errors": [
+    {
+      "code": "NO_BOUNCE",
+      "severity": "critical",
+      "detect": {
+        "metric": "knee_flexion_amplitude",
+        "op": "<",
+        "valueDeg": 12
+      },
+      "evidence": ["knee_flexion_amplitude"],
+      "relatedDrill": "hh_bounce_slow",
+      "note": "The learner is standing still to the music. The single most common beginner failure and the reason this step is level 1."
+    },
+    {
+      "code": "BOUNCE_INVERTED",
+      "severity": "major",
+      "detect": {
+        "metric": "bottom_beat_phase",
+        "op": "outside",
+        "range": [-0.25, 0.25]
+      },
+      "evidence": ["bottom_beat_phase"],
+      "relatedDrill": "hh_bounce_slow",
+      "note": "Hip-hop groove sits DOWN on the beat. Bottoming out on the 'and' is a genuine style error, not a timing miss — the shape is right and the phase is wrong, so it must be named differently from STEP_LATE."
+    },
+    {
+      "code": "TRUNK_COLLAPSE",
+      "severity": "major",
+      "detect": {
+        "all": [
+          { "metric": "trunk_tilt_amplitude", "op": ">", "valueDeg": 14 },
+          { "metric": "knee_flexion_amplitude", "op": "<", "valueDeg": 18 }
+        ]
+      },
+      "evidence": ["trunk_tilt_amplitude", "knee_flexion_amplitude"],
+      "relatedDrill": "hh_bounce_wall",
+      "note": "Bending at the waist instead of the knees. Detected as a conjunction so that a deliberate forward-leaning groove is not flagged."
+    },
+    {
+      "code": "ASYMMETRIC_BOUNCE",
+      "severity": "minor",
+      "detect": {
+        "metric": "knee_flexion_lr_difference",
+        "op": ">",
+        "valueDeg": 16
+      },
+      "evidence": ["left_knee", "right_knee"],
+      "relatedDrill": "hh_bounce_slow"
+    }
+  ],
+
+  "reference": {
+    "requiredTakes": 6,
+    "collectedTakes": 0,
+    "status": "pending",
+    "note": "≥3 independent instructors required, 6 preferred — catalogue §6.0. Tolerance is derived from their disagreement, not authored."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "salsa_shines",
+  "name": { "en": "Salsa Shines" },
+  "countSystem": "salsa_123_567",
+  "bpmRange": [89, 100],
+  "bpmNote": "Sourced range (R1 §3). Narrow and well-attested, which makes this style the better of the two for calibrating the beat-alignment engine.",
+
+  "copyright": {
+    "status": "clear",
+    "basis": "Social dance; core shines such as Suzy Q trace to the 1930s and are public domain. Shines are by definition the solo, partnerless subset of the dance — the product's constraint matches the form rather than fighting it.",
+    "boundary": "Named instructor routines are not reproduced; combos are our own arrangement of public step vocabulary."
+  },
+
+  "levels": [
+    {
+      "level": 1,
+      "name": { "en": "The basic and the count" },
+      "lessons": ["ss_l1_basic", "ss_l1_hold"],
+      "unlockRule": {
+        "description": "3 consecutive attempts at ss_basic with onBeatRatio >= 0.7, shapeScore >= 0.75 and zero NO_WEIGHT_TRANSFER",
+        "thresholdsCalibrated": false,
+        "note": "Provisional until G4 calibration (family rule M-F-04)."
+      }
+    }
+  ],
+
+  "stepInventory": {
+    "sourcedFrom": ["R1 §2 — 4 core shines with clear sourcing"],
+    "totalCandidates": 4,
+    "note": "A much smaller and better-defined vocabulary than hip-hop, with a strict count system. This is why the pair was chosen: one style maximises market, the other maximises measurability (plan §6.1).",
+
+    "tierA_confirmed": [
+      { "id": "ss_basic", "name": "Salsa Basic (solo)", "status": "authored" },
+      { "id": "ss_suzy_q", "name": "Suzy Q", "status": "named in research, needs movement description" }
+    ],
+
+    "needsMovementDescription": [
+      "Remaining 2 of the 4 core shines were counted but not individually named in the research pass — a second, narrower research round is required."
+    ]
+  },
+
+  "errorTaxonomy": {
+    "status": "usable",
+    "note": "R1 rated this style 5/5 on error taxonomy (8 errors, strong source diversity) — noticeably better raw material than hip-hop. The authored set below still had to be re-expressed as landmark-measurable conditions.",
+    "authored": [
+      "NO_WEIGHT_TRANSFER", "STEP_MISSED_ON_4", "WRONG_FOOT",
+      "STEP_TOO_LARGE", "STEP_LATE"
+    ]
+  }
+}
