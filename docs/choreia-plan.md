@@ -239,17 +239,32 @@ Her fazın tanımı: giriş koşulu · çıkış koşulu · timeout · iptal ko�
 
 ⚠️ **Bu oturumda öğrenilen ders (fixture'a yazıldı):** Yumuşatma bilinçli olarak geciktirir. Bir çekim hareket biter bitmez sonlanırsa filtre dinlenme değerine dönemez ve "recovered" eşiği hiç ateşlenmez. **Kural eşikleri kâğıttaki geometriye göre değil, filtrelenmiş sinyale göre yazılır**; referans çekimlerinde kapanış pozu kısaca tutulur.
 
-## 11. Referans koreografi üretim hattı
+## 11. Referans üretim hattı — **KURUCU KARARI (aile-geneli bağlayıcı)**
+
+> Kanonik metin: `10-ARAC-KATALOGU.md §6.0` · aile defteri `M-C-01..04`. Bu bölüm o kararın Choreia'ya uygulanışıdır; **yeniden tartışılmaz**.
 
 ```text
-Eğitmen çekimi (video)
-→ MediaPipe landmark çıkarımı
-→ Elle temizleme + faz etiketleme + beat anotasyonu
-→ Referans şablonu (JSON: açı dizisi + ScoredMoment[] + beat eşlemesi)
-→ Adım state-machine eşiklerinin fixture'la doğrulanması
+Kamuya açık gerçek eğitmen videoları (≥3, tercihen 6+ bağımsız kaynak)
+→ MediaPipe landmark çıkarımı (mevcut Python hattı — M-017 kararı)
+→ KALİTE KAPILARI: aynalama konsensüsü · kamera açısı · plan/kesme sınırı · StructuralValidator
+→ ReferenceBuilder: medoid zaman tabanı + DTW hizalama + dairesel ortalama
+→ CanonicalReference (açı dizisi + eğitmen-varyansından türetilmiş TOLERANS)
+→ Elle: faz etiketleme + beat anotasyonu (videodan GELMEZ)
+→ Hatalı fixture'lar: referansın kontrollü bozulması (etiket bedava)
 ```
 
-**Bağlayıcı: bu hat araçlaştırılır.** Her yeni ders elle uğraş istememeli — aksi halde stil eklemenin maliyeti içerik değil emek olur ve mimarinin "stil = paket" vaadi kâğıt üstünde kalır. Araç, G3'ün birinci çıktısıdır.
+**Neden tek video yetmez — iki bağımsız gerekçe:**
+
+1. **Aynalama tek videoda çözülemez.** Eğitmenler izleyiciye göre aynalayarak öğretir ve landmark'ta bunu söyleyen hiçbir şey yoktur. N takede konsensüsle çözülür (her take iki yönde denenir, grup uyumunu en çoklayan atama seçilir). Çözülmezse ürün her kullanıcıya **sistematik olarak ters taraf** öğretir — C-005'in en kötü hâli.
+2. **Eğitmenler arası varyans, toleransın kendisidir.** Çoğunluk aynı şeyi yapıyorsa *o* adımdır; ayrıştıkları yer kişisel stildir. Eğitmenlerin kendi aralarında anlaşamadığı bir eklemde kullanıcıyı cezalandırmak dürüstlük ihlali olur. **Tek eğitmenden bu bilgi asla çıkmaz** — çoklu kaynağın asıl gerekçesi hacim değil budur.
+
+**Öğretim görseli ayrı bir artefakttır.** Kullanıcıya gösterilen kısa video, skorlama referansı değildir; **inandırıcı** olması yeter, AI üretimi serbesttir (EU AI Act Art.50 ifşasıyla). **AI videodan landmark çıkarılmaz** — üretken modelin anatomi motoru yoktur.
+
+**Uzman doğrulaması:** eğitmenle sözleşme/anlaşma **gerekmez**. Ship öncesi tek seferlik kural-seti kontrolü yeter — referans parametrik olduğu için uzman "ağırlık 40ms erken aktarılmalı" dediğinde bir sayı değişir, yeniden çekim yoktur.
+
+**Hukuki pozisyon:** YouTube ToS ve türev-eser riski kurucuya sunuldu ve **kurucu kararıyla kabul edildi** (DEFTER C-017). Lansman öncesi IP görüşü manuel listede kalır.
+
+**Bu hat araçlaştırılır.** Her yeni ders elle uğraş istememeli — aksi halde stil eklemenin maliyeti içerik değil emek olur ve "stil = paket" vaadi kâğıt üstünde kalır. `ReferenceBuilder` çekirdekte hazır (94/94 test); kalan (b)(c)(e) kapıları G1 pilotunda ölçülür.
 
 ## 12. Skorlama
 
@@ -330,6 +345,12 @@ R3 birincil kaynak taramasının sonucu:
 | **Spotify SDK** | ❌ Geliştirici Politikası **senkronizasyonu açıkça yasaklıyor**; ham ses erişimi de yok |
 | **Apple MusicKit** | ❌ V1'de kullanılmaz. Abonelik şart, paywall arkasına konamaz ve kritik olarak *"belirli bir anda şarkı çalma"* standart iznin ÖTESİNDE — yani beat-senkron tam olarak izin kapsamı dışında kalabilir |
 | Artlist / Epidemic / Soundstripe | ⚠️ Standart planlar app-içi dağıtımı KAPSAMIYOR; ayrı Business katmanı ($2.500-25.000/yıl bandı) gerekir |
+
+### 16.0 V1 müzik bütçesi: **$0** (kurucu kararı, C-018)
+
+Çekirdek beat kaynağı **kendi ürettiğimiz metronom** — hiçbir lisans gerektirmiyor. Kullanıcının kendi müziği yerel çalınıyor, o da bedava. Ek parça gerekirse **ücretsiz ve mecra-sınırsız** kaynaklar var: Pixabay Music · Incompetech (CC-BY 4.0, künye ekranı yeter) · Free Music Archive (parça başı lisans kontrolü).
+
+Bedavanın maliyeti para değil, iki şey: **BPM etiketi genelde yok** (tek seferlik ölçeriz — "bilinen BPM" mimarisi zaten bunu gerektiriyor) ve **küratörlük zamanı** (tempo'su sabit, dansa uygun parça ayıklamak). Ücretli kütüphane **bloke edici değil, cila**; G6'ya, "ürün tuttuysa" kararına bırakıldı.
 
 **En büyük tuzak:** "Royalty-free" sözcüğü lineer içerik (YouTube/reklam) senkronizasyonu demektir. Mobil uygulama içinde çalma çoğu lisansta ayrı ve pahalı katmandır. İkinci tuzak: **gizli kopya tavanları** (AudioJungle Standard 10.000, PremiumBeat Enhanced 1.000) — uygulama büyürse lisans aşılır.
 
@@ -456,8 +477,10 @@ Temel vizyon:
 
 1. **Bu planın tamamı** (M-009/C-001 kapısı) — onaysız koda geçilmez.
 2. **V1 stil çifti** (§6) — farklı bir çift isterseniz mimari değişmez, yalnız içerik paketi.
-3. **Royalty-free beat kütüphanesi satın alımı** (§16) — Uppbeat Pro / Envato Elements ~$150-450/yıl veya GameDev Market tek-seferlik ~$100-350.
-4. **Nihai fiyat** (§21).
-5. **Referans koreografi çekimleri için eğitmen anlaşması** (2 stil).
-6. **IP/eğlence hukuku görüşü** — lansman öncesi.
-7. **Domain** — Choreia taraması hiç yapılmadı (M-006).
+3. **Nihai fiyat** (§21).
+4. **IP/eğlence hukuku görüşü** — lansman öncesi (referans kaynağı kararı zaten alındı, C-017).
+5. **Domain** — Choreia taraması hiç yapılmadı (M-006).
+
+**Kapanan onay kalemleri (kurucu kararıyla, 2026-07-26):**
+- ~~Beat kütüphanesi satın alımı~~ → **$0 varsayılan** (metronom + kullanıcı müziği + ücretsiz CC + künye ekranı). Ücretli kütüphane bloke edici değil, cila — G6'ya bırakıldı (C-018).
+- ~~Eğitmen anlaşması~~ → **gerekmez.** Referans kamuya açık eğitmen videolarından çıkarılır; ship öncesi tek seferlik kural kontrolü yeter (§11, C-017).
