@@ -157,8 +157,17 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> None:
     if style.get("id") != path.parent.name:
         rep.error(where, "id does not match directory name")
 
-    rng = style.get("bpmRange", [])
-    if len(rng) != 2 or rng[0] >= rng[1]:
+    rng = style.get("bpmRange")
+    if rng is None:
+        # A null range is tolerated only when it is an explicit, documented
+        # dispute. Working with a known-unknown is fine; shipping one is not,
+        # so this stays visible on every run instead of quietly passing.
+        if style.get("bpmStatus", "").startswith("DISPUTED"):
+            rep.warn(where, "bpmRange is unresolved (DISPUTED) — no lesson in "
+                            "this style may ship until a measurement settles it")
+        else:
+            rep.error(where, "bpmRange missing and no bpmStatus explains why")
+    elif not isinstance(rng, list) or len(rng) != 2 or rng[0] >= rng[1]:
         rep.error(where, f"bpmRange {rng} invalid")
 
     for lvl in style.get("levels", []):

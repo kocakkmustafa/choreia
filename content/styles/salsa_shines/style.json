@@ -3,8 +3,15 @@
   "id": "salsa_shines",
   "name": { "en": "Salsa Shines" },
   "countSystem": "salsa_123_567",
-  "bpmRange": [89, 100],
-  "bpmNote": "Sourced range (R1 §3). Narrow and well-attested, which makes this style the better of the two for calibrating the beat-alignment engine.",
+  "bpmRange": null,
+  "bpmStatus": "DISPUTED — must be resolved by measurement before any lesson ships",
+  "bpmCandidates": {
+    "r1_reported": [89, 100],
+    "r5_reported": [160, 220],
+    "note": "Two research passes disagree by roughly a factor of two. R1 reported 89-100; the harvest pass found 160-180 rising to 200-220 in the instructors' own material, and even a single source (RF Dance) contradicts itself across two of its own articles. The likely cause is that the two passes measured different quantities: salsa's quick-quick-slow places three steps across four musical beats, so a 'step feel' rate and a musical beat rate differ by about 2x.",
+    "whyItMatters": "The beat grid must run at the rate the dancer actually steps to. Getting it wrong by 2x does not produce slightly-off timing — it produces a grid that lines up with every other beat, so half the learner's correct steps are scored as misses and the product blames them for its own error.",
+    "resolution": "G1: take one known track, tap-annotate it with tools/beat_annotate.py, and compare the fitted BPM against both candidate ranges. One measurement settles it; no further research round is warranted."
+  },
 
   "copyright": {
     "status": "clear",
