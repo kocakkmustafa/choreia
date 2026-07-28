@@ -3,3 +3,10 @@ build/
 .dart_tool/
 node_modules/
 *.log
+harvest/media/
+harvest/*.mp4
+
+# Hasat ara çıktıları: hattan yeniden üretilebilir, git%27e girmez (48 MB dersi)
+harvest/fixtures/
+harvest/media/
+harvest/probe.json

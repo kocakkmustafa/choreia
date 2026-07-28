@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "hip_hop_foundations",
+  "name": { "en": "Hip-Hop Foundations" },
+  "countSystem": "8count",
+  "bpmRange": [85, 105],
+  "bpmNote": "General dance-teaching range is 80-160; no hip-hop-specific band was verifiable (R1 §3, marked DOĞRULANMADI). This narrower band is our teaching choice for V1, not a sourced fact.",
+
+  "copyright": {
+    "status": "clear",
+    "basis": "Foundational party-dance vocabulary is the category the US Copyright Office 'commonplace movements' exclusion targets. Three precedents confirm step-level freedom: 2 Milly v. Epic, Ribeiro/'Carlton' registration refusal, Hanagami v. Epic (which concerned a full routine, not a step).",
+    "boundary": "Isolated steps are low risk; copying one instructor's original long sequence verbatim is not. Combos in this style must be our own arrangement."
+  },
+
+  "levels": [
+    {
+      "level": 1,
+      "name": { "en": "Find the groove" },
+      "lessons": ["hh_l1_bounce", "hh_l1_rock"],
+      "unlockRule": {
+        "description": "3 consecutive attempts at hh_bounce with onBeatRatio >= 0.7 and shapeScore >= 0.75",
+        "thresholdsCalibrated": false,
+        "note": "Thresholds are provisional until G4 calibration against real takes (family rule M-F-04: no score shown to a user before calibration)."
+      }
+    }
+  ],
+
+  "stepInventory": {
+    "sourcedFrom": [
+      "iampro — Beginner Hip Hop Dance Foundations (20 steps)",
+      "learntodance.com — independent list, overlapping names"
+    ],
+    "totalCandidates": 23,
+    "note": "Two independent lists overlap at ~20 steps, which is decent evidence for a stable core vocabulary. What the research did NOT produce is a biomechanical description per step — see MEASUREMENT below. Tier assignment therefore stays 'unknown' for most entries; assigning a tier without knowing what the body actually does would be a guess dressed as a decision.",
+
+    "tierA_confirmed": [
+      { "id": "hh_bounce", "name": "Bounce", "status": "authored" },
+      { "id": "hh_rock", "name": "Rock", "status": "described, not authored" },
+      { "id": "hh_groove", "name": "Groove", "status": "described, not authored" }
+    ],
+
+    "tierC_excluded": [
+      {
+        "name": "Harlem Shake",
+        "reason": "Shoulder isolation — low-amplitude single-segment, the documented weak area for pose models (R1 §7a)."
+      },
+      {
+        "name": "Running Man",
+        "reason": "Foot-slide illusion; correctness depends on toe-ground contact timing, and toe landmarks are among the lowest-confidence points in markerless single-camera estimation (R1 §7b)."
+      },
+      {
+        "name": "Happy Feet",
+        "reason": "Same as Running Man — fast foot shuffle, toe-contact dependent."
+      }
+    ],
+
+    "needsMovementDescription": [
+      "Bart Simpson", "Smurf", "Janet Jackson", "Wop", "ATL Stomp", "Prep",
+      "Steve Martin", "Monastery", "Bankhead Bounce", "Cabbage Patch",
+      "Reebok", "Gucci", "Wu-Tang", "Stomp", "Roger Rabbit", "Butterfly",
+      "BK Bounce"
+    ]
+  },
+
+  "errorTaxonomy": {
+    "status": "insufficient",
+    "gap": "R1's beginner-error list for this style is pedagogical advice ('skipping fundamentals', 'being impatient', 'analysing the music with your head'), not observable form faults. Those may be true and are useful lesson copy, but none of them can be seen by a camera. Every entry in a step's errors[] must bind to a landmark-measurable condition (content/SCHEMA.md), so this style's error taxonomy has to be built from movement description, not from the existing research pass.",
+    "authored": ["NO_BOUNCE", "BOUNCE_INVERTED", "TRUNK_COLLAPSE", "ASYMMETRIC_BOUNCE"]
+  }
+}
