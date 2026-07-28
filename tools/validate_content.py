@@ -5,10 +5,12 @@ Content is versioned JSON that the engine interprets at runtime (plan §7), whic
 means a typo in a joint id is not a compile error — it is a step that silently
 scores nothing. This script is the compile step content never had.
 
-The joint vocabulary is read out of motion_core's Dart source rather than
-duplicated here, so the two cannot drift apart. motion_core is READ-ONLY for
+The joint vocabulary is read out of a PINNED motion_core tag rather than
+duplicated here, so the two cannot drift apart and neither can a neighbouring
+session's checkout change this script's verdict. motion_core is READ-ONLY for
 this repo (family decision M-F-03): its maintenance belongs to the coordinator
 session, and Choreia reports needs as M-C-* records instead of editing it.
+Bumping CORE_PIN is a deliberate act: semver + DEFTER entry.
 """
 
 from __future__ import annotations
@@ -20,17 +22,14 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 CONTENT = REPO / "content" / "styles"
-CORE_JOINTS = (
-    REPO.parents[1]
-    / "motion-core"
-    / "lib"
-    / "packages"
-    / "motion_core"
-    / "lib"
-    / "src"
-    / "geometry"
-    / "joint_angles.dart"
-)
+CORE_REPO = REPO.parents[1] / "motion-core" / "lib"
+
+# Content is validated against a PINNED core version, never against whatever
+# branch happens to be checked out next door. motion-core is a shared repo with
+# several sessions working in it; reading its working tree would mean this
+# script's verdict silently changed with someone else's checkout.
+CORE_PIN = "motion_core-v0.1.0"
+CORE_JOINTS_PATH = "packages/motion_core/lib/src/geometry/joint_angles.dart"
 
 SUPPORTED_SCHEMA = 1
 MIN_REFERENCE_TAKES = 3  # catalogue §6.0
@@ -39,11 +38,20 @@ VALID_SEVERITIES = {"safety", "critical", "major", "minor", "info"}
 
 
 def core_joint_ids() -> set[str]:
-    """Joint ids declared in motion_core's StandardJoints."""
-    if not CORE_JOINTS.exists():
-        raise SystemExit(f"motion_core not found at {CORE_JOINTS}")
-    src = CORE_JOINTS.read_text(encoding="utf-8")
-    return set(re.findall(r"id:\s*'([a-z_]+)'", src))
+    """Joint ids declared in the pinned motion_core's StandardJoints."""
+    import subprocess
+
+    r = subprocess.run(
+        ["git", "-C", str(CORE_REPO), "show", f"{CORE_PIN}:{CORE_JOINTS_PATH}"],
+        capture_output=True, text=True,
+    )
+    if r.returncode != 0:
+        raise SystemExit(
+            f"pinned core {CORE_PIN} not readable from {CORE_REPO}\n"
+            f"  {r.stderr.strip()[:200]}\n"
+            "  fetch tags, or bump CORE_PIN deliberately (semver + DEFTER)."
+        )
+    return set(re.findall(r"id:\s*'([a-z_]+)'", r.stdout))
 
 
 class Report:
@@ -271,7 +279,7 @@ def main() -> int:
         on_disk.add(p.parent.name)
     validate_library(rep, on_disk)
 
-    print(f"motion_core joint vocabulary: {len(joints)} ids")
+    print(f"motion_core {CORE_PIN}: {len(joints)} joint ids (pinned)")
     print(f"content files checked: {rep.checked}")
     for w in rep.warnings:
         print(f"  WARN  {w}")
