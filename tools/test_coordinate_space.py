@@ -102,7 +102,7 @@ def main() -> int:
             lm, wd = f["lm"], f["world"]
             # Aynı gövde, farklı kare en-boyu: normalize koordinatlar yeniden
             # ölçeklenir. Gerçek vücut değişmedi — açılar da değişmemeli.
-            rescaled = [[p[0] * (ar / other), p[1]] for p in lm]
+            rescaled = [[p[0] * (ar / other), p[1]] for p in lm]  # not: çekirdek z’yi de ölçekler (toIsotropic); planar açıda etkisiz
             fixed_a = [[p[0] * ar, p[1]] for p in lm]
             fixed_b = [[p[0] * ar, p[1]] for p in rescaled]
             for _, a, b, c in JOINTS:

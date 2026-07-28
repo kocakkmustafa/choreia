@@ -28,7 +28,7 @@ CORE_REPO = REPO.parents[1] / "motion-core" / "lib"
 # branch happens to be checked out next door. motion-core is a shared repo with
 # several sessions working in it; reading its working tree would mean this
 # script's verdict silently changed with someone else's checkout.
-CORE_PIN = "motion_core-v0.2.0"
+CORE_PIN = "motion_core-v0.3.0"
 CORE_JOINTS_PATH = "packages/motion_core/lib/src/geometry/joint_angles.dart"
 
 SUPPORTED_SCHEMA = 1
