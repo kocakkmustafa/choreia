@@ -1,9 +1,11 @@
 # CHOREIA — KAMERA TABANLI DANS ÖĞRETİMİ VE BEAT-SENKRON DEĞERLENDİRME
 ## Claude Code için Ana Proje Tanımı
 
-**Tarih:** 2026-07-26 · **Statü:** 🟡 **ONAY BEKLİYOR (kurucu kapısı — M-009/C-001)**
-**Hiyerarşi:** `00-AILE-MIMARISI.md` > `20-URETIM-SURECI.md` > `10-ARAC-KATALOGU.md` > `choreia-roadmap.md` > **bu dosya** > ~~`choreia-brief.md`~~ (bu plan onaylandığında süpersede edilir).
-**Araştırma dayanağı:** `docs/research/R1-stil-katalogu.md` · `R2-rakip-dogrulama.md` · `R3-muzik-lisans.md` · `R4-senkron-ve-veri.md` (hepsi 2026-07-26, URL'li).
+**Tarih:** 2026-07-26 · **Kapsam hizalaması:** 2026-07-29 · **Statü:** ✅ **KURUCU ONAYLI** — kapsam `CHOREIA-BLUEPRINT.md` ile onaylandı (M-F-18); C-001 ve aile M-009 KAPANDI.
+**Hiyerarşi:** `00-AILE-MIMARISI.md` > `20-URETIM-SURECI.md` > `10-ARAC-KATALOGU.md` > `30-URUN-BLUEPRINT-STANDARDI.md` > **`CHOREIA-BLUEPRINT.md` (kapsam otoritesi)** > `choreia-roadmap.md` > **bu dosya** > ~~`choreia-brief.md`~~ (SÜPERSEDE EDİLDİ).
+**Araştırma dayanağı:** `docs/research/R1-stil-katalogu.md` · `R2-rakip-dogrulama.md` · `R3-muzik-lisans.md` · `R4-senkron-ve-veri.md` · `R5a-hiphop-hasat.md` · `R5-hasat-launch.md` · `R7-hiphop-hareket-tarifleri.md` · blueprint korpusları (2026-07-28).
+
+> ⚡ **KAPSAM HİZALAMASI 2026-07-29.** Bu plan ilk yazıldığında V1 = 2 stildi. Kurucu kapsamı blueprint'le **~30 stile** genişletti (5 dalga + 1 beklemede). Aşağıdaki bölümler buna göre revize edildi: §6 (dalga tabloları), §6.3 (perküsif onset skorlaması — yeni), §22 (V1-dışı), §24 (dalga-bazlı tamamlanma). Mimari **değişmedi** — "stil = içerik paketi, kod değil" ilkesi tam da bu genişlemeyi taşımak için kurulmuştu; 30 stil 30 kod yolu değil, 30 config paketidir.
 
 > Bu belge Choreia'nın hedefini, V1 kapsamını, teknik mimarisini ve kritik risklerini tanımlar. Ürün tek kişi, tek sabit kamera, partnersiz ve ev ortamı için tasarlanır. V1'de partner dansı, çoklu kişi takibi, lisanslı müzik kataloğu ve gerçek-zamanlı LLM **yoktur**.
 
@@ -71,13 +73,74 @@ Ayakta kalan iddia şudur ve pazarlamada **yalnız bu** kullanılır:
 
 **Desteklenmeyen:** partner · çoklu kişi · yerde çalışma (floorwork) · akrobasi/power move · hızlı çoklu dönüş · ayakkabı/kıyafet tanıma · "profesyonel seviye" hükmü · yaralanma teşhisi · yarışma puanı.
 
-## 6. V1 stil seçimi — **KARAR K1**
+## 6. Kapsam: ~30 stil, 5 dalga — **KARAR K1 (blueprint ile revize)**
 
-Aday 12 stil `R1-stil-katalogu.md`'de 7 kriterle puanlandı (solo-yapılabilirlik, adım vokabüleri, sayım sistemi, hata taksonomisi, telif temizliği, pazar hacmi, CV-ölçülebilirlik).
+> **Kapsam otoritesi `CHOREIA-BLUEPRINT.md`'dir.** Bu bölüm onun plan-içi özetidir; çelişkide blueprint kazanır.
 
-### 6.1 Seçim
+**Nihai ürün ~30 stildir, her biri kendi sayfasında.** Dalgalar **motor rollout'unun** sırasıdır, ürün vaadinin tavanı değil — kullanıcı kütüphanenin tamamını baştan görür, açılmamış stiller "yakında" durumundadır (standart §2: dar app algısı yaratılmaz, ama sahte/boş kurs listelenmez).
 
-> **V1 = Hip-Hop Foundations (32/35) + Salsa Shines (31/35).**
+**Mimari genişlemeyi zaten taşıyor.** "Stil = içerik paketi, kod değil" ilkesi (§7) tam da bunun için kurulmuştu: 30 stil, 30 kod yolu değil **30 versiyonlu config paketidir**. Genişlemenin maliyeti G6 içerik hattındadır, motorda değil.
+
+### 6.1 Dalga tablosu
+
+| Dalga | Stiller | Neden bu sırada |
+|---|---|---|
+| **W1 — launch** | Hip-Hop foundations · Latin-fusion fitness dans · Line Dance · Salsa shines · TikTok-format | Hasat fizibilitesi **ölçülmüş** (≥3 bağımsız eğitmen ✓); vokabüler kodifiye; telifi en temiz; yarım-tempo öğretim = doğal slow-mo referansı |
+| **W2 — hızlı takip** | K-Pop point-choreo (ayna-modu) · Bachata solo · Afrobeats + **Amapiano döner trend-paketi** · Dancehall · Shuffle · Belly Dance · Bollywood · **Merengue + Cumbia solo** | Merengue/Cumbia bachata-shines deseninin birebir tekrarı — **en ucuz ekleme**. Amapiano sabit müfredat değil, viral döngü |
+| **W3 — syllabus-destekli** | **Ballroom/Latin Solo ailesi (7 dans: Cha-Cha, Rumba, Jive, Waltz, Quickstep, Paso Doble, Tango solo)** tek sayfa · **Tap** (onset) · **Funk Styles paketi: Locking + Popping + Waacking + Vogue** · Jazz · **Samba no Pé** · Solo Jazz/Charleston/**Shim Sham** · **Bhangra** | Ballroom ailesi tek IA sayfası altında 7 sekme — ölçek ekonomisi. Popping hit'leri RhythmEngine'e birebir oturuyor. Shim Sham sabit 32-count → DTW-dostu |
+| **W4** | Balet/Barre · Contemporary (ayakta alt-küme) · **Flamenco** (onset + palmas) · **Irish** (hard-shoe onset / soft-shoe poz) · Kizomba/Zouk solo · **Garba** (solo footwork; **Dandiya-Raas ❌**) · Twerk + Reggaeton/Perreo | Onset-skorlamalı stiller W3'te kanıtlandıktan sonra. Garba sezonluk (Navratri). Duyusal-kova store-policy turu bu dalgadan ÖNCE |
+| **W5** | Heels (ayakkabı-güvenlik onboarding'i) · Breaking (toprock/uprock skorlu; power move demo-only) | Güvenlik çerçevesi en ağır olanlar sona |
+| **⏸ Beklemede** | **Hula** | hālau/kumu-hula ortaklığı OLMADAN yapılmaz — yaşayan kültürel-manevi pratik; jenerik kaynakla içerik üretimi yasak |
+| **Elendi (sessiz)** | Kuduro · Dabke · Yunan halk/sirtaki · Country two-step | Kanıt ince. "Neden yok?" sayfası gerekmez |
+
+### 6.2 W1 seçiminin gerekçesi (ölçülmüş)
+
+> **Launch = Hip-Hop Foundations + Latin-fusion fitness + Line Dance + Salsa shines + TikTok-format.**
+
+İlk plan W1'i 2 stille açıyordu; blueprint 5'e çıkardı. İkisinin de dayanağı aynı ölçüm: **≥3 bağımsız eğitmen kriteri hip-hop ve salsa'da doğrulandı** (C-030, sonda ile: Cabbage Patch 4 kanal, Roger Rabbit 4, Running Man 3).
+
+- **Hip-Hop Foundations** — 20 çekirdek adımın tamamı yerinde/dönüşsüz; telif adım-seviyesinde temiz (üç mahkeme emsali: *2 Milly*, *Ribeiro/Carlton*, *Hanagami*); en güçlü pazar sinyali.
+- **Salsa shines** — dansın kendi içinde adı konmuş **solo** alt-kategorisi; sayım sistemi katı → zamanlama ölçen ürün için en verimli zemin. ⚠️ BPM çelişkili (C-032, ölçümle çözülecek); vokabüler tek-kaynaklı (C-033) → adım hedefi vokabüler-uyarlamalı.
+- **Line Dance** — step-sheet formatı kural-motoruna **birebir** oturuyor; CV profili en güvenilir (kaba, büyük genlikli). ⚠️ Yayımlı step-sheet **kopyalanmaz**, orijinal diziler.
+- **Latin-fusion fitness** — ⚠️ **"Zumba" adı KULLANILMAZ** (tescilli marka).
+- **TikTok-format** — orijinal kombolar; isimli viral koreografi öğretilmez.
+
+### 6.3 Perküsif onset skorlaması — **yeni motor bağlantısı (K9)**
+
+Tap, Flamenco (zapateado) ve Irish hard-shoe'da **ayak sesinin zamanlaması** puanlanır: shuffle/flap/stamp ayrımı + beat'e göre sapma.
+
+**Yeni modül değil, iki mevcut modülün bağlanması:** Ostinato'nun onset motoru + bizim beat-grid'imiz. Mikrofon ve kamera **tek saatte** timestamp'lenir — Ostinato'nun tek-saat sözleşmesi zaten bunu tanımlıyor (§9.4).
+
+Bu, üründeki **benzersiz farkın** kaynağı: kamera bir tap dansçısının ayağını yeterince hassas göremez, ama **sesi duyabilir**. Poz skorlaması ile onset skorlaması birbirinin yerine geçmez, tamamlar.
+
+⚠️ Donanım bağımlılığı onboarding'de açık olmalı: tap ayakkabısı + sert zemin **zorunlu**; flamenko ayakkabısı önerilir. Bu bir kısıt değil, dürüstlük gereği (§7).
+
+**Spike DEFTER'e yazıldı; koordinatörün çekirdek-merge'inden sonra çalışılır** (W3 öncesi).
+
+### 6.4 Elenenlerin revizyonu
+
+İlk plan bazı stilleri elemişti; blueprint çoğunu **dalgaya taşıdı**, çünkü eleme gerekçeleri kapsam değil *sıra* gerekçesiydi:
+
+| Stil | İlk hüküm | Blueprint |
+|---|---|---|
+| K-Pop / Jazz-Funk | ❌ elendi (telif 1/5) | **W2** — point-choreo + ayna-modu; ajans içeriği yüksek-dikkat, bağımsız eğitmen öncelikli |
+| Breaking | ❌ (dönüş pedagojinin özü) | **W5** — toprock/uprock **skorlu**, power move **demo-only** + güvenlik uyarısı |
+| House Dance | ❌ ("counts değil feeling") | Blueprint'te W-listesinde **yok** — C-034 ile doğrulanan yapısal gerilim korunuyor |
+| Belly Dance | ❌ (shimmy landmark-altı) | **W2** — prop'lar avatar-demo; shimmy skorlanmaz, öğretilir |
+| Line Dance · Latin/Cha-Cha | ertelenmişti | **W1** ve **W3** |
+| Afrobeats / Dancehall | V2 araştırması | **W2** |
+
+Değişmeyen tek şey: **ölçemediğimizi skorlamayız.** Blueprint bunu eleme yerine *skorlu / demo-only* ayrımıyla çözüyor — daha iyi bir çözüm, çünkü kullanıcı hareketi öğrenebiliyor, biz de ölçemediğimiz şeye puan vermiyoruz.
+
+### 6.5 Hukuk katmanı bayrağı (her stil sayfasında zorunlu)
+
+🟢 sosyal/halk adımı (serbest) · 🟡 stil-temsili **orijinal** kombo · 🔴 adlı ticari koreografi / marka adı / syllabus metni **YASAK**.
+
+ISTD/WDSF gibi syllabus'lardan **yapı ve figür ADLARI** esinlenilir; **müfredat metni telifli**, anlatım daima orijinaldir.
+
+### 6.6 Arşiv: ilk 2-stil gerekçesi
+
+> ~~V1 = Hip-Hop Foundations (32/35) + Salsa Shines (31/35).~~ (2026-07-26 kararı, blueprint ile genişletildi)
 
 **Hip-Hop Foundations — neden:**
 - 20 çekirdek adımın tamamı yerinde ve dönüşsüz → tek sabit kamera için ideal.
@@ -92,19 +155,7 @@ Aday 12 stil `R1-stil-katalogu.md`'de 7 kriterle puanlandı (solo-yapılabilirli
 
 **İkisi birlikte neden:** biri **en büyük pazar**, diğeri **en yüksek ölçülebilirlik**; pedagojileri farklı (groove-tabanlı vs katı-sayım), bu da "stil = içerik paketi, kod değil" mimarisini V1'de gerçekten sınar. Tek stille bu mimari test edilmemiş kalırdı.
 
-### 6.2 Elenenler ve gerekçeleri (kayda geçer)
-
-| Stil | Neden elendi |
-|---|---|
-| **K-pop / Jazz-Funk** | Telif 1/5. Piyasadaki dersler başlangıçta bile spesifik şarkı koreografisi öğretiyor + Kore'de aktif ajans/ihbar kültürü. Ürünün kırmızı çizgisiyle doğrudan çakışıyor. **Toplam puanı yüksek olsa da alınamaz.** |
-| **Breaking Toprock** | Dönüş, pedagojinin özü — edge-case değil. Tek kameranın en zayıf olduğu yer. |
-| **House Dance** | "Counts değil feeling" öğretiliyor. Zamanlama ölçen ürünle yapısal uyumsuz; ölçmek stile saygısızlık olur. |
-| **Belly Dance** (19/35) | En iyi durağan-oran profili ama CV riski en yüksek: stilin özü shimmy/mikro-pelvis rotasyonu — landmark çözünürlüğünün altında. |
-| **Line Dance / Country Two-Step** (30/35) | **Elenmedi, ertelendi.** Telif en açık, CV profili en güvenilir. V2'nin ilk adayı; V1'e girmemesinin tek sebebi pazar aspirasyonunun düşüklüğü. |
-| **Latin Solo / Cha-Cha** (31/35) | Salsa Shines'a eşit puan; "iki Latin stili birden olmasın" çeşitlilik tercihiyle V2'ye bırakıldı. |
-| Afrobeats / Dancehall | Vokabüler kodifikasyonu zayıf, 8-count geleneği doğrulanamadı. V2 araştırması. |
-
-**Kurucu notu:** Bu seçim oturumun yetkisindedir (kickoff promptu: "V1 stil seçimi DAHİL"). Ancak planın tamamı gibi bu bölüm de onaya tabidir; kurucu farklı bir çift isterse müfredat mimarisi değişmez, yalnız içerik paketi değişir — maliyeti G6'ya sınırlıdır.
+İlk turun 12-stil puanlaması (`R1-stil-katalogu.md`, 7 kriter) **hâlâ geçerli girdi**: dalga sırası büyük ölçüde o puanlamayı izliyor. Değişen, puanı düşük olanın *elenmesi* değil, **daha sonraki bir dalgaya ve uygun skorlama moduna** yerleşmesi (§6.4).
 
 ## 7. Müfredat modeli
 
@@ -410,13 +461,17 @@ Paywall deseni: **assessment-kapılı** — ilk ders + ilk skorlu deneme ücrets
 Trial 7 gün varsayılan; 14 gün ciddi değerlendirilir (beceri gelişimi bir haftada görünmez).
 Aile paketi lansmanda YOK.
 
-## 22. V1 dışı
+## 22. Kapsam dışı (dalgadan bağımsız — hiçbir zaman)
 
-Partner dansı · çoklu kişi · yerde çalışma/akrobasi · sosyal ağ/feed · canlı ders · yarışma puanı iddiası · gerçek-zamanlı LLM · avatar · çoklu kamera · uygulama içi lisanslı müzik kataloğu · Spotify/Apple Music entegrasyonu · isimli sanatçı koreografisi · çocuk modu · koç pazaryeri · medikal/tedavi iddiası.
+Partner dansı · çoklu kişi takibi · sosyal ağ/feed · canlı ders · yarışma puanı iddiası · gerçek-zamanlı LLM · çoklu kamera · uygulama içi lisanslı müzik kataloğu · Spotify/Apple Music entegrasyonu · **isimli sanatçı/ticari koreografi** · koç pazaryeri · medikal/tedavi iddiası · **Dandiya-Raas** (çift-sopa vuruşmalı, solo öğrenilemez) · **Hula** (ortaklık olmadan).
+
+**"Skorlanmaz ama öğretilir" kovası** — kapsam dışı DEĞİL, ölçüm dışı: yer çalışması/floorwork · power move'lar (Breaking) · shimmy (Belly) · prop'lu figürler · groove/musicality/ifade. Bunlar **demo-only** olarak sunulur ve kullanıcıya *neden* skorlanmadığı açıkça söylenir. Eleme yerine bu ayrımı kullanmak, hem hareketi öğretmeyi hem ölçemediğimize puan vermemeyi mümkün kılıyor.
 
 ## 23. Claude Code için kurallar
 
-- V1'i seçilen iki stilin dışına genişletme.
+- Kapsam otoritesi `CHOREIA-BLUEPRINT.md`; dalga sırası dışına atlama, ama kapsamı da daraltma.
+- Yeni stil = **içerik paketi**. Stil eklemek için motora dokunuyorsan dur — mimari kırılmış demektir.
+- Ölçemediğin hareketi elemek yerine **demo-only** işaretle; kullanıcıya nedenini söyle.
 - Pose modelini karar motoru sanma; tüm hükümler açıklanabilir kural motorundan çıkar.
 - Düşük güvende hüküm verme.
 - Ham koordinat DTW yazma; önce normalizasyon/açı.
@@ -431,12 +486,34 @@ Partner dansı · çoklu kişi · yerde çalışma/akrobasi · sosyal ağ/feed �
 - Ölçemediğin şeyi kesin sunma ("groove", "musicality", "seviye").
 - Önce beş çok güvenilir hata, sonra kapsam.
 
-## 24. V1 tamamlanma kriterleri
+## 24. Tamamlanma kriterleri
 
-- [ ] Android/iOS tam vücut takip + kamera kurulum sihirbazı + vücut kalibrasyonu
+Standart §1: *"bitti" = kullanıcı indirir, onboarding'den geçer, **kütüphanenin TAMAMI gezilebilir**, kurs seçer, sesli koçluk alır, ilerlemesini görür, abonelik çalışır, çökmez, offline çalışır.*
+
+### 24.0 Platform katmanı (bir kez, dalgadan bağımsız)
+
+- [ ] IA çatısı: Ana · **Kütüphane (~30 stil sayfası, açılmamışlar "yakında")** · İlerlemede · Profil
+- [ ] Kütüphanede arama + filtre (seviye/süre/ekipman) + "tüm kurslar" dizini
+- [ ] 2-tık kuralı: ana sayfadan aktif kursa ≤2 dokunuş, kütüphaneden kursa ≤3
+- [ ] Her stil sayfasında **"neler ölçülür / ölçülmez" kutusu** + köken-atıf kutusu + hukuk bayrağı (🟢/🟡/🔴)
+- [ ] Ortak araçlar: metronom/beat kütüphanesi · **ayna-modu** · tempo yavaşlatıcı (kendi beat'imizde)
+- [ ] Paywall (assessment-kapılı) · offline · profil+hesap silme · ilerleme grafikleri
+
+### 24.1 Dalga başına (her stil için aynı çıta)
+
+- [ ] Stil sayfası + kurs listesi (Temeller · Kombolar · Rutinler)
+- [ ] Adım sayısı **vokabüler-uyarlamalı** (C-021): stilin gerçek çekirdek vokabüleri neyse o — sayı tutturmak için isim çeşitliliği adım çeşitliliği sayılmaz (C-037, C-039)
+- [ ] Her adım: ≥3 **bağımsız** eğitmen konsensüsü + fixture (≥1 doğru + ≥2 türetilmiş hatalı)
+- [ ] Tier C adım yok; ölçülemeyenler **demo-only** ve nedeni yazılı
+- [ ] Beat anotasyonu (≥16 vuruş, hüküm ≥ usable) + stil-tipik BPM aralığı
+- [ ] Hukuk bayrağı atanmış; 🔴 içerik yok
+
+### 24.2 Motor (W1 öncesi)
+
+- [ ] Android/iOS tam vücut takip + kamera sihirbazı + vücut kalibrasyonu
 - [ ] **Ses gecikmesi kalibrasyonu** (route başına, BT dahil) ve doğrulanmış telafi
-- [ ] 2 stil × 4 seviye müfredat, versiyonlu config'te
-- [ ] Stil başına ≥8 adım + ≥4 kombo, her biri fixture'lı
+- [ ] **Skor kalibrasyonu** gerçek fixture'larla (C-012 — kalibrasyonsuz skor GÖSTERİLMEZ, aile kuralı M-F-04)
+- [ ] En az 10 güvenilir hata kodu (W1 stillerine yayılmış)
 - [ ] En az 10 güvenilir hata kodu
 - [ ] Ayna modu doğru yön eşlemesiyle
 - [ ] Canlı tek sesli düzeltme + sayım sırasında sessizlik
@@ -464,7 +541,9 @@ Temel vizyon:
 
 | # | Karar | Statü |
 |---|---|---|
-| K1 | V1 stilleri: **Hip-Hop Foundations + Salsa Shines** | Oturum kararı (§6) |
+| K1 | ~~V1 = 2 stil~~ → **Kapsam ~30 stil, 5 dalga; W1 = 5 stil** | **Kurucu onaylı** (M-F-18, blueprint) — §6 |
+| K9 | **Perküsif onset skorlaması** (tap/flamenco/Irish hard-shoe): Ostinato onset motoru + beat-grid, yeni modül DEĞİL | Blueprint kararı — §6.3, W3 |
+| K10 | Ölçülemeyen hareket **elenmez, demo-only işaretlenir** ve nedeni kullanıcıya söylenir | Oturum kararı — §22 |
 | K2 | Native/Dart sınırı; `motion_core` normatif referans | Oturum kararı (§8) |
 | K3 | Beat kaynağı soyut; V1 metronom + bilinen-BPM royalty-free | Oturum kararı (§9.1) |
 | K4 | Route-başına ses gecikmesi kalibrasyonu zorunlu | Oturum kararı (§9.2) |
@@ -473,14 +552,19 @@ Temel vizyon:
 | K7 | Müzik telifi kırmızı çizgileri; Spotify/MusicKit V1'de YOK | Oturum kararı (§16) |
 | K8 | Skor mutlak kalibrasyonu G4'e açık; kalibrasyonsuz skor gösterilmez | Oturum kararı (§12.4) |
 
-## 27. Kurucu onayı bekleyenler
+## 27. Kurucu kapıları
 
-1. **Bu planın tamamı** (M-009/C-001 kapısı) — onaysız koda geçilmez.
-2. **V1 stil çifti** (§6) — farklı bir çift isterseniz mimari değişmez, yalnız içerik paketi.
-3. **Nihai fiyat** (§21).
-4. **IP/eğlence hukuku görüşü** — lansman öncesi (referans kaynağı kararı zaten alındı, C-017).
-5. **Domain** — Choreia taraması hiç yapılmadı (M-006).
+**✅ Kapanan (kurucu kararıyla):**
+- ~~**Planın tamamı** (M-009/C-001)~~ → **ONAYLANDI** 2026-07-29, kapsam blueprint'le (M-F-18). Brief süpersede edildi.
+- ~~V1 stil seçimi~~ → blueprint dalga tablosu (§6.1).
+- ~~Beat kütüphanesi satın alımı~~ → **$0 varsayılan** (metronom + kullanıcı müziği + ücretsiz CC + künye). Ücretli kütüphane cila, W1 öncesi tek harcama onayı (C-018).
+- ~~Eğitmen anlaşması~~ → **gerekmez** (kamu-video konsensüsü, M-F-13/C-017).
+- ~~Cihaz benchmark'ı erken faz blokajı~~ → **G8'e taşındı**, erken fazlar beklemez (M-F-16).
 
-**Kapanan onay kalemleri (kurucu kararıyla, 2026-07-26):**
-- ~~Beat kütüphanesi satın alımı~~ → **$0 varsayılan** (metronom + kullanıcı müziği + ücretsiz CC + künye ekranı). Ücretli kütüphane bloke edici değil, cila — G6'ya bırakıldı (C-018).
-- ~~Eğitmen anlaşması~~ → **gerekmez.** Referans kamuya açık eğitmen videolarından çıkarılır; ship öncesi tek seferlik kural kontrolü yeter (§11, C-017).
+**⏳ Açık (manuel-sona listesi, akışı durdurmaz):**
+1. Dans eğitmeni **doğrulama turları** — stil-ailesi başına, ship öncesi tek seferlik kural kontrolü.
+2. Royalty-free beat lisans satın alımı — W1 öncesi tek harcama onayı.
+3. **Hula ortaklık kararı** — kumu-hula/hālau ortaklığı isterseniz kapsam açılır.
+4. **Duyusal-kova store-policy onayı** — Twerk/Reggaeton kovası, W4 öncesi.
+5. Cihaz-benchmark (G8) · nihai fiyat (§21) · IP/eğlence hukuku görüşü · submission.
+6. **Domain** — Choreia taraması hiç yapılmadı (M-006).
