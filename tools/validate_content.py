@@ -192,6 +192,72 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> None:
             rep.error(where, f"step '{sid}' is authored but also listed as excluded")
 
 
+VALID_STATUS = {"live", "comingSoon", "onHold", "excluded"}
+VALID_FLAGS = {"green", "amber", "red"}
+VALID_SCORING = {"pose", "pose+onset", "onset"}
+
+
+def validate_library(rep: Report, styles_on_disk: set[str]) -> None:
+    """Checks the library registry against what actually exists.
+
+    The registry is what the user sees: every style page, including the ones
+    that are only "coming soon". Two failure modes matter and both are silent
+    without this check — a style marked `live` with no content behind it (an
+    empty course, which the IA standard forbids), and a style pack on disk that
+    the library never lists (invisible work).
+    """
+    path = REPO / "content" / "library.json"
+    if not path.exists():
+        rep.error("content/library.json", "missing — the library IA has no source")
+        return
+    where = "content/library.json"
+    lib = json.loads(path.read_text(encoding="utf-8"))
+    rep.checked += 1
+
+    if lib.get("schemaVersion") != SUPPORTED_SCHEMA:
+        rep.error(where, "unsupported schemaVersion")
+
+    seen: set[str] = set()
+    live: set[str] = set()
+    for s in lib.get("styles", []):
+        sid = s.get("id", "?")
+        if sid in seen:
+            rep.error(where, f"duplicate style id '{sid}'")
+        seen.add(sid)
+
+        if s.get("status") not in VALID_STATUS:
+            rep.error(where, f"'{sid}' status '{s.get('status')}' invalid")
+        if s.get("legalFlag") not in VALID_FLAGS:
+            rep.error(where, f"'{sid}' legalFlag '{s.get('legalFlag')}' invalid")
+        if s.get("legalFlag") == "red":
+            rep.error(where, f"'{sid}' is flagged red — named commercial "
+                             "choreography / brand / syllabus text may not ship")
+        if s.get("scoring") and s["scoring"] not in VALID_SCORING:
+            rep.error(where, f"'{sid}' scoring '{s['scoring']}' invalid")
+
+        status = s.get("status")
+        if status == "onHold" and not s.get("onHoldReason"):
+            rep.error(where, f"'{sid}' is on hold with no reason — the page must "
+                             "state why")
+        if status == "live":
+            live.add(sid)
+            if sid not in styles_on_disk:
+                rep.error(where, f"'{sid}' is marked live but has no style pack "
+                                 "on disk — an empty course must never be listed")
+        if status == "comingSoon" and sid in styles_on_disk:
+            rep.warn(where, f"'{sid}' has content on disk but is still listed as "
+                            "coming soon")
+
+    for sid in sorted(styles_on_disk - seen):
+        rep.error(where, f"style pack '{sid}' exists on disk but the library "
+                         "does not list it — invisible to the user")
+
+    waves = [s.get("wave") for s in lib.get("styles", []) if s.get("wave")]
+    if waves:
+        print(f"library: {len(seen)} style pages across waves "
+              f"{min(waves)}-{max(waves)}; {len(live)} live")
+
+
 def main() -> int:
     joints = core_joint_ids()
     rep = Report()
@@ -199,8 +265,11 @@ def main() -> int:
     steps: dict[str, dict] = {}
     for p in sorted(CONTENT.glob("*/steps/*.json")):
         steps[p.stem] = validate_step(p, joints, rep)
+    on_disk: set[str] = set()
     for p in sorted(CONTENT.glob("*/style.json")):
         validate_style(p, steps, rep)
+        on_disk.add(p.parent.name)
+    validate_library(rep, on_disk)
 
     print(f"motion_core joint vocabulary: {len(joints)} ids")
     print(f"content files checked: {rep.checked}")
