@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "step": "hh_cabbage_patch",
+  "note": "Pilot provenance. Ham fixture JSON git'e GİRMEZ — hattan yeniden üretilebilir ara çıktıdır (tools/harvest.py --fetch). Burada yalnız kaynak kimliği ve ölçüm özeti durur.",
+  "takes": [
+    {
+      "schemaVersion": 1,
+      "platform": "youtube",
+      "videoId": "0iweU5HmAUQ",
+      "url": "https://www.youtube.com/watch?v=0iweU5HmAUQ",
+      "channel": {
+        "name": "V COMPANY PRODUCTIONS ",
+        "id": "UCHaHjua0PPVsH1kNv_yUMnQ",
+        "independent": null
+      },
+      "title": "DANCE TUTORIAL NO.11 | CABBAGE PATCH | OLD SCHOOL HIP HOP | V COMPANY",
+      "license": "unknown",
+      "uploadDate": "20161220",
+      "durationSec": 106,
+      "mediaRetained": false,
+      "frameCount": 2535,
+      "detectedFrames": 1968,
+      "fps": 23.976,
+      "modelVersion": "pose_landmarker_heavy/float16/1",
+      "modelSha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b"
+    },
+    {
+      "schemaVersion": 1,
+      "platform": "youtube",
+      "videoId": "EUuqLa1oqo8",
+      "url": "https://www.youtube.com/watch?v=EUuqLa1oqo8",
+      "channel": {
+        "name": "MahaloDance",
+        "id": "UCPKfYbU9EW7zd9LOQois03g",
+        "independent": null
+      },
+      "title": "Learn Hip Hop Dance: Cabbage Patch",
+      "license": "unknown",
+      "uploadDate": "20120413",
+      "durationSec": 175,
+      "mediaRetained": false,
+      "frameCount": 10463,
+      "detectedFrames": 10463,
+      "fps": 59.94,
+      "modelVersion": "pose_landmarker_heavy/float16/1",
+      "modelSha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b"
+    },
+    {
+      "schemaVersion": 1,
+      "platform": "youtube",
+      "videoId": "N4STZCPuhf0",
+      "url": "https://www.youtube.com/watch?v=N4STZCPuhf0",
+      "channel": {
+        "name": "Howcast",
+        "id": "UCSpVHeDGr9UbREhRca0qwsA",
+        "independent": null
+      },
+      "title": "How to Do the Cabbage Patch | Hip-Hop Dancing",
+      "license": "unknown",
+      "uploadDate": "20120924",
+      "durationSec": 143,
+      "mediaRetained": false,
+      "frameCount": 3431,
+      "detectedFrames": 3252,
+      "fps": 23.976,
+      "modelVersion": "pose_landmarker_heavy/float16/1",
+      "modelSha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b"
+    }
+  ]
+}
