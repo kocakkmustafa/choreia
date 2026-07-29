@@ -58,6 +58,21 @@ MIN_TAKES = 3
 MIN_TOLERANCE_DEG = 6.0
 TOLERANCE_K = 1.5  # band = K * dispersion, floored
 
+# Above this measured teacher dispersion a joint is coached but not scored
+# (family rule M-F-41). The number is deliberately a MEASUREMENT threshold and
+# not an anatomical judgement: JabLab refuted its own "legs are scored, arms
+# are coached" shorthand when it measured a lead hip disagreeing at 27.2 deg
+# while a rear shoulder agreed at 13.3.
+#
+# Choreia adds one refinement that a punch does not need. A dance cycle passes
+# through phases, and the same joint can be tight in some and wild in others:
+# the Running Man knees sit at the 6 deg floor for most of the cycle and blow
+# out to 94 deg at the two kick instants. Scoring that knee "because its median
+# is low" would mark correct dancing wrong at exactly the moment the step is
+# hardest. So the decision is taken per (joint, PHASE), and each joint reports
+# what fraction of the cycle it can honestly be scored over.
+SCORED_MAX_DISPERSION_DEG = 14.0
+
 
 def mirror_joint(name: str) -> str:
     if name.startswith("left_"):
@@ -347,6 +362,31 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     disagreement = [d for d in (classify_disagreement(oriented, consensus, j, bins)
                                 for j in joints) if d]
 
+    scoring = {}
+    for j in joints:
+        disp = [dispersion(oriented, j, b) for b in range(bins)]
+        mask = [d <= SCORED_MAX_DISPERSION_DEG for d in disp]
+        cov = sum(mask) / bins
+        scoring[j] = {
+            "scoredPhases": mask,
+            "coverage": round(cov, 3),
+            "medianDispersionDeg": round(statistics.median(disp), 2),
+            "verdict": ("scored" if cov >= 0.9 else
+                        "scored_partial" if cov >= 0.4 else "coached_only"),
+        }
+
+    # The invariant that keeps a coach's own variation from being billed to the
+    # learner: nowhere may the free band sit below the disagreement actually
+    # measured between instructors. Checked here rather than trusted, because
+    # any future change to the floor or the multiplier could quietly break it.
+    violations = [
+        {"joint": j, "phase": round(b / bins, 3),
+         "toleranceDeg": tolerance[j][b],
+         "dispersionDeg": round(dispersion(oriented, j, b), 2)}
+        for j in joints for b in range(bins)
+        if tolerance[j][b] + 1e-9 < dispersion(oriented, j, b)
+    ]
+
     return {
         "step": step,
         "built": True,
@@ -364,6 +404,8 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         "reference": consensus,
         "toleranceDeg": tolerance,
         "disagreement": disagreement,
+        "scoring": scoring,
+        "toleranceBelowDispersion": violations,
     }
 
 
@@ -476,6 +518,28 @@ def self_test() -> int:
           bool(wk) and all(v in ("residual", "mixed") for v in wk.values()),
           str(wk))
 
+    # M-F-41 invariant, forced rather than trusted: a coach's own spread may
+    # never be billed to the learner. Pushed with a teacher who disagrees
+    # violently, which is the case a floor-plus-multiplier could get wrong.
+    wild = _synth_take("c", noise=0.5)
+    wild["joints"]["left_knee"] = [v * 0.3 + 95 for v in wild["joints"]["left_knee"]]
+    wild["joints"]["right_elbow"] = [v + 55 for v in wild["joints"]["right_elbow"]]
+    inv = build([_synth_take("a", noise=0.5),
+                 _synth_take("b", noise=0.5), wild], "s")
+    check("DEĞİŞMEZ: tolerans hiçbir fazda ölçülen ayrışmanın altında değil",
+          inv["built"] and not inv["toleranceBelowDispersion"],
+          f"{len(inv.get('toleranceBelowDispersion', []))} ihlal")
+
+    # And the joint that blew out must stop being scored, not silently keep a
+    # band wide enough to pass anything. left_knee is the control: it is
+    # perturbed too, but not far enough to clear the threshold once the median
+    # of three has absorbed it, so it must STAY scored — the rule has to be a
+    # measurement, not a reflex to any disagreement at all.
+    v = {j: inv["scoring"][j]["verdict"] for j in inv["scoring"]}
+    check("ayrışan eklem SKORLANIR olmaktan çıkar, komşusu çıkmaz",
+          v.get("right_elbow") in ("coached_only", "scored_partial") and
+          v.get("right_knee") == "scored", str(v))
+
     print()
     if fails:
         print(f"SELF-TEST FAILED ({fails})")
@@ -540,11 +604,26 @@ def main() -> int:
                   f"marj={e['margin']}{warn}")
 
     tol = r["toleranceDeg"]
-    print("\n  tolerans (derece, faz boyunca):")
+    print("\n  tolerans + skorlama kararı (M-F-41: ölçüm, anatomi değil):")
+    print(f"    {'eklem':<16}{'min':>6}{'ortanca':>9}{'max':>7}"
+          f"{'kapsam':>9}  karar")
     for j in sorted(tol):
-        col = tol[j]
-        print(f"    {j:<16}min {min(col):>5.1f}  ortanca "
-              f"{statistics.median(col):>5.1f}  max {max(col):>5.1f}")
+        col = tol[j]; sc = r["scoring"][j]
+        tag = {"scored": "SKORLANIR", "scored_partial": "kısmen skorlanır",
+               "coached_only": "yalnız koçlanır"}[sc["verdict"]]
+        print(f"    {j:<16}{min(col):>6.1f}{statistics.median(col):>9.1f}"
+              f"{max(col):>7.1f}{sc['coverage']*100:>8.0f}%  {tag}")
+    partial = [j for j in tol if r["scoring"][j]["verdict"] == "scored_partial"]
+    if partial:
+        print("    ↳ kısmen: eklem çevrimin bir kısmında sıkı, kalanında değil —"
+              "\n      skorlama o fazlarda KAPATILIR (dansta aynı eklem faz\n"
+              "      boyunca skorlanabilir↔skorlanamaz arası gider).")
+    if r["toleranceBelowDispersion"]:
+        print(f"\n  ✗ DEĞİŞMEZ İHLALİ: {len(r['toleranceBelowDispersion'])} "
+              "noktada tolerans ölçülen ayrışmanın ALTINDA — eğitmenlerin kendi\n"
+              "    farkı kullanıcı hatası sayılıyor.")
+    else:
+        print("\n  ✓ değişmez: hiçbir fazda tolerans ölçülen ayrışmanın altında değil.")
 
     if r["disagreement"]:
         print(f"\n  eğitmen ayrışması ({len(r['disagreement'])} eklem):")
