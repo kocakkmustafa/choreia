@@ -226,28 +226,39 @@ def _smooth(xs: list[float], k: int) -> list[float]:
 
 
 def find_anchor(signal: list[float], period_frames: int) -> dict:
-    """Cycle phase 0 = left foot furthest forward, within the first cycle.
+    """Cycle phase 0 = left foot furthest forward, located within the first cycle.
 
-    Searching only the first cycle (rather than globally) keeps the anchor at a
-    known cycle index, so the offset means "phase", not "the single biggest
-    stride in the take" — one exaggerated rep would otherwise move the origin.
+    Two different questions are asked at two different scopes, and conflating
+    them was a real defect. "Does this take have leading-foot motion at all?"
+    is a property of the WHOLE segment. "Where in the cycle is the origin?" is
+    necessarily a question about ONE cycle — searching globally would put the
+    origin at the take's single biggest stride rather than at a phase.
+
+    Measuring both on the first cycle rejected a take whose ankles swung 0.819
+    torso-lengths across the segment but only 0.079 in its opening repetition,
+    which was a slow lead-in. The dancer was fine; the gate was reading the
+    wrong window.
     """
     if period_frames < 2 or len(signal) < period_frames:
         return {"ok": False, "why": "period longer than segment"}
     sm = _smooth(signal, max(3, period_frames // 8))
+
+    whole = [v for v in sm if not math.isnan(v)]
+    if not whole:
+        return {"ok": False, "why": "ankles never visible"}
+    swing = max(whole) - min(whole)
+    # A step whose ankles barely separate anywhere has no leading foot to speak
+    # of, and anchoring on noise would be worse than admitting the take cannot
+    # be anchored: downstream would then read pure noise as signal.
+    if swing < 0.08:
+        return {"ok": False, "why": f"ankle swing too small ({swing:.3f} torso)",
+                "swing": round(swing, 4)}
+
     first = sm[:period_frames]
     usable = [(i, v) for i, v in enumerate(first) if not math.isnan(v)]
     if not usable:
         return {"ok": False, "why": "ankles never visible in first cycle"}
     idx, peak = max(usable, key=lambda iv: iv[1])
-    trough = min(v for _, v in usable)
-    swing = peak - trough
-    # A step whose ankles barely separate has no leading foot to speak of, and
-    # anchoring on noise would be worse than admitting the take cannot be
-    # anchored: the mirror test downstream would then read pure noise as signal.
-    if swing < 0.08:
-        return {"ok": False, "why": f"ankle swing too small ({swing:.3f} torso)",
-                "swing": round(swing, 4)}
     return {
         "ok": True,
         "frameInCycle": idx,
@@ -255,6 +266,8 @@ def find_anchor(signal: list[float], period_frames: int) -> dict:
         "leadingFoot": "left" if peak > 0 else "right",
         "peak": round(peak, 4),
         "swing": round(swing, 4),
+        "firstCycleSwing": round(max(v for _, v in usable)
+                                 - min(v for _, v in usable), 4),
     }
 
 
