@@ -696,6 +696,45 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         if tolerance[j][b] + 1e-9 < dispersion(oriented, j, b)
     ]
 
+    # Everything below this line was, until now, patched into the artifact by
+    # hand after the fact in three separate sessions (hh_running_man,
+    # hh_roger_rabbit, salsa_shines) — the same computation typed fresh each
+    # time from numbers already sitting in this function. That is exactly the
+    # "beşinci soru" failure mode applied to the tool itself: a value nobody
+    # captured as code decays into something a human has to remember to
+    # reproduce correctly. It is folded in here so the next rebuild of any
+    # step gets it for free.
+    mirror_confident = all(m["confident"] for m in mirror_log)
+    thin_takes = [p["videoId"] for p in sources
+                  if (p.get("cyclesInSegment") or 0) < MIN_CYCLES_PER_TAKE]
+    # toleranceSource is "floor" for a phase where the measured floor
+    # (MIN_TOLERANCE_DEG) exceeds instructor disagreement — i.e. our own
+    # caution, not their agreement. The percentage tells a reader how much of
+    # a joint's band is that caution rather than measured variance.
+    floor_pct = {j: round(100 * sum(1 for s in tolerance_source[j] if s == "floor")
+                           / bins) for j in joints}
+    evidence_thickness = {
+        "cyclesPerTake": [p.get("cyclesInSegment") for p in sources],
+        "thinTakes": thin_takes,
+        "toleranceSourceFloorPct": floor_pct,
+    }
+    source_suitability = {
+        "rule": "yalnız DERS-GOSTERIMI kaynaklari referansa girer (fail-closed)",
+        "excludedNotLesson": excluded_source,
+        "why": ("performans klibi tekrar eden bir cumleyle her hareket/kamera/"
+                "capa testini gecer ama ogretim degildir; hukum eğitmenin "
+                "SÖZLERİNDEN gelir (classify_source.py)"),
+    }
+    status, provisional_reason = None, None
+    if not mirror_confident:
+        uncertain_pct = [round(100 * m["cellsBeyondTolerance"])
+                          for m in mirror_log if not m["confident"]]
+        status = "provisional"
+        provisional_reason = (
+            f"Yon BELIRSIZ; bir take cevrilirse hucrelerin "
+            f"%{min(uncertain_pct)}-{max(uncertain_pct)}'si bandini asar. "
+            f"Take basina cevrim: {evidence_thickness['cyclesPerTake']}.")
+
     return {
         "step": step,
         "built": True,
@@ -720,12 +759,17 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
              "why": "ayak bileği izlenemedi; dizden çapalandı — faz tanımı farklı"}
             for p in excluded],
         "mirrorResolution": mirror_log,
+        "mirrorConfident": mirror_confident,
         "reference": consensus,
         "toleranceDeg": tolerance,
         "toleranceSource": tolerance_source,
         "disagreement": disagreement,
         "scoring": scoring,
         "toleranceBelowDispersion": violations,
+        "status": status,
+        "provisionalReason": provisional_reason,
+        "evidenceThickness": evidence_thickness,
+        "sourceSuitability": source_suitability,
     }
 
 
