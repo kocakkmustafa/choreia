@@ -80,8 +80,13 @@ def validate_step(path: Path, joints: set[str], rep: Report) -> dict:
 
     beats = step.get("beats")
     labels = step.get("countLabels", [])
-    if not isinstance(beats, int) or beats < 1:
-        rep.error(where, "beats must be a positive integer")
+    beats_blocked = beats is None and bool(step.get("beatsStatus"))
+    if beats_blocked:
+        rep.warn(where, f"beats is null (blocked: {step['beatsStatus'][:80]}...) "
+                        "— phase-only step, cannot be beat-timed until filled in")
+    elif not isinstance(beats, int) or beats < 1:
+        rep.error(where, "beats must be a positive integer, or null with a "
+                         "named beatsStatus explaining the block")
     elif len(labels) != beats:
         rep.error(where, f"countLabels has {len(labels)} entries for {beats} beats")
 

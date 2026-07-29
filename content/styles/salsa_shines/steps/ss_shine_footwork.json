@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "id": "ss_shine_footwork",
+  "style": "salsa_shines",
+  "name": { "en": "Shine Footwork (solo, generic)" },
+  "level": null,
+  "status": "DRAFT — scoring-wiring proof, not curriculum-placed",
+  "note": "Not yet assigned to a level/lesson — that is a curriculum-sequencing decision separate from this scoring-wiring pass (M-F-109 scope: bind the reference to a consumer, not decide where it teaches). See content/references/ss_shine_footwork.json for the built reference and its provisional/mirror-uncertain status.",
+
+  "beats": null,
+  "beatsStatus": "PENDING — style.json bpmStatus is DISPUTED (89-100 vs 160-220 candidates, ~2x apart); beat_annotate resolution needs the founder's live tap, not yet run. A beat count written now would be an invented number over a disputed base — the family's core failure mode. Fill in only after beat_annotate settles it.",
+  "countLabels": ["a", "b"],
+  "countLabelsNote": "Placeholder ids for the two measured phase-settle moments, NOT salsa count numbers (1,2,3.../5,6,7) — those require the beat grid above.",
+
+  "measurability": {
+    "tier": "A",
+    "rationale": "Legs score at 100% phase coverage (left_knee/right_knee/left_hip/right_hip/left_thigh/right_thigh/left_shin/right_shin all verdict=scored, medianDispersion 1.7-6.5deg across 4 independent instructors) — the tightest of Choreia's three built references. Fronto-parallel footwork, no turns in the pooled content.",
+    "riskFlags": [
+      "Amplitude between the two measured settle points is small (1-8deg on several joints) relative to their own tolerance bands (6-12deg) — see phases[].derivation. This is a real measurement, not noise (medianDispersion is tight), but it means the signal a scorer would judge on is subtler than ss_basic's forward/back basic. Flagged for movement-science-advisor review, not asserted as settled."
+    ]
+  },
+
+  "scoring": {
+    "focusJoints": [
+      "left_knee", "right_knee", "left_hip", "right_hip",
+      "left_thigh", "right_thigh", "left_shin", "right_shin"
+    ],
+    "freeJoints": [
+      "left_upper_arm", "right_upper_arm", "left_forearm", "right_forearm",
+      "left_elbow", "right_elbow", "left_shoulder", "right_shoulder"
+    ],
+    "freeJointsRationale": "Same as ss_basic (plan C-014) — arm carriage varies by school; here it is also measured fact, not just policy: arm joints in the built reference are coached_only/scored_partial (0-64% coverage, 11-58deg dispersion) while every leg joint is scored at 100% coverage. The reference itself draws this line before the config states it.",
+    "toleranceProfile": "beginner",
+    "mirrorRule": "K10 — reference mirrorConfident:false (content/references/ss_shine_footwork.json). No side-dependent judgment: no leading-side check exists in errors[] below, and none may be added until a future rebuild reports mirrorConfident:true. This is the family's kural-7 (JabLab stance precedent) applied here."
+  },
+
+  "phases": [
+    {
+      "id": "settle_a",
+      "enter": { "metric": "cyclePhaseNear", "phaseBin": 1, "phaseBins": 64, "toleranceBins": 3 },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "timeoutMs": 900,
+      "derivation": "Coincides with prepare_take.py's own anchor (phase=0: leading ankle-separation peak) — not an independent finding, the cycle is cut here by construction."
+    },
+    {
+      "id": "transfer_ab",
+      "enter": { "metric": "cyclePhaseNear", "phaseBin": 9, "phaseBins": 64, "toleranceBins": 3 },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "timeoutMs": 500,
+      "derivation": "Sharpest multi-joint rate-of-change region measured on the reference curve (z-scored, smoothed, summed |derivative| across the 8 focusJoints) between the two settle points — a transition, not scored itself."
+    },
+    {
+      "id": "settle_b",
+      "enter": { "metric": "cyclePhaseNear", "phaseBin": 29, "phaseBins": 64, "toleranceBins": 4 },
+      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "timeoutMs": 900,
+      "isTerminal": true,
+      "derivation": "Second local minimum of the same rate-of-change signal, ~0.44 cycle after settle_a — the most defensible second 'landed' moment in the measured data, but the angular displacement from settle_a on several joints (1-8deg) is close to those joints' own tolerance bands. movement-science-advisor should confirm this reads as two genuine weight-transfer moments and not one continuous motion measured at two arbitrary low-velocity points."
+    }
+  ],
+
+  "scoredMoments": [
+    { "id": "moment_a", "phase": "settle_a", "beat": null, "label": "a" },
+    { "id": "moment_b", "phase": "settle_b", "beat": null, "label": "b" }
+  ],
+
+  "errors": [
+    {
+      "code": "NO_WEIGHT_TRANSFER",
+      "severity": "critical",
+      "status": "calibration-open",
+      "calibrationNote": "valueDeg below was reasoned from medianDispersion, not measured per-source, and the liveness check (tools/ss_shine_footwork_liveness.py) caught it: run against all 4 contributing sources, the loaded-leg knee delta between moment_a/moment_b is 1.07 / 21.76 / 2.03 / 3.97deg (SHGkSbJm2Iw / bqoNqA2hmE4 / jjP8bKWCg9U / w4opJ2ezmd4) — bqoNqA2hmE4 an order of magnitude above the other three. No single fixed-degree threshold separates all four honestly; the metric may need reformulating (full-trajectory shape rather than a 2-point delta) or bqoNqA2hmE4's outlier status needs its own investigation before this threshold is trusted. Not fixed by picking a different number — flagged to movement-science-advisor instead (M-F-109 discipline: measured, not guessed).",
+      "detect": {
+        "metric": "loaded_leg_knee_change",
+        "op": "<",
+        "valueDeg": 4,
+        "atMoments": ["moment_a", "moment_b"]
+      },
+      "evidence": ["left_knee", "right_knee", "loaded_leg_knee_change"],
+      "relatedDrill": "ss_weight_shift",
+      "note": "valueDeg is PROVISIONAL, see calibrationNote — do not treat as settled."
+    },
+    {
+      "code": "STEP_TOO_LARGE",
+      "severity": "minor",
+      "detect": {
+        "metric": "step_thigh_excursion",
+        "op": ">",
+        "valueDeg": 20
+      },
+      "evidence": ["left_thigh", "right_thigh"],
+      "relatedDrill": "ss_small_steps",
+      "note": "Threshold halved from ss_basic's 38deg — this content's own measured thigh excursion between settle points is 1-3deg, an order of magnitude below ss_basic's forward/back basic. A learner swinging as large as the basic step is, by this reference, not doing this step."
+    },
+    {
+      "code": "WRONG_FOOT",
+      "severity": "critical",
+      "status": "blocked",
+      "blockedBy": "mirrorConfident:false (content/references/ss_shine_footwork.json)",
+      "detect": {
+        "metric": "leading_side",
+        "op": "!=",
+        "expected": "reference",
+        "atMoments": ["moment_a", "moment_b"]
+      },
+      "evidence": ["leading_side"],
+      "relatedDrill": "ss_lead_foot",
+      "note": "Not dropped, not silently omitted — locked, same discipline as a JabLab locked-lesson pattern applied to a single error code. Definition kept so it activates without redesign the day a rebuild reports mirrorConfident:true; until then this code MUST NOT fire (kural-7)."
+    },
+    {
+      "code": "STEP_LATE",
+      "severity": "major",
+      "status": "blocked",
+      "blockedBy": "beatsStatus:PENDING — no beat grid to be late against",
+      "detect": {
+        "metric": "timing_verdict",
+        "op": "in",
+        "values": ["late", "offBeat"],
+        "atMoments": ["moment_a", "moment_b"]
+      },
+      "evidence": ["timing_offset_ms", "timing_verdict"],
+      "relatedDrill": "ss_slow_tempo",
+      "note": "Same block reason as beats above — timing judgment needs the music beat grid, not just the dancer's own phase-cycle. Ready to unblock the same day beats/countLabels are filled in."
+    }
+  ],
+
+  "omittedFromStyleTaxonomy": [
+    {
+      "code": "STEP_MISSED_ON_4",
+      "why": "ss_basic-specific: it detects motion during the held count-4/8 pause that IS that step's structure. This content's measured curve has no comparable plateau/hold region (continuous smooth motion between settle_a and settle_b, confirmed by the rate-of-change analysis finding no third low-velocity region) — importing this error here would test for a structural feature this step does not have."
+    }
+  ],
+
+  "reference": {
+    "requiredTakes": 6,
+    "collectedTakes": 4,
+    "status": "provisional",
+    "note": "content/references/ss_shine_footwork.json — built, mirrorConfident:false, thinEvidence on 2 of 4 sources. See references/README.md for consumption rules; scoredPhases=false phases carry no judgment regardless of what this file's phases[] claims."
+  },
+
+  "advisorReview": {
+    "status": "first-pass complete — human video-observation still required before final sign-off",
+    "requestedFrom": "movement-science-advisor",
+    "reviewedAt": "2026-07-29",
+    "questions": [
+      "Do settle_a/settle_b read as two genuine, distinct weight-transfer moments for solo salsa shine footwork, or is the measured amplitude (1-8deg on several joints, close to their own tolerance bands) more consistent with one continuous subtle motion sampled at two low-velocity points?",
+      "Is the halved STEP_TOO_LARGE threshold (20deg vs ss_basic's 38deg) a reasonable read of 'too large for this specific step', or does it risk flagging normal stylistic variation as error given the small measured base?",
+      "Is omitting STEP_MISSED_ON_4 (no measured hold/plateau in this content) the right call, or does a hold exist that the phase-velocity method used here would miss?",
+      "NO_WEIGHT_TRANSFER's 2-point knee delta measured 1.07/21.76/2.03/3.97deg across the 4 sources (bqoNqA2hmE4 an outlier) — is a fixed-degree threshold the wrong shape of metric for this signal, should bqoNqA2hmE4 be investigated as a mis-segmented take, or is there a biomechanical reason its knee delta at these two specific phase points would legitimately differ this much from the other three?"
+    ],
+    "findings": [
+      "Q1 (settle_a/settle_b): methodology sound, likely two genuine moments — the separately-measured transfer_ab velocity peak between them supports it rather than a flat signal. Cannot be fully confirmed without a human watching the 4 source videos (camera/angle interpretation is outside this review's scope).",
+      "Q2 (STEP_TOO_LARGE 20deg): reasonable, generously safe — measured thigh-excursion ceiling across all 4 sources is ~6.3deg, so 20deg leaves ~3x margin. The 'half of ss_basic's 38deg' framing was coincidental, not the real justification; the real one is the ~3x margin over this step's own measured ceiling.",
+      "Q3 (STEP_MISSED_ON_4 omission): correct — both the measurement (no third low-velocity region found) and domain knowledge (shines are defined as continuous ornamentation over what would be the basic's held counts, so no structural hold is expected) agree independently.",
+      "Q4 (NO_WEIGHT_TRANSFER, most important): found independent corroborating evidence in docs/research/R10-salsa-shines-adaylar.md — bqoNqA2hmE4's own title is '5 FOOTWORK/Shine Steps that every Salsero/a SHOULD know', i.e. a multi-step compilation, not repeated demonstration of one step like the other 3 sources. Combined with it already being thinEvidence:true (4 cycles vs 8-10 for the other two non-thin sources) and having the second-most-uncertain mirror resolution (margin 0.0152), the advisor's read is that bqoNqA2hmE4 is likely measuring a different/ambiguous segment, not legitimate biomechanical variance — recommends investigating/re-harvesting or excluding this source BEFORE touching the threshold or the metric shape. Do not fix by picking a wider threshold; the calibrationNote's PROVISIONAL status stands.",
+      "General structure: no ship-blocking defect found. status/blockedBy pattern (WRONG_FOOT, STEP_LATE) endorsed as correctly built AND enforced (liveness test's judge() never evaluates them, not just documentation). No safety-class errors is correct for this step (no fall/strain risk profile, unlike Gravita/JabLab). Medical-language scan clean.",
+      "Minor notes for next pass: settle_a toleranceBins:3 vs settle_b toleranceBins:4 asymmetry is unexplained (probably the flatter second minimum, add a line); left_thigh's near-±180deg sign flips should be re-verified with motion-cv-engineer for circular-diff correctness in the excursion calculation (does not change the biomechanical read, could affect numeric reliability); timeoutMs values (900/500/900) look copied from ss_basic — roughly consistent with the measured periods but should be revisited once BPM resolves.",
+      "Curriculum-placement note (not this pass's scope): this file proves scoring-wiring, not a skill-graph gate — a separate movement-science-advisor pass is needed when this step is actually placed into a level/lesson sequence."
+    ]
+  }
+}
