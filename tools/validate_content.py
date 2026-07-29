@@ -298,6 +298,28 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
                 if demo and not ls.get("demoOnlyReason"):
                     rep.error(where, f"lesson '{lid}' is demoOnly without a "
                                      "demoOnlyReason in user language (K10)")
+                if demo:
+                    # M-F-152: the axis that matters is not "temporary vs
+                    # permanent" but whether a promotion path EXISTS and is
+                    # named. A structural-circular block that never says how it
+                    # lifts is indistinguishable from a permanent one, and the
+                    # lesson would quietly stay unscored forever.
+                    klass = ls.get("demoOnlyClass")
+                    if klass not in ("permanent", "structural-circular"):
+                        rep.error(where, f"lesson '{lid}' demoOnlyClass "
+                                         f"'{klass}' invalid — must be "
+                                         "'permanent' (no promotion possible) "
+                                         "or 'structural-circular' (promotion "
+                                         "path exists and must be named)")
+                    elif klass == "structural-circular":
+                        path = ls.get("promotionPath") or {}
+                        for field in ("blockedBy", "unblockedBy"):
+                            if not path.get(field):
+                                rep.error(where, f"lesson '{lid}' is "
+                                                 "structural-circular but "
+                                                 f"promotionPath.{field} is "
+                                                 "missing — an unnamed way out "
+                                                 "is not a way out")
                 if not locked and not demo:
                     rep.error(where, f"lesson '{lid}' is not scored but is "
                                      "neither locked nor demoOnly — say which, "

@@ -85,7 +85,16 @@ Kullanıcı rozeti = `status` (ki zaten ancak ship edilmiş bir build'de görün
 
 **`library.json` stil-düzeyi `demoOnly` dizisi bir PLAN NOTU'dur**, ders durumu değil — kafes kararı yalnız `style.json`'daki gerçek `lessons[]` durumlarına bakar.
 
-**`locked` ≠ `demoOnly`:** `locked` = ölçüm eksik, gelecekte açılabilir (geçici). `demoOnly` = ölçüm yapısal olarak mümkün değil ya da anlamsız (kalıcı; groove, kol stili, ayak-ucu zamanlaması). İkisini karıştırmak, çözülebilir bir eksiği çözülemez göstermek (ya da tersi) olur.
+**`locked` ≠ `demoOnly`:** `locked` = ölçüm eksik, gelecekte açılabilir (geçici) — ve **ders KAPALI**. `demoOnly` = skorlama yapısal olarak mümkün değil ya da anlamsız — ama **ders AÇIK**. İkisini karıştırmak, çözülebilir bir eksiği çözülemez göstermek (ya da tersi) olur.
+
+**Ayrımın asıl ekseni "geçici mi kalıcı mı" DEĞİL, "kullanıcı bu dersi açabiliyor mu".** Bu, `demoOnlyClass` ile netleşir (M-F-152'de ss_basic bu ayrımı zorladı):
+
+| `demoOnlyClass` | Anlam | Terfi yolu | Örnek |
+|---|---|---|---|
+| `permanent` | Ölçüm anlamsız ya da imkânsız; hiç skorlanmayacak | YOK | groove/musicality · kol stili (eğitmenler 11-58° ayrışıyor) |
+| `structural-circular` | Ölçüm mümkün OLABİLİR ama şu an yapısal bir döngü kilitliyor; ders yine de öğretilebilir | VAR, **isimli** (`promotionPath`) | ss_basic: hold imzası pozitif kontrol olmadan aranamıyor, referans tam da aranan şey |
+
+**Neden `locked` değil de `demoOnly`:** ölçüm gelmeyebilir, ama ÖĞRETİM içeriği hazır ve dürüst beyanla verilebilir. Kullanıcıyı belirsiz bir ölçüm bekleyişi için mahrum bırakmak, K10'un tam engellemek istediği şeydir ("ölçülemeyen hareket ELENMEZ"). Terfi olduğu gün geçiş **ölçümle** yapılır, kanaatle değil.
 
 Skorlanmayan bir ders `locked` ya da `demoOnly` olmak ZORUNDA — ikisi de değilse gerekçesiz-skorsuz ders olur, `validate_content.py` bunu reddeder.
 

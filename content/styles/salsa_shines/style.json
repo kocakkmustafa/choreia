@@ -66,17 +66,22 @@
         {
           "id": "ss_l1_basic",
           "displayName": {
-            "en": "The forward-and-back basic"
+            "en": "The forward-and-back basic (not graded)"
           },
           "step": "ss_basic",
           "scored": false,
-          "status": "locked",
-          "lockedReason": {
-            "en": "We looked twice and still can't grade this one honestly. First we checked the salsa clips we already had; then we went out and collected six more lessons that teach nothing but this step. Of those, two were too short to trust, one instructor talks more than they dance, and the rest don't show the one thing that makes the basic the basic — the held count on 4 and 8 — in a way a phone camera can actually see. So the step stays here, taught but not scored, until we find footage that lets us measure it fairly."
+          "demoOnly": true,
+          "demoOnlyClass": "structural-circular",
+          "demoOnlyReason": {
+            "en": "We teach this one but we don't score it, and we'd rather tell you why than pretend. What makes the basic the basic is the held count — you step on 1, 2, 3 and hold on 4. To grade that we'd have to see the hold on camera, and to know what a hold looks like we'd first need footage we're certain contains one. We went looking twice: through the salsa clips we already had, then through six lessons that teach nothing but this step. Two were too short to trust, one teacher talks more than they dance, one films at an angle we can't read, and in the rest we couldn't tell a real hold from our own measurement noise. So: the step, the count, and the teaching are all here. The number isn't, until we can earn it."
           },
-          "blockedBy": "reference.collectedTakes == 0 — pool probe (2026-07-30, harvestProbe) AND targeted harvest (harvestProbe2_targeted, 6 candidates / 4 harvested) both returned 0 basic candidates; two structural limits measured (window length, plateau measurement level)",
-          "minutes": 8,
-          "probeNote": "Both rejections are measured, not assumed: tools/probe_basic_candidates.py. Targeted round used rig SHA 144b767. Limit (b) opens a tier question (is ss_basic really Tier A if its hold is foot-contact?) — raised to coordinator."
+          "evidence": "steps/ss_basic.json reference.harvestProbe (pool) + harvestProbe2_targeted (6 candidates/4 harvested) + harvestProbe3_reevaluation (window fix applied, 2 independent second gates) + harvestProbe4_footLevel (ankle/heel/toe all overlap with control)",
+          "promotionPath": {
+            "blockedBy": "No positive control: the hold signature cannot be sought without one verified example of the basic, and that example IS the reference being sought (circular). Measured across 3 foot levels — all overlap with the shine control.",
+            "unblockedBy": "FOUNDER, ~2 minutes: watch one candidate (FtZzjGsPxjg, 'Front & Back Basic Variations') and say whether it is the plain basic or a variation. A human eye breaks the circle that measurement cannot. If a clean basic exists in the material, the reference chain resumes and this lesson is PROMOTED demoOnly -> scored — by measurement on that day, never by opinion.",
+            "ifItStaysBlocked": "demoOnly becomes permanent and that is an honest ending too: the step is taught, the count is taught, and no score is invented."
+          },
+          "minutes": 8
         },
         {
           "id": "ss_l1_arm_styling",
@@ -89,7 +94,9 @@
             "en": "There is no single correct arm position here — we measured it: the teachers we studied differ from each other by 11 to 58 degrees on the arms while doing the same footwork. That is style, not error. So we show you the range and let you choose; grading it would be inventing a right answer that does not exist."
           },
           "evidence": "content/references/ss_shine_footwork.json scoring[] — arm joints verdict coached_only / scored_partial (0-64% coverage, 11-58deg medianDispersion) while every leg joint is scored at 100%",
-          "minutes": 6
+          "minutes": 6,
+          "demoOnlyClass": "permanent",
+          "demoOnlyClassBasis": "Measured, not assumed: instructors differ 11-58deg on arm joints while doing the same footwork (M-F-102). There is no single correct arm to grade against, so no future measurement changes this — it is style, and style is the point."
         },
         {
           "id": "ss_l1_musicality",
@@ -103,7 +110,9 @@
           },
           "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
           "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
-          "minutes": 5
+          "minutes": 5,
+          "demoOnlyClass": "permanent",
+          "demoOnlyClassBasis": "A camera cannot hear whether you found the 1. Outside the measurement surface by nature, not by current limitation (plan §22)."
         }
       ],
       "unlockRule": {

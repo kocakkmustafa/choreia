@@ -73,7 +73,9 @@
           },
           "evidence": "content/references/hh_running_man.json (4 instructors, provisional) + stepInventory.tierC_excluded[Running Man] — measurability tier C per content/SCHEMA.md: dependent on toe-ground contact timing, the documented weak point of markerless single-camera pose (R1 §7b)",
           "k10Note": "K10 applied as intended: 'ölçülemeyen hareket ELENMEZ, demo-only işaretlenir ve nedeni kullanıcıya söylenir'. Previously this step was only recorded as tierC_EXCLUDED, which read as 'dropped from the product' — it is not; it is dropped from SCORING. The harvest effort (4 instructors, richest source 12 cycles) becomes user-facing content instead of a shelved measurement.",
-          "minutes": 10
+          "minutes": 10,
+          "demoOnlyClass": "permanent",
+          "demoOnlyClassBasis": "The step's identity IS toe/heel contact timing, and toe landmarks are the least reliable points in markerless single-camera pose (R1 §7b, tier C). A better harvest does not fix a landmark-reliability limit — this stays taught-not-scored."
         },
         {
           "id": "hh_l1_groove",
@@ -86,7 +88,9 @@
             "en": "Groove is the part of hip-hop a camera is worst at and a mirror is best at. We teach it and stay out of your way."
           },
           "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket",
-          "minutes": 5
+          "minutes": 5,
+          "demoOnlyClass": "permanent",
+          "demoOnlyClassBasis": "Groove is what a camera is worst at and a mirror is best at. Not a measurement gap, a category difference."
         }
       ],
       "unlockRule": null,
