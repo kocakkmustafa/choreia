@@ -67,7 +67,7 @@ RAW = HARVEST / "raw"
 
 REPO = Path(__file__).resolve().parents[1]
 CORE_REPO = REPO.parents[1] / "motion-core" / "lib"
-CORE_PIN = "motion_core-v0.3.0"
+CORE_PIN = "motion_core-v0.5.0"
 CORE_JOINTS_PATH = "packages/motion_core/lib/src/geometry/joint_angles.dart"
 
 L_SHOULDER, R_SHOULDER = 11, 12

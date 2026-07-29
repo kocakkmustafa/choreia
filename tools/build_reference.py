@@ -210,25 +210,94 @@ def orient_exhaustive(cycles: list[dict[str, list[float]]]
     oriented = [_variant(cycles[i], *VARIANTS[a])
                 for i, a in enumerate(best_assign)]
 
-    # Per-take margin, now meaningful: with every OTHER take held at its chosen
-    # orientation, how much better is this take's winner than its runner-up?
+    # Absolute convention: keep the majority's handedness and flip the minority
+    # (motion_core v0.5.0). Pinning take 0 breaks the global symmetry but leaves
+    # the surviving orientation at the mercy of whichever file was listed first,
+    # so a set where three teachers face the camera and one mirrors could end up
+    # with all three flipped. Nothing downstream breaks, but every artifact
+    # would then be described the minority's way round.
+    best_assign, oriented = _apply_majority_convention(best_assign, oriented)
+
     log = []
     for i, a in enumerate(best_assign):
         others = [o for j, o in enumerate(oriented) if j != i]
         rest = merge(others) if others else None
-        costs = sorted(distance(_variant(cycles[i], *v), rest) for v in VARIANTS) \
-            if rest else [0.0, 0.0]
         flip, half = VARIANTS[a]
-        entry = {
-            "index": i, "flipped": flip, "halfCycle": half,
-            "bestDeg": round(costs[0], 3), "runnerUpDeg": round(costs[1], 3),
-            "margin": round((costs[1] - costs[0]) / max(costs[1], 1e-9), 4),
-            "method": "exhaustive",
-        }
-        if i == 0:
-            entry["seed"] = True   # pinned to break the global symmetry
+        entry = {"index": i, "flipped": flip, "halfCycle": half,
+                 "method": "exhaustive"}
+        if rest:
+            entry.update(_margin_vs_distinct_rival(cycles[i], oriented[i], rest, others))
         log.append(entry)
     return oriented, log
+
+
+def _apply_majority_convention(assign, oriented):
+    """Flip the whole set if that leaves fewer takes described as mirrored.
+
+    Mirroring every take together is a symmetry of the problem — the relative
+    arrangement is untouched — so this only changes how the result is
+    described, never what it says.
+    """
+    flipped = sum(1 for a in assign if VARIANTS[a][0])
+    if flipped * 2 <= len(assign):
+        return assign, oriented
+    swapped = [VARIANTS.index((not f, h)) for f, h in (VARIANTS[a] for a in assign)]
+    return swapped, [mirrored(o) for o in oriented]
+
+
+# A close call only matters if the rival would give a DIFFERENT reference
+# (motion_core v0.5.0 semantics). The test for that is not whether the two
+# candidate cycles look alike — an earlier version compared them directly and
+# never fired — but whether swapping to the rival moves the consensus the takes
+# actually produce. Measured on Roger Rabbit: forcing its tightest call to the
+# runner-up shifted the consensus by 0.0 degrees, so the "uncertainty" changed
+# nothing that is consumed downstream.
+#
+# The distinction is worth keeping straight. Degenerate means the answer does
+# not matter. Uncertain means it matters and is not settled.
+CONSENSUS_MOVE_DEG = 0.5
+MIRROR_MARGIN = 0.03
+
+
+def _margin_vs_distinct_rival(raw, placed, rest, others) -> dict:
+    best = distance(placed, rest)
+    rivals = sorted(
+        ((distance(_variant(raw, *v), rest), v) for v in VARIANTS
+         if distance(_variant(raw, *v), placed) > 1e-9),
+        key=lambda t: t[0])
+    if not rivals:
+        return {"bestDeg": round(best, 3), "runnerUpDeg": None, "margin": None,
+                "confident": True, "orientationEffect": "degenerate",
+                "note": "her varyant aynı çevrimi veriyor"}
+
+    rival_cost, rival_v = rivals[0]
+    with_placed = merge(others + [placed])
+    with_rival = merge(others + [_variant(raw, *rival_v)])
+    moved = max((abs(x - y) for j in with_placed
+                 for x, y in zip(with_placed[j], with_rival[j])), default=0.0)
+
+    out = {"bestDeg": round(best, 3), "runnerUpDeg": round(rival_cost, 3),
+           "margin": round((rival_cost - best) / max(rival_cost, 1e-9), 4),
+           "consensusMoveDeg": round(moved, 2)}
+
+    if moved <= CONSENSUS_MOVE_DEG:
+        # The rival is a different cycle but produces the same reference, so
+        # the orientation of this take simply does not reach the output.
+        out["confident"] = True
+        out["orientationEffect"] = "degenerate"
+        out["note"] = ("rakip farklı ama uzlaşmayı oynatmıyor — bu take'in yönü "
+                       "çıktıya ULAŞMIYOR, belirsizlik değil")
+    elif out["margin"] < 0:
+        # The global optimum placed this take against its own local preference
+        # to lower the total. Real tension, and different from a coin flip.
+        out["confident"] = False
+        out["orientationEffect"] = "against_local_optimum"
+        out["note"] = ("global çözüm bu take'i KENDİ tercihinin tersine "
+                       "yerleştirdi (toplam maliyet için) — gerilim var")
+    else:
+        out["confident"] = out["margin"] >= MIRROR_MARGIN
+        out["orientationEffect"] = "decisive" if out["confident"] else "uncertain"
+    return out
 
 
 def orient(cycles: list[dict[str, list[float]]]) -> tuple[list[dict], list[dict]]:
@@ -692,15 +761,22 @@ def main() -> int:
               f"periyot {s['periodSeconds']}s  segment {s['segmentSeconds']}s")
     print("\n  ayna çözümü:")
     for e in r["mirrorResolution"]:
-        if e.get("seed"):
-            print(f"    {e['videoId']:<13}tohum (yön referansı)")
+        if False:
+            pass
         else:
             bits = ("ayna" if e["flipped"] else "düz") + \
                    ("+yarım" if e["halfCycle"] else "")
-            warn = "  ⚠ marj düşük — yön belirsiz" if e["margin"] < 0.03 else ""
+            warn = {
+                "degenerate": "  ○ DEJENERE — yönü çıktıya ulaşmıyor",
+                "against_local_optimum": "  ⚠ global çözüm kendi tercihinin TERSİNE yerleştirdi",
+                "uncertain": "  ⚠ BELİRSİZ — rakip farklı ve marj eşiğin altında",
+                "decisive": "",
+            }.get(e.get("orientationEffect"), "")
+            if e.get("consensusMoveDeg") is not None:
+                warn += f"  [uzlaşma oynaması {e['consensusMoveDeg']}°]"
             print(f"    {e['videoId']:<13}{bits:<12}"
-                  f"en-iyi={e['bestDeg']}° ikinci={e['runnerUpDeg']}° "
-                  f"marj={e['margin']}{warn}")
+                  f"en-iyi={e['bestDeg']}° ikinci={e.get('runnerUpDeg')}° "
+                  f"marj={e.get('margin')}{warn}")
 
     tol = r["toleranceDeg"]
     print("\n  tolerans + skorlama kararı (M-F-41: ölçüm, anatomi değil):")

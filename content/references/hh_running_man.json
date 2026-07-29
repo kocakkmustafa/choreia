@@ -1,7 +1,7 @@
 {
  "step": "hh_running_man",
  "built": true,
- "corePin": "motion_core-v0.3.0",
+ "corePin": "motion_core-v0.5.0",
  "phaseBins": 64,
  "takeCount": 4,
  "sources": [
@@ -35,41 +35,53 @@
    "index": 0,
    "flipped": false,
    "halfCycle": false,
-   "bestDeg": 20.647,
-   "runnerUpDeg": 20.893,
-   "margin": 0.0118,
    "method": "exhaustive",
-   "seed": true,
+   "bestDeg": 20.893,
+   "runnerUpDeg": 20.647,
+   "margin": -0.0119,
+   "consensusMoveDeg": 56.73,
+   "confident": false,
+   "orientationEffect": "against_local_optimum",
+   "note": "global çözüm bu take'i KENDİ tercihinin tersine yerleştirdi (toplam maliyet için) — gerilim var",
    "videoId": "KV-sxd_pQ9w"
   },
   {
    "index": 1,
    "flipped": false,
    "halfCycle": false,
+   "method": "exhaustive",
    "bestDeg": 17.369,
    "runnerUpDeg": 18.33,
    "margin": 0.0524,
-   "method": "exhaustive",
+   "consensusMoveDeg": 57.34,
+   "confident": true,
+   "orientationEffect": "decisive",
    "videoId": "UO9Ehsdt2IE"
   },
   {
    "index": 2,
    "flipped": true,
    "halfCycle": true,
+   "method": "exhaustive",
    "bestDeg": 29.583,
    "runnerUpDeg": 30.03,
    "margin": 0.0149,
-   "method": "exhaustive",
+   "consensusMoveDeg": 53.32,
+   "confident": false,
+   "orientationEffect": "uncertain",
    "videoId": "Wd29rBfAzkI"
   },
   {
    "index": 3,
    "flipped": false,
    "halfCycle": false,
+   "method": "exhaustive",
    "bestDeg": 15.207,
    "runnerUpDeg": 16.486,
    "margin": 0.0776,
-   "method": "exhaustive",
+   "consensusMoveDeg": 36.21,
+   "confident": true,
+   "orientationEffect": "decisive",
    "videoId": "lYpRasK4c9k"
   }
  ],
@@ -1819,8 +1831,8 @@
  },
  "toleranceBelowDispersion": [],
  "status": "provisional",
- "provisionalReason": "4 bagimsiz egitmen ama segmentler 5-7s = take basina 3-5 cevrim; varyans tahmini bu orneklemde zayif.",
- "orientationNote": "Wd29rBfAzkI ayna marji 0.0149 (belirsiz esigin altinda). Ikinci secenege zorlandiginda uzlasma ortanca 1.1 derece / max 53.3 derece oynuyor, bacak kapsami %82 → %80: kucuk ama sifir degil.",
- "orientationMethod": "exhaustive — tum varyant atamalari denenip toplam ikili uyusmazlik minimize edilir; girdi sirasindan BAGIMSIZ (acgozlu surum sirayla degisiyordu)",
- "scoringNote": "M-F-41 olcumle, (eklem, FAZ) basina. Tuketim kurallari: content/references/README.md + motion-core docs/50-REFERANS-TUKETIM-SOZLESMESI.md"
+ "mirrorConfident": false,
+ "orientationNote": "Yon BELIRSIZ: dort take'ten ikisi esigin altinda, biri global cozum tarafindan KENDI yerel tercihinin tersine yerlestirilmis. Yonun uzlasmaya etkisi 36-57 derece — kucuk degil.",
+ "orientationMethod": "exhaustive global atama (girdi sirasindan bagimsiz) + cogunluk konvansiyonu; marj EN YAKIN FARKLI rakibe gore ve 'farkli' testi uzlasmayi oynatip oynatmadigi (motion_core v0.5.0 semantigi)",
+ "provisionalReason": "AYRICA: yon atamasi belirsiz — bkz orientationNote."
 }

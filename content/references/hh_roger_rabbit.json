@@ -1,7 +1,7 @@
 {
  "step": "hh_roger_rabbit",
  "built": true,
- "corePin": "motion_core-v0.3.0",
+ "corePin": "motion_core-v0.5.0",
  "phaseBins": 64,
  "takeCount": 4,
  "sources": [
@@ -35,41 +35,53 @@
    "index": 0,
    "flipped": false,
    "halfCycle": false,
+   "method": "exhaustive",
    "bestDeg": 15.333,
    "runnerUpDeg": 15.679,
    "margin": 0.0221,
-   "method": "exhaustive",
-   "seed": true,
+   "consensusMoveDeg": 23.05,
+   "confident": false,
+   "orientationEffect": "uncertain",
    "videoId": "35sk_G8Vf9o"
   },
   {
    "index": 1,
    "flipped": true,
    "halfCycle": false,
+   "method": "exhaustive",
    "bestDeg": 19.801,
    "runnerUpDeg": 19.856,
    "margin": 0.0027,
-   "method": "exhaustive",
+   "consensusMoveDeg": 6.18,
+   "confident": false,
+   "orientationEffect": "uncertain",
    "videoId": "5MQEtoEKdEw"
   },
   {
    "index": 2,
    "flipped": true,
    "halfCycle": false,
-   "bestDeg": 27.484,
-   "runnerUpDeg": 27.542,
-   "margin": 0.0021,
    "method": "exhaustive",
+   "bestDeg": 27.542,
+   "runnerUpDeg": 27.484,
+   "margin": -0.0021,
+   "consensusMoveDeg": 25.01,
+   "confident": false,
+   "orientationEffect": "against_local_optimum",
+   "note": "global çözüm bu take'i KENDİ tercihinin tersine yerleştirdi (toplam maliyet için) — gerilim var",
    "videoId": "rRlUNGymhmE"
   },
   {
    "index": 3,
    "flipped": false,
    "halfCycle": true,
+   "method": "exhaustive",
    "bestDeg": 29.81,
    "runnerUpDeg": 30.197,
    "margin": 0.0128,
-   "method": "exhaustive",
+   "consensusMoveDeg": 33.53,
+   "confident": false,
+   "orientationEffect": "uncertain",
    "videoId": "selXuuAWI64"
   }
  ],
@@ -1819,8 +1831,8 @@
  },
  "toleranceBelowDispersion": [],
  "status": "provisional",
- "provisionalReason": "4 bagimsiz egitmen ama segmentler 9-11s = take basina 5-9 cevrim. Diz kapsami yalnizca %52 (ortanca dispersiyon 19-21 derece, esik 14) — Running Man'e gore belirgin gevsek; skorlanabilir yuzey dar.",
- "orientationNote": "Uc take'in de ayna marji cok dusuk (0.0027 / 0.0021 / 0.0128). Bu belirsizlik DEGIL dejenerasyon: en dusuk marjli take ikinci secenege zorlandiginda uzlasma 0.0 derece oynuyor. Donusumlu bir adimin aynasi zaten yarim-cevrim kaydirilmis haline denk, o yuzden varyantlar ayni seye cikiyor ve secim onemsiz.",
- "orientationMethod": "exhaustive — tum varyant atamalari denenip toplam ikili uyusmazlik minimize edilir; girdi sirasindan BAGIMSIZ (acgozlu surum sirayla degisiyordu)",
- "scoringNote": "M-F-41 olcumle, (eklem, FAZ) basina. Tuketim kurallari: content/references/README.md + motion-core docs/50-REFERANS-TUKETIM-SOZLESMESI.md"
+ "mirrorConfident": false,
+ "orientationNote": "DUZELTME (C-078): daha once bu referansta 'yon dejenere, belirsiz degil' yazmistim — YANLIS. O sonuc olcum artefaktiydi: duyarlilik sondam take'i yerel siralamanin ranked[1]'ine zorluyordu, ama global cozumde take kendi yerel optimumunda olmayabilir ve bu take icin ranked[1] ZATEN yerlesimin kendisiydi — yerlesimi kendisiyle karsilastirmisim. Dogru olcum: her take'in yonu uzlasmayi 6.2-33.5 derece oynatiyor. Yon BELIRSIZ (dort take'in dordunde de marj esigin altinda).",
+ "orientationMethod": "exhaustive global atama (girdi sirasindan bagimsiz) + cogunluk konvansiyonu; marj EN YAKIN FARKLI rakibe gore ve 'farkli' testi uzlasmayi oynatip oynatmadigi (motion_core v0.5.0 semantigi)",
+ "provisionalReason": "AYRICA: yon atamasi belirsiz — bkz orientationNote."
 }
