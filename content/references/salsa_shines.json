@@ -38,6 +38,7 @@
    "thinEvidence": false
   }
  ],
+ "excludedNotLesson": [],
  "excludedAnchorSource": [
   {
    "videoId": "v_y4l3lAZ0Q",
@@ -4880,7 +4881,7 @@
  },
  "toleranceBelowDispersion": [],
  "status": "provisional",
- "provisionalReason": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %5-13'i bandini asar. Take basina cevrim: [3, 4, 10, 8] (ikisi <5). Bir kaynak DISLANDI: Dance With Rasa'nin ayak bilegi gorunurlugu 0.007 — ayak-isi stilinde ayaklari izlenemeyen cekim ayak isi hakkinda kanit degil; dizden capalandigi icin faz tanimi da farkliydi. Dislama uyusmazliktan degil goruntu olcumunden.",
+ "mirrorConfident": false,
  "evidenceThickness": {
   "cyclesPerTake": [
    3,
@@ -4912,5 +4913,10 @@
    "trunk_tilt": 100
   }
  },
- "mirrorConfident": false
+ "sourceSuitability": {
+  "rule": "yalnız DERS-GOSTERIMI kaynaklari referansa girer (fail-closed)",
+  "excludedNotLesson": [],
+  "why": "performans klibi tekrar eden bir cumleyle her hareket/kamera/capa testini gecer ama ogretim degil STIL kodlar; bu ayrimi hicbir olcum goremez, o yuzden egitmenin SOYLEDIGINE bakilir"
+ },
+ "provisionalReason": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %5-13'i bandini asar. Take basina cevrim: [3, 4, 10, 8]."
 }

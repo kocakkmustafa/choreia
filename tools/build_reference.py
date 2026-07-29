@@ -575,9 +575,28 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     # of the footage says its feet were never tracked: ankle visibility 0.007
     # on the take that triggered this. For a footwork style, footage whose feet
     # cannot be seen is not evidence about footwork.
-    all_usable = [p for p in prepared if p.get("usable")]
+    # Source suitability, fail-closed (family M-F-43/45, Choreia vocabulary in
+    # classify_source.py). A performance clip can repeat a phrase and satisfy
+    # every movement, camera and anchor test downstream while encoding styling
+    # rather than instruction — no measurement in this pipeline can see the
+    # difference, which is why the question is asked of what the instructor
+    # SAYS. It caught one: a Roger Rabbit source with nine spoken words in the
+    # whole clip. Nobody teaches in nine words.
+    from classify_source import classify  # noqa: PLC0415
+    all_usable = []
+    not_lessons = []
+    for p in prepared:
+        if not p.get("usable"):
+            continue
+        c = classify(p["videoId"])
+        p["_source"] = c
+        (all_usable if c["verdict"] == "lesson" else not_lessons).append(p)
     excluded = [p for p in all_usable
                 if (p.get("anchor") or {}).get("anchorSource") == "knee"]
+    excluded_source = [
+        {"videoId": p["videoId"], "verdict": p["_source"]["verdict"],
+         "spokenWords": p["_source"].get("spokenWords"),
+         "why": p["_source"].get("why")} for p in not_lessons]
     usable = [p for p in all_usable if p not in excluded]
     cycles, sources = [], []
     for p in usable:
@@ -615,6 +634,7 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     if len(cycles) < MIN_TAKES:
         return {
             "step": step, "built": False,
+            "excludedNotLesson": excluded_source,
             "excludedAnchorSource": [
                 {"videoId": p["videoId"],
                  "ankleVisibility": (p.get("anchor") or {}).get("ankleVisibility"),
@@ -693,6 +713,7 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
              "thinEvidence": (p.get("cyclesInSegment") or 0) < MIN_CYCLES_PER_TAKE}
             for p in sources
         ],
+        "excludedNotLesson": excluded_source,
         "excludedAnchorSource": [
             {"videoId": p["videoId"],
              "ankleVisibility": (p.get("anchor") or {}).get("ankleVisibility"),

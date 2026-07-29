@@ -99,6 +99,9 @@ STEP_OF: dict[str, str] = {
     "E6GfqbvDJfU": "hh_running_man",    # MihranTV
     "Wd29rBfAzkI": "hh_running_man",    # The Shed
     "KV-sxd_pQ9w": "hh_running_man",    # James Deane
+    "ZpTgAZBYNrU": "hh_running_man",
+    "0UDxiThjwG8": "hh_running_man",
+    "-8W2bnjrhE0": "hh_running_man",
 }
 
 
