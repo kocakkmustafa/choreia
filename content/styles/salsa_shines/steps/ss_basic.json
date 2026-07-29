@@ -2,12 +2,22 @@
   "schemaVersion": 1,
   "id": "ss_basic",
   "style": "salsa_shines",
-  "name": { "en": "Salsa Basic (solo)" },
+  "name": {
+    "en": "Salsa Basic (solo)"
+  },
   "level": 1,
   "beats": 8,
-  "countLabels": ["1", "2", "3", "4", "5", "6", "7", "8"],
+  "countLabels": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+  ],
   "note": "Forward-and-back basic danced solo. Counts 4 and 8 are held, not stepped — the pause is part of the step and learners who fill it are dancing a different rhythm.",
-
   "measurability": {
     "tier": "A",
     "rationale": "Weight transfer produces large thigh-orientation and knee-flexion changes. Step direction is fronto-parallel to the camera. No turns in the basic.",
@@ -15,82 +25,179 @@
       "Step size is small relative to hip-hop; amplitude thresholds must be calibrated against real takes before shipping (plan §12.4)."
     ]
   },
-
   "scoring": {
     "focusJoints": [
-      "left_thigh", "right_thigh", "left_knee", "right_knee",
-      "left_hip", "right_hip", "trunk_tilt"
+      "left_thigh",
+      "right_thigh",
+      "left_knee",
+      "right_knee",
+      "left_hip",
+      "right_hip",
+      "trunk_tilt"
     ],
     "freeJoints": [
-      "left_upper_arm", "right_upper_arm", "left_forearm", "right_forearm",
-      "left_elbow", "right_elbow", "left_shoulder", "right_shoulder"
+      "left_upper_arm",
+      "right_upper_arm",
+      "left_forearm",
+      "right_forearm",
+      "left_elbow",
+      "right_elbow",
+      "left_shoulder",
+      "right_shoulder"
     ],
     "freeJointsRationale": "Arm carriage in solo salsa varies widely between schools. V1 scores footwork and timing only, and says so to the user (plan C-014).",
     "toleranceProfile": "beginner"
   },
-
   "phases": [
     {
       "id": "ready",
-      "enter": { "metric": "weight_balance", "op": "centered", "toleranceDeg": 6 },
-      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "enter": {
+        "metric": "weight_balance",
+        "op": "centered",
+        "toleranceDeg": 6
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
       "timeoutMs": 3000
     },
     {
       "id": "fwd_step",
-      "enter": { "metric": "left_thigh_forward", "op": ">", "valueDeg": 12 },
-      "requiredLandmarks": ["leftLeg", "torso"],
+      "enter": {
+        "metric": "left_thigh_forward",
+        "op": ">",
+        "valueDeg": 12
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "torso"
+      ],
       "timeoutMs": 900
     },
     {
       "id": "fwd_replace",
-      "enter": { "metric": "weight_side", "op": "==", "value": "right" },
-      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "enter": {
+        "metric": "weight_side",
+        "op": "==",
+        "value": "right"
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
       "timeoutMs": 900
     },
     {
       "id": "fwd_close",
-      "enter": { "metric": "weight_balance", "op": "centered", "toleranceDeg": 8 },
-      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "enter": {
+        "metric": "weight_balance",
+        "op": "centered",
+        "toleranceDeg": 8
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
       "timeoutMs": 900
     },
     {
       "id": "hold_4",
-      "enter": { "metric": "feet_settled", "op": "true" },
-      "requiredLandmarks": ["leftLeg", "rightLeg"],
+      "enter": {
+        "metric": "feet_settled",
+        "op": "true"
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg"
+      ],
       "minDurationMs": 120,
       "timeoutMs": 900
     },
     {
       "id": "back_step",
-      "enter": { "metric": "right_thigh_back", "op": ">", "valueDeg": 12 },
-      "requiredLandmarks": ["rightLeg", "torso"],
+      "enter": {
+        "metric": "right_thigh_back",
+        "op": ">",
+        "valueDeg": 12
+      },
+      "requiredLandmarks": [
+        "rightLeg",
+        "torso"
+      ],
       "timeoutMs": 900
     },
     {
       "id": "back_replace",
-      "enter": { "metric": "weight_side", "op": "==", "value": "left" },
-      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "enter": {
+        "metric": "weight_side",
+        "op": "==",
+        "value": "left"
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
       "timeoutMs": 900
     },
     {
       "id": "back_close",
-      "enter": { "metric": "weight_balance", "op": "centered", "toleranceDeg": 8 },
-      "requiredLandmarks": ["leftLeg", "rightLeg", "torso"],
+      "enter": {
+        "metric": "weight_balance",
+        "op": "centered",
+        "toleranceDeg": 8
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
       "timeoutMs": 900,
       "isTerminal": true
     }
   ],
-
   "scoredMoments": [
-    { "id": "step_1", "phase": "fwd_step", "beat": 0, "label": "1" },
-    { "id": "step_2", "phase": "fwd_replace", "beat": 1, "label": "2" },
-    { "id": "step_3", "phase": "fwd_close", "beat": 2, "label": "3" },
-    { "id": "step_5", "phase": "back_step", "beat": 4, "label": "5" },
-    { "id": "step_6", "phase": "back_replace", "beat": 5, "label": "6" },
-    { "id": "step_7", "phase": "back_close", "beat": 6, "label": "7" }
+    {
+      "id": "step_1",
+      "phase": "fwd_step",
+      "beat": 0,
+      "label": "1"
+    },
+    {
+      "id": "step_2",
+      "phase": "fwd_replace",
+      "beat": 1,
+      "label": "2"
+    },
+    {
+      "id": "step_3",
+      "phase": "fwd_close",
+      "beat": 2,
+      "label": "3"
+    },
+    {
+      "id": "step_5",
+      "phase": "back_step",
+      "beat": 4,
+      "label": "5"
+    },
+    {
+      "id": "step_6",
+      "phase": "back_replace",
+      "beat": 5,
+      "label": "6"
+    },
+    {
+      "id": "step_7",
+      "phase": "back_close",
+      "beat": 6,
+      "label": "7"
+    }
   ],
-
   "errors": [
     {
       "code": "NO_WEIGHT_TRANSFER",
@@ -99,9 +206,18 @@
         "metric": "loaded_leg_knee_change",
         "op": "<",
         "valueDeg": 8,
-        "atMoments": ["step_1", "step_3", "step_5", "step_7"]
+        "atMoments": [
+          "step_1",
+          "step_3",
+          "step_5",
+          "step_7"
+        ]
       },
-      "evidence": ["left_knee", "right_knee", "loaded_leg_knee_change"],
+      "evidence": [
+        "left_knee",
+        "right_knee",
+        "loaded_leg_knee_change"
+      ],
       "relatedDrill": "ss_weight_shift",
       "note": "Marking the step with the foot without committing weight. The defining beginner fault in every social dance and the reason the basic is scored on weight, not foot position."
     },
@@ -112,9 +228,13 @@
         "metric": "movement_during_hold",
         "op": ">",
         "valueDeg": 10,
-        "atMoments": ["hold_4"]
+        "atMoments": [
+          "hold_4"
+        ]
       },
-      "evidence": ["movement_during_hold"],
+      "evidence": [
+        "movement_during_hold"
+      ],
       "relatedDrill": "ss_count_hold",
       "note": "Stepping on 4 turns the salsa basic into a march. Detecting it needs the hold to be an explicit phase, which is why hold_4 exists."
     },
@@ -125,9 +245,14 @@
         "metric": "leading_side",
         "op": "!=",
         "expected": "reference",
-        "atMoments": ["step_1", "step_5"]
+        "atMoments": [
+          "step_1",
+          "step_5"
+        ]
       },
-      "evidence": ["leading_side"],
+      "evidence": [
+        "leading_side"
+      ],
       "relatedDrill": "ss_lead_foot",
       "note": "Only meaningful once mirroring is resolved on the reference side — see catalogue §6.0 and C-005. A mirror error here would blame the learner for our own bug."
     },
@@ -139,7 +264,10 @@
         "op": ">",
         "valueDeg": 38
       },
-      "evidence": ["left_thigh", "right_thigh"],
+      "evidence": [
+        "left_thigh",
+        "right_thigh"
+      ],
       "relatedDrill": "ss_small_steps"
     },
     {
@@ -148,18 +276,40 @@
       "detect": {
         "metric": "timing_verdict",
         "op": "in",
-        "values": ["late", "offBeat"],
-        "atMoments": ["step_1", "step_2", "step_3", "step_5", "step_6", "step_7"]
+        "values": [
+          "late",
+          "offBeat"
+        ],
+        "atMoments": [
+          "step_1",
+          "step_2",
+          "step_3",
+          "step_5",
+          "step_6",
+          "step_7"
+        ]
       },
-      "evidence": ["timing_offset_ms", "timing_verdict"],
+      "evidence": [
+        "timing_offset_ms",
+        "timing_verdict"
+      ],
       "relatedDrill": "ss_slow_tempo",
       "note": "Suppressed when TimingSummary.suggestsCalibrationIssue is true — a large, tight bias is uncalibrated audio, not a dragging dancer (plan §9.2)."
     }
   ],
-
   "reference": {
     "requiredTakes": 6,
     "collectedTakes": 0,
-    "status": "pending"
+    "status": "pending — existing pool PROBED and named-rejected (M-F-128)",
+    "harvestProbe": {
+      "date": "2026-07-30",
+      "question": "Is the basic already in the 5 salsa clips harvested for the shines? (cheap check before a targeted harvest)",
+      "tool": "tools/probe_basic_candidates.py",
+      "criteria": "Taken from THIS step's own config, not invented: (a) >=2 plateaus per cycle of >=7 phase bins — hold_4.minDurationMs 120ms on a ~1.1s cycle at 64 bins, and this file's own note 'Counts 4 and 8 are held, not stepped'; (b) sagittal thigh excursion >=12deg — fwd_step/back_step travel, against the shine's MEASURED ceiling of 4.0deg.",
+      "result": "0 candidate windows across 4 probeable sources. Closest was bqoNqA2hmE4 (the '5 FOOTWORK/Shine Steps' compilation): thigh excursion 20.78deg CLEARS the travel criterion but only 1 plateau, not 2. The 2x-harmonic hypothesis (that its 1.47s period was a half cycle hiding the second plateau) was tested and REFUTED: at 2.94s the cycle yields 0 plateaus and an absurd 137.5deg excursion, i.e. it averages two different steps rather than one longer one.",
+      "negativeControl": "PASSED — the detector flagged none of the 3 known shine segments as basic (a detector that fires everywhere measures nothing).",
+      "measuredMethodLimit": "IMPORTANT, this bounds the conclusion: the movement isolator finds only ~1 usable window per clip (2 in the 16-minute compilation, one of which fails the camera gate) because it searches for SUSTAINED periodic stretches. A compilation that demonstrates five steps briefly each does not present them as five windows. So the honest claim is 'ss_basic is not in the windows this pipeline surfaces', NOT 'ss_basic is not in this footage'.",
+      "verdict": "TARGETED HARVEST REQUIRED — ss_basic cannot be built from the existing pool. Search terms should target single-step basic tutorials ('salsa basic step solo', 'forward and back basic'), not compilations."
+    }
   }
 }

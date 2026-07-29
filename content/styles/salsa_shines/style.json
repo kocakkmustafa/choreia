@@ -1,24 +1,30 @@
 {
   "schemaVersion": 1,
   "id": "salsa_shines",
-  "name": { "en": "Salsa Shines" },
+  "name": {
+    "en": "Salsa Shines"
+  },
   "countSystem": "salsa_123_567",
   "bpmRange": null,
   "bpmStatus": "DISPUTED — must be resolved by measurement before any lesson ships",
   "bpmCandidates": {
-    "r1_reported": [89, 100],
-    "r5_reported": [160, 220],
+    "r1_reported": [
+      89,
+      100
+    ],
+    "r5_reported": [
+      160,
+      220
+    ],
     "note": "Two research passes disagree by roughly a factor of two. R1 reported 89-100; the harvest pass found 160-180 rising to 200-220 in the instructors' own material, and even a single source (RF Dance) contradicts itself across two of its own articles. The likely cause is that the two passes measured different quantities: salsa's quick-quick-slow places three steps across four musical beats, so a 'step feel' rate and a musical beat rate differ by about 2x.",
     "whyItMatters": "The beat grid must run at the rate the dancer actually steps to. Getting it wrong by 2x does not produce slightly-off timing — it produces a grid that lines up with every other beat, so half the learner's correct steps are scored as misses and the product blames them for its own error.",
     "resolution": "G1: take one known track, tap-annotate it with tools/beat_annotate.py, and compare the fitted BPM against both candidate ranges. One measurement settles it; no further research round is warranted."
   },
-
   "copyright": {
     "status": "clear",
     "basis": "Social dance; core shines such as Suzy Q trace to the 1930s and are public domain. Shines are by definition the solo, partnerless subset of the dance — the product's constraint matches the form rather than fighting it.",
     "boundary": "Named instructor routines are not reproduced; combos are our own arrangement of public step vocabulary."
   },
-
   "honesty": {
     "$comment": "K10 (plan §22) in machine-readable form: what this style grades, what it deliberately shows without grading, and WHY — every line traceable to a measurement, not a policy preference. Shown to the user; the app must not grade anything absent from `measured`.",
     "measured": [
@@ -31,47 +37,70 @@
       "Whether you truly transferred your weight — the knee-angle change this would need to detect (1.07-3.42deg across the reference's own instructors) sits inside the pipeline's own 6deg landmark-noise floor, so a verdict would be indistinguishable from tracking jitter (M-F-117)."
     ]
   },
-
   "levels": [
     {
       "level": 1,
-      "name": { "en": "The basic and the count" },
+      "name": {
+        "en": "The basic and the count"
+      },
       "lessons": [
         {
           "id": "ss_l1_footwork",
-          "displayName": { "en": "Shine footwork" },
+          "displayName": {
+            "en": "Shine footwork"
+          },
           "step": "ss_shine_footwork",
           "scored": true,
-          "scoredWhat": ["leg shape", "which foot leads"],
-          "notScoredWhat": ["arm styling", "timing against music", "weight-transfer depth"],
+          "scoredWhat": [
+            "leg shape",
+            "which foot leads"
+          ],
+          "notScoredWhat": [
+            "arm styling",
+            "timing against music",
+            "weight-transfer depth"
+          ],
           "minutes": 10,
           "_whyUnlocked": "Only step in this style with a built reference AND a proven consumer: content/references/ss_shine_footwork.json (3 attested instructors, mirrorConfident:true) is read end-to-end by tools/ss_shine_footwork_liveness.py, which shows both live errors firing on controlled corruptions and staying silent on real footage. Family's second full chain (M-F-119)."
         },
         {
           "id": "ss_l1_basic",
-          "displayName": { "en": "The forward-and-back basic" },
+          "displayName": {
+            "en": "The forward-and-back basic"
+          },
           "step": "ss_basic",
           "scored": false,
           "status": "locked",
-          "lockedReason": { "en": "We haven't collected enough teachers for this step yet. Grading you against one teacher's version would just be that teacher's preference wearing a score — so this lesson stays shut until at least three independent instructors have been measured." },
-          "blockedBy": "reference.collectedTakes == 0 (steps/ss_basic.json)",
-          "minutes": 8
+          "lockedReason": {
+            "en": "We haven't found enough teachers for this step yet. We looked: the five salsa clips we already have were measured against what makes the basic the basic — the held count and the travelling step — and none of them contain it. Grading you against one teacher's version would just be that teacher's preference wearing a score, so this lesson stays shut until at least three independent instructors have been measured."
+          },
+          "blockedBy": "reference.collectedTakes == 0 — existing pool PROBED and named-rejected 2026-07-30 (steps/ss_basic.json reference.harvestProbe: 0/4 sources, negative control passed, method limit named)",
+          "minutes": 8,
+          "probeNote": "The rejection is measured, not assumed: tools/probe_basic_candidates.py. Bound conclusion — 'not in the windows this pipeline surfaces', not 'not in this footage' (the isolator yields ~1 window per clip and cannot split a 5-step compilation)."
         },
         {
           "id": "ss_l1_arm_styling",
-          "displayName": { "en": "Arm styling (not graded)" },
+          "displayName": {
+            "en": "Arm styling (not graded)"
+          },
           "scored": false,
           "demoOnly": true,
-          "demoOnlyReason": { "en": "There is no single correct arm position here — we measured it: the teachers we studied differ from each other by 11 to 58 degrees on the arms while doing the same footwork. That is style, not error. So we show you the range and let you choose; grading it would be inventing a right answer that does not exist." },
+          "demoOnlyReason": {
+            "en": "There is no single correct arm position here — we measured it: the teachers we studied differ from each other by 11 to 58 degrees on the arms while doing the same footwork. That is style, not error. So we show you the range and let you choose; grading it would be inventing a right answer that does not exist."
+          },
           "evidence": "content/references/ss_shine_footwork.json scoring[] — arm joints verdict coached_only / scored_partial (0-64% coverage, 11-58deg medianDispersion) while every leg joint is scored at 100%",
           "minutes": 6
         },
         {
           "id": "ss_l1_musicality",
-          "displayName": { "en": "Finding the 1 (not graded)" },
+          "displayName": {
+            "en": "Finding the 1 (not graded)"
+          },
           "scored": false,
           "demoOnly": true,
-          "demoOnlyReason": { "en": "Hearing where the music's 1 falls is the heart of salsa, and a camera cannot see whether you heard it. We teach it and leave the judging to your own ears." },
+          "demoOnlyReason": {
+            "en": "Hearing where the music's 1 falls is the heart of salsa, and a camera cannot see whether you heard it. We teach it and leave the judging to your own ears."
+          },
           "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
           "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
           "minutes": 5
@@ -84,21 +113,27 @@
       }
     }
   ],
-
   "stepInventory": {
-    "sourcedFrom": ["R1 §2 — 4 core shines with clear sourcing"],
+    "sourcedFrom": [
+      "R1 §2 — 4 core shines with clear sourcing"
+    ],
     "totalCandidates": 4,
     "note": "A much smaller and better-defined vocabulary than hip-hop, with a strict count system. This is why the pair was chosen: one style maximises market, the other maximises measurability (plan §6.1).",
-
     "tierA_confirmed": [
-      { "id": "ss_basic", "name": "Salsa Basic (solo)", "status": "authored" },
-      { "id": "ss_suzy_q", "name": "Suzy Q", "status": "named in research, needs movement description — NOT the same artifact as ss_shine_footwork below; do not conflate" }
+      {
+        "id": "ss_basic",
+        "name": "Salsa Basic (solo)",
+        "status": "authored"
+      },
+      {
+        "id": "ss_suzy_q",
+        "name": "Suzy Q",
+        "status": "named in research, needs movement description — NOT the same artifact as ss_shine_footwork below; do not conflate"
+      }
     ],
-
     "needsMovementDescription": [
       "Remaining 2 of the 4 core shines were counted but not individually named in the research pass — a second, narrower research round is required."
     ],
-
     "referencedGenericContent": [
       {
         "id": "ss_shine_footwork",
@@ -108,13 +143,15 @@
       }
     ]
   },
-
   "errorTaxonomy": {
     "status": "usable",
     "note": "R1 rated this style 5/5 on error taxonomy (8 errors, strong source diversity) — noticeably better raw material than hip-hop. The authored set below still had to be re-expressed as landmark-measurable conditions.",
     "authored": [
-      "NO_WEIGHT_TRANSFER", "STEP_MISSED_ON_4", "WRONG_FOOT",
-      "STEP_TOO_LARGE", "STEP_LATE"
+      "NO_WEIGHT_TRANSFER",
+      "STEP_MISSED_ON_4",
+      "WRONG_FOOT",
+      "STEP_TOO_LARGE",
+      "STEP_LATE"
     ]
   }
 }
