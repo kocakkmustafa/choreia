@@ -39,6 +39,7 @@ anchor freed it up to do.
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import math
 import statistics
@@ -165,6 +166,71 @@ def distance(a: dict[str, list[float]], b: dict[str, list[float]]) -> float:
     return total / count if count else float("inf")
 
 
+# Up to this many takes, orientation is solved exactly instead of greedily.
+# 4 variants per take with the first pinned: 4^(n-1) assignments, 16384 at n=8.
+MAX_EXHAUSTIVE_TAKES = 8
+
+VARIANTS = [(False, False), (True, False), (False, True), (True, True)]
+
+
+def _variant(c: dict[str, list[float]], flip: bool, half: bool):
+    out = mirrored(c) if flip else c
+    return rotate_half(out) if half else out
+
+
+def orient_exhaustive(cycles: list[dict[str, list[float]]]
+                      ) -> tuple[list[dict], list[dict]]:
+    """Choose every take's orientation at once, minimising total disagreement.
+
+    The greedy version this replaced decided each take against the consensus of
+    the takes already placed, which makes the answer depend on list order. On
+    near-ties — and dance steps are full of them, since an alternating step is
+    close to its own mirror shifted half a cycle — a coin-flip early on changes
+    the running consensus and the error compounds. Measured: re-seeding with a
+    different take changed the relative orientation of 3 of 6 pairs on Roger
+    Rabbit and 4 of 6 on Running Man. A consensus that depends on which file
+    was listed first is not a consensus.
+
+    Orientation is really a global assignment, so it is solved as one: try
+    every combination and keep the one with the least total pairwise distance.
+    Take 0 is pinned to identity because the whole set can be mirrored or
+    rotated together without changing anything — that symmetry has to be broken
+    or every solution appears four times over.
+    """
+    n = len(cycles)
+    best_cost, best_assign = None, None
+    for combo in itertools.product(range(len(VARIANTS)), repeat=n - 1):
+        assign = (0,) + combo
+        variants = [_variant(cycles[i], *VARIANTS[a]) for i, a in enumerate(assign)]
+        cost = sum(distance(variants[i], variants[j])
+                   for i in range(n) for j in range(i + 1, n))
+        if best_cost is None or cost < best_cost:
+            best_cost, best_assign = cost, assign
+
+    oriented = [_variant(cycles[i], *VARIANTS[a])
+                for i, a in enumerate(best_assign)]
+
+    # Per-take margin, now meaningful: with every OTHER take held at its chosen
+    # orientation, how much better is this take's winner than its runner-up?
+    log = []
+    for i, a in enumerate(best_assign):
+        others = [o for j, o in enumerate(oriented) if j != i]
+        rest = merge(others) if others else None
+        costs = sorted(distance(_variant(cycles[i], *v), rest) for v in VARIANTS) \
+            if rest else [0.0, 0.0]
+        flip, half = VARIANTS[a]
+        entry = {
+            "index": i, "flipped": flip, "halfCycle": half,
+            "bestDeg": round(costs[0], 3), "runnerUpDeg": round(costs[1], 3),
+            "margin": round((costs[1] - costs[0]) / max(costs[1], 1e-9), 4),
+            "method": "exhaustive",
+        }
+        if i == 0:
+            entry["seed"] = True   # pinned to break the global symmetry
+        log.append(entry)
+    return oriented, log
+
+
 def orient(cycles: list[dict[str, list[float]]]) -> tuple[list[dict], list[dict]]:
     """Bring every take into a common handedness.
 
@@ -176,9 +242,11 @@ def orient(cycles: list[dict[str, list[float]]]) -> tuple[list[dict], list[dict]
     """
     if not cycles:
         return [], []
+    if len(cycles) <= MAX_EXHAUSTIVE_TAKES:
+        return orient_exhaustive(cycles)
     oriented = [cycles[0]]
     log = [{"index": 0, "flipped": False, "halfCycle": False,
-            "margin": None, "seed": True}]
+            "margin": None, "seed": True, "greedy": True}]
     for i, c in enumerate(cycles[1:], start=1):
         consensus = merge(oriented)
         # Four candidates, not two. The half-cycle rotation is here because
@@ -517,6 +585,37 @@ def self_test() -> int:
     check("çevrim-içi çarpılma ARTIK'a düşer (bilinen sınır)",
           bool(wk) and all(v in ("residual", "mixed") for v in wk.values()),
           str(wk))
+
+    # Order-independence. The greedy orienter passed every test above while
+    # quietly making the answer depend on which take was listed first — on real
+    # footage it flipped 3 of 6 pairs on one step and 4 of 6 on the other. A
+    # consensus that changes with file order is not a consensus, so the property
+    # is asserted directly: shuffle the input, the relative orientations must
+    # not move.
+    takes = [_synth_take("a", noise=1.0), _synth_take("b", noise=1.0, mirror=True),
+             _synth_take("c", noise=1.0, phase_shift=0.5)]
+    #
+    # What must be stable is the RELATIVE arrangement, not the absolute one:
+    # the whole set can be mirrored or half-rotated together and remain equally
+    # valid, and since the solver pins take 0 to break that symmetry, permuting
+    # the input legitimately pins a different take. So the assertion compares
+    # the pairwise distance matrix, which is blind to the global symmetry and
+    # sees exactly the thing that used to drift.
+    cyc = [take_canonical_cycle(t) for t in takes]
+    base, _ = orient(cyc)
+
+    def pair_matrix(placed, order):
+        m = {}
+        for a in range(len(order)):
+            for b in range(a + 1, len(order)):
+                key = tuple(sorted((order[a], order[b])))
+                m[key] = round(distance(placed[a], placed[b]), 6)
+        return m
+
+    ref_m = pair_matrix(base, list(range(len(cyc))))
+    stable = all(pair_matrix(orient([cyc[i] for i in perm])[0], perm) == ref_m
+                 for perm in ([1, 0, 2], [2, 1, 0], [1, 2, 0]))
+    check("yönlendirme GİRDİ SIRASINDAN bağımsız (göreli düzen)", stable)
 
     # M-F-41 invariant, forced rather than trusted: a coach's own spread may
     # never be billed to the learner. Pushed with a teacher who disagrees
