@@ -23,10 +23,9 @@ transfer from tracking noise, firing or silent are both wrong, so the code is
 kept defined but never evaluated (`judge()` does not compute a verdict for
 it, checked directly below, not just documented as blocked in the config).
 
-What is checked now, with one live error (STEP_TOO_LARGE) and two documented
-non-live ones (NO_WEIGHT_TRANSFER, WRONG_FOOT — the latter unblocked in the
-config by mirrorConfident:true but leading_side has no implementation
-anywhere yet, out of this file's scope):
+What is checked now, with two live errors (STEP_TOO_LARGE, and WRONG_FOOT via
+side_agreement since M-F-117) and one documented non-live one
+(NO_WEIGHT_TRANSFER, calibration-blocked above):
 
   1. A real clip (one of the reference's 3 clean sources) does NOT trip
      STEP_TOO_LARGE — the reference is not so tight it flags its own evidence.
@@ -40,9 +39,12 @@ anywhere yet, out of this file's scope):
      it is side-agnostic by construction (max-over-both-legs), independent
      of whatever mirrorConfident happens to be.
   4. The BPM ship-gate is UNCHANGED by any of this. Binding a scorer to a
-     step does not make the step shippable — content/library.json still says
-     comingSoon and validate_content.py still blocks it on the DISPUTED bpmRange.
-     Run explicitly here so "bound" cannot be misread as "shippable".
+     step does not make the step shippable — the style's bpmRange is still
+     unresolved and the step's `beats` is still null, so no timing judgement
+     can be built. Run explicitly here so "bound" cannot be misread as
+     "shippable". (This check reads the SHIP GATES, not the library status:
+     M-F-123's lattice moved `salsa_shines` to `live` because it now has a
+     scored lesson, which says nothing about whether it can ship.)
 
   python3 tools/ss_shine_footwork_liveness.py
 """
@@ -287,10 +289,21 @@ def main() -> int:
     vc = subprocess.run([sys.executable, str(REPO / "tools/validate_content.py")],
                         capture_output=True, text=True)
     gate_still_warns = "bpmRange is unresolved (DISPUTED)" in vc.stdout
-    still_coming_soon = json.loads((REPO / "content/library.json").read_text()
-                                   )["styles"][3]["status"] == "comingSoon"
+    # Ship-readiness is read from the SHIP GATES, not from the library status.
+    # This check used to assert status == "comingSoon" and M-F-123 broke it:
+    # the status lattice measures what the user finds in a style (salsa now has
+    # a scored lesson, so it is `live`), while shipping is a separate axis
+    # (bpmStatus). The old assertion conflated the two — exactly the
+    # "statü ≠ ship-hazırlığı" distinction the lattice forced into the open.
+    style = json.loads((REPO / "content/styles/salsa_shines/style.json")
+                       .read_text(encoding="utf-8"))
+    bpm_unresolved = (style.get("bpmRange") is None
+                      and str(style.get("bpmStatus", "")).startswith("DISPUTED"))
+    beats_blocked = step.get("beats") is None and bool(step.get("beatsStatus"))
     check("validate_content hâlâ DISPUTED uyarısı veriyor", gate_still_warns)
-    check("library.json hâlâ comingSoon (ship edilmedi)", still_coming_soon)
+    check("stil bpmRange'i HÂLÂ çözülmemiş (asıl ship kapısı)", bpm_unresolved,
+          f"bpmStatus={str(style.get('bpmStatus'))[:40]}...")
+    check("adımın beats'i HÂLÂ null (zamanlama hükmü kurulamaz)", beats_blocked)
     print("     ⚠ BOUND ≠ SHIPPABLE: skorlayıcı-bağlama kanıtı bu testin konusu; "
           "ship kararı BPM çözülmeden (beat_annotate, kurucu-bekleyen) verilemez.")
 

@@ -51,6 +51,24 @@ Ders **çıplak id string'i OLAMAZ**; durumunu beyan eder, yoksa skorlanmayan bi
 | `status: "locked"` + `lockedReason` | ölçüm henüz YOK → ders kapalı. Gerekçe **kullanıcı dilinde**, ve eksik ÖLÇÜMÜN adıyla (`blockedBy` makine-okur karşılığı) |
 | `demoOnly: true` + `demoOnlyReason` | **K10:** ölçülemeyen hareket ELENMEZ, demo-only işaretlenir ve nedeni kullanıcıya söylenir. `evidence` alanı gerekçenin ölçüm dayanağını gösterir |
 
+### Statü kafesi — `library.json` (M-F-123, aile standardı)
+
+Stil statüsü ders durumlarına **İKİ YÖNLÜ** bağlıdır; `validate_content.py` her iki yönü de kapı olarak koşar.
+
+| Statü | Şart |
+|---|---|
+| `live` | ≥1 `scored` ders **ve** `honesty.measured` boş değil |
+| `demoOpen` | ≥1 `demoOnly` ders **ve** `scored` ders sayısı 0 |
+| `comingSoon` | açılabilir (`demoOnly`) ders YOK (diskte style paketi olmaması da buraya girer) |
+
+**Açılabilir = `demoOnly`.** `locked` ders AÇILAMAZ (kilit görünür, açılmaz), bu yüzden yalnız locked ders taşıyan stil `demoOpen` **değildir**.
+
+**Neden iki yönlü:** aşırı-iddia (`live` ama hiçbir şey skorlanmıyor) ile eksik-iddia (`comingSoon` ama kullanıcı dersi açabiliyor) aynı kusurun iki yönü — kayıt defterinin, içeriğin söylemediği bir şeyi söylemesi. Fazla-satmayı engelleyen disiplin eksik-satmayı da engeller.
+
+⚠️ **Statü ≠ ship-hazırlığı.** Kafes "kullanıcı bu stili gördüğünde ne bulacak"ı tanımlar; ship kapıları (ör. salsa'nın `bpmStatus: DISPUTED`) ayrı eksendir. Bir stil `live` olup hâlâ yayına çıkamaz.
+
+**`library.json` stil-düzeyi `demoOnly` dizisi bir PLAN NOTU'dur**, ders durumu değil — kafes kararı yalnız `style.json`'daki gerçek `lessons[]` durumlarına bakar.
+
 **`locked` ≠ `demoOnly`:** `locked` = ölçüm eksik, gelecekte açılabilir (geçici). `demoOnly` = ölçüm yapısal olarak mümkün değil ya da anlamsız (kalıcı; groove, kol stili, ayak-ucu zamanlaması). İkisini karıştırmak, çözülebilir bir eksiği çözülemez göstermek (ya da tersi) olur.
 
 Skorlanmayan bir ders `locked` ya da `demoOnly` olmak ZORUNDA — ikisi de değilse gerekçesiz-skorsuz ders olur, `validate_content.py` bunu reddeder.

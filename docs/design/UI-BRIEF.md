@@ -49,8 +49,11 @@ Amaç: kurulumu doğrulamak, izin gerekçesini söylemek, **ne ölçmediğimizi 
 - **"What we can grade today" kutusu** — `honesty.measured` doğrudan buradan okunur; boşsa boş görünür (bugün hip-hop için boş).
 
 ### 3.3 Library (⚠️ en zor tasarım problemi — §7 açık kalem 2)
-- **34 stil sayfası, 5 dalga** (`content/library.json`). Bugün **skorlanan stil: 0**.
-- Her stil kartı: ad · dalga · durum rozeti (`live` / `comingSoon` / `onHold`) · varsa `demoOnly` etiketi.
+- **34 stil sayfası, 5 dalga** (`content/library.json`). Bugün: **1 `live`** (salsa_shines) · **1 `demoOpen`** (hip_hop_foundations) · gerisi `comingSoon`/`onHold`.
+- Her stil kartı: ad · dalga · durum rozeti · varsa `demoOnly` etiketi. **Rozet üç ayrı şey söylemek zorunda** (statü kafesi, M-F-123):
+  - `live` = bu stilde skorlanan ders var
+  - `demoOpen` = dersleri **açabilirsin ama hiçbiri puan vermez** ⟵ ⚠️ tasarımın yeni ve zor rozeti: "açık" ile "puanlı" aynı şey değil, ve bunu bir rozetle anlatmak gerekiyor
+  - `comingSoon` = açılabilir ders yok
 - Kapsamın **TAMAMI baştan görünür** (plan §24 Tamamlanma kriterleri: "kütüphanenin TAMAMI gezilebilir") — ama **sahte/boş kurs asla listelenmez** (`library.json` statusValues).
 - `onHold` stiller sayfada **gerekçesiyle** görünür (Hula: kültürel ortaklık şartı) — gizlenmez.
 
@@ -131,6 +134,7 @@ Her ekran için: **boş · yükleniyor · hata · izin-reddi**. Choreia-özel ol
 | **Kadraj dışı** (`OUT_OF_FRAME`) | Canlı tur | "Step back, I can't see your feet" — skor değil, uyarı |
 | **Az ışık** (`LOW_LIGHT`) | Canlı tur | Aynı sınıf: hüküm yok, sebep var |
 | **Düşük izleme güveni** | Canlı tur, özet | ⚠️ **Hüküm YOK durumu** — 0 puan DEĞİL. Bu ayrımı görsel olarak çözmek zorunlu |
+| **⭐ ÖLÇÜLEMEDİ ≠ BAŞARISIZLIK** | Özet, Progress, ders kartı | **Kendi başına bir durum.** Üç ayrı kaynağı var ve hepsi aynı yüzeye çıkar: (a) bu faz `scoredPhases:false` — eğitmenler orada anlaşmıyor; (b) bu hata `calibration-blocked` (NO_WEIGHT_TRANSFER: eşik gürültü tabanının altında); (c) izleme güveni düştü. Üçünde de ekran **"yapamadın" demez, "bakmadım/bakamadım" der** — ve hangisi olduğunu söyler. Boş alan, gri "—", 0 puan DEĞİL; ilerleme çubuğuna eksik olarak da yazılmaz |
 | **Ders kilitli** | Ders | Kilit + sebep + eksik ölçümün adı (atlanamaz, "premium" gibi görünmez) |
 | **Ders demo-only** | Ders, özet | Skor alanı **yok** (0 değil), yerinde sebep |
 | **Stil yakında** | Library, Stil sayfası | "coming soon" rozeti; **sahte kurs listesi YOK** |
@@ -152,6 +156,7 @@ Bunlar stil tercihi değil; her biri bir ölçümün sonucu. İhlal = ürünün 
 8. **App-içi müzik kataloğu YOK.** Lisans gerektirir; V1 = kendi metronomumuz + kullanıcının yerel müziği. Tasarım katalog varsaymamalı. (K3 / plan §16)
 9. **Ham video cihazdan çıkmaz** ve bu ekranda yazılı. Kayıt/paylaşım özelliği tasarlanacaksa ayrı gizlilik kararı gerekir. (plan §17 Gizlilik)
 10. **Köken-atıf kutuları kaldırılamaz.** Dekoratif değil; kültürel sorumluluk. (Blueprint §7)
+11. **Statü rozeti içeriğin söylediğinden fazlasını DA azını DA söylemez.** Kafes iki yönlü kapılı: `live` ama skorlanan ders yok = aşırı-iddia; `comingSoon` ama kullanıcı ders açabiliyor = eksik-iddia. İkisi aynı kusur. Tasarım rozeti "pazarlama etiketi" gibi kullanamaz. (M-F-123)
 
 ## 7. Açık kalemler (tasarım oturumu ÖNCESİ karar gerekir)
 
@@ -159,7 +164,8 @@ Bunlar stil tercihi değil; her biri bir ölçümün sonucu. İhlal = ürünün 
 |---|---|---|
 | 1 | **BPM kilidi** — `beat_annotate` canlı-tap ölçümü. Çözülene kadar ders akışının 3. adımı ve tüm zamanlama yüzeyi kapalı. | **kurucu** (~10 dk manuel) |
 | 2 | **34 sayfa / 0 skorlanan** gerilimi: kütüphane sahte-dolu görünmeden nasıl "geniş kapsam" hissi verir? Tasarım oturumunun asıl yaratıcı problemi. | tasarım oturumu |
-| 3 | `statusValues` sözlüğü skorlama etrafında kurulu (`comingSoon` = "kurs yok") ama artık **demo-only ders diskte var**. Yeni statü (`demoOpen`?) mi, tanım genişletme mi? Aile-geneli olabilir. | **koordinatör** (soruldu, M-F-119 sonrası) |
+| 3 | ~~`statusValues` sözlüğü~~ **ÇÖZÜLDÜ (M-F-123):** yeni statü `demoOpen` aile standardı oldu, üçlü kafes iki yönlü kapılı. Tasarıma düşen: `demoOpen` rozetini "açık ama puansız" anlamıyla çizmek. | ✅ kapandı |
+| 3b | **YENİ GERİLİM:** statü ≠ ship-hazırlığı. salsa_shines `live` (skorlanan dersi var) ama `bpmStatus: DISPUTED` yüzünden hâlâ yayına çıkamaz. Kafes ders-durumuna bakıyor, ship kapısı ayrı eksende — ikisinin ilişkisi kafes tanımında YOK. Kullanıcı `live` rozeti görüp ders bulamazsa bu bir dürüstlük sorunu olur. | **koordinatör** (soruldu) |
 | 4 | Ders akışı 3. adımı (beat'le dene) kapalıyken **yerini boş mu bırakmalı, gizlemeli mi?** Boş bırakmak dürüst ama kırık görünebilir. | tasarım oturumu |
 | 5 | TR ürün dili V1 kapsamı dışı (§0) — değişecekse kapsam kararı. | **kurucu** |
 | 6 | Kullanıcı kendini canlı turda görmek ister mi (self-view)? Dans pedagojisinde ayna standart, ama kamera önizlemesi dikkat dağıtabilir. Ölçülmüş verimiz YOK. | tasarım oturumu + kullanıcı testi |

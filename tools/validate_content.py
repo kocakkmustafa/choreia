@@ -276,7 +276,7 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
     return style
 
 
-VALID_STATUS = {"live", "comingSoon", "onHold", "excluded"}
+VALID_STATUS = {"live", "demoOpen", "comingSoon", "onHold", "excluded"}
 VALID_FLAGS = {"green", "amber", "red"}
 VALID_SCORING = {"pose", "pose+onset", "onset"}
 
@@ -323,34 +323,75 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
         if status == "onHold" and not s.get("onHoldReason"):
             rep.error(where, f"'{sid}' is on hold with no reason — the page must "
                              "state why")
+
+        # M-F-123 status lattice, checked BOTH WAYS. Overclaiming ("live" with
+        # nothing scored) and underclaiming ("comingSoon" while the user can
+        # actually open a lesson) are the same defect pointing opposite ways:
+        # the registry saying something the content does not.
+        #
+        # Openable means demoOnly. A `locked` lesson cannot be opened (the lock
+        # is visible and does not lift), so a style carrying only locked lessons
+        # is NOT demoOpen.
+        style = styles_on_disk.get(sid)
+        scored = demo = 0
+        if style is not None:
+            for lvl in style.get("levels", []):
+                for ls in lvl.get("lessons", []):
+                    if not isinstance(ls, dict):
+                        continue
+                    if ls.get("scored"):
+                        scored += 1
+                    elif ls.get("demoOnly"):
+                        demo += 1
+
         if status == "live":
             live.add(sid)
-            if sid not in styles_on_disk:
+            if style is None:
                 rep.error(where, f"'{sid}' is marked live but has no style pack "
                                  "on disk — an empty course must never be listed")
-            # statusValues defines live as "kursları açık, SKORLANIYOR". A style
-            # whose every lesson is locked or demo-only is not scoring anything,
-            # so calling it live is a claim its own content contradicts. This is
-            # the fifth question at library level: the registry says scored —
-            # which lesson does the scoring?
-            style = styles_on_disk.get(sid) if isinstance(styles_on_disk, dict) else None
-            if style is not None:
-                scored = [ls for lvl in style.get("levels", [])
-                          for ls in lvl.get("lessons", [])
-                          if isinstance(ls, dict) and ls.get("scored")]
+            else:
                 if not scored:
                     rep.error(where, f"'{sid}' is marked live but no lesson in "
                                      "its style pack is scored — statusValues "
-                                     "defines live as 'kursları açık, "
-                                     "skorlanıyor'; every lesson here is locked "
-                                     "or demo-only")
+                                     "defines live as '>=1 SKORLANAN ders'; "
+                                     f"found {demo} demo-only and 0 scored "
+                                     "(should this be demoOpen?)")
                 if not style.get("honesty", {}).get("measured"):
                     rep.error(where, f"'{sid}' is marked live but its "
                                      "honesty.measured is empty — the style "
                                      "itself declares it grades nothing")
-        if status == "comingSoon" and sid in styles_on_disk:
-            rep.warn(where, f"'{sid}' has content on disk but is still listed as "
-                            "coming soon")
+        elif status == "demoOpen":
+            if style is None:
+                rep.error(where, f"'{sid}' is marked demoOpen but has no style "
+                                 "pack on disk — there is no lesson to open")
+            else:
+                if scored:
+                    rep.error(where, f"'{sid}' is marked demoOpen but has "
+                                     f"{scored} scored lesson(s) — that is "
+                                     "`live`; demoOpen means 0 scored")
+                if not demo:
+                    rep.error(where, f"'{sid}' is marked demoOpen but no lesson "
+                                     "is demoOnly — a style whose lessons are "
+                                     "all locked has nothing the user can open, "
+                                     "which is comingSoon")
+        elif status == "comingSoon":
+            # The underclaim direction. Content on disk alone is only a warning
+            # (a style pack can legitimately exist while every lesson is still
+            # locked), but an OPENABLE lesson means the user can reach it, and
+            # the registry must say so.
+            if scored:
+                rep.error(where, f"'{sid}' is listed comingSoon but has {scored} "
+                                 "SCORED lesson(s) — that is `live`. "
+                                 "Underclaiming is the same defect as "
+                                 "overclaiming (M-F-123)")
+            elif demo:
+                rep.error(where, f"'{sid}' is listed comingSoon but has {demo} "
+                                 "demo-only lesson(s) the user can actually "
+                                 "open — that is `demoOpen`. Underclaiming is "
+                                 "the same defect as overclaiming (M-F-123)")
+            elif style is not None:
+                rep.warn(where, f"'{sid}' has content on disk but is still "
+                                "listed as coming soon (all lessons locked)")
 
     for sid in sorted(set(styles_on_disk) - seen):
         rep.error(where, f"style pack '{sid}' exists on disk but the library "
