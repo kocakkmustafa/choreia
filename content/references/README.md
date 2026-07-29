@@ -7,6 +7,11 @@ Bu dosya artefaktı *nasıl okuyacağını* söyler. Yanlış okunursa üretilen
 boşa gider — özellikle `scoredPhases`, çünkü onu görmezden gelen bir tüketici
 doğru dans edeni yanlış sayar.
 
+> **Kanonik kaynak:** aile-geneli sözleşme
+> `motion-core/docs/50-REFERANS-TUKETIM-SOZLESMESI.md` (M-F-46). Aşağıdaki
+> kurallar oraya girdi; burada kalmalarının nedeni her birinin Choreia'da
+> ölçülmüş bir gerekçesi olması. Çakışma olursa kanonik doküman kazanır.
+
 ## Alanlar
 
 | alan | ne |
@@ -53,6 +58,20 @@ türü bir hüküm veremez.
 Referans yine kurulabilir — Running Man'de belirsiz take'i çıkarmak uzlaşmayı
 en az oynatan değişiklikti (0.9°) — ama yeni take eklenirken o kaydın kesin
 olmadığı bilinmeli.
+
+## Ürün yüzeyi (kanonik §4 — JabLab'dan gelen iki kural)
+
+**7. Skor YALNIZ skorlanan eklemlerden akar; `coached_only` başlıklar seans
+özetinde AYRI ve nedeniyle gösterilir.** Running Man'de kolları puana katmak
+skoru gürültüyle sulandırır (kapsam %8-31); ayrı göstermemek ise kullanıcıya
+"kolun ölçülmedi" bilgisini borçlu kalır. "Kollar: dört eğitmen farklı taşıyor,
+bu adımda stil serbest" denir.
+
+**8. Sesli koç ölçülmeyen şeyi İDDİA EDEMEZ.** Dansta bunun somut tuzağı
+`scoredPhases=false` olan fazlar: motorun o anda bir hükmü yoktur, dolayısıyla
+replik "tekmede geç kaldın" diyemez. Aynı şekilde ölçülmeyen büyüklükler
+(enerji, "akış", "müzikalite") replikte geçemez — Choreia açı ve faz ölçüyor,
+ifade değil.
 
 ## Faz ekseni
 
