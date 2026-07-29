@@ -153,7 +153,8 @@ def probe(video_id: str) -> dict:
     }
 
 
-def verdict(p: dict, seen: set[str]) -> tuple[str, str]:
+def verdict(p: dict, seen: set[str], inflight: set[str] = frozenset()
+            ) -> tuple[str, str]:
     """Returns (verdict, reason). `seen` is mutated as channels are claimed."""
     if not p.get("ok"):
         return "ERROR", p.get("error", "?")
@@ -167,9 +168,19 @@ def verdict(p: dict, seen: set[str]) -> tuple[str, str]:
     cid = p["channelId"]
     if cid and cid in seen:
         return "RED", f"kanal zaten sayıldı ({p['channel']})"
+    if cid and cid in inflight:
+        # Downloaded but not yet extracted: the instructor is mid-harvest, so
+        # this candidate probably adds repetitions rather than a new source.
+        # Not a rejection — the in-flight take may fail — but the count of
+        # INSTRUCTORS is what the >=3 rule and M-F-32 are about, and calling
+        # this "new channel" overstates what it buys. Caught when a long class
+        # and a short clip from the same studio were queued in two batches.
+        if cid:
+            seen.add(cid)
+        return "ADAY", f"⚠ {p['channel']} zaten hasatta — TEKRAR katar, EĞİTMEN katmaz"
     if cid:
         seen.add(cid)
-    return "ADAY", "yatay + adım uzunluğu + yeni kanal"
+    return "ADAY", "yatay + adım uzunluğu + yeni eğitmen"
 
 
 def main() -> int:
@@ -223,6 +234,11 @@ def main() -> int:
     step = args.step or "unknown"
     seen = {cid for cid, vs in used.get(step, {}).items()
             if any(v["extracted"] for v in vs)}
+    # Channels whose media is on disk but has produced no landmarks yet: a
+    # harvest still running, or one that failed. Reported, never used to reject.
+    inflight = {cid for step_rows in used.values()
+                for cid, vs in step_rows.items()
+                if any(not v["extracted"] for v in vs)} - seen
     print(f"adım: {step} — hâlihazırda {len(seen)} kullanılabilir kanal\n")
     print(f"{'video':<13}{'karar':<15}{'çözünürlük':>11}{'süre':>7}  "
           f"{'kanal':<24}neden")
@@ -230,7 +246,7 @@ def main() -> int:
     accepted: list[str] = []
     for vid in ids:
         p = probe(vid)
-        v, why = verdict(p, seen)
+        v, why = verdict(p, seen, inflight)
         res = f"{p.get('width', 0)}x{p.get('height', 0)}" if p.get("ok") else "-"
         dur = f"{p.get('durationSec', 0)}s" if p.get("ok") else "-"
         print(f"{vid:<13}{v:<15}{res:>11}{dur:>7}  "
@@ -239,7 +255,9 @@ def main() -> int:
             accepted.append(vid)
 
     print(f"\n{len(accepted)}/{len(ids)} aday geçti; "
-          f"adım toplamı {len(seen)} kanal olur.")
+          f"adım toplamı {len(seen)} EĞİTMEN olur.")
+    print("  (sayım birimi EĞİTMEN'dir — aynı kanalın ikinci videosu tekrar "
+          "katar, kaynak katmaz; M-F-32/M-F-54)")
     if len(seen) < 3:
         print(f"⚠ ≥3 kuralı hâlâ sağlanmıyor — {3 - len(seen)} kanal daha lazım. "
               "Referans ÜRETİLMEZ (M-C-04).")
