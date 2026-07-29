@@ -1,0 +1,24 @@
+name: choreia_engine
+description: >-
+  Choreia's dance-scoring engine. Pure Dart, no Flutter: the UI shell consumes
+  this, never the other way round (JabLab's engine/app split, mirrored per
+  M-F-160).
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  # Shared infrastructure comes from motion_core at a PINNED TAG and is never
+  # copied into this repo (CLAUDE.md hard rule). Two-pin regime, M-F-154:
+  # Dart consumers pin a TAG, the harvest rig tracks main.
+  motion_core:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_core
+      ref: motion_core-v0.8.6
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^5.0.0
