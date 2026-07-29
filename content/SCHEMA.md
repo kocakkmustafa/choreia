@@ -103,6 +103,20 @@ Skorlanmayan bir ders `locked` ya da `demoOnly` olmak ZORUNDA — ikisi de deği
 | `errors[]` | `{code, severity, detect, evidence, relatedDrill}` |
 | `reference` | `{requiredTakes, collectedTakes, status}` — ≥3 (tercihen 6) bağımsız eğitmen (katalog §6.0) |
 
+### `analysisWindow` — pencere beyanı (M-F-144, opsiyonel)
+
+Uzun-çevrimli adımlar (ör. 8-count salsa basic) `movement_isolator`'ın **varsayılan 6 s penceresinde YAPISAL OLARAK görünmez**: kendi `hi = win//3` kuralı aranabilir maksimum periyodu ~2 s'ye kırpar. Bu kural **gevşetilmez** — dürüst bir ACF kısıtıdır (periyodiklik iddiası pencerede ≥3 çevrim ister, M-C-25). Çözüm pencereyi uzatmak, ve uzunluğu **adımın kendi sayı yapısı + ÖLÇÜLEN öğretim periyodundan** türetmek.
+
+| Alan | Kural |
+|---|---|
+| `expectedPeriodSeconds` | **ÖLÇÜLMÜŞ** olmalı, tahmin değil; `expectedPeriodBasis` hangi kaynakta ölçüldüğünü söyler |
+| `windowSeconds` | `windowDerivation` aritmetiği + varsa ölçülen düzeltmeyi yazar |
+| `measuredLimitItFixes` | bu beyan olmadan neyin görünmediği |
+
+**Aritmetik yeterli değil, ölçüm gerekir:** `win//3 ≥ periyot` için 3× yeter (2,97 s → 8,9 s), ama ss_basic'te 12 s (4 çevrim) ölçülerek YETMEDİ (periyodiklik 0,49, red) ve 18 s (6 çevrim) geçti (0,51). Bağlayıcı kısıt lag tavanı değil ACF'nin sinyal-gürültü oranı, ve o çevrim sayısıyla iyileşiyor.
+
+Aile varsayılanı (6 s) **değişmez** — kısa hareketler için doğrudur. Bu adım-başına bir beyandır ve `movement_isolator.py` DEĞİŞTİRİLMEZ (`window_s` zaten parametreydi), yani vendored kopya pin'iyle bit-özdeş kalır ve `--drift-check` temiz kalır.
+
 ### `measurability.tier` — V1 kapısı
 
 R1'in CV-risk bulgusuna dayanır: düşük-genlikli tek-segment izolasyonlar poz modellerinin zayıf olduğu alandır; ayak-ucu temas zamanlaması ise markerless tek kamerada **en düşük güvenli** noktalar arasındadır.

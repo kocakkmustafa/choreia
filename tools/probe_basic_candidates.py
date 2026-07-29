@@ -54,6 +54,19 @@ from build_reference import (PHASE_BINS, take_canonical_cycle,  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 SHINE_REF = REPO / "content/references/ss_shine_footwork.json"
+STEP_PATH = REPO / "content/styles/salsa_shines/steps/ss_basic.json"
+
+
+def declared_window_s() -> float:
+    """The step's own analysisWindow declaration (M-F-144), or the family default.
+
+    Read rather than hardcoded: an 8-count step is invisible in the isolator's
+    6s default by construction (C-104 limit (a)), and the fix belongs in the
+    step config where the measurement that justifies it also lives.
+    """
+    step = json.loads(STEP_PATH.read_text(encoding="utf-8"))
+    win = (step.get("analysisWindow") or {}).get("windowSeconds")
+    return float(win) if win else 6.0
 
 # The five extracted salsa clips: the three that built ss_shine_footwork, the
 # one excluded as identity-ambiguous (M-F-115 — a 5-step compilation, the most
@@ -64,6 +77,11 @@ SOURCES = {
     "w4opJ2ezmd4": "Alfonso y Mónica — Pasos Libres (shine source)",
     "bqoNqA2hmE4": "Dalia Dance — '5 FOOTWORK/Shine Steps' COMPILATION",
     "v_y4l3lAZ0Q": "Dance With Rasa (excluded: ankle visibility 0.007)",
+    # Targeted round (M-F-132/139), single-step basic lessons:
+    "wV8cDpJa2f4": "Salsaventura — Basic Step for the Absolute Beginner",
+    "9NZp9_GuKrE": "Ballroom Feed — Forward & Back",
+    "FtZzjGsPxjg": "Dame Mas Dance — Front & Back Basic Variations",
+    "Ns5TaVGv6uY": "Dance Dojo — 10 Minute Basic Steps Practice",
 }
 SHINE_SOURCES = {"SHGkSbJm2Iw", "jjP8bKWCg9U", "w4opJ2ezmd4"}
 
@@ -164,11 +182,12 @@ def _overlap(a: tuple[int, int], b: tuple[int, int]):
     return (lo, hi) if hi > lo else None
 
 
-def probe(video_id: str, shine_ref: dict) -> list[dict]:
+def probe(video_id: str, shine_ref: dict, window_s: float | None = None) -> list[dict]:
     """Every camera-clean movement window in one clip, measured."""
     doc, lm, world, _, fps = load_take(video_id)
     iso = to_isotropic(lm, aspect_of(video_id))
-    moves = find_movement_windows(iso, fps=fps, max_windows=40)
+    moves = find_movement_windows(iso, fps=fps, max_windows=40,
+                                  window_s=window_s or declared_window_s())
     cam = []
     if all(w for w in world):
         cam = [(w.start_frame, w.end_frame)
@@ -220,13 +239,16 @@ def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--video", help="tek kaynak (varsayılan: hepsi)")
+    ap.add_argument("--window-s", type=float,
+                    help="varsayılan: adımın analysisWindow beyanı (M-F-144)")
     ap.add_argument("--out")
     args = ap.parse_args()
 
     shine = json.loads(SHINE_REF.read_text(encoding="utf-8"))["reference"]
     ids = [args.video] if args.video else list(SOURCES)
 
-    print("ss_basic aday taraması — ölçütler adımın KENDİ config'inden:")
+    ws = args.window_s or declared_window_s()
+    print(f"ss_basic aday taraması — ölçütler adımın KENDİ config'inden (pencere {ws}s):")
     print(f"  plato: >={MIN_PLATEAU_BINS} bin (hold_4 minDurationMs=120ms), >=2 tane "
           f"(count 4 ve 8)")
     print(f"  ileri-geri: uyluk salınımı >={MIN_BASIC_THIGH_EXCURSION_DEG}deg "
@@ -236,7 +258,7 @@ def main() -> int:
     for vid in ids:
         print(f"{vid} — {SOURCES.get(vid, '?')}")
         try:
-            rows = probe(vid, shine)
+            rows = probe(vid, shine, args.window_s)
         except SystemExit as e:          # load_take fail-closed (eksik fixture/fps)
             print(f"    atlandı: {e}\n")
             continue

@@ -23,7 +23,8 @@
     "rationale": "Weight transfer produces large thigh-orientation and knee-flexion changes. Step direction is fronto-parallel to the camera. No turns in the basic.",
     "riskFlags": [
       "Step size is small relative to hip-hop; amplitude thresholds must be calibrated against real takes before shipping (plan §12.4)."
-    ]
+    ],
+    "tierStatus": "UNVERIFIED (M-F-144 KARAR 2): the measurement commissioned to confirm or lower this tier returned overlap at all three foot levels and could not decide, for a named structural reason (no positive control — see harvestProbe4_footLevel.whyTheMeasurementCannotDecide). Tier A is the INHERITED value, not a re-confirmed one. Do not cite it as measured."
   },
   "scoring": {
     "focusJoints": [
@@ -329,5 +330,38 @@
       "structuralLimitB_plateauLevel": "MEASURED and more fundamental: 3 of 3 measurable sources show ZERO plateaus, including one whose travel amplitude clearly separates it from the shines (13.8-18.9deg vs the shines' 1.4-5.3deg). The plateau detector reads the summed speed of 8 LEG-ANGLE joints; this step's config declares its hold at FOOT-CONTACT level ('Counts 4 and 8 are held, not stepped'). Those are not the same measurement: on count 4 the foot stops while hips and weight keep moving, so an angle-speed detector sees no pause. Negative control still passes (it does not flag the shines either), so the detector is consistent — it is measuring the wrong LEVEL, not measuring badly.",
       "openQuestion": "Limit (b) raises a tier question this session did not decide: if ss_basic's defining feature is a foot-contact hold, and foot-contact timing is exactly why Running Man is Tier C (toe landmarks least reliable in markerless single-camera), then ss_basic's `measurability.tier: A` may be optimistic. Raised to the coordinator, not resolved here."
     }
+  },
+  "analysisWindow": {
+    "$comment": "M-F-144 KARAR 1. The isolator's `hi = win//3` rule is NOT relaxed — it is an honest ACF constraint (a periodicity claim needs >=3 cycles inside the window, M-C-25). Instead the WINDOW is lengthened, and the length is derived from this step's own count structure plus a MEASURED teaching period.",
+    "expectedPeriodSeconds": 2.97,
+    "expectedPeriodBasis": "MEASURED on 9NZp9_GuKrE (Ballroom Feed, 'Forward & Back') — the only harvested source where an 8-count cycle resolved at all. Consistent with this step's beats:8 and with the high end of the disputed BPM range (8 beats / 2.97s = 161 BPM). NOT a guess: the number came out of the isolator, and if a later harvest measures a different teaching period this field moves with it.",
+    "windowSeconds": 18.0,
+    "windowDerivation": "3x is arithmetically enough (win//3 >= expectedPeriod needs window >= 3*2.97 = 8.9s) but was MEASURED INSUFFICIENT: at window_s=12 (4 cycles) the same source still scored periodicity 0.49 and was rejected; at 18 (6 cycles) it scored 0.51 and passed. So the binding constraint is not the lag ceiling but the ACF's signal-to-noise, which improves with cycle count. 18s ~= 6x expectedPeriod.",
+    "measuredLimitItFixes": "With the family default window_s=6.0 this step is INVISIBLE by construction: hi = win//3 caps the searchable period near 1.99s while an 8-count salsa cycle runs 3-5s. C-104 limit (a) — the other face of C-102 (there short segments were invisible, here long cycles).",
+    "familyDefaultUnchanged": "window_s=6.0 stays the family default and is correct for short movements; this is a per-step declaration, and movement_isolator.py itself is NOT modified (window_s was already a parameter) so the vendored copy stays byte-identical to its pin and --drift-check stays clean.",
+    "measuredEffect": "APPLIED AND IT WORKS, but it did not rescue this step's candidates. Proof it works: at the family default the isolator surfaced no window longer than ~2s in the targeted sources; with windowSeconds=18 it surfaced periods of 2.74s and 3.10s in Ns5TaVGv6uY — i.e. exactly the 8-count range that was invisible before. Proof it did not rescue: both candidates fail a SECOND, independent gate (see harvestProbe3)."
+  },
+  "harvestProbe3_reevaluation": {
+    "date": "2026-07-30",
+    "instruction": "M-F-144 KARAR 1: re-evaluate Ballroom Feed + Dance Dojo with the declared window. No new harvest — the round's data was kept.",
+    "windowUsed": 18.0,
+    "result": "Still 0 basic candidates. The window fix is real but a second gate stops each of them, and the two reasons are different:",
+    "9NZp9_GuKrE_BallroomFeed": "CAMERA ANGLE, not window. Movement window found at 18s (period 2.97s) but the camera gate yields ZERO clean windows: torso yaw median 54.1deg folded, only 14.3% of frames within 15deg and 25.8% within 35deg. The instructor teaches at an oblique angle. This is the gate working as designed (C-041: 30-60deg is the enemy), not a limit to fix.",
+    "Ns5TaVGv6uY_DanceDojo": "NON-OVERLAP. Camera profile is clean (yaw median 7.7deg, 66% within 15deg) and the 18s window surfaced 8 movement windows including 2.74s and 3.10s periods — but NONE of them intersects a camera-clean stretch. The clean stretches and the moving stretches are in different parts of the video. Same class as M-C-16: optimising one criterion and filtering by the other is not the same as optimising over what satisfies both.",
+    "conclusion": "ss_basic remains unbuildable from all footage harvested so far. Three independent obstacles were measured across the two rounds: material without sustained periodicity (Salsaventura), oblique camera (Ballroom Feed), movement/camera non-overlap (Dance Dojo), plus the two structural limits already recorded."
+  },
+  "harvestProbe4_footLevel": {
+    "date": "2026-07-30",
+    "instruction": "M-F-144 KARAR 2: measure ankle horizontal-travel distribution to settle BOTH the plateau-detector level and the tier question. Report only, no threshold.",
+    "tool": "tools/probe_ankle_travel.py (levels: ankle 27/28, heel 29/30, toe 31/32)",
+    "measure": "per-phase-bin foot horizontal speed in torso-lengths/second, median across a take's cycles; reported as min/median (a held count should drive this toward 0) with the shine sources as control (continuous by construction)",
+    "results": {
+      "ankle": "basic candidates [0.216, 0.338, 0.446] median 0.338 · shine control [0.356, 0.369, 0.499] median 0.369 — OVERLAP",
+      "heel": "basic [0.142, 0.496, 0.586] median 0.496 · control [0.296, 0.444, 0.458] median 0.444 — OVERLAP",
+      "toe": "basic [0.228, 0.403, 0.462] median 0.403 · control [0.341, 0.435, 0.469] median 0.435 — OVERLAP"
+    },
+    "verdict": "NEITHER branch of the hüküm holds: (a) is NO (ankle does not separate) and (b) is also NO (the toe does not separate either). All three foot levels overlap with the control.",
+    "whyTheMeasurementCannotDecide": "This is the honest limit, and it is structural rather than a matter of trying harder: there is NO POSITIVE CONTROL. I am looking for the signature of a hold without possessing one verified example of the basic — the reference I would need is the very thing being sought. So an overlap cannot distinguish 'these segments contain no hold' (likely: the strongest candidate is titled Basic VARIATIONS) from 'my measure cannot see a hold that is there'. Breaking the circle needs either a human eye confirming one segment IS the basic, or footage clean enough to build a reference from.",
+    "tierDecision": "NOT CHANGED and NOT confirmed. measurability.tier stays A but is now marked unverified below — the measurement asked to settle it came back unable to. Deciding either way on this data would be inventing a verdict."
   }
 }
