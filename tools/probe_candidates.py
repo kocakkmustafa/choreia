@@ -69,6 +69,18 @@ STEP_OF: dict[str, str] = {
     "pmbH7SmdlBw": "hh_roger_rabbit",   # FUNKMODE — çoklu hareket dersi
     "rRlUNGymhmE": "hh_roger_rabbit",   # Marvelous Mosell
     "selXuuAWI64": "hh_roger_rabbit",   # Free Focus Dance
+    "bhmOeUJPJB0": "salsa_shines",
+    "o6E9Ljr5o_c": "salsa_shines",
+    "C4fsMsgVN0w": "salsa_shines",
+    "Hki7w5Agwgg": "salsa_shines",
+    "SHGkSbJm2Iw": "salsa_shines",
+    "Nzy-uJBeWpc": "salsa_shines",
+    "XQif9iHV5sE": "salsa_shines",
+    "NRpFy38YbUo": "salsa_shines",
+    "mSLyfmQyTiA": "salsa_shines",
+    "OsQUi2l1ZE8": "salsa_shines",
+    "w4opJ2ezmd4": "salsa_shines",
+    "mE2fh2XzeNc": "salsa_shines",
     "lYpRasK4c9k": "hh_running_man",    # Howcast
     "UO9Ehsdt2IE": "hh_running_man",    # JoeyTheJAM
     "k22Bm2pMyD4": "hh_running_man",    # Jayden Rodrigues — dikey, elendi
