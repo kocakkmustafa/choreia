@@ -160,7 +160,7 @@ def validate_step(path: Path, joints: set[str], rep: Report) -> dict:
     return step
 
 
-def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> None:
+def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
     where = path.relative_to(REPO).as_posix()
     style = json.loads(path.read_text(encoding="utf-8"))
     rep.checked += 1
@@ -183,15 +183,84 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> None:
     elif not isinstance(rng, list) or len(rng) != 2 or rng[0] >= rng[1]:
         rep.error(where, f"bpmRange {rng} invalid")
 
+    # K10: what the style grades and what it deliberately does not, with a
+    # reason per line. `measured` may be EMPTY (a style that grades nothing
+    # yet is an honest state) but the field must exist and, when empty, say
+    # why — an absent honesty block is what lets ungraded content drift into
+    # looking graded.
+    honesty = style.get("honesty")
+    if not isinstance(honesty, dict):
+        rep.error(where, "no honesty block — K10 requires every style to state "
+                         "what it measures and what it deliberately does not")
+    else:
+        if not isinstance(honesty.get("measured"), list):
+            rep.error(where, "honesty.measured must be a list (may be empty)")
+        elif not honesty["measured"] and not honesty.get("measuredNote"):
+            rep.error(where, "honesty.measured is empty without a measuredNote "
+                             "— an empty list must say why it is empty")
+        if not honesty.get("notMeasured"):
+            rep.error(where, "honesty.notMeasured is empty — no style measures "
+                             "everything; an empty list means the question "
+                             "was not asked")
+
     for lvl in style.get("levels", []):
-        rule = lvl.get("unlockRule", {})
-        if not rule.get("description"):
-            rep.error(where, f"level {lvl.get('level')} has no unlockRule — "
-                             "completing a lesson must not be what unlocks the next")
-        if rule.get("thresholdsCalibrated") is not False and \
-                rule.get("thresholdsCalibrated") is not True:
-            rep.error(where, f"level {lvl.get('level')} unlockRule must state "
+        lvl_id = lvl.get("level")
+        lessons = lvl.get("lessons", [])
+        scored_lessons = [ls for ls in lessons
+                          if isinstance(ls, dict) and ls.get("scored")]
+
+        rule = lvl.get("unlockRule")
+        if rule is None:
+            # Legitimate only when there is no graded lesson to gate on. A
+            # level that DOES score something still may not let lesson
+            # completion be the unlock (the original rule this check exists
+            # for), so the exemption is narrow and must be explained.
+            if scored_lessons:
+                rep.error(where, f"level {lvl_id} has scored lessons but no "
+                                 "unlockRule — completing a lesson must not be "
+                                 "what unlocks the next")
+            elif not lvl.get("unlockRuleNote"):
+                rep.error(where, f"level {lvl_id} has unlockRule:null without "
+                                 "an unlockRuleNote explaining why")
+        elif not isinstance(rule, dict) or not rule.get("description"):
+            rep.error(where, f"level {lvl_id} unlockRule has no description")
+        elif rule.get("thresholdsCalibrated") not in (True, False):
+            rep.error(where, f"level {lvl_id} unlockRule must state "
                              "thresholdsCalibrated explicitly (family rule M-F-04)")
+
+        for ls in lessons:
+            if not isinstance(ls, dict):
+                rep.error(where, f"level {lvl_id} lesson {ls!r} is a bare id — "
+                                 "lessons must declare scored/locked/demoOnly "
+                                 "state, so an ungraded lesson cannot be "
+                                 "mistaken for a graded one")
+                continue
+            lid = ls.get("id", "<no id>")
+            if "scored" not in ls:
+                rep.error(where, f"lesson '{lid}' does not declare `scored`")
+            # A lesson may be graded, locked, or demo-only. Anything else is
+            # an ungraded lesson with no stated reason — the silent case.
+            if not ls.get("scored"):
+                locked = ls.get("status") == "locked"
+                demo = bool(ls.get("demoOnly"))
+                if locked and not ls.get("lockedReason"):
+                    rep.error(where, f"lesson '{lid}' is locked without a "
+                                     "lockedReason in user language")
+                if demo and not ls.get("demoOnlyReason"):
+                    rep.error(where, f"lesson '{lid}' is demoOnly without a "
+                                     "demoOnlyReason in user language (K10)")
+                if not locked and not demo:
+                    rep.error(where, f"lesson '{lid}' is not scored but is "
+                                     "neither locked nor demoOnly — say which, "
+                                     "and why (K10)")
+            step_id = ls.get("step")
+            if step_id and step_id not in steps:
+                # Tolerated when the lesson is locked precisely because the
+                # step is not authored yet; an unexplained dangling reference
+                # is not.
+                if ls.get("status") != "locked":
+                    rep.error(where, f"lesson '{lid}' references unknown step "
+                                     f"'{step_id}'")
 
     # Tier C must never reach a learner.
     excluded = {e.get("name") for e in
@@ -204,13 +273,15 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> None:
         if step.get("name", {}).get("en") in excluded:
             rep.error(where, f"step '{sid}' is authored but also listed as excluded")
 
+    return style
+
 
 VALID_STATUS = {"live", "comingSoon", "onHold", "excluded"}
 VALID_FLAGS = {"green", "amber", "red"}
 VALID_SCORING = {"pose", "pose+onset", "onset"}
 
 
-def validate_library(rep: Report, styles_on_disk: set[str]) -> None:
+def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
     """Checks the library registry against what actually exists.
 
     The registry is what the user sees: every style page, including the ones
@@ -257,11 +328,31 @@ def validate_library(rep: Report, styles_on_disk: set[str]) -> None:
             if sid not in styles_on_disk:
                 rep.error(where, f"'{sid}' is marked live but has no style pack "
                                  "on disk — an empty course must never be listed")
+            # statusValues defines live as "kursları açık, SKORLANIYOR". A style
+            # whose every lesson is locked or demo-only is not scoring anything,
+            # so calling it live is a claim its own content contradicts. This is
+            # the fifth question at library level: the registry says scored —
+            # which lesson does the scoring?
+            style = styles_on_disk.get(sid) if isinstance(styles_on_disk, dict) else None
+            if style is not None:
+                scored = [ls for lvl in style.get("levels", [])
+                          for ls in lvl.get("lessons", [])
+                          if isinstance(ls, dict) and ls.get("scored")]
+                if not scored:
+                    rep.error(where, f"'{sid}' is marked live but no lesson in "
+                                     "its style pack is scored — statusValues "
+                                     "defines live as 'kursları açık, "
+                                     "skorlanıyor'; every lesson here is locked "
+                                     "or demo-only")
+                if not style.get("honesty", {}).get("measured"):
+                    rep.error(where, f"'{sid}' is marked live but its "
+                                     "honesty.measured is empty — the style "
+                                     "itself declares it grades nothing")
         if status == "comingSoon" and sid in styles_on_disk:
             rep.warn(where, f"'{sid}' has content on disk but is still listed as "
                             "coming soon")
 
-    for sid in sorted(styles_on_disk - seen):
+    for sid in sorted(set(styles_on_disk) - seen):
         rep.error(where, f"style pack '{sid}' exists on disk but the library "
                          "does not list it — invisible to the user")
 
@@ -278,10 +369,9 @@ def main() -> int:
     steps: dict[str, dict] = {}
     for p in sorted(CONTENT.glob("*/steps/*.json")):
         steps[p.stem] = validate_step(p, joints, rep)
-    on_disk: set[str] = set()
+    on_disk: dict[str, dict] = {}
     for p in sorted(CONTENT.glob("*/style.json")):
-        validate_style(p, steps, rep)
-        on_disk.add(p.parent.name)
+        on_disk[p.parent.name] = validate_style(p, steps, rep)
     validate_library(rep, on_disk)
 
     print(f"motion_core {CORE_PIN}: {len(joints)} joint ids (pinned)")

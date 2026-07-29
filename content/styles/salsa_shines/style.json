@@ -19,15 +19,68 @@
     "boundary": "Named instructor routines are not reproduced; combos are our own arrangement of public step vocabulary."
   },
 
+  "honesty": {
+    "$comment": "K10 (plan §22) in machine-readable form: what this style grades, what it deliberately shows without grading, and WHY — every line traceable to a measurement, not a policy preference. Shown to the user; the app must not grade anything absent from `measured`.",
+    "measured": [
+      "Leg shape through the step cycle — 8 leg joints (hips, knees, thighs, shins) agreed to within 1.57-5.76deg across 3 independent instructors, scored at 100% of the cycle (content/references/ss_shine_footwork.json)",
+      "Which foot leads — established by comparing your whole leg pattern against the reference both ways round, with a 15.6deg margin against a 6deg noise floor (M-F-117)"
+    ],
+    "notMeasured": [
+      "Arm carriage and styling — MEASURED and deliberately not graded: instructors disagree by 11-58deg on arm joints in the same footwork, so there is no single correct arm to grade you against. Shown and taught, never scored (M-F-102).",
+      "Timing against the music — the beat grid for this style is unresolved (bpmStatus DISPUTED, two research passes 2x apart). Grading timing on a grid that could be doubled would blame you for our error, so no timing judgement runs until one tap measurement settles it.",
+      "Whether you truly transferred your weight — the knee-angle change this would need to detect (1.07-3.42deg across the reference's own instructors) sits inside the pipeline's own 6deg landmark-noise floor, so a verdict would be indistinguishable from tracking jitter (M-F-117)."
+    ]
+  },
+
   "levels": [
     {
       "level": 1,
       "name": { "en": "The basic and the count" },
-      "lessons": ["ss_l1_basic", "ss_l1_hold"],
+      "lessons": [
+        {
+          "id": "ss_l1_footwork",
+          "displayName": { "en": "Shine footwork" },
+          "step": "ss_shine_footwork",
+          "scored": true,
+          "scoredWhat": ["leg shape", "which foot leads"],
+          "notScoredWhat": ["arm styling", "timing against music", "weight-transfer depth"],
+          "minutes": 10,
+          "_whyUnlocked": "Only step in this style with a built reference AND a proven consumer: content/references/ss_shine_footwork.json (3 attested instructors, mirrorConfident:true) is read end-to-end by tools/ss_shine_footwork_liveness.py, which shows both live errors firing on controlled corruptions and staying silent on real footage. Family's second full chain (M-F-119)."
+        },
+        {
+          "id": "ss_l1_basic",
+          "displayName": { "en": "The forward-and-back basic" },
+          "step": "ss_basic",
+          "scored": false,
+          "status": "locked",
+          "lockedReason": { "en": "We haven't collected enough teachers for this step yet. Grading you against one teacher's version would just be that teacher's preference wearing a score — so this lesson stays shut until at least three independent instructors have been measured." },
+          "blockedBy": "reference.collectedTakes == 0 (steps/ss_basic.json)",
+          "minutes": 8
+        },
+        {
+          "id": "ss_l1_arm_styling",
+          "displayName": { "en": "Arm styling (not graded)" },
+          "scored": false,
+          "demoOnly": true,
+          "demoOnlyReason": { "en": "There is no single correct arm position here — we measured it: the teachers we studied differ from each other by 11 to 58 degrees on the arms while doing the same footwork. That is style, not error. So we show you the range and let you choose; grading it would be inventing a right answer that does not exist." },
+          "evidence": "content/references/ss_shine_footwork.json scoring[] — arm joints verdict coached_only / scored_partial (0-64% coverage, 11-58deg medianDispersion) while every leg joint is scored at 100%",
+          "minutes": 6
+        },
+        {
+          "id": "ss_l1_musicality",
+          "displayName": { "en": "Finding the 1 (not graded)" },
+          "scored": false,
+          "demoOnly": true,
+          "demoOnlyReason": { "en": "Hearing where the music's 1 falls is the heart of salsa, and a camera cannot see whether you heard it. We teach it and leave the judging to your own ears." },
+          "evidence": "plan §468 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
+          "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
+          "minutes": 5
+        }
+      ],
       "unlockRule": {
-        "description": "3 consecutive attempts at ss_basic with onBeatRatio >= 0.7, shapeScore >= 0.75 and zero NO_WEIGHT_TRANSFER",
+        "description": "3 consecutive attempts at ss_shine_footwork with shapeScore >= 0.75 and zero WRONG_FOOT",
         "thresholdsCalibrated": false,
-        "note": "Provisional until G4 calibration (family rule M-F-04)."
+        "note": "Provisional until G4 calibration (family rule M-F-04). Deliberately does NOT include onBeatRatio (no beat grid yet — bpmStatus DISPUTED) or NO_WEIGHT_TRANSFER (calibration-blocked, M-F-117): an unlock rule may only depend on judgements the app is actually allowed to make."
       }
     }
   ],

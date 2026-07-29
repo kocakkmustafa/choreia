@@ -23,8 +23,37 @@ Her dosya `schemaVersion` taşır. Sürüm yükseltmesi = migration notu + eski 
 | `name` | `{en: ...}` — ürün dili İngilizce, i18n anahtarı baştan |
 | `countSystem` | `8count` · `salsa_123_567` — sayım metinlerini ve beat eşlemesini sürer |
 | `bpmRange` | `[min, max]` — ders müziği seçimini ve tempo kapısını sınırlar |
+| `honesty` | **ZORUNLU** — `{measured[], notMeasured[]}`; K10'un makine-okur hâli (aşağıda) |
 | `levels[]` | `{level, name, unlockRule, lessons[]}` |
-| `unlockRule` | ölçülebilir kriter; **ders tamamlamak seviye atlatmaz** (plan §7) |
+| `unlockRule` | ölçülebilir kriter; **ders tamamlamak seviye atlatmaz** (plan §7). Seviyede skorlanan ders YOKSA `null` olabilir — o zaman `unlockRuleNote` zorunlu |
+
+### `honesty` — K10'un makine-okur hâli (ZORUNLU)
+
+**Her stil neyi skorladığını ve neyi BİLEREK skorlamadığını, gerekçesiyle beyan eder.** Ostinato'nun disiplin-düzeyi `honesty` bloğunun Choreia karşılığı.
+
+| Alan | Kural |
+|---|---|
+| `measured[]` | Uygulamanın skorlamaya izinli olduğu şeyler. **Buraya yazılmayan hiçbir şey skorlanamaz.** BOŞ olabilir (hiçbir şeyi henüz skorlamayan stil dürüst bir durumdur) — ama boşsa `measuredNote` neden boş olduğunu söyler |
+| `notMeasured[]` | Gösterilen/öğretilen ama skorlanmayan şeyler, her biri **ölçülmüş** gerekçesiyle. Boş olamaz: hiçbir stil her şeyi ölçmez, boş liste "soru sorulmamış" demektir |
+
+Gerekçe biçimi bağlayıcı: *"eğitmenler 11-58° ayrışıyor"* geçerli, *"bu zor"* değil. `notMeasured` girdisi bir politika tercihi değil, bir ölçüm sonucudur.
+
+### `levels[].lessons[]` — ders nesnesi
+
+Ders **çıplak id string'i OLAMAZ**; durumunu beyan eder, yoksa skorlanmayan bir ders skorlanıyor sanılır.
+
+| Alan | Anlam |
+|---|---|
+| `id` · `displayName` | ders kimliği + `{en: ...}` |
+| `step` | ilgili `steps/<id>.json` (varsa; demo-only derslerde olmayabilir) |
+| `scored` | **ZORUNLU bool.** `true` ise `_whyUnlocked` gerekçesi beklenir |
+| `scoredWhat[]` / `notScoredWhat[]` | skorlu derste kullanıcıya ne söylendiği |
+| `status: "locked"` + `lockedReason` | ölçüm henüz YOK → ders kapalı. Gerekçe **kullanıcı dilinde**, ve eksik ÖLÇÜMÜN adıyla (`blockedBy` makine-okur karşılığı) |
+| `demoOnly: true` + `demoOnlyReason` | **K10:** ölçülemeyen hareket ELENMEZ, demo-only işaretlenir ve nedeni kullanıcıya söylenir. `evidence` alanı gerekçenin ölçüm dayanağını gösterir |
+
+**`locked` ≠ `demoOnly`:** `locked` = ölçüm eksik, gelecekte açılabilir (geçici). `demoOnly` = ölçüm yapısal olarak mümkün değil ya da anlamsız (kalıcı; groove, kol stili, ayak-ucu zamanlaması). İkisini karıştırmak, çözülebilir bir eksiği çözülemez göstermek (ya da tersi) olur.
+
+Skorlanmayan bir ders `locked` ya da `demoOnly` olmak ZORUNDA — ikisi de değilse gerekçesiz-skorsuz ders olur, `validate_content.py` bunu reddeder.
 
 ## `steps/<id>.json`
 
