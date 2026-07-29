@@ -233,7 +233,12 @@ def find_movement_windows(
 
 def load_frames(path: str) -> tuple[list[list[list[float]]], float]:
     d = json.load(open(path, encoding="utf-8"))
-    fps = d.get("recordingMeta", {}).get("fps", 30) or 30
+    fps = d.get("recordingMeta", {}).get("fps")
+    if not fps:
+        # No silent default — same reasoning as prepare_take.load_take: the
+        # harvest pool mixes frame rates and every window/period downstream
+        # scales with this number.
+        raise SystemExit("fixture meta has no fps — refusing to assume one")
     out = []
     for f in d.get("frames", []):
         if f.get("detected") is False:
