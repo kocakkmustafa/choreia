@@ -54,7 +54,17 @@ final int plannedCycles;     // dersin hedeflediği
 bool get isComplete => cyclesCompleted >= plannedCycles;
 ```
 
-Aynı semantik (yarıda bırakılan kaydedilir, tamamlanma oranı okunabilir kalır), farklı birim. **Çekirdek-terfisi günü için not:** ortak arayüz bu alanı `unitsCompleted`/`plannedUnits` gibi birim-agnostik adlandırmalı ve birimin adını app tarafında bırakmalı — üç app üç farklı şey sayacak (JabLab tur, Choreia çevrim, Lissom muhtemelen tekrar/rep). Bugün bunu tek taraflı yapmıyorum; ikinci tüketici olarak deltayı kaydediyorum, isimlendirme kararı üçüncü tüketici geldiğinde koordinatörde.
+Aynı semantik (yarıda bırakılan kaydedilir, tamamlanma oranı okunabilir kalır), farklı birim.
+
+**Çekirdek-terfisi günü için not (M-F-160 ile netleşti):** ortak çekirdek arayüzü **ikisinden birini SEÇMEMELİ** — ne `rounds` ne `cycles`. Aday biçim: **nötr iş-birimi + app-beyanlı birim etiketi**
+
+```dart
+final int unitsCompleted;
+final int plannedUnits;
+final String unitLabel;   // JabLab "round" · Choreia "cycle" · Lissom "rep"
+```
+
+Birim etiketi kayda girer çünkü yüzey onu okuyacak ("6 of 8 cycles" ≠ "6 of 8 rounds") ve app değişse geçmiş kayıt kendi birimini taşımaya devam eder — `lessonClass` ile aynı gerekçe (§3). **Bugün karar YOK:** terfi günü JabLab/Choreia/Lissom üçü bu eksende uzlaşır; ben ikinci tüketici olarak yalnız deltayı ve aday biçimi kaydediyorum.
 
 ## 3. DELTA 2 — `lessonClass` gerekiyor (demoOnly gerçeği)
 
