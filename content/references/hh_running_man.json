@@ -38,6 +38,7 @@
    "thinEvidence": true
   }
  ],
+ "excludedAnchorSource": [],
  "mirrorResolution": [
   {
    "index": 0,
@@ -3774,7 +3775,7 @@
     false,
     false
    ],
-   "coverage": 0.281,
+   "coverage": 0.28125,
    "medianDispersionDeg": 31.24,
    "verdict": "coached_only"
   },
@@ -3916,7 +3917,7 @@
     true,
     true
    ],
-   "coverage": 0.859,
+   "coverage": 0.859375,
    "medianDispersionDeg": 3.63,
    "verdict": "scored_partial"
   },
@@ -3987,7 +3988,7 @@
     true,
     true
    ],
-   "coverage": 0.719,
+   "coverage": 0.71875,
    "medianDispersionDeg": 3.61,
    "verdict": "scored_partial"
   },
@@ -4058,7 +4059,7 @@
     true,
     true
    ],
-   "coverage": 0.719,
+   "coverage": 0.71875,
    "medianDispersionDeg": 5.75,
    "verdict": "scored_partial"
   },
@@ -4129,7 +4130,7 @@
     true,
     true
    ],
-   "coverage": 0.312,
+   "coverage": 0.3125,
    "medianDispersionDeg": 22.11,
    "verdict": "coached_only"
   },
@@ -4200,7 +4201,7 @@
     false,
     true
    ],
-   "coverage": 0.766,
+   "coverage": 0.765625,
    "medianDispersionDeg": 4.21,
    "verdict": "scored_partial"
   },
@@ -4271,7 +4272,7 @@
     true,
     false
    ],
-   "coverage": 0.234,
+   "coverage": 0.234375,
    "medianDispersionDeg": 23.3,
    "verdict": "coached_only"
   },
@@ -4484,7 +4485,7 @@
     false,
     false
    ],
-   "coverage": 0.859,
+   "coverage": 0.859375,
    "medianDispersionDeg": 2.96,
    "verdict": "scored_partial"
   },
@@ -4555,7 +4556,7 @@
     false,
     false
    ],
-   "coverage": 0.828,
+   "coverage": 0.828125,
    "medianDispersionDeg": 4.95,
    "verdict": "scored_partial"
   },
@@ -4626,7 +4627,7 @@
     false,
     false
    ],
-   "coverage": 0.812,
+   "coverage": 0.8125,
    "medianDispersionDeg": 5.31,
    "verdict": "scored_partial"
   },
@@ -4697,7 +4698,7 @@
     true,
     true
    ],
-   "coverage": 0.281,
+   "coverage": 0.28125,
    "medianDispersionDeg": 18.04,
    "verdict": "coached_only"
   },
@@ -4768,7 +4769,7 @@
     false,
     false
    ],
-   "coverage": 0.672,
+   "coverage": 0.671875,
    "medianDispersionDeg": 4.13,
    "verdict": "scored_partial"
   },
@@ -4839,7 +4840,7 @@
     false,
     false
    ],
-   "coverage": 0.266,
+   "coverage": 0.265625,
    "medianDispersionDeg": 18.48,
    "verdict": "coached_only"
   },
@@ -4917,7 +4918,7 @@
  },
  "toleranceBelowDispersion": [],
  "status": "provisional",
- "mirrorConfident": false,
+ "provisionalReason": "Yon BELIRSIZ. Etkisi: bir take cevrilirse (eklem, faz) hucrelerinin %12-22'i kendi tolerans bandinin DISINA cikar — yani secim hukum degistirebilir. Olcut derece degil hucre orani: yonelim aciları eklenince tek bir eklemin tek fazdaki sicramasi derece-maksimumunu ele geciriyordu (104-172 derece okunuyordu). Cozum: daha cok take veya dis oncul. Take basina cevrim: [5, 5, 2, 2].",
  "evidenceThickness": {
   "cyclesPerTake": [
    5,
@@ -4951,5 +4952,5 @@
   "note": "floor = bant EGITMEN UYUMUNDAN degil bizim ihtiyatimizdan geliyor (egitmenler tabandan daha siki uyusuyor); variance = bant olculen ayrismadan turedi. thinEvidence = take 5'ten az cevrim tasiyor."
  },
  "orientationNote": "Yon BELIRSIZ. Etkisi: bir take cevrilirse (eklem, faz) hucrelerinin %12-22'i kendi tolerans bandinin DISINA cikar — yani secim hukum degistirebilir. Olcut derece degil hucre orani: yonelim aciları eklenince tek bir eklemin tek fazdaki sicramasi derece-maksimumunu ele geciriyordu (104-172 derece okunuyordu).",
- "provisionalReason": "Yon BELIRSIZ. Etkisi: bir take cevrilirse (eklem, faz) hucrelerinin %12-22'i kendi tolerans bandinin DISINA cikar — yani secim hukum degistirebilir. Olcut derece degil hucre orani: yonelim aciları eklenince tek bir eklemin tek fazdaki sicramasi derece-maksimumunu ele geciriyordu (104-172 derece okunuyordu). Cozum: daha cok take veya dis oncul. Take basina cevrim: [5, 5, 2, 2]."
+ "mirrorConfident": false
 }

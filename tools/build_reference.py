@@ -654,7 +654,11 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         cov = sum(mask) / bins
         scoring[j] = {
             "scoredPhases": mask,
-            "coverage": round(cov, 3),
+            # Stored unrounded: it is a derived quantity, and rounding it makes
+            # the artifact disagree with its own mask by half a bin (0.3125
+            # stored as 0.312 failed the conformance check). A number a gate
+            # reports must be the number the gate measured.
+            "coverage": cov,
             "medianDispersionDeg": round(statistics.median(disp), 2),
             "verdict": ("scored" if cov >= 0.9 else
                         "scored_partial" if cov >= 0.4 else "coached_only"),

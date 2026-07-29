@@ -4021,7 +4021,7 @@
     true,
     true
    ],
-   "coverage": 0.984,
+   "coverage": 0.984375,
    "medianDispersionDeg": 6.48,
    "verdict": "scored"
   },
@@ -4092,7 +4092,7 @@
     false,
     false
    ],
-   "coverage": 0.422,
+   "coverage": 0.421875,
    "medianDispersionDeg": 15.9,
    "verdict": "scored_partial"
   },
@@ -4376,7 +4376,7 @@
     false,
     false
    ],
-   "coverage": 0.031,
+   "coverage": 0.03125,
    "medianDispersionDeg": 57.96,
    "verdict": "coached_only"
   },
@@ -4660,7 +4660,7 @@
     true,
     true
    ],
-   "coverage": 0.641,
+   "coverage": 0.640625,
    "medianDispersionDeg": 10.99,
    "verdict": "scored_partial"
   },
@@ -4880,7 +4880,7 @@
  },
  "toleranceBelowDispersion": [],
  "status": "provisional",
- "mirrorConfident": false,
+ "provisionalReason": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %5-13'i bandini asar. Take basina cevrim: [3, 4, 10, 8] (ikisi <5). Bir kaynak DISLANDI: Dance With Rasa'nin ayak bilegi gorunurlugu 0.007 — ayak-isi stilinde ayaklari izlenemeyen cekim ayak isi hakkinda kanit degil; dizden capalandigi icin faz tanimi da farkliydi. Dislama uyusmazliktan degil goruntu olcumunden.",
  "evidenceThickness": {
   "cyclesPerTake": [
    3,
@@ -4912,5 +4912,5 @@
    "trunk_tilt": 100
   }
  },
- "provisionalReason": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %5-13'i bandini asar. Take basina cevrim: [3, 4, 10, 8] (ikisi <5). Bir kaynak DISLANDI: Dance With Rasa'nin ayak bilegi gorunurlugu 0.007 — ayak-isi stilinde ayaklari izlenemeyen cekim ayak isi hakkinda kanit degil; dizden capalandigi icin faz tanimi da farkliydi. Dislama uyusmazliktan degil goruntu olcumunden."
+ "mirrorConfident": false
 }
