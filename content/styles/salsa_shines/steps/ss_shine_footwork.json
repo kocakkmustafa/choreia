@@ -96,17 +96,19 @@
     {
       "code": "WRONG_FOOT",
       "severity": "critical",
-      "status": "unblocked (M-F-115) — mirrorConfident:true, wiring still needs a leading_side implementation",
-      "unblockedNote": "The 3-source rebuild (bqoNqA2hmE4 excluded) reports mirrorConfident:true (2 sources decisive, 1 degenerate-but-confident — its orientation choice does not move the consensus either way, content/references/ss_shine_footwork.json mirrorResolution). Kural-7's blocking condition no longer holds, exactly the trigger this definition was written to wait for. Left active rather than re-locked. NOT yet exercised by tools/ss_shine_footwork_liveness.py — leading_side has no concrete implementation anywhere in this pipeline yet (no runtime consumes it), so this is a documented-ready state, not a proven-wired one; do not claim it fires correctly until a liveness check like the other two errors exists for it.",
+      "status": "live (M-F-117) — measured, wired and liveness-tested",
       "detect": {
-        "metric": "leading_side",
-        "op": "!=",
-        "expected": "reference",
-        "atMoments": ["moment_a", "moment_b"]
+        "metric": "side_agreement",
+        "op": "matchesReferenceSide == false",
+        "requires": "reference.mirrorConfident == true",
+        "marginFloorDeg": 6.0,
+        "scope": "whole-cycle (not per-moment)"
       },
-      "evidence": ["leading_side"],
+      "evidence": ["side_agreement.directDeg", "side_agreement.mirroredDeg", "side_agreement.marginDeg"],
       "relatedDrill": "ss_lead_foot",
-      "note": "Definition unchanged from when it was blocked — only the status changed, because the block's own stated condition (mirrorConfident:true) is now met."
+      "measurement": "build_reference.side_agreement compares the learner's full joint vector against the reference in BOTH orientations; the better fit is the side they are on, and the gap between the two costs is the confidence. Measured on this reference: correct-foot clip 14.55deg direct vs 30.15deg mirrored (margin 15.6deg, 2.6x the 6deg noise floor); the mirrored (wrong-foot) corruption inverts exactly that. Reports confident=false and emits NO verdict when the two costs fall within the noise floor of each other — which is what a genuinely left/right-symmetric movement looks like.",
+      "firstAttemptFailed": "A single-bin left-minus-right thigh difference was written first and is STRUCTURALLY unable to do this: in angle space mirroring both swaps left/right and negates orientation values, so ang_diff(left, right) is INVARIANT under it — the corrupted clip returned a bit-identical -6.43deg. The liveness check caught it (that is what it is for). Kept documented in build_reference.side_agreement so nobody re-walks it; same class of trap prepare_take.py records for its own mirror-invariant anchor.",
+      "kural7Note": "Requires reference.mirrorConfident:true — enforced in judge(), which omits the key entirely when it is false, so a consumer cannot read a verdict that was never formed. Verified at runtime against hh_running_man and hh_roger_rabbit (both mirrorConfident:false): the path stays shut on the same clip with only the reference swapped."
     },
     {
       "code": "STEP_LATE",

@@ -57,11 +57,19 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from prepare_take import prepare  # noqa: E402
-from build_reference import take_canonical_cycle, mirrored  # noqa: E402
+from build_reference import (take_canonical_cycle, mirrored,  # noqa: E402
+                            side_agreement,
+                            SIDE_AGREEMENT_MARGIN_FLOOR_DEG)
 
 REPO = Path(__file__).resolve().parents[1]
 STEP_PATH = REPO / "content/styles/salsa_shines/steps/ss_shine_footwork.json"
 REF_PATH = REPO / "content/references/ss_shine_footwork.json"
+# The other two references, both mirrorConfident:false — used to prove the
+# side-dependent path stays SHUT where kural-7 says it must (M-F-117).
+OTHER_REFS = {
+    "hh_running_man": REPO / "content/references/hh_running_man.json",
+    "hh_roger_rabbit": REPO / "content/references/hh_roger_rabbit.json",
+}
 
 # The reference's own richest, mirror-confident source — chosen so a failure
 # here cannot be blamed on thin evidence in the clip being judged.
@@ -75,8 +83,10 @@ def _phase_bin_value(cycle: dict, joint: str, bin_idx: int) -> float:
     return cycle[joint][bin_idx]
 
 
-def judge(cycle: dict, moment_a_bin: int, moment_b_bin: int) -> dict:
-    """The one unblocked error, computed the way a runtime would.
+def judge(cycle: dict, moment_a_bin: int, moment_b_bin: int, *,
+          reference_cycle: dict | None = None,
+          mirror_confident: bool = False) -> dict:
+    """The live errors, computed the way a runtime would.
 
     NO_WEIGHT_TRANSFER is NOT computed here (M-F-117): its threshold
     (1.0deg) sits below MIN_TOLERANCE_DEG (6deg, this pipeline's own
@@ -85,9 +95,15 @@ def judge(cycle: dict, moment_a_bin: int, moment_b_bin: int) -> dict:
     transfer from tracking noise. kneeDeltaDeg is still returned as a
     diagnostic (section 6 uses it), it just backs no verdict.
 
-    STEP_TOO_LARGE is max()'d over both legs rather than "the loaded leg"
-    (which would need a leading-side call kural-7 didn't allow before
-    mirrorConfident:true) — side-agnostic by construction, not just policy.
+    STEP_TOO_LARGE is max()'d over both legs rather than "the loaded leg" —
+    side-agnostic by construction, so it holds whatever mirror_confident is.
+
+    WRONG_FOOT is the side-DEPENDENT one, and it is only computed when BOTH
+    gates open: the caller passes a reference to compare against AND that
+    reference reports mirrorConfident. This is kural-7 enforced in the
+    metric, not in prose: with mirror_confident=False the key is absent
+    from the result entirely, so a consumer cannot read a verdict that was
+    never formed (the RM/RR case, section 7).
     """
     knee_delta = max(
         abs(_phase_bin_value(cycle, "left_knee", moment_b_bin)
@@ -101,11 +117,27 @@ def judge(cycle: dict, moment_a_bin: int, moment_b_bin: int) -> dict:
         abs(_phase_bin_value(cycle, "right_thigh", moment_b_bin)
             - _phase_bin_value(cycle, "right_thigh", moment_a_bin)),
     )
-    return {
+    out = {
         "kneeDeltaDeg": round(knee_delta, 2),
         "thighDeltaDeg": round(thigh_delta, 2),
         "STEP_TOO_LARGE": thigh_delta > STEP_TOO_LARGE_MAX_DEG,
     }
+
+    if reference_cycle is not None and mirror_confident:
+        side = side_agreement(cycle, reference_cycle)
+        out["sideAgreement"] = side
+        if side["confident"]:
+            out["WRONG_FOOT"] = not side["matchesReferenceSide"]
+        else:
+            # Measured but not decisive: no verdict, and the reason is
+            # reported rather than defaulting to "correct". This is what a
+            # left/right-symmetric movement produces — the question is
+            # unanswerable, not answered.
+            out["WRONG_FOOT_noVerdict"] = (
+                f"orientation costs within noise floor "
+                f"({SIDE_AGREEMENT_MARGIN_FLOOR_DEG}deg): direct "
+                f"{side['directDeg']}deg vs mirrored {side['mirroredDeg']}deg")
+    return out
 
 
 def flatten_knees(cycle: dict, bin_a: int, bin_b: int) -> dict:
@@ -128,6 +160,18 @@ def widen_thighs(cycle: dict, bin_a: int, bin_b: int) -> dict:
         delta = out[j][bin_b] - out[j][bin_a]
         out[j][bin_b] = out[j][bin_a] + delta + (25.0 if delta >= 0 else -25.0)
     return out
+
+
+def wrong_foot(cycle: dict) -> dict:
+    """Controlled corruption #3: dance the whole step on the other foot.
+
+    Mirroring IS the corruption here — a learner leading with the other
+    foot produces exactly the left/right-swapped (and sign-negated, for
+    orientation joints) angle series that `mirrored()` builds. Using the
+    pipeline's own mirror operation rather than hand-editing two numbers
+    keeps the corruption faithful to what the real error looks like.
+    """
+    return mirrored(cycle)
 
 
 def main() -> int:
@@ -169,10 +213,14 @@ def main() -> int:
         if not cond:
             findings.append(f"{label} — {detail}")
 
+    ref_cycle = ref["reference"]
+    ref_mirror_confident = bool(ref.get("mirrorConfident"))
+
     print(f"1) GERÇEK KLİP ({TEST_VIDEO_ID}, {p.get('cyclesInSegment')} çevrim, "
           f"mirror confident) — KALİBRASYON sağlık kontrolü (ateşlenmemesi beklenir, "
           f"ama ateşlenirse bu WIRING hatası değil, eşik-kalibrasyon bulgusudur)")
-    gv = judge(good, bin_a, bin_b)
+    gv = judge(good, bin_a, bin_b, reference_cycle=ref_cycle,
+               mirror_confident=ref_mirror_confident)
     check("NO_WEIGHT_TRANSFER judge()'da hiç yok (M-F-117: calibration-blocked, "
           "eşik gürültü tabanının altında — non-live)",
           "NO_WEIGHT_TRANSFER" not in gv, f"knee Δ={gv['kneeDeltaDeg']}° (bilgi amaçlı)")
@@ -198,12 +246,42 @@ def main() -> int:
           "(max-over-both-legs); orijinal ile aynalanmış AYNI hükmü vermeli, "
           "mirrorConfident ne olursa olsun")
     mirrored_good = mirrored(good)
-    mv = judge(mirrored_good, bin_a, bin_b)
+    mv = judge(mirrored_good, bin_a, bin_b, reference_cycle=ref_cycle,
+               mirror_confident=ref_mirror_confident)
     check("STEP_TOO_LARGE aynı", mv["STEP_TOO_LARGE"] == gv["STEP_TOO_LARGE"])
-    check("WRONG_FOOT judge()'da hiç yok (M-F-115: config'te unblocked ama "
-          "leading_side burada HENÜZ İMPLEMENTE EDİLMEDİ — ayrı bir liveness "
-          "turu gerekir, bu turun kapsamı değil)",
-          "WRONG_FOOT" not in gv and "WRONG_FOOT" not in mv)
+
+    print("\n4b) WRONG_FOOT CANLI YOL (M-F-117) — tam eklem vektörü referansla "
+          f"iki yönelimde karşılaştırılıyor (mirrorConfident={ref_mirror_confident})")
+    sa = gv.get("sideAgreement", {})
+    check("doğru ayakla dans eden gerçek klip WRONG_FOOT almadı",
+          gv.get("WRONG_FOOT") is False,
+          f"direct {sa.get('directDeg')}° vs mirrored {sa.get('mirroredDeg')}° "
+          f"(marj {sa.get('marginDeg')}°, taban {SIDE_AGREEMENT_MARGIN_FLOOR_DEG}°)")
+    print("     KONTROLLÜ BOZULMA #3 — tüm adım öbür ayakta (mirrored, "
+          "gerçek hatanın birebir şekli)")
+    msa = mv.get("sideAgreement", {})
+    check("yanlış ayakla dans eden klip WRONG_FOOT ALDI",
+          mv.get("WRONG_FOOT") is True,
+          f"direct {msa.get('directDeg')}° vs mirrored {msa.get('mirroredDeg')}° "
+          f"(marj {msa.get('marginDeg')}°)")
+    print("     ⓘ İLK DENEDİĞİM ÖLÇÜ ÇALIŞMADI ve bu test onu yakaladı: tek-bin "
+          "sol-eksi-sağ uyluk farkı AYNALAMAYA KARŞI DEĞİŞMEZ (bozuk klip "
+          "birebir aynı -6,43°'yi verdi) — açı uzayında aynalama hem takas hem "
+          "işaret-negatifleme yaptığı için fark korunuyor. Doğru ölçü tam "
+          "eklem vektörünün iki yönelimde karşılaştırılması (orient()'in "
+          "kendi mantığı); gerekçe build_reference.side_agreement'ta yazılı.")
+
+    print("\n4c) KURAL-7 RUNTIME TEYİDİ — mirror-BELİRSİZ referanslarda "
+          "taraf-bağımlı yol KAPALI kalmalı (aynı judge(), aynı klip, "
+          "yalnız referans farklı)")
+    for name, path in OTHER_REFS.items():
+        other = json.loads(path.read_text(encoding="utf-8"))
+        other_mc = bool(other.get("mirrorConfident"))
+        ov = judge(good, bin_a, bin_b, reference_cycle=other["reference"],
+                   mirror_confident=other_mc)
+        check(f"{name} (mirrorConfident={other_mc}): WRONG_FOOT hiç oluşmadı",
+              "WRONG_FOOT" not in ov and "sideAgreement" not in ov,
+              "anahtar yok = tüketici okuyamaz")
 
     print("\n5) BPM SHIP-KAPISI DEĞİŞMEDİ — bu bağlama ship-yolunu AÇMAZ")
     vc = subprocess.run([sys.executable, str(REPO / "tools/validate_content.py")],

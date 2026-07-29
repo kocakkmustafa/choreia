@@ -102,6 +102,63 @@ def circ_mean(vals: list[float]) -> float:
     return math.degrees(math.atan2(sy, sx))
 
 
+# --------------------------------------------------------------------------
+# side agreement — M-F-117 package
+# --------------------------------------------------------------------------
+
+# Minimum gap between the two orientation costs below. Reusing the same floor
+# the rest of this file trusts for "is this distinguishable from landmark
+# noise at all" — the NO_WEIGHT_TRANSFER correction (M-F-117) applied here
+# before shipping rather than after.
+SIDE_AGREEMENT_MARGIN_FLOOR_DEG = MIN_TOLERANCE_DEG
+
+
+# WHY THIS IS NOT A SINGLE-NUMBER MEASURE.
+#
+# The obvious implementation is a signed left-right separation at one phase
+# bin (left_thigh minus right_thigh) and reading its sign. It was written
+# that way first and it CANNOT WORK, for a reason worth keeping: in angle
+# space, `mirrored()` both swaps the left/right names and negates the
+# orientation values, so
+#
+#     new_left = -old_right,  new_right = -old_left
+#     ang_diff(new_left, new_right) = old_left - old_right   (unchanged)
+#
+# — any left-minus-right difference is INVARIANT under mirroring, so it
+# returns the identical number for a dancer leading with either foot. The
+# liveness check caught this: the corrupted (mirrored) clip came back with a
+# bit-identical margin of -6.43deg. Same class of defect prepare_take.py
+# documents for its anchor ("the anchor cannot itself tell a mirrored take
+# from a straight one"), rediscovered one level up.
+#
+# What DOES carry the information is the whole joint vector, compared both
+# ways round — exactly what orient() already does when it places a take.
+def side_agreement(cycle: dict[str, list[float]],
+                   reference: dict[str, list[float]]) -> dict:
+    """Is this cycle danced on the reference's side, or mirrored from it?
+
+    Compares the full joint vector against the reference in both
+    orientations. Whichever fits better is the side the dancer is on; the
+    gap between the two costs is how strongly the data says so.
+
+    Only meaningful when the reference resolved its own mirroring
+    (mirrorConfident) — on a mirror-uncertain reference the "correct" side
+    is not established, so the caller must not ask. Also reports
+    confident=False when the two costs are within the noise floor of each
+    other, which is what a genuinely left/right-symmetric movement looks
+    like: the question is then unanswerable rather than answered wrongly.
+    """
+    direct = distance(cycle, reference)
+    flipped = distance(mirrored(cycle), reference)
+    return {
+        "matchesReferenceSide": direct <= flipped,
+        "directDeg": round(direct, 2),
+        "mirroredDeg": round(flipped, 2),
+        "marginDeg": round(abs(flipped - direct), 2),
+        "confident": abs(flipped - direct) >= SIDE_AGREEMENT_MARGIN_FLOOR_DEG,
+    }
+
+
 def circ_center(vals: list[float]) -> float:
     """Circular median: the sample minimising total circular deviation.
 
