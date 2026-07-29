@@ -62,6 +62,13 @@ STEP_OF: dict[str, str] = {
     "_G-hONZsj1w": "hh_roger_rabbit",   # The Shed
     "35sk_G8Vf9o": "hh_roger_rabbit",   # Versa-Style Street Dance Company
     "Ce3NCRk1Nl4": "hh_roger_rabbit",   # KAFQA Dance
+    "n3keE6peOE4": "hh_roger_rabbit",   # VincaniTV
+    "kUQTYnYDipk": "hh_roger_rabbit",   # DanceKizombaTV
+    "GXKNLmjxodU": "hh_roger_rabbit",   # STEEZY
+    "3pg3AQ7puV0": "hh_roger_rabbit",   # Dani Sanz
+    "pmbH7SmdlBw": "hh_roger_rabbit",   # FUNKMODE — çoklu hareket dersi
+    "rRlUNGymhmE": "hh_roger_rabbit",   # Marvelous Mosell
+    "selXuuAWI64": "hh_roger_rabbit",   # Free Focus Dance
     "lYpRasK4c9k": "hh_running_man",    # Howcast
     "UO9Ehsdt2IE": "hh_running_man",    # JoeyTheJAM
     "k22Bm2pMyD4": "hh_running_man",    # Jayden Rodrigues — dikey, elendi
