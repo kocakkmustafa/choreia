@@ -27,6 +27,19 @@ the talking sections highest of all. So a window qualifies only when it is both
 repeating AND moving.
 
 Self-check:  python3 tools/movement_isolator.py --self-test
+
+VENDORED FILE — see drift_check() below.
+
+This is a copy of motion-core's tools/harvest_rig/movement_isolator.py, not
+a package import (build_reference.py's docstring explains why apps don't
+import the family's Dart core directly; this Python rig tooling is copied
+per-app the same way). A copy with no way to notice its source moving on is
+exactly how the fps-fallback and per-frame-energy bugs (M-F-59, this file's
+own git history) drifted silently for a full session before the coordinator
+caught them. `--drift-check` is the standing answer: it distinguishes an
+edit *I* made here from motion moving upstream that I have not looked at.
+
+Drift-check:  python3 tools/movement_isolator.py --drift-check
 """
 
 from __future__ import annotations
@@ -38,6 +51,40 @@ import os
 import statistics
 import sys
 from dataclasses import dataclass
+from pathlib import Path
+
+# --- vendoring pin -----------------------------------------------------
+# Update PIN_SHA only after re-reading the upstream diff since the last pin
+# and either porting the change or adding it to DECLARED_DIFFERENCES with a
+# named, independent reason (family rule: exclusion is always named).
+PIN_REPO_PATH = "tools/harvest_rig/movement_isolator.py"
+PIN_SHA = "eb28039"  # motion-core main, 2026-07-29 — chore: 0.8.4 tag
+
+DECLARED_DIFFERENCES = {
+    "normalized_series": (
+        "M-O-43's [ids] scoping param not ported — Choreia's harvest is "
+        "always full-body dance footage (never a waist-up lesson), so the "
+        "out-of-frame-landmark-noise problem that param solves has no "
+        "current caller. Port it if a style ever needs partial-body "
+        "scoping."),
+    "_motion_energy": (
+        "Docstring wording only (credit-trail differs: this file's own "
+        "fix vs. rig's after-the-fact credit to it) — semantics identical, "
+        "both per-second."),
+    "load_frames": (
+        "Comment/message wording only — both fail-closed on missing fps, "
+        "no silent default either side."),
+    "main": (
+        "Adds the --drift-check CLI flag (local-only, see below) — "
+        "upstream's own main() has no reason to check itself against "
+        "itself."),
+}
+
+# Functions that exist ONLY in this copy, by design — the drift-check
+# machinery itself. Distinct from DECLARED_DIFFERENCES (same name, changed
+# body): these have no upstream counterpart at all, because checking a copy
+# against its source is a copy-specific concern the source doesn't have.
+LOCAL_ONLY_ADDITIONS = {"_find_motion_core_lib", "drift_check"}
 
 L_SHOULDER, R_SHOULDER = 11, 12
 L_HIP, R_HIP = 23, 24
@@ -336,13 +383,107 @@ def self_test() -> int:
     return 0
 
 
+def _find_motion_core_lib():
+    candidate = Path(__file__).resolve().parents[3] / "motion-core" / "lib"
+    return candidate if (candidate / ".git").exists() else None
+
+
+def drift_check() -> int:
+    """Has this vendored copy silently diverged from its upstream source?
+
+    Two separate questions, because conflating them is how the last drift
+    hid: (1) does every function this file did NOT declare as different
+    still match upstream at the pinned commit, structurally (ast-compared,
+    so comment/whitespace churn cannot mask a real change, and cannot
+    manufacture a false failure either)? (2) has upstream moved past the
+    pin at all? This file can answer (1) on its own; it cannot answer
+    whether motion in (2) needs porting — only a human/agent reading the
+    new commits can — so it reports the gap and stops.
+    """
+    import ast
+    import subprocess
+
+    lib = _find_motion_core_lib()
+    if lib is None:
+        print("SKIP: motion-core/lib not checked out as a sibling repo — "
+              "nothing to compare this vendored copy against.")
+        return 0
+
+    try:
+        pinned_src = subprocess.run(
+            ["git", "-C", str(lib), "show", f"{PIN_SHA}:{PIN_REPO_PATH}"],
+            capture_output=True, text=True, check=True).stdout
+    except subprocess.CalledProcessError as e:
+        print(f"FAIL: could not read {PIN_REPO_PATH} at {PIN_SHA} from "
+              f"{lib}: {e.stderr.strip()}")
+        return 1
+
+    def top_level_funcs(src: str) -> dict:
+        tree = ast.parse(src)
+        return {n.name: n for n in tree.body
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+
+    pinned_funcs = top_level_funcs(pinned_src)
+    local_funcs = top_level_funcs(Path(__file__).read_text(encoding="utf-8"))
+
+    ok = True
+    for name, node in local_funcs.items():
+        if name in DECLARED_DIFFERENCES:
+            print(f"  ~ {name}: declared different — "
+                  f"{DECLARED_DIFFERENCES[name]}")
+            continue
+        if name in LOCAL_ONLY_ADDITIONS:
+            if name in pinned_funcs:
+                print(f"  ✗ {name}: declared local-only, but upstream now "
+                      "has it too — check for a name collision/real merge")
+                ok = False
+            continue
+        if name not in pinned_funcs:
+            print(f"  + {name}: local-only (not in pinned upstream) — "
+                  "undeclared, name it above or this is unreviewed drift")
+            ok = False
+            continue
+        if ast.dump(node) != ast.dump(pinned_funcs[name]):
+            print(f"  ✗ {name}: UNDECLARED DRIFT from pinned upstream")
+            ok = False
+    for name in sorted(set(pinned_funcs) - set(local_funcs)):
+        print(f"  ✗ {name}: in pinned upstream, missing here entirely — "
+              "new upstream function never ported or declared")
+        ok = False
+
+    print(("✓" if ok else "✗") +
+          f" vendored copy matches pin {PIN_SHA} + declared differences")
+
+    try:
+        behind = subprocess.run(
+            ["git", "-C", str(lib), "rev-list", "--count",
+             f"{PIN_SHA}..origin/main"],
+            capture_output=True, text=True, check=True).stdout.strip()
+        head = subprocess.run(
+            ["git", "-C", str(lib), "rev-parse", "--short", "origin/main"],
+            capture_output=True, text=True, check=True).stdout.strip()
+    except subprocess.CalledProcessError:
+        behind, head = None, None
+    if behind and behind != "0":
+        print(f"⚠ pin {PIN_SHA} is {behind} commit(s) behind origin/main "
+              f"({head}) — re-diff PIN_REPO_PATH before trusting this file "
+              "matches current rig behavior")
+    elif behind == "0":
+        print(f"✓ pin is current with origin/main ({head})")
+
+    return 0 if ok else 1
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--drift-check", action="store_true")
     ap.add_argument("--fixture")
     args = ap.parse_args()
     if args.self_test:
         return self_test()
+    if args.drift_check:
+        return drift_check()
     if args.fixture:
         frames, fps = load_frames(os.path.expanduser(args.fixture))
         for w in find_movement_windows(frames, fps=fps):
