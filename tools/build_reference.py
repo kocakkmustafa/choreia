@@ -817,6 +817,23 @@ def self_test() -> int:
         if not cond:
             fails += 1
 
+    # build() classifies every take via classify_source.classify(videoId),
+    # which reads real manifest/transcript files from the harvest library.
+    # The synthetic takes below use fake ids ("a", "b", "c", ...) that have no
+    # such files, so left unpatched every one of them is classified as
+    # not-a-lesson and every scenario silently degrades to 0 usable takes —
+    # this self-test is about consensus/mirror/tolerance behaviour, not the
+    # suitability gate (that gate has its own tests in classify_source.py),
+    # so the dependency is stubbed for the duration of this run.
+    import classify_source  # noqa: PLC0415
+    real_classify = classify_source.classify
+    classify_source.classify = lambda video_id: {
+        "verdict": "lesson", "spokenWords": None, "why": "self-test stub"}
+    # No try/finally: this is a terminal --self-test CLI run, nothing else
+    # executes after main() returns, so there is nothing for a leaked patch
+    # to affect. Restored anyway at the two return points below, for anyone
+    # who later imports self_test() as a function rather than running it.
+
     two = build([_synth_take("a"), _synth_take("b")], "s")
     check("2 take ile referans ÜRETİLMEZ", not two["built"], two.get("why", ""))
 
@@ -951,6 +968,8 @@ def self_test() -> int:
     check("ayrışan eklem SKORLANIR olmaktan çıkar, komşusu çıkmaz",
           v.get("right_elbow") in ("coached_only", "scored_partial") and
           v.get("right_knee") == "scored", str(v))
+
+    classify_source.classify = real_classify
 
     print()
     if fails:
