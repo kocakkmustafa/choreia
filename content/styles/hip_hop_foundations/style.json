@@ -20,7 +20,7 @@
       "The Running Man — we have measured 4 independent teachers doing it, and we still will not grade it: what makes this step right or wrong is the timing of the ball and heel of the foot touching the floor, and toe landmarks are the least reliable points a single phone camera produces. We can show you the step; scoring it would be scoring our own noise.",
       "The Roger Rabbit — reference built from 3 teachers, but they disagree about which way round the step is danced (mirrorConfident:false), so we cannot yet tell a mirrored performance from a wrong one. Shown, not graded, until more teachers settle it.",
       "The Bounce, Rock and Groove — the step definitions are written but no teachers have been measured for them yet (reference.collectedTakes == 0), so there is nothing to grade against.",
-      "Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored (plan §468)."
+      "Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored (plan §22)."
     ]
   },
 
@@ -65,7 +65,7 @@
           "scored": false,
           "demoOnly": true,
           "demoOnlyReason": { "en": "Groove is the part of hip-hop a camera is worst at and a mirror is best at. We teach it and stay out of your way." },
-          "evidence": "plan §468 'skorlanmaz ama öğretilir' bucket",
+          "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket",
           "minutes": 5
         }
       ],

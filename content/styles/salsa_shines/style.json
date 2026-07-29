@@ -72,7 +72,7 @@
           "scored": false,
           "demoOnly": true,
           "demoOnlyReason": { "en": "Hearing where the music's 1 falls is the heart of salsa, and a camera cannot see whether you heard it. We teach it and leave the judging to your own ears." },
-          "evidence": "plan §468 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
+          "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
           "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
           "minutes": 5
         }
