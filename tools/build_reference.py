@@ -566,7 +566,19 @@ def classify_disagreement(oriented: list[dict], consensus: dict[str, list[float]
 
 
 def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
-    usable = [p for p in prepared if p.get("usable")]
+    # Anchor-source homogeneity. Phase 0 means "left ankle furthest forward"
+    # for an ankle-anchored take and "left knee highest" for a knee-anchored
+    # one; those are different instants, so merging them merges two phase
+    # definitions. Takes re-anchored on the knees are therefore set aside and
+    # NAMED — not because they disagreed (excluding inconvenient sources is the
+    # failure M-F-47 exists to prevent) but because an independent measurement
+    # of the footage says its feet were never tracked: ankle visibility 0.007
+    # on the take that triggered this. For a footwork style, footage whose feet
+    # cannot be seen is not evidence about footwork.
+    all_usable = [p for p in prepared if p.get("usable")]
+    excluded = [p for p in all_usable
+                if (p.get("anchor") or {}).get("anchorSource") == "knee"]
+    usable = [p for p in all_usable if p not in excluded]
     cycles, sources = [], []
     for p in usable:
         c = take_canonical_cycle(p, bins)
@@ -603,6 +615,11 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     if len(cycles) < MIN_TAKES:
         return {
             "step": step, "built": False,
+            "excludedAnchorSource": [
+                {"videoId": p["videoId"],
+                 "ankleVisibility": (p.get("anchor") or {}).get("ankleVisibility"),
+                 "why": "ayak bileği izlenemedi; dizden çapalandı — faz tanımı farklı"}
+                for p in excluded],
             "why": f"{len(cycles)} kullanılabilir take — >={MIN_TAKES} gerekli (M-C-04)",
             "usableTakes": [p["videoId"] for p in sources],
         }
@@ -672,6 +689,11 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
              "thinEvidence": (p.get("cyclesInSegment") or 0) < MIN_CYCLES_PER_TAKE}
             for p in sources
         ],
+        "excludedAnchorSource": [
+            {"videoId": p["videoId"],
+             "ankleVisibility": (p.get("anchor") or {}).get("ankleVisibility"),
+             "why": "ayak bileği izlenemedi; dizden çapalandı — faz tanımı farklı"}
+            for p in excluded],
         "mirrorResolution": mirror_log,
         "reference": consensus,
         "toleranceDeg": tolerance,

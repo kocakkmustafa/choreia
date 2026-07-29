@@ -220,6 +220,23 @@ def joint_series(frames) -> dict[str, list[float]]:
 # the anchor
 # --------------------------------------------------------------------------
 
+L_KNEE, R_KNEE = 25, 26
+MIN_ANKLE_VISIBILITY = 0.5
+
+
+def ankle_visibility(frames) -> float:
+    """Median tracker confidence on the two ankles across the segment."""
+    vals = []
+    for lm in frames:
+        for i in (L_ANKLE, R_ANKLE):
+            if len(lm[i]) > 3:
+                vals.append(lm[i][3])
+    if not vals:
+        return 1.0            # fixture carries no visibility; cannot judge
+    vals.sort()
+    return vals[len(vals) // 2]
+
+
 def leading_foot_signal(frames, axis: str = "auto") -> tuple[list[float], str]:
     """Signed left-right ankle separation, torso-normalised.
 
@@ -274,7 +291,9 @@ def _smooth(xs: list[float], k: int) -> list[float]:
     return out
 
 
-def find_anchor(signal: list[float], period_frames: int) -> dict:
+def find_anchor(signal: list[float], period_frames: int, *,
+                visibility: float | None = None,
+                knee_swing: float | None = None) -> dict:
     """Cycle phase 0 = left foot furthest forward, located within the first cycle.
 
     Two different questions are asked at two different scopes, and conflating
@@ -296,6 +315,30 @@ def find_anchor(signal: list[float], period_frames: int) -> dict:
     if not whole:
         return {"ok": False, "why": "ankles never visible"}
     swing = max(whole) - min(whole)
+    # "The feet do not separate" and "the feet cannot be seen" produce the same
+    # small number, and until now the same rejection. They are different facts:
+    # one is about the dance, the other about the footage, and only the first
+    # is a reason to say the take has no leading foot. Corroboration comes from
+    # the knees, which stay visible when trousers or occlusion swallow the
+    # ankles (single-metric gate, Lissom L-138 class).
+    if visibility is not None and visibility < MIN_ANKLE_VISIBILITY:
+        if knee_swing is not None and knee_swing >= 0.08:
+            # Corroboration establishes that the dancer MOVES; it does not make
+            # an anchor derived from untracked ankles trustworthy. Letting the
+            # take through on the knees while still phasing it on the ankles
+            # would be a rubber stamp — the caller must re-anchor on the knee
+            # signal instead. Measured: one salsa take had ankle visibility
+            # 0.007 and was contributing both a phase and the anomalous
+            # half-period that broke the pool's harmonic agreement.
+            return {"ok": False, "reanchorOnKnees": True,
+                    "why": f"ankle tracking unusable (vis {visibility:.2f}); "
+                           "knees corroborate movement — re-anchor on knees",
+                    "ankleVisibility": round(visibility, 3)}
+        else:
+            return {"ok": False,
+                    "why": f"ankle tracking unreliable (vis {visibility:.2f}) "
+                           "and knees do not corroborate — UNKNOWN, not 'no swing'",
+                    "swing": round(swing, 4), "ankleVisibility": round(visibility, 3)}
     # A step whose ankles barely separate anywhere has no leading foot to speak
     # of, and anchoring on noise would be worse than admitting the take cannot
     # be anchored: downstream would then read pure noise as signal.
@@ -327,7 +370,15 @@ def load_take(video_id: str):
     if not p.exists():
         raise SystemExit(f"no landmarks for {video_id} — harvest it first")
     d = json.loads(p.read_text(encoding="utf-8"))
-    fps = float(d.get("recordingMeta", {}).get("fps") or 30)
+    fps = d.get("recordingMeta", {}).get("fps")
+    if not fps:
+        # No silent default. This pool alone carries eight distinct frame rates
+        # (23.976 to 60), and every period, window and cycle count downstream is
+        # derived from this number — a 60 fps take assumed to be 30 has all of
+        # them halved, with nothing to show for it.
+        raise SystemExit(f"{video_id}: fixture meta has no fps — refusing to "
+                         "assume one (periods and windows depend on it)")
+    fps = float(fps)
     lm, world, keep = [], [], []
     for i, f in enumerate(d.get("frames", [])):
         if f.get("detected") is False or not f.get("lm"):
@@ -391,8 +442,22 @@ def prepare(video_id: str) -> dict:
     frames = iso[seg[0]:seg[1]]
     period_frames = max(2, int(round(best.period_s * fps)))
     signal, axis = leading_foot_signal(frames)
-    anchor = find_anchor(signal, period_frames)
+    knee_sig = [((lm[L_KNEE][1] - lm[R_KNEE][1]) / tf[2])
+                for lm in frames if (tf := torso_frame(lm))]
+    knee_swing = (max(knee_sig) - min(knee_sig)) if knee_sig else None
+    vis = ankle_visibility(frames)
+    anchor = find_anchor(signal, period_frames, visibility=vis, knee_swing=knee_swing)
+    if anchor.get("reanchorOnKnees"):
+        knee_series = [((lm[L_KNEE][1] - lm[R_KNEE][1]) / tf[2])
+                       for lm in frames if (tf := torso_frame(lm))]
+        anchor = find_anchor(knee_series, period_frames)
+        anchor["anchorSource"] = "knee"
+        axis = "knee_y"
+    else:
+        anchor["anchorSource"] = "ankle"
     anchor["axis"] = axis
+    anchor["ankleVisibility"] = round(vis, 3)
+    anchor["kneeSwing"] = round(knee_swing, 4) if knee_swing is not None else None
 
     return {
         "videoId": video_id,
