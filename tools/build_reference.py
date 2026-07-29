@@ -984,6 +984,26 @@ def self_test() -> int:
     return 0
 
 
+def _json_safe(obj):
+    """Recursively replaces NaN/Inf with null before serialisation.
+
+    json.dumps's default (allow_nan=True) writes the literal token `NaN` —
+    valid Python, not valid JSON, and exactly what turned a NaN produced
+    upstream into a cross-language artifact crash rather than a null a
+    consumer can check for (0.8.4's lesson, applied here proactively rather
+    than after the same failure). Written with allow_nan=False below so a
+    NaN that reaches serialisation despite this walk raises loudly instead
+    of writing invalid JSON anyway.
+    """
+    if isinstance(obj, float):
+        return None if (math.isnan(obj) or math.isinf(obj)) else obj
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_json_safe(v) for v in obj]
+    return obj
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1002,12 +1022,28 @@ def main() -> int:
         ap.print_help()
         return 1
 
+    def _restore_nan(p: dict) -> dict:
+        # The inverse of _json_safe below: prepare_take.py's own --out
+        # sanitises NaN to JSON null on the way out (0.8.4 lesson), so a
+        # gated-out joint value round-trips here as None, not NaN — and
+        # this file's math still expects the latter (resample/take_
+        # canonical_cycle call math.isnan on it). Only "joints" is fixed
+        # up: it is the one field this pipeline ever puts a NaN into.
+        joints = p.get("joints")
+        if isinstance(joints, dict):
+            for name, series in joints.items():
+                joints[name] = [float("nan") if v is None else v
+                                for v in series]
+        return p
+
     prepared: list[dict] = []
     if args.prepared:
         d = json.loads(Path(args.prepared).read_text(encoding="utf-8"))
-        prepared.extend(d if isinstance(d, list) else [d])
+        prepared.extend(_restore_nan(x) for x in
+                        (d if isinstance(d, list) else [d]))
     for p in args.takes:
-        prepared.append(json.loads(Path(p).read_text(encoding="utf-8")))
+        prepared.append(
+            _restore_nan(json.loads(Path(p).read_text(encoding="utf-8"))))
     if not prepared:
         print("take verilmedi")
         return 1
@@ -1085,8 +1121,9 @@ def main() -> int:
         print("\n  kayda değer eğitmen ayrışması yok.")
 
     if args.out:
-        Path(args.out).write_text(json.dumps(r, ensure_ascii=False, indent=1),
-                                  encoding="utf-8")
+        Path(args.out).write_text(
+            json.dumps(_json_safe(r), ensure_ascii=False, indent=1,
+                      allow_nan=False), encoding="utf-8")
         print(f"\nyazıldı: {args.out}")
     return 0
 

@@ -178,7 +178,24 @@ def torso_frame(lm) -> tuple[float, float, float] | None:
     return hx, hy, torso
 
 
+# Below this, a landmark's (x, y) is MediaPipe's guess, not a measurement —
+# visible on request: at ankle-vis 0.008 a knee angle still came back 174-179°
+# degrees, plausible-looking and numeric, not the NaN the low confidence
+# should have produced (J-056; the Dart core hit the same class of defect and
+# gates on this same threshold — family symmetry, not a new number).
+MIN_JOINT_VISIBILITY = 0.5
+
+
+def _visible(*points: list[float]) -> bool:
+    for p in points:
+        if len(p) > 3 and p[3] < MIN_JOINT_VISIBILITY:
+            return False
+    return True             # no visibility channel at all: cannot judge, pass
+
+
 def angle_at(a, b, c) -> float:
+    if not _visible(a, b, c):
+        return float("nan")
     ux, uy = a[0] - b[0], a[1] - b[1]
     vx, vy = c[0] - b[0], c[1] - b[1]
     lu, lv = math.hypot(ux, uy), math.hypot(vx, vy)
@@ -203,16 +220,24 @@ def joint_series(frames) -> dict[str, list[float]]:
         for name, (a, b, c) in JOINT_TRIPLETS.items():
             out[name].append(angle_at(lm[a], lm[b], lm[c]))
 
+        # The trunk axis feeds every segment orientation AND trunk_tilt below,
+        # so an unreliable hip/shoulder corrupts all of them, not just its own
+        # entry — gated once here rather than re-checked at each call site.
+        trunk_ok = _visible(lm[L_HIP], lm[R_HIP], lm[L_SHOULDER], lm[R_SHOULDER])
         hx = (lm[L_HIP][0] + lm[R_HIP][0]) / 2
         hy = (lm[L_HIP][1] + lm[R_HIP][1]) / 2
         sx = (lm[L_SHOULDER][0] + lm[R_SHOULDER][0]) / 2
         sy = (lm[L_SHOULDER][1] + lm[R_SHOULDER][1]) / 2
         tx, ty = sx - hx, sy - hy          # trunk axis, hips -> shoulders
         for name, (a, b) in JOINT_SEGMENTS.items():
+            if not trunk_ok or not _visible(lm[a], lm[b]):
+                out[name].append(float("nan"))
+                continue
             out[name].append(signed_angle_to(lm[b][0] - lm[a][0],
                                              lm[b][1] - lm[a][1], tx, ty))
         # Image vertical points up the screen, i.e. decreasing y.
-        out[TRUNK_TILT].append(signed_angle_to(tx, ty, 0.0, -1.0))
+        out[TRUNK_TILT].append(
+            signed_angle_to(tx, ty, 0.0, -1.0) if trunk_ok else float("nan"))
     return out
 
 
@@ -572,6 +597,26 @@ def self_test() -> int:
     return 0
 
 
+def _json_safe(obj):
+    """Recursively replaces NaN/Inf with null before serialisation.
+
+    json.dumps's default (allow_nan=True) writes the literal token `NaN` —
+    valid Python, not valid JSON, and exactly what turned a NaN produced
+    upstream into a cross-language artifact crash rather than a null a
+    consumer can check for (0.8.4's lesson, applied here proactively rather
+    than after the same failure). Written with allow_nan=False below so a
+    NaN that reaches serialisation despite this walk raises loudly instead
+    of writing invalid JSON anyway.
+    """
+    if isinstance(obj, float):
+        return None if (math.isnan(obj) or math.isinf(obj)) else obj
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_json_safe(v) for v in obj]
+    return obj
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -612,9 +657,10 @@ def main() -> int:
         print(f"⚠ ≥3 kuralı sağlanmıyor — referans ÜRETİLMEZ (M-C-04).")
 
     if args.out:
+        payload = results if len(results) > 1 else results[0]
         Path(args.out).write_text(
-            json.dumps(results if len(results) > 1 else results[0],
-                       ensure_ascii=False, indent=1), encoding="utf-8")
+            json.dumps(_json_safe(payload), ensure_ascii=False, indent=1,
+                      allow_nan=False), encoding="utf-8")
         print(f"yazıldı: {args.out}")
     return 0
 
