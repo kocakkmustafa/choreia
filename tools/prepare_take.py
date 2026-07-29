@@ -91,6 +91,35 @@ JOINT_TRIPLETS: dict[str, tuple[int, int, int]] = {
     "right_knee": (24, 26, 28),
 }
 
+# Segment ORIENTATIONS — where a limb points, measured against the trunk axis.
+#
+# These were missing and their absence was not cosmetic. The core states the
+# reason plainly: flexion alone cannot tell an arm held out to the side from
+# the same arm held in front, because both have the identical elbow angle. In
+# dance, limb placement in space *is* the content, so a reference built from
+# flexion only cannot describe the step. Choreia's first two references were
+# built that way — eight flexion angles out of the seventeen the core defines.
+#
+# Unlike flexion these are SIGNED (a thigh pointing left is not a thigh
+# pointing right), which makes mirroring a different operation: swapping the
+# left/right names is no longer enough, the value must be negated too. See
+# ORIENTATION_JOINTS use in build_reference.
+JOINT_SEGMENTS: dict[str, tuple[int, int]] = {
+    "left_upper_arm": (11, 13),
+    "right_upper_arm": (12, 14),
+    "left_forearm": (13, 15),
+    "right_forearm": (14, 16),
+    "left_thigh": (23, 25),
+    "right_thigh": (24, 26),
+    "left_shin": (25, 27),
+    "right_shin": (26, 28),
+}
+
+# Trunk against image vertical. The core weights this low and says why: it
+# moves when the PHONE tilts, so it carries camera error alongside body
+# information. Kept because a harvested tutorial has a fixed camera.
+TRUNK_TILT = "trunk_tilt"
+
 
 def core_joint_ids() -> set[str]:
     r = subprocess.run(
@@ -159,11 +188,31 @@ def angle_at(a, b, c) -> float:
     return math.degrees(math.acos(cos))
 
 
+def signed_angle_to(ux: float, uy: float, vx: float, vy: float) -> float:
+    """Signed angle from vector v to vector u, degrees in (-180, 180]."""
+    if math.hypot(ux, uy) < 1e-9 or math.hypot(vx, vy) < 1e-9:
+        return float("nan")
+    return math.degrees(math.atan2(ux * vy - uy * vx, ux * vx + uy * vy))
+
+
 def joint_series(frames) -> dict[str, list[float]]:
     out: dict[str, list[float]] = {k: [] for k in JOINT_TRIPLETS}
+    out.update({k: [] for k in JOINT_SEGMENTS})
+    out[TRUNK_TILT] = []
     for lm in frames:
         for name, (a, b, c) in JOINT_TRIPLETS.items():
             out[name].append(angle_at(lm[a], lm[b], lm[c]))
+
+        hx = (lm[L_HIP][0] + lm[R_HIP][0]) / 2
+        hy = (lm[L_HIP][1] + lm[R_HIP][1]) / 2
+        sx = (lm[L_SHOULDER][0] + lm[R_SHOULDER][0]) / 2
+        sy = (lm[L_SHOULDER][1] + lm[R_SHOULDER][1]) / 2
+        tx, ty = sx - hx, sy - hy          # trunk axis, hips -> shoulders
+        for name, (a, b) in JOINT_SEGMENTS.items():
+            out[name].append(signed_angle_to(lm[b][0] - lm[a][0],
+                                             lm[b][1] - lm[a][1], tx, ty))
+        # Image vertical points up the screen, i.e. decreasing y.
+        out[TRUNK_TILT].append(signed_angle_to(tx, ty, 0.0, -1.0))
     return out
 
 

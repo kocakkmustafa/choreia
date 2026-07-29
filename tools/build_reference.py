@@ -46,6 +46,11 @@ import statistics
 import sys
 from pathlib import Path
 
+ORIENTATION_JOINTS = frozenset({
+    "left_upper_arm", "right_upper_arm", "left_forearm", "right_forearm",
+    "left_thigh", "right_thigh", "left_shin", "right_shin", "trunk_tilt",
+})
+
 PHASE_BINS = 64
 
 # Independent instructors required before a reference may be built (M-C-04).
@@ -77,6 +82,52 @@ TOLERANCE_K = 1.5  # band = K * dispersion, floored
 # hardest. So the decision is taken per (joint, PHASE), and each joint reports
 # what fraction of the cycle it can honestly be scored over.
 SCORED_MAX_DISPERSION_DEG = 14.0
+
+
+# Orientation angles live on a circle: -179 and +179 are two degrees apart, not
+# 358. Treating them linearly produced thigh tolerances of 250-330 degrees,
+# which is not a wide band but a meaningless one — the median and the spread
+# were both computed across a seam. Flexion angles never approach the seam and
+# are left on the ordinary number line.
+def ang_diff(a: float, b: float) -> float:
+    """Shortest signed difference a-b, in (-180, 180]."""
+    return (a - b + 180.0) % 360.0 - 180.0
+
+
+def circ_mean(vals: list[float]) -> float:
+    if not vals:
+        return float("nan")
+    sx = sum(math.cos(math.radians(v)) for v in vals)
+    sy = sum(math.sin(math.radians(v)) for v in vals)
+    return math.degrees(math.atan2(sy, sx))
+
+
+def circ_center(vals: list[float]) -> float:
+    """Circular median: the sample minimising total circular deviation.
+
+    The circular MEAN is pulled by outliers the same way a linear one is, and
+    three or four teachers is exactly the regime where that matters, so the
+    centre is a sample rather than an average — with the mean as the seed for
+    tie-breaking on tiny samples.
+    """
+    if not vals:
+        return float("nan")
+    if len(vals) <= 2:
+        return circ_mean(vals)
+    return min(vals, key=lambda c: sum(abs(ang_diff(v, c)) for v in vals))
+
+
+def center_of(vals: list[float], circular: bool) -> float:
+    return circ_center(vals) if circular else statistics.median(vals)
+
+
+def spread_of(vals: list[float], circular: bool) -> float:
+    """Mean absolute deviation about the centre (see `dispersion`)."""
+    if len(vals) < 2:
+        return 0.0
+    c = center_of(vals, circular)
+    devs = [abs(ang_diff(v, c)) if circular else abs(v - c) for v in vals]
+    return 1.2533 * sum(devs) / len(devs)
 
 
 def mirror_joint(name: str) -> str:
@@ -135,8 +186,8 @@ def take_canonical_cycle(prepared: dict, bins: int = PHASE_BINS
                  if r is not None]
         if not stack:
             return None
-        out[name] = [statistics.median([c[b] for c in stack])
-                     for b in range(bins)]
+        circ = name in ORIENTATION_JOINTS
+        out[name] = [center_of([c[b] for c in stack], circ) for b in range(bins)]
     return out
 
 
@@ -144,8 +195,20 @@ def take_canonical_cycle(prepared: dict, bins: int = PHASE_BINS
 # mirror resolution + consensus
 # --------------------------------------------------------------------------
 
+# Signed quantities — where a limb POINTS, and how the trunk leans. Mirroring
+# these is not just a rename: a thigh pointing 30 degrees to the left becomes a
+# thigh pointing 30 degrees to the right, so the value is negated as well.
+# Flexion angles are unsigned and must NOT be touched. Getting this wrong would
+# not raise anything; it would quietly make every mirrored take disagree with
+# its own reflection and inflate the tolerance that is derived from that
+# disagreement.
+
+
 def mirrored(cycle: dict[str, list[float]]) -> dict[str, list[float]]:
-    return {mirror_joint(k): v for k, v in cycle.items()}
+    out: dict[str, list[float]] = {}
+    for k, v in cycle.items():
+        out[mirror_joint(k)] = [-x for x in v] if k in ORIENTATION_JOINTS else v
+    return out
 
 
 def rotate_half(cycle: dict[str, list[float]]) -> dict[str, list[float]]:
@@ -164,8 +227,9 @@ def distance(a: dict[str, list[float]], b: dict[str, list[float]]) -> float:
         return float("inf")
     total, count = 0.0, 0
     for j in shared:
+        circ = j in ORIENTATION_JOINTS
         for x, y in zip(a[j], b[j]):
-            total += abs(x - y)
+            total += abs(ang_diff(x, y)) if circ else abs(x - y)
             count += 1
     return total / count if count else float("inf")
 
@@ -362,7 +426,8 @@ def merge(cycles: list[dict[str, list[float]]]) -> dict[str, list[float]]:
     for j in joints:
         cols = [c[j] for c in cycles if j in c]
         bins = len(cols[0])
-        out[j] = [statistics.median([c[b] for c in cols]) for b in range(bins)]
+        circ = j in ORIENTATION_JOINTS
+        out[j] = [center_of([c[b] for c in cols], circ) for b in range(bins)]
     return out
 
 
@@ -387,11 +452,7 @@ def dispersion(cycles: list[dict[str, list[float]]], joint: str,
     dominating it quadratically the way a standard deviation would.
     """
     vals = [c[joint][b] for c in cycles if joint in c]
-    if len(vals) < 2:
-        return 0.0
-    med = statistics.median(vals)
-    mean_abs = sum(abs(v - med) for v in vals) / len(vals)
-    return 1.2533 * mean_abs  # E|X-mu| = sigma*sqrt(2/pi) under normality
+    return spread_of(vals, joint in ORIENTATION_JOINTS)
 
 
 # Teachers disagreeing about WHEN look nothing like teachers disagreeing about
@@ -494,11 +555,19 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     consensus = merge(oriented)
 
     joints = sorted(consensus)
-    tolerance = {
-        j: [round(max(MIN_TOLERANCE_DEG, TOLERANCE_K * dispersion(oriented, j, b)), 2)
-            for b in range(bins)]
-        for j in joints
-    }
+    tolerance, tolerance_source = {}, {}
+    for j in joints:
+        band, src = [], []
+        for b in range(bins):
+            derived = TOLERANCE_K * dispersion(oriented, j, b)
+            band.append(round(max(MIN_TOLERANCE_DEG, derived), 2))
+            # Where the floor wins, the band is OUR caution, not the teachers'
+            # agreement — they agreed more tightly than landmark noise can be
+            # trusted to resolve. A consumer reading 6.0 degrees needs to know
+            # which of the two it is looking at (family standard, G-050).
+            src.append("floor" if derived <= MIN_TOLERANCE_DEG else "variance")
+        tolerance[j] = band
+        tolerance_source[j] = src
 
     disagreement = [d for d in (classify_disagreement(oriented, consensus, j, bins)
                                 for j in joints) if d]
@@ -548,6 +617,7 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         "mirrorResolution": mirror_log,
         "reference": consensus,
         "toleranceDeg": tolerance,
+        "toleranceSource": tolerance_source,
         "disagreement": disagreement,
         "scoring": scoring,
         "toleranceBelowDispersion": violations,
@@ -655,6 +725,23 @@ def self_test() -> int:
     # a within-cycle warp is a timing difference that a GLOBAL shift cannot
     # undo, so it lands in `residual` alongside form differences. Separating
     # the two needs local alignment, which is motion_core's DTW, not this tool's.
+    # The orientation-mirror rule, forced. A signed thigh angle must come back
+    # negated when the body is mirrored; if mirrored() only renamed the joint,
+    # the flipped take would disagree with its own reflection and the tolerance
+    # derived from that disagreement would be inflated — silently, since
+    # nothing else in the pipeline inspects the sign.
+    a_or = _synth_take("a", noise=0.0)
+    a_or["joints"]["left_thigh"] = [30.0] * len(a_or["joints"]["left_knee"])
+    a_or["joints"]["right_thigh"] = [-30.0] * len(a_or["joints"]["left_knee"])
+    cyc_or = take_canonical_cycle(a_or)
+    m = mirrored(cyc_or)
+    check("aynalama YÖNELİM açısının işaretini çevirir",
+          abs(m["right_thigh"][0] - (-30.0)) < 1e-6 and
+          abs(m["left_thigh"][0] - 30.0) < 1e-6,
+          f"sol={m['left_thigh'][0]:.1f} sağ={m['right_thigh'][0]:.1f}")
+    check("aynalama FLEKSİYON açısına dokunmaz",
+          abs(m["left_knee"][0] - cyc_or["right_knee"][0]) < 1e-6)
+
     warped = build([_synth_take("a", noise=0.5),
                     _synth_take("b", noise=0.5, linger=0.18),
                     _synth_take("c", noise=0.5)], "s")
@@ -791,13 +878,15 @@ def main() -> int:
     tol = r["toleranceDeg"]
     print("\n  tolerans + skorlama kararı (M-F-41: ölçüm, anatomi değil):")
     print(f"    {'eklem':<16}{'min':>6}{'ortanca':>9}{'max':>7}"
-          f"{'kapsam':>9}  karar")
+          f"{'kapsam':>9}  karar   [bandın ne kadarı TABAN kaynaklı]")
     for j in sorted(tol):
         col = tol[j]; sc = r["scoring"][j]
         tag = {"scored": "SKORLANIR", "scored_partial": "kısmen skorlanır",
                "coached_only": "yalnız koçlanır"}[sc["verdict"]]
+        floor_pct = r["toleranceSource"][j].count("floor") / len(col) * 100
         print(f"    {j:<16}{min(col):>6.1f}{statistics.median(col):>9.1f}"
-              f"{max(col):>7.1f}{sc['coverage']*100:>8.0f}%  {tag}")
+              f"{max(col):>7.1f}{sc['coverage']*100:>8.0f}%  {tag}"
+              f"   [taban %{floor_pct:.0f}]")
     partial = [j for j in tol if r["scoring"][j]["verdict"] == "scored_partial"]
     if partial:
         print("    ↳ kısmen: eklem çevrimin bir kısmında sıkı, kalanında değil —"
