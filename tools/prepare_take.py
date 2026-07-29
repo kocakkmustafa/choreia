@@ -171,22 +171,47 @@ def joint_series(frames) -> dict[str, list[float]]:
 # the anchor
 # --------------------------------------------------------------------------
 
-def leading_foot_signal(frames) -> list[float]:
+def leading_foot_signal(frames, axis: str = "auto") -> tuple[list[float], str]:
     """Signed left-right ankle separation, torso-normalised.
 
-    Positive means the left ankle leads. Mirroring the footage leaves this
-    unchanged (see the module docstring), so it gives a phase origin that does
-    not depend on the instructor's filming convention.
+    Two axes are available and they behave differently under mirroring, which
+    is why the choice is recorded rather than hidden:
+
+      x  lateral separation. INVARIANT under mirroring — flipping the image
+         negates x and swapping the anatomical labels negates it again. Ideal,
+         but small for steps that travel backwards rather than sideways: a
+         Roger Rabbit take measured 0.079 torso-lengths of lateral swing where
+         the threshold wanted 0.08.
+
+      y  vertical separation — which foot is lifted. Large for kick-back steps,
+         but it ANTI-inverts: mirroring does not flip y while the label swap
+         does, so a mirrored take anchors half a cycle away.
+
+    `auto` takes whichever swings harder and reports it, and build_reference
+    absorbs the difference by searching the half-cycle shift as part of mirror
+    resolution.
     """
-    out: list[float] = []
+    xs: list[float] = []
+    ys: list[float] = []
     for lm in frames:
         tf = torso_frame(lm)
         if tf is None:
-            out.append(float("nan"))
+            xs.append(float("nan"))
+            ys.append(float("nan"))
             continue
-        hx, _, torso = tf
-        out.append(((lm[L_ANKLE][0] - hx) - (lm[R_ANKLE][0] - hx)) / torso)
-    return out
+        _, _, torso = tf
+        xs.append((lm[L_ANKLE][0] - lm[R_ANKLE][0]) / torso)
+        ys.append((lm[L_ANKLE][1] - lm[R_ANKLE][1]) / torso)
+
+    def swing(v: list[float]) -> float:
+        ok = [q for q in v if not math.isnan(q)]
+        return (max(ok) - min(ok)) if ok else 0.0
+
+    if axis == "x":
+        return xs, "x"
+    if axis == "y":
+        return ys, "y"
+    return (xs, "x") if swing(xs) >= swing(ys) else (ys, "y")
 
 
 def _smooth(xs: list[float], k: int) -> list[float]:
@@ -261,34 +286,51 @@ def prepare(video_id: str) -> dict:
     aspect = aspect_of(video_id)
     iso = to_isotropic(lm, aspect)
 
-    moves = find_movement_windows(iso, fps=fps)
+    # Both searches are widened well past their defaults and then intersected,
+    # rather than taking each list's best and hoping the two agree.
+    #
+    # Taking movement's top window and only then asking the camera gate about
+    # it rejected most of the library: on The Shed's take the best movement
+    # window ended 40 frames before the nearest clean window began, while the
+    # third-best sat inside it. Optimising one criterion and filtering by the
+    # other is not the same as optimising over what satisfies both.
+    moves = find_movement_windows(iso, fps=fps, max_windows=40)
     if not moves:
         return {"videoId": video_id, "usable": False,
                 "why": "no repeating-and-moving window found"}
-    best = moves[0]
 
     cam_ok: list[tuple[int, int]] = []
-    if any(w for w in world):
-        try:
-            cam_ok = [(w.start_frame, w.end_frame)
-                      for w in find_usable_windows_world(
-                          [w for w in world if w], fps=fps)]
-        except TypeError:
-            cam_ok = []
+    if all(w for w in world):
+        cam_ok = [(w.start_frame, w.end_frame)
+                  for w in find_usable_windows_world(world, fps=fps,
+                                                     max_windows=40)]
 
-    seg = (best.start_frame, best.end_frame)
     if cam_ok:
-        hits = [o for o in (overlap(seg, c) for c in cam_ok) if o]
-        if not hits:
+        feasible = []
+        for m in moves:
+            for c in cam_ok:
+                o = overlap((m.start_frame, m.end_frame), c)
+                # A sliver of overlap is not a usable take; require enough of
+                # the step to survive that several cycles remain.
+                if o and (o[1] - o[0]) >= max(2, int(round(m.period_s * fps))) * 3:
+                    feasible.append((o, m))
+        if not feasible:
             return {"videoId": video_id, "usable": False,
-                    "why": "movement window and camera-clean windows do not overlap",
-                    "movement": [seg[0], seg[1]],
-                    "cameraWindows": [list(c) for c in cam_ok]}
-        seg = max(hits, key=lambda o: o[1] - o[0])
+                    "why": "no movement window overlaps a camera-clean window",
+                    "movementWindows": [[m.start_frame, m.end_frame] for m in moves[:6]],
+                    "cameraWindows": [list(c) for c in cam_ok[:6]]}
+        # Prefer the most self-similar movement, then the longest usable stretch.
+        seg, best = max(feasible, key=lambda fm: (fm[1].periodicity,
+                                                  fm[0][1] - fm[0][0]))
+    else:
+        best = moves[0]
+        seg = (best.start_frame, best.end_frame)
 
     frames = iso[seg[0]:seg[1]]
     period_frames = max(2, int(round(best.period_s * fps)))
-    anchor = find_anchor(leading_foot_signal(frames), period_frames)
+    signal, axis = leading_foot_signal(frames)
+    anchor = find_anchor(signal, period_frames)
+    anchor["axis"] = axis
 
     return {
         "videoId": video_id,
@@ -305,6 +347,7 @@ def prepare(video_id: str) -> dict:
         "periodicity": best.periodicity,
         "motionEnergy": best.motion_energy,
         "anchor": anchor,
+        "anchorAxis": anchor.get("axis"),
         "joints": joint_series(frames) if anchor.get("ok") else None,
         "provenance": doc.get("provenance", {}),
     }
@@ -348,8 +391,8 @@ def self_test() -> int:
     fails = 0
 
     straight = _stepping()
-    a = find_anchor(leading_foot_signal(straight), PERIOD)
-    b = find_anchor(leading_foot_signal(_mirror(straight)), PERIOD)
+    a = find_anchor(leading_foot_signal(straight, "x")[0], PERIOD)
+    b = find_anchor(leading_foot_signal(_mirror(straight), "x")[0], PERIOD)
 
     print(f"  düz            : ok={a.get('ok')} faz={a.get('phase')} "
           f"öncü={a.get('leadingFoot')} salınım={a.get('swing')}")
@@ -371,14 +414,14 @@ def self_test() -> int:
     # check above. Start the same step a quarter cycle in; the origin must move
     # with it.
     shifted = _stepping(offset=math.pi / 2)
-    d = find_anchor(leading_foot_signal(shifted), PERIOD)
+    d = find_anchor(leading_foot_signal(shifted, "x")[0], PERIOD)
     delta = (a.get("phase", 0) - d.get("phase", 0)) % 1.0
     print(f"  çeyrek kaydırma: faz={d.get('phase')} (fark={delta:.3f}, ~0.25 bekleniyor)")
     if not (0.20 <= delta <= 0.30):
         print("  ! çapa faz kaymasını izlemiyor"); fails += 1
 
     flat = _stepping(amp=0.003)
-    c = find_anchor(leading_foot_signal(flat), PERIOD)
+    c = find_anchor(leading_foot_signal(flat, "x")[0], PERIOD)
     print(f"  ayak ayrılmıyor: ok={c.get('ok')} ({c.get('why', '')})")
     if c.get("ok"):
         print("  ! ayrılmayan ayaklarda çapa REDDEDİLMELİ"); fails += 1
@@ -417,7 +460,7 @@ def main() -> int:
         return 1
 
     print(f"{'video':<13}{'durum':<10}{'segment':>16}{'periyot':>9}"
-          f"{'faz':>7}{'öncü':>7}  neden")
+          f"{'faz':>7}{'öncü':>7}{'eks':>4}  neden")
     results = []
     for vid in ids:
         r = prepare(vid)
@@ -428,7 +471,7 @@ def main() -> int:
               f"{(str(seg.get('seconds', '-')) + 's'):>16}"
               f"{(str(r.get('periodSeconds', '-')) + 's'):>9}"
               f"{str(anc.get('phase', '-')):>7}{str(anc.get('leadingFoot', '-')):>7}"
-              f"  {r.get('why') or ''}")
+              f"{str(anc.get('axis', '-')):>4}  {r.get('why') or ''}")
 
     ok = [r for r in results if r["usable"]]
     print(f"\n{len(ok)}/{len(results)} take hazır.")

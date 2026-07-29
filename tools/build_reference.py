@@ -128,6 +128,15 @@ def mirrored(cycle: dict[str, list[float]]) -> dict[str, list[float]]:
     return {mirror_joint(k): v for k, v in cycle.items()}
 
 
+def rotate_half(cycle: dict[str, list[float]]) -> dict[str, list[float]]:
+    """Same cycle read from half a period later."""
+    out = {}
+    for k, v in cycle.items():
+        h = len(v) // 2
+        out[k] = v[h:] + v[:h]
+    return out
+
+
 def distance(a: dict[str, list[float]], b: dict[str, list[float]]) -> float:
     """Mean absolute angle difference over shared joints and phases."""
     shared = sorted(set(a) & set(b))
@@ -153,24 +162,40 @@ def orient(cycles: list[dict[str, list[float]]]) -> tuple[list[dict], list[dict]
     if not cycles:
         return [], []
     oriented = [cycles[0]]
-    log = [{"index": 0, "flipped": False, "margin": None, "seed": True}]
+    log = [{"index": 0, "flipped": False, "halfCycle": False,
+            "margin": None, "seed": True}]
     for i, c in enumerate(cycles[1:], start=1):
         consensus = merge(oriented)
-        d_straight = distance(c, consensus)
-        d_mirror = distance(mirrored(c), consensus)
-        flip = d_mirror < d_straight
-        oriented.append(mirrored(c) if flip else c)
-        denom = max(d_straight, d_mirror, 1e-9)
+        # Four candidates, not two. The half-cycle rotation is here because
+        # prepare_take anchors on whichever ankle axis actually swings, and the
+        # two axes disagree by half a cycle under mirroring: lateral separation
+        # (L.x-R.x) is mirror-invariant, while vertical separation (L.y-R.y)
+        # anti-inverts, since mirroring leaves y alone but the anatomical label
+        # swap negates it. A take anchored on "left foot lifted" therefore lands
+        # half a cycle from one anchored on "left foot leading" once mirrored.
+        # Searching the rotation costs one comparison and removes the need for
+        # the two tools to agree on an axis.
+        cands = {
+            (False, False): c,
+            (True, False): mirrored(c),
+            (False, True): rotate_half(c),
+            (True, True): rotate_half(mirrored(c)),
+        }
+        scored = sorted(((distance(v, consensus), k) for k, v in cands.items()))
+        best_d, (flip, half) = scored[0]
+        runner_d = scored[1][0]
+        oriented.append(cands[(flip, half)])
         log.append({
             "index": i,
             "flipped": flip,
-            "straightDeg": round(d_straight, 3),
-            "mirrorDeg": round(d_mirror, 3),
-            # Relative margin: how decisively the better orientation won. Near
-            # zero means the take is close to bilaterally symmetric over the
-            # joints measured, and its handedness is genuinely undetermined
-            # rather than merely close.
-            "margin": round(abs(d_straight - d_mirror) / denom, 4),
+            "halfCycle": half,
+            "bestDeg": round(best_d, 3),
+            "runnerUpDeg": round(runner_d, 3),
+            # Relative margin: how decisively the winning variant beat the next
+            # one. Near zero means the take is close to bilaterally symmetric
+            # over the joints measured, and its orientation is genuinely
+            # undetermined rather than merely close.
+            "margin": round((runner_d - best_d) / max(runner_d, 1e-9), 4),
         })
     return oriented, log
 
@@ -507,10 +532,11 @@ def main() -> int:
         if e.get("seed"):
             print(f"    {e['videoId']:<13}tohum (yön referansı)")
         else:
-            mark = "ÇEVRİLDİ" if e["flipped"] else "düz"
-            warn = "  ⚠ marj düşük — el-yönü belirsiz" if e["margin"] < 0.03 else ""
-            print(f"    {e['videoId']:<13}{mark:<10}"
-                  f"düz={e['straightDeg']}° ayna={e['mirrorDeg']}° "
+            bits = ("ayna" if e["flipped"] else "düz") + \
+                   ("+yarım" if e["halfCycle"] else "")
+            warn = "  ⚠ marj düşük — yön belirsiz" if e["margin"] < 0.03 else ""
+            print(f"    {e['videoId']:<13}{bits:<12}"
+                  f"en-iyi={e['bestDeg']}° ikinci={e['runnerUpDeg']}° "
                   f"marj={e['margin']}{warn}")
 
     tol = r["toleranceDeg"]

@@ -54,13 +54,20 @@ MAX_SECONDS = 900
 # does not survive into the raw metadata, so the mapping lives here until the
 # rig records it (M-C-13).
 STEP_OF: dict[str, str] = {
-    "bdY2Pwqj-9A": "hh_roger_rabbit",
-    "pua9UszdO24": "hh_roger_rabbit",
-    "DEFnniCN7ok": "hh_roger_rabbit",
-    "blWeCJW2Peo": "hh_roger_rabbit",
-    "lYpRasK4c9k": "hh_running_man",
-    "UO9Ehsdt2IE": "hh_running_man",
-    "k22Bm2pMyD4": "hh_running_man",
+    "bdY2Pwqj-9A": "hh_roger_rabbit",   # James Deane
+    "pua9UszdO24": "hh_roger_rabbit",   # Howcast
+    "DEFnniCN7ok": "hh_roger_rabbit",   # Nustudios
+    "blWeCJW2Peo": "hh_roger_rabbit",   # Danceopedia
+    "5MQEtoEKdEw": "hh_roger_rabbit",   # Kiarilk
+    "_G-hONZsj1w": "hh_roger_rabbit",   # The Shed
+    "35sk_G8Vf9o": "hh_roger_rabbit",   # Versa-Style Street Dance Company
+    "Ce3NCRk1Nl4": "hh_roger_rabbit",   # KAFQA Dance
+    "lYpRasK4c9k": "hh_running_man",    # Howcast
+    "UO9Ehsdt2IE": "hh_running_man",    # JoeyTheJAM
+    "k22Bm2pMyD4": "hh_running_man",    # Jayden Rodrigues — dikey, elendi
+    "E6GfqbvDJfU": "hh_running_man",    # MihranTV
+    "Wd29rBfAzkI": "hh_running_man",    # The Shed
+    "KV-sxd_pQ9w": "hh_running_man",    # James Deane
 }
 
 
@@ -72,7 +79,12 @@ def used_channels() -> dict[str, dict[str, dict]]:
     metadata behind but contributes no reference material, and treating it as
     a used channel would block a *usable* video from the same instructor.
     """
-    out: dict[str, dict[str, dict]] = {}
+    # Videos are grouped UNDER a channel rather than keyed BY one. Keying by
+    # channel_id silently dropped a second video from the same instructor —
+    # The Shed teaches both steps, and one of its takes vanished from the
+    # listing without a word. Counting distinct channels is still the rule;
+    # losing a row while doing it is not.
+    out: dict[str, dict[str, list[dict]]] = {}
     for info in sorted(RAW.glob("*.info.json")):
         vid = info.name[: -len(".info.json")]
         try:
@@ -80,13 +92,13 @@ def used_channels() -> dict[str, dict[str, dict]]:
         except (OSError, json.JSONDecodeError):
             continue
         step = STEP_OF.get(vid, "unknown")
-        extracted = (LANDMARKS / f"{vid}.full.json").exists()
-        out.setdefault(step, {})[d.get("channel_id", vid)] = {
-            "videoId": vid,
-            "channel": d.get("channel", ""),
-            "extracted": extracted,
-            "resolution": f"{d.get('width')}x{d.get('height')}",
-        }
+        out.setdefault(step, {}).setdefault(
+            d.get("channel_id") or vid, []).append({
+                "videoId": vid,
+                "channel": d.get("channel", ""),
+                "extracted": (LANDMARKS / f"{vid}.full.json").exists(),
+                "resolution": f"{d.get('width')}x{d.get('height')}",
+            })
     return out
 
 
@@ -157,12 +169,16 @@ def main() -> int:
         print("HASAT EDİLMİŞ KANALLAR (adım bazlı)\n")
         for step in sorted(used):
             rows = used[step]
-            live = [r for r in rows.values() if r["extracted"]]
-            print(f"  {step}  —  {len(live)} çıkarıldı / {len(rows)} indirildi")
-            for cid, r in sorted(rows.items(), key=lambda kv: kv[1]["channel"]):
-                mark = "✓" if r["extracted"] else "✗"
-                print(f"    {mark} {r['channel'][:26]:<28}{r['videoId']}  "
-                      f"{r['resolution']:>10}  {cid}")
+            vids = [v for vs in rows.values() for v in vs]
+            live = {cid for cid, vs in rows.items()
+                    if any(v["extracted"] for v in vs)}
+            print(f"  {step}  —  {len(live)} kanal çıkarıldı / "
+                  f"{len(vids)} video indirildi")
+            for cid, vs in sorted(rows.items(), key=lambda kv: kv[1][0]["channel"]):
+                for v in vs:
+                    mark = "✓" if v["extracted"] else "✗"
+                    print(f"    {mark} {v['channel'][:26]:<28}{v['videoId']}  "
+                          f"{v['resolution']:>10}  {cid}")
             need = max(0, 3 - len(live))
             print(f"    → hasat tarafı: "
                   f"{'yeterli' if not need else f'{need} kanal daha gerekiyor'}\n")
@@ -186,7 +202,8 @@ def main() -> int:
     ids = list(dict.fromkeys(ids))  # order-preserving dedup
 
     step = args.step or "unknown"
-    seen = {cid for cid, r in used.get(step, {}).items() if r["extracted"]}
+    seen = {cid for cid, vs in used.get(step, {}).items()
+            if any(v["extracted"] for v in vs)}
     print(f"adım: {step} — hâlihazırda {len(seen)} kullanılabilir kanal\n")
     print(f"{'video':<13}{'karar':<15}{'çözünürlük':>11}{'süre':>7}  "
           f"{'kanal':<24}neden")
