@@ -286,6 +286,14 @@ def orient_exhaustive(cycles: list[dict[str, list[float]]]
     # would then be described the minority's way round.
     best_assign, oriented = _apply_majority_convention(best_assign, oriented)
 
+    # Provisional bands from the chosen assignment, used only to judge whether
+    # a rival orientation could move a cell out of its band.
+    merged0 = merge(oriented)
+    tolerance_hint = {j: [max(MIN_TOLERANCE_DEG,
+                              TOLERANCE_K * spread_of([c[j][b] for c in oriented
+                                                       if j in c],
+                                                      j in ORIENTATION_JOINTS))
+                          for b in range(len(merged0[j]))] for j in merged0}
     log = []
     for i, a in enumerate(best_assign):
         others = [o for j, o in enumerate(oriented) if j != i]
@@ -323,11 +331,22 @@ def _apply_majority_convention(assign, oriented):
 #
 # The distinction is worth keeping straight. Degenerate means the answer does
 # not matter. Uncertain means it matters and is not settled.
-CONSENSUS_MOVE_DEG = 0.5
+# Threshold ordering (audit prompted by Gravita's P0): a counting gate is the
+# generous outer bound, a quality line sits inside it. This one was inverted.
+#
+# The question "does this orientation choice matter" was asked at 0.5 degrees
+# while MIN_TOLERANCE_DEG says 6 degrees is the smallest angle worth a verdict.
+# A consensus that moves 3 degrees was therefore called "matters" even though
+# it cannot change any judgement the reference is capable of making. The test
+# has to use the same floor the rest of the pipeline uses.
+# Fraction of (joint, phase) cells whose value would leave its own tolerance
+# band if this take were flipped. At or below this the orientation cannot
+# change a verdict, whatever the raw degrees look like.
+CELLS_BEYOND_TOLERANCE = 0.01
 MIRROR_MARGIN = 0.03
 
 
-def _margin_vs_distinct_rival(raw, placed, rest, others) -> dict:
+def _margin_vs_distinct_rival(raw, placed, rest, others, tolerance=None) -> dict:
     best = distance(placed, rest)
     rivals = sorted(
         ((distance(_variant(raw, *v), rest), v) for v in VARIANTS
@@ -341,15 +360,27 @@ def _margin_vs_distinct_rival(raw, placed, rest, others) -> dict:
     rival_cost, rival_v = rivals[0]
     with_placed = merge(others + [placed])
     with_rival = merge(others + [_variant(raw, *rival_v)])
-    moved = max((abs(ang_diff(x, y)) if j in ORIENTATION_JOINTS else abs(x - y)
-                 for j in with_placed
-                 for x, y in zip(with_placed[j], with_rival[j])), default=0.0)
+    # "Does the choice matter" is asked cell by cell, against each cell's own
+    # band. A single max in degrees is the wrong statistic once orientation
+    # angles are in the pool: one joint swinging at one phase captures the whole
+    # measure (it read 104-172 degrees on takes whose flexion barely moved). The
+    # only shift that can change a judgement is one that leaves the tolerance
+    # the reference itself publishes.
+    cells = shifted = 0
+    for j in with_placed:
+        band = tolerance.get(j) if tolerance else None
+        for b, (x, y) in enumerate(zip(with_placed[j], with_rival[j])):
+            d = abs(ang_diff(x, y)) if j in ORIENTATION_JOINTS else abs(x - y)
+            cells += 1
+            if d > (band[b] if band else MIN_TOLERANCE_DEG):
+                shifted += 1
+    moved = shifted / cells if cells else 0.0
 
     out = {"bestDeg": round(best, 3), "runnerUpDeg": round(rival_cost, 3),
            "margin": round((rival_cost - best) / max(rival_cost, 1e-9), 4),
-           "consensusMoveDeg": round(moved, 2)}
+           "cellsBeyondTolerance": round(moved, 4)}
 
-    if moved <= CONSENSUS_MOVE_DEG:
+    if moved <= CELLS_BEYOND_TOLERANCE:
         # The rival is a different cycle but produces the same reference, so
         # the orientation of this take simply does not reach the output.
         out["confident"] = True
@@ -896,8 +927,9 @@ def main() -> int:
                 "uncertain": "  ⚠ BELİRSİZ — rakip farklı ve marj eşiğin altında",
                 "decisive": "",
             }.get(e.get("orientationEffect"), "")
-            if e.get("consensusMoveDeg") is not None:
-                warn += f"  [uzlaşma oynaması {e['consensusMoveDeg']}°]"
+            if e.get("cellsBeyondTolerance") is not None:
+                warn += (f"  [bandı aşan hücre %"
+                         f"{e['cellsBeyondTolerance']*100:.1f}]")
             print(f"    {e['videoId']:<13}{bits:<12}"
                   f"en-iyi={e['bestDeg']}° ikinci={e.get('runnerUpDeg')}° "
                   f"marj={e.get('margin')}{warn}")

@@ -47,7 +47,7 @@
    "bestDeg": 21.373,
    "runnerUpDeg": 21.196,
    "margin": -0.0083,
-   "consensusMoveDeg": 358.15,
+   "cellsBeyondTolerance": 0.1232,
    "confident": false,
    "orientationEffect": "against_local_optimum",
    "note": "global çözüm bu take'i KENDİ tercihinin tersine yerleştirdi (toplam maliyet için) — gerilim var",
@@ -61,7 +61,7 @@
    "bestDeg": 19.418,
    "runnerUpDeg": 20.16,
    "margin": 0.0368,
-   "consensusMoveDeg": 359.54,
+   "cellsBeyondTolerance": 0.1756,
    "confident": true,
    "orientationEffect": "decisive",
    "videoId": "UO9Ehsdt2IE"
@@ -74,7 +74,7 @@
    "bestDeg": 35.158,
    "runnerUpDeg": 34.793,
    "margin": -0.0105,
-   "consensusMoveDeg": 357.88,
+   "cellsBeyondTolerance": 0.1388,
    "confident": false,
    "orientationEffect": "against_local_optimum",
    "note": "global çözüm bu take'i KENDİ tercihinin tersine yerleştirdi (toplam maliyet için) — gerilim var",
@@ -88,7 +88,7 @@
    "bestDeg": 18.241,
    "runnerUpDeg": 19.738,
    "margin": 0.0758,
-   "consensusMoveDeg": 359.54,
+   "cellsBeyondTolerance": 0.2206,
    "confident": true,
    "orientationEffect": "decisive",
    "videoId": "lYpRasK4c9k"
@@ -4918,7 +4918,38 @@
  "toleranceBelowDispersion": [],
  "status": "provisional",
  "mirrorConfident": false,
- "jointCoverageNote": "17/17 cekirdek eklemi olculuyor: 8 fleksiyon + 8 segment YONELIMI + trunk_tilt. Onceki surumler yalniz 8 fleksiyon tasiyordu — fleksiyon tek basina yana acilmis uzvu onde tutulandan ayiramaz, ve dansta uzuv yerlesimi icerigin kendisidir. Yonelim acilari ISARETLI ve DAIRESEL: aynalama isareti cevirir, istatistikler dairesel (dogrusal medyan ±180 dikisinde uyluk toleransini 250-330 dereceye cikariyordu — genis degil anlamsiz).",
- "evidenceNote": "Take basina cevrim: [5, 5, 2, 2]. ZAYIF (<5): Wd29rBfAzkI, lYpRasK4c9k.",
- "provisionalReason": "Yon atamasi BELIRSIZ (mirrorConfident=False); yonun uzlasmaya etkisi [358.15, 359.54, 357.88, 359.54] derece. Take basina cevrim: [5, 5, 2, 2]. ZAYIF (<5): Wd29rBfAzkI, lYpRasK4c9k."
+ "evidenceThickness": {
+  "cyclesPerTake": [
+   5,
+   5,
+   2,
+   2
+  ],
+  "thinTakes": [
+   "Wd29rBfAzkI",
+   "lYpRasK4c9k"
+  ],
+  "toleranceSourceFloorPct": {
+   "left_elbow": 0,
+   "left_forearm": 0,
+   "left_hip": 52,
+   "left_knee": 55,
+   "left_shin": 27,
+   "left_shoulder": 5,
+   "left_thigh": 42,
+   "left_upper_arm": 8,
+   "right_elbow": 0,
+   "right_forearm": 0,
+   "right_hip": 72,
+   "right_knee": 39,
+   "right_shin": 27,
+   "right_shoulder": 0,
+   "right_thigh": 48,
+   "right_upper_arm": 0,
+   "trunk_tilt": 69
+  },
+  "note": "floor = bant EGITMEN UYUMUNDAN degil bizim ihtiyatimizdan geliyor (egitmenler tabandan daha siki uyusuyor); variance = bant olculen ayrismadan turedi. thinEvidence = take 5'ten az cevrim tasiyor."
+ },
+ "orientationNote": "Yon BELIRSIZ. Etkisi: bir take cevrilirse (eklem, faz) hucrelerinin %12-22'i kendi tolerans bandinin DISINA cikar — yani secim hukum degistirebilir. Olcut derece degil hucre orani: yonelim aciları eklenince tek bir eklemin tek fazdaki sicramasi derece-maksimumunu ele geciriyordu (104-172 derece okunuyordu).",
+ "provisionalReason": "Yon BELIRSIZ. Etkisi: bir take cevrilirse (eklem, faz) hucrelerinin %12-22'i kendi tolerans bandinin DISINA cikar — yani secim hukum degistirebilir. Olcut derece degil hucre orani: yonelim aciları eklenince tek bir eklemin tek fazdaki sicramasi derece-maksimumunu ele geciriyordu (104-172 derece okunuyordu). Cozum: daha cok take veya dis oncul. Take basina cevrim: [5, 5, 2, 2]."
 }
