@@ -8,21 +8,37 @@ rather than merely "written", something has to consume them the way a future
 scorer would and show the judgment moves — the fifth question (M-F-99/102/109)
 applied to this specific pair.
 
-This is a proof of the WIRING, not the runtime. It implements the two
-unblocked errors' metrics (loaded_leg_knee_change, step_thigh_excursion) just
-well enough to run one real clip and one deliberately corrupted copy through
-them, and checks four things a silent binding failure could hide:
+This is a proof of the WIRING, not the runtime. It implements STEP_TOO_LARGE's
+metric (step_thigh_excursion) well enough to run one real clip and deliberately
+corrupted copies through it, and checks what a silent binding failure could hide.
 
-  1. A real clip (one of the reference's own 4 sources) does NOT trip either
-     error — the reference is not so tight it flags its own evidence.
-  2. A controlled corruption of that SAME clip DOES trip the corresponding
-     error (M-C-01 pattern: mutate a known-good take, don't invent a "bad"
-     clip from nothing — a synthetic worst-case can pass by accident, a
-     targeted mutation of real data cannot).
-  3. Mirroring the good clip changes NEITHER verdict — kural-7 (JabLab stance
-     precedent): mirrorConfident:false on this reference means no error may
-     depend on which side is which, and this is checked by construction
-     (max-over-both-legs) rather than asserted in prose.
+Reference history in this file (read the git log, not just the docstring, if
+the two ever disagree): M-F-102 pooled 4 sources; M-F-115 excluded bqoNqA2hmE4
+(excludedIdentityAmbiguous) and rebuilt on 3 — which, unplanned, also resolved
+mirrorConfident to TRUE (Choreia's first). M-F-117 then blocked
+NO_WEIGHT_TRANSFER entirely: its clean-3-source threshold (1.0deg) turned out
+to sit below this pipeline's own MIN_TOLERANCE_DEG (6deg landmark-jitter
+floor) — a decision line inside that much noise cannot tell a genuine light
+transfer from tracking noise, firing or silent are both wrong, so the code is
+kept defined but never evaluated (`judge()` does not compute a verdict for
+it, checked directly below, not just documented as blocked in the config).
+
+What is checked now, with one live error (STEP_TOO_LARGE) and two documented
+non-live ones (NO_WEIGHT_TRANSFER, WRONG_FOOT — the latter unblocked in the
+config by mirrorConfident:true but leading_side has no implementation
+anywhere yet, out of this file's scope):
+
+  1. A real clip (one of the reference's 3 clean sources) does NOT trip
+     STEP_TOO_LARGE — the reference is not so tight it flags its own evidence.
+  2. A controlled corruption of that SAME clip DOES trip it (M-C-01 pattern:
+     mutate a known-good take, don't invent a "bad" clip from nothing — a
+     synthetic worst-case can pass by accident, a targeted mutation cannot).
+     A second corruption (flattened knees) confirms NO_WEIGHT_TRANSFER stays
+     un-evaluated even when the exact condition it would have caught is
+     present — proving the block is inert, not merely unlucky not to fire.
+  3. Mirroring the good clip changes STEP_TOO_LARGE's verdict NOT AT ALL —
+     it is side-agnostic by construction (max-over-both-legs), independent
+     of whatever mirrorConfident happens to be.
   4. The BPM ship-gate is UNCHANGED by any of this. Binding a scorer to a
      step does not make the step shippable — content/library.json still says
      comingSoon and validate_content.py still blocks it on the DISPUTED bpmRange.
@@ -60,11 +76,18 @@ def _phase_bin_value(cycle: dict, joint: str, bin_idx: int) -> float:
 
 
 def judge(cycle: dict, moment_a_bin: int, moment_b_bin: int) -> dict:
-    """The two unblocked errors, computed the way a runtime would.
+    """The one unblocked error, computed the way a runtime would.
 
-    Deliberately max()'d over both legs rather than "the loaded leg" (which
-    would need a leading-side call this reference cannot make) — this is
-    kural-7 enforced in the metric itself, not just documented.
+    NO_WEIGHT_TRANSFER is NOT computed here (M-F-117): its threshold
+    (1.0deg) sits below MIN_TOLERANCE_DEG (6deg, this pipeline's own
+    landmark-jitter floor) and is calibration-blocked in the step config —
+    a decision line inside the noise floor cannot tell a genuine light
+    transfer from tracking noise. kneeDeltaDeg is still returned as a
+    diagnostic (section 6 uses it), it just backs no verdict.
+
+    STEP_TOO_LARGE is max()'d over both legs rather than "the loaded leg"
+    (which would need a leading-side call kural-7 didn't allow before
+    mirrorConfident:true) — side-agnostic by construction, not just policy.
     """
     knee_delta = max(
         abs(_phase_bin_value(cycle, "left_knee", moment_b_bin)
@@ -81,7 +104,6 @@ def judge(cycle: dict, moment_a_bin: int, moment_b_bin: int) -> dict:
     return {
         "kneeDeltaDeg": round(knee_delta, 2),
         "thighDeltaDeg": round(thigh_delta, 2),
-        "NO_WEIGHT_TRANSFER": knee_delta < NO_WEIGHT_TRANSFER_MAX_DEG,
         "STEP_TOO_LARGE": thigh_delta > STEP_TOO_LARGE_MAX_DEG,
     }
 
@@ -151,17 +173,20 @@ def main() -> int:
           f"mirror confident) — KALİBRASYON sağlık kontrolü (ateşlenmemesi beklenir, "
           f"ama ateşlenirse bu WIRING hatası değil, eşik-kalibrasyon bulgusudur)")
     gv = judge(good, bin_a, bin_b)
-    calibration_check("NO_WEIGHT_TRANSFER ateşlenmedi", not gv["NO_WEIGHT_TRANSFER"],
-          f"knee Δ={gv['kneeDeltaDeg']}° (eşik {NO_WEIGHT_TRANSFER_MAX_DEG}°)")
+    check("NO_WEIGHT_TRANSFER judge()'da hiç yok (M-F-117: calibration-blocked, "
+          "eşik gürültü tabanının altında — non-live)",
+          "NO_WEIGHT_TRANSFER" not in gv, f"knee Δ={gv['kneeDeltaDeg']}° (bilgi amaçlı)")
     calibration_check("STEP_TOO_LARGE ateşlenmedi", not gv["STEP_TOO_LARGE"],
           f"thigh Δ={gv['thighDeltaDeg']}° (eşik {STEP_TOO_LARGE_MAX_DEG}°)")
 
     print("\n2) KONTROLLÜ BOZULMA #1 — diz açısı moment_b'de moment_a'ya eşitlendi "
-          "(M-C-01: gerçek klip mutasyonu, uydurma 'kötü' klip değil)")
+          "(M-C-01: gerçek klip mutasyonu, uydurma 'kötü' klip değil) — "
+          "NO_WEIGHT_TRANSFER blocked olduğu için ateşlenmemesi BEKLENİR")
     flat = flatten_knees(good, bin_a, bin_b)
     fv = judge(flat, bin_a, bin_b)
-    check("NO_WEIGHT_TRANSFER ATEŞLENDİ", fv["NO_WEIGHT_TRANSFER"],
-          f"knee Δ={fv['kneeDeltaDeg']}° (0.0 olmalı)")
+    check("NO_WEIGHT_TRANSFER bozuk klipte de judge()'da yok (blok gerçekten "
+          "inert — 'ateşlenmedi' ile 'hiç değerlendirilmedi' aynı şey değil)",
+          "NO_WEIGHT_TRANSFER" not in fv, f"knee Δ={fv['kneeDeltaDeg']}° (0.0)")
 
     print("\n3) KONTROLLÜ BOZULMA #2 — uyluk açısı 25° abartıldı")
     wide = widen_thighs(good, bin_a, bin_b)
@@ -169,12 +194,11 @@ def main() -> int:
     check("STEP_TOO_LARGE ATEŞLENDİ", wv["STEP_TOO_LARGE"],
           f"thigh Δ={wv['thighDeltaDeg']}°")
 
-    print("\n4) AYNA-SİMETRİSİ — NO_WEIGHT_TRANSFER/STEP_TOO_LARGE taraf-bağımsız "
-          "TASARLANDI (max-over-both-legs); orijinal ile aynalanmış AYNI iki "
-          "hükmü vermeli, mirrorConfident ne olursa olsun")
+    print("\n4) AYNA-SİMETRİSİ — STEP_TOO_LARGE taraf-bağımsız TASARLANDI "
+          "(max-over-both-legs); orijinal ile aynalanmış AYNI hükmü vermeli, "
+          "mirrorConfident ne olursa olsun")
     mirrored_good = mirrored(good)
     mv = judge(mirrored_good, bin_a, bin_b)
-    check("NO_WEIGHT_TRANSFER aynı", mv["NO_WEIGHT_TRANSFER"] == gv["NO_WEIGHT_TRANSFER"])
     check("STEP_TOO_LARGE aynı", mv["STEP_TOO_LARGE"] == gv["STEP_TOO_LARGE"])
     check("WRONG_FOOT judge()'da hiç yok (M-F-115: config'te unblocked ama "
           "leading_side burada HENÜZ İMPLEMENTE EDİLMEDİ — ayrı bir liveness "
@@ -192,8 +216,9 @@ def main() -> int:
     print("     ⚠ BOUND ≠ SHIPPABLE: skorlayıcı-bağlama kanıtı bu testin konusu; "
           "ship kararı BPM çözülmeden (beat_annotate, kurucu-bekleyen) verilemez.")
 
-    print("\n6) TEMİZ 3 KAYNAĞIN TAMAMINDA knee/thigh delta (eşik NEREDEN "
-          "geldiğinin kanıtı — bqoNqA2hmE4 M-F-115'te excludedIdentityAmbiguous)")
+    print("\n6) TEMİZ 3 KAYNAĞIN TAMAMINDA knee/thigh delta (NO_WEIGHT_TRANSFER "
+          "NEDEN bloklu kaldığının kanıtı — bqoNqA2hmE4 M-F-115'te "
+          "excludedIdentityAmbiguous, eşik M-F-117'de calibration-blocked)")
     per_source = []
     for vid in ("SHGkSbJm2Iw", "jjP8bKWCg9U", "w4opJ2ezmd4"):
         pp = prepare(vid)
@@ -206,10 +231,11 @@ def main() -> int:
               f"thigh={jv['thighDeltaDeg']:>6.2f}°")
     knee_vals = sorted(v for _, v, _ in per_source)
     print(f"     knee Δ aralığı: {knee_vals[0]:.2f}-{knee_vals[-1]:.2f}° "
-          f"— {NO_WEIGHT_TRANSFER_MAX_DEG}°'lik eşik bu aralığın ALTINDA "
-          f"(en küçük gerçek gösterimi işaretlememek için kasıtlı); "
-          f"aralık artık dar ve aykırısız (bqoNqA2hmE4'ten önce 21,76° "
-          f"vardı)")
+          f"— aykırısız hâle geldi (bqoNqA2hmE4'ten önce 21,76° vardı) AMA "
+          f"MIN_TOLERANCE_DEG (6°) landmark-gürültü tabanının hâlâ İÇİNDE — "
+          f"bu yüzden {NO_WEIGHT_TRANSFER_MAX_DEG}°'lik bir karar çizgisi "
+          f"gürültüden ayırt edilemez, temizlenmiş veri bile bu kodu tek "
+          f"başına canlı yapmaya yetmiyor (M-F-117)")
 
     print()
     if fails:

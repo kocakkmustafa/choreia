@@ -68,8 +68,9 @@
     {
       "code": "NO_WEIGHT_TRANSFER",
       "severity": "critical",
-      "status": "calibration-improved, noise-floor-caveat-open",
-      "calibrationNote": "M-F-115: bqoNqA2hmE4 excluded (excludedIdentityAmbiguous in the reference — compilation source, 10x knee-delta outlier, re-segmentation found no clean alternative window to swap in instead). Re-measured on the clean 3-source pool: loaded-leg knee delta between moment_a/moment_b is now 1.07 / 2.03 / 3.42deg (SHGkSbJm2Iw / jjP8bKWCg9U / w4opJ2ezmd4) — tight, no outlier, in line with the reference's own toleranceDeg (left_knee/right_knee now 100% coverage, near-floor). valueDeg set to 1.0 (just under the smallest genuine demonstration, so the lightest real weight transfer is not flagged). REMAINING CAVEAT the advisor's metric-shape concern does not fully close: this range (1.07-3.42deg) sits close to MIN_TOLERANCE_DEG (6deg, this pipeline's own landmark-jitter floor elsewhere) — a 2-point delta this small may not reliably separate a genuine light transfer from tracking noise. Shipping this threshold with the caveat stated, not as settled; full-trajectory metric reformulation is still open if false positives/negatives show up once a real scorer exists.",
+      "status": "blocked",
+      "blockedBy": "calibration-blocked: threshold(1.0deg) < noiseFloor(6.0deg)",
+      "calibrationNote": "M-F-117 correction of M-F-115: the 3-source-clean threshold (1.0deg, set just under the smallest genuine demonstration of 1.07/2.03/3.42deg) is itself below MIN_TOLERANCE_DEG (6deg — this pipeline's own landmark-jitter floor, the same rule this codebase already states elsewhere: 'karar ölçüsü kendi gürültü tabanının altında soru soramaz', M-F-60 CONSENSUS_MOVE precedent). A 1deg decision line inside 6deg of jitter cannot tell a genuine light transfer from tracking noise, whether it fires or stays silent — the caveat left open in M-F-115 was necessary but not sufficient, this code MUST NOT fire until it closes. Two named ways to unblock: (a) reduce the signal-to-noise ratio the metric itself sees (e.g. multi-frame windowing around moment_a/moment_b instead of two single bins), or (b) re-derive a threshold that sits above the noise floor from data, not from the smallest observed demonstration.",
       "detect": {
         "metric": "loaded_leg_knee_change",
         "op": "<",
@@ -78,7 +79,7 @@
       },
       "evidence": ["left_knee", "right_knee", "loaded_leg_knee_change"],
       "relatedDrill": "ss_weight_shift",
-      "note": "valueDeg re-derived from the clean 3-source pool (M-F-115), see calibrationNote for the noise-floor caveat that keeps this from being fully settled."
+      "note": "Definition kept, not fired — see blockedBy/calibrationNote. valueDeg is not a live threshold; it records where the M-F-115 measurement landed, not a number a scorer may use yet."
     },
     {
       "code": "STEP_TOO_LARGE",
