@@ -24,7 +24,7 @@ be checked here has no defined use, and that is the signal to bind it or drop
 it.
 
   python3 tools/validate_reference.py
-  python3 tools/validate_reference.py content/references/salsa_shines.json
+  python3 tools/validate_reference.py content/references/ss_shine_footwork.json
 """
 
 from __future__ import annotations

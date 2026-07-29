@@ -39,11 +39,20 @@
 
     "tierA_confirmed": [
       { "id": "ss_basic", "name": "Salsa Basic (solo)", "status": "authored" },
-      { "id": "ss_suzy_q", "name": "Suzy Q", "status": "named in research, needs movement description" }
+      { "id": "ss_suzy_q", "name": "Suzy Q", "status": "named in research, needs movement description — NOT the same artifact as ss_shine_footwork below; do not conflate" }
     ],
 
     "needsMovementDescription": [
       "Remaining 2 of the 4 core shines were counted but not individually named in the research pass — a second, narrower research round is required."
+    ],
+
+    "referencedGenericContent": [
+      {
+        "id": "ss_shine_footwork",
+        "name": "Shine Footwork (solo, generic)",
+        "status": "reference built (4 instructors, provisional) — measurement, no movement description authored",
+        "note": "Harvested to chase ss_suzy_q; only 1 of the 4 sources is individually named Suzy Q, the other 3 are generic shine/footwork tutorials. Legs-only pairwise distance across all 4 (4.1-7.1 deg, best orientation) is the same order as a single reference's own instructor-to-instructor dispersion — MEASURED same-movement, not eyeballed (M-F-102 reversed an earlier visual impression that they looked different). So the id names the measured generic content, not the Suzy Q figure specifically; the Suzy Q source is tagged at source level (content/references/ss_shine_footwork.json sources[].namedVariant) rather than dropped or split out. ss_suzy_q above stays reserved and unbuilt until sourced cleanly."
+      }
     ]
   },
 
