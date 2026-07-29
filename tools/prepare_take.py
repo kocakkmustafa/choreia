@@ -357,6 +357,12 @@ def prepare(video_id: str) -> dict:
                     "seconds": round((seg[1] - seg[0]) / fps, 2)},
         "periodSeconds": best.period_s,
         "periodFrames": period_frames,
+        # How many whole cycles the usable segment actually contains. The
+        # reference builder takes a per-take median ACROSS these, so a take
+        # with three of them is a much weaker vote than one with nine — and
+        # nothing downstream could see the difference until it was recorded.
+        "cyclesInSegment": max(0, (seg[1] - seg[0] - anchor.get("frameInCycle", 0))
+                               // period_frames),
         "periodicity": best.periodicity,
         "motionEnergy": best.motion_energy,
         "anchor": anchor,

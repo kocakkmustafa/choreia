@@ -53,6 +53,10 @@ PHASE_BINS = 64
 # disagreement is a coin flip between them, with no majority to locate.
 MIN_TAKES = 3
 
+# Below this a take's own median is computed from very few repetitions and is
+# reported as thin rather than silently weighted like any other source.
+MIN_CYCLES_PER_TAKE = 5
+
 # Tolerance floor in degrees. Landmark jitter alone is worth a few degrees, so
 # a phase where teachers happen to agree closely must not produce a band so
 # tight that correct dancing scores as error.
@@ -534,7 +538,11 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
             {"videoId": p["videoId"],
              "channel": (p.get("provenance") or {}).get("channel", ""),
              "periodSeconds": p.get("periodSeconds"),
-             "segmentSeconds": (p.get("segment") or {}).get("seconds")}
+             "segmentSeconds": (p.get("segment") or {}).get("seconds"),
+             "cyclesInSegment": p.get("cyclesInSegment"),
+             # A take contributing three cycles is not the same evidence as one
+             # contributing nine; the median that represents it is thinner.
+             "thinEvidence": (p.get("cyclesInSegment") or 0) < MIN_CYCLES_PER_TAKE}
             for p in sources
         ],
         "mirrorResolution": mirror_log,
@@ -757,8 +765,10 @@ def main() -> int:
 
     print(f"✓ {args.step}: {r['takeCount']} eğitmenden referans\n")
     for s in r["sources"]:
+        thin = "  ⚠ ZAYIF KANIT" if s.get("thinEvidence") else ""
         print(f"    {s['videoId']:<13}{s['channel'][:26]:<28}"
-              f"periyot {s['periodSeconds']}s  segment {s['segmentSeconds']}s")
+              f"periyot {s['periodSeconds']}s  segment {s['segmentSeconds']}s"
+              f"  {s.get('cyclesInSegment','?')} çevrim{thin}")
     print("\n  ayna çözümü:")
     for e in r["mirrorResolution"]:
         if False:

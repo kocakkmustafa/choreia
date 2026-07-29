@@ -9,25 +9,33 @@
    "videoId": "35sk_G8Vf9o",
    "channel": "Versa-Style Street Dance Company",
    "periodSeconds": 1.17,
-   "segmentSeconds": 11.0
+   "segmentSeconds": 11.0,
+   "cyclesInSegment": 8,
+   "thinEvidence": false
   },
   {
    "videoId": "5MQEtoEKdEw",
    "channel": "Kiarilk",
    "periodSeconds": 1.75,
-   "segmentSeconds": 10.76
+   "segmentSeconds": 10.76,
+   "cyclesInSegment": 5,
+   "thinEvidence": false
   },
   {
    "videoId": "rRlUNGymhmE",
    "channel": "Marvelous Mosell",
    "periodSeconds": 1.3,
-   "segmentSeconds": 9.84
+   "segmentSeconds": 9.84,
+   "cyclesInSegment": 7,
+   "thinEvidence": false
   },
   {
    "videoId": "selXuuAWI64",
    "channel": "Free Focus Dance",
    "periodSeconds": 1.75,
-   "segmentSeconds": 8.94
+   "segmentSeconds": 8.94,
+   "cyclesInSegment": 4,
+   "thinEvidence": true
   }
  ],
  "mirrorResolution": [
@@ -1832,7 +1840,6 @@
  "toleranceBelowDispersion": [],
  "status": "provisional",
  "mirrorConfident": false,
- "orientationNote": "DUZELTME (C-078): daha once bu referansta 'yon dejenere, belirsiz degil' yazmistim — YANLIS. O sonuc olcum artefaktiydi: duyarlilik sondam take'i yerel siralamanin ranked[1]'ine zorluyordu, ama global cozumde take kendi yerel optimumunda olmayabilir ve bu take icin ranked[1] ZATEN yerlesimin kendisiydi — yerlesimi kendisiyle karsilastirmisim. Dogru olcum: her take'in yonu uzlasmayi 6.2-33.5 derece oynatiyor. Yon BELIRSIZ (dort take'in dordunde de marj esigin altinda).",
- "orientationMethod": "exhaustive global atama (girdi sirasindan bagimsiz) + cogunluk konvansiyonu; marj EN YAKIN FARKLI rakibe gore ve 'farkli' testi uzlasmayi oynatip oynatmadigi (motion_core v0.5.0 semantigi)",
- "provisionalReason": "AYRICA: yon atamasi belirsiz — bkz orientationNote."
+ "evidenceNote": "Take basina cevrim sayisi: [8, 5, 7, 4]. 1 take 5 cevrimin altinda (selXuuAWI64) — o take'in kendi medyani cok az tekrardan geliyor, digerleriyle ayni agirlikta sayiliyor ama ayni guvende degil.",
+ "provisionalReason": "Yon atamasi BELIRSIZ (mirrorConfident=false) — yonun uzlasmaya etkisi [23.05, 6.18, 25.01, 33.53] derece. Cozum: daha cok take veya dis oncul. Take basina cevrim sayisi: [8, 5, 7, 4]. 1 take 5 cevrimin altinda (selXuuAWI64) — o take'in kendi medyani cok az tekrardan geliyor, digerleriyle ayni agirlikta sayiliyor ama ayni guvende degil. AYRICA diz kapsami %52 — skorlanabilir yuzey dar."
 }

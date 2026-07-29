@@ -9,25 +9,33 @@
    "videoId": "KV-sxd_pQ9w",
    "channel": "James Deane",
    "periodSeconds": 1.2,
-   "segmentSeconds": 6.97
+   "segmentSeconds": 6.97,
+   "cyclesInSegment": 5,
+   "thinEvidence": false
   },
   {
    "videoId": "UO9Ehsdt2IE",
    "channel": "JoeyTheJAM",
    "periodSeconds": 1.21,
-   "segmentSeconds": 7.0
+   "segmentSeconds": 7.0,
+   "cyclesInSegment": 5,
+   "thinEvidence": false
   },
   {
    "videoId": "Wd29rBfAzkI",
    "channel": "The Shed",
    "periodSeconds": 1.67,
-   "segmentSeconds": 5.01
+   "segmentSeconds": 5.01,
+   "cyclesInSegment": 2,
+   "thinEvidence": true
   },
   {
    "videoId": "lYpRasK4c9k",
    "channel": "Howcast",
    "periodSeconds": 1.54,
-   "segmentSeconds": 5.01
+   "segmentSeconds": 5.01,
+   "cyclesInSegment": 2,
+   "thinEvidence": true
   }
  ],
  "mirrorResolution": [
@@ -1832,7 +1840,6 @@
  "toleranceBelowDispersion": [],
  "status": "provisional",
  "mirrorConfident": false,
- "orientationNote": "Yon BELIRSIZ: dort take'ten ikisi esigin altinda, biri global cozum tarafindan KENDI yerel tercihinin tersine yerlestirilmis. Yonun uzlasmaya etkisi 36-57 derece — kucuk degil.",
- "orientationMethod": "exhaustive global atama (girdi sirasindan bagimsiz) + cogunluk konvansiyonu; marj EN YAKIN FARKLI rakibe gore ve 'farkli' testi uzlasmayi oynatip oynatmadigi (motion_core v0.5.0 semantigi)",
- "provisionalReason": "AYRICA: yon atamasi belirsiz — bkz orientationNote."
+ "evidenceNote": "Take basina cevrim sayisi: [5, 5, 2, 2]. 2 take 5 cevrimin altinda (Wd29rBfAzkI, lYpRasK4c9k) — o take'in kendi medyani cok az tekrardan geliyor, digerleriyle ayni agirlikta sayiliyor ama ayni guvende degil.",
+ "provisionalReason": "Yon atamasi BELIRSIZ (mirrorConfident=false) — yonun uzlasmaya etkisi [56.73, 57.34, 53.32, 36.21] derece. Cozum: daha cok take veya dis oncul. Take basina cevrim sayisi: [5, 5, 2, 2]. 2 take 5 cevrimin altinda (Wd29rBfAzkI, lYpRasK4c9k) — o take'in kendi medyani cok az tekrardan geliyor, digerleriyle ayni agirlikta sayiliyor ama ayni guvende degil."
 }
