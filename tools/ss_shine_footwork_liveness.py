@@ -51,7 +51,7 @@ REF_PATH = REPO / "content/references/ss_shine_footwork.json"
 # here cannot be blamed on thin evidence in the clip being judged.
 TEST_VIDEO_ID = "jjP8bKWCg9U"
 
-NO_WEIGHT_TRANSFER_MAX_DEG = 4.0
+NO_WEIGHT_TRANSFER_MAX_DEG = 1.0  # M-F-115: re-derived from the clean 3-source pool
 STEP_TOO_LARGE_MAX_DEG = 20.0
 
 
@@ -169,13 +169,16 @@ def main() -> int:
     check("STEP_TOO_LARGE ATEŞLENDİ", wv["STEP_TOO_LARGE"],
           f"thigh Δ={wv['thighDeltaDeg']}°")
 
-    print("\n4) AYNA-SİMETRİSİ (kural-7: mirrorConfident:false → taraf-bağımsız "
-          "hüküm) — orijinal ile aynalanmış AYNI iki hükmü vermeli")
+    print("\n4) AYNA-SİMETRİSİ — NO_WEIGHT_TRANSFER/STEP_TOO_LARGE taraf-bağımsız "
+          "TASARLANDI (max-over-both-legs); orijinal ile aynalanmış AYNI iki "
+          "hükmü vermeli, mirrorConfident ne olursa olsun")
     mirrored_good = mirrored(good)
     mv = judge(mirrored_good, bin_a, bin_b)
     check("NO_WEIGHT_TRANSFER aynı", mv["NO_WEIGHT_TRANSFER"] == gv["NO_WEIGHT_TRANSFER"])
     check("STEP_TOO_LARGE aynı", mv["STEP_TOO_LARGE"] == gv["STEP_TOO_LARGE"])
-    check("WRONG_FOOT hiç değerlendirilmedi (kod blocked, judge() onu hiç hesaplamıyor)",
+    check("WRONG_FOOT judge()'da hiç yok (M-F-115: config'te unblocked ama "
+          "leading_side burada HENÜZ İMPLEMENTE EDİLMEDİ — ayrı bir liveness "
+          "turu gerekir, bu turun kapsamı değil)",
           "WRONG_FOOT" not in gv and "WRONG_FOOT" not in mv)
 
     print("\n5) BPM SHIP-KAPISI DEĞİŞMEDİ — bu bağlama ship-yolunu AÇMAZ")
@@ -189,9 +192,10 @@ def main() -> int:
     print("     ⚠ BOUND ≠ SHIPPABLE: skorlayıcı-bağlama kanıtı bu testin konusu; "
           "ship kararı BPM çözülmeden (beat_annotate, kurucu-bekleyen) verilemez.")
 
-    print("\n6) 4 KAYNAĞIN TAMAMINDA knee/thigh delta (eşik NEREDEN geldiğinin kanıtı)")
+    print("\n6) TEMİZ 3 KAYNAĞIN TAMAMINDA knee/thigh delta (eşik NEREDEN "
+          "geldiğinin kanıtı — bqoNqA2hmE4 M-F-115'te excludedIdentityAmbiguous)")
     per_source = []
-    for vid in ("SHGkSbJm2Iw", "bqoNqA2hmE4", "jjP8bKWCg9U", "w4opJ2ezmd4"):
+    for vid in ("SHGkSbJm2Iw", "jjP8bKWCg9U", "w4opJ2ezmd4"):
         pp = prepare(vid)
         cc = take_canonical_cycle(pp)
         if cc is None:
@@ -202,8 +206,10 @@ def main() -> int:
               f"thigh={jv['thighDeltaDeg']:>6.2f}°")
     knee_vals = sorted(v for _, v, _ in per_source)
     print(f"     knee Δ aralığı: {knee_vals[0]:.2f}-{knee_vals[-1]:.2f}° "
-          f"(4°'lik eşik bu aralığın İÇİNDE — tek bir sabit derece eşiği "
-          f"4 kaynağı da dürüstçe ayıramıyor)")
+          f"— {NO_WEIGHT_TRANSFER_MAX_DEG}°'lik eşik bu aralığın ALTINDA "
+          f"(en küçük gerçek gösterimi işaretlememek için kasıtlı); "
+          f"aralık artık dar ve aykırısız (bqoNqA2hmE4'ten önce 21,76° "
+          f"vardı)")
 
     print()
     if fails:

@@ -14,7 +14,7 @@
 
   "measurability": {
     "tier": "A",
-    "rationale": "Legs score at 100% phase coverage (left_knee/right_knee/left_hip/right_hip/left_thigh/right_thigh/left_shin/right_shin all verdict=scored, medianDispersion 1.7-6.5deg across 4 independent instructors) — the tightest of Choreia's three built references. Fronto-parallel footwork, no turns in the pooled content.",
+    "rationale": "Legs score at 100% phase coverage (left_knee/right_knee/left_hip/right_hip/left_thigh/right_thigh/left_shin/right_shin all verdict=scored, medianDispersion 1.57-5.76deg across the 3 clean instructors — M-F-115 rebuild, bqoNqA2hmE4 excluded) — the tightest of Choreia's three built references, and now also mirrorConfident:true. Fronto-parallel footwork, no turns in the pooled content.",
     "riskFlags": [
       "Amplitude between the two measured settle points is small (1-8deg on several joints) relative to their own tolerance bands (6-12deg) — see phases[].derivation. This is a real measurement, not noise (medianDispersion is tight), but it means the signal a scorer would judge on is subtler than ss_basic's forward/back basic. Flagged for movement-science-advisor review, not asserted as settled."
     ]
@@ -31,7 +31,7 @@
     ],
     "freeJointsRationale": "Same as ss_basic (plan C-014) — arm carriage varies by school; here it is also measured fact, not just policy: arm joints in the built reference are coached_only/scored_partial (0-64% coverage, 11-58deg dispersion) while every leg joint is scored at 100% coverage. The reference itself draws this line before the config states it.",
     "toleranceProfile": "beginner",
-    "mirrorRule": "K10 — reference mirrorConfident:false (content/references/ss_shine_footwork.json). No side-dependent judgment: no leading-side check exists in errors[] below, and none may be added until a future rebuild reports mirrorConfident:true. This is the family's kural-7 (JabLab stance precedent) applied here."
+    "mirrorRule": "K10, UPDATED M-F-115 — reference mirrorConfident:TRUE as of the 3-source rebuild (content/references/ss_shine_footwork.json). WRONG_FOOT is unblocked in errors[] below; STEP_TOO_LARGE/NO_WEIGHT_TRANSFER were already side-agnostic (max-over-both-legs) so this changes nothing for them. Kural-7 (JabLab stance precedent) still governs: side-dependent judgment stays off until the condition it names is met, and now it is."
   },
 
   "phases": [
@@ -68,17 +68,17 @@
     {
       "code": "NO_WEIGHT_TRANSFER",
       "severity": "critical",
-      "status": "calibration-open",
-      "calibrationNote": "valueDeg below was reasoned from medianDispersion, not measured per-source, and the liveness check (tools/ss_shine_footwork_liveness.py) caught it: run against all 4 contributing sources, the loaded-leg knee delta between moment_a/moment_b is 1.07 / 21.76 / 2.03 / 3.97deg (SHGkSbJm2Iw / bqoNqA2hmE4 / jjP8bKWCg9U / w4opJ2ezmd4) — bqoNqA2hmE4 an order of magnitude above the other three. No single fixed-degree threshold separates all four honestly; the metric may need reformulating (full-trajectory shape rather than a 2-point delta) or bqoNqA2hmE4's outlier status needs its own investigation before this threshold is trusted. Not fixed by picking a different number — flagged to movement-science-advisor instead (M-F-109 discipline: measured, not guessed).",
+      "status": "calibration-improved, noise-floor-caveat-open",
+      "calibrationNote": "M-F-115: bqoNqA2hmE4 excluded (excludedIdentityAmbiguous in the reference — compilation source, 10x knee-delta outlier, re-segmentation found no clean alternative window to swap in instead). Re-measured on the clean 3-source pool: loaded-leg knee delta between moment_a/moment_b is now 1.07 / 2.03 / 3.42deg (SHGkSbJm2Iw / jjP8bKWCg9U / w4opJ2ezmd4) — tight, no outlier, in line with the reference's own toleranceDeg (left_knee/right_knee now 100% coverage, near-floor). valueDeg set to 1.0 (just under the smallest genuine demonstration, so the lightest real weight transfer is not flagged). REMAINING CAVEAT the advisor's metric-shape concern does not fully close: this range (1.07-3.42deg) sits close to MIN_TOLERANCE_DEG (6deg, this pipeline's own landmark-jitter floor elsewhere) — a 2-point delta this small may not reliably separate a genuine light transfer from tracking noise. Shipping this threshold with the caveat stated, not as settled; full-trajectory metric reformulation is still open if false positives/negatives show up once a real scorer exists.",
       "detect": {
         "metric": "loaded_leg_knee_change",
         "op": "<",
-        "valueDeg": 4,
+        "valueDeg": 1.0,
         "atMoments": ["moment_a", "moment_b"]
       },
       "evidence": ["left_knee", "right_knee", "loaded_leg_knee_change"],
       "relatedDrill": "ss_weight_shift",
-      "note": "valueDeg is PROVISIONAL, see calibrationNote — do not treat as settled."
+      "note": "valueDeg re-derived from the clean 3-source pool (M-F-115), see calibrationNote for the noise-floor caveat that keeps this from being fully settled."
     },
     {
       "code": "STEP_TOO_LARGE",
@@ -90,13 +90,13 @@
       },
       "evidence": ["left_thigh", "right_thigh"],
       "relatedDrill": "ss_small_steps",
-      "note": "Threshold halved from ss_basic's 38deg — this content's own measured thigh excursion between settle points is 1-3deg, an order of magnitude below ss_basic's forward/back basic. A learner swinging as large as the basic step is, by this reference, not doing this step."
+      "note": "This content's own measured thigh excursion ceiling (3-source clean pool, M-F-115) is 4.0deg — 20deg leaves 5x margin, generously safe per movement-science-advisor review. An order of magnitude below ss_basic's forward/back basic (38deg threshold), consistent with shine footwork being subtler than the basic step."
     },
     {
       "code": "WRONG_FOOT",
       "severity": "critical",
-      "status": "blocked",
-      "blockedBy": "mirrorConfident:false (content/references/ss_shine_footwork.json)",
+      "status": "unblocked (M-F-115) — mirrorConfident:true, wiring still needs a leading_side implementation",
+      "unblockedNote": "The 3-source rebuild (bqoNqA2hmE4 excluded) reports mirrorConfident:true (2 sources decisive, 1 degenerate-but-confident — its orientation choice does not move the consensus either way, content/references/ss_shine_footwork.json mirrorResolution). Kural-7's blocking condition no longer holds, exactly the trigger this definition was written to wait for. Left active rather than re-locked. NOT yet exercised by tools/ss_shine_footwork_liveness.py — leading_side has no concrete implementation anywhere in this pipeline yet (no runtime consumes it), so this is a documented-ready state, not a proven-wired one; do not claim it fires correctly until a liveness check like the other two errors exists for it.",
       "detect": {
         "metric": "leading_side",
         "op": "!=",
@@ -105,7 +105,7 @@
       },
       "evidence": ["leading_side"],
       "relatedDrill": "ss_lead_foot",
-      "note": "Not dropped, not silently omitted — locked, same discipline as a JabLab locked-lesson pattern applied to a single error code. Definition kept so it activates without redesign the day a rebuild reports mirrorConfident:true; until then this code MUST NOT fire (kural-7)."
+      "note": "Definition unchanged from when it was blocked — only the status changed, because the block's own stated condition (mirrorConfident:true) is now met."
     },
     {
       "code": "STEP_LATE",
@@ -133,9 +133,9 @@
 
   "reference": {
     "requiredTakes": 6,
-    "collectedTakes": 4,
-    "status": "provisional",
-    "note": "content/references/ss_shine_footwork.json — built, mirrorConfident:false, thinEvidence on 2 of 4 sources. See references/README.md for consumption rules; scoredPhases=false phases carry no judgment regardless of what this file's phases[] claims."
+    "collectedTakes": 3,
+    "status": "provisional — built (3/6 preferred), mirrorConfident:true",
+    "note": "content/references/ss_shine_footwork.json — rebuilt M-F-115 on 3 sources (bqoNqA2hmE4 excluded, excludedIdentityAmbiguous), mirrorConfident:TRUE, thinEvidence on 1 of 3 sources (SHGkSbJm2Iw, 3 cycles). See references/README.md for consumption rules; scoredPhases=false phases carry no judgment regardless of what this file's phases[] claims."
   },
 
   "advisorReview": {
