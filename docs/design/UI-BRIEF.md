@@ -97,7 +97,22 @@ Dans ederken kullanıcı telefona bakamaz. Bu, ekranı **sesin etrafında** kurm
 - Skorlanan ↔ skorlanmayan ayrımı ekranda: hangi eklemler hüküm taşıdı, hangileri (kollar) bilinçli serbest.
 - Hüküm verilmeyen fazlar **boş** görünür — 0 puan değil, "ölçülmedi".
 
-### 3.9 Progress
+### 3.9 Progress — İKİ BÖLÜM, karıştırılamaz (M-F-156)
+
+**"Kaydedilenler" (ÖLÇÜM) ile "Değerlendirilenler" (HÜKÜM) ayrı bölümlerdir.** Tek listede karıştırmak, demoOnly derslerin tamamlamalarını puanlanmış gibi okutur.
+
+| Bölüm | İçerik | Hangi dersler |
+|---|---|---|
+| **Kaydedilenler** | süre · çevrim sayısı · tamamlama işareti | **hepsi** (scored + demoOnly) |
+| **Değerlendirilenler** | bant/ilerleme (kalibrasyon kapısından sonra) | **yalnız** `scored` |
+
+**demoOnly ders "öğrenildi" işareti ALIR, bant ASLA almaz.** Gerekçe zinciri: K8 **skoru** kapatır olguyu kapatmaz · "bu dersi baştan sona çalıştım" kameradan bağımsız bir ÖLÇÜMDÜR · "bunu iyi yaptın" bir HÜKÜMDÜR ve demoOnly derste tanım gereği yok · tamamlamayı da esirgemek dersi ikinci sınıf yapardı, tam K10'un engellemek istediği şey. demoOnly satırında hüküm alanı **"—"** + `demoOnlyReason`.
+
+**Ve bugün geçilemeyen kapılar EKRANDA YAZILI** (J-066 disiplini: sessizlik yalandır) — süre retroaktif kredi OLMAZ. Choreia'nın bugünkü listesi: zamanlama hiçbir derste ölçülmüyor (BPM disputed) · `ss_shine_footwork` dışında skorlanan ders yok · `NO_WEIGHT_TRANSFER` gürültü tabanı yüzünden bloklu.
+
+Detay sözleşme: `docs/design/SESSION-STORE-DELTA.md` §4.
+
+### 3.9b Progress — diğer kalemler
 - Ders/adım ilerlemesi. ⚠️ Zamanlama-trend grafiği V1'de **yok**.
 - Seviye açılma kriteri **görünür**: hangi kriter / gereken / gözlenen (`unlockRule`). Salsa L1: `shapeScore >= 0.75` + `WRONG_FOOT` yok — `onBeatRatio` bilinçli **dışarıda**.
 
