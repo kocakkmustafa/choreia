@@ -1,17 +1,20 @@
 {
   "schemaVersion": 1,
   "id": "hip_hop_foundations",
-  "name": { "en": "Hip-Hop Foundations" },
+  "name": {
+    "en": "Hip-Hop Foundations"
+  },
   "countSystem": "8count",
-  "bpmRange": [85, 105],
+  "bpmRange": [
+    85,
+    105
+  ],
   "bpmNote": "General dance-teaching range is 80-160; no hip-hop-specific band was verifiable (R1 §3, marked DOĞRULANMADI). This narrower band is our teaching choice for V1, not a sourced fact.",
-
   "copyright": {
     "status": "clear",
     "basis": "Foundational party-dance vocabulary is the category the US Copyright Office 'commonplace movements' exclusion targets. Three precedents confirm step-level freedom: 2 Milly v. Epic, Ribeiro/'Carlton' registration refusal, Hanagami v. Epic (which concerned a full routine, not a step).",
     "boundary": "Isolated steps are low risk; copying one instructor's original long sequence verbatim is not. Combos in this style must be our own arrangement."
   },
-
   "honesty": {
     "$comment": "K10 (plan §22) in machine-readable form. NOTE the asymmetry with salsa_shines: this style currently grades NOTHING, and says so. Two references exist (hh_running_man, hh_roger_rabbit) but neither backs a graded lesson — see notMeasured for the measured reasons.",
     "measured": [],
@@ -23,48 +26,65 @@
       "Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored (plan §22)."
     ]
   },
-
   "levels": [
     {
       "level": 1,
-      "name": { "en": "Find the groove" },
+      "name": {
+        "en": "Find the groove"
+      },
       "lessons": [
         {
           "id": "hh_l1_bounce",
-          "displayName": { "en": "The bounce" },
+          "displayName": {
+            "en": "The bounce"
+          },
           "step": "hh_bounce",
           "scored": false,
           "status": "locked",
-          "lockedReason": { "en": "The step is written but no teachers have been measured for it yet. We grade you against what several independent instructors actually agree on — until we have at least three, there is nothing honest to score." },
+          "lockedReason": {
+            "en": "The step is written but no teachers have been measured for it yet. We grade you against what several independent instructors actually agree on — until we have at least three, there is nothing honest to score."
+          },
           "blockedBy": "reference.collectedTakes == 0 (steps/hh_bounce.json)",
           "minutes": 8
         },
         {
           "id": "hh_l1_rock",
-          "displayName": { "en": "The rock" },
+          "displayName": {
+            "en": "The rock"
+          },
           "step": "hh_rock",
           "scored": false,
           "status": "locked",
-          "lockedReason": { "en": "This step's movement description isn't finished yet, so there is nothing for the camera to check." },
+          "lockedReason": {
+            "en": "This step's movement description isn't finished yet, so there is nothing for the camera to check."
+          },
           "blockedBy": "stepInventory.tierA_confirmed[hh_rock].status == 'described, not authored' — no steps/hh_rock.json exists",
           "minutes": 6
         },
         {
           "id": "hh_l1_running_man",
-          "displayName": { "en": "The Running Man (not graded)" },
+          "displayName": {
+            "en": "The Running Man (not graded)"
+          },
           "scored": false,
           "demoOnly": true,
-          "demoOnlyReason": { "en": "This one we can teach but not grade, and the reason is specific: the Running Man works through the timing of your ball and heel touching the floor — that is what makes it look like running in place. Toe and heel points are the least reliable thing a phone camera tracks, so any score we gave you would mostly be measuring our own uncertainty. You get the step, the count and four teachers' versions of it; you don't get a number." },
+          "demoOnlyReason": {
+            "en": "This one we can teach but not grade, and the reason is specific: the Running Man works through the timing of your ball and heel touching the floor — that is what makes it look like running in place. Toe and heel points are the least reliable thing a phone camera tracks, so any score we gave you would mostly be measuring our own uncertainty. You get the step, the count and four teachers' versions of it; you don't get a number."
+          },
           "evidence": "content/references/hh_running_man.json (4 instructors, provisional) + stepInventory.tierC_excluded[Running Man] — measurability tier C per content/SCHEMA.md: dependent on toe-ground contact timing, the documented weak point of markerless single-camera pose (R1 §7b)",
           "k10Note": "K10 applied as intended: 'ölçülemeyen hareket ELENMEZ, demo-only işaretlenir ve nedeni kullanıcıya söylenir'. Previously this step was only recorded as tierC_EXCLUDED, which read as 'dropped from the product' — it is not; it is dropped from SCORING. The harvest effort (4 instructors, richest source 12 cycles) becomes user-facing content instead of a shelved measurement.",
           "minutes": 10
         },
         {
           "id": "hh_l1_groove",
-          "displayName": { "en": "Groove and feel (not graded)" },
+          "displayName": {
+            "en": "Groove and feel (not graded)"
+          },
           "scored": false,
           "demoOnly": true,
-          "demoOnlyReason": { "en": "Groove is the part of hip-hop a camera is worst at and a mirror is best at. We teach it and stay out of your way." },
+          "demoOnlyReason": {
+            "en": "Groove is the part of hip-hop a camera is worst at and a mirror is best at. We teach it and stay out of your way."
+          },
           "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket",
           "minutes": 5
         }
@@ -73,7 +93,6 @@
       "unlockRuleNote": "No unlock rule, deliberately. Every lesson in this level is either locked or demo-only, so there is no graded attempt to gate progression on. Writing a threshold here (the previous draft had onBeatRatio >= 0.7 + shapeScore >= 0.75 against hh_bounce) would have been a rule referencing a measurement this style cannot currently make — the exact class of silent-wrong this codebase keeps catching. Restore it when hh_bounce has a real reference."
     }
   ],
-
   "stepInventory": {
     "sourcedFrom": [
       "iampro — Beginner Hip Hop Dance Foundations (20 steps)",
@@ -81,13 +100,23 @@
     ],
     "totalCandidates": 23,
     "note": "Two independent lists overlap at ~20 steps, which is decent evidence for a stable core vocabulary. What the research did NOT produce is a biomechanical description per step — see MEASUREMENT below. Tier assignment therefore stays 'unknown' for most entries; assigning a tier without knowing what the body actually does would be a guess dressed as a decision.",
-
     "tierA_confirmed": [
-      { "id": "hh_bounce", "name": "Bounce", "status": "authored" },
-      { "id": "hh_rock", "name": "Rock", "status": "described, not authored" },
-      { "id": "hh_groove", "name": "Groove", "status": "described, not authored" }
+      {
+        "id": "hh_bounce",
+        "name": "Bounce",
+        "status": "authored"
+      },
+      {
+        "id": "hh_rock",
+        "name": "Rock",
+        "status": "described, not authored"
+      },
+      {
+        "id": "hh_groove",
+        "name": "Groove",
+        "status": "described, not authored"
+      }
     ],
-
     "tierC_excluded": [
       {
         "name": "Harlem Shake",
@@ -102,18 +131,36 @@
         "reason": "Same as Running Man — fast foot shuffle, toe-contact dependent."
       }
     ],
-
     "needsMovementDescription": [
-      "Bart Simpson", "Smurf", "Janet Jackson", "Wop", "ATL Stomp", "Prep",
-      "Steve Martin", "Monastery", "Bankhead Bounce", "Cabbage Patch",
-      "Reebok", "Gucci", "Wu-Tang", "Stomp", "Roger Rabbit", "Butterfly",
+      "Bart Simpson",
+      "Smurf",
+      "Janet Jackson",
+      "Wop",
+      "ATL Stomp",
+      "Prep",
+      "Steve Martin",
+      "Monastery",
+      "Bankhead Bounce",
+      "Cabbage Patch",
+      "Reebok",
+      "Gucci",
+      "Wu-Tang",
+      "Stomp",
+      "Roger Rabbit",
+      "Butterfly",
       "BK Bounce"
     ]
   },
-
   "errorTaxonomy": {
     "status": "insufficient",
     "gap": "R1's beginner-error list for this style is pedagogical advice ('skipping fundamentals', 'being impatient', 'analysing the music with your head'), not observable form faults. Those may be true and are useful lesson copy, but none of them can be seen by a camera. Every entry in a step's errors[] must bind to a landmark-measurable condition (content/SCHEMA.md), so this style's error taxonomy has to be built from movement description, not from the existing research pass.",
-    "authored": ["NO_BOUNCE", "BOUNCE_INVERTED", "TRUNK_COLLAPSE", "ASYMMETRIC_BOUNCE"]
-  }
+    "authored": [
+      "NO_BOUNCE",
+      "BOUNCE_INVERTED",
+      "TRUNK_COLLAPSE",
+      "ASYMMETRIC_BOUNCE"
+    ]
+  },
+  "shipGates": [],
+  "shipGatesNote": "Empty on purpose, and that is not the same as 'ready to sell': this style has no BLOCKING release gate (bpmRange is set, and its demo-only lessons work without any scoring), so nothing here holds it back. What holds it back from being useful is content — every lesson is locked or demo-only, which is what `status: demoOpen` says on the other (orthogonal) axis. M-F-130: the two axes are read separately."
 }

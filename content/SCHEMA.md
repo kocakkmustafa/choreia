@@ -65,7 +65,23 @@ Stil statüsü ders durumlarına **İKİ YÖNLÜ** bağlıdır; `validate_conten
 
 **Neden iki yönlü:** aşırı-iddia (`live` ama hiçbir şey skorlanmıyor) ile eksik-iddia (`comingSoon` ama kullanıcı dersi açabiliyor) aynı kusurun iki yönü — kayıt defterinin, içeriğin söylemediği bir şeyi söylemesi. Fazla-satmayı engelleyen disiplin eksik-satmayı da engeller.
 
-⚠️ **Statü ≠ ship-hazırlığı.** Kafes "kullanıcı bu stili gördüğünde ne bulacak"ı tanımlar; ship kapıları (ör. salsa'nın `bpmStatus: DISPUTED`) ayrı eksendir. Bir stil `live` olup hâlâ yayına çıkamaz.
+### İKİ EKSEN — `status` ⊥ `shipGates` (M-F-130, NORMATİF)
+
+**Bunlar birbirinden ASLA türetilmez.** İki ayrı soru, iki ayrı alan:
+
+| Eksen | Alan | Soru | Kim okur |
+|---|---|---|---|
+| **İÇERİK-durumu** | `library.json` `status` | "kullanıcı bu stilde NE BULUR?" — uygulama-içi gerçek | kullanıcı rozeti |
+| **YAYIN** | `style.json` `shipGates[]` | "bu stil yayına çıkabilir mi?" (BPM, store, vs.) | iç araçlar, release kararı |
+
+**Normatif, iki yön:**
+1. **Statü, ship-vekili olarak OKUNAMAZ.** (Ölçülmüş kanıt: C-101 — liveness testi `status == "comingSoon"`u "ship edilmedi" kanıtı sanıyordu; kafes ikisini ayırınca vekil sessizce yanlışa döndü. *Bir vekil ölçü, vekili olduğu şey değişmediği sürece doğru görünür.*)
+2. **Ship-kapısı statüyü DEĞİŞTİREMEZ.** `salsa_shines` bugün dürüstçe **`live` VE yayınlanamaz**: içerik gerçeği live (skorlanan dersi var), yayın kapısı kapalı (`bpmStatus: DISPUTED`). İkisi de doğru; bu bir çelişki DEĞİL.
+
+Kullanıcı rozeti = `status` (ki zaten ancak ship edilmiş bir build'de görünür). Release kararı YALNIZ `shipGates`'ten okunur.
+
+**`shipGates[]` girdisi:** `{gate, blocked, why, unblockedBy}` — `blocked: true` ise `unblockedBy` **zorunlu** (isimli açılma şartı, aile deseni). "Ship edilebilir mi" TÜRETİLİR (bloklu girdi var mı), dosyada saklanmaz — iki yerde tutulan gerçek tutarsızlaşır.
+
 
 **`library.json` stil-düzeyi `demoOnly` dizisi bir PLAN NOTU'dur**, ders durumu değil — kafes kararı yalnız `style.json`'daki gerçek `lessons[]` durumlarına bakar.
 

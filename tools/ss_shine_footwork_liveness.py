@@ -297,13 +297,18 @@ def main() -> int:
     # "statü ≠ ship-hazırlığı" distinction the lattice forced into the open.
     style = json.loads((REPO / "content/styles/salsa_shines/style.json")
                        .read_text(encoding="utf-8"))
-    bpm_unresolved = (style.get("bpmRange") is None
-                      and str(style.get("bpmStatus", "")).startswith("DISPUTED"))
+    # M-F-130 hükmü 3: release kararı YALNIZ shipGates'ten okunur. Bu test de
+    # bir release-okuru gibi davranır — statüye BAKMAZ (C-101'in vekil hatası).
+    blocked = [g for g in (style.get("shipGates") or []) if g.get("blocked")]
     beats_blocked = step.get("beats") is None and bool(step.get("beatsStatus"))
     check("validate_content hâlâ DISPUTED uyarısı veriyor", gate_still_warns)
-    check("stil bpmRange'i HÂLÂ çözülmemiş (asıl ship kapısı)", bpm_unresolved,
-          f"bpmStatus={str(style.get('bpmStatus'))[:40]}...")
+    check("shipGates'te bloklu kapı VAR (release ekseni kapalı)", bool(blocked),
+          f"bloklu: {[g['gate'] for g in blocked]}")
     check("adımın beats'i HÂLÂ null (zamanlama hükmü kurulamaz)", beats_blocked)
+    print(f"     ⓘ Bu stilin statüsü '{json.loads((REPO / 'content/library.json')
+          .read_text(encoding='utf-8'))['styles'][3]['status']}' — ve bu testi "
+          "İLGİLENDİRMİYOR (M-F-130: iki eksen ortogonal; statü ship-vekili "
+          "olarak okunamaz, C-101).")
     print("     ⚠ BOUND ≠ SHIPPABLE: skorlayıcı-bağlama kanıtı bu testin konusu; "
           "ship kararı BPM çözülmeden (beat_annotate, kurucu-bekleyen) verilemez.")
 

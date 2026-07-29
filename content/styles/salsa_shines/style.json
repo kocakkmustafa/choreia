@@ -153,5 +153,14 @@
       "STEP_TOO_LARGE",
       "STEP_LATE"
     ]
-  }
+  },
+  "shipGates": [
+    {
+      "gate": "bpmResolved",
+      "blocked": true,
+      "why": "bpmRange unresolved (bpmStatus DISPUTED — two research passes ~2x apart, 89-100 vs 160-220). A beat grid off by 2x scores half a learner's correct steps as misses, so no lesson in this style may ship until one measurement settles it.",
+      "unblockedBy": "tools/beat_annotate.py live tap on one known track (founder, ~10 min) — then beats/countLabels fill in, STEP_LATE unblocks, and lesson-flow step 3 ('try it with the beat') opens"
+    }
+  ],
+  "shipGatesNote": "M-F-130 NORMATIVE: this axis is orthogonal to library.json `status`. This style is honestly BOTH `live` (it has a scored lesson — content reality) AND unshippable (this gate is blocked — release reality). Neither is derived from the other; reading one as a proxy for the other is the C-101 defect."
 }

@@ -170,6 +170,43 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
     if style.get("id") != path.parent.name:
         rep.error(where, "id does not match directory name")
 
+    # M-F-130: the RELEASE axis, orthogonal to library.json `status`.
+    #
+    # Deliberately NOT cross-checked against status in either direction — that
+    # is the point of the hüküm. A style may honestly be `live` with every ship
+    # gate blocked (salsa_shines today: it has a scored lesson AND cannot be
+    # published). Adding a "live implies shippable" check here would recreate
+    # exactly the proxy defect C-101 recorded.
+    #
+    # What IS checked: the field exists, each entry is self-explaining, and a
+    # blocked gate names its own unblocking condition rather than leaving the
+    # reader to guess when it lifts.
+    gates = style.get("shipGates")
+    if gates is None:
+        rep.error(where, "no shipGates field — the release axis must be stated "
+                         "explicitly (empty list is fine WITH a shipGatesNote; "
+                         "absent means the question was never asked, M-F-130)")
+    elif not isinstance(gates, list):
+        rep.error(where, "shipGates must be a list")
+    else:
+        if not gates and not style.get("shipGatesNote"):
+            rep.error(where, "shipGates is empty without a shipGatesNote — an "
+                             "empty list must say why nothing blocks release")
+        for g in gates:
+            gid = g.get("gate", "<unnamed>") if isinstance(g, dict) else repr(g)
+            if not isinstance(g, dict) or not g.get("gate"):
+                rep.error(where, f"shipGates entry {gid} has no `gate` name")
+                continue
+            if g.get("blocked") not in (True, False):
+                rep.error(where, f"ship gate '{gid}' must state `blocked` "
+                                 "explicitly (true/false)")
+            if not g.get("why"):
+                rep.error(where, f"ship gate '{gid}' has no `why`")
+            if g.get("blocked") and not g.get("unblockedBy"):
+                rep.error(where, f"ship gate '{gid}' is blocked without an "
+                                 "`unblockedBy` — a block with no named lifting "
+                                 "condition is indistinguishable from a dead end")
+
     rng = style.get("bpmRange")
     if rng is None:
         # A null range is tolerated only when it is an explicit, documented
@@ -178,6 +215,18 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
         if style.get("bpmStatus", "").startswith("DISPUTED"):
             rep.warn(where, "bpmRange is unresolved (DISPUTED) — no lesson in "
                             "this style may ship until a measurement settles it")
+            # A known release blocker must appear on the release axis too, or
+            # the two records drift and a release decision reading only
+            # shipGates (which M-F-130 says is the ONLY thing it may read)
+            # would miss it.
+            named = any(isinstance(g, dict) and g.get("blocked")
+                        and "bpm" in str(g.get("gate", "")).lower()
+                        for g in (style.get("shipGates") or []))
+            if not named:
+                rep.error(where, "bpmStatus is DISPUTED but no blocked bpm* ship "
+                                 "gate declares it — a release decision reads "
+                                 "shipGates ONLY (M-F-130), so an undeclared "
+                                 "blocker is invisible to it")
         else:
             rep.error(where, "bpmRange missing and no bpmStatus explains why")
     elif not isinstance(rng, list) or len(rng) != 2 or rng[0] >= rng[1]:
