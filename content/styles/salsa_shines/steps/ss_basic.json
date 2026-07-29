@@ -300,7 +300,7 @@
   "reference": {
     "requiredTakes": 6,
     "collectedTakes": 0,
-    "status": "pending — existing pool PROBED and named-rejected (M-F-128)",
+    "status": "pending — TARGETED harvest also failed (M-F-132/139); two structural limits measured",
     "harvestProbe": {
       "date": "2026-07-30",
       "question": "Is the basic already in the 5 salsa clips harvested for the shines? (cheap check before a targeted harvest)",
@@ -310,6 +310,24 @@
       "negativeControl": "PASSED — the detector flagged none of the 3 known shine segments as basic (a detector that fires everywhere measures nothing).",
       "measuredMethodLimit": "IMPORTANT, this bounds the conclusion: the movement isolator finds only ~1 usable window per clip (2 in the 16-minute compilation, one of which fails the camera gate) because it searches for SUSTAINED periodic stretches. A compilation that demonstrates five steps briefly each does not present them as five windows. So the honest claim is 'ss_basic is not in the windows this pipeline surfaces', NOT 'ss_basic is not in this footage'.",
       "verdict": "TARGETED HARVEST REQUIRED — ss_basic cannot be built from the existing pool. Search terms should target single-step basic tutorials ('salsa basic step solo', 'forward and back basic'), not compilations."
+    },
+    "harvestProbe2_targeted": {
+      "date": "2026-07-30",
+      "rigSha": "144b767 (isolated worktree, detached — M-F-139 family rule)",
+      "searchTerms": "coordinator-approved: 'salsa basic step solo tutorial', 'salsa forward and back basic tutorial' — single-step lessons, compilations deliberately excluded",
+      "candidates": "6 passed probe_candidates (6 independent instructors, step-scoped diversity per M-F-139)",
+      "outcome": {
+        "Salsa Suave (86s)": "REJECTED at triage: duration <90s (shorts gate)",
+        "MoveMakers Philly (69s)": "REJECTED at triage: duration <90s",
+        "Salsaventura (240s)": "harvested, classify=lesson (659 words) — ZERO movement windows at ANY window length (6/12/18s). A talking-head explanation: the instructor describes more than they dance.",
+        "Ballroom Feed (424s)": "harvested, classify=lesson (1249 words) — invisible at default settings, appears ONLY at window_s=18 (period 2.97s, periodicity 0.51). See limit (a).",
+        "Dame Mas Dance (534s)": "harvested, classify=lesson (777 words) — 3 windows, thigh excursion 13.78-18.94deg CLEARS the travel criterion, but plateaus = 0. See limit (b).",
+        "Dance Dojo (624s)": "harvested, classify=lesson (921 words) — no anchorable camera-clean window"
+      },
+      "verdict": "0 basic candidates. ss_basic still has no reference and the lesson stays locked.",
+      "structuralLimitA_windowLength": "MEASURED: movement_isolator's default window_s=6.0 combined with its own `hi = min(max_period_s*fps, win//3)` rule caps the SEARCHABLE period at ~1.99s. A salsa basic spans 8 beats and can cycle in 3-5s, so the isolator cannot see it BY CONSTRUCTION. Proof: Ballroom Feed yields 0 windows at window_s=6/12 and 1 window at 18 (period 2.97s). This is the other face of the C-102 limit — there short segments were invisible, here long cycles are. NOT a new cutter class: a parameter of the existing one. Permanent change is a coordinator call (movement_isolator is vendored, family-wide).",
+      "structuralLimitB_plateauLevel": "MEASURED and more fundamental: 3 of 3 measurable sources show ZERO plateaus, including one whose travel amplitude clearly separates it from the shines (13.8-18.9deg vs the shines' 1.4-5.3deg). The plateau detector reads the summed speed of 8 LEG-ANGLE joints; this step's config declares its hold at FOOT-CONTACT level ('Counts 4 and 8 are held, not stepped'). Those are not the same measurement: on count 4 the foot stops while hips and weight keep moving, so an angle-speed detector sees no pause. Negative control still passes (it does not flag the shines either), so the detector is consistent — it is measuring the wrong LEVEL, not measuring badly.",
+      "openQuestion": "Limit (b) raises a tier question this session did not decide: if ss_basic's defining feature is a foot-contact hold, and foot-contact timing is exactly why Running Man is Tier C (toe landmarks least reliable in markerless single-camera), then ss_basic's `measurability.tier: A` may be optimistic. Raised to the coordinator, not resolved here."
     }
   }
 }

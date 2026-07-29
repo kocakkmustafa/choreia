@@ -72,11 +72,11 @@
           "scored": false,
           "status": "locked",
           "lockedReason": {
-            "en": "We haven't found enough teachers for this step yet. We looked: the five salsa clips we already have were measured against what makes the basic the basic — the held count and the travelling step — and none of them contain it. Grading you against one teacher's version would just be that teacher's preference wearing a score, so this lesson stays shut until at least three independent instructors have been measured."
+            "en": "We looked twice and still can't grade this one honestly. First we checked the salsa clips we already had; then we went out and collected six more lessons that teach nothing but this step. Of those, two were too short to trust, one instructor talks more than they dance, and the rest don't show the one thing that makes the basic the basic — the held count on 4 and 8 — in a way a phone camera can actually see. So the step stays here, taught but not scored, until we find footage that lets us measure it fairly."
           },
-          "blockedBy": "reference.collectedTakes == 0 — existing pool PROBED and named-rejected 2026-07-30 (steps/ss_basic.json reference.harvestProbe: 0/4 sources, negative control passed, method limit named)",
+          "blockedBy": "reference.collectedTakes == 0 — pool probe (2026-07-30, harvestProbe) AND targeted harvest (harvestProbe2_targeted, 6 candidates / 4 harvested) both returned 0 basic candidates; two structural limits measured (window length, plateau measurement level)",
           "minutes": 8,
-          "probeNote": "The rejection is measured, not assumed: tools/probe_basic_candidates.py. Bound conclusion — 'not in the windows this pipeline surfaces', not 'not in this footage' (the isolator yields ~1 window per clip and cannot split a 5-step compilation)."
+          "probeNote": "Both rejections are measured, not assumed: tools/probe_basic_candidates.py. Targeted round used rig SHA 144b767. Limit (b) opens a tier question (is ss_basic really Tier A if its hold is foot-contact?) — raised to coordinator."
         },
         {
           "id": "ss_l1_arm_styling",
