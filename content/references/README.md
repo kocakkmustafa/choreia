@@ -83,3 +83,20 @@ aranır, bu yüzden artefaktın faz ekseni tek ve tutarlıdır.
 Beat ızgarasına bağlanırken: `phase` müzikal ölçüye değil ADIM ÇEVRİMİNE
 görelidir. İkisinin eşlenmesi adım config'inin `beats` alanının işidir, bu
 artefaktın değil.
+
+## Tempo bağımsızlığı (doğrulandı)
+
+Artefakt **hiçbir yerde saniye taşımaz** — `reference` ve `toleranceDeg`
+`phaseBins` kutu üzerinde, yani çevrime göreli. Zaman taşıyan tek alanlar
+`sources[].periodSeconds` ve `segmentSeconds`, ve onlar künyedir: hangi
+eğitmenin hangi tempoda gösterdiğini kaydeder, hesaba girmez.
+
+Bunun pratik sonucu: 150 BPM'de gösteren eğitmenle 200 BPM'de gösteren **aynı
+faz eksenine** katkı verir. Ölçüldü — take'ler arası gösterim temposu 90-274
+BPM aralığında değişiyordu ve uzlaşma bundan etkilenmedi.
+
+**Tüketici için tuzak:** `phase`'i saniyeye çevirmeye çalışma. Kullanıcının
+çevrim süresi kendi temposundan gelir; referansın işi o çevrimin İÇİNDE
+nerede ne olması gerektiğini söylemek. Zamanlama hükmü beat ızgarasına
+bağlanır, eğitmenin gösterim temposuna değil — bir eğitmen yavaşlatarak
+öğretmişse bu bir stil özelliği değil, o çekimin özelliğidir.
