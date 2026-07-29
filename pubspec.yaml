@@ -1,0 +1,40 @@
+name: choreia
+description: Choreia — Learn to Dance. Camera-based dance coaching, on device.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The engine is a SEPARATE package with no Flutter dependency (M-F-160,
+  # JabLab's split mirrored): scoring logic must stay testable without a widget
+  # tree, and the shell must not be able to reach into it sideways.
+  choreia_engine:
+    path: packages/choreia_engine
+
+  # Only to locate the app-private directory. The storage FORMAT lives in the
+  # app (append-only JSONL, lib/app/session_store.dart) — a 3rd-party DB is
+  # deliberately absent: session history is an event stream with no query load,
+  # and that need is met when it is MEASURED, not anticipated (J-064).
+  path_provider: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    # Content is versioned JSON the engine interprets at runtime (plan §7):
+    # a new style is a content pack, not a code change.
+    - content/
+    - content/references/
+    - content/styles/salsa_shines/
+    - content/styles/salsa_shines/steps/
+    - content/styles/hip_hop_foundations/
+    - content/styles/hip_hop_foundations/steps/

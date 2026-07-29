@@ -10,3 +10,6 @@ harvest/*.mp4
 harvest/fixtures/
 harvest/media/
 harvest/probe.json
+
+# Flutter üretilen (JabLab deseni): eklenti çözümü makineye özel, git'e girmez
+.flutter-plugins-dependencies
