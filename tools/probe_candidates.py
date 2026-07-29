@@ -81,6 +81,18 @@ STEP_OF: dict[str, str] = {
     "OsQUi2l1ZE8": "salsa_shines",
     "w4opJ2ezmd4": "salsa_shines",
     "mE2fh2XzeNc": "salsa_shines",
+    "_1iPe2rYb94": "salsa_shines",
+    "bqoNqA2hmE4": "salsa_shines",
+    "XhqT7slTCfY": "salsa_shines",
+    "v_y4l3lAZ0Q": "salsa_shines",
+    "t7u8f8L2HK0": "salsa_shines",
+    "uCwim7nbkdE": "salsa_shines",
+    "jjP8bKWCg9U": "salsa_shines",
+    "2Zf1U7ViIz8": "salsa_shines",
+    "1F9qFAW_khY": "salsa_shines",
+    "7km54RpMuL8": "salsa_shines",
+    "D915lOJf9I4": "salsa_shines",
+    "3yldlm52GRE": "salsa_shines",
     "lYpRasK4c9k": "hh_running_man",    # Howcast
     "UO9Ehsdt2IE": "hh_running_man",    # JoeyTheJAM
     "k22Bm2pMyD4": "hh_running_man",    # Jayden Rodrigues — dikey, elendi

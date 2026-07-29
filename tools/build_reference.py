@@ -341,7 +341,8 @@ def _margin_vs_distinct_rival(raw, placed, rest, others) -> dict:
     rival_cost, rival_v = rivals[0]
     with_placed = merge(others + [placed])
     with_rival = merge(others + [_variant(raw, *rival_v)])
-    moved = max((abs(x - y) for j in with_placed
+    moved = max((abs(ang_diff(x, y)) if j in ORIENTATION_JOINTS else abs(x - y)
+                 for j in with_placed
                  for x, y in zip(with_placed[j], with_rival[j])), default=0.0)
 
     out = {"bestDeg": round(best, 3), "runnerUpDeg": round(rival_cost, 3),
@@ -541,6 +542,32 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         if c is not None:
             cycles.append(c)
             sources.append(p)
+
+    # Harmonic agreement. A phase axis only means the same thing across takes
+    # if every take was cut on the SAME cycle. An alternating step is nearly
+    # periodic at half its cycle, so one take can lock to the 4-count while
+    # another locks to the 8 — and merging them silently averages two different
+    # things. Salsa surfaced this directly: periods of 0.68 and 1.36 seconds in
+    # the same pool. This is C-032's factor-of-two trap reaching the reference
+    # itself, not just the BPM report.
+    periods = sorted(p.get("periodSeconds") or 0 for p in sources)
+    harmonic_conflict = []
+    for i in range(len(periods)):
+        for j in range(i + 1, len(periods)):
+            if periods[i] > 0 and 1.7 <= periods[j] / periods[i] <= 2.3:
+                harmonic_conflict.append([periods[i], periods[j]])
+    if harmonic_conflict:
+        return {
+            "step": step, "built": False,
+            "why": ("harmonik çelişki — take'ler AYNI çevrimde kesilmemiş "
+                    f"(periyot çiftleri ~2x: {harmonic_conflict}); faz ekseni "
+                    "take'ler arasında aynı şeyi anlatmıyor"),
+            "periodsSeconds": periods,
+            "usableTakes": [p["videoId"] for p in sources],
+            "remedy": ("measure_tempo ile her take'in dönüşümlü olup olmadığını "
+                       "belirle; yarım çevrime kilitlenenleri havuzdan çıkar "
+                       "veya tam çevrime taşı"),
+        }
 
     if len(cycles) < MIN_TAKES:
         return {
