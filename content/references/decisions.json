@@ -85,6 +85,25 @@
      "carriedWhy": "Landmark fixture diskte duruyor ama hazirlanan-take havuzunda yok; olcum 2026-07-30'da yeniden kosuldu."
     }
    ]
+  },
+  "hh_bounce": {
+   "excludedWithReason": [
+    {
+     "videoId": "NWB9Y1_lZDQ",
+     "channel": "Thilanka Rathnayake",
+     "stage": "suitability",
+     "reasonCode": "no-speech",
+     "why": "yalnız 0 sözcük konuşulmuş — kimse sessizce öğretmez; en güçlü performans işareti",
+     "evidence": [
+      "classify_source verdict=performance, spokenWords=0",
+      "transkript dosyasi VAR ama 0 segment (faster-whisper VAD)",
+      "ffmpeg volumedetect mean_volume=-12.8 dB, opus stereo 124 kb/s → SES VAR",
+      "yani 'duyamadik' degil 'konusma yok, muzik var' — olcum gercek"
+     ],
+     "measuredAt": "2026-07-30",
+     "carriedWhy": "Kaynak hazirlanan-take havuzunda ama build_reference onu kaynak-uygunluk kapisinda eliyor; kapi kendi kararini artefakta yazamiyor cunku referans KURULAMADI (2 kullanilabilir kaynak < MIN_TAKES 3). Kayit burada tutulur ki 'bu kanala bakildi mi' sorusu cevaplanabilsin. Ses kanitini AYRICA yazdim: 0 sozcuk bir OLCUM mu yoksa transkripsiyon hatasi mi sorusu, kaydi okuyanin ilk soracagi sey."
+    }
+   ]
   }
  }
 }
