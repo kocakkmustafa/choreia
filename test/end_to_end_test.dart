@@ -4,11 +4,12 @@ import 'dart:io';
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/progress_summary.dart';
 import 'package:choreia/app/progress_view.dart';
-import 'package:choreia/app/session_store.dart';
+import 'package:choreia/app/recorded_summary.dart';
 import 'package:choreia/app/style_availability.dart';
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:motion_core/motion_core.dart';
 
 /// END TO END: real reference → real judge → recorded session → surface.
 ///
@@ -219,11 +220,12 @@ void main() {
       await tester.runAsync(() async {
         await store.append(SessionRecord(
           lessonId: 'ss_l1_footwork',
-          lessonClass: LessonClass.scored,
+          lessonClass: ChoreiaLessonClass.scored,
           completedAt: DateTime.utc(2026, 7, 30, 12),
           workedSeconds: 600,
-          cyclesCompleted: 8,
-          plannedCycles: 8,
+          unitsCompleted: 8,
+          plannedUnits: 8,
+          unitLabel: choreiaUnitLabel,
         ));
       });
 

@@ -195,14 +195,14 @@ packages:
     source: hosted
     version: "1.17.0"
   motion_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/motion_core"
-      ref: "motion_core-v0.8.8"
-      resolved-ref: "03ff936057e2d8070520d0a235397c77616209b1"
+      ref: "motion_core-v0.9.0"
+      resolved-ref: "13d07ceb938d886d23f6005cefa1a25971fbc924"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
-    version: "0.8.8"
+    version: "0.9.0"
   objective_c:
     dependency: transitive
     description:

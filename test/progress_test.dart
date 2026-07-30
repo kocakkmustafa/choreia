@@ -1,13 +1,14 @@
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/progress_summary.dart';
 import 'package:choreia/app/progress_view.dart';
-import 'package:choreia/app/session_store.dart';
+import 'package:choreia/app/recorded_summary.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:motion_core/motion_core.dart';
 
 /// These tests measure the HONESTY STRUCTURE of the progress surface, not its
 /// appearance — there is no device in this session, so nothing here claims
@@ -90,7 +91,7 @@ void main() {
 
   SessionRecord rec({
     required String lesson,
-    LessonClass klass = LessonClass.scored,
+    String klass = ChoreiaLessonClass.scored,
     int worked = 600,
     int cycles = 8,
     int planned = 8,
@@ -101,8 +102,9 @@ void main() {
         lessonClass: klass,
         completedAt: at ?? DateTime.utc(2026, 7, 30, 12),
         workedSeconds: worked,
-        cyclesCompleted: cycles,
-        plannedCycles: planned,
+        unitsCompleted: cycles,
+        plannedUnits: planned,
+        unitLabel: choreiaUnitLabel,
       );
 
   ProgressSummary summaryOf(List<SessionRecord> history) =>
@@ -115,6 +117,7 @@ void main() {
           workedSeconds: 0,
           scoredSessions: 0,
           demoOnlySessions: 0,
+          unmeasuredUnits: 0,
         ),
       );
 
@@ -180,7 +183,7 @@ void main() {
     test('a demoOnly session appears in Recorded with its completion counted',
         () {
       final ProgressSummary s = summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_basic', klass: LessonClass.demoOnly),
+        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
       ]);
       final RecordedRow row = s.recorded.single;
       expect(row.isDemoOnly, isTrue);
@@ -192,12 +195,12 @@ void main() {
     test('a lesson practised across a promotion reports the CAUTIOUS class',
         () {
       final ProgressSummary s = summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_basic', klass: LessonClass.demoOnly,
+        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly,
             at: DateTime.utc(2026, 1, 1)),
-        rec(lesson: 'ss_l1_basic', klass: LessonClass.scored,
+        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.scored,
             at: DateTime.utc(2026, 7, 1)),
       ]);
-      expect(s.recorded.single.lessonClass, LessonClass.demoOnly,
+      expect(s.recorded.single.lessonClass, ChoreiaLessonClass.demoOnly,
           reason: 'calling the whole history scored would over-claim exactly '
               'the sessions danced before the promotion');
     });
@@ -262,7 +265,7 @@ void main() {
     testWidgets('a demoOnly row shows the completion mark AND the no-band dash',
         (WidgetTester tester) async {
       await pump(tester, summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_basic', klass: LessonClass.demoOnly),
+        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
       ]));
       final Finder row = find.byKey(const Key('progress.recorded.ss_l1_basic'));
       expect(
@@ -302,6 +305,44 @@ void main() {
           findsNothing,
           reason: 'the dash is the demo-only marker; on a scored lesson it '
               'would claim a judgement was withheld');
+    });
+
+    testWidgets('unmeasured cycles are NAMED on the row they happened in',
+        (WidgetTester tester) async {
+      await pump(tester, summaryOf(<SessionRecord>[
+        SessionRecord(
+          lessonId: 'ss_l1_footwork',
+          lessonClass: ChoreiaLessonClass.scored,
+          completedAt: DateTime.utc(2026, 7, 30, 12),
+          workedSeconds: 600,
+          unitsCompleted: 7,
+          plannedUnits: 8,
+          unitLabel: choreiaUnitLabel,
+          unmeasuredUnits: 1,
+          unmeasuredReason: 'framing',
+        ),
+      ]));
+      final Finder row =
+          find.byKey(const Key('progress.recorded.ss_l1_footwork'));
+      expect(
+          find.descendant(
+              of: row, matching: find.textContaining('could not check')),
+          findsOneWidget,
+          reason: 'without this line the row reads "7 of 8 cycles" for a '
+              'session where the learner danced 8 — the product failure is '
+              'reported as the dancer doing less');
+    });
+
+    testWidgets('a row with NOTHING unmeasured says nothing about it',
+        (WidgetTester tester) async {
+      // The positive twin's negative half: an always-present notice would be
+      // noise, and a surface that always warns is a surface nobody reads.
+      await pump(tester, summaryOf(<SessionRecord>[rec(lesson: 'ss_l1_footwork')]));
+      expect(
+          find.descendant(
+              of: find.byKey(const Key('progress.recorded.ss_l1_footwork')),
+              matching: find.textContaining('could not check')),
+          findsNothing);
     });
 
     testWidgets('every blocked gate is NAMED on screen, with its reason',
@@ -435,11 +476,12 @@ void main() {
       final ProgressSummary s = ProgressSummary.build(
         history: <SessionRecord>[
           rec(lesson: 'ss_l1_footwork'),
-          rec(lesson: 'ss_l1_basic', klass: LessonClass.demoOnly),
+          rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
         ],
         catalog: real,
         totals: const RecordedSummary(sessions: 2, completed: 2,
-            workedSeconds: 1200, scoredSessions: 1, demoOnlySessions: 1),
+            workedSeconds: 1200, scoredSessions: 1, demoOnlySessions: 1,
+            unmeasuredUnits: 0),
       );
       await tester.pumpWidget(Directionality(
         textDirection: TextDirection.ltr,

@@ -105,6 +105,11 @@ class ProgressView extends StatelessWidget {
         Text(ProgressStrings.cycles(row.cyclesCompleted, row.plannedCycles)),
         Text(ProgressStrings.sessionsCompleted(
             row.completedSessions, row.sessions)),
+        // Unmeasured work is named on the row it happened in — an aggregate
+        // elsewhere would tell the user something went unchecked without
+        // saying where.
+        if (row.unmeasuredCycles > 0)
+          Text(ProgressStrings.unmeasured(row.unmeasuredCycles)),
         // A demo-only lesson EARNS the completion mark and shows `—` where a
         // band would be. Both halves matter: the mark because completion is a
         // measurement, the dash because a blank would look like a missing value

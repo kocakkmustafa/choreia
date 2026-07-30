@@ -1,5 +1,7 @@
+import 'package:motion_core/motion_core.dart';
+
 import 'course_catalog.dart';
-import 'session_store.dart';
+import 'recorded_summary.dart';
 
 /// One row of the **Recorded** section: MEASUREMENTS only.
 ///
@@ -19,6 +21,7 @@ final class RecordedRow {
     required this.cyclesCompleted,
     required this.plannedCycles,
     required this.completedSessions,
+    required this.unmeasuredCycles,
   });
 
   final String lessonId;
@@ -27,7 +30,12 @@ final class RecordedRow {
   /// The class RECORDED at write time, not derived from today's content.
   /// A lesson's class changes (`ss_l1_basic` has a promotion path); deriving it
   /// at read time would make pre-promotion sessions retroactively look scored.
-  final LessonClass lessonClass;
+  ///
+  /// A STRING since the core promotion (M-F-193): the vocabulary is open and
+  /// each app owns its words. The safety property is unchanged and now lives in
+  /// exactly one place — only `'scored'` reads as scored, so an unknown class
+  /// can never over-claim.
+  final String lessonClass;
 
   final int sessions;
   final int workedSeconds;
@@ -35,7 +43,12 @@ final class RecordedRow {
   final int plannedCycles;
   final int completedSessions;
 
-  bool get isDemoOnly => lessonClass == LessonClass.demoOnly;
+  /// Cycles attempted but not judgeable. Kept per row so the surface can say
+  /// which lesson the unmeasured work happened in — an aggregate alone would
+  /// tell the user something went unmeasured without saying where.
+  final int unmeasuredCycles;
+
+  bool get isDemoOnly => lessonClass != ChoreiaLessonClass.scored;
 }
 
 /// One row of the **Evaluated** section: JUDGEMENTS.
@@ -121,21 +134,26 @@ final class ProgressSummary {
     final List<RecordedRow> recorded = <RecordedRow>[];
     for (final MapEntry<String, List<SessionRecord>> e in byLesson.entries) {
       final List<SessionRecord> rows = e.value;
-      // The class comes from the RECORDS, not from the catalog — and when a
-      // lesson was practised across a promotion, the more cautious class wins.
-      // Claiming the whole history is scored because the lesson is scored TODAY
-      // would over-claim exactly the sessions that were not.
-      final bool anyDemoOnly = rows.any((r) => r.lessonClass == LessonClass.demoOnly);
+      // The class comes from the RECORDS, not from the catalog, and the more
+      // cautious one wins across a promotion: claiming the whole history is
+      // scored because the lesson is scored TODAY would over-claim exactly the
+      // sessions that were not.
+      final bool anyDemoOnly = rows.any((SessionRecord r) => !r.isScoredClass);
       recorded.add(RecordedRow(
         lessonId: e.key,
         displayName: catalog.lessonById(e.key)?.displayName ?? e.key,
-        lessonClass:
-            anyDemoOnly ? LessonClass.demoOnly : LessonClass.scored,
+        lessonClass: anyDemoOnly
+            ? ChoreiaLessonClass.demoOnly
+            : ChoreiaLessonClass.scored,
         sessions: rows.length,
-        workedSeconds: rows.fold(0, (a, r) => a + r.workedSeconds),
-        cyclesCompleted: rows.fold(0, (a, r) => a + r.cyclesCompleted),
-        plannedCycles: rows.fold(0, (a, r) => a + r.plannedCycles),
-        completedSessions: rows.where((r) => r.isComplete).length,
+        workedSeconds: rows.fold(0, (int a, SessionRecord r) => a + r.workedSeconds),
+        cyclesCompleted:
+            rows.fold(0, (int a, SessionRecord r) => a + r.unitsCompleted),
+        plannedCycles:
+            rows.fold(0, (int a, SessionRecord r) => a + r.plannedUnits),
+        completedSessions: rows.where((SessionRecord r) => r.isComplete).length,
+        unmeasuredCycles:
+            rows.fold(0, (int a, SessionRecord r) => a + r.unmeasuredUnits),
       ));
     }
     recorded.sort((a, b) => a.displayName.compareTo(b.displayName));
@@ -215,4 +233,14 @@ abstract final class ProgressStrings {
 
   static String demoOnlyMark(String? reason) =>
       reason == null ? 'Taught, not graded' : 'Taught, not graded — $reason';
+
+  /// Cycles the learner did that could not be judged.
+  ///
+  /// Shown rather than quietly dropped: without this line the screen would say
+  /// "8 of 8 cycles" for a session where one went unmeasured, which is the
+  /// silence the core's `unmeasuredUnits` field exists to prevent. Phrased so
+  /// the fault is the product's, not the dancer's.
+  static String unmeasured(int cycles) => cycles == 1
+      ? '1 cycle we could not check (framing or lighting)'
+      : '$cycles cycles we could not check (framing or lighting)';
 }

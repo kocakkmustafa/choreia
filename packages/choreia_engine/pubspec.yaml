@@ -13,11 +13,19 @@ dependencies:
   # Shared infrastructure comes from motion_core at a PINNED TAG and is never
   # copied into this repo (CLAUDE.md hard rule). Two-pin regime, M-F-154:
   # Dart consumers pin a TAG, the harvest rig tracks main.
+  #
+  # NOTE — this package currently imports NOTHING from motion_core; the pin is
+  # declared, not consumed. It is not free: pub forces one resolution per git
+  # dependency, so this unused pin put the app into version lockstep with the
+  # engine and blocked the v0.9.0 adoption until bumped in tandem. Bumped to
+  # v0.9.0 after diffing the tags (purely additive: SessionStore + export).
+  # Raised with the coordinator: drop it until the engine really consumes the
+  # core, or keep it and say why an unused pin is deliberate.
   motion_core:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: motion_core-v0.8.8
+      ref: motion_core-v0.9.0
 
 dev_dependencies:
   test: ^1.25.0
