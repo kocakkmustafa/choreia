@@ -149,13 +149,23 @@ final class JudgeResult {
 
 /// Scores one learner cycle against a reference, for the errors that are LIVE.
 ///
-/// Two error codes are deliberately absent from this engine and their absence
-/// is checked by tests rather than trusted:
+/// Two error codes are never JUDGED here, and each says so in its own result:
 ///   * NO_WEIGHT_TRANSFER — calibration-blocked (threshold under the noise
 ///     floor, M-F-117). Its measurement is still returned.
 ///   * STEP_LATE — needs a beat grid; salsa's BPM is disputed.
-/// "Not computed" is stronger than "computed and suppressed": a consumer
-/// cannot read a verdict that was never formed.
+///
+/// They are emitted with [Verdict.noVerdict] and a `why`, NOT omitted. An
+/// earlier version of this comment claimed the opposite ("deliberately absent")
+/// while the code below already did this — the code was right and the comment
+/// was stale. Reason: an absent code tells a consumer nothing, and cannot be
+/// told apart from a code that was forgotten. A `noVerdict` finding says "we
+/// looked, we cannot judge this, and here is why" — the same discipline the
+/// surface follows by NAMING blocked gates on screen instead of hiding them.
+///
+/// The genuinely NEVER-FORMED case is different and lives below: under
+/// `mirrorConfident == false` no WRONG_FOOT finding is created at all, because
+/// there the question itself is unanswerable rather than merely uncalibrated
+/// (kural-7).
 final class DanceJudge {
   const DanceJudge({
     required this.reference,
