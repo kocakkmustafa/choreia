@@ -32,6 +32,19 @@
      "carriedWhy": "Kaynak havuzdan CIKTI (harvest/ temizligi) — classify() onu artik olcemez, olcum 2026-07-29 turundandir. Kayit tasinir cunku bir dislamanin ANLAMI, dislanan seyin havuzda OLMAMASIDIR: kaydi kaynaga bagli tutmak, dislamayi kaynagin gidisiyle birlikte silmek demek."
     }
    ]
+  },
+  "hh_running_man": {
+   "excludedNotLesson": [
+    {
+     "videoId": "lYpRasK4c9k",
+     "channel": "Howcast",
+     "verdict": "unknown",
+     "spokenWords": 285,
+     "why": "konuşma var ama öğretim dili yok; başlık/açıklamada 1 işaret — ZAYIF kanıt, hüküm için yetmez",
+     "measuredAt": "2026-07-30",
+     "carriedWhy": "Bu kaynak C-089'da kaynak-uygunluk kapisiyla DISLANDI (fail-closed: 'unknown' verdict referansa giremez) ve o tur RM referansindan cikti — C-072'deki dort kaynaktan BIRIYDI (James Deane/JoeyTheJAM/The Shed/Howcast), yerine DNCR geldi. Ama dislandigi icin hazirlanan-take havuzundan da dustu, ve kapi yalnizca HAVUZDAKI kaynaklari siniflandirdigi icin KENDI DISLAMASINI ARTEFAKTA YAZAMADI: bugunku artefakt 4 kaynak gosteriyor ve besinci kanalin degerlendirilip elendigini HIC ANMIYOR. C-113'un ayni sinifi, bu kez KAYNAK duzeyinde — 'bir dislamanin anlami dislananin havuzda olmamasidir', dolayisiyla kayit havuza bagli tutulamaz. Verdict/spokenWords bugun yeniden olculdu."
+    }
+   ]
   }
  }
 }
