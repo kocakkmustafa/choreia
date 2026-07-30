@@ -150,6 +150,18 @@ SIDE_AGREEMENT_MARGIN_FLOOR_DEG = MIN_TOLERANCE_DEG
 DECISIONS_PATH = Path(__file__).resolve().parents[1] / "content/references/decisions.json"
 
 
+#: Bir referansin eklem-medyan `taban%`i bunu ASARSA, toleransinin COGU
+#: olculen ayrismadan degil ihtiyattan geliyor demektir.
+#:
+#: %50 TANIMSAL bir cizgi, ayarlanmis degil: "yarisindan fazlasi" ifadesinin
+#: dogru oldugu nokta. Ilk denemem karsilastirmaliydi ("kabul edilmis diger
+#: referanslarin maksimumunu as") ve YAPISAL olarak kusurluydu — N referanstan
+#: EN YUKSEGI icin her zaman dogru olur, yani sinyali degil siralamayi olcer.
+#: Bilinen-iyi referanslara karsi kosunca yakalandi: shine %28 ile temeli
+#: aliyordu, oysa istisnai degil sadece ucun en yuksegiydi.
+FLOOR_DOMINATED_PCT = 50
+
+
 def step_decisions(step: str) -> dict:
     if not DECISIONS_PATH.exists():
         return {}
@@ -858,6 +870,30 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
                     f"ediyor. Minimum karsilanmis, tercih edilen karsilanmamis "
                     f"— tolerans daha az kaynaktan turuyor."),
             "resolvedBy": f"{PREFERRED_TAKES - len(sources)} yeni bagimsiz egitmen",
+        })
+
+    # LOW-AMPLITUDE-VS-FAMILY (M-F-198). TURETILIR, elle yazilmaz: elle
+    # yamanmis bir temel ilk yeniden uretimde kaybolurdu (C-113 sinifi).
+    #
+    # Sorunun kendisi: bu adimin egitmenleri birbirinden gurultu tabaninin
+    # USTUNDE mi ayrisiyor? Ayrismiyorlarsa tolerans olculmus degil TABAN
+    # kaynakli olur ve referans "dogru" ile "gurultu"yu ayirt edemez.
+    joint_floor_meds = sorted(floor_pct.values())
+    own_med = joint_floor_meds[len(joint_floor_meds) // 2] if joint_floor_meds else 0
+    if own_med > FLOOR_DOMINATED_PCT:
+        status_bases.append({
+            "basis": "low-amplitude-vs-family",
+            "why": (f"Ortanca eklemde tolerans binlerinin %{own_med}'i OLCULEN "
+                    f"egitmen ayrismasindan degil {MIN_TOLERANCE_DEG} derecelik "
+                    f"gurultu tabanindan geliyor — yani bu adimda egitmenler "
+                    f"cogunlukla tabanin ALTINDA ayrisiyor ve referansin "
+                    f"ayirt etme gucu bu kaynaklarla sinirli. Karsilastirma "
+                    f"icin: kabul edilmis referanslarda bu oran %9-28."),
+            "resolvedBy": (f"egitmen ayrismasi {MIN_TOLERANCE_DEG} derecelik "
+                           f"tabanin USTUNDE olculurse (daha cok ya da daha "
+                           f"genis genlikli kaynak) temel TEMIZLENIR; altinda "
+                           f"kalirsa temel DURUR ve adimin measurability.tier "
+                           f"iddiasi VERIYLE yeniden acilir"),
         })
 
     if thin_takes:
