@@ -147,15 +147,81 @@ def validate(path: Path) -> Report:
     return r
 
 
+DECISIONS_NAME = "decisions.json"
+
+
+def check_decisions(rep: list[str]) -> int:
+    """Minimal contract for the decisions file: shape + non-empty reasons.
+
+    It cannot be validated like a reference (no cycles, no tolerances), but it
+    must not go unchecked either — every entry is a judgement that overrides
+    what the build would otherwise say, so an entry without a stated reason is
+    an unexplained exclusion.
+    """
+    path = REFS / DECISIONS_NAME
+    if not path.exists():
+        return 0                      # optional file; absence is not an error
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    errors = 0
+
+    if doc.get("schemaVersion") != 1:
+        rep.append("decisions.json: schemaVersion 1 bekleniyor")
+        errors += 1
+
+    for step, dec in (doc.get("steps") or {}).items():
+        for e in dec.get("excludedIdentityAmbiguous") or []:
+            if not e.get("videoId"):
+                rep.append(f"decisions.json [{step}]: dışlama kaydında videoId yok")
+                errors += 1
+            if not e.get("why"):
+                rep.append(f"decisions.json [{step}]: '{e.get('videoId')}' "
+                           "dışlaması GEREKÇESİZ — uyuşmazlık gerekçe değildir "
+                           "(M-F-47), bağımsız bir ölçüm yazılmalı")
+                errors += 1
+        for e in dec.get("excludedNotLesson") or []:
+            if not e.get("videoId"):
+                rep.append(f"decisions.json [{step}]: taşınan ders-dışı "
+                           "kaydında videoId yok")
+                errors += 1
+            if not e.get("why"):
+                rep.append(f"decisions.json [{step}]: '{e.get('videoId')}' "
+                           "ders-dışı dışlaması GEREKÇESİZ")
+                errors += 1
+            # A carried record is an OLDER measurement. Without a date and a
+            # reason for carrying it, a reader cannot tell it apart from one
+            # taken against today's pool — and a stale exclusion that looks
+            # fresh is worse than no record, because it silently vetoes a source
+            # the pipeline might accept today.
+            if not (e.get("measuredAt") and e.get("carriedWhy")):
+                rep.append(f"decisions.json [{step}]: '{e.get('videoId')}' "
+                           "taşınan ölçüm ama measuredAt/carriedWhy eksik — "
+                           "bayat dışlama TAZE görünürse sessiz veto olur")
+                errors += 1
+        for vid, label in (dec.get("namedVariants") or {}).items():
+            if not label:
+                rep.append(f"decisions.json [{step}]: '{vid}' namedVariant boş")
+                errors += 1
+    return errors
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*")
     args = ap.parse_args()
-    paths = [Path(p) for p in args.paths] or sorted(REFS.glob("*.json"))
+    # decisions.json lives here but is NOT a reference artifact — it holds the
+    # source-level judgements the build carries INTO artifacts (C-113). It gets
+    # its own check below rather than being skipped silently: a file excluded
+    # from validation with no reason is how an unchecked file becomes an
+    # unnoticed one.
+    paths = [Path(p) for p in args.paths] or sorted(
+        p for p in REFS.glob("*.json") if p.name != DECISIONS_NAME)
     if not paths:
         print("referans artefaktı bulunamadı")
         return 1
+
+    decision_problems: list[str] = []
+    decision_errors = check_decisions(decision_problems)
 
     failed = 0
     for p in paths:
@@ -169,12 +235,20 @@ def main() -> int:
             print(f"    ⚠ {w}")
         failed += bool(r.errors)
 
+    if decision_problems:
+        print(f"\n✗ {DECISIONS_NAME}  {len(decision_problems)} HATA")
+        for e in decision_problems:
+            print(f"    ✗ {e}")
+    else:
+        print(f"\n✓ {DECISIONS_NAME}  kaynak-düzeyi kararlar sözleşmeye uyuyor "
+              "(her dışlama gerekçeli, her varyasyon etiketli)")
+
     print(f"\n{len(paths) - failed}/{len(paths)} artefakt sözleşmeye uyuyor.")
     print("\nNOT: bu araç SKORLAMAZ. Choreia'nın skorlayıcısı henüz yok, yani\n"
           "ürettiğim bayrakların gerçek tüketicisi SIFIR. Bu araç tüketicinin\n"
           "rolünü oynayarak bayrakların süse dönüşmesini engelliyor: burada\n"
           "kontrol edilemeyen bir bayrağın tanımlı kullanımı yok demektir.")
-    return 1 if failed else 0
+    return 1 if (failed or decision_errors) else 0
 
 
 if __name__ == "__main__":

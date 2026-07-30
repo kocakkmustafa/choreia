@@ -29,24 +29,50 @@ void main() {
       expect(ref.joints, hasLength(17));
     });
 
-    test('KNOWN INCONSISTENCY (C-111): artifact status is null while the step '
-        'config calls the same reference provisional', () {
-      // Found by this test, not by inspection. build_reference.py sets
-      // status=provisional ONLY when mirroring is unresolved; the 3-source
-      // rebuild resolved mirroring, so status went null — even though the
-      // reference is still provisional on the OTHER axis it records itself
-      // (3 of 6 preferred sources, one carrying thinEvidence).
-      //
-      // Two records of one fact drifting apart is the C-091 defect. The fix
-      // belongs in build_reference.py (widen the provisional condition) plus a
-      // rebuild, NOT in a hand-patched artifact. Asserted as the CURRENT state
-      // so this test fails the day it is fixed and forces the update.
+    test('C-111 FIXED: status is derived from NAMED bases, so resolving one '
+        'weakness cannot silently clear the others', () {
+      // The nail test that used to assert `status == null` lived here and
+      // failed the moment the fix landed — exactly as designed. What replaced
+      // it asserts the SHAPE of the fix rather than a snapshot: provisional is
+      // now derived from a list of independently-resolvable bases.
       final DanceReference ref = DanceReference.load(shineRef);
-      expect(ref.status, isNull,
-          reason: 'when this starts failing, the fix landed — update this test '
-              'and drop the C-111 note');
-      expect(ref.takeCount, lessThan(6),
-          reason: 'the independent reason it is still provisional');
+      expect(ref.status, 'provisional');
+      expect(ref.isProvisional, isTrue);
+
+      // Mirroring WAS resolved on this reference (3-source rebuild), so that
+      // basis must be ABSENT while the others remain. This is the whole point:
+      // before the fix, resolving mirroring cleared the flag entirely.
+      expect(ref.hasBasis('mirror-ambiguity'), isFalse);
+      expect(ref.hasBasis('source-count-below-target'), isTrue);
+      expect(ref.hasBasis('thin-evidence'), isTrue);
+
+      // Every basis says what would lift IT — a flag with no named cure is
+      // indistinguishable from a permanent one.
+      for (final StatusBasis b in ref.statusBases) {
+        expect(b.why, isNotEmpty, reason: '${b.basis} has no measured why');
+        expect(b.resolvedBy, isNotEmpty,
+            reason: '${b.basis} does not say what would lift it');
+      }
+    });
+
+    test('a mirror-uncertain reference DOES carry the mirror basis', () {
+      final DanceReference rm = DanceReference.load(rmRef);
+      expect(rm.hasBasis('mirror-ambiguity'), isTrue,
+          reason: 'the contrast that proves the bases are per-weakness, not a '
+              'single boolean wearing three names');
+      expect(rm.mirrorConfident, isFalse);
+    });
+
+    test('source-level DECISIONS survive a rebuild (C-113)', () {
+      // These are judgements the build cannot derive: which source was excluded
+      // as identity-ambiguous, which carries a named variation. Written into
+      // the artifact by hand they were lost on regen — twice. Now they live in
+      // content/references/decisions.json and the build carries them, so this
+      // test guards the round trip rather than the hand-editing.
+      final DanceReference ref = DanceReference.load(shineRef);
+      expect(ref.excludedIdentityAmbiguous, isNotEmpty,
+          reason: 'bqoNqA2hmE4 exclusion (M-F-115) must survive every rebuild');
+      expect(ref.namedVariantOf('SHGkSbJm2Iw'), contains('Suzy Q'));
     });
 
     test('scoredPhases is read per joint — a false bin carries no verdict', () {

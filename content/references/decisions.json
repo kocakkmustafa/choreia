@@ -1,0 +1,37 @@
+{
+ "$comment": "KAYNAK-DUZEYI KARARLAR — build_reference.py bunlari OKUR ve artefakta yazar. Neden ayri dosya: bunlar OLCUM degil HUKUM (koordinator/insan karari), otomatik turetilemez. Artefakta ELLE yazilirsa her regen'de KAYBOLUR — bu tuzak Choreia'da IKI KEZ isirdi: namedVariant sessizce (hic fark edilmedi), excludedIdentityAmbiguous C-111 regen'inde (git diff yakaladi). C-091'in dersi: iki yerde tutulan gercek tutarsizlasir; burada TEK yerde tutulur ve build onu tasir. UCUNCU vaka (C-113 Bolum 4): excludedNotLesson TURETILEN bir alandi, elle yamali degil — yine de kayboldu, cunku girdisi (kaynagin kendisi) havuzdan cikti. Ders: kayip elle-yamamayla degil, GIRDININ KALICILIGIYLA ilgili.",
+ "schemaVersion": 1,
+ "steps": {
+  "ss_shine_footwork": {
+   "excludedIdentityAmbiguous": [
+    {
+     "videoId": "bqoNqA2hmE4",
+     "channel": "Dalia Dance",
+     "why": "Yeniden-segmentasyon (bu turda): tek geçerli hareket-penceresi mevcut kullanılan segmentti (23010-23250) — 2. aday pencere (16860-17070) kamera-temizlik kapısından GEÇMEDİ, alternatif YOK. Genel bacak-şekli 3-kaynak temeline göre makul (3.92 derece, ikili karşılaştırmalardan bile sıkı) — kimlik reddi DEĞİL. Dışlama nedeni LOKAL: moment_a/moment_b (bin1/bin29) diz-açı-delta 21.76 derece, diğer 3 kaynağın 1.07-3.97 derece bandının ~6-10 katı. Bağımsız kanıt (movement-science-advisor, docs/research/R10-salsa-shines-adaylar.md): kaynağın kendi başlığı \"5 FOOTWORK/Shine Steps that every Salsero/a SHOULD know\" — tek-adım tekrarlı gösterim değil, çok-adım derleme. thinEvidence:true (4 çevrim) + ikinci-en-belirsiz ayna-çözünürlüğü (margin 0.0152, 4-kaynak yapısında) üçlüsü aynı yöne işaret ediyor.",
+     "evidence": [
+      "weight-transfer knee-delta 10x outlier (21.76 vs 1.07-3.97 deg)",
+      "compilation source title (R10 §research)",
+      "thinEvidence:true (4 cycles)",
+      "second-most-uncertain mirror resolution in 4-source build"
+     ],
+     "decidedBy": "M-F-115 (koordinatör hükmü, movement-science-advisor 2. göz sonrası)"
+    }
+   ],
+   "namedVariants": {
+    "SHGkSbJm2Iw": "Suzy Q — havuzun TEK isimli varyasyonu; diger 3 kaynak jenerik shine/footwork dersi. M-F-102 hukmu: adim TEK, isim kaynak duzeyinde korunur (dusurme yok, bolme yok, etiketleme var)."
+   }
+  },
+  "hh_roger_rabbit": {
+   "excludedNotLesson": [
+    {
+     "videoId": "rRlUNGymhmE",
+     "verdict": "performance",
+     "spokenWords": 9,
+     "why": "yalnız 9 sözcük konuşulmuş — kimse sessizce öğretmez; en güçlü performans işareti",
+     "measuredAt": "2026-07-29",
+     "carriedWhy": "Kaynak havuzdan CIKTI (harvest/ temizligi) — classify() onu artik olcemez, olcum 2026-07-29 turundandir. Kayit tasinir cunku bir dislamanin ANLAMI, dislanan seyin havuzda OLMAMASIDIR: kaydi kaynaga bagli tutmak, dislamayi kaynagin gidisiyle birlikte silmek demek."
+    }
+   ]
+  }
+ }
+}

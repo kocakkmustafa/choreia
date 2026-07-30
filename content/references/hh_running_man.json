@@ -38,6 +38,7 @@
    "thinEvidence": false
   }
  ],
+ "excludedIdentityAmbiguous": [],
  "excludedNotLesson": [],
  "excludedAnchorSource": [],
  "mirrorResolution": [
@@ -4918,7 +4919,24 @@
  },
  "toleranceBelowDispersion": [],
  "status": "provisional",
- "provisionalReason": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %12-15'si bandini asar. Take basina cevrim: [5, 5, 2, 12].",
+ "statusBases": [
+  {
+   "basis": "mirror-ambiguity",
+   "why": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %12-15'si bandini asar.",
+   "resolvedBy": "daha cok take, ya da dis onsel (capa mirror-invariant, ondan cikmaz)"
+  },
+  {
+   "basis": "source-count-below-target",
+   "why": "4 bagimsiz egitmen; katalog §6.0 minimum 3 sart kosuyor ama 6 tercih ediyor. Minimum karsilanmis, tercih edilen karsilanmamis — tolerans daha az kaynaktan turuyor.",
+   "resolvedBy": "2 yeni bagimsiz egitmen"
+  },
+  {
+   "basis": "thin-evidence",
+   "why": "1 kaynak <5 cevrim tasiyor (Wd29rBfAzkI); az cevrim dispersiyonu daraltmaz ama take-medyanini gurultuler. Take basina cevrim: [5, 5, 2, 12].",
+   "resolvedBy": "ayni egitmenlerden daha uzun segment, ya da yerine daha cok cevrimli kaynak"
+  }
+ ],
+ "provisionalReason": "Yon BELIRSIZ; bir take cevrilirse hucrelerin %12-15'si bandini asar. · 4 bagimsiz egitmen; katalog §6.0 minimum 3 sart kosuyor ama 6 tercih ediyor. Minimum karsilanmis, tercih edilen karsilanmamis — tolerans daha az kaynaktan turuyor. · 1 kaynak <5 cevrim tasiyor (Wd29rBfAzkI); az cevrim dispersiyonu daraltmaz ama take-medyanini gurultuler. Take basina cevrim: [5, 5, 2, 12].",
  "evidenceThickness": {
   "cyclesPerTake": [
    5,

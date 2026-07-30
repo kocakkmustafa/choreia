@@ -11,7 +11,8 @@
    "periodSeconds": 1.13,
    "segmentSeconds": 4.04,
    "cyclesInSegment": 3,
-   "thinEvidence": true
+   "thinEvidence": true,
+   "namedVariant": "Suzy Q — havuzun TEK isimli varyasyonu; diger 3 kaynak jenerik shine/footwork dersi. M-F-102 hukmu: adim TEK, isim kaynak duzeyinde korunur (dusurme yok, bolme yok, etiketleme var)."
   },
   {
    "videoId": "jjP8bKWCg9U",
@@ -28,6 +29,20 @@
    "segmentSeconds": 12.0,
    "cyclesInSegment": 8,
    "thinEvidence": false
+  }
+ ],
+ "excludedIdentityAmbiguous": [
+  {
+   "videoId": "bqoNqA2hmE4",
+   "channel": "Dalia Dance",
+   "why": "Yeniden-segmentasyon (bu turda): tek geçerli hareket-penceresi mevcut kullanılan segmentti (23010-23250) — 2. aday pencere (16860-17070) kamera-temizlik kapısından GEÇMEDİ, alternatif YOK. Genel bacak-şekli 3-kaynak temeline göre makul (3.92 derece, ikili karşılaştırmalardan bile sıkı) — kimlik reddi DEĞİL. Dışlama nedeni LOKAL: moment_a/moment_b (bin1/bin29) diz-açı-delta 21.76 derece, diğer 3 kaynağın 1.07-3.97 derece bandının ~6-10 katı. Bağımsız kanıt (movement-science-advisor, docs/research/R10-salsa-shines-adaylar.md): kaynağın kendi başlığı \"5 FOOTWORK/Shine Steps that every Salsero/a SHOULD know\" — tek-adım tekrarlı gösterim değil, çok-adım derleme. thinEvidence:true (4 çevrim) + ikinci-en-belirsiz ayna-çözünürlüğü (margin 0.0152, 4-kaynak yapısında) üçlüsü aynı yöne işaret ediyor.",
+   "evidence": [
+    "weight-transfer knee-delta 10x outlier (21.76 vs 1.07-3.97 deg)",
+    "compilation source title (R10 §research)",
+    "thinEvidence:true (4 cycles)",
+    "second-most-uncertain mirror resolution in 4-source build"
+   ],
+   "decidedBy": "M-F-115 (koordinatör hükmü, movement-science-advisor 2. göz sonrası)"
   }
  ],
  "excludedNotLesson": [],
@@ -4828,8 +4843,20 @@
   }
  },
  "toleranceBelowDispersion": [],
- "status": null,
- "provisionalReason": null,
+ "status": "provisional",
+ "statusBases": [
+  {
+   "basis": "source-count-below-target",
+   "why": "3 bagimsiz egitmen; katalog §6.0 minimum 3 sart kosuyor ama 6 tercih ediyor. Minimum karsilanmis, tercih edilen karsilanmamis — tolerans daha az kaynaktan turuyor.",
+   "resolvedBy": "3 yeni bagimsiz egitmen"
+  },
+  {
+   "basis": "thin-evidence",
+   "why": "1 kaynak <5 cevrim tasiyor (SHGkSbJm2Iw); az cevrim dispersiyonu daraltmaz ama take-medyanini gurultuler. Take basina cevrim: [3, 10, 8].",
+   "resolvedBy": "ayni egitmenlerden daha uzun segment, ya da yerine daha cok cevrimli kaynak"
+  }
+ ],
+ "provisionalReason": "3 bagimsiz egitmen; katalog §6.0 minimum 3 sart kosuyor ama 6 tercih ediyor. Minimum karsilanmis, tercih edilen karsilanmamis — tolerans daha az kaynaktan turuyor. · 1 kaynak <5 cevrim tasiyor (SHGkSbJm2Iw); az cevrim dispersiyonu daraltmaz ama take-medyanini gurultuler. Take basina cevrim: [3, 10, 8].",
  "evidenceThickness": {
   "cyclesPerTake": [
    3,
@@ -4863,19 +4890,5 @@
   "rule": "yalnız DERS-GOSTERIMI kaynaklari referansa girer (fail-closed)",
   "excludedNotLesson": [],
   "why": "performans klibi tekrar eden bir cumleyle her hareket/kamera/capa testini gecer ama ogretim degildir; hukum eğitmenin SÖZLERİNDEN gelir (classify_source.py)"
- },
- "excludedIdentityAmbiguous": [
-  {
-   "videoId": "bqoNqA2hmE4",
-   "channel": "Dalia Dance",
-   "why": "Yeniden-segmentasyon (bu turda): tek geçerli hareket-penceresi mevcut kullanılan segmentti (23010-23250) — 2. aday pencere (16860-17070) kamera-temizlik kapısından GEÇMEDİ, alternatif YOK. Genel bacak-şekli 3-kaynak temeline göre makul (3.92 derece, ikili karşılaştırmalardan bile sıkı) — kimlik reddi DEĞİL. Dışlama nedeni LOKAL: moment_a/moment_b (bin1/bin29) diz-açı-delta 21.76 derece, diğer 3 kaynağın 1.07-3.97 derece bandının ~6-10 katı. Bağımsız kanıt (movement-science-advisor, docs/research/R10-salsa-shines-adaylar.md): kaynağın kendi başlığı \"5 FOOTWORK/Shine Steps that every Salsero/a SHOULD know\" — tek-adım tekrarlı gösterim değil, çok-adım derleme. thinEvidence:true (4 çevrim) + ikinci-en-belirsiz ayna-çözünürlüğü (margin 0.0152, 4-kaynak yapısında) üçlüsü aynı yöne işaret ediyor.",
-   "evidence": [
-    "weight-transfer knee-delta 10x outlier (21.76 vs 1.07-3.97 deg)",
-    "compilation source title (R10 §research)",
-    "thinEvidence:true (4 cycles)",
-    "second-most-uncertain mirror resolution in 4-source build"
-   ],
-   "decidedBy": "M-F-115 (koordinatör hükmü, movement-science-advisor 2. göz sonrası)"
-  }
- ]
+ }
 }

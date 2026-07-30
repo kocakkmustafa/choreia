@@ -58,6 +58,11 @@ PHASE_BINS = 64
 # disagreement is a coin flip between them, with no majority to locate.
 MIN_TAKES = 3
 
+# Catalogue §6.0 asks for >=3 independent instructors and PREFERS 6. Meeting the
+# minimum is not meeting the preference, and the artifact says which — see
+# status_bases below.
+PREFERRED_TAKES = 6
+
 # Below this a take's own median is computed from very few repetitions and is
 # reported as thin rather than silently weighted like any other source.
 MIN_CYCLES_PER_TAKE = 5
@@ -133,6 +138,25 @@ SIDE_AGREEMENT_MARGIN_FLOOR_DEG = MIN_TOLERANCE_DEG
 #
 # What DOES carry the information is the whole joint vector, compared both
 # ways round — exactly what orient() already does when it places a take.
+# Source-level DECISIONS live outside the artifact and are read back into it.
+#
+# WHY A SEPARATE FILE: these are judgements, not measurements — which source was
+# excluded as identity-ambiguous, which one carries a named variation. The build
+# cannot derive them. Written straight into the artifact they are lost on every
+# regen, and that trap bit Choreia TWICE: `namedVariant` vanished silently in an
+# earlier rebuild (nobody noticed), `excludedIdentityAmbiguous` vanished in the
+# C-111 rebuild and only a `git diff` caught it. C-091's lesson applied one
+# level up: one place holds the fact, the build carries it.
+DECISIONS_PATH = Path(__file__).resolve().parents[1] / "content/references/decisions.json"
+
+
+def step_decisions(step: str) -> dict:
+    if not DECISIONS_PATH.exists():
+        return {}
+    doc = json.loads(DECISIONS_PATH.read_text(encoding="utf-8"))
+    return (doc.get("steps") or {}).get(step) or {}
+
+
 def side_agreement(cycle: dict[str, list[float]],
                    reference: dict[str, list[float]]) -> dict:
     """Is this cycle danced on the reference's side, or mirrored from it?
@@ -654,6 +678,25 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         {"videoId": p["videoId"], "verdict": p["_source"]["verdict"],
          "spokenWords": p["_source"].get("spokenWords"),
          "why": p["_source"].get("why")} for p in not_lessons]
+    # AN EXCLUSION RECORD OUTLIVES THE SOURCE IT EXCLUDES — that is its whole
+    # point. `classify()` can only measure sources still in the pool, so when a
+    # rejected take is cleaned out of `harvest/` the reason for its rejection
+    # leaves with it. That happened: hh_roger_rabbit's "nine spoken words"
+    # record was re-derived on every build until rRlUNGymhmE left the pool, and
+    # then quietly became `[]` — a THIRD instance of C-091's class, and the one
+    # that shows the pattern is not about hand-patching at all: a DERIVED field
+    # is just as lossy once its input is gone.
+    #
+    # Merge rule: a fresh measurement always wins. Carried records fill in only
+    # for videoIds absent from this run, so a carried record can never keep
+    # asserting an exclusion the pipeline would no longer make today. They are
+    # tagged `carried` so a reader never mistakes an older measurement for one
+    # taken against today's pool.
+    measured_ids = {p["videoId"] for p in prepared}
+    for carried in step_decisions(step).get("excludedNotLesson") or []:
+        if carried.get("videoId") in measured_ids:
+            continue
+        excluded_source.append({**carried, "carried": True})
     usable = [p for p in all_usable if p not in excluded]
     cycles, sources = [], []
     for p in usable:
@@ -782,15 +825,58 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
                 "capa testini gecer ama ogretim degildir; hukum eğitmenin "
                 "SÖZLERİNDEN gelir (classify_source.py)"),
     }
-    status, provisional_reason = None, None
+    # PROVISIONAL, WITH ITS BASES NAMED — not a boolean (M-F-166).
+    #
+    # The first version derived `provisional` from mirror ambiguity ALONE. When
+    # the 3-source rebuild resolved mirroring, status went null while the
+    # reference was still provisional for two other reasons it records about
+    # itself — the artifact under-declared its own weakness and the step config
+    # disagreed with it (C-111, found by a Dart test reading the real file).
+    #
+    # A flag that does not say WHICH weakness it marks makes solving one look
+    # like solving all of them. So each basis is listed by name, and `status`
+    # is derived from the list rather than being a separate judgement.
+    status_bases: list[dict] = []
+
     if not mirror_confident:
         uncertain_pct = [round(100 * m["cellsBeyondTolerance"])
                           for m in mirror_log if not m["confident"]]
-        status = "provisional"
-        provisional_reason = (
-            f"Yon BELIRSIZ; bir take cevrilirse hucrelerin "
-            f"%{min(uncertain_pct)}-{max(uncertain_pct)}'si bandini asar. "
-            f"Take basina cevrim: {evidence_thickness['cyclesPerTake']}.")
+        status_bases.append({
+            "basis": "mirror-ambiguity",
+            "why": (f"Yon BELIRSIZ; bir take cevrilirse hucrelerin "
+                    f"%{min(uncertain_pct)}-{max(uncertain_pct)}'si bandini "
+                    f"asar."),
+            "resolvedBy": ("daha cok take, ya da dis onsel (capa "
+                           "mirror-invariant, ondan cikmaz)"),
+        })
+
+    if len(sources) < PREFERRED_TAKES:
+        status_bases.append({
+            "basis": "source-count-below-target",
+            "why": (f"{len(sources)} bagimsiz egitmen; katalog §6.0 minimum "
+                    f"{MIN_TAKES} sart kosuyor ama {PREFERRED_TAKES} tercih "
+                    f"ediyor. Minimum karsilanmis, tercih edilen karsilanmamis "
+                    f"— tolerans daha az kaynaktan turuyor."),
+            "resolvedBy": f"{PREFERRED_TAKES - len(sources)} yeni bagimsiz egitmen",
+        })
+
+    if thin_takes:
+        status_bases.append({
+            "basis": "thin-evidence",
+            "why": (f"{len(thin_takes)} kaynak <{MIN_CYCLES_PER_TAKE} cevrim "
+                    f"tasiyor ({', '.join(thin_takes)}); az cevrim "
+                    f"dispersiyonu daraltmaz ama take-medyanini gurultuler. "
+                    f"Take basina cevrim: {evidence_thickness['cyclesPerTake']}."),
+            "resolvedBy": "ayni egitmenlerden daha uzun segment, ya da yerine "
+                          "daha cok cevrimli kaynak",
+        })
+
+    decisions = step_decisions(step)
+    named_variants: dict = decisions.get("namedVariants") or {}
+
+    status = "provisional" if status_bases else None
+    provisional_reason = (
+        " · ".join(b["why"] for b in status_bases) if status_bases else None)
 
     return {
         "step": step,
@@ -806,9 +892,14 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
              "cyclesInSegment": p.get("cyclesInSegment"),
              # A take contributing three cycles is not the same evidence as one
              # contributing nine; the median that represents it is thinner.
-             "thinEvidence": (p.get("cyclesInSegment") or 0) < MIN_CYCLES_PER_TAKE}
+             "thinEvidence": (p.get("cyclesInSegment") or 0) < MIN_CYCLES_PER_TAKE,
+             **({"namedVariant": named_variants[p["videoId"]]}
+                if p["videoId"] in named_variants else {})}
             for p in sources
         ],
+        # Carried from decisions.json, not authored here — see DECISIONS_PATH.
+        "excludedIdentityAmbiguous":
+            decisions.get("excludedIdentityAmbiguous") or [],
         "excludedNotLesson": excluded_source,
         "excludedAnchorSource": [
             {"videoId": p["videoId"],
@@ -824,6 +915,7 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         "scoring": scoring,
         "toleranceBelowDispersion": violations,
         "status": status,
+        "statusBases": status_bases,
         "provisionalReason": provisional_reason,
         "evidenceThickness": evidence_thickness,
         "sourceSuitability": source_suitability,

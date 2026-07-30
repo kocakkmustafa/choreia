@@ -13,3 +13,8 @@ harvest/probe.json
 
 # Flutter üretilen (JabLab deseni): eklenti çözümü makineye özel, git'e girmez
 .flutter-plugins-dependencies
+
+# Python bytecode: üretilir, git%27e girmez — her regen sonrası diff%27i kirletiyordu
+# (C-113 dersi: diff okunabilir kalmalı, kayıpları YAKALAYAN şey o)
+__pycache__/
+*.pyc
