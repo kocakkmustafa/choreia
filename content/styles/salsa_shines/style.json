@@ -1,175 +1,176 @@
 {
-  "schemaVersion": 1,
-  "id": "salsa_shines",
-  "name": {
-    "en": "Salsa Shines"
-  },
-  "countSystem": "salsa_123_567",
-  "bpmRange": null,
-  "bpmStatus": "DISPUTED — must be resolved by measurement before any lesson ships",
-  "bpmCandidates": {
-    "r1_reported": [
-      89,
-      100
-    ],
-    "r5_reported": [
-      160,
-      220
-    ],
-    "note": "Two research passes disagree by roughly a factor of two. R1 reported 89-100; the harvest pass found 160-180 rising to 200-220 in the instructors' own material, and even a single source (RF Dance) contradicts itself across two of its own articles. The likely cause is that the two passes measured different quantities: salsa's quick-quick-slow places three steps across four musical beats, so a 'step feel' rate and a musical beat rate differ by about 2x.",
-    "whyItMatters": "The beat grid must run at the rate the dancer actually steps to. Getting it wrong by 2x does not produce slightly-off timing — it produces a grid that lines up with every other beat, so half the learner's correct steps are scored as misses and the product blames them for its own error.",
-    "resolution": "G1: take one known track, tap-annotate it with tools/beat_annotate.py, and compare the fitted BPM against both candidate ranges. One measurement settles it; no further research round is warranted."
-  },
-  "copyright": {
-    "status": "clear",
-    "basis": "Social dance; core shines such as Suzy Q trace to the 1930s and are public domain. Shines are by definition the solo, partnerless subset of the dance — the product's constraint matches the form rather than fighting it.",
-    "boundary": "Named instructor routines are not reproduced; combos are our own arrangement of public step vocabulary."
-  },
-  "honesty": {
-    "$comment": "K10 (plan §22) in machine-readable form: what this style grades, what it deliberately shows without grading, and WHY — every line traceable to a measurement, not a policy preference. Shown to the user; the app must not grade anything absent from `measured`.",
-    "measured": [
-      "Leg shape through the step cycle — 8 leg joints (hips, knees, thighs, shins) agreed to within 1.57-5.76deg across 3 independent instructors, scored at 100% of the cycle (content/references/ss_shine_footwork.json)",
-      "Which foot leads — established by comparing your whole leg pattern against the reference both ways round, with a 15.6deg margin against a 6deg noise floor (M-F-117)"
-    ],
-    "notMeasured": [
-      "Arm carriage and styling — MEASURED and deliberately not graded: instructors disagree by 11-58deg on arm joints in the same footwork, so there is no single correct arm to grade you against. Shown and taught, never scored (M-F-102).",
-      "Timing against the music — the beat grid for this style is unresolved (bpmStatus DISPUTED, two research passes 2x apart). Grading timing on a grid that could be doubled would blame you for our error, so no timing judgement runs until one tap measurement settles it.",
-      "Whether you truly transferred your weight — the knee-angle change this would need to detect (1.07-3.42deg across the reference's own instructors) sits inside the pipeline's own 6deg landmark-noise floor, so a verdict would be indistinguishable from tracking jitter (M-F-117)."
-    ]
-  },
-  "levels": [
-    {
-      "level": 1,
-      "name": {
-        "en": "The basic and the count"
-      },
-      "lessons": [
-        {
-          "id": "ss_l1_footwork",
-          "displayName": {
-            "en": "Shine footwork"
-          },
-          "step": "ss_shine_footwork",
-          "scored": true,
-          "scoredWhat": [
-            "leg shape",
-            "which foot leads"
-          ],
-          "notScoredWhat": [
-            "arm styling",
-            "timing against music",
-            "weight-transfer depth"
-          ],
-          "minutes": 10,
-          "_whyUnlocked": "Only step in this style with a built reference AND a proven consumer: content/references/ss_shine_footwork.json (3 attested instructors, mirrorConfident:true) is read end-to-end by tools/ss_shine_footwork_liveness.py, which shows both live errors firing on controlled corruptions and staying silent on real footage. Family's second full chain (M-F-119)."
-        },
-        {
-          "id": "ss_l1_basic",
-          "displayName": {
-            "en": "The forward-and-back basic (not graded)"
-          },
-          "step": "ss_basic",
-          "scored": false,
-          "demoOnly": true,
-          "demoOnlyClass": "structural-circular",
-          "demoOnlyReason": {
-            "en": "We teach this one but we don't score it, and we'd rather tell you why than pretend. What makes the basic the basic is the held count — you step on 1, 2, 3 and hold on 4. To grade that we'd have to see the hold on camera, and to know what a hold looks like we'd first need footage we're certain contains one. We went looking twice: through the salsa clips we already had, then through six lessons that teach nothing but this step. Two were too short to trust, one teacher talks more than they dance, one films at an angle we can't read, and in the rest we couldn't tell a real hold from our own measurement noise. So: the step, the count, and the teaching are all here. The number isn't, until we can earn it."
-          },
-          "evidence": "steps/ss_basic.json reference.harvestProbe (pool) + harvestProbe2_targeted (6 candidates/4 harvested) + harvestProbe3_reevaluation (window fix applied, 2 independent second gates) + harvestProbe4_footLevel (ankle/heel/toe all overlap with control)",
-          "promotionPath": {
-            "blockedBy": "No positive control: the hold signature cannot be sought without one verified example of the basic, and that example IS the reference being sought (circular). Measured across 3 foot levels — all overlap with the shine control.",
-            "unblockedBy": "FOUNDER, ~2 minutes: watch one candidate (FtZzjGsPxjg, 'Front & Back Basic Variations') and say whether it is the plain basic or a variation. A human eye breaks the circle that measurement cannot. If a clean basic exists in the material, the reference chain resumes and this lesson is PROMOTED demoOnly -> scored — by measurement on that day, never by opinion.",
-            "ifItStaysBlocked": "demoOnly becomes permanent and that is an honest ending too: the step is taught, the count is taught, and no score is invented."
-          },
-          "minutes": 8
-        },
-        {
-          "id": "ss_l1_arm_styling",
-          "displayName": {
-            "en": "Arm styling (not graded)"
-          },
-          "scored": false,
-          "demoOnly": true,
-          "demoOnlyReason": {
-            "en": "There is no single correct arm position here — we measured it: the teachers we studied differ from each other by 11 to 58 degrees on the arms while doing the same footwork. That is style, not error. So we show you the range and let you choose; grading it would be inventing a right answer that does not exist."
-          },
-          "evidence": "content/references/ss_shine_footwork.json scoring[] — arm joints verdict coached_only / scored_partial (0-64% coverage, 11-58deg medianDispersion) while every leg joint is scored at 100%",
-          "minutes": 6,
-          "demoOnlyClass": "permanent",
-          "demoOnlyClassBasis": "Measured, not assumed: instructors differ 11-58deg on arm joints while doing the same footwork (M-F-102). There is no single correct arm to grade against, so no future measurement changes this — it is style, and style is the point."
-        },
-        {
-          "id": "ss_l1_musicality",
-          "displayName": {
-            "en": "Finding the 1 (not graded)"
-          },
-          "scored": false,
-          "demoOnly": true,
-          "demoOnlyReason": {
-            "en": "Hearing where the music's 1 falls is the heart of salsa, and a camera cannot see whether you heard it. We teach it and leave the judging to your own ears."
-          },
-          "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
-          "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
-          "minutes": 5,
-          "demoOnlyClass": "permanent",
-          "demoOnlyClassBasis": "A camera cannot hear whether you found the 1. Outside the measurement surface by nature, not by current limitation (plan §22)."
-        }
-      ],
-      "unlockRule": {
-        "description": "3 consecutive attempts at ss_shine_footwork with shapeScore >= 0.75 and zero WRONG_FOOT",
-        "thresholdsCalibrated": false,
-        "note": "Provisional until G4 calibration (family rule M-F-04). Deliberately does NOT include onBeatRatio (no beat grid yet — bpmStatus DISPUTED) or NO_WEIGHT_TRANSFER (calibration-blocked, M-F-117): an unlock rule may only depend on judgements the app is actually allowed to make."
-      }
-    }
+ "schemaVersion": 1,
+ "id": "salsa_shines",
+ "name": {
+  "en": "Salsa Shines"
+ },
+ "countSystem": "salsa_123_567",
+ "bpmRange": null,
+ "bpmStatus": "DISPUTED — must be resolved by measurement before any lesson ships",
+ "bpmCandidates": {
+  "r1_reported": [
+   89,
+   100
   ],
-  "stepInventory": {
-    "sourcedFrom": [
-      "R1 §2 — 4 core shines with clear sourcing"
-    ],
-    "totalCandidates": 4,
-    "note": "A much smaller and better-defined vocabulary than hip-hop, with a strict count system. This is why the pair was chosen: one style maximises market, the other maximises measurability (plan §6.1).",
-    "tierA_confirmed": [
-      {
-        "id": "ss_basic",
-        "name": "Salsa Basic (solo)",
-        "status": "authored"
-      },
-      {
-        "id": "ss_suzy_q",
-        "name": "Suzy Q",
-        "status": "named in research, needs movement description — NOT the same artifact as ss_shine_footwork below; do not conflate"
-      }
-    ],
-    "needsMovementDescription": [
-      "Remaining 2 of the 4 core shines were counted but not individually named in the research pass — a second, narrower research round is required."
-    ],
-    "referencedGenericContent": [
-      {
-        "id": "ss_shine_footwork",
-        "name": "Shine Footwork (solo, generic)",
-        "status": "reference built (4 instructors, provisional) — measurement, no movement description authored",
-        "note": "Harvested to chase ss_suzy_q; only 1 of the 4 sources is individually named Suzy Q, the other 3 are generic shine/footwork tutorials. Legs-only pairwise distance across all 4 (4.1-7.1 deg, best orientation) is the same order as a single reference's own instructor-to-instructor dispersion — MEASURED same-movement, not eyeballed (M-F-102 reversed an earlier visual impression that they looked different). So the id names the measured generic content, not the Suzy Q figure specifically; the Suzy Q source is tagged at source level (content/references/ss_shine_footwork.json sources[].namedVariant) rather than dropped or split out. ss_suzy_q above stays reserved and unbuilt until sourced cleanly."
-      }
-    ]
-  },
-  "errorTaxonomy": {
-    "status": "usable",
-    "note": "R1 rated this style 5/5 on error taxonomy (8 errors, strong source diversity) — noticeably better raw material than hip-hop. The authored set below still had to be re-expressed as landmark-measurable conditions.",
-    "authored": [
-      "NO_WEIGHT_TRANSFER",
-      "STEP_MISSED_ON_4",
-      "WRONG_FOOT",
-      "STEP_TOO_LARGE",
-      "STEP_LATE"
-    ]
-  },
-  "shipGates": [
-    {
-      "gate": "bpmResolved",
-      "blocked": true,
-      "why": "bpmRange unresolved (bpmStatus DISPUTED — two research passes ~2x apart, 89-100 vs 160-220). A beat grid off by 2x scores half a learner's correct steps as misses, so no lesson in this style may ship until one measurement settles it.",
-      "unblockedBy": "tools/beat_annotate.py live tap on one known track (founder, ~10 min) — then beats/countLabels fill in, STEP_LATE unblocks, and lesson-flow step 3 ('try it with the beat') opens"
-    }
+  "r5_reported": [
+   160,
+   220
   ],
-  "shipGatesNote": "M-F-130 NORMATIVE: this axis is orthogonal to library.json `status`. This style is honestly BOTH `live` (it has a scored lesson — content reality) AND unshippable (this gate is blocked — release reality). Neither is derived from the other; reading one as a proxy for the other is the C-101 defect."
+  "note": "Two research passes disagree by roughly a factor of two. R1 reported 89-100; the harvest pass found 160-180 rising to 200-220 in the instructors' own material, and even a single source (RF Dance) contradicts itself across two of its own articles. The likely cause is that the two passes measured different quantities: salsa's quick-quick-slow places three steps across four musical beats, so a 'step feel' rate and a musical beat rate differ by about 2x.",
+  "whyItMatters": "The beat grid must run at the rate the dancer actually steps to. Getting it wrong by 2x does not produce slightly-off timing — it produces a grid that lines up with every other beat, so half the learner's correct steps are scored as misses and the product blames them for its own error.",
+  "resolution": "G1: take one known track, tap-annotate it with tools/beat_annotate.py, and compare the fitted BPM against both candidate ranges. One measurement settles it; no further research round is warranted."
+ },
+ "copyright": {
+  "status": "clear",
+  "basis": "Social dance; core shines such as Suzy Q trace to the 1930s and are public domain. Shines are by definition the solo, partnerless subset of the dance — the product's constraint matches the form rather than fighting it.",
+  "boundary": "Named instructor routines are not reproduced; combos are our own arrangement of public step vocabulary."
+ },
+ "honesty": {
+  "$comment": "K10 (plan §22) in machine-readable form: what this style grades, what it deliberately shows without grading, and WHY — every line traceable to a measurement, not a policy preference. Shown to the user; the app must not grade anything absent from `measured`.",
+  "measured": [
+   "Leg shape through the step cycle — 8 leg joints (hips, knees, thighs, shins) agreed to within 1.57-5.76deg across 3 independent instructors, scored at 100% of the cycle (content/references/ss_shine_footwork.json)",
+   "Which foot leads — established by comparing your whole leg pattern against the reference both ways round, with a 15.6deg margin against a 6deg noise floor (M-F-117)"
+  ],
+  "notMeasured": [
+   "Arm carriage and styling — MEASURED and deliberately not graded: instructors disagree by 11-58deg on arm joints in the same footwork, so there is no single correct arm to grade you against. Shown and taught, never scored (M-F-102).",
+   "Timing against the music — the beat grid for this style is unresolved (bpmStatus DISPUTED, two research passes 2x apart). Grading timing on a grid that could be doubled would blame you for our error, so no timing judgement runs until one tap measurement settles it.",
+   "Whether you truly transferred your weight — the knee-angle change this would need to detect (1.07-3.42deg across the reference's own instructors) sits inside the pipeline's own 6deg landmark-noise floor, so a verdict would be indistinguishable from tracking jitter (M-F-117).",
+   "Whether you are dancing THIS step at all — we check HOW you do the step, never WHETHER it is the step. Measured, not assumed: a hip-hop Running Man cycle and a hip-hop Bounce cycle were both judged against this reference and came back with zero errors (thigh excursion 16.9deg and 14.8deg, both under the 20deg cap that STEP_TOO_LARGE uses). So if you practise something else, this lesson will not say 'that is a different step' — it will simply find nothing wrong. A step-identity check would need its own calibration and does not exist yet."
+  ]
+ },
+ "levels": [
+  {
+   "level": 1,
+   "name": {
+    "en": "The basic and the count"
+   },
+   "lessons": [
+    {
+     "id": "ss_l1_footwork",
+     "displayName": {
+      "en": "Shine footwork"
+     },
+     "step": "ss_shine_footwork",
+     "scored": true,
+     "scoredWhat": [
+      "leg shape",
+      "which foot leads"
+     ],
+     "notScoredWhat": [
+      "arm styling",
+      "timing against music",
+      "weight-transfer depth"
+     ],
+     "minutes": 10,
+     "_whyUnlocked": "Only step in this style with a built reference AND a proven consumer: content/references/ss_shine_footwork.json (3 attested instructors, mirrorConfident:true) is read end-to-end by tools/ss_shine_footwork_liveness.py, which shows both live errors firing on controlled corruptions and staying silent on real footage. Family's second full chain (M-F-119)."
+    },
+    {
+     "id": "ss_l1_basic",
+     "displayName": {
+      "en": "The forward-and-back basic (not graded)"
+     },
+     "step": "ss_basic",
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "structural-circular",
+     "demoOnlyReason": {
+      "en": "We teach this one but we don't score it, and we'd rather tell you why than pretend. What makes the basic the basic is the held count — you step on 1, 2, 3 and hold on 4. To grade that we'd have to see the hold on camera, and to know what a hold looks like we'd first need footage we're certain contains one. We went looking twice: through the salsa clips we already had, then through six lessons that teach nothing but this step. Two were too short to trust, one teacher talks more than they dance, one films at an angle we can't read, and in the rest we couldn't tell a real hold from our own measurement noise. So: the step, the count, and the teaching are all here. The number isn't, until we can earn it."
+     },
+     "evidence": "steps/ss_basic.json reference.harvestProbe (pool) + harvestProbe2_targeted (6 candidates/4 harvested) + harvestProbe3_reevaluation (window fix applied, 2 independent second gates) + harvestProbe4_footLevel (ankle/heel/toe all overlap with control)",
+     "promotionPath": {
+      "blockedBy": "No positive control: the hold signature cannot be sought without one verified example of the basic, and that example IS the reference being sought (circular). Measured across 3 foot levels — all overlap with the shine control.",
+      "unblockedBy": "FOUNDER, ~2 minutes: watch one candidate (FtZzjGsPxjg, 'Front & Back Basic Variations') and say whether it is the plain basic or a variation. A human eye breaks the circle that measurement cannot. If a clean basic exists in the material, the reference chain resumes and this lesson is PROMOTED demoOnly -> scored — by measurement on that day, never by opinion.",
+      "ifItStaysBlocked": "demoOnly becomes permanent and that is an honest ending too: the step is taught, the count is taught, and no score is invented."
+     },
+     "minutes": 8
+    },
+    {
+     "id": "ss_l1_arm_styling",
+     "displayName": {
+      "en": "Arm styling (not graded)"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyReason": {
+      "en": "There is no single correct arm position here — we measured it: the teachers we studied differ from each other by 11 to 58 degrees on the arms while doing the same footwork. That is style, not error. So we show you the range and let you choose; grading it would be inventing a right answer that does not exist."
+     },
+     "evidence": "content/references/ss_shine_footwork.json scoring[] — arm joints verdict coached_only / scored_partial (0-64% coverage, 11-58deg medianDispersion) while every leg joint is scored at 100%",
+     "minutes": 6,
+     "demoOnlyClass": "permanent",
+     "demoOnlyClassBasis": "Measured, not assumed: instructors differ 11-58deg on arm joints while doing the same footwork (M-F-102). There is no single correct arm to grade against, so no future measurement changes this — it is style, and style is the point."
+    },
+    {
+     "id": "ss_l1_musicality",
+     "displayName": {
+      "en": "Finding the 1 (not graded)"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyReason": {
+      "en": "Hearing where the music's 1 falls is the heart of salsa, and a camera cannot see whether you heard it. We teach it and leave the judging to your own ears."
+     },
+     "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket — musicality/expression is explicitly outside the measurement surface, not outside the product",
+     "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
+     "minutes": 5,
+     "demoOnlyClass": "permanent",
+     "demoOnlyClassBasis": "A camera cannot hear whether you found the 1. Outside the measurement surface by nature, not by current limitation (plan §22)."
+    }
+   ],
+   "unlockRule": {
+    "description": "3 consecutive attempts at ss_shine_footwork with shapeScore >= 0.75 and zero WRONG_FOOT",
+    "thresholdsCalibrated": false,
+    "note": "Provisional until G4 calibration (family rule M-F-04). Deliberately does NOT include onBeatRatio (no beat grid yet — bpmStatus DISPUTED) or NO_WEIGHT_TRANSFER (calibration-blocked, M-F-117): an unlock rule may only depend on judgements the app is actually allowed to make."
+   }
+  }
+ ],
+ "stepInventory": {
+  "sourcedFrom": [
+   "R1 §2 — 4 core shines with clear sourcing"
+  ],
+  "totalCandidates": 4,
+  "note": "A much smaller and better-defined vocabulary than hip-hop, with a strict count system. This is why the pair was chosen: one style maximises market, the other maximises measurability (plan §6.1).",
+  "tierA_confirmed": [
+   {
+    "id": "ss_basic",
+    "name": "Salsa Basic (solo)",
+    "status": "authored"
+   },
+   {
+    "id": "ss_suzy_q",
+    "name": "Suzy Q",
+    "status": "named in research, needs movement description — NOT the same artifact as ss_shine_footwork below; do not conflate"
+   }
+  ],
+  "needsMovementDescription": [
+   "Remaining 2 of the 4 core shines were counted but not individually named in the research pass — a second, narrower research round is required."
+  ],
+  "referencedGenericContent": [
+   {
+    "id": "ss_shine_footwork",
+    "name": "Shine Footwork (solo, generic)",
+    "status": "reference built (4 instructors, provisional) — measurement, no movement description authored",
+    "note": "Harvested to chase ss_suzy_q; only 1 of the 4 sources is individually named Suzy Q, the other 3 are generic shine/footwork tutorials. Legs-only pairwise distance across all 4 (4.1-7.1 deg, best orientation) is the same order as a single reference's own instructor-to-instructor dispersion — MEASURED same-movement, not eyeballed (M-F-102 reversed an earlier visual impression that they looked different). So the id names the measured generic content, not the Suzy Q figure specifically; the Suzy Q source is tagged at source level (content/references/ss_shine_footwork.json sources[].namedVariant) rather than dropped or split out. ss_suzy_q above stays reserved and unbuilt until sourced cleanly."
+   }
+  ]
+ },
+ "errorTaxonomy": {
+  "status": "usable",
+  "note": "R1 rated this style 5/5 on error taxonomy (8 errors, strong source diversity) — noticeably better raw material than hip-hop. The authored set below still had to be re-expressed as landmark-measurable conditions.",
+  "authored": [
+   "NO_WEIGHT_TRANSFER",
+   "STEP_MISSED_ON_4",
+   "WRONG_FOOT",
+   "STEP_TOO_LARGE",
+   "STEP_LATE"
+  ]
+ },
+ "shipGates": [
+  {
+   "gate": "bpmResolved",
+   "blocked": true,
+   "why": "bpmRange unresolved (bpmStatus DISPUTED — two research passes ~2x apart, 89-100 vs 160-220). A beat grid off by 2x scores half a learner's correct steps as misses, so no lesson in this style may ship until one measurement settles it.",
+   "unblockedBy": "tools/beat_annotate.py live tap on one known track (founder, ~10 min) — then beats/countLabels fill in, STEP_LATE unblocks, and lesson-flow step 3 ('try it with the beat') opens"
+  }
+ ],
+ "shipGatesNote": "M-F-130 NORMATIVE: this axis is orthogonal to library.json `status`. This style is honestly BOTH `live` (it has a scored lesson — content reality) AND unshippable (this gate is blocked — release reality). Neither is derived from the other; reading one as a proxy for the other is the C-101 defect."
 }

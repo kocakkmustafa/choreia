@@ -65,6 +65,18 @@ void main() {
       expect(r.isScoredClass, isFalse);
     });
 
+    test('POSITIVE TWIN — the scored word actually READS as scored', () async {
+      // Added by the M-F-194 absence-gate scan, which found this the one
+      // unpaired absence claim in the suite. Without it, an `isScoredClass`
+      // that always returned false would pass every test: least-privilege
+      // stops OVER-claiming, but a read so restrictive that nothing ever
+      // counts as scored is its own defect — under-claiming every graded
+      // session the product does have.
+      await store.append(rec(klass: ChoreiaLessonClass.scored));
+      expect((await store.recent()).single.isScoredClass, isTrue);
+      expect((await RecordedSummary.from(store)).scoredSessions, 1);
+    });
+
     test('a class Choreia never writes NEVER reads as scored', () async {
       // The open vocabulary removed the enum that used to make this
       // impossible; the safety property moved into the core's
