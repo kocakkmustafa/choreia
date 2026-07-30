@@ -149,6 +149,16 @@ def validate(path: Path) -> Report:
 
 DECISIONS_NAME = "decisions.json"
 
+# Bir dışlamanın hattın NERESİNDE olduğu. Sabit liste, çünkü serbest metin
+# olsaydı aynı sınıf üç farklı yazımla üç sınıf gibi görünürdü.
+EXCLUSION_STAGES = {
+    "triage",            # indirme öncesi metadata elemesi
+    "prepare",           # kullanılabilir pencere/segment çıkmadı
+    "identity",          # bu kaynağın BU adımı gösterdiği kurulamadı
+    "suitability",       # ders-gösterimi olduğu kurulamadı (kaynak uygunluğu)
+    "tool-disagreement", # iki ölçüm aleti aynı büyüklükte anlaşamadı
+}
+
 
 def check_decisions(rep: list[str]) -> int:
     """Minimal contract for the decisions file: shape + non-empty reasons.
@@ -197,6 +207,32 @@ def check_decisions(rep: list[str]) -> int:
                            "taşınan ölçüm ama measuredAt/carriedWhy eksik — "
                            "bayat dışlama TAZE görünürse sessiz veto olur")
                 errors += 1
+        for e in dec.get("excludedWithReason") or []:
+            vid = e.get("videoId")
+            if not vid:
+                rep.append(f"decisions.json [{step}]: excludedWithReason "
+                           "kaydında videoId yok")
+                errors += 1
+            if e.get("stage") not in EXCLUSION_STAGES:
+                rep.append(f"decisions.json [{step}]: '{vid}' stage "
+                           f"{e.get('stage')!r} tanımlı değil — "
+                           f"biri olmalı: {', '.join(sorted(EXCLUSION_STAGES))}")
+                errors += 1
+            # reasonCode MAKİNE-okur, why İNSAN-okur. İkisi de zorunlu: yalnız
+            # kod, gerekçesi olmayan bir dışlamadır; yalnız metin, gruplanamaz.
+            if not e.get("reasonCode"):
+                rep.append(f"decisions.json [{step}]: '{vid}' reasonCode yok")
+                errors += 1
+            if not e.get("why"):
+                rep.append(f"decisions.json [{step}]: '{vid}' GEREKÇESİZ "
+                           "dışlama — uyuşmazlık gerekçe değildir (M-F-47)")
+                errors += 1
+            if not (e.get("measuredAt") and e.get("carriedWhy")):
+                rep.append(f"decisions.json [{step}]: '{vid}' taşınan kayıt ama "
+                           "measuredAt/carriedWhy eksik — bayat dışlama TAZE "
+                           "görünürse sessiz veto olur")
+                errors += 1
+
         for vid, label in (dec.get("namedVariants") or {}).items():
             if not label:
                 rep.append(f"decisions.json [{step}]: '{vid}' namedVariant boş")

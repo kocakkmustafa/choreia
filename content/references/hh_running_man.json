@@ -39,6 +39,46 @@
   }
  ],
  "excludedIdentityAmbiguous": [],
+ "excludedWithReason": [
+  {
+   "videoId": "-8W2bnjrhE0",
+   "channel": "Tiger Street Dancer",
+   "stage": "tool-disagreement",
+   "reasonCode": "period-mismatch",
+   "why": "Iki olcum aleti ayni buyuklukte anlasmiyor: measure_tempo 1,033s, prepare_take 0,7s (~1,5x). Ustelik measure_tempo cevrimi 'non_alternating' isaretliyor. Birbirini dogrulamayan iki olcumden hangisinin dogru oldugu bilinmiyor — havuza alinirsa referans, hangi periyoda gore ornekledigini bilmeden ornekler.",
+   "evidence": [
+    "measure_tempo periodSeconds=1.033",
+    "prepare_take periodSeconds=0.7",
+    "measure_tempo alternation=non_alternating"
+   ],
+   "measuredAt": "2026-07-30",
+   "carriedWhy": "Kaynak hazirlanan-take havuzunda DEGIL, bu yuzden hat bu dislamayi kendisi yeniden turetemez. Iki olcum de 2026-07-30'da YENIDEN kosuldu, hatirlanmadi."
+  },
+  {
+   "videoId": "0UDxiThjwG8",
+   "channel": "Darren R. Wong",
+   "stage": "prepare",
+   "reasonCode": "no-usable-window",
+   "why": "prepare_take kullanilabilir pencere bulamadi: 'no repeating-and-moving window found'. Egitmen hareket ediyor ama tekrar eden bir gosteri penceresi yok — cevrim cikarilamiyor.",
+   "evidence": [
+    "prepare_take: no repeating-and-moving window found"
+   ],
+   "measuredAt": "2026-07-30",
+   "carriedWhy": "Landmark fixture diskte duruyor ama hazirlanan-take havuzunda yok; olcum 2026-07-30'da yeniden kosuldu."
+  },
+  {
+   "videoId": "E6GfqbvDJfU",
+   "channel": "MihranTV",
+   "stage": "prepare",
+   "reasonCode": "no-usable-window",
+   "why": "prepare_take kullanilabilir pencere bulamadi: 'no repeating-and-moving window found'.",
+   "evidence": [
+    "prepare_take: no repeating-and-moving window found"
+   ],
+   "measuredAt": "2026-07-30",
+   "carriedWhy": "Landmark fixture diskte duruyor ama hazirlanan-take havuzunda yok; olcum 2026-07-30'da yeniden kosuldu."
+  }
+ ],
  "excludedNotLesson": [
   {
    "videoId": "lYpRasK4c9k",

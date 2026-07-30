@@ -900,6 +900,14 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         # Carried from decisions.json, not authored here — see DECISIONS_PATH.
         "excludedIdentityAmbiguous":
             decisions.get("excludedIdentityAmbiguous") or [],
+        # GENERIC exclusion record (M-F-190). The named buckets above stay as
+        # they are — a record that already lives somewhere is not migrated,
+        # because migrating it is one more chance to lose it. NEW exclusion
+        # classes land here instead of growing a bucket per case: once there
+        # are five buckets, "which bucket does this go in" becomes its own
+        # source of error. Same lesson as the dot-prefix rule — solve the
+        # class, not the instance.
+        "excludedWithReason": decisions.get("excludedWithReason") or [],
         "excludedNotLesson": excluded_source,
         "excludedAnchorSource": [
             {"videoId": p["videoId"],
