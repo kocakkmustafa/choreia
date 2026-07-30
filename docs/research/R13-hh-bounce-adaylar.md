@@ -80,3 +80,78 @@ Bu tur RM ve RR'yi de kapsıyordu. **RM'nin havuzu tükendi** (8 kanal: 4 refera
 gerekiyor; bu notta yalnız `hh_bounce` var çünkü sıfırdan başlayan ve en yüksek
 getirisi olan o. RR ayrı aramayı bekliyor (yapısal olarak yalnız hasatla çözülür,
 C-116/R12).
+
+---
+
+# SONUÇLAR (2026-07-30, hasat sonrası)
+
+**Yukarıdaki risk tablosu sonuçlardan ÖNCE yazıldı. Öngörüsü TERSİNE ÇIKTI, ve
+bunu rasyonalize etmek yerine yazıyorum — ön-kaydın bütün değeri bu.**
+
+## Hasat
+
+| aday | indirme | çıkarım |
+|---|---|---|
+| `AyzYABnWDEM` | ✓ | ✓ |
+| `NWB9Y1_lZDQ` | ✓ | ✓ |
+| `l3r4bPhikGQ` | ✓ | ✓ |
+| `nOR1qEhpssg` | ✗ HTTP 403 | — |
+| `4BRd2E8vBic` | ✗ HTTP 403 | — |
+
+403'ler ilk iki indirmeden SONRA başladı → içerik değil hız-sınırı imzası.
+Üst üste zorlanmadı; sonraki turda gecikmeli yeniden denenir.
+
+## Ölçüm — ve öngörünün tersine dönüşü
+
+| take | R13 öngörüsü | seçilen segmentte diz aralığı | kalça-y 3sn MEDYAN | çapa |
+|---|---|---|---|---|
+| `AyzYABnWDEM` | **saf** | 14,5° / **10,9°** (std **1,7°**) | **0,029** | ankle-x |
+| `NWB9Y1_lZDQ` | **saf** | 16,7° / 29,5° | 0,081 | ankle-x |
+| `l3r4bPhikGQ` | **derleme riskli** | **47,2° / 55,1°** | 0,057 | ankle-x |
+| *ZpTgAZBYNrU (RM, çalışan referans)* | — | *84,8° / 41,2°* | *0,086* | *ankle-y* |
+
+**"Saf" dediklerim en ZAYIF sinyali, "derleme riskli" dediğim en GÜÇLÜ sinyali
+verdi.** Öngörü başlıklara dayanıyordu; ölçüm başlığı doğrulamadı.
+
+## Neden bu havuzdan referans KURULMADI
+
+Üç kullanılabilir take var, `MIN_TAKES=3` sağlanıyor — ve buna rağmen referans
+üretilmedi. Gerekçe üç ölçüm:
+
+1. **Gürültü tabanı.** `AyzYABnWDEM`'in sağ diz std'si **1,7°**, hattın
+   `MIN_TOLERANCE_DEG = 6,0°` tabanının altında. Bir karar ölçüsü kendi gürültü
+   tabanının altında soru soramaz — bu take'in taşıdığı bilgi, taşıdığı
+   gürültüden küçük.
+2. **İki alet anlaşmıyor.** `measure_tempo` her üç take için de **`no_peak`**
+   diyor; `prepare_take` ise periyot buluyor (1,37 / 0,9 / 1,7s). Bu tam olarak
+   `-8W2bnjrhE0`'ı eleyen `tool-disagreement` sınıfı — kendi kovamızı yeni
+   açtığımız sınıf.
+3. **Adımın kendi faz tanımı karşılanmıyor.** `hh_bounce` fazları
+   `knee_flexion_mean > 168°` (top) + azalan **≥40°/s** (drop) istiyor. Toplam
+   diz aralığı 10,9-16,7° olan bir pencerede bu eşikler anlamlı ayrım üretmez.
+
+**Bu havuzdan referans kurmak C-071'in tekrarı olurdu:** "araçlar başarılı çıktı
+üretti ama referans kapanmamıştı."
+
+## Açık soru — KOORDİNATÖRDE (ölçü tasarımı)
+
+Ölçüm iki açıklamayı ayırt ETMİYOR:
+
+- **(a) Çapa modeli bounce'a uymuyor.** Hattın çapası ayak bileğine bakıyor ve üç
+  take'te de eksen **x** seçildi. Bounce ayaklar YERDE, hareket DİKEY ve diz
+  sürücülü — RM'de çapa `ankle-y`. Yatay ayak hareketi için kurulmuş bir çapa,
+  ayağı sabit bir harekette gürültüye kilitlenmiş olabilir; `AyzYABnWDEM`'in
+  27 saniyelik, 0,976 periyodiklikli ama 10,9° genlikli penceresi buna benziyor
+  (çok düzenli, çok küçük — konuşan eğitmenin hafif salınımı gibi).
+- **(b) Bounce gerçekten küçük genlikli** ve tek-kamerada ölçülemeyecek kadar
+  taban-yakını bir hareket.
+
+İkisi farklı sonuçlar doğurur: (a) düzeltilebilir bir araç sınırı, (b)
+`hh_bounce`'ın `measurability.tier: A` beyanının YANLIŞ olduğu anlamına gelir ve
+adımın demo-only'ye taşınmasını gerektirir. **Ayırt etmenin yolu diz-sürücülü bir
+segment bulucu denemek** (mevcut ayak-çapası yerine `knee_flexion_mean`) — bu bir
+ölçü TASARIMI, yükseltme kuralı gereği bende değil.
+
+`l3r4bPhikGQ`'nun güçlü sinyalinin bounce mi criss-cross mu olduğu da aynı
+soruya bağlı: doğru segment bulucu olmadan hangi pencereyi ölçtüğümüzden emin
+olamayız.
