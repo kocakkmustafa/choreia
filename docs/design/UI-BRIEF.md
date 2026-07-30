@@ -112,6 +112,35 @@ Dans ederken kullanıcı telefona bakamaz. Bu, ekranı **sesin etrafında** kurm
 
 Detay sözleşme: `docs/design/SESSION-STORE-DELTA.md` §4.
 
+> **⚠️ TASARIM OTURUMUNA NOT — bu bölümün dürüstlük YAPISI artık KODDA ve TESTLİ.**
+> **Tasarım stilleri değiştirir, yapıyı DEVRALIR — icat etmez.**
+>
+> `lib/app/progress_summary.dart` + `lib/app/progress_view.dart`, 22 testle çivili
+> (`test/progress_test.dart`). Sözleşmenin kod karşılıkları:
+>
+> | §3.9 kuralı | Koddaki karşılığı | Nasıl ölçülüyor |
+> |---|---|---|
+> | İki bölüm karıştırılamaz | `ProgressSummary`'de **birleşik liste ALANI YOK** — yüzey tek liste render EDEMEZ | bölüm-kapsamlı `find.descendant`; iki bölümü birleştiren sabotaj testi düşürüyor |
+> | demoOnly işaret ALIR, bant ASLA | satırda `demoOnlyMark` + `noBand` (`—`) birlikte | tireyi kaldıran sabotaj testi düşürüyor |
+> | Geçilemeyen kapılar ekranda | `CourseCatalog.blockedGates` **içerikten TÜRETİLİYOR** (stil `shipGates` + adım `errorCodes[].status=="blocked"` + ders `demoOnly`/`locked`) | gerçek içerik üzerinden test; listeyi gizleyen sabotaj düşürüyor |
+> | Süre retroaktif kredi olmaz | `ProgressSummary.retroactiveCreditNote`, bloklu bölümün içinde | `retroactiveNoteKey` bölüm-kapsamlı test |
+> | Çıplak sayı yok (K8) | birimler `ProgressStrings` içinde, çağırana bırakılmıyor | `duration/cycles/sessionsCompleted` birim testleri |
+>
+> **Kapı listesi ELLE YAZILMADI, bilinçli olarak.** BPM indiği gün elle yazılmış
+> bir liste yalan söylerdi — "size yapamadığımız şeyi söylüyoruz" diyen ekranın
+> kendisi bayatlayamaz.
+>
+> **Bu teslimin SINIRI:** görsel doğrulama YAPILMADI — bu oturumda cihaz,
+> emülatör ve kamera yok. Testli olan **yapı**; **görünüm** tasarım bekliyor.
+> Renk/tipografi/yerleşim/ikonografi ve `Recorded`/`Evaluated` başlık adlandırması
+> tasarım oturumunun kararı; yeniden adlandırma serbest, **bölümleri
+> birleştirmek değil**.
+>
+> Kapsam dışı bırakılanlar (§3.9b'ye ait): `unlockRule` gösterimi ve
+> zamanlama-trend grafiği — ikincisi V1'de bilinçli YOK. Veri katmanına
+> `unlockRule` alanı EKLENMEDİ, çünkü tüketicisi olmayan alan bu depoda süse
+> dönüşür.
+
 ### 3.9b Progress — diğer kalemler
 - Ders/adım ilerlemesi. ⚠️ Zamanlama-trend grafiği V1'de **yok**.
 - Seviye açılma kriteri **görünür**: hangi kriter / gereken / gözlenen (`unlockRule`). Salsa L1: `shapeScore >= 0.75` + `WRONG_FOOT` yok — `onBeatRatio` bilinçli **dışarıda**.
