@@ -56,7 +56,7 @@ tek başına KULLANILAMAZ. Bağımsız hatlar:
   yeniden türetip aynı sayıyı bulmak doğrulamadır, ama bunu ikinci bir kanıt gibi
   saymak tek kanıtı ikiye katlamış gibi göstermek olur. Asıl bulgu şu:
   **kanıt artefaktta duruyordu ve okunmadı.** ("Yazılmış ama okunmamış alan",
-  kaybolan alanın kardeş arıza kipi — `reference_keyset_gate` alanın VARLIĞINI
+  kaybolan alanın kardeş arıza kipi — `artifact_keyset_gate` alanın VARLIĞINI
   ölçüyor, OKUNDUĞUNU ölçemiyor.)
 - **Argüman POST-HOC.** Gerekçeyi ayna sonucunu GÖRDÜKTEN sonra aradım. İki hat da
   önceden mevcuttu, ama salsa emsalinde **dört** bağımsız hat + `movement-science-advisor`

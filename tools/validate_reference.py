@@ -209,13 +209,22 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*")
     args = ap.parse_args()
-    # decisions.json lives here but is NOT a reference artifact — it holds the
-    # source-level judgements the build carries INTO artifacts (C-113). It gets
-    # its own check below rather than being skipped silently: a file excluded
-    # from validation with no reason is how an unchecked file becomes an
-    # unnoticed one.
+    # WHAT COUNTS AS A REFERENCE ARTIFACT — a rule, not a list of names.
+    #
+    # `decisions.json` is not one: it holds the source-level judgements the
+    # build carries INTO artifacts (C-113), and it gets its own check below
+    # rather than being skipped silently — a file excluded from validation with
+    # no reason is how an unchecked file becomes an unnoticed one.
+    #
+    # The first version of this exclusion named that one file. That fixed the
+    # instance, not the class: the next sibling to land in this directory
+    # (`.keyset-baseline.json`) fell into the same hole and produced three
+    # nonsense errors. Ledger/baseline files are dot-prefixed by convention
+    # (the rig's own keyset gate does the same), so the rule is: dot-prefixed
+    # files are bookkeeping, not artifacts.
     paths = [Path(p) for p in args.paths] or sorted(
-        p for p in REFS.glob("*.json") if p.name != DECISIONS_NAME)
+        p for p in REFS.glob("*.json")
+        if p.name != DECISIONS_NAME and not p.name.startswith("."))
     if not paths:
         print("referans artefaktı bulunamadı")
         return 1
