@@ -98,14 +98,14 @@ BASELINE_VERSION = 1
 
 # Update PIN_SHA only after re-reading the upstream diff since the last pin.
 PIN_REPO_PATH = "tools/harvest_rig/artifact_keyset_gate.py"
-PIN_SHA = "6b717ca"
+PIN_SHA = "d8257fd"
 
-# PIN DURUMU: bu SHA henüz `main`'de DEĞİL — `feat/keyset-gate` dalında,
-# koordinatör merge'ini bekliyor. Saklanacak bir şey değil, ÖLÇÜLECEK bir şey:
-# drift_check() pin'in main'in atası olup olmadığını sınıyor ve dal-pin'i yüksek
-# sesle bildiriyor. Merge indiğinde yeniden pinlenmeli; aksi hâlde rebase pin'i
-# geçersiz kılar.
-PIN_EXPECTED_ON_MAIN = False
+# PIN DURUMU: merge indi (2026-07-30), pin artık `main` üzerinde. Repin körlemesine
+# YAPILMADI — önce dal ucu (`6b717ca`) ile `origin/main` arasındaki dosya farkı
+# ölçüldü ve BİREBİR AYNI çıktı; fark olsaydı repin, merge sırasında gelen bir
+# değişikliği beyansız yutardı. drift_check() bu bayrağı sınamayı sürdürüyor:
+# ters yön de (main'de olmayan bir pin) uyarı üretir.
+PIN_EXPECTED_ON_MAIN = True
 
 DECLARED_DIFFERENCES: dict[str, str] = {
     "main": ("yalnızca `--drift-check` bayrağı eklendi; kapının ÖLÇÜM mantığı "
