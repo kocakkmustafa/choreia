@@ -67,6 +67,54 @@ double cycleDistance(Cycle a, Cycle b) {
   return count == 0 ? double.infinity : total / count;
 }
 
+/// How far is this cycle from the reference, in SHAPE alone?
+///
+/// Mirror-independent by construction (best of the two orientations), because
+/// identity and side are different questions: a learner on the wrong foot is
+/// still doing THIS step, and must not be measured as if they were doing a
+/// different one.
+///
+/// **REPORT-ONLY. No threshold, no verdict, no error code** (M-F-207 (i)).
+/// The measurement exists so a distribution can accumulate; the gate comes
+/// only once separation is MEASURED. Choreia's own numbers say why the
+/// shortcut is unavailable: an in-vocabulary shine cycle sits at 15.2deg and an
+/// out-of-vocabulary Running Man at 18.6deg — one measure cannot separate
+/// those, and the family precedent (M-F-60(2), squat identity) needed TWO
+/// signals.
+double shapeDistance(Cycle learner, Cycle reference) => math.min(
+      cycleDistance(learner, reference),
+      cycleDistance(mirrorCycle(learner), reference),
+    );
+
+/// [shapeDistance] restricted to the leg joints.
+///
+/// A second candidate signal, deliberately different in kind from the first:
+/// arms are styling and the references themselves disagree on them by 11-58deg,
+/// so whole-body distance mixes real shape with authored noise. If a composite
+/// gate is ever built, two signals that fail the same way would be one signal.
+double legShapeDistance(Cycle learner, Cycle reference) {
+  Cycle legsOf(Cycle c) => <String, List<double>>{
+        for (final MapEntry<String, List<double>> e in c.entries)
+          if (legJoints.contains(e.key)) e.key: e.value,
+      };
+  return shapeDistance(legsOf(learner), legsOf(reference));
+}
+
+/// The single WORST joint distance — a third candidate, sensitive where the
+/// means are blunt: a step that differs in one limb only averages away.
+double worstJointDistance(Cycle learner, Cycle reference) {
+  double worst = 0;
+  for (final String j in learner.keys) {
+    final List<double>? other = reference[j];
+    if (other == null) continue;
+    final Cycle one = <String, List<double>>{j: learner[j]!};
+    final Cycle ref = <String, List<double>>{j: other};
+    final double d = shapeDistance(one, ref);
+    if (d.isFinite && d > worst) worst = d;
+  }
+  return worst;
+}
+
 /// Which side is the learner dancing on, relative to the reference?
 ///
 /// WHY THIS IS NOT A SINGLE-NUMBER MEASURE — the mistake is easy and silent,
@@ -200,6 +248,24 @@ final class DanceJudge {
     final double thighDelta = maxDelta('left_thigh', 'right_thigh');
     measurements['kneeDeltaDeg'] = kneeDelta;
     measurements['thighDeltaDeg'] = thighDelta;
+
+    // STEP-IDENTITY INSTRUMENTATION — report-first (M-F-207 (i)).
+    //
+    // Measured on EVERY judgement, including when `mirrorConfident` is false:
+    // identity is not the side question, and gating it behind the mirror flag
+    // would leave the very references that need it most unmeasured.
+    //
+    // No code, no verdict, no threshold. Choreia currently cannot tell that a
+    // learner is dancing a different step at all (measured: a hip-hop Running
+    // Man cycle returns zero errors against the salsa shine reference), and
+    // that limit is stated in the style's `notMeasured`. These numbers are how
+    // the distribution needed to close it gets collected — not a gate wearing
+    // a measurement's clothes.
+    measurements['identityShapeDeg'] = shapeDistance(learner, reference.angles);
+    measurements['identityLegShapeDeg'] =
+        legShapeDistance(learner, reference.angles);
+    measurements['identityWorstJointDeg'] =
+        worstJointDistance(learner, reference.angles);
 
     findings.add(ErrorFinding(
       'STEP_TOO_LARGE',

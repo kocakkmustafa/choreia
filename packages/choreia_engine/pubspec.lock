@@ -169,15 +169,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  motion_core:
-    dependency: "direct main"
-    description:
-      path: "packages/motion_core"
-      ref: "motion_core-v0.9.0"
-      resolved-ref: "13d07ceb938d886d23f6005cefa1a25971fbc924"
-      url: "https://github.com/kocakkmustafa/motion-core.git"
-    source: git
-    version: "0.9.0"
   node_preamble:
     dependency: transitive
     description:

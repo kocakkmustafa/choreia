@@ -10,22 +10,19 @@ environment:
   sdk: ^3.6.0
 
 dependencies:
-  # Shared infrastructure comes from motion_core at a PINNED TAG and is never
-  # copied into this repo (CLAUDE.md hard rule). Two-pin regime, M-F-154:
-  # Dart consumers pin a TAG, the harvest rig tracks main.
+  # motion_core pini DÜŞÜRÜLDÜ (M-F-207). Bu paket çekirdekten hiçbir şey
+  # import etmiyordu — beyan edilmiş ama tüketilmemiş bir bağımlılıktı, yani
+  # "tüketicisiz alan süse dönüşür" kuralının pubspec düzeyi.
   #
-  # NOTE — this package currently imports NOTHING from motion_core; the pin is
-  # declared, not consumed. It is not free: pub forces one resolution per git
-  # dependency, so this unused pin put the app into version lockstep with the
-  # engine and blocked the v0.9.0 adoption until bumped in tandem. Bumped to
-  # v0.9.0 after diffing the tags (purely additive: SessionStore + export).
-  # Raised with the coordinator: drop it until the engine really consumes the
-  # core, or keep it and say why an unused pin is deliberate.
-  motion_core:
-    git:
-      url: https://github.com/kocakkmustafa/motion-core.git
-      path: packages/motion_core
-      ref: motion_core-v0.9.0
+  # Ve bedelsiz değildi, ÖLÇÜLDÜ: pub bir git bağımlılığı için tek çözüm
+  # zorluyor, dolayısıyla bu kullanılmayan pin app'i kilit adımına soktu ve
+  # SessionStore v0.9.0 adopsiyonunu bloke etti.
+  #
+  # İSİMLİ GERİ-GİRİŞ TETİĞİ: ilk gerçek import günü — büyük olasılıkla
+  # kamera köprüsü / PoseFrame tüketimi — pin TAG'le geri gelir. O gün gelene
+  # kadar burada bir satır olmaması, olmasından dürüsttür.
+  #
+  # App'in kendi pini KALIR: o SessionStore'u gerçekten çekirdekten tüketiyor.
 
 dev_dependencies:
   test: ^1.25.0

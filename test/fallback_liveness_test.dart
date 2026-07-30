@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:io';
 
 import 'package:choreia_engine/choreia_engine.dart';
@@ -182,5 +183,84 @@ void main() {
     expect(reachedFallback, greaterThan(0),
         reason: 'no real cycle ever produced a noVerdict — the fallback is '
             'decorative and the honesty copy resting on it is unearned');
+  });
+
+  group('step-identity INSTRUMENTATION (report-first, M-F-207 (i))', () {
+    test('the identity measures are present on EVERY judgement, and carry no '
+        'verdict', () {
+      for (final Cycle c in <Cycle>[
+        ...control.values,
+        ...outOfVocabulary.values,
+      ]) {
+        final JudgeResult r = DanceJudge(reference: reference)
+            .judge(c, momentA: momentA, momentB: momentB);
+        for (final String k in <String>[
+          'identityShapeDeg',
+          'identityLegShapeDeg',
+          'identityWorstJointDeg',
+        ]) {
+          expect(r.measurements.containsKey(k), isTrue, reason: '$k missing');
+          expect(r.measurements[k]!.isFinite, isTrue);
+        }
+        // The whole point of report-first: no code, no verdict, no threshold.
+        // If an identity code appears here, a gate was built before its
+        // separation was measured — the failure kalem-2 exists to prevent.
+        expect(r.findings.map((ErrorFinding f) => f.code),
+            isNot(contains(startsWith('IDENTITY'))),
+            reason: 'an identity ERROR CODE exists — instrumentation turned '
+                'into a gate without a measured threshold');
+      }
+    });
+
+    test('MEASURED: does any single identity signal separate in- from '
+        'out-of-vocabulary today?', () {
+      double m(Cycle c, String k) => DanceJudge(reference: reference)
+          .judge(c, momentA: momentA, momentB: momentB)
+          .measurements[k]!;
+
+      final StringBuffer log = StringBuffer('\nidentity signals\n');
+      bool anySeparates = false;
+      for (final String k in <String>[
+        'identityShapeDeg',
+        'identityLegShapeDeg',
+        'identityWorstJointDeg',
+      ]) {
+        final List<double> inV =
+            control.values.map((Cycle c) => m(c, k)).toList();
+        final List<double> outV =
+            outOfVocabulary.values.map((Cycle c) => m(c, k)).toList();
+        final double worstIn = inV.reduce(math.max);
+        final double bestOut = outV.reduce(math.min);
+        final bool separates = bestOut > worstIn;
+        anySeparates = anySeparates || separates;
+        log.writeln('  $k: in=${inV.map((d) => d.toStringAsFixed(1))} '
+            'out=${outV.map((d) => d.toStringAsFixed(1))} '
+            'gap=${(bestOut - worstIn).toStringAsFixed(1)} '
+            '${separates ? "SEPARATES" : "overlaps"}');
+      }
+      printOnFailure(log.toString());
+
+      // My first version asserted `isA<bool>()` — an assertion that CANNOT
+      // fail, i.e. the decorative thing this whole recipe exists to catch,
+      // written into the recipe's own test. Replaced with today's measured
+      // truth, which can.
+      //
+      // Measured (n=2 per side):
+      //   identityShapeDeg      in 15.2, 14.6 | out 25.6, 18.6   -> 1.2x
+      //   identityLegShapeDeg   in  3.4,  1.3 | out 17.4,  6.9   -> 2-5x
+      //   identityWorstJointDeg in 52.0, 66.2 | out 92.5, 69.5   -> 1.1x
+      //
+      // All three separate, but the RATIOS differ by a lot and that is the
+      // finding worth carrying into a composite: the leg-only signal is the
+      // strong one, consistent with the reason it was written (arms are
+      // styling, and the references disagree on them by 11-58deg by design).
+      //
+      // n=2 per side cannot yield a threshold — this only says which candidate
+      // is worth collecting. If separation LOSES here, the composite design
+      // rests on a coincidence and must be reopened.
+      expect(anySeparates, isTrue,
+          reason: 'no identity signal separates in- from out-of-vocabulary any '
+              'more — the report-first candidates are not candidates');
+    });
   });
 }
