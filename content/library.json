@@ -1,90 +1,505 @@
 {
-  "schemaVersion": 1,
-  "generatedFrom": "docs/CHOREIA-BLUEPRINT.md (M-F-18, kurucu onaylı)",
-  "note": "Kütüphane IA'sının makine-okur hâli. Standart §2: kapsamın TAMAMI kullanıcıya baştan görünür; açılmamış stiller 'yakında' durumundadır, ama SAHTE/boş kurs asla listelenmez. Dalga = motor rollout sırası, ürün vaadinin tavanı DEĞİL.",
-
-  "statusValues": {
-    "live": "≥1 SKORLANAN ders var (kursları açık ve skorlanıyor)",
-    "demoOpen": "≥1 AÇILABİLİR ders var ama SKORLANAN ders YOK — dersler açılır, hiçbiri puan vermez (her biri demoOnly/locked gerekçeli)",
-    "comingSoon": "açılabilir ders YOK; sayfası görünür, 'yakında' rozeti",
-    "onHold": "bilinçli beklemede — sayfada gerekçesi yazılı",
-    "excluded": "kapsam dışı; sessiz (ayrı 'neden yok' sayfası gerekmez)"
+ "schemaVersion": 1,
+ "generatedFrom": "docs/CHOREIA-BLUEPRINT.md (M-F-18, kurucu onaylı)",
+ "note": "Kütüphane IA'sının makine-okur hâli. Standart §2: kapsamın TAMAMI kullanıcıya baştan görünür; açılmamış stiller 'yakında' durumundadır, ama SAHTE/boş kurs asla listelenmez. Dalga = motor rollout sırası, ürün vaadinin tavanı DEĞİL.",
+ "statusValues": {
+  "live": "≥1 SKORLANAN ders var (kursları açık ve skorlanıyor)",
+  "demoOpen": "≥1 AÇILABİLİR ders var ama SKORLANAN ders YOK — dersler açılır, hiçbiri puan vermez (her biri demoOnly/locked gerekçeli)",
+  "comingSoon": "açılabilir ders YOK; sayfası görünür, 'yakında' rozeti",
+  "onHold": "bilinçli beklemede — sayfada gerekçesi yazılı",
+  "excluded": "kapsam dışı; sessiz (ayrı 'neden yok' sayfası gerekmez)"
+ },
+ "statusLattice": {
+  "$comment": "M-F-123 aile standardı. Üçlü kafes, statü ↔ ders-durumu İKİ YÖNLÜ bağlı ve validate_content bunu kapı olarak koşuyor. Gerekçe: fazla-satmayı engelleyen disiplin EKSİK-satmayı da engellemeli — kullanıcının açabildiği ders VARSA statü onu söylemeli ('bitti = kullanıcının gördüğü yüzey' ailesi).",
+  "rule": {
+   "live": "style.json'da >=1 lessons[].scored == true VE honesty.measured boş değil",
+   "demoOpen": "style.json'da >=1 lessons[].demoOnly == true VE scored ders sayısı == 0",
+   "comingSoon": "style.json'da açılabilir (demoOnly) ders YOK — diskte style.json olmaması da bu duruma girer"
   },
-  "statusLattice": {
-    "$comment": "M-F-123 aile standardı. Üçlü kafes, statü ↔ ders-durumu İKİ YÖNLÜ bağlı ve validate_content bunu kapı olarak koşuyor. Gerekçe: fazla-satmayı engelleyen disiplin EKSİK-satmayı da engellemeli — kullanıcının açabildiği ders VARSA statü onu söylemeli ('bitti = kullanıcının gördüğü yüzey' ailesi).",
-    "rule": {
-      "live": "style.json'da >=1 lessons[].scored == true VE honesty.measured boş değil",
-      "demoOpen": "style.json'da >=1 lessons[].demoOnly == true VE scored ders sayısı == 0",
-      "comingSoon": "style.json'da açılabilir (demoOnly) ders YOK — diskte style.json olmaması da bu duruma girer"
-    },
-    "openableMeans": "demoOnly == true. `locked` ders AÇILAMAZ (ölçüm eksik, kilit görünür ve açılmaz), bu yüzden yalnız locked ders taşıyan bir stil demoOpen DEĞİLDİR.",
-    "demoOnlyFieldHasTwoMeanings": "DİKKAT — bu dosyadaki stil-düzeyi `demoOnly` dizisi bir PLAN NOTU'dur ('bu stil açıldığında şu hareketler skorlanmayacak'), ders durumu DEĞİL. Kafes kararı yalnız style.json'daki gerçek lessons[] durumlarına bakar. Örnek: belly_dance/contemporary/kizomba_zouk_solo/breaking plan notu taşır ama diskte içeriği yoktur → comingSoon doğru. hip_hop_foundations ise diskte gerçek demoOnly DERS taşır → demoOpen."
+  "openableMeans": "demoOnly == true. `locked` ders AÇILAMAZ (ölçüm eksik, kilit görünür ve açılmaz), bu yüzden yalnız locked ders taşıyan bir stil demoOpen DEĞİLDİR.",
+  "demoOnlyFieldHasTwoMeanings": "DİKKAT — bu dosyadaki stil-düzeyi `demoOnly` dizisi bir PLAN NOTU'dur ('bu stil açıldığında şu hareketler skorlanmayacak'), ders durumu DEĞİL. Kafes kararı yalnız style.json'daki gerçek lessons[] durumlarına bakar. Örnek: belly_dance/contemporary/kizomba_zouk_solo/breaking plan notu taşır ama diskte içeriği yoktur → comingSoon doğru. hip_hop_foundations ise diskte gerçek demoOnly DERS taşır → demoOpen.",
+  "shipGateRelationship": "TASARIM GEREGI TANIMSIZ. Kafes yalnizca ICERIK gercegini soyler (acilabilir/skorlanan ders VAR MI). Ship-kapilariyla iliskisi burada TANIMLANMAZ ve yuzey-turetim katmaninda yasar (lib/app/style_availability.dart, RENDER aninda turetilir, ASLA saklanmaz). Gerekce: kafesi ship'e baglamak M-F-130'un iki-eksen-ortogonal kararini geri alir — biri digerinin vekili olur ve C-101 vekil kusuru geri doner. Sonuc: bir stil durustce hem `live` (skorlanan dersi var) hem ACILAMAZ olabilir (ship kapisi kapali); yuzey bunu KAPALI gosterir, cunku kapili seyi vaat etmek coming-soon yasaginin ters yonudur."
+ },
+ "legalFlags": {
+  "green": "sosyal/halk adımı — serbest",
+  "amber": "stil-temsili ORİJİNAL kombo",
+  "red": "adlı ticari koreografi / marka adı / syllabus metni — YASAK"
+ },
+ "openDecision": {
+  "id": "IA-1",
+  "question": "Funk Styles paketi tek sayfa mı, dört sayfa mı?",
+  "resolution": "DÖRT sayfa, birlikte ship edilir.",
+  "rationale": "Blueprint Ballroom için açıkça 'TEK AİLE SAYFASI altında 7 dans' diyor; Funk Styles için 'birlikte tek genişleme' diyor — bu ship birlikteliğidir, sayfa birleşimi değil. Locking, Popping, Waacking ve Vogue ayrı adım vokabülerlerine ve ayrı köken-atıflarına sahip (Vogue: Black/Latino LGBTQ+ ballroom kültürü); tek sayfada toplamak atıf kutusunu da vokabüleri de bulanıklaştırırdı.",
+  "pageCountEffect": "33 dalgalı sayfa + Hula (beklemede, gerekçesiyle görünür) = 34 stil sayfası; blueprint'in '~30' ifadesiyle uyumlu"
+ },
+ "styles": [
+  {
+   "id": "hip_hop_foundations",
+   "name": {
+    "en": "Hip-Hop Foundations"
+   },
+   "wave": 1,
+   "status": "demoOpen",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "demoOnly": [
+    "Running Man — ayak-ucu/topuk temas zamanlaması tek-kamerada en düşük güvenli ölçüm (Tier C); 4 eğitmen ÖLÇÜLDÜ, hareket öğretilir, SKORLANMAZ (K10)",
+    "groove/feel — kamera göremez"
+   ],
+   "note": "07-29 DÜZELTME: status 'live' idi ve YANLIŞTI — statusValues live'ı 'kursları açık, SKORLANIYOR' diye tanımlıyor, ama bu stilin skorlanan tek dersi yok (honesty.measured BOŞ: hh_bounce'ın referansı yok, Running Man Tier C, Roger Rabbit mirrorConfident:false). Eski not '≥3 bağımsız eğitmen ÖLÇÜLDÜ (C-030)' doğruydu ama ölçüm SKORLANAN derse dönüşmedi — 'ölçtüm' ile 'skorluyorum' aynı şey değil. validate_content artık bu çelişkiyi kapı olarak yakalıyor."
   },
-
-  "legalFlags": {
-    "green": "sosyal/halk adımı — serbest",
-    "amber": "stil-temsili ORİJİNAL kombo",
-    "red": "adlı ticari koreografi / marka adı / syllabus metni — YASAK"
+  {
+   "id": "latin_fusion_fitness",
+   "name": {
+    "en": "Latin Fusion Dance Fitness"
+   },
+   "wave": 1,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka"
   },
-
-  "openDecision": {
-    "id": "IA-1",
-    "question": "Funk Styles paketi tek sayfa mı, dört sayfa mı?",
-    "resolution": "DÖRT sayfa, birlikte ship edilir.",
-    "rationale": "Blueprint Ballroom için açıkça 'TEK AİLE SAYFASI altında 7 dans' diyor; Funk Styles için 'birlikte tek genişleme' diyor — bu ship birlikteliğidir, sayfa birleşimi değil. Locking, Popping, Waacking ve Vogue ayrı adım vokabülerlerine ve ayrı köken-atıflarına sahip (Vogue: Black/Latino LGBTQ+ ballroom kültürü); tek sayfada toplamak atıf kutusunu da vokabüleri de bulanıklaştırırdı.",
-    "pageCountEffect": "33 dalgalı sayfa + Hula (beklemede, gerekçesiyle görünür) = 34 stil sayfası; blueprint'in '~30' ifadesiyle uyumlu"
+  {
+   "id": "line_dance",
+   "name": {
+    "en": "Line Dance"
+   },
+   "wave": 1,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "Step-sheet formatı kural motoruna birebir oturuyor; yayımlı step-sheet KOPYALANMAZ, orijinal diziler"
   },
-
-  "styles": [
-    { "id": "hip_hop_foundations", "name": {"en": "Hip-Hop Foundations"}, "wave": 1, "status": "demoOpen", "legalFlag": "green", "countSystem": "8count", "scoring": "pose",
-      "demoOnly": ["Running Man — ayak-ucu/topuk temas zamanlaması tek-kamerada en düşük güvenli ölçüm (Tier C); 4 eğitmen ÖLÇÜLDÜ, hareket öğretilir, SKORLANMAZ (K10)", "groove/feel — kamera göremez"],
-      "note": "07-29 DÜZELTME: status 'live' idi ve YANLIŞTI — statusValues live'ı 'kursları açık, SKORLANIYOR' diye tanımlıyor, ama bu stilin skorlanan tek dersi yok (honesty.measured BOŞ: hh_bounce'ın referansı yok, Running Man Tier C, Roger Rabbit mirrorConfident:false). Eski not '≥3 bağımsız eğitmen ÖLÇÜLDÜ (C-030)' doğruydu ama ölçüm SKORLANAN derse dönüşmedi — 'ölçtüm' ile 'skorluyorum' aynı şey değil. validate_content artık bu çelişkiyi kapı olarak yakalıyor." },
-    { "id": "latin_fusion_fitness", "name": {"en": "Latin Fusion Dance Fitness"}, "wave": 1, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka" },
-    { "id": "line_dance", "name": {"en": "Line Dance"}, "wave": 1, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "note": "Step-sheet formatı kural motoruna birebir oturuyor; yayımlı step-sheet KOPYALANMAZ, orijinal diziler" },
-    { "id": "salsa_shines", "name": {"en": "Salsa Shines"}, "wave": 1, "status": "live", "legalFlag": "green", "countSystem": "salsa_123_567", "scoring": "pose", "contentOnDisk": true,
-      "statusNote": "07-30 M-F-123 kafesi: `live` çünkü ss_l1_footwork SKORLANAN bir ders (tam-zincir, M-F-119: WRONG_FOOT + STEP_TOO_LARGE canlı, liveness testi kanıtlı) ve honesty.measured dolu. ⚠️ AÇIK GERİLİM — statü ≠ ship-hazırlığı: bpmStatus DISPUTED olduğu için validate_content hâlâ 'no lesson in this style may ship' uyarısını veriyor. Kafes DERS-DURUMUNA bakıyor (kullanıcı ship edildiğinde ne görecek), ship-kapısı AYRI bir eksen (BPM). İkisinin ilişkisi kafes tanımında YOK — koordinatöre soruldu; bu stil BPM çözülmeden yayına çıkmaz, statü live olsa da.", "note": "Adım config'i yazıldı (ss_basic) ama HENÜZ SHIP EDİLEMEZ: BPM hâlâ çözülmedi (C-032 kapandı — hareket-üzerinden BPM çıkmaz sokaktı, ölçüldü — ama beat_annotate ile müzik-ızgarası kurucunun canlı tap'ini bekliyor, henüz koşulmadı); ss_shine_footwork referansı 4 eğitmenle KURULDU (provisional) ama ss_basic'in kendi referans takeleri (collectedTakes) hâlâ 0 — adım-config↔referans bağı ss_shine_footwork için var, ss_basic için yok. Doğrulayıcının 'diskte içerik var ama yakında' uyarısı bu yüzden BEKLENEN — içerik hazır olmakla ship edilebilir olmak aynı şey değil" },
-    { "id": "tiktok_format", "name": {"en": "Short-Form Dance"}, "wave": 1, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "note": "Orijinal kombolar; isimli viral koreografi öğretilmez" },
-
-    { "id": "kpop_point", "name": {"en": "K-Pop Point Choreo"}, "wave": 2, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "cautionClass": "high", "note": "Ajans içeriği yüksek-dikkat; bağımsız eğitmen kanalları öncelikli. Ayna-modu zorunlu" },
-    { "id": "bachata_solo", "name": {"en": "Bachata Solo"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "bachata_1234_tap", "scoring": "pose", "note": "Yalnız 2 kanal bulundu — ek tarama görevi" },
-    { "id": "afrobeats", "name": {"en": "Afrobeats"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "trendPack": "amapiano", "note": "Amapiano döner trend-paketi: sabit müfredat değil, viral döngü. Köken-atıf kutusu zorunlu" },
-    { "id": "dancehall", "name": {"en": "Dancehall"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "safetyExclusions": ["Dutty Wine — boyun riski"] },
-    { "id": "shuffle", "name": {"en": "Shuffle"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "note": "≥60fps önerisi — hızlı ayak işi" },
-    { "id": "belly_dance", "name": {"en": "Belly Dance"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "dum_tek", "scoring": "pose", "demoOnly": ["shimmy — landmark çözünürlüğü altında", "prop'lu figürler — avatar demo"] },
-    { "id": "bollywood", "name": {"en": "Bollywood"}, "wave": 2, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "note": "Mudra: el-landmark varsa skorlu, yoksa demo" },
-    { "id": "merengue_solo", "name": {"en": "Merengue Solo"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "note": "Bachata/shines deseninin birebir tekrarı — en ucuz ekleme" },
-    { "id": "cumbia_solo", "name": {"en": "Cumbia Solo"}, "wave": 2, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose" },
-
-    { "id": "ballroom_latin_solo", "name": {"en": "Ballroom & Latin Solo Technique"}, "wave": 3, "status": "comingSoon", "legalFlag": "amber", "countSystem": "per_dance", "scoring": "pose", "isFamilyPage": true, "subDances": ["Cha-Cha", "Rumba", "Jive", "Waltz", "Quickstep", "Paso Doble", "Tango solo"], "note": "TEK sayfa, 7 sekme. ISTD/WDSF Bronze→Gold yapısı ESİNLENİLİR; syllabus METNİ telifli, anlatım ORİJİNAL" },
-    { "id": "tap", "name": {"en": "Tap Dance"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose+onset", "hardwareRequired": ["tap ayakkabısı", "sert zemin"], "note": "PERKÜSİF ONSET: shuffle/flap/stamp ayrımı + zamanlama (K9). ISTD 6-seviye esinli" },
-    { "id": "locking", "name": {"en": "Locking"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "pack": "funk_styles" },
-    { "id": "popping", "name": {"en": "Popping"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "pack": "funk_styles", "note": "Hit'ler RhythmEngine'e birebir uyum" },
-    { "id": "waacking", "name": {"en": "Waacking"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "pack": "funk_styles" },
-    { "id": "vogue", "name": {"en": "Vogue"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "pack": "funk_styles", "originAttribution": "Black/Latino LGBTQ+ ballroom kültürü — atıf kutusu ZORUNLU" },
-    { "id": "jazz", "name": {"en": "Jazz"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose" },
-    { "id": "samba_no_pe", "name": {"en": "Samba no Pé"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "note": "Karnaval solo samba. Gafieira ayrı SKU DEĞİL — ileri-stil katmanı" },
-    { "id": "solo_jazz_charleston", "name": {"en": "Solo Jazz & Charleston"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "note": "Shim Sham = sabit 32-count rutin → DTW-dostu" },
-    { "id": "bhangra", "name": {"en": "Bhangra"}, "wave": 3, "status": "comingSoon", "legalFlag": "green", "countSystem": "dhol", "scoring": "pose", "note": "Dhol ritmi RhythmEngine'e uygun; müfredat ORİJİNAL geliştirilir" },
-
-    { "id": "ballet_barre", "name": {"en": "Ballet & Barre"}, "wave": 4, "status": "comingSoon", "legalFlag": "green", "countSystem": "adagio_allegro", "scoring": "pose", "note": "Ev-desteği modu (sandalye/tezgâh)" },
-    { "id": "contemporary", "name": {"en": "Contemporary"}, "wave": 4, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "demoOnly": ["yer frazları — floorwork"] },
-    { "id": "flamenco", "name": {"en": "Flamenco"}, "wave": 4, "status": "comingSoon", "legalFlag": "green", "countSystem": "compas", "scoring": "pose+onset", "hardwareRequired": ["flamenko ayakkabısı önerilir"], "note": "Zapateado = onset skorlama; palmas bonus" },
-    { "id": "irish_dance", "name": {"en": "Irish Dance"}, "wave": 4, "status": "comingSoon", "legalFlag": "green", "countSystem": "reel_jig", "scoring": "pose+onset", "note": "Hard-shoe = onset; soft-shoe = poz+sıçrama kadraj kalibrasyonu. TEK lineage seçilir" },
-    { "id": "kizomba_zouk_solo", "name": {"en": "Kizomba & Zouk Solo"}, "wave": 4, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "demoOnly": ["cambré — skor baskısı YOK, güvenlik çerçevesi"] },
-    { "id": "garba", "name": {"en": "Garba"}, "wave": 4, "status": "comingSoon", "legalFlag": "green", "countSystem": "taali", "scoring": "pose", "seasonal": "Navratri", "note": "YALNIZ solo footwork + tef/el çırpma tekniği. Dandiya-Raas kapsam DIŞI (çift-sopa, solo öğrenilemez)" },
-    { "id": "twerk_reggaeton", "name": {"en": "Twerk & Reggaeton"}, "wave": 4, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "policyBucket": "sensual_expression", "note": "3/4 kamera açısı modu. Store-policy turu bu kovaya BİRLİKTE bakar — W4 öncesi kurucu onayı" },
-
-    { "id": "heels", "name": {"en": "Heels"}, "wave": 5, "status": "comingSoon", "legalFlag": "amber", "countSystem": "8count", "scoring": "pose", "safetyOnboarding": "ayakkabı güvenliği ZORUNLU" },
-    { "id": "breaking", "name": {"en": "Breaking"}, "wave": 5, "status": "comingSoon", "legalFlag": "green", "countSystem": "8count", "scoring": "pose", "demoOnly": ["power move'lar — güvenlik uyarısıyla"], "note": "Toprock/uprock SKORLU" },
-
-    { "id": "hula", "name": {"en": "Hula"}, "wave": null, "status": "onHold", "legalFlag": "green", "scoring": "pose", "onHoldReason": "Yaşayan kültürel-manevi pratik. hālau/kumu-hula ORTAKLIĞI olmadan yapılmaz; jenerik kaynakla içerik üretimi YASAK. Sayfada bu gerekçe açıkça yazılır." }
-  ],
-
-  "excludedSilently": [
-    { "name": "Kuduro", "reason": "kanıt ince" },
-    { "name": "Dabke", "reason": "kanıt ince" },
-    { "name": "Yunan halk / sirtaki", "reason": "kanıt ince" },
-    { "name": "Country two-step", "reason": "kanıt ince" },
-    { "name": "Dandiya-Raas", "reason": "çift-sopa vuruşmalı — solo öğrenilemez" }
-  ]
+  {
+   "id": "salsa_shines",
+   "name": {
+    "en": "Salsa Shines"
+   },
+   "wave": 1,
+   "status": "live",
+   "legalFlag": "green",
+   "countSystem": "salsa_123_567",
+   "scoring": "pose",
+   "contentOnDisk": true,
+   "statusNote": "07-30 M-F-123 kafesi: `live` çünkü ss_l1_footwork SKORLANAN bir ders (tam-zincir, M-F-119: WRONG_FOOT + STEP_TOO_LARGE canlı, liveness testi kanıtlı) ve honesty.measured dolu. ⚠️ AÇIK GERİLİM — statü ≠ ship-hazırlığı: bpmStatus DISPUTED olduğu için validate_content hâlâ 'no lesson in this style may ship' uyarısını veriyor. Kafes DERS-DURUMUNA bakıyor (kullanıcı ship edildiğinde ne görecek), ship-kapısı AYRI bir eksen (BPM). İkisinin ilişkisi kafes tanımında YOK — koordinatöre soruldu; bu stil BPM çözülmeden yayına çıkmaz, statü live olsa da.",
+   "note": "Adım config'i yazıldı (ss_basic) ama HENÜZ SHIP EDİLEMEZ: BPM hâlâ çözülmedi (C-032 kapandı — hareket-üzerinden BPM çıkmaz sokaktı, ölçüldü — ama beat_annotate ile müzik-ızgarası kurucunun canlı tap'ini bekliyor, henüz koşulmadı); ss_shine_footwork referansı 4 eğitmenle KURULDU (provisional) ama ss_basic'in kendi referans takeleri (collectedTakes) hâlâ 0 — adım-config↔referans bağı ss_shine_footwork için var, ss_basic için yok. Doğrulayıcının 'diskte içerik var ama yakında' uyarısı bu yüzden BEKLENEN — içerik hazır olmakla ship edilebilir olmak aynı şey değil"
+  },
+  {
+   "id": "tiktok_format",
+   "name": {
+    "en": "Short-Form Dance"
+   },
+   "wave": 1,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "Orijinal kombolar; isimli viral koreografi öğretilmez"
+  },
+  {
+   "id": "kpop_point",
+   "name": {
+    "en": "K-Pop Point Choreo"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "cautionClass": "high",
+   "note": "Ajans içeriği yüksek-dikkat; bağımsız eğitmen kanalları öncelikli. Ayna-modu zorunlu"
+  },
+  {
+   "id": "bachata_solo",
+   "name": {
+    "en": "Bachata Solo"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "bachata_1234_tap",
+   "scoring": "pose",
+   "note": "Yalnız 2 kanal bulundu — ek tarama görevi"
+  },
+  {
+   "id": "afrobeats",
+   "name": {
+    "en": "Afrobeats"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "trendPack": "amapiano",
+   "note": "Amapiano döner trend-paketi: sabit müfredat değil, viral döngü. Köken-atıf kutusu zorunlu"
+  },
+  {
+   "id": "dancehall",
+   "name": {
+    "en": "Dancehall"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "safetyExclusions": [
+    "Dutty Wine — boyun riski"
+   ]
+  },
+  {
+   "id": "shuffle",
+   "name": {
+    "en": "Shuffle"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "≥60fps önerisi — hızlı ayak işi"
+  },
+  {
+   "id": "belly_dance",
+   "name": {
+    "en": "Belly Dance"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "dum_tek",
+   "scoring": "pose",
+   "demoOnly": [
+    "shimmy — landmark çözünürlüğü altında",
+    "prop'lu figürler — avatar demo"
+   ]
+  },
+  {
+   "id": "bollywood",
+   "name": {
+    "en": "Bollywood"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "Mudra: el-landmark varsa skorlu, yoksa demo"
+  },
+  {
+   "id": "merengue_solo",
+   "name": {
+    "en": "Merengue Solo"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "Bachata/shines deseninin birebir tekrarı — en ucuz ekleme"
+  },
+  {
+   "id": "cumbia_solo",
+   "name": {
+    "en": "Cumbia Solo"
+   },
+   "wave": 2,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose"
+  },
+  {
+   "id": "ballroom_latin_solo",
+   "name": {
+    "en": "Ballroom & Latin Solo Technique"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "per_dance",
+   "scoring": "pose",
+   "isFamilyPage": true,
+   "subDances": [
+    "Cha-Cha",
+    "Rumba",
+    "Jive",
+    "Waltz",
+    "Quickstep",
+    "Paso Doble",
+    "Tango solo"
+   ],
+   "note": "TEK sayfa, 7 sekme. ISTD/WDSF Bronze→Gold yapısı ESİNLENİLİR; syllabus METNİ telifli, anlatım ORİJİNAL"
+  },
+  {
+   "id": "tap",
+   "name": {
+    "en": "Tap Dance"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose+onset",
+   "hardwareRequired": [
+    "tap ayakkabısı",
+    "sert zemin"
+   ],
+   "note": "PERKÜSİF ONSET: shuffle/flap/stamp ayrımı + zamanlama (K9). ISTD 6-seviye esinli"
+  },
+  {
+   "id": "locking",
+   "name": {
+    "en": "Locking"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "pack": "funk_styles"
+  },
+  {
+   "id": "popping",
+   "name": {
+    "en": "Popping"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "pack": "funk_styles",
+   "note": "Hit'ler RhythmEngine'e birebir uyum"
+  },
+  {
+   "id": "waacking",
+   "name": {
+    "en": "Waacking"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "pack": "funk_styles"
+  },
+  {
+   "id": "vogue",
+   "name": {
+    "en": "Vogue"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "pack": "funk_styles",
+   "originAttribution": "Black/Latino LGBTQ+ ballroom kültürü — atıf kutusu ZORUNLU"
+  },
+  {
+   "id": "jazz",
+   "name": {
+    "en": "Jazz"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose"
+  },
+  {
+   "id": "samba_no_pe",
+   "name": {
+    "en": "Samba no Pé"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "Karnaval solo samba. Gafieira ayrı SKU DEĞİL — ileri-stil katmanı"
+  },
+  {
+   "id": "solo_jazz_charleston",
+   "name": {
+    "en": "Solo Jazz & Charleston"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "note": "Shim Sham = sabit 32-count rutin → DTW-dostu"
+  },
+  {
+   "id": "bhangra",
+   "name": {
+    "en": "Bhangra"
+   },
+   "wave": 3,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "dhol",
+   "scoring": "pose",
+   "note": "Dhol ritmi RhythmEngine'e uygun; müfredat ORİJİNAL geliştirilir"
+  },
+  {
+   "id": "ballet_barre",
+   "name": {
+    "en": "Ballet & Barre"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "adagio_allegro",
+   "scoring": "pose",
+   "note": "Ev-desteği modu (sandalye/tezgâh)"
+  },
+  {
+   "id": "contemporary",
+   "name": {
+    "en": "Contemporary"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "demoOnly": [
+    "yer frazları — floorwork"
+   ]
+  },
+  {
+   "id": "flamenco",
+   "name": {
+    "en": "Flamenco"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "compas",
+   "scoring": "pose+onset",
+   "hardwareRequired": [
+    "flamenko ayakkabısı önerilir"
+   ],
+   "note": "Zapateado = onset skorlama; palmas bonus"
+  },
+  {
+   "id": "irish_dance",
+   "name": {
+    "en": "Irish Dance"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "reel_jig",
+   "scoring": "pose+onset",
+   "note": "Hard-shoe = onset; soft-shoe = poz+sıçrama kadraj kalibrasyonu. TEK lineage seçilir"
+  },
+  {
+   "id": "kizomba_zouk_solo",
+   "name": {
+    "en": "Kizomba & Zouk Solo"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "demoOnly": [
+    "cambré — skor baskısı YOK, güvenlik çerçevesi"
+   ]
+  },
+  {
+   "id": "garba",
+   "name": {
+    "en": "Garba"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "taali",
+   "scoring": "pose",
+   "seasonal": "Navratri",
+   "note": "YALNIZ solo footwork + tef/el çırpma tekniği. Dandiya-Raas kapsam DIŞI (çift-sopa, solo öğrenilemez)"
+  },
+  {
+   "id": "twerk_reggaeton",
+   "name": {
+    "en": "Twerk & Reggaeton"
+   },
+   "wave": 4,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "policyBucket": "sensual_expression",
+   "note": "3/4 kamera açısı modu. Store-policy turu bu kovaya BİRLİKTE bakar — W4 öncesi kurucu onayı"
+  },
+  {
+   "id": "heels",
+   "name": {
+    "en": "Heels"
+   },
+   "wave": 5,
+   "status": "comingSoon",
+   "legalFlag": "amber",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "safetyOnboarding": "ayakkabı güvenliği ZORUNLU"
+  },
+  {
+   "id": "breaking",
+   "name": {
+    "en": "Breaking"
+   },
+   "wave": 5,
+   "status": "comingSoon",
+   "legalFlag": "green",
+   "countSystem": "8count",
+   "scoring": "pose",
+   "demoOnly": [
+    "power move'lar — güvenlik uyarısıyla"
+   ],
+   "note": "Toprock/uprock SKORLU"
+  },
+  {
+   "id": "hula",
+   "name": {
+    "en": "Hula"
+   },
+   "wave": null,
+   "status": "onHold",
+   "legalFlag": "green",
+   "scoring": "pose",
+   "onHoldReason": "Yaşayan kültürel-manevi pratik. hālau/kumu-hula ORTAKLIĞI olmadan yapılmaz; jenerik kaynakla içerik üretimi YASAK. Sayfada bu gerekçe açıkça yazılır."
+  }
+ ],
+ "excludedSilently": [
+  {
+   "name": "Kuduro",
+   "reason": "kanıt ince"
+  },
+  {
+   "name": "Dabke",
+   "reason": "kanıt ince"
+  },
+  {
+   "name": "Yunan halk / sirtaki",
+   "reason": "kanıt ince"
+  },
+  {
+   "name": "Country two-step",
+   "reason": "kanıt ince"
+  },
+  {
+   "name": "Dandiya-Raas",
+   "reason": "çift-sopa vuruşmalı — solo öğrenilemez"
+  }
+ ]
 }
