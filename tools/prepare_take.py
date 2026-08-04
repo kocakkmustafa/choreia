@@ -419,7 +419,110 @@ def overlap(a: tuple[int, int], b: tuple[int, int]) -> tuple[int, int] | None:
     return (lo, hi) if hi - lo > 0 else None
 
 
-def prepare(video_id: str) -> dict:
+def kinematic_unit(step: str | None) -> dict | None:
+    """Adım config'i KİNEMATİK bir çevrim birimi beyan ediyor mu? (M-F-231)
+
+    Dispatch kuralı bu fonksiyondadır ve tek yerdedir. `None` dönerse çağıran
+    ESKİ yolu koşar — ve o yol satır satır değiştirilmemiştir, yani
+    non-kinematik adımların bit-değişmezliği İDDİA değil İNŞA gereğidir.
+
+    `cyclePhaseNear` sınıfı adımlar (ss_shine_footwork vb.) `cycleUnit`
+    beyan etmez: onların fazı bir eklem açısından değil, çapanın kendisinden
+    türer — dolayısıyla "hangi pencerede bu olay var" sorusu onlar için
+    tanımsızdır ve sorulmaz.
+    """
+    if not step:
+        return None
+    import json as _json  # noqa: PLC0415
+    for p in REPO.glob(f"content/styles/*/steps/{step}.json"):
+        cfg = _json.loads(p.read_text(encoding="utf-8"))
+        unit = cfg.get("cycleUnit") or None
+        if unit and unit.get("driver") and unit.get("dipsPerCycle"):
+            unit = dict(unit)
+            unit["_phases"] = cfg.get("phases") or []
+            return unit
+        return None
+    return None
+
+
+def _phase_thresholds_from(phases: list) -> tuple[float | None, float | None]:
+    """(top giriş açısı, hız eşiği °/s) — adımın KENDİ faz tanımından.
+
+    `probe_knee_windows.phase_thresholds` ile aynı sözleşme; oradan import
+    etmek döngüsel olurdu (o modül bu modülü import ediyor), o yüzden okuma
+    burada tekrarlanıyor. Tekrarlanan şey EŞİK DEĞİL, eşiğin nereden
+    okunacağıdır — eşiklerin tek kaynağı hâlâ config.
+    """
+    top = rate = None
+    for ph in phases:
+        enter = ph.get("enter") or {}
+        if ph.get("id") == "top" and enter.get("op") == ">":
+            top = float(enter["valueDeg"])
+        if enter.get("minRateDegPerSec") is not None:
+            r = float(enter["minRateDegPerSec"])
+            rate = r if rate is None else min(rate, r)
+    return top, rate
+
+
+def _knee_mean_series(frames) -> list[float]:
+    """Ortalama diz açısı serisi. Tek diz görünmüyorsa NaN — yarım kanıttan
+    tam sayı üretmek görünürlük kapısının engellemek için var olduğu şey."""
+    j = joint_series(frames)
+    left, right = j.get("left_knee") or [], j.get("right_knee") or []
+    out: list[float] = []
+    for i in range(min(len(left), len(right))):
+        a, b = left[i], right[i]
+        out.append(float("nan") if (a != a or b != b) else (a + b) / 2.0)
+    return out
+
+
+def select_by_phase_driver(iso, feasible, fps: float, unit: dict) -> tuple:
+    """Adayları, ADIMIN BEYAN ETTİĞİ OLAYI içermelerine göre sırala.
+
+    ARAMA UZAYINA DOKUNULMAZ: adaylar yine hareket ∩ kamera-temiz
+    kesişiminden gelir. Değişen tek şey, o uzayda hangi pencerenin
+    seçildiğidir.
+
+    Neden gerekliydi (ÖLÇÜLDÜ, C-124): eski sıralama `max(periodicity,
+    uzunluk)` ile "en kendine-benzer" pencereyi alıyordu ve konuşan bir
+    eğitmenin hafif salınımı, dans eden bedenden DAHA düzenlidir.
+    `4BRd2E8vBic`'te bu, 193 çöküşlü bir videoda SIFIR çöküşlü bir pencere
+    seçtirdi — yani bulucu, aranan olayı içermeyen bir yeri "en iyi" ilan
+    etti. Düzenlilik, doğru olayın orada olduğunun kanıtı değildir.
+
+    Periyot da buradan TÜRETİLİR: `çöküş aralığı × beyanEdilenÇöküş/çevrim`.
+    Bu, harmonik birim sorusunu inşa gereği çözer — ve meşrudur, çünkü
+    birimi CONFIG beyan eder (M-F-231/3), ben "take'ler uyuşsun diye"
+    seçmem. Take'ler arası çöküş-periyodu yayılımı TEMPO varyansıdır,
+    birim çatışması değil.
+    """
+    from probe_knee_dips import detect_dips  # noqa: PLC0415  (döngüsel import
+    # riski yüzünden TEMBEL: probe_knee_dips -> probe_knee_windows -> bu modül.
+    # Çağrı anında bu modül tamamen yüklüdür, o yüzden güvenli.)
+
+    top, rate = _phase_thresholds_from(unit.get("_phases") or [])
+    dips_per_cycle = float(unit["dipsPerCycle"])
+    scored = []
+    for seg, mv in feasible:
+        rep = detect_dips(_knee_mean_series(iso[seg[0]:seg[1]]), fps,
+                          top_deg=top, rate_deg_s=rate)
+        gap = rep["medianInterDipSeconds"]
+        if not rep["dipCount"] or not gap:
+            continue                      # aranan olay YOK -> aday değil
+        scored.append({
+            "seg": seg, "mv": mv, "dips": rep["dipCount"], "gap": gap,
+            "periodSeconds": round(gap * dips_per_cycle, 3),
+            "topQualified": rep["topQualifiedCount"],
+        })
+    if not scored:
+        return None, None, None
+    # Sıralama: önce KANIT MİKTARI (nitelikli çöküş sayısı), sonra uzunluk.
+    # Periyodikliğe göre DEĞİL — eski sıralamanın yanıldığı yer tam orasıydı.
+    best = max(scored, key=lambda s: (s["dips"], s["seg"][1] - s["seg"][0]))
+    return best["seg"], best["mv"], best
+
+
+def prepare(video_id: str, step: str | None = None) -> dict:
     doc, lm, world, _, fps = load_take(video_id)
     aspect = aspect_of(video_id)
     iso = to_isotropic(lm, aspect)
@@ -463,9 +566,32 @@ def prepare(video_id: str) -> dict:
     else:
         best = moves[0]
         seg = (best.start_frame, best.end_frame)
+        feasible = [(seg, best)]
+
+    # FAZ-SÜRÜCÜLÜ SEÇİM (M-F-231). Yalnız adım config'i kinematik bir çevrim
+    # birimi BEYAN ediyorsa devreye girer; etmiyorsa yukarıdaki seçim aynen
+    # kalır (bit-değişmezlik inşa gereği).
+    unit = kinematic_unit(step)
+    driver_pick = None
+    if unit:
+        d_seg, d_best, driver_pick = select_by_phase_driver(iso, feasible,
+                                                            fps, unit)
+        if driver_pick is None:
+            # HİÇBİR aday pencere adımın beyan ettiği olayı içermiyor. Bu
+            # "hareket yok" DEĞİL: hareket ve kamera kapıları geçilmiş ama
+            # aranan olay hiçbir adayda bulunamamış. İkisini aynı gerekçeye
+            # yıkmak, ölçülen arızayı gizler.
+            return {"videoId": video_id, "usable": False,
+                    "why": (f"aday pencerelerin hiçbirinde nitelikli "
+                            f"{unit['driver']} olayı yok (faz-sürücülü seçim)"),
+                    "candidateWindows": len(feasible)}
+        seg, best = d_seg, d_best
 
     frames = iso[seg[0]:seg[1]]
-    period_frames = max(2, int(round(best.period_s * fps)))
+    # Periyot: faz-sürücülü seçimde çöküş aralığından TÜRETİLİR
+    # (aralık × beyanEdilenÇöküş/çevrim), yoksa hareket penceresinden gelir.
+    period_s = driver_pick["periodSeconds"] if driver_pick else best.period_s
+    period_frames = max(2, int(round(period_s * fps)))
     signal, axis = leading_foot_signal(frames)
     knee_sig = [((lm[L_KNEE][1] - lm[R_KNEE][1]) / tf[2])
                 for lm in frames if (tf := torso_frame(lm))]
@@ -484,7 +610,7 @@ def prepare(video_id: str) -> dict:
     anchor["ankleVisibility"] = round(vis, 3)
     anchor["kneeSwing"] = round(knee_swing, 4) if knee_swing is not None else None
 
-    return {
+    out = {
         "videoId": video_id,
         "usable": bool(anchor.get("ok")),
         "why": None if anchor.get("ok") else anchor.get("why"),
@@ -494,8 +620,14 @@ def prepare(video_id: str) -> dict:
         "fps": fps,
         "segment": {"startFrame": seg[0], "endFrame": seg[1],
                     "seconds": round((seg[1] - seg[0]) / fps, 2)},
-        "periodSeconds": best.period_s,
+        "periodSeconds": period_s,
         "periodFrames": period_frames,
+        # `cycleUnit` AŞAĞIDA, yalnızca faz-sürücülü seçim koştuysa eklenir.
+        # Burada `None` olarak yazılamaz: YOK OLAN alan ile NULL olan alan
+        # aynı şey değildir — non-kinematik adımların çıktısına null bir
+        # anahtar koymak bit-değişmezliği bozar (ölçüldü: regresyon diff'i
+        # tam bu tek satırda kırıldı) ve keyset tabanına gerçekte var
+        # olmayan bir sözleşme yazar.
         # How many whole cycles the usable segment actually contains. The
         # reference builder takes a per-take median ACROSS these, so a take
         # with three of them is a much weaker vote than one with nine — and
@@ -509,6 +641,20 @@ def prepare(video_id: str) -> dict:
         "joints": joint_series(frames) if anchor.get("ok") else None,
         "provenance": doc.get("provenance", {}),
     }
+    if driver_pick:
+        # BEYAN EDİLEN BİRİM görünür olmalı: aşağı akıştaki harmonik kapı
+        # oranları buna göre yorumlar (oran≈2,0'ın anlamı beyana bağlıdır —
+        # RM dönüşümlü olduğu için orada 2 çöküş/çevrim KANONİKTİR, bounce'ta
+        # değildir). Alanın YOKLUĞU "segment eski yolla seçildi" demektir.
+        out["cycleUnit"] = {
+            "driver": unit["driver"],
+            "dipsPerCycle": unit["dipsPerCycle"],
+            "dipsInSegment": driver_pick["dips"],
+            "medianInterDipSeconds": driver_pick["gap"],
+            "topQualifiedDips": driver_pick["topQualified"],
+            "selectedBy": "phase-driver",
+        }
+    return out
 
 
 PERIOD = 30
@@ -621,6 +767,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--video")
+    ap.add_argument("--step", help="adım id — config KİNEMATİK çevrim birimi "
+                                   "beyan ediyorsa segment seçimi faz-sürücülü "
+                                   "olur (M-F-231); yoksa davranış DEĞİŞMEZ")
     ap.add_argument("--out")
     ap.add_argument("--all", action="store_true",
                     help="every harvested take")
@@ -641,7 +790,7 @@ def main() -> int:
           f"{'faz':>7}{'öncü':>7}{'eks':>4}  neden")
     results = []
     for vid in ids:
-        r = prepare(vid)
+        r = prepare(vid, args.step)
         results.append(r)
         seg = r.get("segment") or {}
         anc = r.get("anchor") or {}

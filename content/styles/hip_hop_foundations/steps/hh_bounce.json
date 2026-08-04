@@ -14,6 +14,14 @@
     "riskFlags": []
   },
 
+  "cycleUnit": {
+    "driver": "knee_flexion_mean",
+    "dipsPerCycle": 1,
+    "derivedFrom": "phases",
+    "rationale": "The phase chain is top -> drop -> bottom -> rise with `rise` terminal, so one cycle contains exactly ONE knee dip. Consistent with beats:1 and countLabels:['1']. This is DECLARED, not inferred by the segment finder: a 2x spread in measured period between two takes of this step is a TEMPO difference between instructors, not a unit disagreement — the unit is fixed here (M-F-231).",
+    "note": "Steps whose phases are driven by cyclePhaseNear rather than a kinematic metric declare no cycleUnit; those keep the ankle-anchored segment path unchanged."
+  },
+
   "scoring": {
     "focusJoints": ["left_knee", "right_knee", "left_hip", "right_hip", "trunk_tilt"],
     "freeJoints": [

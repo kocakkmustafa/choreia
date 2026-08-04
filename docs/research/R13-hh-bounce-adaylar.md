@@ -550,3 +550,132 @@ artefakt yok). `hh_bounce` **AÇIK kalıyor**, karar koordinatörde.
 **"segment bulucu diz-sürücülü hâle getirilmeli mi"** — çünkü belirsizliğin
 üçü de birim belirsizliğinden değil, PENCERE seçiminden geliyor. Bu bir ölçü
 tasarımı; bende değil.
+
+---
+
+# DÖRDÜNCÜ TUR — faz-sürücülü segment seçimi (2026-08-04, M-F-231)
+
+**Zincir KOŞULMADI.** Şart 4 açıkça "üçlü geçmeden zincir koşulmaz" diyor ve
+**(a) kabul testi DÜŞTÜ**. Aşağısı üçlünün sonucu ve düşmenin teşhisidir.
+Ön-kayıt da yazılmadı: koşmayacak bir turun iki ucunu yazmak ön-kaydı
+törene çevirirdi.
+
+## Değişiklik — ARAMA UZAYINA değil SIRALAMAYA
+
+`prepare_take` artık adım config'i **kinematik çevrim birimi beyan ediyorsa**
+segmenti faz-sürücüsüyle seçiyor. Aday üretimi (hareket ∩ kamera-temiz)
+**aynen duruyor**; değişen iki şey:
+
+1. **Sıralama:** eski `max(periyodiklik, uzunluk)` yerine **nitelikli çöküş
+   sayısı**, sonra uzunluk.
+2. **Periyot türetimi:** `çöküş aralığı × beyanEdilenÇöküş/çevrim`.
+
+Config'e `cycleUnit` alanı eklendi (`driver: knee_flexion_mean`,
+`dipsPerCycle: 1`, `derivedFrom: phases`, gerekçeli). Birim **BEYAN EDİLİR**,
+bulucu tarafından çıkarsanmaz — böylece take'ler arası periyot yayılımı
+**TEMPO varyansı** olarak okunur, birim çatışması olarak değil (M-F-231/3).
+
+## Doğrulama üçlüsü
+
+### (b) BİT-DEĞİŞMEZLİK — GEÇTİ 3/3, ama önce GERÇEK bir regresyon yakaladı
+
+Kabul edilmiş üç shine take'i, `git show HEAD:tools/prepare_take.py` ile
+çıkarılan ESKİ sürüme karşı koşuldu:
+
+| take | eski sha256 | `--step`siz | `--step ss_shine_footwork` |
+|---|---|---|---|
+| `SHGkSbJm2Iw` | `3074fdeef6774569` | **AYNI** | **AYNI** |
+| `jjP8bKWCg9U` | `6c8a95557b7c46e3` | **AYNI** | **AYNI** |
+| `w4opJ2ezmd4` | `20669dae27528c1b` | **AYNI** | **AYNI** |
+
+**İlk koşumda ÜÇÜ DE FARKLIYDI.** Sebep tek satırdı: çıktı sözlüğüne
+koşulsuz `"cycleUnit": null` koymuştum. **Yok olan alan ile null olan alan
+aynı şey değildir** — bu deponun keyset kapısında (C-114) "boşalma ≠ kayıp"
+diye öğrendiği ayrımın aynısı, bu kez üretici tarafında. Alan artık yalnız
+faz-sürücülü seçim gerçekten koştuğunda yazılıyor; **yokluğu "segment eski
+yolla seçildi" anlamına geliyor.** Bit-değişmezlik iddia değil, regresyon
+diff'iyle KANIT.
+
+### (c) SENTETİK — GEÇTİ
+
+`prepare_take --self-test` 0 · `probe_knee_dips --self-test` 15/15 · 11/11
+Python kapısı 0.
+
+### (a) `4BRd2E8vBic` KABUL TESTİ — **DÜŞTÜ**
+
+Kriter: yeni pencere nitelikli çöküş İÇERMEK zorundaydı. İçermiyor — take
+artık **isimli gerekçeyle eleniyor**: *"aday pencerelerin hiçbirinde nitelikli
+`knee_flexion_mean` olayı yok (faz-sürücülü seçim)"*.
+
+**Teşhis: darboğaz SIRALAMADA değil, bir katman YUKARIDA — ADAY ÜRETİMİNDE.**
+
+`4BRd2E8vBic` **896 saniyelik** bir ders ve tüm take'te **193 nitelikli çöküş**
+var, **67s ile 860s arasına yayılmış**. Ama `find_movement_windows` bu videoda
+yalnız **5 pencere** buluyor, toplamı ~34 saniye (**videonun ~%3,8'i**):
+
+| pencere | süre | periyodiklik | nitelikli çöküş |
+|---|---|---|---|
+| 190-196s | 6s | 0,741 | **0** |
+| 567-575s | 8s | 0,628 | **0** |
+| 444-452s | 8s | 0,593 | **1** |
+| 282-288s | 6s | 0,586 | **0** |
+| 368-374s | 6s | 0,502 | **0** |
+
+Tek çöküş içeren pencerede aralık HESAPLANAMAZ (iki çöküş gerekir), dolayısıyla
+aday kalmıyor. **Yani bounce'la dolu bir videoda, aday havuzunun kendisi
+bounce'ı içermiyor.** Sıralamayı düzeltmek bu take'i kurtaramaz çünkü sıralanacak
+doğru aday hiç üretilmemiş.
+
+## SIRALAMA DÜZELTMESİ ÇALIŞIYOR — ve kanıtı `DEWpw4n8Lkw`
+
+Aynı ölçüm, düzeltmenin gerçek olduğunu da gösteriyor. `DEWpw4n8Lkw` (1434s,
+771 çöküş, 29 hareket penceresi):
+
+| pencere | periyodiklik | nitelikli çöküş |
+|---|---|---|
+| 915-927s | **0,932** (en yüksek) | **0** |
+| 654-664s | 0,929 | **0** |
+| 263-275s | 0,920 | 1 |
+| 321-347s | 0,809 | **18** |
+
+**ESKİ sıralama (max periyodiklik) çöküşü OLMAYAN pencereyi seçerdi.** Yeni
+sıralama 18 çöküşlü pencereyi seçiyor. Bu, "düzenlilik doğru olayın orada
+olduğunu göstermez" tezinin doğrudan ölçümü.
+
+**Ve `DEWpw4n8Lkw` GERİ KAZANILDI:** ayak-çapası onu *"ankle swing too small
+(0,034 torso)"* diyerek TAMAMEN elemişti (C-123). Faz sürücüsüyle artık
+**hazır** (17 çöküş, 0,76s aralık, 15/17 topQualified) ve `classify_source`
+onu **`lesson`** veriyor — **2468 sözcük, 7 öğretim işareti**, havuzun en
+konuşkan kaynağı. Ayak-çapasının çöpe attığı şey, en güçlü ders kaynağıymış.
+
+## Yan sonuç: periyotlar TOPLANDI, tek aykırı R13'ün ön-işaretlediği take
+
+Faz-sürücülü periyotlar (ders-doğrulanmış take'ler):
+
+| take | periyot | not |
+|---|---|---|
+| `l3r4bPhikGQ` | **0,400s** | ~150 BPM — R13 triyajında **"derleme riskli"** işaretli |
+| `nOR1qEhpssg` | 0,725s | |
+| `DEWpw4n8Lkw` | 0,760s | **yeni kazanılan** |
+| `1IVtcoqMrBA` | 1,200s | |
+| `AyzYABnWDEM` | 2,034s | |
+
+**Kalan 2× çatışmaların İKİSİ DE `l3r4bPhikGQ` kaynaklı** (0,4↔0,725 = 1,81 ·
+0,4↔0,76 = 1,90). Diğer dördü arasında 2× çatışma **YOK**. Yani faz-sürücülü
+periyot türetimi havuzun 4/5'ini harmonik uyuma getirdi, ve tek aykırı R13'ün
+hasattan ÖNCE "bounce mu criss-cross mu" diye işaretlediği take.
+
+**Bunu "çözüldü" saymıyorum:** `l3r4bPhikGQ`'nun 0,4s'si gerçek bir hızlı
+bounce da olabilir, criss-cross ayak çalışması da. Ayırt etmek için segment
+kimliği gerekir, ki o da aday üretimi sorusuna bağlı.
+
+## KOORDİNATÖRE — darboğaz ADLANDIRILDI
+
+Faz sürücüsü **seçim** katmanına indi ve orada işini yapıyor. Kalan sorun
+**aday üretimi**: `find_movement_windows` hareket-enerjisi/ayak sürücülü ve
+diz-sürücülü bir adımda pencereleri kaçırıyor (`4BRd2E8vBic`: %3,8 kapsam;
+`AyzYABnWDEM`: 10 çöküşlü 163-185s penceresi var ama kamera kapısını geçmiyor).
+
+**`movement_isolator.py` VENDORED** (pin `eb28039`, `--drift-check`'li) — yani
+orayı diz-sürücülü yapmak aile-düzeyi bir karar, bende değil. App düzeyinde
+alternatif bir aday üreteci yazmak da yeni ölçü tasarımıdır. **Karar sende.**
