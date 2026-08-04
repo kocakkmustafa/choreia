@@ -304,3 +304,82 @@ diz çöküşü olduğunu saymak harmonik soruyu da doğrudan keserdi. Bu bir
 C-117 gürültü tabanı · C-119 kaynak sayısı · **bugün harmonik birim
 belirsizliği**. Kaynak sayısı artık engel DEĞİL (5 ders-doğrulanmış kanal).
 Kalan tek engel bir ölçü sorusu, ve o soru koordinatörde.
+
+---
+
+# ÖN-KAYIT — diz-sürücülü bulucu (2026-08-04, ÖLÇÜMDEN ÖNCE)
+
+**Bu bölüm bulucu KOŞULMADAN önce yazıldı ve AYRI commit'lendi** — sıranın
+kanıtı git geçmişinde, benim beyanımda değil (M-F-191). Koordinatör hükmü
+M-F-226, şart 4.
+
+## Ölçülecek soru
+
+Harmonik BİRİM: `hh_bounce`'ta bir çevrim **tek diz çöküşü** mü, **çöküş çifti**
+mi? Havuz ikiye ayrılmıştı — KISA {0,68 · 0,71s} ↔ UZUN {1,27 · 1,37 · 1,70s}.
+
+## İki uç — ÖNCEDEN yazılı, hangisi çıkarsa rasyonalize EDİLMEYECEK
+
+- **KISA temel:** kanonik çevrim = tek çöküş. UZUN take'ler çevrim başına **2**
+  çöküş taşır → çift-birime kilitlenmişlerdir, birim damgası "tek çöküş" olur.
+- **UZUN temel:** kanonik çevrim = çöküş çifti. KISA take'ler çevrim başına **1**
+  çöküş taşır → yarım-birime kilitlenmişlerdir, birim damgası "çift çöküş" olur.
+
+**Üçüncü çıkış (dürüst duruş, şart 7-ii):** ≥2/5 take `indeterminate` çıkarsa
+birim ÇÖZÜLMEZ, `hh_bounce` açık kalır, koordinatöre dönülür.
+
+**Dördüncü çıkış (ayrıca ön-kayıtlı):** config'in `top` kapısı (>168°) hiçbir
+take'te sağlanmazsa, bu "çöküş yok" demek DEĞİL — "tam ekstansiyona hiç
+çıkılmıyor" demektir ve R13 açık sorusu **(b)** lehine (tier-A beyanı yanlış,
+K10 demo-only yolu) ölçülmüş kanıt olur. Bu ihtimal şimdi yazılıyor ki çıkarsa
+sonradan icat edilmiş görünmesin.
+
+## ÖNSEL — ölçüm DEĞİL, ve ölçüm yerine GEÇMEZ
+
+Bir önceki tur BPM ipucunu kaydetmiştim (vuruş-başına çöküş ~0,60-0,67s →
+KISA). Bugün buna **config-kaynaklı ikinci bir önsel** eklendi:
+
+> `hh_bounce.json` → **`beats: 1`**, **`countLabels: ["1"]`**, ve faz zinciri
+> `top → drop → bottom → rise` (`rise` **terminal**) = **çevrim başına TEK
+> çöküş.**
+
+Yani adımın KENDİ sözleşmesi kanonik birimi zaten tek-çöküş olarak tanımlıyor.
+**Bu, hangi take'lerin o birimde KESİLDİĞİNİ söylemez** — ölçülecek olan tam
+olarak budur. İki önsel de KISA'yı işaret ediyor; **ikisi de kanıt sayılmayacak**
+ve sonuç UZUN çıkarsa öndeki bu satırlar SİLİNMEYECEK, yanlış çıkmış önsel
+olarak kalacak.
+
+## Doğrulama üçlüsü (şart 3) — hüküm ÖNCESİ geçilmesi zorunlu
+
+- **(a) Sentetik:** bilinen çöküş sayısı · **çöküşsüz** kontrol · gürültülü
+  kontrol · **dropout/NaN kontrolü** (sahte, ARIZA KİPİNİ taklit eder — imzayı
+  değil; C-115 dersi).
+- **(b) Yapısal genellik — İKAME BEYANI:** hüküm "RM'nin KENDİ sürücüsü" diyor,
+  ama **RM'nin adım config'i repoda YOK** (`content/styles/*/steps/` altında
+  yalnız `hh_bounce.json` var; RM'in yalnız referans artefaktı mevcut). Tek
+  diğer config'li adım `ss_shine_footwork` **`cyclePhaseNear`** ile sürülüyor —
+  kinematik metrik değil, faz-bin. Yani **`hh_bounce` repodaki TEK
+  kinematik-sürücülü adım**; M-F-195'in burada ısırmasının sebebi de bu.
+  İkame: mekanizma RM'nin **kabul edilmiş take'lerinde** koşulur ve RM'nin
+  **artefakta kayıtlı** çevrim yapısını (periyot 1,2 · 1,21 · 1,67 · 1,38s)
+  geri verip vermediğine bakılır. **Sınırı yazılı:** bu periyotlar
+  `prepare_take`'in ayak-çapasından gelir, yani "bağımsız hakikat" değil
+  *hattın kendi kabul ettiği doğru*; test, mekanizmanın bounce'a özel
+  ayarlanmadığını gösterir, mutlak doğruluğu değil.
+- **(c) Yarı-bilinen:** `1IVtcoqMrBA` — iki aletin uyuştuğu TEK take
+  (`measure_tempo` 1,30 ↔ `prepare_take` 1,27s).
+
+**Bu üçlü geçmeden itiraz-konulu take'lere verdikt YOK.**
+
+## Parametre kaynakları (şart 1) — hangi sayı nereden
+
+| parametre | değer | kaynak | damga |
+|---|---|---|---|
+| `top` giriş açısı | >168° | `hh_bounce.json` faz `top` | **config** |
+| çöküş/yükseliş hız eşiği | ≥40°/s | `hh_bounce.json` fazlar `drop`/`rise` | **config** |
+| dip = yerel minimum | — | `hh_bounce.json` faz `bottom` (`localMinimum`) | **config** |
+| minimum çöküş derinliği | 6,0° | `build_reference.MIN_TOLERANCE_DEG` | **hat sabiti** — uydurulmadı; sert kural gereği bir karar ölçüsü kendi gürültü tabanının altında soru soramaz |
+| açı tanımı | — | `prepare_take.joint_series` (İÇE AKTARILIR) | **tek kaynak** (M-F-03) |
+
+Config'te olmayan hiçbir eşik icat edilmedi; tek hat-sabiti yukarıda isimle
+ve gerekçesiyle beyan edildi.
