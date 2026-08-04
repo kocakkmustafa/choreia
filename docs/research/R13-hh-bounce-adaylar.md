@@ -778,3 +778,67 @@ yüksek sesle bildiriyor" diye kayıtlıydı — **ölçtüm, bildirmiyordu**, �
 tam da bunun için yazıldığı vakada. Soy-ağacı artık DOĞRUDAN soruluyor
 (`merge-base --is-ancestor`) ve dal pini yüksek sesle raporlanıyor. Sabotajla
 ayırt ediciliği kanıtlandı: main atası olan pinde uyarı SUSUYOR.
+
+---
+
+# ÖN-KAYIT — tur 5 zinciri (2026-08-04, ZİNCİRDEN ÖNCE)
+
+**Ayrı commit'lendi; sıranın kanıtı git geçmişinde.** M-F-238 şart 3-4.
+
+## Havuz (zincire girecek)
+
+4 ders-doğrulanmış + kullanılabilir kaynak, **`l3r4bPhikGQ` İÇERİDE**:
+
+| take | periyot | çöküş |
+|---|---|---|
+| `l3r4bPhikGQ` | 0,333s | 30 |
+| `1IVtcoqMrBA` | 0,583s | 21 |
+| `4BRd2E8vBic` | 0,625s | 20 |
+| `DEWpw4n8Lkw` | 0,680s | 16 |
+
+Harmonik kapının **ne göreceği önceden biliniyor**: `l3r4bPhikGQ` diğer üçüyle
+1,75 / 1,88 / 2,04 oranında çatışıyor; diğer üçü birbirine 1,17× içinde.
+Zincir yine de **onu İÇERİDE tutarak** koşulacak — kapı hükmü versin, ben değil.
+
+## İKİ DÜRÜST UÇ — önceden yazılı, hangisi çıkarsa rasyonalize EDİLMEYECEK
+
+**UÇ-1 — `l3r4bPhikGQ` KİMLİĞİ ÇÖZÜLÜR (bileşik kanıtla).** Üç bağımsız
+işaretten (transkript · çapa deseni · çöküş şekli) **en az ikisi** aynı yöne
+işaret ederse dışlama İSİMLİ ve gerekçeli olur (`excludedWithReason/identity`),
+referans kalan **3 kaynakla** kurulur, `cycleUnit: dipsPerCycle=1` damgası
+artefakta iner, ve **`low-amplitude-vs-family` temeli NİHAYET sınanır** →
+`resolvedBy` okuması + tur-5 sonuç bölümü.
+
+**UÇ-2 — KİMLİK KANITI TOPLANAMAZ.** Üç işaretten ikisi hizalanmazsa dışlama
+YAPILMAZ. O zaman referans **kurulamaz** ve dürüst son *"2× çatışma —
+`l3r4bPhikGQ` kimliği çözülmedi"* olarak isimle yazılır. **`l3r4bPhikGQ`'yu
+"uyuşmuyor" diye atmak bu turda da YASAK** (C-124'te reddettiğim hamle;
+uyuşmazlık gerekçe değildir, M-F-47).
+
+**Üçüncü ihtimal ayrıca yazılıyor:** kapı hiç çatışma bildirmezse (ör. birim
+damgası oranları farklı okutursa) bu SÜRPRİZDİR ve sürpriz olarak raporlanır —
+"beklediğim buydu" diye yazılmaz.
+
+## Kimlik kanıtının ÜÇ ayağı (tek ölçü yetmez, M-F-60/2 emsali)
+
+Soru: `l3r4bPhikGQ`'nun 0,333s'si (≈180 BPM) **hızlı bounce** mu, **criss-cross**
+mu? (Başlık zaten "Bounce **w/ Cris Cross**" — R13 triyajında "derleme riskli".)
+
+1. **Transkript:** segmentin zaman aralığında eğitmen hangi hareketi
+   adlandırıyor?
+2. **Çapa deseni:** criss-cross ayak ÇAPRAZLAMADIR → yatay ayak hareketi
+   beklenir; bounce dikey/diz sürücülüdür.
+3. **Çöküş şekli:** bounce'ın çöküşü diz sürücülü ve simetriktir; criss-cross'ta
+   diz salınımı ayak yerleşiminin YAN ÜRÜNÜDÜR — `identityLegShapeDeg` ve
+   çöküş derinliği/asimetrisi diğer üç kaynakla karşılaştırılır.
+
+**Hiçbiri tek başına hüküm vermez.** İkisi hizalanmazsa UÇ-2.
+
+## Ölçüm öncesi ÖNSEL (kanıt değil)
+
+`l3r4bPhikGQ` C-117'de **en GÜÇLÜ** diz sinyalini vermişti (47,2°/55,1°) ve o
+zaman "derleme riskli işaretlediğim en güçlü çıktı" diye kaydedilmişti — yani
+sinyalin güçlü olması kimliğin doğru olduğunu göstermiyor, sadece bir şeyin
+güçlü olduğunu. 0,333s ≈ 180 BPM bir bounce için hızlı; ama yavaş bir
+criss-cross da aynı hızda diz salınımı üretebilir. **İki yönde de zayıfım;
+ölçüm karar versin.**
