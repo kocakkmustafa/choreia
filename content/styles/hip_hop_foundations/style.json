@@ -81,7 +81,10 @@
      "k10Note": "K10 applied as intended: 'ölçülemeyen hareket ELENMEZ, demo-only işaretlenir ve nedeni kullanıcıya söylenir'. Previously this step was only recorded as tierC_EXCLUDED, which read as 'dropped from the product' — it is not; it is dropped from SCORING. The harvest effort (4 instructors, richest source 12 cycles) becomes user-facing content instead of a shelved measurement.",
      "minutes": 10,
      "demoOnlyClass": "permanent",
-     "demoOnlyClassBasis": "The step's identity IS toe/heel contact timing, and toe landmarks are the least reliable points in markerless single-camera pose (R1 §7b, tier C). A better harvest does not fix a landmark-reliability limit — this stays taught-not-scored."
+     "demoOnlyClassBasis": "The step's identity IS toe/heel contact timing, and toe landmarks are the least reliable points in markerless single-camera pose (R1 §7b, tier C). A better harvest does not fix a landmark-reliability limit — this stays taught-not-scored.",
+     "whyPermanent": {
+      "en": "What decides whether a Running Man is right is the timing of the ball and heel of your foot meeting the floor — a few hundredths of a second, at the two points a phone camera tracks worst. That is not a limitation we expect to out-wait: more teachers would not move those landmarks. If we ever score this step it will be because the measurement changed, not because we got more data."
+     }
     },
     {
      "id": "hh_l1_groove",
@@ -96,11 +99,71 @@
      "evidence": "plan §22 'skorlanmaz ama öğretilir' bucket",
      "minutes": 5,
      "demoOnlyClass": "permanent",
-     "demoOnlyClassBasis": "Groove is what a camera is worst at and a mirror is best at. Not a measurement gap, a category difference."
+     "demoOnlyClassBasis": "Groove is what a camera is worst at and a mirror is best at. Not a measurement gap, a category difference.",
+     "whyPermanent": {
+      "en": "Groove is not a quantity a camera can see. Two dancers can produce almost the same joint angles and only one of them is grooving; the difference lives in the music and in you, not in the geometry we can measure. We teach it throughout and we will not put a number on it."
+     }
     }
    ],
    "unlockRule": null,
    "unlockRuleNote": "No unlock rule, deliberately. Every lesson in this level is either locked or demo-only, so there is no graded attempt to gate progression on. Writing a threshold here (the previous draft had onBeatRatio >= 0.7 + shapeScore >= 0.75 against hh_bounce) would have been a rule referencing a measurement this style cannot currently make — the exact class of silent-wrong this codebase keeps catching. Restore it when hh_bounce has a real reference."
+  },
+  {
+   "level": 2,
+   "name": {
+    "en": "Drills"
+   },
+   "note": "Drills named by the step definitions' own error taxonomy. None of them are scored and none of them wait for a reference: a drill is a correction you practise, not a performance we judge (K10).",
+   "lessons": [
+    {
+     "id": "hh_bounce_slow",
+     "displayName": {
+      "en": "Bounce, half speed"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "The bounce at half tempo, with the count said out loud. Most beginners either stand still to the music or arrive at the bottom on the 'and' instead of on the beat — both are much easier to feel slowly than to see at speed. Same movement, more time to notice where the bottom actually lands, and whether one knee is doing more work than the other."
+     },
+     "whyPermanent": {
+      "en": "A drill is a correction, not a performance. There is no such thing as several teachers agreeing on the right way to do the bounce at half speed — the slow version exists to let you feel something, not to be judged. Grading it would mean grading a target we made up."
+     },
+     "drillFor": {
+      "step": "hh_bounce",
+      "errorCodes": [
+       "NO_BOUNCE",
+       "BOUNCE_INVERTED",
+       "ASYMMETRIC_BOUNCE"
+      ]
+     },
+     "minutes": 6
+    },
+    {
+     "id": "hh_bounce_wall",
+     "displayName": {
+      "en": "Bounce against a wall"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "Stand with your back lightly against a wall and bounce. The wall does the checking for you: if you are bending at the waist instead of the knees, your back leaves the wall and you feel it immediately. A deliberate forward-leaning groove is a real style choice — this drill is about noticing when the lean is happening by accident."
+     },
+     "whyPermanent": {
+      "en": "The wall is the feedback here, not us. This drill is a way of checking yourself, and putting a score on it would replace the thing that actually teaches it — noticing your own back leaving the wall."
+     },
+     "drillFor": {
+      "step": "hh_bounce",
+      "errorCodes": [
+       "TRUNK_COLLAPSE"
+      ]
+     },
+     "minutes": 5
+    }
+   ],
+   "unlockRule": null,
+   "unlockRuleNote": "No unlock rule by design. Every lesson in this level is a drill and none of them are scored, so there is no judgement the app is allowed to make that could gate them — an unlock rule here would have to invent a threshold on measurements we deliberately do not take (M-F-04: a rule may only depend on judgements we actually make). Drills are open from the start, which is also what they are for: you reach for one when a lesson tells you what went wrong."
   }
  ],
  "stepInventory": {

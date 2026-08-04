@@ -320,6 +320,37 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
                                                  f"promotionPath.{field} is "
                                                  "missing — an unnamed way out "
                                                  "is not a way out")
+                    elif klass == "permanent":
+                        # İKİZ KAPI (M-F-245/3). structural-circular tarafı
+                        # "yol VAR mı" diye sorar; permanent tarafı iki şeyi
+                        # birden sorar ve İKİNCİSİ ters yönlüdür:
+                        #
+                        #   (1) kalıcılığın KENDİ gerekçesi yazılmış mı —
+                        #       `demoOnlyReason` "ne alırsın/almazsın" der,
+                        #       `whyPermanent` "ve bu DEĞİŞMEYECEK, çünkü bu
+                        #       kameranın görebileceği bir nicelik değil" der.
+                        #       İkincisi olmadan kalıcı sınıflandırma, genel
+                        #       bir demo gerekçesinin arkasına saklanabilir.
+                        #
+                        #   (2) terfi yolu yazılMAMIŞ mı — permanent bir derse
+                        #       yol yazmak ÇELİŞKİDİR, eksiklik değil: ya sınıf
+                        #       yanlıştır ya yol sahtedir. Sessiz geçmek,
+                        #       kullanıcıya var olmayan bir gelecek vaat eder.
+                        #       (M-F-207 zeyli: en-az-yetkinin AŞIRI hâli de
+                        #       arızadır — bu kapı fazla-kısıtlamayı da yakalar.)
+                        if not ls.get("whyPermanent"):
+                            rep.error(where, f"lesson '{lid}' is permanent "
+                                             "without whyPermanent — 'never "
+                                             "scored' is a claim and needs its "
+                                             "own stated reason, in user "
+                                             "language")
+                        if ls.get("promotionPath"):
+                            rep.error(where, f"lesson '{lid}' is permanent but "
+                                             "declares a promotionPath — "
+                                             "CONTRADICTION: either the class "
+                                             "is wrong or the path is fiction. "
+                                             "A permanent block with a way out "
+                                             "is not permanent")
                 if not locked and not demo:
                     rep.error(where, f"lesson '{lid}' is not scored but is "
                                      "neither locked nor demoOnly — say which, "
@@ -332,6 +363,31 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
                 if ls.get("status") != "locked":
                     rep.error(where, f"lesson '{lid}' references unknown step "
                                      f"'{step_id}'")
+
+    # EVERY relatedDrill MUST RESOLVE TO A LESSON.
+    #
+    # The error taxonomy tells a learner "here is the drill for this mistake".
+    # If that drill has no lesson behind it, the app has promised help it
+    # cannot deliver — the dead-button class, in content rather than in UI, and
+    # invisible because nothing was checking it. Measured when this gate was
+    # added: ALL SEVEN drill targets across both styles were dangling.
+    #
+    # The drill must live in the SAME style: a hip-hop error pointing at a
+    # salsa drill would resolve here and still be wrong for the learner.
+    lesson_ids = {ls.get("id")
+                  for lv in style.get("levels", [])
+                  for ls in (lv.get("lessons") or [])}
+    for sid, step in steps.items():
+        if step.get("style") != style.get("id"):
+            continue
+        for err in step.get("errors") or []:
+            drill = err.get("relatedDrill")
+            if drill and drill not in lesson_ids:
+                rep.error(where, f"step '{sid}' error '{err.get('code')}' "
+                                 f"points at drill '{drill}' but no lesson "
+                                 "with that id exists in this style — a named "
+                                 "remedy with nothing behind it is a promise "
+                                 "the app cannot keep")
 
     # Tier C must never reach a learner.
     excluded = {e.get("name") for e in

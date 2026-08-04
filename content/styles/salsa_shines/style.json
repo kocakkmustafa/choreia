@@ -97,7 +97,10 @@
      "evidence": "content/references/ss_shine_footwork.json scoring[] — arm joints verdict coached_only / scored_partial (0-64% coverage, 11-58deg medianDispersion) while every leg joint is scored at 100%",
      "minutes": 6,
      "demoOnlyClass": "permanent",
-     "demoOnlyClassBasis": "Measured, not assumed: instructors differ 11-58deg on arm joints while doing the same footwork (M-F-102). There is no single correct arm to grade against, so no future measurement changes this — it is style, and style is the point."
+     "demoOnlyClassBasis": "Measured, not assumed: instructors differ 11-58deg on arm joints while doing the same footwork (M-F-102). There is no single correct arm to grade against, so no future measurement changes this — it is style, and style is the point.",
+     "whyPermanent": {
+      "en": "Arm styling is personal expression, not technique. There is no correct version to compare you against — scoring it would mean penalising you for having a style of your own, which is the opposite of what this lesson is for."
+     }
     },
     {
      "id": "ss_l1_musicality",
@@ -113,7 +116,10 @@
      "note": "Separate from the timing block in honesty.notMeasured: that one is a solvable measurement waiting on beat_annotate; this one is not a measurement target at all.",
      "minutes": 5,
      "demoOnlyClass": "permanent",
-     "demoOnlyClassBasis": "A camera cannot hear whether you found the 1. Outside the measurement surface by nature, not by current limitation (plan §22)."
+     "demoOnlyClassBasis": "A camera cannot hear whether you found the 1. Outside the measurement surface by nature, not by current limitation (plan §22).",
+     "whyPermanent": {
+      "en": "Musicality is how you hear and answer the music. A camera can see where your body is; it cannot see whether the clave is in you. This one stays taught and unscored by design, not by a gap in our data."
+     }
     }
    ],
    "unlockRule": {
@@ -121,6 +127,127 @@
     "thresholdsCalibrated": false,
     "note": "Provisional until G4 calibration (family rule M-F-04). Deliberately does NOT include onBeatRatio (no beat grid yet — bpmStatus DISPUTED) or NO_WEIGHT_TRANSFER (calibration-blocked, M-F-117): an unlock rule may only depend on judgements the app is actually allowed to make."
    }
+  },
+  {
+   "level": 2,
+   "name": {
+    "en": "Drills"
+   },
+   "note": "Drills named by the step definitions' own error taxonomy. None of them are scored and none of them wait for a reference: a drill is a correction you practise, not a performance we judge (K10).",
+   "lessons": [
+    {
+     "id": "ss_weight_shift",
+     "displayName": {
+      "en": "Committing your weight"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "Step and pause, and notice which foot is actually carrying you. The defining beginner habit is marking the step with the foot without ever handing the weight over — it looks close to right and feels like nothing. Slow enough that you can lift the other foot off the floor to prove where your weight went."
+     },
+     "whyPermanent": {
+      "en": "What this drill teaches is a sensation — where your weight is — and that is not something a camera reads off your joint angles. You can reach the right position with your weight in the wrong place."
+     },
+     "drillFor": {
+      "step": "ss_basic",
+      "errorCodes": [
+       "NO_WEIGHT_TRANSFER"
+      ]
+     },
+     "minutes": 6
+    },
+    {
+     "id": "ss_count_hold",
+     "displayName": {
+      "en": "The hold on 4"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "The salsa basic is not a march: 4 is a hold, not a step. This drill is just the count with the hold exaggerated, so the gap stops feeling like a mistake you are making and starts feeling like part of the rhythm."
+     },
+     "whyPermanent": {
+      "en": "This drill is about hearing the count, and hearing is not something a camera can check. We can eventually tell you whether you moved on 4; we cannot tell you whether you felt the hold."
+     },
+     "drillFor": {
+      "step": "ss_basic",
+      "errorCodes": [
+       "STEP_MISSED_ON_4"
+      ]
+     },
+     "minutes": 5
+    },
+    {
+     "id": "ss_lead_foot",
+     "displayName": {
+      "en": "Which foot leads"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "Which foot starts, and how to find it again after you lose it. Worth practising on its own because starting on the other foot does not feel wrong from the inside — everything else about the step can be correct."
+     },
+     "whyPermanent": {
+      "en": "Whether you are on the 'wrong' foot depends on which foot the teacher you are following started on, and mirrored footage flips that. Until that is settled on the reference side, a score here would be a coin flip presented as a judgement."
+     },
+     "drillFor": {
+      "step": "ss_basic",
+      "errorCodes": [
+       "WRONG_FOOT"
+      ]
+     },
+     "minutes": 5
+    },
+    {
+     "id": "ss_small_steps",
+     "displayName": {
+      "en": "Keeping the steps small"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "Shines travel less than beginners expect. Practise the footwork inside an imaginary square about the width of your shoulders — when the steps grow, the timing goes with them, and the fix is almost always here rather than in the count."
+     },
+     "whyPermanent": {
+      "en": "How big a step should be depends on your height and your floor, and we are not going to invent a universal correct size and score you against it. The drill gives you a reference you can see; the number would be ours, not yours."
+     },
+     "drillFor": {
+      "step": "ss_shine_footwork",
+      "errorCodes": [
+       "STEP_TOO_LARGE"
+      ]
+     },
+     "minutes": 5
+    },
+    {
+     "id": "ss_slow_tempo",
+     "displayName": {
+      "en": "Slow tempo practice"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyClass": "permanent",
+     "demoOnlyReason": {
+      "en": "The same footwork at a tempo you can actually hold, before speeding it up. Being late is usually not a timing problem — it is the step being too big or the weight arriving too late, and both are visible to you once there is time to look."
+     },
+     "whyPermanent": {
+      "en": "Timing judgement needs the music's beat grid, and this drill is deliberately practised without one so you can find your own pace first. There is nothing here for us to time you against, by design."
+     },
+     "drillFor": {
+      "step": "ss_shine_footwork",
+      "errorCodes": [
+       "STEP_LATE"
+      ]
+     },
+     "minutes": 6
+    }
+   ],
+   "unlockRule": null,
+   "unlockRuleNote": "No unlock rule by design. Every lesson in this level is a drill and none of them are scored, so there is no judgement the app is allowed to make that could gate them — an unlock rule here would have to invent a threshold on measurements we deliberately do not take (M-F-04: a rule may only depend on judgements we actually make). Drills are open from the start, which is also what they are for: you reach for one when a lesson tells you what went wrong."
   }
  ],
  "stepInventory": {

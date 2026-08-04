@@ -1066,3 +1066,79 @@ kendi dersi: sürekli yanan sebepsiz uyarı okunmaz hâle gelir.
 
 Pin **`6fd718f`**'e (güncel main) bump'landı — politikanın "doğal dokunuşta
 bump" maddesi; `✓ pin is current with origin/main`.
+
+---
+
+# K10 GENİŞLETMESİ (2026-08-04, M-F-245) — ve yol üstünde 13 KIRIK ATIF
+
+## `demoOnlyClass` sözleşmesi KODA yazıldı — ikiz kapılar
+
+Koordinatörün "VARSAYILAN YOK" sertleştirmesi `validate_content`'e indi:
+
+- **`structural-circular`** ⇒ `promotionPath.blockedBy` + `unblockedBy` ZORUNLU
+- **`permanent`** ⇒ `whyPermanent` ZORUNLU **ve** `promotionPath` **YASAK**
+
+İkinci kapı ters yönlüdür ve asıl yenilik odur: permanent bir derse yol
+yazmak **eksiklik değil ÇELİŞKİDİR** — ya sınıf yanlıştır ya yol sahtedir, ve
+sessiz geçmek kullanıcıya var olmayan bir gelecek vaat eder (M-F-207 zeyli:
+en-az-yetkinin aşırı hâli de arızadır).
+
+**Sabotaj sınavı 5/5:** whyPermanent sil → ateşler · permanent'a path ekle →
+**ÇELİŞKİ** ateşler · structural-circular'dan path sil → ateşler · sözlük dışı
+sınıf → ateşler · geri al → **susar**.
+
+Mevcut dört `permanent` dersin (Running Man · groove · arm styling ·
+musicality) **hiçbirinde `whyPermanent` yoktu**; dördü de yazıldı — ve
+`demoOnlyReason`'dan farklı bir iş yapıyorlar: birincisi *"ne alırsın,
+ne almazsın"*, ikincisi *"ve bu DEĞİŞMEYECEK, çünkü…"*.
+
+## Yol üstünde: `relatedDrill` atıflarının HEPSİ boştaydı
+
+K10 içeriğine ne yazacağımı ararken adım config'lerinin **zaten
+isimlendirdiği** ama karşılığı olmayan şeyi buldum: hata taksonomisi
+kullanıcıyı 7 ayrı alıştırmaya yönlendiriyor ve **hiçbirinin dersi yoktu** —
+**13 kırık atıf**, ve `validate_content` bunu **hiç denetlemiyordu**.
+
+Bu, kullanıcı arayüzünde değil İÇERİKTE ölü-buton sınıfı: *"şu hatayı
+yaptıysan şu alıştırmaya bak"* diyen bir vaat, arkasında hiçbir şey yokken.
+
+**Kapı eklendi:** her `relatedDrill` AYNI stildeki bir derse çözülmeli
+(farklı stildeki bir drill'e çözülmek de yanlıştır). Sabotajla sınandı:
+drill seviyesini kaldır → 9 hata, geri koy → sessiz.
+
+## İçerik: 7 alıştırma, hiçbiri uydurulmadı
+
+| stil | alıştırma | düzelttiği hata |
+|---|---|---|
+| hip-hop | `hh_bounce_slow` | NO_BOUNCE · BOUNCE_INVERTED · ASYMMETRIC_BOUNCE |
+| hip-hop | `hh_bounce_wall` | TRUNK_COLLAPSE |
+| salsa | `ss_weight_shift` | NO_WEIGHT_TRANSFER |
+| salsa | `ss_count_hold` | STEP_MISSED_ON_4 |
+| salsa | `ss_lead_foot` | WRONG_FOOT |
+| salsa | `ss_small_steps` | STEP_TOO_LARGE |
+| salsa | `ss_slow_tempo` | STEP_LATE |
+
+Metinler hataların **kendi notlarından** türetildi. Hepsi `demoOnly` +
+`permanent` + `drillFor: {step, errorCodes}`.
+
+**`permanent` gerekçesi SAHTE KAMERA ARGÜMANI DEĞİL.** Bir alıştırma bir
+DÜZELTMEdir, performans değil: kasten yavaşlatılmış ya da duvara yaslanmış
+bir versiyonun eğitmen uzlaşısı yoktur ve olamaz — uydurulmuş bir "doğru"ya
+karşı puanlamak kendi icadımızı puanlamak olurdu. Bu yüzden `promotionPath`
+YASAK, ve yasağı kapı zorluyor.
+
+**"Henüz yazılmamış adım" `locked` KALDI** (`hh_rock`) — demoOnly'ye
+taşınmadı; C-096 aynen: locked = geçici/ölçüm-eksik, demoOnly = yapısal.
+
+Yeni seviyelerde `unlockRule: null` + gerekçesi: **puanlanmayan derslerde
+kilit kuralı olamaz**, çünkü kural ancak app'in vermeye izinli olduğu bir
+hükme dayanabilir (M-F-04) — ve alıştırmalar zaten hata anında elini uzatman
+gereken şeyler, baştan açıklar.
+
+## Doğrulama
+
+`validate_content` 0 · `validate_reference` 0 · keyset 0 + self-test + drift ·
+liveness 0 · `movement_isolator --drift-check` 0 · **58 Flutter + 16 engine
+testi** · `flutter analyze` + `dart analyze` temiz.
+
+Kurs yapısı: hip-hop **L1 4 + L2 2** · salsa **L1 4 + L2 5** ders.
