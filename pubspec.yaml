@@ -28,7 +28,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: motion_core-v0.9.0
+      ref: motion_core-v0.10.0
 
   # Only to locate the app-private directory. The storage FORMAT is the core's
   # (append-only JSONL) — a 3rd-party DB is deliberately absent: session

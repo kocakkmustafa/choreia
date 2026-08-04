@@ -1142,3 +1142,75 @@ liveness 0 · `movement_isolator --drift-check` 0 · **58 Flutter + 16 engine
 testi** · `flutter analyze` + `dart analyze` temiz.
 
 Kurs yapısı: hip-hop **L1 4 + L2 2** · salsa **L1 4 + L2 5** ders.
+
+---
+
+# PAKET A — SessionStore 0.10.0 adopsiyonu (2026-08-04, M-F-248)
+
+Pin `motion_core-v0.9.0` → **`v0.10.0`**; `pubspec.lock` kanıt taşıyor
+(`resolved-ref 4708652`).
+
+**Adopsiyonun ASIL işi pin değil OKUMAKTI.** Pin bump'ından sonra `analyze`
+temizdi — yani hiçbir şey kırılmadı, çünkü app çekirdeğin `JsonlSessionStore`'unu
+kullanıyor ve yeni zorunlu üye orada karşılanıyor. **Boşluk tam da buydu:**
+çekirdek `unreadableRecords()` cevabını veriyordu, yüzey ona **bakmıyordu** —
+"yazılmış ama OKUNMAMIŞ alan" sınıfı (R12'de isimlendirilmişti).
+
+## Üç durumlu okuma — `HistoryIntegrity`
+
+Çekirdek SAYIYI verir, CÜMLEYİ vermez (kendi dokümanı böyle diyor). Yüzey
+tarafı:
+
+| durum | anlamı | totals |
+|---|---|---|
+| `ok` | açıldı, okunamayan yok | tam sayım |
+| `partial(n)` | açıldı, n kayıt okunamadı | **TABAN** ("en az bu kadar") |
+| `unavailable` | hiç açılmadı | **YOK** |
+
+**"Hiç okunamadı" ucu AYRI cümle:** okunabilir kayıt 0 iken "toplamların bir
+tabandır" demek teknik olarak doğru ve işe yaramaz — o taban sıfır. Ayrı
+metin gerçek şeyi söylüyor: *"That is not the same as you not having
+practised — we simply cannot tell you what is in them."*
+
+**`totals` NULLABLE yapıldı.** Sıfırlarla dolu bir `RecordedSummary`
+döndürmek, yüzeyin BİZİM dosya açamamamızdan "0 seans, 0 dk" render
+etmesine izin verirdi — "hiçbir şey yapmadın" yalanının en kendinden emin
+hâli. Nesne yoksa render edilecek sayı da yok: `DanceJudge`'daki kural-7 ve
+bu sınıfın "birleşik satır alanı yok" tasarımıyla aynı hamle — yanlış çıktı
+gizlenmiyor, **hiç OLUŞMUYOR**.
+
+Not yüzeyde **sayıların ÜSTÜNDE**: totallerden sonra gelen bir kayıt, onların
+tam sayım olarak okunmasına zaten izin vermiş olur.
+
+## Testler (7 yeni, hepsi ikizli)
+
+- **Pozitif ikiz A:** temiz store → `ok` ve **HİÇBİR ŞEY SÖYLEMİYOR**. Bu ikiz
+  olmasa, koşulsuz uyaran bir yüzey diğer bütün testleri geçerdi.
+- **Pozitif ikiz B:** kısmi okuma → söylüyor, ve `at least` ifadesini taşıyor.
+- **Ayrık cümle sınavı:** none-readable metni partial'dan FARKLI ve `at least`
+  İÇERMİYOR.
+- **Gerçek dosya, gerçek bozulma:** store'un KENDİ yazdığı JSONL'ın ortasına
+  bozuk satır enjekte edildi → `unreadableRecords()` 1, özet `partial`,
+  okunabilirler yine geçti (`sessions: 2`).
+- **Aynı dosyanın bozulmamış hâli → SESSİZ** (ikiz).
+- **Açılamayan store → `totals` NULL** (sıfır değil, YOK).
+- **e2e zincirinde:** replay'in kendi yazdığı store `ok` dönüyor ve
+  kendini uyarıyla etiketlemiyor — alan gerçek hattan geçiyor.
+
+## Yol üstünde iki kusur, ikisi de testlerle yakalandı
+
+1. **Dart interpolasyonu kırıktı.** `'$unreadable saved sessions…'` metni
+   kaçış hatasıyla ham `$unreadable` olarak yazılmıştı — kullanıcıya değişken
+   ADI gidecekti. `contains('2')` iddiası düşürdü.
+2. **Doküman bloğu yanlış sınıfa yapıştı.** Yeni `HistoryIntegrity` bloğunu
+   araya koyunca `ProgressSummary`'nin doküman yorumu enum'a bağlandı;
+   geri taşındı.
+
+Ayrıca `_DiskBundle` test yardımcısı **paylaşılan** `test/support/`'a alındı
+(iki kopya sahte, birbirinden ayrışır — M-F-03).
+
+## Doğrulama
+
+**65 Flutter** (58 + 7 yeni) **+ 16 engine testi** · `flutter analyze` +
+`dart analyze` **temiz** · `validate_content` 0 · `validate_reference` 0 ·
+keyset 0 · liveness 0 · `movement_isolator --drift-check` 0.

@@ -74,6 +74,70 @@ final class EvaluatedRow {
   final String band;
 }
 
+/// How much of the stored history this reading actually saw.
+///
+/// The core answers `unreadableRecords()`; it does NOT decide what a surface
+/// should say about it, and that split is deliberate — the number is a fact,
+/// the sentence is a product decision (core doc: "surfaces derive their own
+/// three-state reading").
+///
+/// Three states, because two would collapse the distinction that matters:
+///
+///   ok          opened, nothing unreadable — totals are exact
+///   partial(n)  opened, n records unreadable — totals are a FLOOR
+///   unavailable could not open at all — NO numbers, because a zero here
+///               would read as "you did nothing" (J-066: "hiç yapmadın ≠
+///               bilmiyorum")
+///
+/// The measured case this exists for is JabLab's: 40 of 50 lines corrupt and
+/// the summary said "10 sessions" with full confidence. The number was not
+/// wrong about what it counted; it was wrong about what it CLAIMED.
+enum HistoryFidelity { ok, partial, unavailable }
+
+final class HistoryIntegrity {
+  const HistoryIntegrity._(this.fidelity, this.unreadableRecords,
+      this.readableRecords);
+
+  /// The store opened. [unreadable] comes from the core; [readable] is what
+  /// this reading actually got, and both are needed because "some of it" and
+  /// "none of it" are different sentences to a person.
+  factory HistoryIntegrity.opened({
+    required int unreadable,
+    required int readable,
+  }) =>
+      HistoryIntegrity._(
+        unreadable == 0 ? HistoryFidelity.ok : HistoryFidelity.partial,
+        unreadable,
+        readable,
+      );
+
+  /// The store could not be opened. Deliberately carries no counts: there is
+  /// nothing to be a floor OF.
+  static const HistoryIntegrity unavailable =
+      HistoryIntegrity._(HistoryFidelity.unavailable, 0, 0);
+
+  final HistoryFidelity fidelity;
+  final int unreadableRecords;
+  final int readableRecords;
+
+  /// Whether totals may be shown at all. False only when the store never
+  /// opened — a partial reading still shows numbers, it just stops calling
+  /// them complete.
+  bool get showsTotals => fidelity != HistoryFidelity.unavailable;
+
+  /// The sentence for this state, or null when there is nothing to say.
+  String? get note => switch (fidelity) {
+        HistoryFidelity.ok => null,
+        HistoryFidelity.unavailable => ProgressStrings.historyUnavailable,
+        // "SOME of it" and "NONE of it" are separate sentences on purpose.
+        // Collapsing them would let "your totals are a floor" appear above a
+        // screen whose floor is zero — technically true, and useless.
+        HistoryFidelity.partial => readableRecords == 0
+            ? ProgressStrings.historyNoneReadable(unreadableRecords)
+            : ProgressStrings.historyPartial(unreadableRecords),
+      };
+}
+
 /// The progress surface's data layer — TWO SECTIONS THAT CANNOT MERGE (M-F-156).
 ///
 /// The type enforces the separation that a screen is supposed to show: there is
@@ -88,6 +152,7 @@ final class ProgressSummary {
     required this.evaluatedUnavailableReason,
     required this.blockedGates,
     required this.totals,
+    required this.integrity,
   });
 
   /// Facts about what was practised. All lessons.
@@ -106,7 +171,19 @@ final class ProgressSummary {
   /// Gates that cannot be passed today, derived from content.
   final List<BlockedGate> blockedGates;
 
-  final RecordedSummary totals;
+  /// Totals, or NULL when the history could not be read at all.
+  ///
+  /// Nullable rather than zero-filled, and that is the whole design: a
+  /// `RecordedSummary` of zeros would let a surface render "0 sessions, 0 min"
+  /// from OUR failure to open a file, which is the "you did nothing" lie in
+  /// its most confident form. With no object there is no number to render —
+  /// the same move as kural-7 in `DanceJudge` and as this class having no
+  /// merged-rows field: the wrong output is never FORMED, not merely hidden.
+  final RecordedSummary? totals;
+
+  /// How much of the stored history this reading saw. Never null: "we read
+  /// everything" is itself a claim and has to be stated, not assumed.
+  final HistoryIntegrity integrity;
 
   /// Time already worked does NOT become retroactive credit when a gate opens.
   ///
@@ -123,7 +200,8 @@ final class ProgressSummary {
   factory ProgressSummary.build({
     required List<SessionRecord> history,
     required CourseCatalog catalog,
-    required RecordedSummary totals,
+    HistoryIntegrity? integrity,
+    RecordedSummary? totals,
   }) {
     final Map<String, List<SessionRecord>> byLesson =
         <String, List<SessionRecord>>{};
@@ -171,18 +249,43 @@ final class ProgressSummary {
       evaluatedUnavailableReason: reason,
       blockedGates: catalog.blockedGates,
       totals: totals,
+      integrity: integrity ??
+          HistoryIntegrity.opened(unreadable: 0, readable: history.length),
     );
   }
 
   static Future<ProgressSummary> from({
     required SessionStore store,
     required CourseCatalog catalog,
-  }) async =>
-      ProgressSummary.build(
-        history: await store.recent(),
+  }) async {
+    // The store's own answer about what it could not read (core 0.10.0,
+    // REQUIRED member). Reading it is the whole point of the adoption: the
+    // core can only expose the number, it cannot make a surface look at it —
+    // a field written and never read is the failure class this repo already
+    // named once (R12).
+    try {
+      final List<SessionRecord> history = await store.recent();
+      final int unreadable = await store.unreadableRecords();
+      return ProgressSummary.build(
+        history: history,
         catalog: catalog,
         totals: await RecordedSummary.from(store),
+        integrity: HistoryIntegrity.opened(
+          unreadable: unreadable,
+          readable: history.length,
+        ),
       );
+    } on Exception {
+      // The store did not open. NOT the same as an empty history, and the
+      // difference is the entire reason this branch exists: an empty summary
+      // renders "no practice recorded yet", which is a claim about the user.
+      return ProgressSummary.build(
+        history: const <SessionRecord>[],
+        catalog: catalog,
+        integrity: HistoryIntegrity.unavailable,
+      );
+    }
+  }
 
   bool get hasHistory => recorded.isNotEmpty;
 }
@@ -208,6 +311,42 @@ abstract final class ProgressStrings {
   static const String blockedSection = 'What we cannot check yet';
   static const String blockedSubtitle =
       'Named, with the reason. We would rather tell you than leave it out.';
+
+  /// The store opened but some records could not be read back.
+  ///
+  /// The word that does the work is "at least". Without it the totals below
+  /// make a claim they cannot support — JabLab's measured case said
+  /// "10 sessions" over a file where 40 of 50 lines were corrupt, and every
+  /// number on that screen was a confident understatement.
+  static String historyPartial(int unreadable) => unreadable == 1
+      ? 'One saved session could not be read back. Everything below counts '
+          'what we could read, so treat it as "at least this much" rather '
+          'than a full total.'
+      : '$unreadable saved sessions could not be read back. Everything below '
+          'counts what we could read, so treat it as "at least this much" '
+          'rather than a full total.';
+
+  /// The store opened and NOTHING in it could be read.
+  ///
+  /// A separate sentence from [historyPartial] on purpose: telling someone
+  /// their totals are "a floor" when that floor is zero is technically true
+  /// and useless. This says the actual thing — the practice happened, we
+  /// just cannot read it back.
+  static String historyNoneReadable(int unreadable) => unreadable == 1
+      ? 'We found one saved session but could not read it. That is not the '
+          'same as you not having practised — we simply cannot tell you '
+          'what is in it.'
+      : 'We found $unreadable saved sessions but could not read any of '
+          'them. That is not the same as you not having practised — we '
+          'simply cannot tell you what is in them.';
+
+  /// The store never opened. NO numbers accompany this string.
+  ///
+  /// Showing a zero here would say "you did nothing", which is a claim about
+  /// the user made from our own failure (J-066).
+  static const String historyUnavailable =
+      'We could not open your practice history. Rather than show you a zero '
+      'that would be wrong, we are not showing numbers until we can read it.';
 
   static const String emptyHistory =
       'No practice recorded yet. Nothing has been hidden — there is simply '

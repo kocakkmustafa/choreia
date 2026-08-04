@@ -198,11 +198,11 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/motion_core"
-      ref: "motion_core-v0.9.0"
-      resolved-ref: "13d07ceb938d886d23f6005cefa1a25971fbc924"
+      ref: "motion_core-v0.10.0"
+      resolved-ref: "4708652d47104784b58b0b34f0afbf500ae07b54"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
-    version: "0.9.0"
+    version: "0.10.0"
   objective_c:
     dependency: transitive
     description:

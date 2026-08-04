@@ -2,12 +2,11 @@ import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/progress_summary.dart';
 import 'package:choreia/app/progress_view.dart';
 import 'package:choreia/app/recorded_summary.dart';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/test_catalog.dart';
 import 'package:motion_core/motion_core.dart';
 
 /// These tests measure the HONESTY STRUCTURE of the progress surface, not its
@@ -411,7 +410,7 @@ void main() {
     // asset paths resolve on a device is a separate claim, and this test does
     // not make it.
     Future<CourseCatalog> loadReal(WidgetTester tester) async =>
-        CourseCatalog.load(_DiskBundle());
+        CourseCatalog.load(DiskBundle());
 
     testWidgets('loads, and every ungraded lesson names a reason',
         (WidgetTester tester) async {
@@ -500,16 +499,3 @@ void main() {
 
 /// Serves the repository's real content files through the [AssetBundle] API, so
 /// the production loader is the thing under test.
-class _DiskBundle extends CachingAssetBundle {
-  @override
-  Future<ByteData> load(String key) async {
-    final File file = File(key);
-    if (!file.existsSync()) {
-      // Same shape of failure the real bundle raises for a missing asset —
-      // which is the branch `CourseCatalog.load` has to survive for a step
-      // whose document is not written yet.
-      throw FlutterError('asset not found: $key');
-    }
-    return ByteData.view(file.readAsBytesSync().buffer);
-  }
-}

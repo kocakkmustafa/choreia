@@ -43,10 +43,27 @@ class ProgressView extends StatelessWidget {
   /// row must still render honestly without it.
   final CourseCatalog? catalog;
 
+  /// The history-integrity sentence, when there is one to say.
+  static const Key integrityNoteKey = Key('progress.integrityNote');
+
   @override
   Widget build(BuildContext context) {
+    final String? integrityNote = summary.integrity.note;
     return ListView(
       children: <Widget>[
+        // INTEGRITY FIRST, above the numbers it qualifies.
+        //
+        // Placed here rather than in a footnote because a caveat that arrives
+        // after the totals has already let them be read as complete. When the
+        // history could not be read at all there are no totals below this line
+        // to qualify — `ProgressSummary.totals` is null in that state, so the
+        // sentence stands alone rather than captioning a screen of zeros.
+        if (integrityNote != null)
+          Padding(
+            key: integrityNoteKey,
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(integrityNote),
+          ),
         _section(
           key: recordedSectionKey,
           title: ProgressStrings.recordedSection,

@@ -252,6 +252,17 @@ void main() {
       expect(summary.evaluated, isEmpty);
       expect(summary.evaluatedUnavailableReason, isNotNull);
 
+      // The 0.10.0 adoption, proved through the REAL chain rather than in
+      // isolation: this store was written by this replay, so its reading must
+      // come back `ok` and say nothing. The twin (a corrupted file reporting
+      // partial) lives in history_integrity_test — together they pin both
+      // directions. Asserting only the corrupt case would be satisfied by a
+      // surface that warns unconditionally.
+      expect(summary.integrity.fidelity, HistoryFidelity.ok);
+      expect(summary.integrity.note, isNull,
+          reason: 'a clean replay must not caption itself with a warning');
+      expect(summary.totals, isNotNull);
+
       await tester.pumpWidget(Directionality(
         textDirection: TextDirection.ltr,
         child: ProgressView(summary: summary, catalog: catalog),
