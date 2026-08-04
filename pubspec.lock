@@ -194,15 +194,24 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
+  motion_camera:
+    dependency: "direct main"
+    description:
+      path: "packages/motion_camera"
+      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      resolved-ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      url: "https://github.com/kocakkmustafa/motion-core.git"
+    source: git
+    version: "0.1.2"
   motion_core:
     dependency: "direct main"
     description:
       path: "packages/motion_core"
-      ref: "motion_core-v0.10.0"
-      resolved-ref: "4708652d47104784b58b0b34f0afbf500ae07b54"
+      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      resolved-ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
-    version: "0.10.0"
+    version: "0.11.0"
   objective_c:
     dependency: transitive
     description:
