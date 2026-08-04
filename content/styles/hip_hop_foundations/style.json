@@ -62,9 +62,9 @@
      "scored": false,
      "status": "locked",
      "lockedReason": {
-      "en": "This step's movement description isn't finished yet, so there is nothing for the camera to check."
+      "en": "The step is written down now, but no teachers have been measured doing it. We grade you against what several independent instructors actually agree on — a written description is not that, and we are not going to score you against our own writing."
      },
-     "blockedBy": "stepInventory.tierA_confirmed[hh_rock].status == 'described, not authored' — no steps/hh_rock.json exists",
+     "blockedBy": "steps/hh_rock.json reference.collectedTakes == 0 — the definition now exists (authored 2026-08-04 from 4BRd2E8vBic), so the OLD blocker ('no steps/hh_rock.json exists') is retired; writing a definition is not measuring one",
      "minutes": 6
     },
     {
@@ -183,12 +183,14 @@
    {
     "id": "hh_rock",
     "name": "Rock",
-    "status": "described, not authored"
+    "status": "authored 2026-08-04 (source-derived); reference pending",
+    "tierNote": "Tier here is a SURVEY PREDICTION and the step file labels it as one (measurability.predictionOnly). Predicted B, not A: the driver is trunk_tilt, the one angle the core weights low because it moves when the phone does."
    },
    {
     "id": "hh_groove",
     "name": "Groove",
-    "status": "described, not authored"
+    "status": "NOT A STEP — see contradictionNote",
+    "contradictionNote": "This entry contradicts the style's own honesty block and the honesty block is right. `honesty.notMeasured` says: 'Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored.' The lesson `hh_l1_groove` already ships that way: demoOnly, class PERMANENT, with no `step` field at all. Listing groove here as an authorable tier-A step says the opposite, and searching for its movement description found none anywhere — R7 covers 17 named steps and groove is not among them; R1 mentions it once as the BASIS of a syllabus. Kept rather than deleted so the survey's claim and the correction stay readable side by side (same treatment as hh_bounce's withdrawn tier). Removing the entry is a catalogue decision, not this file's to make."
    }
   ],
   "tierC_excluded": [

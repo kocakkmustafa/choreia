@@ -1214,3 +1214,97 @@ Ayrıca `_DiskBundle` test yardımcısı **paylaşılan** `test/support/`'a alı
 **65 Flutter** (58 + 7 yeni) **+ 16 engine testi** · `flutter analyze` +
 `dart analyze` **temiz** · `validate_content` 0 · `validate_reference` 0 ·
 keyset 0 · liveness 0 · `movement_isolator --drift-check` 0.
+
+---
+
+# PAKET B — `hh_rock` yazıldı, `hh_groove` YAZILMADI (2026-08-04, M-F-248/B)
+
+Şart (1) kaynak-atıf istiyordu. **Kaynak aramaya gidince ikisi ayrıldı.**
+
+## Envanterdeki "described" iddiası DAYANAKSIZDI
+
+`stepInventory` ikisini de *"described, not authored"* diye işaretliyordu.
+Kaynak taraması:
+
+- **R7** (hareket-tarifi araştırma turu) **17 adım** kapsıyor — Rock ve Groove
+  **listede YOK**.
+- **R1** "Bounce/Rock/Groove"u **bir kez**, bir kursun *temeli* olarak anıyor;
+  hareket tarifi vermiyor.
+- `docs/g1/MUFREDAT-MALIYET-OLCUMU.md` bunları bekleyen iş diye sayıyor ve
+  kendi payına çekinceli: *"tarif var/kısmen var"*.
+
+Yani "described" kelimesi, bir gelecekteki yazarın güveneceği yerde,
+**karşılığı olmayan bir iddiaydı** — bu turun üçüncü kez gördüğü sınıf
+(`collectedTakes == 0` bayat satırı · 13 sarkan drill · bu).
+
+## `hh_rock` — YAZILDI, kaynak HAVUZDAN türetildi
+
+Koordinatör "mevcut havuz transkriptleri"ni kaynak saydı, ve havuzda
+**`4BRd2E8vBic` (JoeyTheJAM, *"How to BOUNCE & ROCK"*, 2070 sözcük,
+`classify_source: lesson`)** rock'ı fiilen öğretiyor. Tanım onun **kendi
+cümlelerinden** türetildi, zaman damgalarıyla dosyaya yazıldı:
+
+| an | eğitmenin sözü |
+|---|---|
+| 100,5s | *"with the rock, we're really primarily using our **upper body**… our **chest**"* |
+| 111,3s | *"forward rock or… back rock — two sides of the same coin"* |
+| 130,4s | *"it's a forward rock because we're **accenting the one**"* |
+| 220,4s | *"there is also a **side to side**"* |
+| **480,4s** | *"balancing is gonna come from the **opposite** place that your rock is coming from… if the rock is primarily with your upper body and your hips, the balance is going to be mostly with your **legs and specifically your knees**"* |
+
+**480,4s bu adımın ihtiyacı olan AYIRT EDİCİ.** Eğitmenin kendi ağzından:
+rock gövdeden sürülür, dizler DENGELER — `hh_bounce`'ın tam tersi (sürücüsü
+diz fleksiyonu). Bu cümle olmasa, bu adıma nişanlanmış bir segment bulucunun
+bounce seçmemek için ilkeli bir yolu olmazdı.
+
+**Şartların karşılıkları:** `cycleUnit` beyanlı (`driver: trunk_tilt`,
+`dipsPerCycle: 1`) — gelecekteki zincir hazır doğsun · `measurability`
+**`predictionOnly: true`** + `predictionBasis` + `predictionNote` (öngörü ile
+ölçüm-hükmü asla karışmaz) · tier **B, A değil**: sürücü `trunk_tilt`, yani
+çekirdeğin *"telefon eğilince oynar"* diye bilerek düşük ağırlıklandırdığı
+açı — ve `hh_bounce` bu kataloğa kendinden emin bir tier A olarak girip
+ölçümle geri çekilmişti · **ders `locked` KALDI**; blokör güncellendi
+(*"steps/hh_rock.json yok"* → *"reference.collectedTakes == 0"*), çünkü
+**tanım yazmak ölçmek değildir**.
+
+Hatalarda `relatedDrill` **bilinçli YOK** — var olmayan derse işaret etmek,
+bu içeriğin bir kez bedelini ödediği sarkan-atıf sınıfı (C-129).
+
+## `hh_groove` — YAZILMADI, ve sebebi bir ÇELİŞKİ
+
+Groove için hiçbir yerde hareket tarifi yok. Ama asıl bulgu şu: **envanterin
+kendisi stilin dürüstlük bloğuyla çelişiyor, ve dürüstlük bloğu HAKLI.**
+
+> `honesty.notMeasured`: *"Groove, feel and musicality — a camera cannot see
+> whether the music is in you. Taught throughout, never scored."*
+
+Ders `hh_l1_groove` **zaten öyle yayınlanıyor**: `demoOnly`, sınıf
+**`permanent`**, ve `step` alanı hiç YOK. Envanterin onu "yazılabilir tier-A
+adım" diye listelemesi bunun tersini söylüyor.
+
+**Yazmadım.** Bir adım config'i yazmak, kameranın göremeyeceğini beyan
+ettiğimiz bir niteliği ölçülebilir bir adım gibi göstermek olurdu. Envanter
+kaydı **silinmedi, çelişki notuyla etiketlendi** — `hh_bounce`'ın geri
+çekilmiş tier'ı gibi: taramanın iddiası ile düzeltme yan yana okunsun.
+Kaydın kaldırılması bir katalog kararı, bu dosyanın değil.
+
+## Yol üstünde: bir ÇİVİ TESTİ tasarlandığı gibi kırıldı
+
+`"an UNWRITTEN step is recorded as unknown"` testi `hh_rock`'ın yazılmamış
+oluşunu çivilemişti ve dosyayı yazdığım an **düştü** — içerik kaydı, süit
+dünün durumunu iddia etmeyi reddetti.
+
+Silmedim, **yeniden nişanladım** — ve orijinalinden daha güçlü hâle geldi.
+Orijinalin zayıflığı, kataloğun EKSİK OLMASINA bağımlı olmasıydı: her adım
+yazıldığı gün `unreadableSteps` boşalır ve o küme üzerinde dönen bir iddia
+**hiçbir şey iddia etmeden geçmeye devam eder** — bu turda avladığım
+kırılamaz-iddia tuzağı. Artık eksik belge **test içinde üretiliyor**
+(`_BundleMissing`), yani vaka kalıcı olarak gerçek; ve pozitif ikizi var
+(hiçbir şey gizlenmediğinde aynı adım unreadable **değil**), yoksa her şeyi
+okunamaz sayan bir yükleyici de geçerdi.
+
+## Doğrulama
+
+**65 Flutter + 16 engine testi** · `flutter analyze` + `dart analyze` temiz ·
+`validate_content` 0 · `validate_reference` 0 · keyset 0 · liveness 0 ·
+`movement_isolator --drift-check` 0.

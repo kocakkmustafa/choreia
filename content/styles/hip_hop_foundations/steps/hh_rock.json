@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "id": "hh_rock",
+  "style": "hip_hop_foundations",
+  "name": { "en": "Rock" },
+  "level": 1,
+  "beats": 1,
+  "countLabels": ["1"],
+  "note": "The bounce's counterpart: where the bounce drives from the knees, the rock drives from the chest and hips. Taught together in the source lesson because most hip-hop movement contains some of each.",
+
+  "sourceDerivation": {
+    "$comment": "AUTHORED FROM A MEASURED SOURCE, NOT FROM MEMORY. Every claim below traces to an instructor's own words in a take this pipeline already verified as a lesson (classify_source: lesson, 2070 spoken words). Timestamps are into that video's transcript so a reader can hear the sentence rather than trust this file.",
+    "videoId": "4BRd2E8vBic",
+    "channel": "JoeyTheJAM",
+    "title": "How to BOUNCE & ROCK",
+    "quotes": [
+      { "at": "100.5s", "text": "with the rock, we're really primarily using our upper body... our chest... then I'll show you how to use your hips" },
+      { "at": "111.3s", "text": "within rocking, you can either do a forward rock or you can do a back rock... two sides of the same coin" },
+      { "at": "130.4s", "text": "it's a forward rock because we're accenting the one first... whatever your one is is going to be your accent" },
+      { "at": "220.4s", "text": "with the rock, there is also a side to side" },
+      { "at": "255.7s", "text": "the way the hips rock are gonna be very similar to the way you rock with your chest" },
+      { "at": "480.4s", "text": "balancing is gonna come from the opposite place that your rock is coming from... if the rock is primarily with your upper body and your hips, the balance is going to be mostly with your legs and specifically your knees" }
+    ],
+    "whyThisMatters": "The 480.4s quote is the discriminator this step needed. It says in the instructor's own words that the rock is driven from the torso while the knees do the BALANCING — the exact inverse of hh_bounce, whose driver is knee flexion. Without it, a segment finder pointed at this step would have no principled way to avoid selecting a bounce.",
+    "notCoveredBy": "R7 (the movement-description research round) covers 17 named steps and Rock is NOT among them; R1 mentions 'Bounce/Rock/Groove' once as the BASIS of a course syllabus, with no movement description. The stepInventory entry saying 'described, not authored' was therefore over-stated — the description did not exist until this file derived it from the harvest pool."
+  },
+
+  "cycleUnit": {
+    "driver": "trunk_tilt",
+    "dipsPerCycle": 1,
+    "derivedFrom": "phases",
+    "rationale": "One cycle is one lean-and-return, accented on the one (source 130.4s). Declared here so that a future segment finder uses THIS step's driver rather than the ankle anchor — the mistake measured on hh_bounce, where a foot-anchored finder selected windows containing none of the step's own events (C-125/C-126). PREDICTED unit: no reference has been built for this step, so the declaration is a contract for the day one is, not a measurement."
+  },
+
+  "measurability": {
+    "tier": "B",
+    "predictionOnly": true,
+    "predictionBasis": "survey + source transcript, NOT measurement",
+    "rationale": "PREDICTED, NOT MEASURED. Trunk lean is a large, two-segment movement, which argues for reliability. Against it: `trunk_tilt` is the one angle the pinned core deliberately weights LOW, because it moves when the PHONE tilts and so carries camera error alongside body information. A tier claim resting on that angle cannot be graded 'A' before anything is measured — hh_bounce entered this catalogue as a confident tier A and measurement withdrew it (tierWithdrawn, 2026-08-04). B is the honest prediction, and it stays a prediction until a reference exists.",
+    "riskFlags": ["driver-is-camera-sensitive", "no-reference-built"],
+    "predictionNote": "SURVEY PREDICTION and MEASUREMENT VERDICT never merge. If a reference is ever built here, the measured result is written alongside this block the way hh_bounce records its withdrawal — the prediction is not deleted, so the two stay readable side by side."
+  },
+
+  "scoring": {
+    "focusJoints": ["trunk_tilt", "left_hip", "right_hip", "left_shoulder", "right_shoulder"],
+    "freeJoints": [
+      "left_elbow", "right_elbow", "left_forearm", "right_forearm",
+      "left_upper_arm", "right_upper_arm", "left_knee", "right_knee"
+    ],
+    "freeJointsRationale": "The knees are FREE here and that is the point of the step: the source teaches that while the rock comes from the torso, the legs are what balance it (480.4s). Scoring the knees would penalise the very thing that is supposed to absorb the movement.",
+    "toleranceProfile": "beginner"
+  },
+
+  "phases": [
+    {
+      "id": "neutral",
+      "enter": { "metric": "trunk_tilt", "op": "<", "valueDeg": 6 },
+      "requiredLandmarks": ["torso", "leftLeg", "rightLeg"],
+      "timeoutMs": 2000
+    },
+    {
+      "id": "lean",
+      "enter": { "metric": "trunk_tilt", "op": "increasing", "minRateDegPerSec": 25 },
+      "requiredLandmarks": ["torso"],
+      "timeoutMs": 800
+    },
+    {
+      "id": "accent",
+      "enter": { "metric": "trunk_tilt", "op": "localMaximum" },
+      "requiredLandmarks": ["torso"],
+      "minDurationMs": 30,
+      "timeoutMs": 600
+    },
+    {
+      "id": "return",
+      "enter": { "metric": "trunk_tilt", "op": "decreasing", "minRateDegPerSec": 25 },
+      "requiredLandmarks": ["torso"],
+      "timeoutMs": 800,
+      "isTerminal": true
+    }
+  ],
+
+  "scoredMoments": [
+    {
+      "id": "rock_accent",
+      "phase": "accent",
+      "beat": 0,
+      "label": "accent"
+    }
+  ],
+
+  "errors": [
+    {
+      "code": "ROCK_FROM_LEGS",
+      "severity": "major",
+      "detect": {
+        "all": [
+          { "metric": "trunk_tilt_amplitude", "op": "<", "valueDeg": 8 },
+          { "metric": "knee_flexion_amplitude", "op": ">", "valueDeg": 18 }
+        ]
+      },
+      "evidence": ["trunk_tilt_amplitude", "knee_flexion_amplitude"],
+      "note": "Bouncing instead of rocking. Detected as a CONJUNCTION so that a small rock with quiet legs is not flagged — what makes this an error is the movement having moved to the knees, not the torso being still. Sourced from 480.4s: the rock comes from the upper body, the legs balance it.",
+      "drillNote": "No drill authored yet. `relatedDrill` is deliberately absent rather than pointing at a lesson that does not exist — the dangling-reference class this content already paid for once (C-129)."
+    },
+    {
+      "code": "NO_ROCK",
+      "severity": "critical",
+      "detect": {
+        "metric": "trunk_tilt_amplitude",
+        "op": "<",
+        "valueDeg": 5
+      },
+      "evidence": ["trunk_tilt_amplitude"],
+      "note": "Standing still to the music, the rock's version of NO_BOUNCE."
+    }
+  ],
+
+  "reference": {
+    "requiredTakes": 6,
+    "collectedTakes": 0,
+    "status": "pending",
+    "note": "No instructor has been measured for THIS step. `4BRd2E8vBic` is in the pool and teaches the rock, but it was harvested and prepared for hh_bounce and its selected segment is a bounce segment — reusing it here without re-preparing against this step's own driver would be the identity error this project has already measured twice (l3r4bPhikGQ, C-127).",
+    "blocksLesson": "hh_l1_rock stays locked. Writing a definition is not measuring one — the lock lifts on a reference, not on this file existing."
+  }
+}

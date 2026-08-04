@@ -3,6 +3,8 @@ import 'package:choreia/app/progress_summary.dart';
 import 'package:choreia/app/progress_view.dart';
 import 'package:choreia/app/recorded_summary.dart';
 
+import 'dart:typed_data';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -442,17 +444,40 @@ void main() {
       expect(ids, contains('STEP_LATE'));
     });
 
-    testWidgets('an UNWRITTEN step is recorded as unknown, not as clean',
+    // THIS TEST CHANGED BECAUSE THE WORLD DID, AND THAT IS THE DESIGN.
+    //
+    // It used to pin `hh_rock` as the unwritten step, and it BROKE the moment
+    // that document was authored (2026-08-04) — which is what a nail test is
+    // for: content moved and the suite refused to keep asserting yesterday's
+    // state. The property it protects is unchanged, so it is re-aimed rather
+    // than deleted.
+    //
+    // It no longer depends on the catalogue HAPPENING to be incomplete. That
+    // dependency was the original's weakness: the day every step is authored,
+    // `unreadableSteps` goes empty and an assertion that loops over it stops
+    // asserting anything while still passing — the unbreakable-claim trap this
+    // repo keeps paying for. So the missing document is MANUFACTURED here, and
+    // the case stays real forever.
+    testWidgets('an unreadable step is reported as unknown, never as clean',
         (WidgetTester tester) async {
+      const String hidden = 'content/styles/hip_hop_foundations/steps/'
+          'hh_bounce.json';
+      final CourseCatalog crippled =
+          await CourseCatalog.load(_BundleMissing(hidden));
+
+      expect(crippled.unreadableSteps, contains('hh_bounce'),
+          reason: 'a step whose document will not load must be RECORDED as '
+              'unreadable, not quietly skipped');
+      expect(crippled.blockedGates.map((BlockedGate g) => g.id),
+          contains('hh_bounce'),
+          reason: 'an unreadable step must appear as something we cannot '
+              'check, otherwise the screen implies it needs no checks');
+
+      // POSITIVE TWIN: the same load with nothing hidden must NOT report that
+      // step as unreadable. Without this, a loader that marked everything
+      // unreadable would pass the assertions above.
       final CourseCatalog real = await loadReal(tester);
-      // `hh_l1_rock` points at `hh_rock`, whose step document is deliberately
-      // not written yet. Loading must survive it (content says so on purpose)
-      // AND must not report "no blocked checks" for it — absence of the
-      // document is absence of KNOWLEDGE.
-      expect(real.unreadableSteps, contains('hh_rock'));
-      expect(real.blockedGates.map((BlockedGate g) => g.id), contains('hh_rock'),
-          reason: 'an unreadable step must appear as something we cannot check, '
-              'otherwise the screen implies it needs no checks');
+      expect(real.unreadableSteps, isNot(contains('hh_bounce')));
     });
 
     testWidgets('a scored lesson exists and is NOT listed as blocked',
@@ -499,3 +524,18 @@ void main() {
 
 /// Serves the repository's real content files through the [AssetBundle] API, so
 /// the production loader is the thing under test.
+
+/// A bundle that fails for ONE named asset, the way a missing step document
+/// fails. Used to keep the unreadable-step case real even after every step in
+/// the catalogue has been authored.
+class _BundleMissing extends DiskBundle {
+  _BundleMissing(this.missing);
+
+  final String missing;
+
+  @override
+  Future<ByteData> load(String key) async {
+    if (key == missing) throw FlutterError('asset not found: $key');
+    return super.load(key);
+  }
+}
