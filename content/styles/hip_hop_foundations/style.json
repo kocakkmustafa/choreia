@@ -185,12 +185,6 @@
     "name": "Rock",
     "status": "authored 2026-08-04 (source-derived); reference pending",
     "tierNote": "Tier here is a SURVEY PREDICTION and the step file labels it as one (measurability.predictionOnly). Predicted B, not A: the driver is trunk_tilt, the one angle the core weights low because it moves when the phone does."
-   },
-   {
-    "id": "hh_groove",
-    "name": "Groove",
-    "status": "NOT A STEP — see contradictionNote",
-    "contradictionNote": "This entry contradicts the style's own honesty block and the honesty block is right. `honesty.notMeasured` says: 'Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored.' The lesson `hh_l1_groove` already ships that way: demoOnly, class PERMANENT, with no `step` field at all. Listing groove here as an authorable tier-A step says the opposite, and searching for its movement description found none anywhere — R7 covers 17 named steps and groove is not among them; R1 mentions it once as the BASIS of a syllabus. Kept rather than deleted so the survey's claim and the correction stay readable side by side (same treatment as hh_bounce's withdrawn tier). Removing the entry is a catalogue decision, not this file's to make."
    }
   ],
   "tierC_excluded": [
@@ -225,6 +219,27 @@
    "Roger Rabbit",
    "Butterfly",
    "BK Bounce"
+  ],
+  "removedEntries": [
+   {
+    "id": "hh_groove",
+    "name": "Groove",
+    "removedFrom": "tierA_confirmed",
+    "removedAt": "2026-08-04",
+    "why": "Contradicted this style's own honesty block, and the honesty block is the deeper commitment: it is a PUBLISHED claim to the user, it is backed by a lesson that ships as demoOnly with class `permanent`, and that class carries a `whyPermanent` reason. The inventory line was a survey-era artefact asserting the opposite — that groove is an authorable, tier-A, measurable STEP.",
+    "theContradiction": {
+     "inventorySaid": "tierA_confirmed — an authorable step, tier A",
+     "honestySays": "Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored.",
+     "whatShips": "lesson hh_l1_groove: demoOnly, demoOnlyClass `permanent`, no `step` field at all"
+    },
+    "resolution": "GROOVE LIVES AS A LESSON, NOT AS A STEP. Nothing about the product changed here — the lesson already shipped correctly. What changed is that the catalogue stopped claiming otherwise.",
+    "evidence": [
+     "R7 (the movement-description research round) covers 17 named steps; groove is NOT among them",
+     "R1 mentions 'Bounce/Rock/Groove' once, as the BASIS of a course syllabus — no movement description anywhere",
+     "docs/g1/MUFREDAT-MALIYET-OLCUMU.md hedges its own claim: 'tarif var/kısmen var'"
+    ],
+    "tombstoneNote": "Kept as a dated record rather than deleted outright: the record outlives the source. A line that simply vanishes takes its correction with it, and the next survey would be free to re-assert the same thing."
+   }
   ]
  },
  "errorTaxonomy": {

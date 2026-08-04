@@ -1308,3 +1308,33 @@ okunamaz sayan bir yükleyici de geçerdi.
 **65 Flutter + 16 engine testi** · `flutter analyze` + `dart analyze` temiz ·
 `validate_content` 0 · `validate_reference` 0 · keyset 0 · liveness 0 ·
 `movement_isolator --drift-check` 0.
+
+---
+
+# `hh_groove` MEZAR-TAŞI (2026-08-04, M-F-252)
+
+Koordinatör hükmü: satır aktif envanterden **çıkarıldı**, yerine tarihli
+mezar-taşı kaydı kondu (`stepInventory.removedEntries`).
+
+**Gerekçe — dürüstlük bloğu DAHA DERİN taahhüt:** yayımlı bir kullanıcı
+iddiası, `demoOnly`/`permanent` sınıfıyla yayınlanan bir ders ve o sınıfın
+`whyPermanent` gerekçesiyle destekli. Envanter satırı ise tarama-dönemi
+artefaktıydı ve bunun **tersini** iddia ediyordu.
+
+Mezar-taşı üç şeyi taşıyor: çelişkinin iki yakası (envanter ne diyordu ↔
+`honesty` ne diyor ↔ **ne yayınlanıyor**), çözüm cümlesi (*"groove DERS
+olarak yaşar, ADIM olarak değil"*), ve kanıt (R7'nin 17 adımında yok · R1
+bir kez kurs-temeli olarak anıyor · g1 belgesi kendi payına çekinceli).
+
+**Silinmedi, mezar-taşlandı** çünkü **kayıt kaynaktan uzun yaşar**: yok
+olan bir satır düzeltmesini de birlikte götürür ve bir sonraki tarama aynı
+şeyi yeniden iddia etmekte serbest kalır.
+
+**ÜRÜN YÜZEYİ DEĞİŞMEDİ, ve asıl nokta bu.** `hh_l1_groove` zaten doğru
+yayınlanıyordu: `demoOnly`, `permanent`, `whyPermanent` gerekçeli, `step`
+alanı hiç yok. Değişen tek şey, **kataloğun aksini iddia etmeyi
+bırakması**.
+
+`tierA_confirmed` artık `hh_bounce` + `hh_rock`. Doğrulama:
+`validate_content` 0 · `validate_reference` 0 · **65 Flutter + 16 engine** ·
+analyze temiz.
