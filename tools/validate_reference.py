@@ -237,6 +237,35 @@ def check_decisions(rep: list[str]) -> int:
             if not label:
                 rep.append(f"decisions.json [{step}]: '{vid}' namedVariant boş")
                 errors += 1
+
+    # TOOL LIMITATIONS — bir aracın belirli bir adım sınıfında GÜVENİLMEZ
+    # olduğunun ölçülmüş kaydı (C-124 / M-F-226 şart 8). Kaynak kararı DEĞİL,
+    # o yüzden yukarıdaki dışlama listelerine girmez; ama denetimsiz de
+    # bırakılamaz — C-114'ün dersi: sebepsiz denetim dışı kalan alan, fark
+    # edilmeyen alana dönüşür. Ölçüm olmadan yazılmış bir sınırlama kaydı
+    # söylentidir, o yüzden `evidence` ve `measuredAt` ZORUNLU.
+    for lim in doc.get("toolLimitations") or []:
+        tool = lim.get("tool")
+        if not tool:
+            rep.append("decisions.json: toolLimitations kaydında 'tool' yok")
+            errors += 1
+        if not lim.get("scope"):
+            rep.append(f"decisions.json: '{tool}' sınırlaması KAPSAMSIZ — "
+                       "hangi adım sınıfında geçersiz olduğu yazılmalı "
+                       "(her yerde geçersiz demek değildir)")
+            errors += 1
+        if not lim.get("why"):
+            rep.append(f"decisions.json: '{tool}' sınırlaması GEREKÇESİZ")
+            errors += 1
+        if not lim.get("evidence"):
+            rep.append(f"decisions.json: '{tool}' sınırlaması KANITSIZ — "
+                       "ölçülmemiş sınırlama söylentidir")
+            errors += 1
+        if not lim.get("measuredAt"):
+            rep.append(f"decisions.json: '{tool}' sınırlamasında measuredAt "
+                       "yok — bayat sınırlama taze görünürse aracı haksız "
+                       "yere emekliye ayırır")
+            errors += 1
     return errors
 
 

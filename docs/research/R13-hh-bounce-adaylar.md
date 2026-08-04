@@ -383,3 +383,170 @@ olarak kalacak.
 
 Config'te olmayan hiçbir eşik icat edilmedi; tek hat-sabiti yukarıda isimle
 ve gerekçesiyle beyan edildi.
+
+---
+
+# SONUÇLAR — ÜÇÜNCÜ TUR (2026-08-04, diz-sürücülü bulucu)
+
+**Ön-kayıt `7bb6936`'da, bu ölçümden ÖNCE commit'lendi.** Aşağısı o kayda karşı
+okunmalı. Koordinatör hükmü M-F-226.
+
+## Doğrulama üçlüsü — hüküm ÖNCESİ (şart 3)
+
+### (a) Sentetik: 15/15 — ama ÖNCE İKİ GERÇEK HATA DÜŞÜRDÜ
+
+Bilinen-cevaplı girdi işini yaptı ve **ilk koşumda 6 iddia kırıldı.**
+
+**Hata 1 — sayıcı her seride TAM BİR ÇÖKÜŞ EKSİK sayıyordu.** `_extrema` baştaki
+ucu hiç eklemiyordu (yön henüz kurulmamışken ilk nokta düşüyordu): 4/8/12 çöküşlü
+sentetik girdiler **3/7/11** dönüyordu. Gerçek take'lerde bu **1 fark** olarak
+görünürdü — yani birim hükmünü sessizce bozardı ve hiçbir yerde "hata" gibi
+durmazdı. Bilinen-cevaplı girdi olmasaydı yakalanmazdı.
+
+**Hata 2 — test yanlıştı, kod değil.** "±4° gürültü sahte çöküş imal eder"
+diye yazmıştım; ölçtüm, **etmiyor**. Testi iddiama göre değil ölçüme göre
+yeniden yazdım ve gürültü sınırını ÖLÇTÜM:
+
+| gürültü | ortanca \|Δ\| | sahte çöküş |
+|---|---|---|
+| ±2° | 1,27° | 0 |
+| ±4° | 2,54° | **0** |
+| ±6° | 3,81° | **13** |
+| ±8° | 5,09° | 20 |
+| ±20° | 12,71° | 37 |
+
+Kanarya artık **iki yönlü**: sağlamlık kaybolursa da, kırılma noktası kaybolursa
+da düşer (ikincisi eleme fazla agresifleşti = gerçek çöküşleri yiyor demektir).
+
+**Gerçek take'lerin artığı bu sınıra karşı okundu — hepsi GÜVENLİ bölgede:**
+`AyzYABnWDEM` 0,21° · `4BRd2E8vBic` 0,32° · `nOR1qEhpssg` 0,41° ·
+`1IVtcoqMrBA` 0,52° · `l3r4bPhikGQ` 0,53° (sınır 3,81°). **Yani aşağıdaki
+çöküş sayıları gürültü artefaktı DEĞİL.**
+
+### (b) Yapısal genellik — RM, ve sonuç ÖĞRETİCİ çıktı
+
+İkame ön-kayıtta beyan edilmişti (RM'in adım config'i repoda yok). Mekanizma
+RM'in **kabul edilmiş** 4 take'inde koşuldu; `prepare_take` RM'in artefakta
+kayıtlı periyotlarını birebir yeniden üretti (1,2 · 1,21 · 1,67 · 1,38s).
+
+| RM take | atanan | çöküş aralığı | oran | verdikt |
+|---|---|---|---|---|
+| `KV-sxd_pQ9w` | 1,20s | 0,601s | **2,00** | two-dip |
+| `UO9Ehsdt2IE` | 1,21s | 0,625s | **1,94** | two-dip |
+| `Wd29rBfAzkI` | 1,67s | 0,792s | **2,11** | two-dip |
+| `ZpTgAZBYNrU` | 1,38s | 0,396s | 3,48 | indeterminate |
+
+**3/4'te oran ≈ 2,0 — ve bu DOĞRU cevap.** Running Man **dönüşümlü** bir adım:
+bir tam çevrim = sol bacak + sağ bacak = `knee_flexion_mean`'de **iki** çöküş.
+Mekanizma, kabul edilmiş bir referansta fizyolojik olarak doğru çevrim yapısını
+2,00/1,94/2,11 hassasiyetinde geri verdi — bounce'a özel ayarlanmadığının kanıtı.
+Aykırı `ZpTgAZBYNrU` isimle kayıtlı: dördü içinde **çapası `x` seçen tek take**
+(diğer üçü `ankle-y`) ve **kapsamı en düşük olan** (0,694).
+
+**Ve bu doğrulama bir YORUM KURALI üretti:** oran ≈ 2,0 tek başına "yanlış
+kesilmiş" demek DEĞİLDİR — dönüşümlü bir adım için çevrim başına iki çöküş
+KANONİK birimdir. Aynı sayı, adımın beyan ettiği birime göre farklı şey anlatır.
+`hh_bounce` `beats: 1` + terminal `rise` ile tek-çöküş beyan ediyor; RM etmiyor.
+
+### (c) Yarı-bilinen: `1IVtcoqMrBA`
+
+İki aletin uyuştuğu tek take. Sonuç: **one-dip**, oran **1,06** (atanan 1,27s /
+çöküş aralığı 1,20s), `topQualified` 10/10. Uyuşan take temiz cevap verdi.
+
+**Üçlü geçti** → itiraz-konulu take'lere hüküm verilebilir.
+
+## Verdikt tablosu — 5 bounce take'i
+
+| take | atanan | segment çöküş | çöküş aralığı | oran | **verdikt** |
+|---|---|---|---|---|---|
+| `1IVtcoqMrBA` | 1,27s | 10 | 1,200s | 1,06 | **one-dip** |
+| `nOR1qEhpssg` | 0,68s | 7 | 0,758s | 0,90 | **one-dip** |
+| `AyzYABnWDEM` | 1,37s | 6 | 2,034s | 0,67 | indeterminate |
+| `l3r4bPhikGQ` | 1,70s | 18 | 0,400s | 4,25 | indeterminate |
+| `4BRd2E8vBic` | 0,71s | **0** | — | — | indeterminate |
+
+**Sayım: 2 one-dip · 3 indeterminate → şart 7-ii eşiği (≥2/5) AŞILDI.**
+
+## Ön-kayda karşı okuma — ve ÖN-KAYDIN KENDİSİ YANLIŞ SORU SORMUŞ OLABİLİR
+
+Ön-kayıt iki uç yazmıştı: **KISA temel** (çevrim = tek çöküş) vs **UZUN temel**
+(çevrim = çift çöküş). **İkisi de ilan EDİLEMİYOR** — 3/5 belirsiz. Ama belirli
+çıkan ikisi şunu söylüyor, ve bu ikisinin de öngörmediği bir şey:
+
+> `nOR1qEhpssg` (atanan **0,68s**) → **one-dip**
+> `1IVtcoqMrBA` (atanan **1,27s**) → **one-dip**
+
+**İkisi de tek-çöküş, ama atanan periyotları 1,87× farklı.** Eğer ikisi de
+gerçekten çevrim başına bir çöküş taşıyorsa, aradaki 2× fark bir **BİRİM**
+farkı değil **TEMPO** farkıdır — biri ~0,76s/çöküş (~79 BPM), diğeri
+~1,20s/çöküş (~50 BPM, yavaş öğretim gösterimi; bir eğitmenin "yavaşça, şöyle"
+demesi tam olarak böyle görünür).
+
+Bu doğruysa **harmonik kapı yanlış şeyi yakalamış olur**: kapı 2× periyot
+oranını "farklı çevrimde kesilmiş" diye okuyor, ama aynı imzayı *aynı birimde,
+farklı tempoda* dans eden iki eğitmen de üretir. Kapı bu ikisini AYIRT ETMİYOR.
+
+**BUNU KANITLANMIŞ SAYMIYORUM — n=2.** Geçen vardiyanın dersi tam da bu:
+sayı üreten ama dağılımı yetmeyen ölçü hüküm veremez. Ön-kaydımın ikili
+çerçevesi (KISA mı UZUN mu) muhtemelen **yanlış soruydu**, ve bunu "önselim
+doğru çıktı" diye okumak da aynı hata olurdu: iki önselim de KISA'yı işaret
+ediyordu, ama çıkan şey "KISA doğru" değil **"ikisi de aynı birimde olabilir"**.
+Önseller silinmedi, yukarıda duruyorlar.
+
+## Ön-kayıtlı DÖRDÜNCÜ çıkış GERÇEKLEŞMEDİ — ve bu (b)'nin aleyhine
+
+Ön-kayıt "`top` kapısı (>168°) hiç sağlanmazsa bu (b) lehine kanıttır" demişti.
+**Sağlanıyor:** `1IVtcoqMrBA` 10/10 · `nOR1qEhpssg` 7/7 · `AyzYABnWDEM` 6/6 ·
+`l3r4bPhikGQ` 17/18 · `4BRd2E8vBic` (tüm take) 190/193.
+
+Yani take'lerde **config'in kendi eşiklerini geçen, ≥6° derin, ≥40°/s hızlı,
+tam ekstansiyondan başlayan GERÇEK çöküşler var.** R13 açık sorusu **(b)**
+("bounce gerçekten ölçülemeyecek kadar taban-yakını") bu ölçümle
+**DESTEKLENMİYOR**. `measurability.tier: A` beyanına bu turda karşı kanıt çıkmadı.
+
+## (a) LEHİNE yeni ve daha keskin kanıt: segment-take TUTARSIZLIĞI
+
+Belirsizliğin nereden geldiğini ölçtüm — ve örüntü tek yöne bakıyor:
+
+| take | TÜM take aralığı | SEGMENT aralığı | SEG/TÜM | verdikt |
+|---|---|---|---|---|
+| `1IVtcoqMrBA` | 0,900s | 1,200s | **1,33** | one-dip |
+| `nOR1qEhpssg` | 0,683s | 0,758s | **1,11** | one-dip |
+| `AyzYABnWDEM` | 0,967s | 2,034s | **2,10** | indeterminate |
+| `l3r4bPhikGQ` | 0,567s | 0,400s | **0,71** | indeterminate |
+| `4BRd2E8vBic` | 1,125s | — | **segmentte 0 çöküş** | indeterminate |
+
+**Verdikt belirliliği, segmentin take'in geneliyle tutarlılığını İZLİYOR.**
+Belirli çıkan ikisinde segment take'e benziyor (1,33 · 1,11); belirsiz üçünde
+ayrışıyor (2,10 · 0,71 · hiç).
+
+En çarpıcısı **`4BRd2E8vBic`**: tüm take'te 1,125s aralıkla **193 çöküş** var,
+ama `prepare_take`'in seçtiği **3,0 saniyelik** segmentte **SIFIR** nitelikli
+çöküş. Segment 3 çevrim taşıdığını iddia ediyor. Yani ayak-çapalı bulucu, bol
+bol bounce içeren bir videoda **bounce İÇERMEYEN bir pencere seçmiş.**
+
+Bu, R13 açık sorusu **(a)** için birinci turdakinden çok daha keskin bir kanıt:
+artık "çapa şüpheli" değil, **çapanın seçtiği pencerede aranan olayın olmadığı
+ölçülmüş** durumda. n=5, yani örüntü — kanun değil.
+
+## Sonuç: ŞART 7-ii — DÜRÜST DURUŞ
+
+3/5 belirsiz olduğu için **birim ÇÖZÜLMEDİ**, referans yeniden kurulmadı, birim
+damgası konulmadı, `low-amplitude-vs-family` temeli **hâlâ sınanmadı** (kurulan
+artefakt yok). `hh_bounce` **AÇIK kalıyor**, karar koordinatörde.
+
+**Ama bu tur boş dönmedi** — dört şey kazanıldı:
+1. **Doğrulanmış bir ölçü aleti** (11 kapı yeşil, gürültü sınırı ölçülü, RM'de
+   genelliği kanıtlı, iki gerçek hatası bilinen-cevaplı girdiyle yakalanmış).
+2. **Belirsizliğin ADI kondu:** üçü de segment-seçimi kaynaklı, ikisi tempo
+   farkıyla açıklanabilir. "Bilmiyoruz" değil, "şu üç take'te şu sebeple
+   bilmiyoruz".
+3. **(b) aleyhine ölçüm** — tier-A beyanına karşı kanıt yok, aksine config'in
+   kendi eşiklerini geçen gerçek çöküşler var.
+4. **(a) lehine keskin kanıt** — çapa, bounce içermeyen pencere seçebiliyor
+   (`4BRd2E8vBic`: 193 çöküşlü videoda 0 çöküşlü segment).
+
+**Koordinatöre giden asıl soru DEĞİŞTİ:** artık "birim hangisi" değil,
+**"segment bulucu diz-sürücülü hâle getirilmeli mi"** — çünkü belirsizliğin
+üçü de birim belirsizliğinden değil, PENCERE seçiminden geliyor. Bu bir ölçü
+tasarımı; bende değil.

@@ -105,5 +105,21 @@
     }
    ]
   }
- }
+ },
+ "toolLimitations": [
+  {
+   "tool": "measure_tempo.py",
+   "scope": "diz-surdurulen (knee-driven) adimlar — olculen ornek: hh_bounce",
+   "why": "Bu adim sinifinda measure_tempo periyot hakemi olarak KULLANILAMAZ: 5 bounce take'inin 2'sinde `no_peak` donuyor (hukum yok), 2'sinde prepare_take ile 2-3x CELISIYOR, yalniz 1'inde uyusuyor. Yani harmonik catismayi cozmek icin cagrilan hakemin kendisi hakem gerektiriyor. build_reference'in harmonik kapisi caresi olarak measure_tempo'yu ADLANDIRIYOR — o tavsiye bu adim sinifi icin gecersiz ve sessiz birakilamaz.",
+   "evidence": [
+    "AyzYABnWDEM: measure_tempo=no_peak · prepare_take=1.37s",
+    "4BRd2E8vBic: measure_tempo=no_peak · prepare_take=0.71s",
+    "l3r4bPhikGQ: measure_tempo=0.867s · prepare_take=1.70s (~2x celiski)",
+    "nOR1qEhpssg: measure_tempo=2.05s · prepare_take=0.68s (~3x celiski)",
+    "1IVtcoqMrBA: measure_tempo=1.30s · prepare_take=1.27s (UYUSAN tek take)"
+   ],
+   "measuredAt": "2026-08-04",
+   "fixScope": "DUZELTME KAPSAM DISI (koordinator hukmu M-F-226/8). Bu kayit sinirlamayi GORUNUR kilar, cozmez."
+  }
+ ]
 }

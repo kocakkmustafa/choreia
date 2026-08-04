@@ -1011,7 +1011,15 @@ def self_test() -> int:
             fails += 1
 
     # build() classifies every take via classify_source.classify(videoId),
-    # which reads real manifest/transcript files from the harvest library.
+    # which reads real transcript files (`transcripts/<id>.transcript.json`)
+    # and raw metadata (`raw/<id>.info.json`) from the harvest library.
+    # NOT manifests: the vendored-rig manifests carry decision fields
+    # (`rom_mode`, `reference_eligible`) that are step-AGNOSTIC, and feeding
+    # them in would be fail-open — measured in C-123, where a manifest marked
+    # `reference_eligible: true` on a salsa video that had no business near a
+    # hip-hop reference. The comment used to say "manifest/transcript"; the
+    # code never read manifests, but a stale comment claiming a dependency is
+    # how a future reader talks themselves into adding one.
     # The synthetic takes below use fake ids ("a", "b", "c", ...) that have no
     # such files, so left unpatched every one of them is classified as
     # not-a-lesson and every scenario silently degrades to 0 usable takes —

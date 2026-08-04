@@ -50,9 +50,16 @@
     "steps.ss_shine_footwork.excludedIdentityAmbiguous[].videoId",
     "steps.ss_shine_footwork.excludedIdentityAmbiguous[].why",
     "steps.ss_shine_footwork.namedVariants",
-    "steps.ss_shine_footwork.namedVariants.SHGkSbJm2Iw"
+    "steps.ss_shine_footwork.namedVariants.SHGkSbJm2Iw",
+    "toolLimitations",
+    "toolLimitations[].evidence",
+    "toolLimitations[].fixScope",
+    "toolLimitations[].measuredAt",
+    "toolLimitations[].scope",
+    "toolLimitations[].tool",
+    "toolLimitations[].why"
    ],
-   "updatedAt": "2026-07-30"
+   "updatedAt": "2026-08-04"
   },
   "hh_roger_rabbit.json": {
    "keys": [
@@ -279,7 +286,7 @@
     "toleranceSource.right_upper_arm",
     "toleranceSource.trunk_tilt"
    ],
-   "updatedAt": "2026-07-30"
+   "updatedAt": "2026-08-04"
   },
   "hh_running_man.json": {
    "keys": [
@@ -517,7 +524,7 @@
     "toleranceSource.right_upper_arm",
     "toleranceSource.trunk_tilt"
    ],
-   "updatedAt": "2026-07-30"
+   "updatedAt": "2026-08-04"
   },
   "ss_shine_footwork.json": {
    "keys": [
@@ -737,7 +744,7 @@
     "toleranceSource.right_upper_arm",
     "toleranceSource.trunk_tilt"
    ],
-   "updatedAt": "2026-07-30"
+   "updatedAt": "2026-08-04"
   }
  },
  "declaredRemovals": {},
