@@ -969,3 +969,30 @@ AZ iddia eder.
 
 `nOR1qEhpssg` kaybının bedeli **isimli**: C-124'te KESİN `one-dip` hükmü almış
 iki take'ten biriydi, yani birim sorusuna en çok ışık tutan kaynaktı.
+
+## EK — re-pin `dde99bd` (koordinatör talimatı, zincir SONRASI)
+
+Zincir `9620394` pinliyken koşulmuştu. Talimat üzerine pin **`dde99bd`**'ye
+taşındı. **Zincir yeniden doğrulandı, hiçbir çıktı değişmedi:**
+
+- `movement_isolator.py` **`9620394` → `dde99bd` → `5bbced9` boyunca bit-aynı**
+  (git diff ile ölçüldü) — re-pin saf pin yükseltmesi, içerik yükseltmesi değil.
+- 6 take'in prepared çıktısı **birebir aynı** · referans yeniden üretimi
+  **birebir aynı** · 13/13 kapı 0.
+
+**İKİ NOKTA KOORDİNATÖRE (talimat uygulandı, ama ölçüm iki şey söylüyor):**
+
+1. **`dde99bd` artık main değil** — main `5bbced9`'a ilerledi (D1 kapısı
+   merge'i), dolayısıyla kendi `drift_check`'im artık **"pin 2 commit(s)
+   behind origin/main"** uyarısı basıyor. Uyarı DOĞRU ama içerik hakkında
+   değil pin YAŞI hakkında: izolatör dosyası o iki commit boyunca değişmedi
+   (ölçüldü). Sürekli yanan sebepsiz uyarı, C-114'ün *"gürültülü kapı
+   kapatılır"* dersinin tam hedefi — **`5bbced9`'a bump önerilir**, ama pin
+   değeri senin talimatındı, tek taraflı değiştirmedim.
+
+2. **Soy-nöbeti bu kopyaya ULAŞMIYOR.** `rig_version()`/`onMainLineage`
+   `tools/harvest_rig/manifest.py`'de; **Choreia o dosyayı vendor ETMİYOR**,
+   yalnız `movement_isolator.py`'yi ediyor. Yani "kendi kopyan da soy-nöbetli
+   olur" gerekçesi bu vendored yol için geçerli değil — ama boşluk YOK:
+   bu kopyanın kendi `merge-base --is-ancestor` kontrolü (C-126) zaten aynı
+   işi yapıyor ve sabotajla ayırt ediciliği kanıtlı.
