@@ -155,3 +155,152 @@ segment bulucu denemek** (mevcut ayak-çapası yerine `knee_flexion_mean`) — b
 `l3r4bPhikGQ`'nun güçlü sinyalinin bounce mi criss-cross mu olduğu da aynı
 soruya bağlı: doğru segment bulucu olmadan hangi pencereyi ölçtüğümüzden emin
 olamayız.
+
+---
+
+# SONUÇLAR — İKİNCİ TUR (2026-08-04, tam havuz)
+
+**Ön-kayıt disiplini burada da geçerli:** devir promptunda İKİ dürüst son
+ÖNCEDEN yazılıydı (temel *temizlendi* / temel *duruyor*). **Çıkan sonuç
+ikisinden de değil** — ve bunu ikisinden birine yamamak, ön-kaydın engellemek
+için var olduğu şeyin ta kendisi olurdu. Üçüncü son ayrıca yazılıyor.
+
+Bir öncekinden farkı: 403'ler geçici çıktı, havuz **2 kullanılabilirden 5
+ders-doğrulanmış kaynağa** yükseldi — yani `MIN_TAKES=3` bu adımda **ilk kez**
+sağlandı. Referans yine kurulmadı, ama **gerekçe DEĞİŞTİ**.
+
+## Zincir (prepare → classify → build → resolvedBy)
+
+`prepare_take` — 7 aday, 6 hazır:
+
+| take | durum | segment | periyot | çapa | not |
+|---|---|---|---|---|---|
+| `AyzYABnWDEM` | hazır | 27,0s | **1,37s** | x | |
+| `NWB9Y1_lZDQ` | hazır | 6,0s | 0,90s | x | classify'da elendi |
+| `l3r4bPhikGQ` | hazır | 9,0s | **1,70s** | x | |
+| `nOR1qEhpssg` | hazır | 7,0s | **0,68s** | x | |
+| `4BRd2E8vBic` | hazır | 3,0s | **0,71s** | x | |
+| `1IVtcoqMrBA` | hazır | 14,0s | **1,27s** | x | |
+| `DEWpw4n8Lkw` | **elendi** | 12,0s | 1,28s | — | *ankle swing too small (0,034 torso)* |
+
+`classify_source` (fail-closed) — 6 hazırdan **5 `lesson`**:
+`AyzYABnWDEM` 449 sözcük · `l3r4bPhikGQ` 2062 · `nOR1qEhpssg` 421 ·
+`4BRd2E8vBic` 2070 · `1IVtcoqMrBA` 944. Elenen: **`NWB9Y1_lZDQ`**,
+`performance`/`silence`, **0 sözcük** — C-119'daki ölçümün (transkript var
+0 segment + volumedetect −12,8 dB: ses var, konuşma yok) bağımsız tekrarı.
+
+## Referans NEDEN kurulmadı — bu kez ÜÇÜNCÜ gerekçe
+
+`build_reference` **harmonik çelişki** kapısında durdu (C-032'nin iki-kat
+tuzağının referans kurucuya ulaşmış hâli). Faz ekseni ancak her take AYNI
+çevrimde kesilmişse take'ler arasında aynı şeyi anlatır:
+
+| çift | oran |
+|---|---|
+| `nOR1qEhpssg` 0,68 ↔ `AyzYABnWDEM` 1,37 | **2,01×** |
+| `4BRd2E8vBic` 0,71 ↔ `1IVtcoqMrBA` 1,27 | **1,79×** |
+| `nOR1qEhpssg` 0,68 ↔ `1IVtcoqMrBA` 1,27 | **1,87×** |
+| `4BRd2E8vBic` 0,71 ↔ `AyzYABnWDEM` 1,37 | **1,93×** |
+
+Havuz iki harmonik aileye ayrılıyor: **UZUN** {1,27 · 1,37 · 1,70} ve
+**KISA** {0,68 · 0,71}. Bu bir genlik sorunu DEĞİL, bir *birim* sorunu:
+"bir çevrim" tek diz çöküşü mü, yoksa çöküş-çifti (2-count) mi?
+
+**`low-amplitude-vs-family` temeli bu turda SINANMADI.** Sınanamaz da:
+`statusBases` ancak kurulan bir artefakt üzerinde türetilir, kapı ondan
+ÖNCE ateşledi. Devirdeki iki dürüst sonun ikisi de kurulmuş bir artefakt
+varsayıyordu; o yüzden ikisi de bugün uygulanamaz. **Soru açık kalıyor.**
+
+## Kapının kendi çaresi ÖLÇÜLDÜ — ve KAPALI çıktı
+
+Kapı çareyi kendisi adlandırıyor: *"`measure_tempo` ile her take'in dönüşümlü
+olup olmadığını belirle; yarım çevrime kilitlenenleri havuzdan çıkar."*
+Çarenin **mevcut olup olmadığını varsaymadım, ölçtüm:**
+
+| take | `measure_tempo` | çevrim | `prepare_take` | uyum |
+|---|---|---|---|---|
+| `AyzYABnWDEM` | `no_peak` | — | 1,37s | **hüküm YOK** |
+| `4BRd2E8vBic` | `no_peak` | — | 0,71s | **hüküm YOK** |
+| `l3r4bPhikGQ` | `non_alternating` | 0,867s | 1,70s | **~2× ÇELİŞKİ** |
+| `nOR1qEhpssg` | `non_alternating` | 2,05s | 0,68s | **~3× ÇELİŞKİ** |
+| `1IVtcoqMrBA` | `alternating` | 1,30s | 1,27s | ✓ uyuşuyor |
+
+**5 take'in yalnız 1'inde iki alet aynı şeyi söylüyor.** İkisinde hakem
+hüküm veremiyor, ikisinde hakem 2-3× farkla çelişiyor. Yani harmonik çelişki
+"bazı take'ler yanlış kesilmiş" diye tekil bir arıza değil: **iki periyot
+kestiricisi bu harekette birbirini doğrulamıyor**, ve hangisinin haklı
+olduğunu söyleyecek üçüncü bir ölçü havuzda yok. C-116'da `-8W2bnjrhE0`
+için açılan `tool-disagreement` sınıfı, bounce havuzunun **5'te 4'ünü**
+kapsıyor.
+
+## Kurulabilecek ALT KÜME VAR — ve bilerek KURULMADI
+
+Aritmetik kontrol edildi (elle değil, betikle): UZUN grup
+{`AyzYABnWDEM` 1,37 · `l3r4bPhikGQ` 1,70 · `1IVtcoqMrBA` 1,27} **n=3**,
+kendi içinde harmonik çelişki **YOK**, üçü de `lesson` — yani
+`MIN_TAKES=3`'ü sağlıyor ve **kapıdan geçerdi**.
+
+**Kurmadım.** Gerekçe, geçen vardiyanın en pahalı dersinin doğrudan
+uygulanması: kapıdan geçen alt kümeyi seçmek, *cevap veren grubu* seçmektir
+— "N'in en uçtakini al" tuzağının kılık değiştirmiş hâli. Bir take'i
+"yarım çevrime kilitlenmiş" diye atmak, hangi harmoniğin GERÇEK çevrim
+olduğuna dair **bağımsız kanıt** ister; bugün o kanıt yok (yukarıdaki
+tablo tam olarak bunu gösteriyor). Dışlama isimli VE bağımsız gerekçeli
+olmalı (M-F-47); "kalanların uyuşması" bir gerekçe değildir.
+
+**Üstelik elimdeki tek sezgi ters yöne işaret ediyor:** hip-hop bounce
+tipik olarak vuruş-başına bir çöküştür; ~90-100 BPM'lik bir müzikte bu
+0,60-0,67s eder — yani **KISA gruba** yakın, kurulabilecek alt kümeye
+değil. Bunu ÖLÇMEDİM ve ölçüm yerine geçirmiyorum; buraya yazılma sebebi,
+uygun alt kümeyi kurmanın neden özellikle riskli olduğunu göstermesi:
+kolay yol, elimdeki tek bağımsız ipucuyla **çelişiyor**.
+
+## R13'ün açık sorusu (a) GÜÇLENDİ — ama kanıtlanmadı
+
+Birinci tur (a) "çapa modeli bounce'a uymuyor" ile (b) "bounce gerçekten
+küçük genlikli" arasında ayrım yapamamıştı. Bu turda (a) lehine **üç
+bağımsız işaret** birikti:
+
+1. **`DEWpw4n8Lkw` tam çapa gerekçesiyle elendi:** *"ankle swing too small
+   (0,034 torso)"*. Çapa ayak bileği AYRILMASI istiyor; bounce ayakları
+   YERDE tutar. Çapa, hareketin tanımlayıcı özelliğini gürültü sayıyor.
+2. **6 hazır take'in 6'sı da `x` ekseni seçti** — yatay. Bounce dikey ve
+   diz sürücülü; çalışan RM referansı `ankle-y` seçiyor.
+3. **İki periyot kestiricisi 5'te 4 take'te uyuşmuyor** — dikey bir
+   hareketi yatay ayak yolculuğundan okumaya çalışan bir hattın
+   üreteceği imza budur.
+
+Üçü de aynı yöne bakıyor, ama hiçbiri (b)'yi ÇÜRÜTMÜYOR: gerçekten
+taban-yakını bir hareket de kararsız periyot üretebilir. **Ayırt edecek
+ölçü hâlâ aynı: adımın kendi faz tanımına (`knee_flexion_mean` top >168°,
+drop ≥40°/s) dayanan diz-sürücülü bir segment bulucu** — bir çevrimde KAÇ
+diz çöküşü olduğunu saymak harmonik soruyu da doğrudan keserdi. Bu bir
+ölçü TASARIMI; yükseltme kuralı gereği bende değil, **koordinatörde**.
+
+## Yan bulgular (kayda geçsin)
+
+- **8. fixture `Ns5TaVGv6uY` zincire ALINMADI.** Provenans sınavı:
+  *"10 Minute Salsa Basic Steps Practice Routine"* (Dance Dojo) — `hh_bounce`
+  adayı değil, R13 triyaj tablosunda da yok. **Manifest'i `reference_eligible:
+  true` diyor** — ve tam bu yüzden o alan girdi olarak kullanılamaz:
+  bayrak adım-agnostik, hip-hop bir referansa salsa kaynağı sokardı
+  (M-F-218/221'in somut kanıtı, artık varsayım değil).
+- **Zincir manifest-BAĞIMSIZ olduğu ÖLÇÜLDÜ:** `prepare_take`,
+  `build_reference`, `classify_source`, `movement_isolator`,
+  `camera_angle_gate` dosyalarında `manifest|rom_mode|reference_eligible`
+  taraması **tek isabet** verdi, o da bir YORUM satırı. Vendored-rig
+  dönemi karar-alanları bu hattan yapısal olarak erişilemez.
+  *(Küçük bakım notu: `build_reference.py:1013` yorumu `classify_source`
+  için "manifest/transcript okur" diyor; gerçekte `transcripts/` +
+  `raw/*.info.json` okuyor — yorum bayat, kod doğru.)*
+- **`1IVtcoqMrBA` `lesson` hükmünü tek öğretim işaretiyle aldı** (944
+  sözcük içinde 1 marker). Kapının kendi kuralı bu ve ezmedim; yalnız
+  havuzun en ince kanıtlı `lesson` kaydı olduğu kayda geçiyor.
+- İndirme YAPILMADI — zincir tamamen disk işiydi (hasat slotu JabLab'da).
+
+## Sonuç cümlesi
+
+`hh_bounce` bugün de kurulmadı, ama **üçüncü kez farklı bir duvarda**:
+C-117 gürültü tabanı · C-119 kaynak sayısı · **bugün harmonik birim
+belirsizliği**. Kaynak sayısı artık engel DEĞİL (5 ders-doğrulanmış kanal).
+Kalan tek engel bir ölçü sorusu, ve o soru koordinatörde.
