@@ -679,3 +679,102 @@ diz-sürücülü bir adımda pencereleri kaçırıyor (`4BRd2E8vBic`: %3,8 kapsa
 **`movement_isolator.py` VENDORED** (pin `eb28039`, `--drift-check`'li) — yani
 orayı diz-sürücülü yapmak aile-düzeyi bir karar, bende değil. App düzeyinde
 alternatif bir aday üreteci yazmak da yeni ölçü tasarımıdır. **Karar sende.**
+
+---
+
+# BEŞİNCİ TUR — aday üretimi rig'de faz-sürücülü (2026-08-04, M-F-235)
+
+**Zincir KOŞULMADI:** şart 6 zinciri MERGE SONRASINA bağlıyor. Aşağısı dalın
+kanıt dosyası. Rig dalı: `feat/isolator-kinematic-driver` @ **`5054426`**
+(motion-core, push'lu, merge kararı koordinatörde).
+
+## Rig değişikliği — alan sözlüğü PARAMETREYLE
+
+`find_movement_windows` iki opsiyonel parametre kazandı:
+`driver_series` (çağıranın verdiği kare-başına skaler) ve `min_amplitude`
+(sürücünün KENDİ birimindeki genlik tabanı). **Rig hangi eklem, hangi adım,
+hangi birim olduğunu öğrenmiyor** — yalnız verilen sinyali pencereliyor.
+
+**Hiçbir ölçünün ikinci uygulaması yazılmadı:** skaler sürücü, 1 boyutlu
+vektör serisidir; `_motion_energy` ve `_periodicity` **değiştirilmeden**
+yeniden kullanıldı (`dim` zaten çalışma anında okunuyordu).
+
+Choreia tarafında iki değer de **config'ten** geliyor: sürücü
+`knee_flexion_mean`, taban **12°** — adımın kendi `NO_BOUNCE` hatasının
+eşiği, notu birebir *"öğrenci müziğe kıpırdamadan duruyor"*. İcat edilmedi.
+
+## Doğrulama üçlüsü — rig düzeyi
+
+**Varsayılan yol BİT-DEĞİŞMEZ (5/5 gerçek take, alan alan karşılaştırma):**
+`SHGkSbJm2Iw` · `jjP8bKWCg9U` · `AyzYABnWDEM` · `4BRd2E8vBic` ·
+`DEWpw4n8Lkw` — eski/yeni pencere listeleri birebir aynı. Parametreler
+varsayılanda no-op olduğu için bu "beklenti" değil, **aynı girdilerle aynı kod**.
+
+| test | sonuç |
+|---|---|
+| **(a)** `4BRd2E8vBic` çöküş-yoğun bölge kapsanıyor | ✓ **5→8 pencere, SEKİZİNİN DE ≥2 çöküşü var** (eskiden dördünde 0, birinde 1 → aralık hesaplanamıyordu) |
+| **(b)** `DEWpw4n8Lkw` 321-347s sınıfı pencere havuzda | ✓ 40 pencere, 315-323s örtüşüyor |
+| **(c)** pozitif-ikiz | ✓ hareketsiz sürücüde 0 · NaN sürücüde 0 · **gerçek 1s salınımda 1** |
+
+Rig'in KENDİ self-test'i sürücü modunu kapsıyor ve **atıl (inert) gövde
+kareleri** besliyor: pencere ancak sürücüden gelebilir. Tabanın gerçekten
+uygulandığı da çivilendi — **aynı 20° salınım, 40° taban altında REDDEDİLMELİ**;
+o satır olmadan taban tamamen yok sayılabilir ve diğer satırlar yine geçerdi.
+
+## Choreia düzeyi — (a) GEÇTİ, ama İKİ GERİLEME VAR
+
+| take | önce | sonra | çöküş | periyot |
+|---|---|---|---|---|
+| `4BRd2E8vBic` | **elendi** | **hazır** | 20 (20/20 topQ) | 0,625s |
+| `DEWpw4n8Lkw` | hazır | hazır | 16 | 0,680s |
+| `1IVtcoqMrBA` | hazır | hazır | 21 | 0,583s |
+| `l3r4bPhikGQ` | hazır | hazır | 30 | 0,333s |
+| `NWB9Y1_lZDQ` | hazır | hazır | 10 | 1,167s |
+| `AyzYABnWDEM` | hazır | **ELENDİ** | — | — |
+| `nOR1qEhpssg` | hazır | **ELENDİ** | — | — |
+
+**Kabul testi geçti** (`4BRd2E8vBic`), ama iki take düştü ve sebepleri AYRI:
+
+**`AyzYABnWDEM` — genlik tabanında ölüyor.** Tüm-take diz genliği (p95-p5)
+**13,8°**, config'in `NO_BOUNCE` tabanı 12°. Yalnız 1 aday pencere hayatta
+kalıyor ve onda nitelikli çöküş yok. Bu take C-117'de sağ diz std'si **1,7°**
+(gürültü tabanının ALTINDA) diye zaten işaretlenmişti. Elenmesi tutarlı
+görünüyor — ama **davranış değişikliğidir ve gizlenmiyor**.
+
+**`nOR1qEhpssg` — KAMERA KAPISINDA ölüyor.** Gerekçe: *"no movement window
+overlaps a camera-clean window"*. Sürücü, dizin çalıştığı FARKLI pencereleri
+buluyor ve onlar kamera-temiz bölgelerin dışına düşüyor. **Bu, koordinatörün
+şart 4'te önceden adlandırdığı olgunun ta kendisi** (`AyzYABnWDEM` 163-185s
+vakası). **Kamera kapısı BU TURDA GEVŞETİLMEDİ** (M-F-200); bulgu isimli olarak
+buraya yazıldı, hüküm koordinatörde.
+
+## Havuzun bugünkü hâli (zincir koşulmadan, yalnız ölçüm)
+
+Ders-doğrulanmış **ve** kullanılabilir **4** kaynak:
+
+| take | periyot |
+|---|---|
+| `l3r4bPhikGQ` | 0,333s |
+| `1IVtcoqMrBA` | 0,583s |
+| `4BRd2E8vBic` | 0,625s |
+| `DEWpw4n8Lkw` | 0,680s |
+
+**Kalan 2× çatışmaların ÜÇÜ DE `l3r4bPhikGQ` kaynaklı** (1,75 · 1,88 · 2,04).
+Diğer üçü **birbirine 1,17× içinde** — yani `l3r4bPhikGQ` dışarıda kalırsa
+`MIN_TAKES=3` tam olarak sağlanıyor. **Bunu "referans kurulabilir" diye
+OKUMUYORUM:** zincir merge sonrasına bağlı, ve `l3r4bPhikGQ`'yu "uyuşmuyor"
+diye atmak tam olarak C-124'te reddettiğim hamle — dışlama bağımsız kanıt
+ister, ki o da segment kimliği sorusudur (0,333s ≈ 180 BPM: hızlı bounce mu,
+criss-cross mu). R13'ün hasattan ÖNCE "derleme riskli" işaretlediği take
+olmaya devam ediyor.
+
+## Yan bulgu: `drift_check`'in kendi kör noktası — C-114'ün iddiası YANLIŞMIŞ
+
+Vendored kopya merge EDİLMEMİŞ bir dala pinlendiğinde `drift_check`
+**"✓ pin is current with origin/main"** diyordu. Sebep: sayım
+`rev-list --count PIN..origin/main` ve pin main'in **ARDILI** olduğunda bu
+sayı da 0. C-114 "drift_check pinin main'in atası olup olmadığını sınayıp
+yüksek sesle bildiriyor" diye kayıtlıydı — **ölçtüm, bildirmiyordu**, üstelik
+tam da bunun için yazıldığı vakada. Soy-ağacı artık DOĞRUDAN soruluyor
+(`merge-base --is-ancestor`) ve dal pini yüksek sesle raporlanıyor. Sabotajla
+ayırt ediciliği kanıtlandı: main atası olan pinde uyarı SUSUYOR.

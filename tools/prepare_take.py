@@ -440,9 +440,29 @@ def kinematic_unit(step: str | None) -> dict | None:
         if unit and unit.get("driver") and unit.get("dipsPerCycle"):
             unit = dict(unit)
             unit["_phases"] = cfg.get("phases") or []
+            unit["_errors"] = cfg.get("errors") or []
             return unit
         return None
     return None
+
+
+def _standing_still_floor(unit: dict) -> float:
+    """Adımın KENDİ "yerinde duruyor" eşiği, sürücünün kendi biriminde.
+
+    İcat edilmedi: config'in `NO_BOUNCE` hatası zaten
+    `knee_flexion_amplitude < 12°` diyor ve notu birebir "öğrenci müziğe
+    kıpırdamadan duruyor". Aday penceresini elemek için gereken şey tam
+    olarak bu — rig'in tüm-vücut enerji tabanı ise torso-göreli birimlerde
+    ve bu eklem hakkında hiçbir şey söylemiyor.
+
+    Eşik yoksa 0.0 döner (kapı kapanır, uydurulmaz).
+    """
+    for err in unit.get("_errors") or []:
+        det = err.get("detect") or {}
+        if (det.get("metric") == f"{unit['driver'].replace('_mean', '')}_amplitude"
+                and det.get("op") == "<"):
+            return float(det["valueDeg"])
+    return 0.0
 
 
 def _phase_thresholds_from(phases: list) -> tuple[float | None, float | None]:
@@ -535,7 +555,27 @@ def prepare(video_id: str, step: str | None = None) -> dict:
     # window ended 40 frames before the nearest clean window began, while the
     # third-best sat inside it. Optimising one criterion and filtering by the
     # other is not the same as optimising over what satisfies both.
-    moves = find_movement_windows(iso, fps=fps, max_windows=40)
+    # ADAY ÜRETİMİ de faz-sürücülü olabilir (M-F-235). Sıralamayı düzeltmek
+    # yetmedi: `4BRd2E8vBic`'te 896 saniyelik, 193 nitelikli çöküş taşıyan bir
+    # derste tüm-vücut pencereleme 5 aday üretti ve dördü o çöküşlerin
+    # HİÇBİRİNİ içermiyordu. Tüm-vücut enerjisi "adım oluyor mu"nun VEKİLİDİR
+    # ve bounce gibi bedeni yerinde tutan bir adımda vekil adımla anlaşmıyor.
+    #
+    # Alan sözlüğü BURADA kalır: rig'e hangi eklem/hangi adım/hangi birim
+    # olduğu söylenmez, yalnız sinyal ve kendi birimindeki taban verilir.
+    unit = kinematic_unit(step)
+    if unit:
+        cfg_amp = _standing_still_floor(unit)
+        moves = find_movement_windows(
+            iso, fps=fps, max_windows=40,
+            driver_series=_knee_mean_series(iso),
+            # Vekil kapı KAPALI: yerine adımın KENDİ "yerinde duruyor"
+            # eşiği geçiyor (config'in NO_BOUNCE tanımı), yani daha zayıf
+            # değil DAHA DOĞRUDAN bir kapı.
+            min_energy_per_s=0.0,
+            min_amplitude=cfg_amp)
+    else:
+        moves = find_movement_windows(iso, fps=fps, max_windows=40)
     if not moves:
         return {"videoId": video_id, "usable": False,
                 "why": "no repeating-and-moving window found"}

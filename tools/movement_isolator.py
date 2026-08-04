@@ -58,7 +58,7 @@ from pathlib import Path
 # and either porting the change or adding it to DECLARED_DIFFERENCES with a
 # named, independent reason (family rule: exclusion is always named).
 PIN_REPO_PATH = "tools/harvest_rig/movement_isolator.py"
-PIN_SHA = "eb28039"  # motion-core main, 2026-07-29 — chore: 0.8.4 tag
+PIN_SHA = "5054426"  # feat/isolator-kinematic-driver — MERGE BEKLİYOR (M-F-235)
 
 DECLARED_DIFFERENCES = {
     "normalized_series": (
@@ -110,8 +110,15 @@ class MovementWindow:
                 f"periyot={self.period_s:.2f}s")
 
 
-def normalized_series(frames: list[list[list[float]]]) -> list[list[float]]:
+def normalized_series(frames: list[list[list[float]]],
+                      ids: list[int] | None = None) -> list[list[float]]:
     """Torso-relative body landmarks, flattened per frame.
+
+    [ids] scopes WHICH landmarks enter the series (default: full BODY).
+    M-O-43: measuring energy/drift over landmarks that are structurally out
+    of frame (legs in a waist-up lesson) folds MediaPipe's guessed-position
+    noise into the measurement — the scope must match what the downstream
+    consumer actually requires.
 
     Same normalization idea as the engine: origin at the hip midpoint, scaled by
     torso length, so that a dancer stepping toward the camera does not read as
@@ -128,7 +135,7 @@ def normalized_series(frames: list[list[list[float]]]) -> list[list[float]]:
             out.append(None)
             continue
         row = []
-        for i in BODY:
+        for i in (ids if ids is not None else BODY):
             row.append((lm[i][0] - hx) / torso)
             row.append((lm[i][1] - hy) / torso)
         out.append(row)
@@ -144,8 +151,7 @@ def _motion_energy(seg: list[list[float]], fps: float) -> float:
     a fixed per-frame floor silently rejected it. The floor below is
     declared in per-second units; 0.30/s is the old 0.010/frame at the
     30 fps the number was tuned on — identical behavior there, correct
-    behavior everywhere else. (Ported from harvest_rig/movement_isolator.py
-    after the coordinator flagged this copy had drifted — M-F-77 follow-up.)
+    behavior everywhere else.
     """
     if len(seg) < 2 or fps <= 0:
         return 0.0
@@ -224,6 +230,25 @@ def _periodicity(
     return best, best_lag
 
 
+def _amplitude(seg: list[list[float]]) -> float:
+    """Robust per-dimension excursion (p95-p5), max across dimensions.
+
+    p95-p5 rather than max-min: on real takes max-min measures the worst
+    tracking glitch in the window, not the movement (a consumer measured
+    a "3031 deg/s" knee once and it was one bad frame).
+    """
+    if len(seg) < 3:
+        return 0.0
+    dim = len(seg[0])
+    best = 0.0
+    for d in range(dim):
+        col = sorted(f[d] for f in seg)
+        lo_i = int(0.05 * (len(col) - 1))
+        hi_i = int(0.95 * (len(col) - 1))
+        best = max(best, col[hi_i] - col[lo_i])
+    return best
+
+
 def find_movement_windows(
     frames: list[list[list[float]]],
     *,
@@ -235,9 +260,51 @@ def find_movement_windows(
     min_periodicity: float = 0.5,
     min_energy_per_s: float = 0.30,
     max_windows: int = 5,
+    driver_series: list[float] | None = None,
+    min_amplitude: float = 0.0,
 ) -> list[MovementWindow]:
-    """Windows that are both repeating and moving."""
-    series = normalized_series(frames)
+    """Windows that are both repeating and moving.
+
+    KINEMATIC-DRIVER MODE (optional, off by default).
+
+    By default the window search runs over `normalized_series` — whole-body,
+    torso-relative motion. That is the right signal when the step's identity
+    IS gross body movement, and it is what every existing caller gets.
+
+    It is the WRONG signal when a step's defining event is a small excursion
+    of one joint while the body stays put. A consumer measured this: on a
+    896 s lesson containing 193 qualified events of the step being taught,
+    whole-body windowing produced 5 candidate windows totalling ~34 s (3.8%
+    of the video) and four of them contained none of those events. The
+    energy pre-gate was rejecting the very thing being looked for, because
+    whole-body energy is a PROXY for "is the step happening" and the proxy
+    disagrees with the step.
+
+    So the signal to window over becomes caller-supplied:
+
+      driver_series   per-frame scalar the caller considers definitional
+                      (NaN or None marks an unusable frame, exactly as a
+                      missing torso does in the default path)
+      min_amplitude   excursion floor IN THE DRIVER'S OWN UNITS
+
+    The rig stays domain-blind: it never learns which joint, which step, or
+    what the units mean. It windows over the signal it is handed. Callers
+    source the driver and its floors from their own step configuration, so
+    the vocabulary lives where the domain knowledge lives.
+
+    Note the scalar is simply a one-dimensional vector series, so
+    `_motion_energy` and `_periodicity` are reused UNCHANGED — no second
+    implementation of either measure exists to drift from the first.
+
+    Both new parameters default to no-ops, so the existing path is not
+    merely "expected" to be unchanged, it is the same code with the same
+    inputs.
+    """
+    if driver_series is None:
+        series = normalized_series(frames)
+    else:
+        series = [None if (v is None or v != v) else [float(v)]
+                  for v in driver_series]
     usable = [i for i, r in enumerate(series) if r is not None]
     if len(usable) < 10 or fps <= 0:
         return []
@@ -265,6 +332,14 @@ def find_movement_windows(
         if energy < min_energy_per_s:
             continue                      # standing still — reject before the
                                           # autocorrelation can flatter it
+        # Excursion floor in the driver's own units. A no-op at the default
+        # 0.0, so this cannot change any existing caller. It exists because a
+        # caller windowing over a joint angle has a floor that means something
+        # concrete ("below this the person is standing still") while the
+        # whole-body energy floor above is in torso-relative units that say
+        # nothing about that joint.
+        if min_amplitude > 0.0 and _amplitude(seg) < min_amplitude:
+            continue
         per, lag = _periodicity(seg, lo, min(hi, len(seg) - 2))
         if per < min_periodicity:
             continue
@@ -290,12 +365,13 @@ def find_movement_windows(
 
 def load_frames(path: str) -> tuple[list[list[list[float]]], float]:
     d = json.load(open(path, encoding="utf-8"))
+    # Fail-closed, never a silent 30 (M-F-59 class; Choreia found the same
+    # leak in its copy and fixed it first — ff4f665): a wrong fps corrupts
+    # every per-second number downstream while looking plausible.
     fps = d.get("recordingMeta", {}).get("fps")
     if not fps:
-        # No silent default — same reasoning as prepare_take.load_take: the
-        # harvest pool mixes frame rates and every window/period downstream
-        # scales with this number.
-        raise SystemExit("fixture meta has no fps — refusing to assume one")
+        raise SystemExit(f"fps yok: {path} — recordingMeta.fps zorunlu "
+                         "(sessiz 30 varsayımı yasak, doc 60 §1)")
     out = []
     for f in d.get("frames", []):
         if f.get("detected") is False:
@@ -372,6 +448,42 @@ def self_test() -> int:
             lm[i] = [wx, wy, 0, 1]
         walk.append(lm)
     run("random walk (M-C-25 class)", walk, False)
+
+    # ---- KINEMATIC-DRIVER MODE ------------------------------------------
+    # The driver is a caller-supplied scalar, so these cases feed it directly
+    # and hand in body frames that carry NO movement at all. That separation
+    # is the point: if the driver path were quietly still reading the body,
+    # the oscillating case below would find nothing.
+    print()
+    print(f"{'driver-mode scenario':<40}{'windows':>8}{'per':>7}{'energy':>9}")
+    n = 30 * 40
+    inert = [[[0.0, 0.0, 0.0]] * 33 for _ in range(n)]
+
+    def run_driver(label, driver, expect_found, min_amplitude=10.0):
+        nonlocal fails
+        ws = find_movement_windows(inert, fps=30, window_s=4.0,
+                                   driver_series=driver, min_energy_per_s=0.0,
+                                   min_amplitude=min_amplitude)
+        top = ws[0] if ws else None
+        print(f"{label:<40}{len(ws):>8}"
+              f"{(top.periodicity if top else 0):>7.2f}"
+              f"{(top.motion_energy if top else 0):>9.4f}")
+        if bool(ws) != expect_found:
+            print(f"    ! expected {'a window' if expect_found else 'none'}")
+            fails += 1
+
+    osc = [172.0 - 20.0 * (0.5 - 0.5 * math.cos(2 * math.pi * i / 30.0))
+           for i in range(n)]
+    run_driver("driver: 1 s oscillation, 20 deg", osc, True)
+    run_driver("driver: held still", [172.0] * n, False)
+    run_driver("driver: untracked (NaN)", [float("nan")] * n, False)
+    # Amplitude floor is the caller's, in the caller's units: the SAME signal
+    # must be rejected once the floor is raised above its excursion. Without
+    # this the floor could be ignored entirely and every row above still pass.
+    run_driver("driver: 20 deg swing under a 40 deg floor", osc, False,
+               min_amplitude=40.0)
+    # Body frames are inert throughout, so a window here can only have come
+    # from the driver — this is what proves the driver is actually being read.
 
     print()
     if fails:
@@ -464,7 +576,28 @@ def drift_check() -> int:
             capture_output=True, text=True, check=True).stdout.strip()
     except subprocess.CalledProcessError:
         behind, head = None, None
-    if behind and behind != "0":
+    # IS THE PIN EVEN ON MAIN? `rev-list --count PIN..origin/main` is 0 both
+    # when the pin IS main and when the pin is a branch commit AHEAD of main —
+    # and the second case was being printed as "current with origin/main",
+    # which is the opposite of true. That is precisely the case this check was
+    # added for (C-114 pinned to an unmerged branch and recorded that the
+    # drift check would say so loudly; measured today, it did not). Ancestry
+    # has to be asked directly.
+    try:
+        merged = subprocess.run(
+            ["git", "-C", str(lib), "merge-base", "--is-ancestor",
+             PIN_SHA, "origin/main"],
+            capture_output=True, text=True).returncode == 0
+    except Exception:                                    # noqa: BLE001
+        merged = True                                    # bilinmiyorsa sessiz
+                                                         # geçme, aşağıda söyle
+    if not merged:
+        print(f"⚠ pin {PIN_SHA} is NOT an ancestor of origin/main ({head}) — "
+              "this file is vendored from an UNMERGED branch. That is allowed "
+              "while the branch is in review, but it must be re-pinned to the "
+              "merge commit once it lands, or this copy silently outlives the "
+              "branch it came from.")
+    elif behind and behind != "0":
         print(f"⚠ pin {PIN_SHA} is {behind} commit(s) behind origin/main "
               f"({head}) — re-diff PIN_REPO_PATH before trusting this file "
               "matches current rig behavior")
