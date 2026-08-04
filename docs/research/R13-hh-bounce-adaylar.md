@@ -996,3 +996,73 @@ taşındı. **Zincir yeniden doğrulandı, hiçbir çıktı değişmedi:**
    olur" gerekçesi bu vendored yol için geçerli değil — ama boşluk YOK:
    bu kopyanın kendi `merge-base --is-ancestor` kontrolü (C-126) zaten aynı
    işi yapıyor ve sabotajla ayırt ediciliği kanıtlı.
+
+---
+
+# HÜKÜM UYGULAMASI — `hh_bounce` → demoOnly (2026-08-04, M-F-242)
+
+Koordinatör `measurability.tier: A` beyanını **geri çekti** ve adımı K10
+demo-only yoluna aldı — **ölçülmüş gerekçeyle**. Uygulama:
+
+## Adım config'i
+
+`measurability.tier`: **A → B**. `tier: C` seçilemezdi: sözleşme *"tier C
+must never ship in V1"* diyor, oysa bu ders **kullanıcıya gösterilecek**.
+
+`measurability.tierWithdrawn` eklendi — **kapı-isimli** (M-F-217):
+`resolvedBy: low-amplitude-vs-family` + artefakt-atıflı sayılar (%83 taban
+payı vs kabul edilmişlerde %9-28; 6,0° taban) + `promotionPath`.
+
+`reference`: `collectedTakes` 0 → **3**, `status` → `provisional`, ve
+**`notConsumedForScoring`** alanı: artefakt YAŞAR ama hiçbir şey ona karşı
+puanlamaz — kayıt, tier kararının dayandığı kanıt olduğu için silinmez.
+
+## Ders yüzeyi
+
+`hh_l1_bounce`: `locked` → **`demoOnly`**, `demoOnlyClass:
+structural-circular`, ve `promotionPath` **isimli + veri-tetikli**
+(≥6 kaynakla yeniden ölçümde eğitmen ayrışması tabanın üstüne çıkarsa tier
+yeniden açılır). Başlık: *"The bounce (not graded)"*.
+
+Kullanıcı-dili gerekçe (emir kipi yok, kullanıcıyı suçlamıyor):
+
+> *"We measured three teachers doing this step, and the result was not the one
+> we expected: they move so alike that the differences between them are smaller
+> than what a phone camera can reliably resolve. A score here would mostly be
+> measuring our own uncertainty rather than your bounce. So you get the step,
+> the count and three teachers' versions of it — the number is the part we are
+> leaving out, and we would rather say that than hand you a confident-looking
+> one."*
+
+## `honesty` bloğu — eski satır ARTIK YANLIŞTI
+
+`notMeasured`'daki Bounce satırı *"no teachers have been measured for them
+yet (collectedTakes == 0)"* diyordu. **Bu bugün yanlış.** Yerine ölçülmüş
+gerekçe yazıldı; Rock/Groove ayrı satıra alındı (onlar hâlâ yazılmamış).
+`measuredNote` de güncellendi: **"kurulmuş referans, puanlanabilir referans
+demek DEĞİLDİR"** — bu bloğun var olma sebebi tam olarak bu karışıklık.
+
+`stepInventory.tierA_confirmed`'daki `hh_bounce` kaydı **silinmedi**,
+etiketlendi: ölçüm-öncesi taramanın ÖNGÖRÜSÜ ile ölçümün HÜKMÜ yan yana
+okunabilsin diye.
+
+## Doğrulama
+
+`validate_content` 0 · `validate_reference` 0 · **58 Flutter + 16 engine
+testi** · `flutter analyze` + `dart analyze` temiz.
+
+## `drift_check` v2 — yaş uyarısı İÇERİK-DUYARLI (M-F-242/3)
+
+Uyarı artık yalnız `git diff PIN..origin/main -- <vendored yol>` **boş
+değilken** yanıyor; boşken tek satırlık bilgi notu (`·`). Gerekçe C-114'ün
+kendi dersi: sürekli yanan sebepsiz uyarı okunmaz hâle gelir.
+
+**Sabotaj ikizi, iki yön de ölçüldü:**
+
+| pin | vendored dosya o aralıkta | çıktı |
+|---|---|---|
+| `dde99bd` (4 geride) | **değişmedi** | `· … UNCHANGED in that range — vendored content is current` |
+| `eb28039` (69 geride) | **DEĞİŞTİ** | `⚠ … CHANGED in that range — re-diff and re-vendor` |
+
+Pin **`6fd718f`**'e (güncel main) bump'landı — politikanın "doğal dokunuşta
+bump" maddesi; `✓ pin is current with origin/main`.

@@ -9,9 +9,25 @@
   "note": "Foundational groove. Every other hip-hop step in the curriculum sits on top of this one, so it is taught first and drilled longest.",
 
   "measurability": {
-    "tier": "A",
-    "rationale": "Large-amplitude, two-segment (both knees), driven by knee flexion which is among the most reliably tracked angles. No dependence on toe-ground contact timing.",
-    "riskFlags": []
+    "tier": "B",
+    "rationale": "The movement IS detected reliably — every measured take clears this step's own phase gates (knee extension >168 deg before each dip, descent and rise above 40 deg/s, dips at least 6 deg deep: 100% of dips in all three reference sources). What tier A additionally claimed, and the data does not support, is that a learner can be scored against instructor consensus: the teachers we measured agree more tightly than our own measurement noise, so the tolerance band is mostly our caution rather than their agreement.",
+    "riskFlags": ["scoring-below-noise-floor"],
+    "tierWithdrawn": {
+      "from": "A",
+      "measuredAt": "2026-08-04",
+      "resolvedBy": "low-amplitude-vs-family",
+      "evidence": [
+        "content/references/hh_bounce.json statusBases includes low-amplitude-vs-family",
+        "median joint tolerance is 83% floor-derived (MIN_TOLERANCE_DEG = 6.0 deg), against 28% / 9% / 22% for the accepted references (salsa shine / Running Man / Roger Rabbit) — 3-9x their share",
+        "the same round measured the opposite for detection: this step's `top` gate (>168 deg) was met by 100% of dips in all three sources",
+        "R13 'SONUÇLAR — TUR 5'; defter C-127"
+      ],
+      "note": "DETECTION and SCORABILITY are separate claims and this withdrawal touches only the second. Reading it as 'the bounce cannot be measured' would be wrong — it is measured; what cannot be done is grading a learner against a consensus that sits below our own resolution.",
+      "promotionPath": {
+        "blockedBy": "instructor disagreement below the 6.0 deg noise floor at 3 sources",
+        "unblockedBy": "a rebuild with >=6 independent teachers in which measured disagreement exceeds the floor — i.e. the median floor-derived share falls into the 9-28% band the accepted references occupy. The tier question reopens with THAT data, not with an opinion."
+      }
+    }
   },
 
   "cycleUnit": {
@@ -123,8 +139,9 @@
 
   "reference": {
     "requiredTakes": 6,
-    "collectedTakes": 0,
-    "status": "pending",
-    "note": "≥3 independent instructors required, 6 preferred — catalogue §6.0. Tolerance is derived from their disagreement, not authored."
+    "collectedTakes": 3,
+    "status": "provisional",
+    "note": "≥3 independent instructors required, 6 preferred — catalogue §6.0. Tolerance is derived from their disagreement, not authored. Built 2026-08-04 from 1IVtcoqMrBA / 4BRd2E8vBic / DEWpw4n8Lkw; carries cycleUnit (knee_flexion_mean, 1 dip per cycle) and four NAMED exclusions in decisions.json (no-speech / amplitude-floor / camera-driver-disjoint / identity).",
+    "notConsumedForScoring": "The artifact exists and is kept, but nothing grades against it while this step is demoOnly — it is the record of what was measured, and the baseline any future >=6-source rebuild is compared to. Deleting it would throw away the evidence the tier decision rests on."
   }
 }

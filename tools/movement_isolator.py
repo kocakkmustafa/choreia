@@ -58,7 +58,7 @@ from pathlib import Path
 # and either porting the change or adding it to DECLARED_DIFFERENCES with a
 # named, independent reason (family rule: exclusion is always named).
 PIN_REPO_PATH = "tools/harvest_rig/movement_isolator.py"
-PIN_SHA = "dde99bd"  # motion-core main, 2026-08-04 — M-F-238 soy-nöbeti merge'i
+PIN_SHA = "6fd718f"  # motion-core main, 2026-08-04 — doğal dokunuşta bump (M-F-242/3)
 
 DECLARED_DIFFERENCES = {
     "normalized_series": (
@@ -598,9 +598,29 @@ def drift_check() -> int:
               "merge commit once it lands, or this copy silently outlives the "
               "branch it came from.")
     elif behind and behind != "0":
-        print(f"⚠ pin {PIN_SHA} is {behind} commit(s) behind origin/main "
-              f"({head}) — re-diff PIN_REPO_PATH before trusting this file "
-              "matches current rig behavior")
+        # YAŞ UYARISI İÇERİK-DUYARLIDIR (M-F-242/3). Eski hâli pin main'in
+        # gerisinde kaldığı ANDA yanıyordu — oysa rig'in başka bir dosyasına
+        # dokunan her commit bu pini "geride" bırakır ve uyarı, VENDOR EDİLEN
+        # dosya kılı kıpırdamamışken de yanar. Sürekli yanan sebepsiz uyarı
+        # okunmaz hâle gelir; C-114'ün kendi dersi: "gürültülü kapı kapatılır,
+        # kapatılan kapı yoktur". Soru artık "pin geride mi" değil,
+        # **"VENDOR EDİLEN YOL değişti mi"**.
+        try:
+            touched = subprocess.run(
+                ["git", "-C", str(lib), "diff", "--name-only",
+                 f"{PIN_SHA}..origin/main", "--", PIN_REPO_PATH],
+                capture_output=True, text=True, check=True).stdout.strip()
+        except subprocess.CalledProcessError:
+            touched = PIN_REPO_PATH          # bilinmiyorsa SESSİZ GEÇME
+        if touched:
+            print(f"⚠ pin {PIN_SHA} is {behind} commit(s) behind origin/main "
+                  f"({head}) AND {PIN_REPO_PATH} CHANGED in that range — "
+                  "re-diff and re-vendor before trusting this copy")
+        else:
+            print(f"· pin {PIN_SHA} is {behind} commit(s) behind origin/main "
+                  f"({head}), but {PIN_REPO_PATH} is UNCHANGED in that range — "
+                  "vendored content is current; bump the pin at the next "
+                  "natural touch")
     elif behind == "0":
         print(f"✓ pin is current with origin/main ({head})")
 
