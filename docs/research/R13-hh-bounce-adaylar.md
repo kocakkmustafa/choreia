@@ -842,3 +842,130 @@ sinyalin güçlü olması kimliğin doğru olduğunu göstermiyor, sadece bir ş
 güçlü olduğunu. 0,333s ≈ 180 BPM bir bounce için hızlı; ama yavaş bir
 criss-cross da aynı hızda diz salınımı üretebilir. **İki yönde de zayıfım;
 ölçüm karar versin.**
+
+---
+
+# SONUÇLAR — TUR 5 (2026-08-04, zincir KOŞULDU)
+
+**Ön-kayıt `17f4522`'de, bu zincirden ÖNCE.** Rig merge'i: motion-core main
+**`9620394`** (M-F-238). Vendored kopya `9620394`'e re-pin'lendi ve
+`drift_check`'in ⚠ satırı **sustu** (`✓ pin is current with origin/main`);
+re-pin sonrası 7 take'in prepared çıktısı **birebir aynı** — merge içerik
+değiştirmemiş.
+
+## Zincir
+
+`classify` → 4 `lesson` (`l3r4bPhikGQ` 2062 · `1IVtcoqMrBA` 944 ·
+`4BRd2E8vBic` 2070 · `DEWpw4n8Lkw` 2468 sözcük); `NWB9Y1_lZDQ` yine 0 sözcükle
+elendi.
+
+`build_reference` **4 kaynakla** koşuldu (ön-kayıt gereği `l3r4bPhikGQ`
+İÇERİDE) ve harmonik kapı **ön-kayıtta yazdığım çatışmayı** bildirdi:
+0,333 ↔ 0,583 / 0,625 / 0,680.
+
+## `l3r4bPhikGQ` — UÇ-1 GERÇEKLEŞTİ: kimlik ÇÖZÜLDÜ
+
+Ön-kayıt üç ayaklı bileşik kanıt şart koşuyordu; **ikisi hizalandı, üçüncüsü
+ayırt etmedi.**
+
+**AYAK 1 — TRANSKRİPT (belirleyici).** Seçilen segment **537-549s**. Dersin
+transkripti hareketleri isimleriyle anıyor:
+
+| zaman | söylenen |
+|---|---|
+| 48,9s | *"we were working on what I call **bounces** or hops"* |
+| 51,3s | *"all we did was the **basic bounce side to side**"* |
+| **504,5s** | *"This is a one, and two, and **cross, cross, switch**"* |
+| 530,8s | *"five, six, and **left, and right**"* (müzikle koşum) |
+| 592,5s | *"was **crossing our legs** in front"* (özet) |
+
+**Seçilen segment, 504,5s'te başlayan CRISS-CROSS rutininin içinde.** Temel
+bounce dersin başında (48-90s) ve 586-590s'te. Yani bu take `hh_bounce`'ı
+değil **komşu hareketi** ölçüyor.
+
+**AYAK 2 — ÇAPA DESENİ: AYIRT ETMEDİ.** `l3r4bPhikGQ` `x` seçti, ama
+`1IVtcoqMrBA` ve `4BRd2E8vBic` de `x` seçti (yalnız `DEWpw4n8Lkw` `y`).
+**Bu ayak hükme KATILMADI** — ayırt etmeyen ölçü kanıt değildir.
+
+**AYAK 3 — ÇÖKÜŞ ŞEKLİ: ayrıştırdı.**
+
+| take | ort. derinlik | giriş/çıkış asimetrisi | **topQualified** |
+|---|---|---|---|
+| **`l3r4bPhikGQ`** | 13,3° | **0,33** | **%53** |
+| `1IVtcoqMrBA` | 12,9° | 0,10 | %100 |
+| `4BRd2E8vBic` | 13,8° | 0,16 | %100 |
+| `DEWpw4n8Lkw` | 17,2° | 0,13 | %100 |
+
+Çöküşlerinin ancak **yarısı** tam ekstansiyondan başlıyor (diğer üçünde
+**tamamı**), ve giriş/çıkış asimetrisi 2-3× yüksek — diz hareketi ayak
+yerleşiminin **yan ürünü** gibi davranıyor.
+
+**Dışlama UYUŞMAZLIKTAN türemedi** (M-F-47): harmonik kapı onu zaten
+2×-ailesi diye işaretlemişti ama o tek başına gerekçe sayılmadı. Kayıt
+`decisions.json` → `excludedWithReason/identity`, dört kanıt satırıyla —
+ayırt etmeyen üçüncü ayak da **açıkça** yazıldı.
+
+## REFERANS KURULDU — ve asıl sınav NİHAYET koşuldu
+
+3 kaynakla kuruldu, birim damgası artefaktta:
+`cycleUnit: {driver: knee_flexion_mean, dipsPerCycle: 1, selectedBy: phase-driver}`.
+
+### `resolvedBy` SINAVI — **TEMEL DURUYOR**
+
+| ölçü | değer |
+|---|---|
+| kaynak | 3 · `mirrorConfident: false` · `status: provisional` |
+| **ORTANCA eklem taban%** | **83** |
+| kabul edilmiş referanslar | shine **28** · RM **9** · RR **22** |
+| `statusBases` | `mirror-ambiguity` · `source-count-below-target` · **`low-amplitude-vs-family`** |
+
+**İlk devirde yazılan iki dürüst sondan İKİNCİSİ çıktı:** toleransın %83'ü
+ölçülen eğitmen ayrışmasından değil **6° gürültü tabanından** geliyor. Kabul
+edilmiş referanslarda bu oran %9-28; bounce onların **3-9 katı**.
+
+**Sonuç: `hh_bounce`'ın `measurability.tier: A` beyanı VERİYLE
+DESTEKLENMİYOR** ve adım K10 demo-only yoluna **ölçülmüş gerekçeyle** aday.
+
+### Bu, "bounce ölçülemiyor" DEMEK DEĞİL — ayrım önemli
+
+Aynı turda `top` kapısının her take'te sağlandığını ölçmüştük (%100 · %100 ·
+%100). Yani:
+
+- **"Hareket algılanıyor mu?"** → **EVET.** ≥6° derin, ≥40°/s hızlı, tam
+  ekstansiyondan başlayan gerçek çöküşler var.
+- **"Öğrenciyi eğitmen uzlaşısına karşı SKORLAYABİLİR miyiz?"** → **HAYIR.**
+  Tolerans kendi gürültü tabanımızın hükmü altında; referans "doğru" ile
+  "gürültü"yü ayırt edemez.
+
+`tier: A` ikincisini iddia ediyor ("large-amplitude… among the most reliably
+tracked angles"). Ölçüm birinciyi doğruluyor, ikinciyi **çürütüyor**.
+**Adımın statüsünü DEĞİŞTİRMEDİM** — dürüstlük-metriği hükmü koordinatörde.
+
+## Zincir yol boyu İKİ GERÇEK KUSUR düşürdü
+
+**1. Birim tutarlılık kapısı yanlış-pozitif verdi — ve suçlusu bendim.**
+Kapıyı yazarken yorumuna *"yalnız beyan karşılaştırılır, ölçüm değil"* demiş,
+sonra **tüm `cycleUnit` sözlüğünü** karşılaştırmıştım — sözlük take-başına
+ölçümleri (`dipsInSegment` vb.) de taşıyor ve onların farklı olması normalin
+ta kendisi. Kapı ilk koşumda ateşledi ve **kendi yazarını denetledi.**
+Düzeltme: yalnız `(driver, dipsPerCycle)` karşılaştırılıyor.
+
+**2. `toleranceSource` etiketi yayımlanan sayıyla çelişebiliyordu.**
+`validate_reference` gerçek artefaktta yakaladı: `right_shin[36]` toleransı
+**6,0°** ama etiketi `variance`. Sebep: sınıflandırma HAM türetilmiş değerden,
+yayımlanan sayı ise YUVARLANMIŞ değerden geliyordu — 6,004° "6.0" diye
+yayımlanıp "ölçülmüş ayrışma" diye etiketleniyordu. Artık etiket **yayımlanan
+sayıdan** türüyor; yayımlanan çözünürlükte dürüst etiket `floor`'dur, çünkü
+AZ iddia eder.
+
+## Havuzun son hâli — dört dışlamanın DÖRDÜ DE isimli ve kanıtlı
+
+| take | reasonCode | gerekçe |
+|---|---|---|
+| `NWB9Y1_lZDQ` | `no-speech` | 0 sözcük; ses var (−12,8 dB), konuşma yok |
+| `AyzYABnWDEM` | `amplitude-floor` | diz genliği 13,8° < config `NO_BOUNCE` 12° eşiğinin marjında; 1 aday, 0 nitelikli çöküş |
+| `nOR1qEhpssg` | `camera-driver-disjoint` | kamera-temiz ve diz-aktif pencereler kesişmiyor — **dürüst kayıp**, kapı gevşetilmedi |
+| `l3r4bPhikGQ` | `identity` | segment criss-cross rutininin içinde (transkript + çöküş şekli) |
+
+`nOR1qEhpssg` kaybının bedeli **isimli**: C-124'te KESİN `one-dip` hükmü almış
+iki take'ten biriydi, yani birim sorusuna en çok ışık tutan kaynaktı.

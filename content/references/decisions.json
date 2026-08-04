@@ -102,6 +102,50 @@
      ],
      "measuredAt": "2026-07-30",
      "carriedWhy": "Kaynak hazirlanan-take havuzunda ama build_reference onu kaynak-uygunluk kapisinda eliyor; kapi kendi kararini artefakta yazamiyor cunku referans KURULAMADI (2 kullanilabilir kaynak < MIN_TAKES 3). Kayit burada tutulur ki 'bu kanala bakildi mi' sorusu cevaplanabilsin. Ses kanitini AYRICA yazdim: 0 sozcuk bir OLCUM mu yoksa transkripsiyon hatasi mi sorusu, kaydi okuyanin ilk soracagi sey."
+    },
+    {
+     "videoId": "AyzYABnWDEM",
+     "channel": "Versa-Style Street Dance",
+     "stage": "prepare",
+     "reasonCode": "amplitude-floor",
+     "why": "Diz genligi adimin KENDI 'yerinde duruyor' tabaninin altinda kaliyor: tum-take p95-p5 = 13,8 derece, hh_bounce'in NO_BOUNCE esigi 12 derece. Faz-surdurulen aday uretiminde yalniz 1 pencere hayatta kaliyor ve onda nitelikli cokus YOK.",
+     "evidence": [
+      "tum-take knee_flexion_mean p95-p5 = 13.8 derece (NO_BOUNCE esigi 12)",
+      "C-117: sag diz std 1.7 derece — MIN_TOLERANCE_DEG 6.0'in ALTINDA",
+      "faz-surdurulen aday uretimi: 1 aday pencere, nitelikli cokus 0",
+      "eski ayak-capali yolda hazir gorunuyordu (segment 27s, 6 cokus, aralik 2.034s) — yani eski yol bunu KABUL ediyordu"
+     ],
+     "measuredAt": "2026-08-04",
+     "carriedWhy": "DAVRANIS DEGISIKLIGI, gizlenmiyor: bu take onceki turda hazir'di. Faz-surdurulen uretim onu eliyor cunku adimin kendi genlik tabanini saglamiyor. Koordinator M-F-238'de kabul etti; kayit burada ki 'bu kanala bakildi mi' sorusu ve 'neden dun hazirdi' sorusu birlikte cevaplanabilsin."
+    },
+    {
+     "videoId": "nOR1qEhpssg",
+     "channel": "O G Here",
+     "stage": "prepare",
+     "reasonCode": "camera-driver-disjoint",
+     "why": "Video kamera-temiz pencereyi ve diz-aktif pencereyi AYNI ANDA sunmuyor. Faz-surdurulen uretim dizin calistigi pencereleri buluyor, kamera kapisi baska bolgeleri temiz buluyor, ikisi KESISMIYOR: 'no movement window overlaps a camera-clean window'.",
+     "evidence": [
+      "prepare_take (faz-surdurulen) why = no movement window overlaps a camera-clean window",
+      "tum-take diz genligi p95-p5 = 149.4 derece — genlik SORUN DEGIL",
+      "eski ayak-capali yolda hazir'di (0.725s, 7 cokus) ve C-124'te DEFINITE one-dip verdikti almisti (oran 0.90)"
+     ],
+     "measuredAt": "2026-08-04",
+     "carriedWhy": "DURUST KAYIP (M-F-238). Kamera kapisi GEVSETILMEDI (M-F-200): malzeme kamera-temiz + diz-aktif pencereyi ayni anda sunmuyorsa bu videonun gercegidir, kapinin hatasi degil. Bedel ISIMLI: bu, iki aletin uyustugu ve C-124'te KESIN one-dip hukmu alan iki take'ten biriydi — yani birim sorusuna en cok isik tutan kaynagi kaybettik."
+    },
+    {
+     "videoId": "l3r4bPhikGQ",
+     "channel": "Darren R. Wong",
+     "stage": "identity",
+     "reasonCode": "identity",
+     "why": "Secilen segment (537-549s) dersin CRISS-CROSS rutininin ICINDE; temel bounce dersin basinda (48-90s) ve 586-590s'te anlatiliyor. Yani bu take hh_bounce'i degil komsu hareketi olcuyor — R13'un hasattan ONCE isaretledigi 'derleme riski' GERCEKLESTI.",
+     "evidence": [
+      "TRANSKRIPT (belirleyici): 504.5s 'This is a one, and two, and cross, cross, switch' — criss-cross rutini orada basliyor; secilen segment 537-549s onun icinde. 592.5s 'was crossing our legs in front' (ozet). Temel bounce: 48.9s 'the basic bounce side to side', 586.3s 'changing out this basic bounce'.",
+      "COKUS SEKLI: topQualified %53 — digerlerinin UCUNDE de %100. Cokuslerin ancak yarisi tam ekstansiyondan basliyor, yani diz hareketi ayak yerlesiminin YAN URUNU gibi davraniyor.",
+      "COKUS ASIMETRISI giris/cikis 0.33 — digerleri 0.10 / 0.16 / 0.13 (2-3 kat ayrisma).",
+      "CAPA DESENI AYIRT ETMEDI: l3r4bPhikGQ 'x' sectI ama 1IVtcoqMrBA ve 4BRd2E8vBic de 'x' secti — bu ayak SONUCSUZ, hukme KATILMADI (uc ayaktan ikisi hizalandi, ucuncusu ayirt etmedi)."
+     ],
+     "measuredAt": "2026-08-04",
+     "carriedWhy": "Dislama UYUSMAZLIKTAN DEGIL (M-F-47), BAGIMSIZ kimlik kanitindan turedi: harmonik kapi bu take'i zaten 2x-ailesi diye isaretlemisti (0.333 vs 0.583/0.625/0.680), ama o TEK BASINA gerekce sayilmadi — on-kayit (17f4522) uc-ayakli bilesik kanit sartini yaziyordu ve iki ayak hizalandi. Kanit hizalanmasaydi UC-2 (kurulamadi) yazilacakti."
     }
    ]
   }

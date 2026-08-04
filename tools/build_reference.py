@@ -724,6 +724,57 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     # things. Salsa surfaced this directly: periods of 0.68 and 1.36 seconds in
     # the same pool. This is C-032's factor-of-two trap reaching the reference
     # itself, not just the BPM report.
+    # DECLARED CYCLE UNIT (M-F-231/238). When the step declares a kinematic
+    # cycle unit, every prepared take carries it and its period is DERIVED as
+    # (inter-event interval x declared events-per-cycle). That is what makes
+    # the ratios below comparable at all: they are already expressed in the
+    # step's own unit, so a 2x ratio means "cut on a different cycle" rather
+    # than "a different step convention".
+    #
+    # The same ratio means different things for different steps — Running Man
+    # is alternating, so two knee dips per cycle is CANONICAL there while for
+    # bounce it would be a doubling. The unit therefore has to be recorded on
+    # the artifact, not left implicit in whoever last read the phase list.
+    #
+    # Takes disagreeing about the unit is a real error, not a curiosity: it
+    # would mean two takes of one step were prepared under different
+    # conventions and their phase axes do not describe the same thing.
+    # YALNIZ BEYAN karşılaştırılır, ölçüm DEĞİL. İlk yazışımda tüm `cycleUnit`
+    # sözlüğünü karşılaştırdım ve kapı derhal yanlış-pozitif verdi: sözlük
+    # take-başına ÖLÇÜMLERİ de taşıyor (`dipsInSegment`, `topQualifiedDips`…)
+    # ve onların take'ler arasında farklı olması normalin ta kendisi. Kuralı
+    # yorumda doğru yazmıştım ("only the declaration is"), kod başka şey
+    # yapıyordu — kapı kendi yazarını denetledi.
+    _DECL = ("driver", "dipsPerCycle")
+    declared_units = {json.dumps({k: p["cycleUnit"].get(k) for k in _DECL},
+                                 sort_keys=True)
+                      for p in sources if p.get("cycleUnit")}
+    if len(declared_units) > 1:
+        return {
+            "step": step, "built": False,
+            "why": ("take'ler ÇEVRİM BİRİMİ konusunda anlaşmıyor — aynı adımın "
+                    "take'leri farklı sözleşmelerle hazırlanmış, faz eksenleri "
+                    "aynı şeyi tarif etmiyor"),
+            "declaredUnits": sorted(declared_units),
+            "usableTakes": [p["videoId"] for p in sources],
+        }
+    cycle_unit = None
+    if declared_units:
+        u = json.loads(declared_units.pop())
+        # Per-take measurements (how many events THIS take's segment held) are
+        # not part of the step-level contract; only the declaration is.
+        # `selectedBy` beyanın parçası değil ama segmentin NASIL seçildiğini
+        # söyler ve tüketici için anlamlıdır; kaynaklardan okunur. Beyan
+        # alt-kümesinden okumak onu null bırakıyordu — null bir alan "bilgi
+        # yok" değil "alan var ama boş" der, bu turda tam bu ayrımdan bir
+        # regresyon çıkmıştı.
+        picked = {p["cycleUnit"].get("selectedBy")
+                  for p in sources if p.get("cycleUnit")}
+        cycle_unit = {"driver": u.get("driver"),
+                      "dipsPerCycle": u.get("dipsPerCycle")}
+        if len(picked) == 1:
+            cycle_unit["selectedBy"] = picked.pop()
+
     periods = sorted(p.get("periodSeconds") or 0 for p in sources)
     harmonic_conflict = []
     for i in range(len(periods)):
@@ -733,6 +784,7 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     if harmonic_conflict:
         return {
             "step": step, "built": False,
+            "cycleUnit": cycle_unit,
             "why": ("harmonik çelişki — take'ler AYNI çevrimde kesilmemiş "
                     f"(periyot çiftleri ~2x: {harmonic_conflict}); faz ekseni "
                     "take'ler arasında aynı şeyi anlatmıyor"),
@@ -767,12 +819,23 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         band, src = [], []
         for b in range(bins):
             derived = TOLERANCE_K * dispersion(oriented, j, b)
-            band.append(round(max(MIN_TOLERANCE_DEG, derived), 2))
+            reported = round(max(MIN_TOLERANCE_DEG, derived), 2)
+            band.append(reported)
             # Where the floor wins, the band is OUR caution, not the teachers'
             # agreement — they agreed more tightly than landmark noise can be
             # trusted to resolve. A consumer reading 6.0 degrees needs to know
             # which of the two it is looking at (family standard, G-050).
-            src.append("floor" if derived <= MIN_TOLERANCE_DEG else "variance")
+            #
+            # The label is derived from the REPORTED (rounded) number, not the
+            # raw one. Classifying the raw value while publishing the rounded
+            # one lets the two disagree: a derived 6.004° publishes as "6.0"
+            # but was labelled `variance`, so a consumer saw a band identical
+            # to the floor claiming to be measured agreement. Real artifact,
+            # caught by validate_reference on right_shin[36]. At the published
+            # resolution the honest label is `floor` — it UNDER-claims (this is
+            # our caution) rather than over-claims, which is the direction this
+            # repo errs in on purpose.
+            src.append("floor" if reported <= MIN_TOLERANCE_DEG else "variance")
         tolerance[j] = band
         tolerance_source[j] = src
 
@@ -959,6 +1022,9 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         "scoring": scoring,
         "toleranceBelowDispersion": violations,
         "status": status,
+        # Beyan edilen çevrim birimi: aşağı akıştaki her tüketici
+        # oranları buna göre okur (oran≈2,0'ın anlamı birime bağlıdır).
+        "cycleUnit": cycle_unit,
         "statusBases": status_bases,
         "provisionalReason": provisional_reason,
         "evidenceThickness": evidence_thickness,

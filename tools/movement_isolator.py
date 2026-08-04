@@ -58,7 +58,7 @@ from pathlib import Path
 # and either porting the change or adding it to DECLARED_DIFFERENCES with a
 # named, independent reason (family rule: exclusion is always named).
 PIN_REPO_PATH = "tools/harvest_rig/movement_isolator.py"
-PIN_SHA = "5054426"  # feat/isolator-kinematic-driver — MERGE BEKLİYOR (M-F-235)
+PIN_SHA = "9620394"  # motion-core main, 2026-08-04 — M-F-238 merge (kinematic driver)
 
 DECLARED_DIFFERENCES = {
     "normalized_series": (
