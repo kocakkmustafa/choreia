@@ -21,6 +21,7 @@ final class LessonInfo {
     required this.displayName,
     required this.kind,
     required this.plannedMinutes,
+    this.stepId,
     this.reason,
     this.demoOnlyClass,
   });
@@ -30,6 +31,15 @@ final class LessonInfo {
   final int level;
   final String displayName;
   final LessonKind kind;
+
+  /// The movement this lesson teaches, when it names one.
+  ///
+  /// Null for most lessons, and that is content being accurate rather than
+  /// incomplete: a drill ("keep the steps small") corrects an error across a
+  /// step rather than being one, and an ungradeable lesson like "finding the 1"
+  /// has no movement to point at. Only a lesson with a step could ever run the
+  /// live path — see `LibraryCatalog.runnableSteps` for the second condition.
+  final String? stepId;
 
   /// Content's own estimate, in MINUTES. Carried as a number with its unit
   /// named in the field, so a surface cannot render it as a bare figure.
@@ -149,6 +159,7 @@ final class CourseCatalog {
             displayName: _en(l['displayName']) ?? l['id'] as String,
             kind: kind,
             plannedMinutes: (l['minutes'] as num?)?.toInt() ?? 0,
+            stepId: l['step'] as String?,
             reason: reason,
             demoOnlyClass: l['demoOnlyClass'] as String?,
           ));
