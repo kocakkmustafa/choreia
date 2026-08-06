@@ -160,21 +160,43 @@ void main() {
     });
   });
 
-  group('measured content gaps (these SHOULD fail when content is written)',
-      () {
-    test('origin/attribution is present on exactly one of the 34 styles',
-        () async {
+  group('attribution', () {
+    test('every style names where its dance comes from', () async {
       final List<StyleCard> cards = (await testLibrary()).cards;
-      final Iterable<String> withAttribution = cards
-          .where((StyleCard c) => !c.attributionIsMissing)
+      final Iterable<String> without = cards
+          .where((StyleCard c) => c.attributionIsMissing)
           .map((StyleCard c) => c.entry.id);
 
-      // Written as a measurement, not a target. When attribution lands for more
-      // styles this test fails LOUDLY and gets its number updated — which is
-      // the point: a silent pass would let the gap stop being visible.
-      expect(withAttribution, <String>['vogue'],
-          reason: 'measured 2026-08-07 — 1 of 34. Every other style renders '
-              'its attribution box as a NAMED GAP rather than an empty panel.');
+      // This assertion INVERTED on 2026-08-07. It previously read
+      // `expect(withAttribution, ['vogue'])` — a measurement of a gap, written
+      // so it would fail loudly the day content landed. It did, and this is
+      // what it became. Kept as a gate rather than deleted: a style added to
+      // the catalogue tomorrow with no attribution must not slip in quietly.
+      expect(without, isEmpty,
+          reason: 'a style with no attribution renders a named gap to the '
+              'user, which is honest but is a debt, not a resting state: '
+              '$without');
+    });
+
+    test('attribution is prose for a reader, not a note to ourselves',
+        () async {
+      final List<StyleCard> cards = (await testLibrary()).cards;
+      for (final StyleCard c in cards) {
+        final String text = c.entry.originAttribution!;
+
+        // The ORIGINAL value of this field on `vogue` was
+        // "Black/Latino LGBTQ+ ballroom kültürü — atıf kutusu ZORUNLU" — an
+        // instruction to whoever built the screen, in Turkish, sitting in a
+        // field the style page renders VERBATIM to a dancer. It was never
+        // wrong as a reminder; it was wrong as copy, and nothing caught it
+        // because nothing rendered the field until now.
+        expect(text, isNot(contains('ZORUNLU')),
+            reason: '${c.entry.id}: an authoring directive is reaching the '
+                'user-facing attribution box');
+        expect(text.split(' ').length, greaterThan(20),
+            reason: '${c.entry.id}: a phrase this short is a label, and the '
+                'brief is explicit that credit is not a footnote');
+      }
     });
   });
 }

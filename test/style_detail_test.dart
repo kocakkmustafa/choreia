@@ -70,9 +70,40 @@ void main() {
               'currently written, and it must reach the screen');
     });
 
+    testWidgets('every style in the real catalogue shows real attribution',
+        (WidgetTester tester) async {
+      for (final String id in <String>['salsa_shines', 'hula', 'breaking']) {
+        await show(tester, id);
+        expect(find.byKey(StyleDetailView.attributionKey), findsOneWidget,
+            reason: '$id should render written attribution');
+        expect(find.byKey(StyleDetailView.attributionGapKey), findsNothing);
+      }
+    });
+
     testWidgets('a style WITHOUT attribution shows a named gap, not a blank',
         (WidgetTester tester) async {
-      await show(tester, 'salsa_shines');
+      // Synthetic, because content no longer has a style like this — and the
+      // branch must stay tested anyway. A gap-rendering path that only ever ran
+      // against content is a path that stops being exercised the moment content
+      // is complete, and then silently rots until the next style is added
+      // (family lesson 4: removing the case makes its absence vacuum-true).
+      final StyleCard real = lib.cardFor('bachata_solo')!;
+      final StyleCard blank = StyleCard(
+        entry: LibraryEntry(
+          id: real.entry.id,
+          displayName: real.entry.displayName,
+          contentStatus: real.entry.contentStatus,
+        ),
+        view: real.view,
+      );
+
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+          theme: ChoreiaTheme.dark, home: StyleDetailView(card: blank)));
+      await tester.pump();
+
       expect(find.byKey(StyleDetailView.attributionGapKey), findsOneWidget,
           reason: 'an absent box would read as a dance with no origin, which '
               'is never true — the debt is carried in public instead');
@@ -82,13 +113,11 @@ void main() {
     testWidgets('clearance reasoning never stands in for credit',
         (WidgetTester tester) async {
       await show(tester, 'salsa_shines');
-      // salsa_shines HAS a `copyright.boundary` and NO `originAttribution`.
-      // The boundary text must appear under its own heading, and must not
-      // silence the attribution gap above it.
+      // salsa_shines has BOTH an `originAttribution` and a
+      // `copyright.boundary`. They must appear under separate headings: being
+      // allowed to teach a dance is not the same as having said whose it is.
+      expect(find.text(StyleStrings.attributionTitle), findsOneWidget);
       expect(find.text(StyleStrings.boundaryTitle), findsOneWidget);
-      expect(find.byKey(StyleDetailView.attributionGapKey), findsOneWidget,
-          reason: 'having a legal boundary is not the same as having said '
-              'whose dance this is');
     });
   });
 
