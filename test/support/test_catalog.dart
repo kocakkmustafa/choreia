@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:choreia/app/course_catalog.dart';
+import 'package:choreia/app/library/library_catalog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -38,3 +39,6 @@ class DiskBundle extends CachingAssetBundle {
 
 /// The real catalog, loaded from the repository's own content.
 Future<CourseCatalog> testCatalog() => CourseCatalog.load(DiskBundle());
+
+/// The real library — all 34 declared styles plus the two authored on disk.
+Future<LibraryCatalog> testLibrary() => LibraryCatalog.load(DiskBundle());
