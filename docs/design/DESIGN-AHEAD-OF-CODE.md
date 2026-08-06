@@ -150,24 +150,47 @@ however many lessons each, if every lesson wants one).
 
 ---
 
-## 7. Attempt summary as its own screen
+## 7. Attempt summary — ONE combined task, not just a missing screen
+
+> **CORRECTED 2026-08-06 (coordinator ruling, supersedes this section's first
+> version from the same day — see Choreia DEFTER C-136).** First pass
+> classified this as "design ahead of code, screen missing" alongside items
+> like Library/Music. That undersold it: the surface this affects
+> (`LiveJudged`) **exists and runs today**, and the rule it fails is not
+> "we have not built the summary screen yet" — it is a **P1, pre-existing,
+> named-open finding**, not an absence.
+
+**The rule, written in three places (UI-BRIEF, CHOREIA-BLUEPRINT §19,
+roadmap):** *"score + ONE correction — the single most important error."*
+`live_view.dart`'s `_judgedCard` — today, restyled this turn — shows **every**
+finding from `JudgeResult.findings`, coloured by verdict, not reduced to one.
+That was true before this turn too; this pass preserved the existing
+behaviour rather than introducing it, but "pre-existing" is not the same as
+"out of scope to name."
 
 **Design (`isSum`):** a dedicated post-lesson screen — banded scores
-("Alignment: strong", "Leg shape: steady"), one correction, a carried-vs-free
-joint breakdown, phases with no judgement named as "not measured."
+("Alignment: strong", "Leg shape: steady"), **one** correction, a
+carried-vs-free joint breakdown, phases with no judgement named as
+"not measured." Three sources agree it is separate (UI-BRIEF §3.8 counts it
+as its own screen, the design drew it as one, and today's inline surface
+already violates the rule) — **the design is ahead of code here, not wrong.**
 
-**Code:** `LiveView`'s `LiveJudged` branch shows the same *underlying* data
-(`JudgeResult.findings`, each with `code`/`verdict`/`why`) inline, restyled
-this turn with verdict-based colour, but never as its own screen and never
-reduced to "bands" or "one correction" — it lists every finding, coloured by
-verdict, exactly as the pre-existing data shape allows.
+**Why single-correction is NOT simply "pick findings.first" (ruled this
+turn):** going from "show all" to "show one" needs a way to say WHICH finding
+is most important. Choreia has no such order today. JabLab does — a named
+severity ladder (safety > movement-impossible > balance > major-alignment >
+minor-form > optimization) — and picking "the most important" without an
+equivalent, DERIVED (not invented) order for Choreia would be exactly the
+threshold-invention this family's own rules forbid.
 
-**Ruled this turn (structure wins — "style changes, inherits structure"):**
-stays inline. **Flagged, not settled:** `UI-BRIEF.md` §3.8 already counts
-Attempt Summary as a separate screen, which means the design may be *ahead of
-the plan's own code* rather than simply ahead of what got built — a real
-product question (is this its own screen with its own route, or does
-`LiveJudged` grow into this in place?), the coordinator's to rule on.
+**Touches if built — ONE task, not three independent ones:**
+1. **Derive** (not invent) a finding-priority order for Choreia's own error
+   codes (`STEP_TOO_LARGE`, `WRONG_FOOT`, …) — from content, measurement
+   severity, or an explicit founder/coordinator ruling, not a coded guess.
+2. Apply single-correction discipline to `_judgedCard` using that order.
+3. **Only then** split Attempt Summary into its own screen/route — splitting
+   it out first, before (1) and (2), would relocate today's rule violation to
+   a new screen instead of fixing it.
 
 ---
 
@@ -235,6 +258,11 @@ own file doc comment for the full reasoning (co-presence assertions in
 `test/progress_test.dart` would not mean what they were written to mean under
 real tab mount/unmount).
 
+**RATIFIED 2026-08-06 (coordinator):** the always-mounted choice serves
+M-F-156 ("two sections cannot merge") *better* than the design's own tabs
+would — a tab HIDES a section, always-mounted does not. No open question
+here; settled, not just proposed.
+
 ---
 
 ## 12. Design-assumed live state with no engine counterpart
@@ -261,11 +289,11 @@ coordinator's call — not decided here.
 | 4 | Lesson-class screen | flow | yes | none (data model complete) |
 | 5 | Lesson flow, step 3 closed | flow | yes | step 1's teacher-demo mechanism unverified |
 | 6 | Mirror mode + teacher-figure asset | asset | no (a field on existing screen) | reference imagery for every lesson |
-| 7 | Attempt summary as its own screen | flow | maybe (product decision) | none (data exists, presentation doesn't) |
+| 7 | **Single-correction discipline + Attempt summary screen** | **P1, pre-existing, named-open finding — NOT a mere absence** | yes, but only AFTER §7's priority-order + single-correction work lands | a derived (not invented) finding-priority order does not exist yet |
 | 8 | Music picker | flow | yes | none (policy already decided) |
 | 9 | Calibration step | flow + data | yes | unclear if engine backs it |
 | 10 | Save-failure state | flow | no | needs `SessionStore` wired up at all |
-| 11 | Progress tabs vs. sections | — | — | styling note only, not a gap |
+| 11 | Progress tabs vs. sections | — (ratified, not open) | — | styling note only, not a gap |
 | 12 | "Low light" live state | data | no | engine has no light-level `QualityIssue` |
 
 ---
