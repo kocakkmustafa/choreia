@@ -8,6 +8,7 @@ import 'app/live/camera_pose_source.dart';
 import 'app/live/live_session.dart';
 import 'app/live/live_state.dart';
 import 'app/live/live_view.dart';
+import 'app/theme.dart';
 
 /// Choreia's entry point.
 ///
@@ -22,7 +23,7 @@ class ChoreiaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'Choreia',
-        theme: ThemeData(useMaterial3: true),
+        theme: ChoreiaTheme.dark,
         home: const LiveLessonPage(
           stepId: 'ss_shine_footwork',
           lessonClass: 'scored',

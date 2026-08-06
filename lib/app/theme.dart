@@ -1,0 +1,443 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+/// Choreia's visual language — design panel v1, 2026-08-05
+/// (`docs/design/DESIGN-PANEL-PROMPT.md`; `claude.ai/design` project
+/// `choreia`, file `Choreia.dc.html`).
+///
+/// STYLE ONLY. Nothing in this file changes what a screen's tests can find —
+/// every widget below is a decoration or a motion primitive that another
+/// file's existing state, Keys and copy get wrapped in. See `live_view.dart`
+/// and `progress_view.dart` for the actual restyle; they inherit their
+/// structure from before this file existed and keep it unchanged.
+///
+/// The one rule this file exists to hold the line on (design brief §1, the
+/// "kardeş çakışması" clause): Choreia's glass is TRANSPARENT — blur never
+/// exceeds 3px, [GlassPanel.blur]'s default — and its motion FLOWS. JabLab,
+/// the family's other dark-and-glass app, is frosted and cuts on snap; no
+/// curve in this file bounces or overshoots, and no opacity jumps untweened.
+
+// ── Colour ───────────────────────────────────────────────────────────────
+
+abstract final class ChoreiaColors {
+  ChoreiaColors._();
+
+  static const Color stage = Color(0xFF0A0508);
+  static const Color oxblood = Color(0xFF2A1220);
+
+  /// Judgement — a lesson or a live reading that carries a verdict. Never
+  /// applied to something merely open: the two tones are a status language
+  /// and design brief §2 is explicit that they do not mix on one element.
+  static const Color rose = Color(0xFFF0A6BD);
+  static const Color roseBright = Color(0xFFF6B9CB);
+  static const Color roseDeep = Color(0xFFE8A2B6);
+
+  /// Open-but-ungraded, in-preparation, or "we cannot check this right now"
+  /// — a status, not a warning.
+  static const Color amber = Color(0xFFECC49B);
+  static const Color amberDeep = Color(0xFFE6C49A);
+
+  static const Color bright = Color(0xFFFBF2F5);
+  static const Color _base = Color(0xFFF6EEF1);
+
+  /// Body text at a named opacity. One function so every screen draws from
+  /// the same ramp instead of each picking its own alpha.
+  static Color text(double opacity) => _base.withValues(alpha: opacity);
+
+  static Color hairline(double opacity) =>
+      Colors.white.withValues(alpha: opacity);
+}
+
+// ── Type ─────────────────────────────────────────────────────────────────
+
+/// Three families, three jobs (design notes, "Tipografi ölçeği"): serif for
+/// what the learner reads as a headline or a count, sans for body and
+/// buttons, mono for anything that is a MEASUREMENT or a STATUS — never a
+/// feeling. Mixing them tells "this is a fact" from "this is prose" before
+/// the words are read.
+abstract final class ChoreiaType {
+  ChoreiaType._();
+
+  static TextStyle display(
+          {double size = 34, Color? color, double height = 1.06}) =>
+      GoogleFonts.instrumentSerif(
+        fontSize: size,
+        height: height,
+        color: color ?? ChoreiaColors.bright,
+        letterSpacing: -0.2,
+      );
+
+  static TextStyle body(
+          {double size = 13.5,
+          Color? color,
+          FontWeight weight = FontWeight.w400,
+          double height = 1.55}) =>
+      GoogleFonts.manrope(
+        fontSize: size,
+        height: height,
+        fontWeight: weight,
+        color: color ?? ChoreiaColors.text(0.78),
+      );
+
+  /// Measurement/status language. `letterSpacing` is an em-multiplier here
+  /// (matching the design's CSS `em` units), converted to Flutter's absolute
+  /// logical pixels by the font size — so the tracking stays proportional at
+  /// every size the way it does in the source spec.
+  static TextStyle label(
+          {double size = 10, Color? color, double letterSpacingEm = 0.16}) =>
+      GoogleFonts.ibmPlexMono(
+        fontSize: size,
+        fontWeight: FontWeight.w500,
+        letterSpacing: letterSpacingEm * size,
+        color: color ?? ChoreiaColors.text(0.45),
+      );
+}
+
+// ── Motion ───────────────────────────────────────────────────────────────
+
+/// Numbers straight from the design's "Hareket spec'i" panel. What is absent
+/// matters as much as what is here: no bounce/elastic curve appears anywhere
+/// in this file (see the file doc comment).
+abstract final class ChoreiaMotion {
+  ChoreiaMotion._();
+
+  static const Duration sceneGlow = Duration(seconds: 19);
+  static const Duration sceneGlowReverse = Duration(seconds: 26);
+  static const Duration breathe = Duration(milliseconds: 2400);
+  static const Duration ringTurn = Duration(seconds: 12);
+  static const Duration screenTransition = Duration(milliseconds: 400);
+
+  /// cubic-bezier(.4,0,.2,1) — Flutter ships this exact curve pre-named.
+  static const Curve transition = Curves.fastOutSlowIn;
+}
+
+/// A child that scales gently between 1.0 and [peak] forever — the design's
+/// "nefes" (breath), used for live counts and idle rings. Not a spinner: it
+/// never implies progress toward completion, only "this is alive and
+/// listening."
+class SlowBreath extends StatefulWidget {
+  const SlowBreath({
+    super.key,
+    required this.child,
+    this.peak = 1.07,
+    this.duration = ChoreiaMotion.breathe,
+  });
+
+  final Widget child;
+  final double peak;
+  final Duration duration;
+
+  @override
+  State<SlowBreath> createState() => _SlowBreathState();
+}
+
+class _SlowBreathState extends State<SlowBreath>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: widget.duration)
+        ..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _c,
+        child: widget.child,
+        builder: (context, child) => Transform.scale(
+          scale: 1 + (widget.peak - 1) * Curves.easeInOut.transform(_c.value),
+          child: child,
+        ),
+      );
+}
+
+/// A full, steady rotation forever — the live-tour tracking ring. Linear on
+/// purpose: a ring that eases would read as arriving somewhere, and this one
+/// never does.
+class SlowSpin extends StatefulWidget {
+  const SlowSpin({
+    super.key,
+    required this.child,
+    this.duration = ChoreiaMotion.ringTurn,
+  });
+
+  final Widget child;
+  final Duration duration;
+
+  @override
+  State<SlowSpin> createState() => _SlowSpinState();
+}
+
+class _SlowSpinState extends State<SlowSpin>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: widget.duration)..repeat();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      RotationTransition(turns: _c, child: widget.child);
+}
+
+/// The stage-light backdrop: two soft, warm blobs drifting in slow, opposite
+/// loops behind the glass. This is the "arkası görünür" (see-through) layer
+/// the brief asks for — [GlassPanel]s sit on top of THIS, not a flat colour,
+/// which is what makes their blur read as glass rather than a tinted box.
+class ChoreiaBackdrop extends StatefulWidget {
+  const ChoreiaBackdrop({super.key, this.child});
+
+  final Widget? child;
+
+  @override
+  State<ChoreiaBackdrop> createState() => _ChoreiaBackdropState();
+}
+
+class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
+    with TickerProviderStateMixin {
+  late final AnimationController _a =
+      AnimationController(vsync: this, duration: ChoreiaMotion.sceneGlow)
+        ..repeat(reverse: true);
+  late final AnimationController _b = AnimationController(
+      vsync: this, duration: ChoreiaMotion.sceneGlowReverse)
+    ..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _a.dispose();
+    _b.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ColoredBox(
+        color: ChoreiaColors.stage,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            _blob(_a,
+                alignment: const Alignment(-0.75, -0.9),
+                color: ChoreiaColors.rose,
+                size: 460),
+            _blob(_b,
+                alignment: const Alignment(0.85, 0.95),
+                color: const Color(0xFFFFBA8A),
+                size: 420,
+                reverse: true),
+            if (widget.child != null) widget.child!,
+          ],
+        ),
+      );
+
+  Widget _blob(
+    AnimationController c, {
+    required Alignment alignment,
+    required Color color,
+    required double size,
+    bool reverse = false,
+  }) =>
+      AnimatedBuilder(
+        animation: c,
+        builder: (context, _) {
+          final double t = Curves.easeInOut.transform(c.value);
+          final double dx = (reverse ? -1 : 1) * (0.09 - 0.18 * t);
+          final double dy = 0.05 - 0.1 * t;
+          return Align(
+            alignment: Alignment(alignment.x + dx, alignment.y + dy),
+            child: Transform.scale(
+              scale: 1 + 0.14 * t,
+              child: Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: <Color>[
+                      color.withValues(alpha: 0.30),
+                      color.withValues(alpha: 0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+}
+
+// ── Glass ────────────────────────────────────────────────────────────────
+
+/// One glass card/panel — the shared decoration primitive for both restyled
+/// screens. Radius follows the design's three named sizes (design notes,
+/// "Şeffaf cam spesifikasyonu"): 14 for a tile, 18 for a panel (the default),
+/// 22 for a hero card.
+class GlassPanel extends StatelessWidget {
+  const GlassPanel({
+    super.key,
+    required this.child,
+    this.radius = 18,
+    this.tint,
+    this.borderColor,
+    this.padding = const EdgeInsets.all(16),
+    this.blur = 3,
+  });
+
+  final Widget child;
+  final double radius;
+  final Color? tint;
+  final Color? borderColor;
+  final EdgeInsetsGeometry padding;
+
+  /// Sigma for the backdrop blur. Design brief §1's line in the sand against
+  /// JabLab's frosted glass: this stays at 3 everywhere it is not explicitly
+  /// overridden, and nothing in this app overrides it upward.
+  final double blur;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color base = tint ?? ChoreiaColors.rose;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                base.withValues(alpha: 0.09),
+                Colors.white.withValues(alpha: 0.02),
+              ],
+            ),
+            border: Border.all(color: borderColor ?? ChoreiaColors.hairline(0.13)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.4),
+                blurRadius: 30,
+                offset: const Offset(0, 14),
+              ),
+            ],
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+/// A ring with a glyph at its centre — the shared shape for "something needs
+/// your attention" states (permission, camera, no-person). [breathing] gives
+/// it the same slow life as a live count; a state that is not currently
+/// live (idle, a settled error) can leave it still.
+class StatusRing extends StatelessWidget {
+  const StatusRing({
+    super.key,
+    required this.icon,
+    this.tone,
+    this.size = 64,
+    this.breathing = true,
+  });
+
+  final IconData icon;
+  final Color? tone;
+  final double size;
+  final bool breathing;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color c = tone ?? ChoreiaColors.text(0.7);
+    final Widget ring = Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: c.withValues(alpha: 0.4), width: 1.4),
+      ),
+      child: Icon(icon, color: c, size: size * 0.4),
+    );
+    return breathing ? SlowBreath(peak: 1.05, child: ring) : ring;
+  }
+}
+
+/// A named-status pill — "SCORED", "OPEN · NOT SCORED", "IN PREPARATION" and
+/// this app's own live/progress equivalents. Mono type; [filled] draws the
+/// tinted-and-bordered treatment the design reserves for a state that IS,
+/// leaving the hollow outline for a state that is named but not active yet.
+class StatusPill extends StatelessWidget {
+  const StatusPill(
+      {super.key, required this.label, required this.tone, this.filled = true});
+
+  final String label;
+  final Color tone;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(999),
+          color: filled ? tone.withValues(alpha: 0.14) : null,
+          border: Border.all(color: tone.withValues(alpha: filled ? 0.4 : 0.55)),
+        ),
+        child: Text(label,
+            style: ChoreiaType.label(size: 9.5, color: tone, letterSpacingEm: 0.1)),
+      );
+}
+
+// ── App theme ────────────────────────────────────────────────────────────
+
+/// The MaterialApp theme. Purely cosmetic — no widget in this app depends on
+/// Material's default colours — so swapping this in is exactly what "design
+/// changes the styling" means at the top of the tree.
+abstract final class ChoreiaTheme {
+  ChoreiaTheme._();
+
+  static ThemeData get dark {
+    final TextTheme base =
+        GoogleFonts.manropeTextTheme(ThemeData.dark().textTheme).apply(
+      bodyColor: ChoreiaColors.text(0.86),
+      displayColor: ChoreiaColors.bright,
+    );
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: ChoreiaColors.stage,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: ChoreiaColors.rose,
+        brightness: Brightness.dark,
+        surface: ChoreiaColors.stage,
+      ),
+      textTheme: base,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        titleTextStyle: ChoreiaType.display(size: 22),
+        iconTheme: IconThemeData(color: ChoreiaColors.text(0.8)),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: ChoreiaColors.rose,
+          foregroundColor: ChoreiaColors.stage,
+          textStyle: ChoreiaType.body(
+              size: 14, weight: FontWeight.w600, color: ChoreiaColors.stage),
+          minimumSize: const Size.fromHeight(50),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        ),
+      ),
+    );
+  }
+}

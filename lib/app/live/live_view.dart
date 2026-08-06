@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:motion_camera/motion_camera.dart';
 import 'package:motion_core/motion_core.dart';
 
+import '../theme.dart';
 import 'live_state.dart';
 
 /// Every user-facing string of the live surface, in one place (same seam as
 /// `ProgressStrings`).
+///
+/// UNCHANGED by the design pass. `live_view_test.dart` pins several of these
+/// verbatim (`LiveStrings.cycles(3) == '3 read so far'` in particular), and
+/// the design brief's own copy for this screen is illustrative rather than
+/// binding — style changes how this reads, not what it says (§9/§14 apply to
+/// the STRUCTURE the copy carries, not to the words).
 abstract final class LiveStrings {
   static const String title = 'Live practice';
 
@@ -76,6 +83,12 @@ abstract final class LiveStrings {
 ///     a "try again" button that cannot work.
 ///   · "NEVER STARTED" ≠ ZERO — the repetition counter is `int?`, and a null
 ///     renders as words, never as a bare 0.
+///
+/// DESIGN PASS (2026-08-06, `docs/design/`): restyled against the design
+/// panel's "Live tour" + "§10 edge states" screens. The seven branches below,
+/// their Keys and every string above are the STRUCTURE this pass inherited —
+/// see the per-branch comments for where the design assumed data this state
+/// does not carry, and what was kept instead.
 class LiveView extends StatelessWidget {
   const LiveView({
     super.key,
@@ -110,17 +123,30 @@ class LiveView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(title: const Text(LiveStrings.title)),
-      body: ListView(
-        key: bodyKey,
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
-          ..._forState(),
-          const SizedBox(height: 24),
-          _gatedSection(),
-          const SizedBox(height: 16),
-          Text(notMeasuredNote, key: notMeasuredKey),
-        ],
+      body: ChoreiaBackdrop(
+        child: SafeArea(
+          child: ListView(
+            key: bodyKey,
+            padding: const EdgeInsets.fromLTRB(16, 100, 16, 24),
+            children: <Widget>[
+              ..._forState(),
+              const SizedBox(height: 20),
+              _gatedSection(),
+              const SizedBox(height: 14),
+              Center(
+                child: Text(
+                  notMeasuredNote,
+                  key: notMeasuredKey,
+                  textAlign: TextAlign.center,
+                  style: ChoreiaType.label(
+                      size: 10.5, color: ChoreiaColors.text(0.4)),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -128,96 +154,358 @@ class LiveView extends StatelessWidget {
   /// The compiler enforces exhaustiveness here — adding an eighth state
   /// breaks the build rather than silently rendering nothing.
   List<Widget> _forState() => switch (state) {
-        LiveIdle() => <Widget>[const Text(LiveStrings.idle)],
-        LivePermissionDenied() => <Widget>[
-            Text(permissionPermanentlyDenied
-                ? LiveStrings.permanentlyDenied
-                : LiveStrings.deniedOnce),
-            const SizedBox(height: 12),
-            // A "try again" that cannot possibly work is worse than no button.
-            if (permissionPermanentlyDenied)
-              FilledButton(
-                key: actionKey,
-                onPressed: onOpenSettings,
-                child: const Text(LiveStrings.openSettings),
-              )
-            else
-              FilledButton(
-                key: actionKey,
-                onPressed: onRetry,
-                child: const Text(LiveStrings.tryAgain),
-              ),
-          ],
+        LiveIdle() => <Widget>[_idleCard()],
+        LivePermissionDenied() => <Widget>[_permissionCard()],
         LiveCameraUnavailable(:final CameraFailure failure, :final String? detail) =>
-          <Widget>[
-            Text(LiveStrings.cameraProblem(failure)),
-            if (detail != null && detail.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(detail, style: const TextStyle(fontSize: 12)),
-              ),
-            const SizedBox(height: 12),
-            // NO DEAD END: there is always something to do next.
-            FilledButton(
-              key: actionKey,
-              onPressed: onRetry,
-              child: const Text(LiveStrings.tryAgain),
-            ),
-          ],
+          <Widget>[_cameraProblemCard(failure, detail)],
         LiveNoPerson(:final Set<QualityIssue> issues) => <Widget>[
-            const Text(LiveStrings.noPerson),
-            for (final QualityIssue i in issues)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(LiveStrings.noPersonWhy(i)),
-              ),
-            const SizedBox(height: 8),
-            Text(LiveStrings.cycles(cyclesRead)),
+            _noPersonCard(issues),
           ],
-        LiveWatching(:final int cyclesSeen) => <Widget>[
-            const Text(LiveStrings.watching),
-            const SizedBox(height: 8),
-            Text(LiveStrings.cycles(cyclesSeen == 0 ? null : cyclesSeen)),
-          ],
+        LiveWatching(:final int cyclesSeen) => <Widget>[_watchingCard(cyclesSeen)],
         // DEMO-ONLY: measurements only. This branch has no band to render
         // because `LiveMeasured` has no band FIELD — the guarantee is the
         // type, not this code remembering.
         LiveMeasured(:final Map<String, double> measurements) => <Widget>[
-            const Text(LiveStrings.measuredTitle,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            for (final MapEntry<String, double> m in measurements.entries)
-              Text('${m.key}: ${m.value.toStringAsFixed(1)}°'),
-            const SizedBox(height: 8),
-            Text(LiveStrings.cycles(cyclesRead)),
+            _measuredCard(measurements),
           ],
-        LiveJudged(:final JudgeResult result) => <Widget>[
-            const Text(LiveStrings.findingsTitle,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            if (result.findings.isEmpty)
-              const Text(LiveStrings.nothingWrong)
-            else
-              for (final ErrorFinding f in result.findings)
-                Text('${f.code}${f.why == null ? '' : ' — ${f.why}'}'),
-            const SizedBox(height: 8),
-            Text(LiveStrings.cycles(cyclesRead)),
-          ],
+        LiveJudged(:final JudgeResult result) => <Widget>[_judgedCard(result)],
       };
+
+  // ── Idle ─────────────────────────────────────────────────────────────
+  //
+  // The design's own rule for its LOADING edge state: "no spinner tricks ·
+  // plain wait" (§10 states gallery). Honoured literally — no ring, no
+  // shimmer, just the sentence, centred and unhurried.
+  Widget _idleCard() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 48),
+        child: Center(
+          child: Text(
+            LiveStrings.idle,
+            textAlign: TextAlign.center,
+            style: ChoreiaType.body(size: 14.5, color: ChoreiaColors.text(0.65)),
+          ),
+        ),
+      );
+
+  // ── Permission ───────────────────────────────────────────────────────
+  //
+  // Design maps this to §10's "CAMERA · NOT NOW" / "CAMERA · BLOCKED", both
+  // amber (a status, not an error). The action button is the one thing that
+  // must differ between the two flavours, and it is the same widget/key
+  // either way — only its label and callback change (M-F-268: a "try again"
+  // that cannot work is worse than no button).
+  Widget _permissionCard() => _AttentionCard(
+        icon: permissionPermanentlyDenied
+            ? Icons.videocam_off_outlined
+            : Icons.videocam_outlined,
+        tone: ChoreiaColors.amber,
+        body: permissionPermanentlyDenied
+            ? LiveStrings.permanentlyDenied
+            : LiveStrings.deniedOnce,
+        action: permissionPermanentlyDenied
+            ? FilledButton(
+                key: actionKey,
+                onPressed: onOpenSettings,
+                child: const Text(LiveStrings.openSettings),
+              )
+            : FilledButton(
+                key: actionKey,
+                onPressed: onRetry,
+                child: const Text(LiveStrings.tryAgain),
+              ),
+      );
+
+  // ── Camera unavailable ───────────────────────────────────────────────
+  //
+  // Not a design-named edge state (the mockup's §10 gallery covers permission
+  // and music, not a model/hardware fault) — closest borrowed tone is the
+  // gallery's ERROR entry, since this IS a fault rather than a status. NO
+  // DEAD END (M-F-268): the action button is always present here.
+  Widget _cameraProblemCard(CameraFailure failure, String? detail) =>
+      _AttentionCard(
+        icon: Icons.error_outline,
+        tone: ChoreiaColors.roseDeep,
+        body: LiveStrings.cameraProblem(failure),
+        detail: detail,
+        action: FilledButton(
+          key: actionKey,
+          onPressed: onRetry,
+          child: const Text(LiveStrings.tryAgain),
+        ),
+      );
+
+  // ── No person ────────────────────────────────────────────────────────
+  //
+  // Closest structural match to the design's "liveBlocked" pattern (frame /
+  // light / conf) — but that pattern's three named causes do not line up
+  // 1:1 with the engine's real `QualityIssue` enum: the design assumes a
+  // low-LIGHT signal this engine does not expose, and has no slot for
+  // `torsoUnreliable`. Resolved per the brief's own rule (§3, "yapı kazanır"):
+  // same visual shape (ring + title + reasons), REAL issues and REAL copy —
+  // nothing invented to fill a design slot the engine cannot back. Named in
+  // the giydirme report rather than silently reconciled.
+  Widget _noPersonCard(Set<QualityIssue> issues) => _AttentionCard(
+        icon: Icons.person_search_outlined,
+        tone: ChoreiaColors.amber,
+        body: LiveStrings.noPerson,
+        reasons: <String>[for (final QualityIssue i in issues) LiveStrings.noPersonWhy(i)],
+        trailing: Text(LiveStrings.cycles(cyclesRead),
+            style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.4))),
+      );
+
+  // ── Watching ─────────────────────────────────────────────────────────
+  //
+  // The design's live-tour showcase: a large breathing count inside a slow,
+  // steady ring. The mockup also prints "cycle 3 of 8" — a target the
+  // current `LiveWatching` state has no field for (it carries `cyclesSeen`
+  // alone, no planned-cycle count), so that half is not reproduced rather
+  // than invented; only what the state actually carries is shown.
+  //
+  // PLACEHOLDER(data): "cycle N of <planned total>" not shown — unblocked
+  // by: LiveWatching (or the step config it is built from) carrying a
+  // planned-cycle count the live surface can read; today it carries
+  // cyclesSeen alone. See docs/design/PLACEHOLDER-REGISTER.md.
+  Widget _watchingCard(int cyclesSeen) {
+    final int? shown = cyclesSeen == 0 ? null : cyclesSeen;
+    return GlassPanel(
+      radius: 22,
+      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 160,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                SlowSpin(
+                  child: Container(
+                    width: 148,
+                    height: 148,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: ChoreiaColors.rose.withValues(alpha: 0.35),
+                          width: 1.2),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 172,
+                  height: 172,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(color: ChoreiaColors.hairline(0.08)),
+                  ),
+                ),
+                SlowBreath(
+                  child: Text(
+                    shown?.toString() ?? '—',
+                    style: ChoreiaType.display(size: 76, color: ChoreiaColors.bright),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(LiveStrings.watching,
+              textAlign: TextAlign.center,
+              style: ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.68))),
+          const SizedBox(height: 10),
+          Text(LiveStrings.cycles(shown),
+              style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
+        ],
+      ),
+    );
+  }
+
+  // ── Measured (demo-only) ─────────────────────────────────────────────
+  //
+  // Mono type for the figures (design's typography rule: measurement
+  // language is always Plex Mono, never the serif or the sans body face) —
+  // and nothing else, on purpose: `LiveMeasured` has no findings field, so
+  // there is no verdict section to style even by mistake.
+  Widget _measuredCard(Map<String, double> measurements) => GlassPanel(
+        tint: ChoreiaColors.amber,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(LiveStrings.measuredTitle,
+                style:
+                    ChoreiaType.body(size: 13, weight: FontWeight.w600, color: ChoreiaColors.bright)),
+            const SizedBox(height: 10),
+            for (final MapEntry<String, double> m in measurements.entries)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(m.key.replaceAll('_', ' '),
+                          style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.68))),
+                    ),
+                    const SizedBox(width: 8),
+                    Text('${m.value.toStringAsFixed(1)}°',
+                        style: ChoreiaType.label(
+                            size: 12.5, color: ChoreiaColors.amberDeep, letterSpacingEm: 0)),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 10),
+            Text(LiveStrings.cycles(cyclesRead),
+                style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.42))),
+          ],
+        ),
+      );
+
+  // ── Judged ────────────────────────────────────────────────────────────
+  //
+  // Same findings as before, all of them — nothing added, nothing dropped.
+  // The one change is visual: each finding is now coloured by its OWN
+  // `verdict` field (fired → rose, ok → neutral, noVerdict → amber), which
+  // the prior version read but never used for anything. Whether a
+  // `noVerdict` finding here duplicates what `gated` already names is a
+  // structural question this pass did not resolve — flagged in the giydirme
+  // report, not decided unilaterally.
+  Widget _judgedCard(JudgeResult result) => GlassPanel(
+        radius: 22,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(LiveStrings.findingsTitle,
+                style:
+                    ChoreiaType.body(size: 13, weight: FontWeight.w600, color: ChoreiaColors.bright)),
+            const SizedBox(height: 12),
+            if (result.findings.isEmpty)
+              Text(LiveStrings.nothingWrong,
+                  style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.7)))
+            else
+              for (final ErrorFinding f in result.findings) _findingRow(f),
+            const SizedBox(height: 10),
+            Text(LiveStrings.cycles(cyclesRead),
+                style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.42))),
+          ],
+        ),
+      );
+
+  Widget _findingRow(ErrorFinding f) {
+    final Color tone = switch (f.verdict) {
+      Verdict.error => ChoreiaColors.rose,
+      Verdict.ok => ChoreiaColors.text(0.4),
+      Verdict.noVerdict => ChoreiaColors.amber,
+    };
+    final IconData glyph = switch (f.verdict) {
+      Verdict.error => Icons.circle,
+      Verdict.ok => Icons.check_circle_outline,
+      Verdict.noVerdict => Icons.remove_circle_outline,
+    };
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Icon(glyph, size: 14, color: tone),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              '${f.code}${f.why == null ? '' : ' — ${f.why}'}',
+              style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.72)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   /// Gated checks, ALWAYS on screen.
   ///
   /// Not folded away behind a tap: a check the app cannot make is exactly the
-  /// thing a learner would otherwise assume passed (kalem-4, C-117).
-  Widget _gatedSection() => Column(
+  /// thing a learner would otherwise assume passed (kalem-4, C-117). Styled
+  /// with the same hollow-amber language the design uses for "in
+  /// preparation" / "not open yet" — a named absence, not an error.
+  Widget _gatedSection() => GlassPanel(
         key: gatedKey,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Text(LiveStrings.gatedTitle,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          for (final GatedCheck g in gated)
-            Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(g.why),
+        tint: ChoreiaColors.amber,
+        borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(LiveStrings.gatedTitle,
+                style: ChoreiaType.label(
+                    size: 9.5, color: ChoreiaColors.amberDeep, letterSpacingEm: 0.12)),
+            for (final GatedCheck g in gated)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(g.why,
+                    style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.7))),
+              ),
+          ],
+        ),
+      );
+}
+
+/// The shared "something needs your attention" card — permission, camera
+/// fault and no-person all compose this. One ring, one title line, optional
+/// per-reason list, optional action: the same shape the design's §10 gallery
+/// uses for every named limit, so a learner who has seen one has seen them
+/// all.
+class _AttentionCard extends StatelessWidget {
+  const _AttentionCard({
+    required this.icon,
+    required this.tone,
+    required this.body,
+    this.reasons = const <String>[],
+    this.detail,
+    this.action,
+    this.trailing,
+  });
+
+  final IconData icon;
+  final Color tone;
+  final String body;
+  final List<String> reasons;
+  final String? detail;
+  final Widget? action;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) => GlassPanel(
+        radius: 22,
+        tint: tone,
+        borderColor: tone.withValues(alpha: 0.28),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            StatusRing(icon: icon, tone: tone),
+            const SizedBox(height: 16),
+            Text(
+              body,
+              textAlign: TextAlign.center,
+              style: ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.85)),
             ),
-        ],
+            for (final String r in reasons)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(r,
+                    textAlign: TextAlign.center,
+                    style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.6))),
+              ),
+            if (detail != null && detail!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(detail!,
+                    textAlign: TextAlign.center,
+                    style: ChoreiaType.label(size: 11, color: ChoreiaColors.text(0.4))),
+              ),
+            if (action != null) ...<Widget>[
+              const SizedBox(height: 18),
+              SizedBox(width: double.infinity, child: action),
+            ],
+            if (trailing != null) ...<Widget>[
+              const SizedBox(height: 12),
+              trailing!,
+            ],
+          ],
+        ),
       );
 }

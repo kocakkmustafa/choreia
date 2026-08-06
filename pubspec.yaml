@@ -55,6 +55,15 @@ dependencies:
   # is MEASURED, not anticipated (J-064).
   path_provider: ^2.1.0
 
+  # Design pass (2026-08-06): the three faces the design brief names
+  # (Instrument Serif, Manrope, IBM Plex Mono) are not system fonts, and
+  # neither LifeOS nor Burun Farkı — the two other apps in this workspace
+  # already shipping this package — bundle them locally either. Same choice
+  # here rather than a new precedent: no Motion sibling had solved this yet
+  # (first giydirme turn), flagged in the report so the family can pick a
+  # single answer once, not five times.
+  google_fonts: ^6.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

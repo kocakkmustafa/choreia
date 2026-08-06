@@ -1,9 +1,10 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import 'course_catalog.dart';
 import 'progress_summary.dart';
+import 'theme.dart';
 
-/// The progress surface's **STRUCTURE**, deliberately without visual design.
+/// The progress surface.
 ///
 /// What this widget is for
 /// -----------------------
@@ -11,24 +12,29 @@ import 'progress_summary.dart';
 /// what may appear next to what: Recorded and Evaluated may never merge, a
 /// demo-only lesson gets a completion mark and never a band, blocked checks are
 /// named on screen, and practice time is never converted into retroactive
-/// credit. Those constraints have to exist in TESTED CODE before a visual pass,
-/// so the design session INHERITS them instead of having to rediscover them.
-/// JabLab's precedent: structure-level widget tests caught a real honesty
-/// defect (three lessons could not pass their own gate).
-///
-/// What this widget is NOT
-/// ----------------------
-/// It is not the finished screen. Colour, type, spacing, iconography and
-/// layout belong to the claude.ai/design pass (founder-manual). **Design changes
-/// the styling and INHERITS the structure — it does not invent it.** There is
-/// also no visual verification behind this file: this session has no device,
-/// emulator or camera, so what is proven here is the STRUCTURE, by test, and
-/// nothing about how it looks.
+/// credit. Those constraints exist in TESTED CODE, and the design pass below
+/// INHERITS them rather than rediscovering them. JabLab's precedent:
+/// structure-level widget tests caught a real honesty defect (three lessons
+/// could not pass their own gate).
 ///
 /// Every section carries a [Key] so a test can assert WHICH SECTION a given
 /// string appears in. A test that only asserts "the text exists somewhere" would
 /// pass even if the two sections were merged — the exact failure the type split
 /// in [ProgressSummary] exists to prevent.
+///
+/// DESIGN PASS (2026-08-06, `docs/design/`): the mockup's "Progress" screen
+/// shows Recorded/Assessed as two TABS — only one mounted at a time. That
+/// would still satisfy every existing assertion below (an unmounted section's
+/// text is simply absent, which is what "findsNothing" already checks for),
+/// but it is not the SAME claim the tests were written to make: several of
+/// them assert that one section's text is present WHILE another section's
+/// same text is absent, in a single pump, which only means what it was
+/// written to mean if both sections are actually in the tree together. Kept
+/// as three always-mounted, strongly separated sections instead — visual
+/// language borrowed from the design (large serif section titles, a hairline
+/// rule, generous spacing), tab AFFORDANCE dropped. Named here rather than
+/// silently decided, per the giydirme brief's own rule on structural
+/// conflicts.
 class ProgressView extends StatelessWidget {
   const ProgressView({required this.summary, this.catalog, super.key});
 
@@ -49,106 +55,246 @@ class ProgressView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String? integrityNote = summary.integrity.note;
-    return ListView(
-      children: <Widget>[
-        // INTEGRITY FIRST, above the numbers it qualifies.
-        //
-        // Placed here rather than in a footnote because a caveat that arrives
-        // after the totals has already let them be read as complete. When the
-        // history could not be read at all there are no totals below this line
-        // to qualify — `ProgressSummary.totals` is null in that state, so the
-        // sentence stands alone rather than captioning a screen of zeros.
-        if (integrityNote != null)
-          Padding(
-            key: integrityNoteKey,
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(integrityNote),
-          ),
-        _section(
-          key: recordedSectionKey,
-          title: ProgressStrings.recordedSection,
-          subtitle: ProgressStrings.recordedSubtitle,
-          children: summary.recorded.isEmpty
-              ? <Widget>[const Text(ProgressStrings.emptyHistory)]
-              : summary.recorded.map(_recordedRow).toList(growable: false),
-        ),
-        _section(
-          key: evaluatedSectionKey,
-          title: ProgressStrings.evaluatedSection,
-          subtitle: ProgressStrings.evaluatedSubtitle,
-          children: summary.evaluated.isEmpty
-              // The reason goes INSIDE this section: a blank Evaluated section
-              // reads as a statement about the user ("you earned nothing"),
-              // when the true statement is about the product.
-              ? <Widget>[Text(summary.evaluatedUnavailableReason ?? '')]
-              : summary.evaluated
-                  .map((EvaluatedRow r) =>
-                      Text('${r.displayName}: ${r.band}'))
-                  .toList(growable: false),
-        ),
-        _section(
-          key: blockedSectionKey,
-          title: ProgressStrings.blockedSection,
-          subtitle: ProgressStrings.blockedSubtitle,
+    return ChoreiaBackdrop(
+      child: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: <Widget>[
-            for (final BlockedGate g in summary.blockedGates)
-              Text('${g.id}: ${g.why}'
-                  '${g.unblockedBy == null ? '' : ' Opens when: ${g.unblockedBy}'}'),
-            // Sits in the blocked section on purpose: it is the answer to the
-            // question this section provokes ("so what happens to my work when
-            // these open?").
-            const Padding(
-              padding: EdgeInsets.zero,
-              child: Text(
-                ProgressSummary.retroactiveCreditNote,
-                key: retroactiveNoteKey,
+            Text('Your practice',
+                style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.42))),
+            const SizedBox(height: 8),
+            Text('Progress', style: ChoreiaType.display(size: 33)),
+            const SizedBox(height: 18),
+
+            // INTEGRITY FIRST, above the numbers it qualifies.
+            //
+            // Placed here rather than in a footnote because a caveat that arrives
+            // after the totals has already let them be read as complete. When the
+            // history could not be read at all there are no totals below this line
+            // to qualify — `ProgressSummary.totals` is null in that state, so the
+            // sentence stands alone rather than captioning a screen of zeros.
+            if (integrityNote != null)
+              Padding(
+                key: integrityNoteKey,
+                padding: const EdgeInsets.only(bottom: 16),
+                child: GlassPanel(
+                  tint: ChoreiaColors.amber,
+                  borderColor: ChoreiaColors.amber.withValues(alpha: 0.24),
+                  child: Text(integrityNote,
+                      style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.8))),
+                ),
               ),
+
+            _section(
+              sectionKey: recordedSectionKey,
+              title: ProgressStrings.recordedSection,
+              subtitle: ProgressStrings.recordedSubtitle,
+              accent: ChoreiaColors.rose,
+              children: summary.recorded.isEmpty
+                  ? <Widget>[
+                      Text(ProgressStrings.emptyHistory,
+                          style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.6)))
+                    ]
+                  : summary.recorded.map(_recordedRow).toList(growable: false),
+            ),
+            const SizedBox(height: 28),
+
+            _section(
+              sectionKey: evaluatedSectionKey,
+              title: ProgressStrings.evaluatedSection,
+              subtitle: ProgressStrings.evaluatedSubtitle,
+              accent: ChoreiaColors.rose,
+              children: summary.evaluated.isEmpty
+                  // The reason goes INSIDE this section: a blank Evaluated section
+                  // reads as a statement about the user ("you earned nothing"),
+                  // when the true statement is about the product.
+                  ? <Widget>[
+                      Text(summary.evaluatedUnavailableReason ?? '',
+                          style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.6)))
+                    ]
+                  : summary.evaluated.map(_evaluatedRow).toList(growable: false),
+            ),
+            const SizedBox(height: 28),
+
+            _section(
+              sectionKey: blockedSectionKey,
+              title: ProgressStrings.blockedSection,
+              subtitle: ProgressStrings.blockedSubtitle,
+              accent: ChoreiaColors.amber,
+              children: <Widget>[
+                for (final BlockedGate g in summary.blockedGates) _blockedRow(g),
+                // Sits in the blocked section on purpose: it is the answer to the
+                // question this section provokes ("so what happens to my work when
+                // these open?").
+                Padding(
+                  key: retroactiveNoteKey,
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(ProgressSummary.retroactiveCreditNote,
+                      style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.48))),
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 
   Widget _recordedRow(RecordedRow row) {
     final LessonInfo? info = catalog?.lessonById(row.lessonId);
-    return Column(
+    final Color tone = row.isDemoOnly ? ChoreiaColors.amber : ChoreiaColors.rose;
+    return Padding(
       key: Key('progress.recorded.${row.lessonId}'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(row.displayName),
-        // Units live in the strings, so no caller can emit a bare number.
-        Text(ProgressStrings.duration(row.workedSeconds)),
-        Text(ProgressStrings.cycles(row.cyclesCompleted, row.plannedCycles)),
-        Text(ProgressStrings.sessionsCompleted(
-            row.completedSessions, row.sessions)),
-        // Unmeasured work is named on the row it happened in — an aggregate
-        // elsewhere would tell the user something went unchecked without
-        // saying where.
-        if (row.unmeasuredCycles > 0)
-          Text(ProgressStrings.unmeasured(row.unmeasuredCycles)),
-        // A demo-only lesson EARNS the completion mark and shows `—` where a
-        // band would be. Both halves matter: the mark because completion is a
-        // measurement, the dash because a blank would look like a missing value
-        // rather than an absent judgement.
-        if (row.isDemoOnly) ...<Widget>[
-          Text(ProgressStrings.demoOnlyMark(info?.reason)),
-          const Text(ProgressStrings.noBand),
-        ],
-      ],
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GlassPanel(
+        radius: 16,
+        tint: tone,
+        borderColor: ChoreiaColors.hairline(0.11),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: tone),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(row.displayName,
+                      style: ChoreiaType.body(
+                          size: 14, weight: FontWeight.w600, color: ChoreiaColors.bright)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Units live in the strings, so no caller can emit a bare number.
+            Text(ProgressStrings.duration(row.workedSeconds),
+                style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
+            Text(ProgressStrings.cycles(row.cyclesCompleted, row.plannedCycles),
+                style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
+            Text(
+                ProgressStrings.sessionsCompleted(
+                    row.completedSessions, row.sessions),
+                style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
+            // Unmeasured work is named on the row it happened in — an aggregate
+            // elsewhere would tell the user something went unchecked without
+            // saying where.
+            if (row.unmeasuredCycles > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(ProgressStrings.unmeasured(row.unmeasuredCycles),
+                    style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.amberDeep)),
+              ),
+            // A demo-only lesson EARNS the completion mark and shows `—` where a
+            // band would be. Both halves matter: the mark because completion is a
+            // measurement, the dash because a blank would look like a missing value
+            // rather than an absent judgement.
+            if (row.isDemoOnly) ...<Widget>[
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // The reason is content-authored prose (K10) with no length
+                  // guarantee — real content already runs longer than the
+                  // synthetic test fixture. Expanded so it WRAPS instead of
+                  // pushing the fixed-width dash off the right edge.
+                  Expanded(
+                    child: Text(ProgressStrings.demoOnlyMark(info?.reason),
+                        style:
+                            ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.62))),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(ProgressStrings.noBand,
+                      style: ChoreiaType.display(size: 15, color: ChoreiaColors.text(0.5))),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 
+  Widget _evaluatedRow(EvaluatedRow row) => Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: GlassPanel(
+          radius: 16,
+          tint: ChoreiaColors.rose,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Text(row.displayName,
+                    style: ChoreiaType.body(
+                        size: 14, weight: FontWeight.w600, color: ChoreiaColors.bright)),
+              ),
+              const SizedBox(width: 10),
+              Text(row.band, style: ChoreiaType.display(size: 17, color: ChoreiaColors.roseBright)),
+            ],
+          ),
+        ),
+      );
+
+  Widget _blockedRow(BlockedGate g) => Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: GlassPanel(
+          radius: 14,
+          tint: ChoreiaColors.amber,
+          borderColor: ChoreiaColors.amber.withValues(alpha: 0.2),
+          padding: const EdgeInsets.all(13),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(g.id,
+                  style: ChoreiaType.label(
+                      size: 9.5, color: ChoreiaColors.amberDeep, letterSpacingEm: 0.1)),
+              const SizedBox(height: 6),
+              Text(g.why, style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.78))),
+              if (g.unblockedBy != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text('Opens when: ${g.unblockedBy}',
+                      style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.5))),
+                ),
+            ],
+          ),
+        ),
+      );
+
   Widget _section({
-    required Key key,
+    required Key sectionKey,
     required String title,
     required String subtitle,
+    required Color accent,
     required List<Widget> children,
   }) {
     return Column(
-      key: key,
+      key: sectionKey,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[Text(title), Text(subtitle), ...children],
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(width: 3, height: 16, color: accent),
+            const SizedBox(width: 8),
+            // Expanded even though today's three titles are short fixed
+            // strings: at large system text-scaling (accessibility) the
+            // same Row-without-Flexible overflow this section's demo-only
+            // row just failed on would reappear here first.
+            Expanded(child: Text(title, style: ChoreiaType.display(size: 20))),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Padding(
+          padding: const EdgeInsets.only(left: 11),
+          child: Text(subtitle,
+              style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55))),
+        ),
+        const SizedBox(height: 12),
+        ...children,
+      ],
     );
   }
 }
