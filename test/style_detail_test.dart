@@ -385,6 +385,20 @@ void main() {
             'kizomba_zouk_solo',
       };
 
+      // THE FIFTH EXEMPTION STRUCTURE (C-165), and I wrote it myself an hour
+      // AFTER the commit that was about exactly this class. C-153 converted
+      // four hand-written assumptions into derivations and proved each by
+      // sabotage; this one arrived in C-160 and shipped without the
+      // self-audit the other four got. A style removed from content would
+      // leave a dead id here and `containsAll` would stay green forever.
+      final Set<String> allIds =
+          lib.cards.map((StyleCard c) => c.entry.id).toSet();
+      expect(explainedOmissions.difference(allIds), isEmpty,
+          reason: 'these ids are exempted from needing a glossary but no '
+              'longer exist in content: '
+              '${explainedOmissions.difference(allIds)}. An exemption that '
+              'outlives the thing it exempts is folklore.');
+
       expect(explainedOmissions.containsAll(unglossed), isTrue,
           reason: 'a style has no glossary and no recorded reason: '
               '${unglossed.difference(explainedOmissions)}. Each existing '

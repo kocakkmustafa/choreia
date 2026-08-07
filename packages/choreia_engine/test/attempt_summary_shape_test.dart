@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:choreia_engine/choreia_engine.dart';
@@ -20,10 +21,9 @@ void main() {
   /// One judged attempt against the reference's own consensus pose — the
   /// cleanest possible learner, so every finding present here is present in
   /// EVERY attempt regardless of how well it was danced.
-  /// Phase bins the step config declares as its two settle moments — the same
-  /// pair `judge_test.dart` uses against these artifacts.
-  const int momentA = 1;
-  const int momentB = 29;
+  final Map<String, int> bins = _settleBins();
+  final int momentA = bins['settle_a']!;
+  final int momentB = bins['settle_b']!;
 
   JudgeResult judgeSelf(DanceReference ref) => DanceJudge(reference: ref)
       .judge(ref.angles, momentA: momentA, momentB: momentB);
@@ -117,4 +117,30 @@ Directory _findRepoRoot() {
     d = up;
   }
   return d;
+}
+
+/// The two settle moments, READ FROM CONTENT (C-165).
+///
+/// These were literals — `momentA: 1, momentB: 29` — copied from `judge_test`
+/// when this file was written. They happen to be correct today, and that is
+/// luck rather than design: nothing verified them, and a re-tuned phase bin
+/// would leave every measurement here pointing at the wrong moment of the cycle
+/// while staying green. `end_to_end_test` and `fallback_liveness_test` already
+/// derived them from `steps/*.json`; the right pattern was in this repo and I
+/// did not follow it.
+Map<String, int> _settleBins() {
+  final Map<String, dynamic> step = (jsonDecode(File(
+              '${_findRepoRoot().path}/content/styles/salsa_shines/steps/'
+              'ss_shine_footwork.json')
+          .readAsStringSync()) as Map)
+      .cast<String, dynamic>();
+  final Map<String, int> bins = <String, int>{
+    for (final Object? p in (step['phases'] as List))
+      (p as Map)['id'] as String:
+          ((p['enter'] as Map)['phaseBin'] as num).toInt(),
+  };
+  if (!bins.containsKey('settle_a') || !bins.containsKey('settle_b')) {
+    throw StateError('settle phases missing from content: ${bins.keys}');
+  }
+  return bins;
 }

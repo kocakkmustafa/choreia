@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:choreia_engine/choreia_engine.dart';
@@ -83,7 +84,9 @@ void main() {
           File('${_findRepoRoot().path}/content/references/'
               'ss_shine_footwork.json'));
       final JudgeResult run = DanceJudge(reference: shine)
-          .judge(shine.angles, momentA: 1, momentB: 29);
+          .judge(shine.angles,
+              momentA: _settleBins()['settle_a']!,
+              momentB: _settleBins()['settle_b']!);
 
       expect(run.findings, isNotEmpty,
           reason: 'an empty run makes every set below vacuously equal — the '
@@ -108,7 +111,9 @@ void main() {
           File('${_findRepoRoot().path}/content/references/'
               'ss_shine_footwork.json'));
       final Set<String> mute = DanceJudge(reference: shine)
-          .judge(shine.angles, momentA: 1, momentB: 29)
+          .judge(shine.angles,
+              momentA: _settleBins()['settle_a']!,
+              momentB: _settleBins()['settle_b']!)
           .findings
           .where((ErrorFinding f) => f.verdict == Verdict.noVerdict)
           .map((ErrorFinding f) => f.code)
@@ -137,4 +142,30 @@ Directory _findRepoRoot() {
     d = up;
   }
   return d;
+}
+
+/// The two settle moments, READ FROM CONTENT (C-165).
+///
+/// These were literals — `momentA: 1, momentB: 29` — copied from `judge_test`
+/// when this file was written. They happen to be correct today, and that is
+/// luck rather than design: nothing verified them, and a re-tuned phase bin
+/// would leave every measurement here pointing at the wrong moment of the cycle
+/// while staying green. `end_to_end_test` and `fallback_liveness_test` already
+/// derived them from `steps/*.json`; the right pattern was in this repo and I
+/// did not follow it.
+Map<String, int> _settleBins() {
+  final Map<String, dynamic> step = (jsonDecode(File(
+              '${_findRepoRoot().path}/content/styles/salsa_shines/steps/'
+              'ss_shine_footwork.json')
+          .readAsStringSync()) as Map)
+      .cast<String, dynamic>();
+  final Map<String, int> bins = <String, int>{
+    for (final Object? p in (step['phases'] as List))
+      (p as Map)['id'] as String:
+          ((p['enter'] as Map)['phaseBin'] as num).toInt(),
+  };
+  if (!bins.containsKey('settle_a') || !bins.containsKey('settle_b')) {
+    throw StateError('settle phases missing from content: ${bins.keys}');
+  }
+  return bins;
 }
