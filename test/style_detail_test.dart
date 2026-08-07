@@ -663,10 +663,25 @@ void main() {
           reason: '34 kültürel iddia kaynak kaydı olmadan duruyor ve bunu '
               'söyleyen bir kayıt da yok');
       final Map<String, dynamic> p = (prov! as Map).cast<String, dynamic>();
-      expect('${p['status']}', startsWith('UNSOURCED'),
-          reason: 'kaynak bulunduysa bu kaydı GÜNCELLE — kapı da, aşağıdaki '
-              'yasak da o gün yeniden okunmalı');
-      expect(p['whatIsStillOwed'], isNotNull);
+      // Was `startsWith('UNSOURCED')` and said "update this the day a source
+      // is found — the gate and the prohibition below both have to be re-read
+      // then". That day was 2026-08-07: one attribution was actually
+      // attempted and three usable sources turned up in minutes. The word had
+      // been standing in for "nobody looked".
+      //
+      // The status is now COUNTED, so this asserts the shape of a measurement
+      // rather than the presence of a word. A blanket claim can drift in
+      // silence; a count is recomputed by `validate_content` every run.
+      final List<String> sourced =
+          ((p['sourcedStyles'] as List?) ?? const <Object?>[])
+              .map((Object? e) => '$e')
+              .toList();
+      expect('${p['status']}', contains('${sourced.length}/'),
+          reason: 'durum metni ÖLÇÜLEN sayıyı taşımıyor — beyana geri dönmüş');
+      expect(p['correctionMade'], isNotNull,
+          reason: 'iddianın nasıl yanlış okunduğu kaydı silinmiş; düzeltmenin '
+              'kendisi kadar önemli');
+      expect(p['surfaceRule'], isNotNull);
     });
 
     testWidgets('yüzey ASLA panel/inceleme/doğrulama iddia etmez',

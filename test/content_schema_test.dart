@@ -88,6 +88,11 @@ void main() {
       'cautionClass': 'internal severity tag; the user-facing half is the '
           'safety copy',
       'isFamilyPage': 'implied to the reader by subDances being present',
+      'attributionSources': 'OUR bookkeeping, not a badge. The provenance '
+          'block\'s own surfaceRule forbids the screen from claiming '
+          'verification, so a source list that reached the surface would turn '
+          'a record into a guarantee nobody made. Dead on purpose, and this '
+          'entry is the declaration that it is (C-198)',
       'trendPack': 'curation grouping',
       'seasonal': 'curation grouping',
       'id': 'the key itself',
