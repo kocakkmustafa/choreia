@@ -193,7 +193,66 @@ final class JudgeResult {
 
   ErrorFinding? operator [](String code) =>
       findings.where((ErrorFinding f) => f.code == code).firstOrNull;
+
+  /// THE one correction to show, or null when nothing fired.
+  ///
+  /// The rule ("score + ONE correction — the single most important error") is
+  /// written in three places and was blocked for a long time on a reasonable
+  /// objection: choosing "the most important" without a derived order is
+  /// threshold-invention, and Choreia had no severity ladder like JabLab's.
+  ///
+  /// **It turned out not to need one.** Measured 2026-08-07: at most TWO codes
+  /// can ever carry a verdict here, so this is not an n-way ranking — it is a
+  /// single binary tie-break. And content had already made that call: the
+  /// level-1 `unlockRule` gates progression on "zero WRONG_FOOT" and does not
+  /// mention STEP_TOO_LARGE at all. [correctionPriority] READS that, it does
+  /// not invent it.
+  ErrorFinding? get correction {
+    ErrorFinding? best;
+    int bestRank = correctionPriority.length + 1;
+    for (final ErrorFinding f in fired) {
+      final int i = correctionPriority.indexOf(f.code);
+      // An unknown code ranks LAST rather than first. If a new code is added
+      // and nobody ranks it, the failure should be "it lost a tie-break", not
+      // "it silently outranked the one content says blocks progression".
+      // `judge_priority_test.dart` fails outright in that case, so this
+      // fallback is a floor, not the plan.
+      final int rank = i < 0 ? correctionPriority.length : i;
+      if (rank < bestRank) {
+        best = f;
+        bestRank = rank;
+      }
+    }
+    return best;
+  }
+
+  /// How many OTHER findings fired besides [correction].
+  ///
+  /// Surfaced as a count, never as a list: showing one correction is the rule,
+  /// but letting the learner believe it was the only thing we saw would be a
+  /// different claim than the rule makes. One number keeps the focus without
+  /// the silence.
+  int get otherFiredCount => fired.isEmpty ? 0 : fired.length - 1;
 }
+
+/// Fired codes ordered most-blocking first — the basis for [JudgeResult.correction].
+///
+/// **DERIVED, NOT INVENTED.** `content/styles/salsa_shines/style.json`, level 1:
+///
+/// > `unlockRule.description`: "3 consecutive attempts at ss_shine_footwork
+/// > with shapeScore >= 0.75 and **zero WRONG_FOOT**"
+///
+/// WRONG_FOOT blocks progression; STEP_TOO_LARGE does not, and the rule's own
+/// note explains which codes were deliberately excluded and why. Content made
+/// the severity statement about exactly this pair before this list existed.
+///
+/// The basis is pinned by a test: if STEP_TOO_LARGE ever enters that unlock
+/// rule, the derivation is void and this order must be re-derived rather than
+/// defended.
+const List<String> correctionPriority = <String>[
+  'WRONG_FOOT',
+  'STEP_TOO_LARGE',
+];
 
 /// Scores one learner cycle against a reference, for the errors that are LIVE.
 ///

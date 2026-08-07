@@ -124,4 +124,71 @@ void main() {
     // all — and cannot, because `LiveMeasured` carries no findings field.
     expect(find.text(LiveStrings.findingsTitle), findsNothing);
   });
+
+  group('SINGLE CORRECTION (C-136 (b), ruled 2026-08-07)', () {
+    ErrorFinding fired(String code) => ErrorFinding(code, Verdict.error);
+
+    Future<void> showJudged(WidgetTester tester, List<ErrorFinding> f) =>
+        tester.pumpWidget(MaterialApp(
+          home: LiveView(
+            state: LiveJudged(
+              result: JudgeResult(
+                  measurements: const <String, double>{}, findings: f),
+              gated: gated,
+              notMeasuredNote: note,
+            ),
+            gated: gated,
+            notMeasuredNote: note,
+          ),
+        ));
+
+    testWidgets('two fired findings render ONE correction, not two',
+        (WidgetTester tester) async {
+      await showJudged(tester,
+          <ErrorFinding>[fired('STEP_TOO_LARGE'), fired('WRONG_FOOT')]);
+
+      // The card used to render a row per finding. It must now show the one
+      // the derived order names.
+      expect(find.textContaining('STEP_TOO_LARGE'), findsNothing,
+          reason: 'the lower-priority finding must not appear as a second '
+              'correction — that is the rule this screen was violating');
+      expect(find.textContaining('WRONG_FOOT'), findsWidgets);
+    });
+
+    testWidgets('the other finding is COUNTED, never silently dropped',
+        (WidgetTester tester) async {
+      await showJudged(tester,
+          <ErrorFinding>[fired('STEP_TOO_LARGE'), fired('WRONG_FOOT')]);
+      expect(find.byKey(LiveView.alsoSawKey), findsOneWidget,
+          reason: 'showing one correction is the rule; implying it was the '
+              'only thing we saw is a stronger claim than the rule makes');
+    });
+
+    testWidgets('a single fired finding shows NO "also saw" line',
+        (WidgetTester tester) async {
+      // The positive twin. Without it, a card that ALWAYS printed the line
+      // would pass the test above.
+      await showJudged(tester, <ErrorFinding>[fired('WRONG_FOOT')]);
+      expect(find.byKey(LiveView.alsoSawKey), findsNothing);
+    });
+
+    testWidgets('nothing fired still renders the clean-attempt sentence',
+        (WidgetTester tester) async {
+      await showJudged(tester, const <ErrorFinding>[]);
+      expect(find.text(LiveStrings.nothingWrong), findsOneWidget);
+      expect(find.byKey(LiveView.alsoSawKey), findsNothing);
+    });
+
+    test('the "also saw" copy INTERPOLATES — no raw variable name ships', () {
+      // This exact bug shipped once in this repo (C-130: a user-facing string
+      // written with the variable name escaped, so \$unreadable reached the
+      // screen) and it recurred while writing THIS line — the plural branch
+      // was authored as '\$n other things', which Dart reads as a literal.
+      // Asserting the NUMBER, not merely "some text", is what catches it.
+      expect(LiveStrings.alsoSaw(2), contains('2'));
+      expect(LiveStrings.alsoSaw(2), isNot(contains(r'$n')));
+      expect(LiveStrings.alsoSaw(1), isNot(contains(r'$n')));
+      expect(LiveStrings.alsoSaw(1), contains('One other thing'));
+    });
+  });
 }

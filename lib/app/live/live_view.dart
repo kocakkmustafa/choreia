@@ -54,6 +54,17 @@ abstract final class LiveStrings {
   static const String nothingWrong =
       'Nothing we check came out wrong this time.';
 
+  /// Names that other findings exist WITHOUT listing them.
+  ///
+  /// Single-correction is about where to put your attention, not about
+  /// pretending the rest of the attempt was clean. The count says "there is
+  /// more" and the sentence says why you are only being shown one.
+  static String alsoSaw(int n) => n == 1
+      ? 'One other thing came up. This is the one to fix first — the rest '
+          'tends to follow.'
+      : '$n other things came up. This is the one to fix first — the rest '
+          'tends to follow.';
+
   static String cameraProblem(CameraFailure f) => switch (f) {
         CameraFailure.modelLoadFailed =>
           'The movement model would not load, so we cannot watch you. This '
@@ -119,6 +130,7 @@ class LiveView extends StatelessWidget {
   static const Key gatedKey = Key('live.gated');
   static const Key notMeasuredKey = Key('live.notMeasured');
   static const Key actionKey = Key('live.action');
+  static const Key alsoSawKey = Key('live.alsoSaw');
 
   @override
   Widget build(BuildContext context) {
@@ -376,11 +388,32 @@ class LiveView extends StatelessWidget {
                 style:
                     ChoreiaType.body(size: 13, weight: FontWeight.w600, color: ChoreiaColors.bright)),
             const SizedBox(height: 12),
-            if (result.findings.isEmpty)
+            // SINGLE-CORRECTION DISCIPLINE (C-136 (a)+(b), ruled 2026-08-07).
+            //
+            // The rule is "score + ONE correction — the single most important
+            // error", and this card used to render EVERY finding. It now shows
+            // the one [JudgeResult.correction] names, ordered by a priority
+            // DERIVED from content's own unlock rule, not invented here.
+            //
+            // The other fired finding is not deleted from the world — it is
+            // COUNTED below. Showing one correction is the rule; letting the
+            // learner believe it was the only thing we saw would be a stronger
+            // claim than the rule makes.
+            if (result.correction == null)
               Text(LiveStrings.nothingWrong,
                   style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.7)))
-            else
-              for (final ErrorFinding f in result.findings) _findingRow(f),
+            else ...<Widget>[
+              _findingRow(result.correction!),
+              if (result.otherFiredCount > 0) ...<Widget>[
+                const SizedBox(height: 8),
+                Text(
+                  LiveStrings.alsoSaw(result.otherFiredCount),
+                  key: alsoSawKey,
+                  style: ChoreiaType.body(
+                      size: 12, color: ChoreiaColors.text(0.55)),
+                ),
+              ],
+            ],
             const SizedBox(height: 10),
             Text(LiveStrings.cycles(cyclesRead),
                 style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.42))),
