@@ -368,12 +368,28 @@ void main() {
 
     testWidgets('a style with no glossary renders no glossary section',
         (WidgetTester tester) async {
-      // The positive twin. 16 of 34 have none, deliberately; a section that
-      // rendered an empty heading would turn a considered omission into a
-      // broken-looking page.
-      expect(lib.cardFor('kpop_point')!.entry.stepGlossary, isEmpty);
-      await show(tester, 'kpop_point');
-      expect(find.byKey(StyleDetailView.glossaryKey), findsNothing);
+      // The positive twin: a section that rendered an empty heading would
+      // turn a considered omission into a broken-looking page.
+      //
+      // NOT a hand-picked id any more. This test named `kpop_point` until
+      // 2026-08-07, when that style got a glossary and the test failed for
+      // the best possible reason — its subject recovered. Naming a
+      // replacement would just queue the same failure behind the next style
+      // written. The PROPERTY is what holds: whichever styles have no
+      // glossary, none of them draws the section.
+      final List<String> without = <String>[
+        for (final StyleCard c in lib.cards)
+          if (c.entry.stepGlossary.isEmpty) c.entry.id,
+      ];
+      expect(without, isNotEmpty,
+          reason: 'her stilin sözlüğü varsa bu test hiçbir şey ölçmüyor — '
+              'sil ya da sentetik bir durumla sına, sessizce yeşil bırakma');
+
+      for (final String id in without) {
+        await show(tester, id);
+        expect(find.byKey(StyleDetailView.glossaryKey), findsNothing,
+            reason: '$id sözlüksüz ama sözlük bölümü çiziliyor');
+      }
     });
 
     test('MEASURED: WHICH styles are unwritten, not merely how many', () {

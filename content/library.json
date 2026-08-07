@@ -82,6 +82,24 @@
    "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka",
    "originAttribution": "The fitness-class format is a late commercial packaging; the dancing inside it is not. Its steps are borrowed from Latin American social dances — salsa, merengue, cumbia, reggaeton — each with its own country and its own history, and the credit belongs to those dances rather than to the exercise format built on top of them.",
    "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. The class runs on repeating blocks of salsa, merengue, cumbia and reggaeton footwork, at a pace that keeps moving.",
+   "stepGlossary": [
+    {
+     "name": "Merengue march",
+     "gloss": "Marching on the spot, weight changing every beat, the hip dropping as each knee bends."
+    },
+    {
+     "name": "Salsa side-basic",
+     "gloss": "Step out to the side and back again, danced without a partner and without travelling far."
+    },
+    {
+     "name": "Cumbia drag",
+     "gloss": "One foot drags toward the other while the body turns slightly away from it."
+    },
+    {
+     "name": "Reggaeton bounce",
+     "gloss": "A heavy, grounded bounce driven from the hips rather than sprung from the toes."
+    }
+   ],
    "cameraLimits": [
     "Whether you are working hard. Effort is heart rate and breath, and a camera reads neither — it sees where your limbs are, not what they cost you.",
     "The bounce that carries a whole class. Sustained low-amplitude movement is where the difference between teachers is smaller than our own measurement noise."
@@ -166,6 +184,24 @@
    "note": "Orijinal kombolar; isimli viral koreografi öğretilmez",
    "originAttribution": "Short dances made to spread on social platforms through the 2010s and 2020s. A great many of them were created by Black teenagers — often girls — whose choreography travelled worldwide while their names did not, and that pattern of uncredited borrowing is part of this form's history. This app teaches general movement vocabulary and reproduces no named creator's routine.",
    "description": "Short dances made to be learned from a phone screen and danced back into one. They are built from a handful of sharp, repeatable moves timed to a specific fragment of a song.",
+   "stepGlossary": [
+    {
+     "name": "Eight-count block",
+     "gloss": "Most short routines are one or two eight-counts, repeated — the format's whole structure."
+    },
+    {
+     "name": "Hit",
+     "gloss": "A sharp stop on a beat where the whole body arrives at once and holds."
+    },
+    {
+     "name": "Body roll",
+     "gloss": "A wave travelling through chest, ribs and hips, usually finishing on a strong count."
+    },
+    {
+     "name": "Arm run",
+     "gloss": "A sequence of arm shapes taken on consecutive counts while the feet stay almost still."
+    }
+   ],
    "cameraLimits": [
     "Whether it looks good on camera, which is the entire point of this form. Framing, angle and timing to the edit are the craft here, and none of them is a joint angle.",
     "Facial performance. Our reading is of bodies, and half of what makes these dances land is above the shoulders."
@@ -185,6 +221,24 @@
    "note": "Ajans içeriği yüksek-dikkat; bağımsız eğitmen kanalları öncelikli. Ayna-modu zorunlu",
    "originAttribution": "The 'point' is the signature hook section of a Korean pop song's choreography, a convention of the Korean idol industry that grew from the 1990s onward. These routines are the work of named choreographers and production companies. They are not reproduced here; what can be taught is the movement vocabulary they draw on.",
    "description": "The signature hook section of a Korean pop routine — the part everyone recognises and copies. It is dense, precise and short, and it rewards clean shapes over big movement.",
+   "stepGlossary": [
+    {
+     "name": "Point move",
+     "gloss": "The one short gesture a routine is remembered by, usually repeated through the chorus."
+    },
+    {
+     "name": "Isolation",
+     "gloss": "Moving one part — head, shoulders, ribs — while everything else stays quiet."
+    },
+    {
+     "name": "Hit and hold",
+     "gloss": "Arriving exactly on the beat and then staying still through the next one."
+    },
+    {
+     "name": "Formation walk",
+     "gloss": "In group routines the travel between shapes; danced alone it is simply a travelling step."
+    }
+   ],
    "cameraLimits": [
     "Sharpness — the stop at the end of a movement, which is what separates this from ordinary dancing. Judging it needs the beat pinned down, and that is a measurement we do not have.",
     "Unison. These routines are built to be danced by several people at once, and one camera watching one dancer cannot see the thing being judged."
@@ -274,6 +328,24 @@
    ],
    "originAttribution": "Jamaican dancehall grew out of Kingston's sound-system culture from the late 1970s. Unusually among popular dances, its steps are individually named and datable, and most can be traced to a specific dancer and a specific moment — which makes crediting them possible in a way it often is not elsewhere.",
    "description": "Jamaican dancehall is a vocabulary of named steps, each with its own attitude and its own moment. Each step stands on its own, and dancers pick between them as the riddim moves.",
+   "stepGlossary": [
+    {
+     "name": "Bounce",
+     "gloss": "The grounded up-and-down most dancehall steps sit on top of."
+    },
+    {
+     "name": "Whine",
+     "gloss": "A continuous circle through the hips, kept smooth rather than sharp."
+    },
+    {
+     "name": "Bogle",
+     "gloss": "A rolling arm-and-shoulder pattern over that bounce; named after the dancer who made it."
+    },
+    {
+     "name": "Log on",
+     "gloss": "A kick-and-lean pattern danced on the spot, one of the widely taught named steps."
+    }
+   ],
    "cameraLimits": [
     "Attitude, which is most of what makes a dancehall step correct. It is carried in the face, the timing and the intent, and none of those is a limb position.",
     "Floor contact in the low steps. Contact timing is the weakest thing a single camera resolves."
@@ -292,6 +364,24 @@
    "note": "≥60fps önerisi — hızlı ayak işi",
    "originAttribution": "The shuffle developed in Melbourne's rave and underground club scene from the late 1980s and 1990s, and later picked up related 'cutting shapes' variants from UK dance scenes. It is a club dance made by dancers on floors, with no single author.",
    "description": "A fast shuffling footwork danced to four-on-the-floor electronic music. The whole dance lives below the knees — the upper body stays quiet while the feet slide and kick.",
+   "stepGlossary": [
+    {
+     "name": "Running man",
+     "gloss": "Running on the spot without travelling — the foot slides back as the other knee lifts."
+    },
+    {
+     "name": "T-step",
+     "gloss": "Twisting on one foot while the other taps out to the side and back in."
+    },
+    {
+     "name": "Heel-toe",
+     "gloss": "Alternating heel and toe contacts that slide the whole body sideways."
+    },
+    {
+     "name": "Spin",
+     "gloss": "A quick turn on the ball of one foot, landing back into the bounce."
+    }
+   ],
    "cameraLimits": [
     "The slide. What makes a shuffle read is friction against the floor — how the foot moves ACROSS it, not where the foot is.",
     "Speed at the point where it stops being resolvable. Fast lower-leg work blurs, and a blurred landmark is a guess wearing a number."
@@ -349,6 +439,24 @@
    "note": "Mudra: el-landmark varsa skorlu, yoksa demo",
    "originAttribution": "Film dance from the Hindi-language film industry in Mumbai, which from the mid-twentieth century blended Indian classical forms such as kathak and bharatanatyam with folk traditions including bhangra and garba, and with Western popular dance. Individual film routines are their choreographers' work and are not reproduced here.",
    "description": "Film dance from Hindi cinema — expressive, rhythmic and unafraid of scale. It borrows from Indian classical and folk forms and from Western popular dance, often within a single song.",
+   "stepGlossary": [
+    {
+     "name": "Mudra",
+     "gloss": "A shaped hand position. Classical Indian dance names dozens of them; film choreography borrows freely."
+    },
+    {
+     "name": "Thumka",
+     "gloss": "A sharp hip accent, usually placed on a strong beat."
+    },
+    {
+     "name": "Chakkar",
+     "gloss": "A spin on the spot, taken from kathak."
+    },
+    {
+     "name": "Jhatka",
+     "gloss": "A quick snapped movement of the shoulder or torso."
+    }
+   ],
    "cameraLimits": [
     "Mudras and fine hand shape. Finger landmarks are below the resolution we work at, and in the classical vocabulary the hand IS the meaning.",
     "Expression. This is a dance form built on telling a story with the face, and we do not read faces."
@@ -367,6 +475,24 @@
    "note": "Bachata/shines deseninin birebir tekrarı — en ucuz ekleme",
    "originAttribution": "Merengue is the national dance of the Dominican Republic, danced there long before it was promoted abroad, and it carries the same African and European meeting that shaped the island's music.",
    "description": "A simple, insistent march danced on the spot or side to side, with the hips carrying what the feet keep plain. It is the most quickly learned of the Latin social dances and the hardest to make look good.",
+   "stepGlossary": [
+    {
+     "name": "March",
+     "gloss": "Weight changing on every beat with soft knees; the whole dance grows from it."
+    },
+    {
+     "name": "Side basic",
+     "gloss": "The same march travelling sideways instead of staying on the spot."
+    },
+    {
+     "name": "Hip drop",
+     "gloss": "The fall of the hip that happens because the knee bends — the step's character, not an addition."
+    },
+    {
+     "name": "Half turn",
+     "gloss": "Marching through a turn without breaking the count."
+    }
+   ],
    "cameraLimits": [
     "Weight transfer, for the same measured reason as every other march-like step: the change we would look for is smaller than what the camera reliably sees.",
     "Whether the hips are moving because the legs made them, or because you pushed them. The shape is the same; the technique is not."
@@ -384,6 +510,24 @@
    "scoring": "pose",
    "originAttribution": "Cumbia began on Colombia's Caribbean coast, in the meeting of Indigenous, African and Spanish traditions, and then travelled: Mexico, Argentina, Peru and others each grew their own cumbia with its own step and its own feel. Naming it one dance understates it.",
    "description": "A dragging, unhurried step danced with one foot brushing the floor, in a small circle or a shuffle. Every country that took up cumbia bent it a different way, so the feel varies more than the footwork.",
+   "stepGlossary": [
+    {
+     "name": "Drag step",
+     "gloss": "One foot drags toward the other — a trace of the shuffling walk the dance is named for."
+    },
+    {
+     "name": "Side step",
+     "gloss": "Step out and close, the upper body staying calm above it."
+    },
+    {
+     "name": "Circle walk",
+     "gloss": "The traditional path around a partner; danced alone it becomes a slow travel."
+    },
+    {
+     "name": "Hip sway",
+     "gloss": "A side-to-side that follows the weight change rather than being pushed."
+    }
+   ],
    "cameraLimits": [
     "The drag. This step is defined by one foot brushing the floor, and floor contact is the weakest measurement a single camera makes.",
     "Which regional cumbia you are dancing. We would be comparing you against one version of a dance that has many, and we are not going to call the others wrong."
@@ -668,6 +812,24 @@
    "note": "Karnaval solo samba. Gafieira ayrı SKU DEĞİL — ileri-stil katmanı",
    "originAttribution": "Samba no pé is the solo footwork of Brazilian samba, an Afro-Brazilian form that grew in the communities of Bahia and Rio de Janeiro and is carried today by the samba schools and their carnival. The dance and the drumming are one tradition, not two.",
    "description": "The solo footwork of Brazilian samba — a bouncing three-step danced in the time of two, fast and low. The bounce comes from the knees, not from jumping.",
+   "stepGlossary": [
+    {
+     "name": "Samba no pé",
+     "gloss": "The basic: three steps fitted into two beats, danced on the spot."
+    },
+    {
+     "name": "Bounce",
+     "gloss": "The vertical drop through the knees that makes it read as samba and not a walk."
+    },
+    {
+     "name": "Travelling samba",
+     "gloss": "The same footwork carried forward or sideways."
+    },
+    {
+     "name": "Arm carriage",
+     "gloss": "The relaxed swing that answers the feet. Nothing about it is prescribed."
+    }
+   ],
    "cameraLimits": [
     "The bounce, at the speed it actually happens. Samba's footwork is fast and low, which is the combination our landmarks resolve worst.",
     "Whether the bounce comes from the knees or from jumping. The vertical travel can look alike; the technique does not."
@@ -722,6 +884,24 @@
    "note": "Dhol ritmi RhythmEngine'e uygun; müfredat ORİJİNAL geliştirilir",
    "originAttribution": "Bhangra is a harvest dance of the Punjab, the region now divided between India and Pakistan, tied to Baisakhi and to the farming year. It has a second life as a British-Punjabi popular music and club form from the 1980s, made by the children of migrants — both are real bhangra and they are not the same dance.",
    "description": "A high-energy Punjabi dance of raised arms, bouncing shoulders and stamping feet, danced to the dhol drum. It is meant to be big — the small version does not work.",
+   "stepGlossary": [
+    {
+     "name": "Chaal",
+     "gloss": "The bounce-and-shoulder pattern the dance is built on."
+    },
+    {
+     "name": "Shoulder move",
+     "gloss": "Alternating shoulder lifts driven from the upper back."
+    },
+    {
+     "name": "Arm raise",
+     "gloss": "Arms lifted overhead with the hands open — the dance's most recognisable shape."
+    },
+    {
+     "name": "Jump",
+     "gloss": "A two-footed hop landing with the dhol's strong beat."
+    }
+   ],
    "cameraLimits": [
     "Energy, which is the form's own standard. A big bhangra and a small one can trace similar angles.",
     "Shoulder detail at speed. Fast repeated movement blurs, and a blurred landmark is not a measurement."
@@ -782,6 +962,24 @@
    ],
    "originAttribution": "Contemporary dance descends from the modern dance of the early twentieth century, made by choreographers — many of them women — who deliberately refused ballet's codified vocabulary and built their own. It is less a single technique than a family of them, each with a named lineage.",
    "description": "A family of techniques descended from twentieth-century modern dance, built on weight, breath and release rather than on a fixed vocabulary. Floorwork and falling are technique here, not accidents.",
+   "stepGlossary": [
+    {
+     "name": "Contraction",
+     "gloss": "A curve through the spine started from the centre of the body."
+    },
+    {
+     "name": "Release",
+     "gloss": "Letting weight fall and using it, instead of holding a shape against it."
+    },
+    {
+     "name": "Spiral",
+     "gloss": "Turning through the torso so the body twists rather than rotating as one block."
+    },
+    {
+     "name": "Floor work",
+     "gloss": "Going into and out of the floor as an ordinary part of a phrase."
+    }
+   ],
    "cameraLimits": [
     "Weight and release, which is what the technique is about. Whether you fell or lowered yourself produces similar paths and opposite intentions.",
     "Floorwork. A single front-facing camera loses most of a body once it is on the ground."
@@ -839,6 +1037,24 @@
    "note": "Hard-shoe = onset; soft-shoe = poz+sıçrama kadraj kalibrasyonu. TEK lineage seçilir",
    "originAttribution": "Irish dance covers both the social forms — céilí and set dancing, danced together — and the competitive step dance most familiar abroad. Its transmission survived long periods when Irish cultural practice was suppressed, and the modern competitive form was shaped substantially in the twentieth century.",
    "description": "Sharp, quick footwork with the upper body held still, danced on the balls of the feet. The legs do everything and they do it in a very small amount of space.",
+   "stepGlossary": [
+    {
+     "name": "Hard shoe",
+     "gloss": "Shoes with a hard tip and heel, where the sound is part of the dance."
+    },
+    {
+     "name": "Soft shoe",
+     "gloss": "Light shoes for the jumped, silent styles."
+    },
+    {
+     "name": "Treble",
+     "gloss": "A brush of the toe forward and back that makes two sounds."
+    },
+    {
+     "name": "Rock",
+     "gloss": "A crossing step where the weight shifts over the back foot."
+    }
+   ],
    "cameraLimits": [
     "Foot contact and sound in the hard-shoe forms — the least reliable measurement we make, on the thing that decides whether it is right.",
     "Turnout and crossing at the speed this dance moves. The positions are precise and the tempo is exactly where our landmarks degrade."
@@ -859,6 +1075,24 @@
    ],
    "originAttribution": "Kizomba came from Angola, growing out of semba, and took shape alongside Cape Verdean and French Antillean zouk music. It is an African dance with a specific history, frequently marketed abroad as though it were generically 'Latin'.",
    "description": "A slow, grounded walking dance from Angola, practised here on your own. The step is simple and the difficulty is all in the weight — where it sits and how long it takes to arrive.",
+   "stepGlossary": [
+    {
+     "name": "Basic walk",
+     "gloss": "Slow steps taken with the whole foot, the weight arriving fully before the next one starts."
+    },
+    {
+     "name": "Tarraxinha",
+     "gloss": "Small grounded hip movements danced almost on the spot."
+    },
+    {
+     "name": "Weight settle",
+     "gloss": "The pause at the end of a step where the body finishes arriving. Danced alone, this is most of the work."
+    },
+    {
+     "name": "Head movement",
+     "gloss": "In zouk this is led by a partner; practised solo it becomes a slow wave through the spine."
+    }
+   ],
    "cameraLimits": [
     "Weight, which is the entire technique here. How long it takes to arrive is the dance, and the change we would measure is inside our noise floor.",
     "Groundedness. Whether you are connected to the floor or hovering above it is felt, not seen."
@@ -911,6 +1145,24 @@
    "note": "3/4 kamera açısı modu. Store-policy turu bu kovaya BİRLİKTE bakar — W4 öncesi kurucu onayı",
    "originAttribution": "Twerk's immediate lineage runs through New Orleans bounce, and behind that through West and Central African dances in which isolated hip and glute movement is long-established technique. Reggaeton grew from Panama and Puerto Rico out of reggae en español and dancehall. Both were treated as vulgar while they belonged to Black and Latino communities and as fashionable once they did not.",
    "description": "Isolated hip and glute movement danced to reggaeton and its relatives — technique that is far older and far more controlled than its reputation. The control comes from the lower back and the legs.",
+   "stepGlossary": [
+    {
+     "name": "Isolation",
+     "gloss": "Moving the hips while the ribcage and shoulders stay still."
+    },
+    {
+     "name": "Bounce",
+     "gloss": "A repeated drop and lift driven by the knees and the glutes."
+    },
+    {
+     "name": "Perreo",
+     "gloss": "The grounded reggaeton step, danced low with the knees bent."
+    },
+    {
+     "name": "Dembow",
+     "gloss": "Not a step — the repeating rhythm the footwork answers."
+    }
+   ],
    "cameraLimits": [
     "Control versus momentum. The same movement driven from the lower back or thrown with the whole body looks similar and is not the same technique.",
     "Isolation quality, for the measured reason that unintended movement elsewhere is the size of our noise floor."
@@ -929,6 +1181,24 @@
    "safetyOnboarding": "ayakkabı güvenliği ZORUNLU",
    "originAttribution": "Heels is a studio style rather than a community dance — it took shape in commercial dance studios, largely in Los Angeles, drawing on jazz, on waacking and on burlesque and cabaret traditions. Much of what gives it its character was carried in by queer dancers from those older forms.",
    "description": "A studio style danced in heels, drawing on jazz, waacking and cabaret. Standing, walking and turning all change in heels, so the first work is not choreography but balance.",
+   "stepGlossary": [
+    {
+     "name": "Walk",
+     "gloss": "The long runway-style walk most heels routines are framed around."
+    },
+    {
+     "name": "Body roll",
+     "gloss": "A wave through the spine, usually taken slowly."
+    },
+    {
+     "name": "Hip release",
+     "gloss": "Letting one hip drop as the weight settles into a heel."
+    },
+    {
+     "name": "Floor transition",
+     "gloss": "Going down to the floor and back up — the part where shoe grip matters most."
+    }
+   ],
    "cameraLimits": [
     "Balance — the actual difficulty of this style. Whether you are stable or recovering is a continuous negotiation we cannot see from joint angles.",
     "Ankle and foot detail, which the shoe hides from the camera as well as from us."

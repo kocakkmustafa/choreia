@@ -478,6 +478,41 @@ def validate_cultural_review(rep: Report, lib: dict, where: str) -> None:
                              "style in this library")
 
 
+def validate_limits_not_doubled(rep: Report, lib: dict,
+                                on_disk: dict[str, dict], where: str) -> None:
+    """A style page must state its camera limits ONCE.
+
+    Two registers exist for the same truth. A style with a pack on disk shows
+    the MEASURED honesty box — "instructors disagree by 11-58deg on arm joints,
+    so there is no single correct arm to grade you against". A style with no
+    pack shows the GENERAL `cameraLimits` list — "effort is heart rate and
+    breath, and a camera reads neither".
+
+    `style_detail_view` renders both when both exist, so a built style that
+    also carried `cameraLimits` would tell a dancer the same limitation twice
+    in two voices, and the weaker one would undercut the measured one.
+
+    This is why `hip_hop_foundations` and `salsa_shines` have no `cameraLimits`
+    and must not get any: their absence is the CORRECT state, and without this
+    check the next person counting empty fields reads it as a content gap and
+    "fixes" it. A gate that protects a deliberate emptiness is worth as much
+    as one that protects a filled field.
+    """
+    for s in lib.get("styles", []):
+        sid = s.get("id", "?")
+        if not s.get("cameraLimits"):
+            continue
+        style = on_disk.get(sid)
+        if style is None:
+            continue
+        honesty = style.get("honesty") or {}
+        if honesty.get("measured") or honesty.get("notMeasured"):
+            rep.error(where, f"'{sid}' carries cameraLimits AND a measured "
+                             "honesty box; the style page renders both, so a "
+                             "dancer reads the same limit twice — once "
+                             "measured, once general. Keep the measured one")
+
+
 def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
     """Checks the library registry against what actually exists.
 
@@ -499,6 +534,7 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
         rep.error(where, "unsupported schemaVersion")
 
     validate_cultural_review(rep, lib, where)
+    validate_limits_not_doubled(rep, lib, styles_on_disk, where)
 
     seen: set[str] = set()
     live: set[str] = set()
