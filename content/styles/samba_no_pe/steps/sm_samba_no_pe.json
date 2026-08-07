@@ -1,0 +1,178 @@
+{
+ "schemaVersion": 1,
+ "id": "sm_samba_no_pe",
+ "style": "samba_no_pe",
+ "name": "Samba no Pé",
+ "level": 1,
+ "beats": 2,
+ "countLabels": [
+  "1",
+  "2"
+ ],
+ "note": "Samba no pé iki vuruşa üç adım sığdırır, ama hasat hattının gördüğü şey AYAK SAYISI değil DİZ ÇEVRİMİ — ve dikey çevrim vuruş başına birdir. Adımın ritmik karmaşıklığı ile ölçülen büyüklüğü karıştırmamak, bu adımı bugün hasat edilebilir kılan şey.",
+ "searchParameters": {
+  "status": "ESTIMATED",
+  "scope": "phases[].enter valueDeg + minRateDegPerSec",
+  "basis": "hh_bounce'un ÖLÇÜLMÜŞ diz-çevrimi eşiklerinden uyarlandı (168°/40°/s). 166° — samba biraz daha alçak durur; 45°/s — alçalış daha keskindir. İkisi de TAHMİN ve hasat düzeltecek.",
+  "whyThisMayBeAuthored": "Bir arama parametresi dansçı hakkında HÜKÜM VERMEZ — videoda adımın NEREDE olduğunu bulur. Yanlışsa kötü bir HASAT olur (bize görünür), yanlış bir PUAN değil (kullanıcıya görünmez). Ve hasat hattı bunu okumak ZORUNDA: null yazmak adımı hasat edilemez yapar, yani dürüstlük adına yazılan boşluk üretimi durdururdu.",
+  "correctedBy": "hasadın kendisi — kötü bir segmentasyon çevrim sayısında ve dağılımda hemen görünür"
+ },
+ "calibration": {
+  "status": "PENDING",
+  "scope": "VERDICT thresholds only — arama parametreleri TARİF tarafında",
+  "why": "Bu adımın hiçbir referansı hasat edilmedi, dolayısıyla dansçının ne kadar iyi olduğunu söyleyen her alan BOŞ. Tolerans, eğitmenlerin ANLAŞMAZLIĞINDAN türetilir; yazılmaz.",
+  "unblockedBy": "content/references/sm_samba_no_pe.json — ≥3 bağımsız eğitmen (katalog §6.0)"
+ },
+ "measurability": {
+  "tier": null,
+  "tierStatus": "Awaiting reference harvest: bu adımın hiçbir çekimi ölçülmedi, yani tespit edilebilirliği BİLİNMİYOR. Düşük bir tier DEĞİL — ölçülmemiş bir tier."
+ },
+ "cycleUnit": "iki vuruşta üç adımlık bir dikey çevrim",
+ "scoring": {
+  "focusJoints": [
+   "left_knee",
+   "right_knee",
+   "left_hip",
+   "right_hip",
+   "trunk_tilt"
+  ],
+  "freeJoints": [
+   "left_upper_arm",
+   "right_upper_arm",
+   "left_forearm",
+   "right_forearm",
+   "left_elbow",
+   "right_elbow",
+   "left_shoulder",
+   "right_shoulder"
+  ],
+  "freeJointsRationale": "Samba'da kollar serbest ve sahneye göre değişir; hiçbir şekle karşı kontrol edilmiyor."
+ },
+ "phases": [
+  {
+   "id": "top",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": ">",
+    "valueDeg": 166
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 2000,
+   "note": "Ağırlık tek ayakta, bacaklar neredeyse uzamış — çevrimin en yüksek anı."
+  },
+  {
+   "id": "drop",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "decreasing",
+    "minRateDegPerSec": 45
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 800,
+   "note": "Diz hızla bükülüyor; sambanın alçalışı sekmeden daha keskindir, o yüzden hız eşiği hh_bounce'tan yüksek."
+  },
+  {
+   "id": "bottom",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "localMinimum"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "minDurationMs": 30,
+   "timeoutMs": 600,
+   "note": "En alçak an. Samba burada durmaz — bu bir geçiş, bir poz değil."
+  },
+  {
+   "id": "rise",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "increasing",
+    "minRateDegPerSec": 45
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 800,
+   "isTerminal": true,
+   "note": "Yükseliş. Ayak değişimi bu fazın içinde olur ama ONU ÖLÇMÜYORUZ; bu faz çevrimi zamanda kapatıyor."
+  }
+ ],
+ "scoredMoments": [
+  {
+   "id": "sm_samba_no_pe_bottom",
+   "phase": "bottom",
+   "beat": 0,
+   "label": "down"
+  },
+  {
+   "id": "sm_samba_no_pe_top",
+   "phase": "rise",
+   "beat": 1,
+   "label": "up"
+  }
+ ],
+ "errors": [
+  {
+   "code": "NO_DROP",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "knee_flexion_amplitude",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "knee_flexion_amplitude"
+   ],
+   "note": "Ayaklar deseni yapıyor ama dizler düşmüyor — adım bir yürüyüşe dönüşüyor. Sambayı samba yapan dikey harekettir."
+  },
+  {
+   "code": "HEELS_DOWN",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "knee_flexion_mean",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "knee_flexion_mean"
+   ],
+   "note": "Topuklar yere oturuyor ve sekme sönüyor. Çevrim yavaşlar, alçalış keskinliğini kaybeder."
+  },
+  {
+   "code": "TRUNK_COLLAPSE",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "trunk_tilt",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "trunk_tilt"
+   ],
+   "note": "Gövde alçalışa eşlik ediyor. Alçalan dizlerdir, göğüs değil."
+  }
+ ],
+ "reference": {
+  "requiredTakes": 3,
+  "collectedTakes": 0,
+  "status": "not-started",
+  "note": ">=3 bağımsız eğitmen (katalog §6.0). Tolerans onların anlaşmazlığından TÜRETİLİR, yazılmaz."
+ }
+}

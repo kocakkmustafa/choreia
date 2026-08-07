@@ -1,0 +1,177 @@
+{
+ "schemaVersion": 1,
+ "id": "dh_bounce",
+ "style": "dancehall",
+ "name": "Bounce",
+ "level": 1,
+ "beats": 1,
+ "countLabels": [
+  "1"
+ ],
+ "note": "Dancehall'ın sekmesi hip-hop'unkinden ayrı bir referans ister: dip daha uzun oturur ve alçalış daha yavaştır. Aynı ada sahip iki adımı tek referansla ölçmek, bir dansı başka bir dansa karşı ölçmek olurdu.",
+ "searchParameters": {
+  "status": "ESTIMATED",
+  "scope": "phases[].enter valueDeg + minRateDegPerSec",
+  "basis": "hh_bounce'tan uyarlandı. 167° — dancehall biraz daha yumuşak durur; 38°/s — sekme itilmek yerine bırakılır. TAHMİN, hasat düzeltecek.",
+  "whyThisMayBeAuthored": "Bir arama parametresi dansçı hakkında HÜKÜM VERMEZ — videoda adımın NEREDE olduğunu bulur. Yanlışsa kötü bir HASAT olur (bize görünür), yanlış bir PUAN değil (kullanıcıya görünmez). Ve hasat hattı bunu okumak ZORUNDA: null yazmak adımı hasat edilemez yapar, yani dürüstlük adına yazılan boşluk üretimi durdururdu.",
+  "correctedBy": "hasadın kendisi — kötü bir segmentasyon çevrim sayısında ve dağılımda hemen görünür"
+ },
+ "calibration": {
+  "status": "PENDING",
+  "scope": "VERDICT thresholds only — arama parametreleri TARİF tarafında",
+  "why": "Bu adımın hiçbir referansı hasat edilmedi, dolayısıyla dansçının ne kadar iyi olduğunu söyleyen her alan BOŞ. Tolerans, eğitmenlerin ANLAŞMAZLIĞINDAN türetilir; yazılmaz.",
+  "unblockedBy": "content/references/dh_bounce.json — ≥3 bağımsız eğitmen (katalog §6.0)"
+ },
+ "measurability": {
+  "tier": null,
+  "tierStatus": "Awaiting reference harvest: bu adımın hiçbir çekimi ölçülmedi, yani tespit edilebilirliği BİLİNMİYOR. Düşük bir tier DEĞİL — ölçülmemiş bir tier."
+ },
+ "cycleUnit": "vuruş başına bir sekme",
+ "scoring": {
+  "focusJoints": [
+   "left_knee",
+   "right_knee",
+   "left_hip",
+   "right_hip",
+   "trunk_tilt"
+  ],
+  "freeJoints": [
+   "left_upper_arm",
+   "right_upper_arm",
+   "left_forearm",
+   "right_forearm",
+   "left_elbow",
+   "right_elbow",
+   "left_shoulder",
+   "right_shoulder"
+  ],
+  "freeJointsRationale": "Kol ve omuz işi dancehall'da kişiseldir ve sahneye göre değişir."
+ },
+ "phases": [
+  {
+   "id": "top",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": ">",
+    "valueDeg": 167
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 2000,
+   "note": "Dizler yumuşak ama uzamış; dancehall hiçbir zaman tam kilitlenmez."
+  },
+  {
+   "id": "drop",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "decreasing",
+    "minRateDegPerSec": 38
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 800,
+   "note": "Alçalış. Sekme yerçekimine bırakılır, itilmez — bu yüzden hız eşiği sambadan düşük."
+  },
+  {
+   "id": "bottom",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "localMinimum"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "minDurationMs": 30,
+   "timeoutMs": 600,
+   "note": "Dip. Dancehall burada bir an OTURUR; bu duruş stilin karakteridir."
+  },
+  {
+   "id": "rise",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "increasing",
+    "minRateDegPerSec": 38
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 800,
+   "isTerminal": true,
+   "note": "Yükseliş, bir sonraki vuruşa hazırlık."
+  }
+ ],
+ "scoredMoments": [
+  {
+   "id": "dh_bounce_bottom",
+   "phase": "bottom",
+   "beat": 0,
+   "label": "down"
+  },
+  {
+   "id": "dh_bounce_top",
+   "phase": "rise",
+   "beat": 0,
+   "label": "up"
+  }
+ ],
+ "errors": [
+  {
+   "code": "NO_BOUNCE",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "knee_flexion_amplitude",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "knee_flexion_amplitude"
+   ],
+   "note": "Vücut müzikle birlikte inip çıkmıyor. Dancehall'da sekme bir süsleme değil, üstüne her şeyin oturduğu zemin."
+  },
+  {
+   "code": "BOUNCE_FROM_TOES",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "knee_flexion_mean",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "knee_flexion_mean"
+   ],
+   "note": "Hareket ayak bileğinden geliyor, dizden değil — sekme yükselir ve topraklanmasını kaybeder."
+  },
+  {
+   "code": "UPPER_BODY_STIFF",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "trunk_tilt",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "trunk_tilt"
+   ],
+   "note": "Göğüs sekmeye hiç cevap vermiyor. Ölçtüğümüz dizler, ama tamamen hareketsiz bir gövde adımın yanlış anlaşıldığını gösterir."
+  }
+ ],
+ "reference": {
+  "requiredTakes": 3,
+  "collectedTakes": 0,
+  "status": "not-started",
+  "note": ">=3 bağımsız eğitmen (katalog §6.0). Tolerans onların anlaşmazlığından TÜRETİLİR, yazılmaz."
+ }
+}

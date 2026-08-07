@@ -67,8 +67,10 @@
   "knee_flexion_amplitude": {
    "readBy": [],
    "usedBy": [
+    "dh_bounce.error:NO_BOUNCE",
     "hh_bounce.error:NO_BOUNCE",
-    "sh_running_man.error:KNEE_TOO_LOW"
+    "sh_running_man.error:KNEE_TOO_LOW",
+    "sm_samba_no_pe.error:NO_DROP"
    ],
    "state": "declared-only"
   },
@@ -82,12 +84,12 @@
   "knee_flexion_mean": {
    "readBy": [],
    "usedBy": [
-    "hh_bounce.phase:bottom",
-    "hh_bounce.phase:drop",
-    "hh_bounce.phase:rise",
-    "hh_bounce.phase:top",
-    "sh_running_man.phase:bottom",
-    "sh_running_man.phase:lift"
+    "dh_bounce.error:BOUNCE_FROM_TOES",
+    "dh_bounce.phase:bottom",
+    "dh_bounce.phase:drop",
+    "dh_bounce.phase:rise",
+    "dh_bounce.phase:top",
+    "hh_bounce.phase:bottom"
    ],
    "state": "declared-only"
   },
@@ -185,6 +187,7 @@
     "prepare_take.py"
    ],
    "usedBy": [
+    "dh_bounce.error:UPPER_BODY_STIFF",
     "hh_rock.phase:accent",
     "hh_rock.phase:lean",
     "hh_rock.phase:neutral",

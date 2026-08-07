@@ -10,13 +10,18 @@
   "2"
  ],
  "note": "Shuffle's running man is not hip-hop's: the slide is longer and the whole step stays lower. The two are separate steps with separate references, and reusing hip_hop's would be measuring one dance against another.",
+ "searchParameters": {
+  "status": "ESTIMATED",
+  "scope": "phases[].enter valueDeg + minRateDegPerSec",
+  "basis": "hh_bounce'un ölçülmüş diz-çevrimi eşiklerinden uyarlandı (165° vs 168°: shuffle'ın running man'i daha alçak durur; 35°/s vs 40°/s: kayma fazı sekmeden yavaş). Bunlar TAHMİN ve hasat onları düzeltecek — ama bir tahminle hasat edilebilir, tahminsiz edilemez.",
+  "whyThisMayBeAuthored": "Bir arama parametresi dansçı hakkında HÜKÜM VERMEZ — videoda adımın NEREDE olduğunu bulur. Yanlışsa kötü bir HASAT olur (bize görünür), yanlış bir PUAN değil (kullanıcıya görünmez).",
+  "correctedBy": "hasadın kendisi"
+ },
  "calibration": {
   "status": "PENDING",
-  "scope": "VERDICT thresholds only",
-  "why": "İki farklı sayı sınıfı var ve pilotun ilk hâli ikisini birden boş bırakmıştı — bu, adımı hasat edilemez yapıyordu.\n① ARAMA parametreleri (phases[].enter valueDeg / minRateDegPerSec): videoda adımın NEREDE olduğunu bulur. Dansçı hakkında hüküm vermez; yanlış olursa kötü bir hasat olur, yanlış bir puan değil. Hasat hattı bunları OKUMAK ZORUNDA, yoksa çevrimi bulamaz — hh_bounce da böyle hasat edildi (168° / 40°/s, ölçümden ÖNCE yazılmış).\n② HÜKÜM eşikleri (measurability.tier, errors[].severity): dansçının ne kadar iyi olduğunu söyler. Bunlar ölçüm ister ve BOŞ kalır.",
-  "unblockedBy": "content/references/sh_running_man.json — ≥3 bağımsız eğitmen. Toleranslar onların ANLAŞMAZLIĞINDAN türetilir, yazılmaz; arama parametreleri ise hasadın GİRDİSİdir, çıktısı değil.",
-  "searchParametersAuthored": true,
-  "searchParameterBasis": "hh_bounce'un ölçülmüş diz-çevrimi eşiklerinden uyarlandı (165° vs 168°: shuffle'ın running man'i daha alçak durur; 35°/s vs 40°/s: kayma fazı sekmeden yavaş). Bunlar TAHMİN ve hasat onları düzeltecek — ama bir tahminle hasat edilebilir, tahminsiz edilemez."
+  "scope": "VERDICT thresholds only — arama parametreleri TARİF tarafında",
+  "why": "Bu adımın hiçbir referansı hasat edilmedi, dolayısıyla dansçının ne kadar iyi olduğunu söyleyen her alan BOŞ. Tolerans, eğitmenlerin ANLAŞMAZLIĞINDAN türetilir; yazılmaz.",
+  "unblockedBy": "content/references/sh_running_man.json — ≥3 bağımsız eğitmen. Toleranslar onların ANLAŞMAZLIĞINDAN türetilir, yazılmaz; arama parametreleri ise hasadın GİRDİSİdir, çıktısı değil."
  },
  "measurability": {
   "tier": null,

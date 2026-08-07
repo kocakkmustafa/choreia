@@ -213,6 +213,11 @@ void main() {
       'relatedDrill': 'authoring link', 'drillNote': 'authoring note',
       'calibrationNote': 'authoring note', 'kural7Note': 'authoring note',
       'firstAttemptFailed': 'authoring record',
+      'searchParameters': 'the ESTIMATED/MEASURED stamp on the numbers that '
+          'tell the HARVEST where the step is in a video (C-204). Read by the '
+          'harvest pipeline via `phases`, never by the app — and it must not '
+          'reach a dancer, because "we guessed where to look" is authoring '
+          'state, not a statement about their dancing',
       'calibration': 'the DESCRIBED-not-yet-CALIBRATED hold (C-200). Read by '
           '`validate_content`, never by the app: it governs which judgement '
           'fields may be null while a step waits for its reference, and a '
