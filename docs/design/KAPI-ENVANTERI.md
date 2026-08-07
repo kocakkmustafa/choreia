@@ -47,6 +47,26 @@ kapanabilir · `yöntem` = ölçüm yöntemi değişirse kapanabilir.
 
 ---
 
+## ⛔ SERT KURAL SÜPÜRMESİ (C-174)
+
+*"Kural var"* ile *"kural ZORLANIYOR"* ayrı şeyler. Brief'in ⛔ listesi tek tek
+süpürüldü. **Bağlanamayan kalemler tek kutuya konmadı** — hangisinin bir gün
+bağlanabileceği kaybolmasın diye sınıfı yazılı (J-143 taksonomisi).
+
+| # | Sert kural | Kapı | Nerede |
+|---|---|---|---|
+| ① | Ritim/zamanlama puanı YOK | ✅ | `STEP_LATE` yapısal `noVerdict`; *"blocked codes never fire"* (judge) + C-170 beat-grid bağı |
+| ② | Sahte/boş kurs ASLA listelenmez | ✅ | *"a style with no authored document declares no lessons"* + *"cannot be openable with nothing to open"* |
+| ③ | Ölçüm olmadan skorlanan adım YOK (K10) | ✅ | *"nothing claims grading while nothing IS graded"* + *"an ungraded lesson always states why"* + `runnableSteps` probe |
+| ④ | `demoOnly` **ikinci sınıf görünmez** | ✅ | Aynı padding (yapı) **+ kontrast bandı** `0,85×–1,05×` scored (görsel). Taban C-156, **tavan C-159** |
+| ⑤ | Köken/atıf **küçültülmez** | ✅ **BU SÜPÜRMEDE KURULDU** | Karşılaştırmalı: sayfadaki hiçbir düzyazı atıftan büyük olamaz. **Ölçüldü: atıf 13,5 iken tanıtım 14,5'ti** — kredi, hemen üstündeki paragraftan küçüktü |
+| ⑥ | Ders akışı 3. adım **boş bırakılır** | ⛔ **SINIF ③ — yanlışlayacak referans yok** | Ders akışı ekranı **hiç yok** (design-ahead §5). Kuralın bağlanacağı yüzey yok; akış inşa edildiği gün kapı ZORUNLU |
+| ⑦ | `onHold` gerekçesiyle görünür | ✅ | Hula kataloğa dahil + gerekçesi zorunlu (3 ayrı test) |
+
+**Sınıf dağılımı: 6 kapıda · 1'i sınıf ③.** Sınıf ① (meşru hâli var) ve ② (kural
+kendi ölçütünü geçemiyor) bu listede yok — yani ⑥ bağlanabilir hâle geldiğinde
+**tek açık kalem** olarak duruyor, unutulacak bir kuyruğun içinde değil.
+
 ## 🧱 KATMAN kapsamı (C-169)
 
 **Kapı yazarken ilk soru *"hangi kelimeler"* değil, *"hangi KATMANLAR"*.**

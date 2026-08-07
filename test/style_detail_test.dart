@@ -414,6 +414,53 @@ void main() {
     });
   });
 
+  group('the attribution box is not the quieter thing on the page (C-174)', () {
+    // A HARD RULE WITH NO GATE, found by sweeping the brief's ⛔ list: "köken/
+    // atıf kutusu küçültülmez, dipnota indirilmez". That is a COMPARATIVE
+    // visual commitment, and nothing measured it — the same shape as
+    // "demo-only is not second class" before C-156 turned it into numbers.
+    //
+    // Measured before the fix: attribution 13.5 under a 14.5 intro. One point
+    // is not a footnote, but credit was rendering smaller than the paragraph
+    // directly above it.
+
+    testWidgets('no prose on the page is larger than the attribution',
+        (WidgetTester tester) async {
+      for (final String id in <String>['vogue', 'salsa_shines', 'hula']) {
+        await show(tester, id);
+
+        double attribution = 0;
+        final List<String> larger = <String>[];
+        for (final Element e in find.byType(Text).evaluate()) {
+          final Text w = e.widget as Text;
+          final double? size = w.style?.fontSize;
+          final String text = w.data ?? '';
+          if (size == null || text.isEmpty) continue;
+          // Headings are a different register and are allowed to be bigger;
+          // this rule is about PROSE, which is what a footnote demotion would
+          // target.
+          if (size >= 17) continue;
+          if (text.startsWith(StyleStrings.attributionMissing.substring(0, 20)) ||
+              (lib.cardFor(id)!.entry.originAttribution != null &&
+                  text == lib.cardFor(id)!.entry.originAttribution)) {
+            attribution = size;
+            continue;
+          }
+          if (size > StyleDetailView.attributionSize) {
+            larger.add('"${text.substring(0, text.length.clamp(0, 30))}" @$size');
+          }
+        }
+
+        expect(attribution, StyleDetailView.attributionSize,
+            reason: '$id renders its attribution at $attribution, not at the '
+                'declared ${StyleDetailView.attributionSize}');
+        expect(larger, isEmpty,
+            reason: '$id sets prose larger than the attribution box, which '
+                'makes credit the quieter thing on the page: $larger');
+      }
+    });
+  });
+
   group('the protected sentence is still ON SCREEN (C-172)', () {
     // A gate that accepts the DELETION of the sentence it protects guards a
     // SILENCE, not an honesty. Measured by sabotage 2026-08-07: removing the

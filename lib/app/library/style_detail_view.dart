@@ -60,6 +60,11 @@ class StyleDetailView extends StatelessWidget {
   static Key lessonKey(String id) => Key('style.lesson.$id');
   static Key permanenceKey(String id) => Key('style.permanent.$id');
 
+  /// The size the attribution box renders at, and the floor every other prose
+  /// block on this page must stay at or below. Named so the gate reads the
+  /// same number the widget draws.
+  static const double attributionSize = 14.5;
+
   @override
   Widget build(BuildContext context) {
     final List<LessonOffer> offers = card.offers(runnableSteps);
@@ -178,8 +183,14 @@ class StyleDetailView extends StatelessWidget {
             // Full body size in both branches. A gap rendered in small grey
             // type would be a way of apologising quietly; this one is meant to
             // be read.
+            // AT LEAST the page's largest prose size (C-174). The brief says
+            // this box is "küçültülmez, dipnota indirilmez" — a COMPARATIVE
+            // claim — and it was rendering at 13.5 under a 14.5 intro. One
+            // point is not a footnote, but it is smaller than the paragraph
+            // directly above it, and the commitment is that credit is not the
+            // quieter thing on the page.
             style: ChoreiaType.body(
-                size: 13.5,
+                size: attributionSize,
                 color: ChoreiaColors.text(attribution == null ? 0.62 : 0.85)),
           ),
           if (boundary != null) ...<Widget>[
