@@ -202,6 +202,48 @@ void main() {
               'yüklemede gürültüsüzce patlar');
     });
 
+    test('demoOpen rozeti CİHAZDA fazla-satıyor — kafesin kaynağı disk, '
+        'kullanıcınınki paket', () {
+      // `demoOpen` means, in the registry's own words, "the user can OPEN a
+      // lesson; none of them score". `validate_content` enforces that lattice
+      // in both directions — against the style pack ON DISK.
+      //
+      // A device does not have the disk. It has whatever `pubspec.yaml`
+      // shipped. `hip_hop_foundations` is registered `demoOpen`, its demo-only
+      // lesson is fully written, and its reference is NOT declared — so on a
+      // phone that lesson cannot open and the badge promises something the
+      // build does not contain.
+      //
+      // This is C-101's shape one layer down: a proxy (disk) standing in for
+      // the thing that matters (the bundle). The lattice is not wrong, its
+      // SOURCE is — and the gap only shows up if you ask the question from
+      // where the user reads it.
+      final List<String> openableOnDevice = <String>[
+        for (final StyleCard c in library.cards)
+          for (final LessonOffer o in c.offers(library.runnableSteps))
+            if (o.canStart) c.entry.id,
+      ];
+      final List<String> claimDemoOpen = <String>[
+        for (final LibraryEntry e in library.entries)
+          if (e.contentStatus == 'demoOpen') e.id,
+      ];
+
+      expect(claimDemoOpen, <String>['hip_hop_foundations'],
+          reason: 'demoOpen iddia eden stil kümesi değişti: $claimDemoOpen');
+      expect(openableOnDevice, isEmpty,
+          reason: 'cihazda açılabilir ders çıktı — fazla-satma kapandı mı?');
+
+      // Pinned as the CONTRADICTION it is, not as a passing check. When
+      // `hh_bounce` is declared (one line in pubspec.yaml, waiting on the
+      // C-143 ruling), this flips and the assertion below fails loudly —
+      // which is the moment the app first has something a user can open.
+      expect(claimDemoOpen.toSet().difference(openableOnDevice.toSet()),
+          <String>{'hip_hop_foundations'},
+          reason: 'demoOpen ↔ cihazda-açılabilir farkı değişti. Fark '
+              'KAPANDIYSA bu iyi haber: pubspec satırı eklenmiş, kullanıcı '
+              'ilk kez bir ders açabiliyor, KATI sayı 3 olmuş demektir');
+    });
+
     test('rota adları ölçülebilir kalmalı — isimsiz rota sayılamaz', () {
       // The measurement above reads `RouteSettings.name`. If a future push
       // omits it the spy still counts the route, but nobody can tell WHICH
