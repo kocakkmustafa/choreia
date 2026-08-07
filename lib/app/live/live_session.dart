@@ -84,10 +84,42 @@ final class LiveSession {
       final String code = '${e['code']}';
       out.add(GatedCheck(code: code, why: _whyFor(code)));
     }
+
+    // RUNTIME SUPPRESSION IS ALSO A GATE (C-179).
+    //
+    // The loop above reads CONFIG: `status: blocked` in the step document.
+    // kural-7 suppresses a check at RUNTIME instead — when a reference cannot
+    // resolve left from right, no WRONG_FOOT finding is FORMED at all. That is
+    // the right engine behaviour and it was invisible here: a check nobody
+    // performs was reaching neither the verdict list nor the "what we are NOT
+    // checking" list.
+    //
+    // A defensive mechanism that produces SILENCE instead of a stated limit is
+    // the same defect as a defensive default that produces a positive verdict
+    // — both let an unmeasured thing pass as settled. The surface would have
+    // said "Nothing we check came out wrong this time" while a named check was
+    // quietly skipped.
+    //
+    // Today no scored lesson runs on a mirror-uncertain reference
+    // (`ss_shine_footwork` is mirrorConfident:true), so this adds nothing to
+    // the live screen right now. It is written before the case exists because
+    // the case is one content change away — every hip-hop reference is
+    // mirrorConfident:false.
+    if (!reference.mirrorConfident &&
+        !out.any((GatedCheck g) => g.code == 'WRONG_FOOT')) {
+      out.add(GatedCheck(code: 'WRONG_FOOT', why: _whyFor('WRONG_FOOT')));
+    }
     return out;
   }
 
   static String _whyFor(String code) => switch (code) {
+        // Reached only through the runtime branch above: this code is never
+        // `status: blocked` in config, because whether it can be judged
+        // depends on the REFERENCE, not on the step.
+        'WRONG_FOOT' => 'We are not checking which foot you start on. The '
+            'teachers we measured for this movement do not agree on which way '
+            'round it is danced, so telling you that you are on the wrong foot '
+            'would be a coin flip presented as a judgement.',
         // NOT a deferral. There is no beat grid for this style at all, so
         // this is a MISSING MEASUREMENT, not a late one — and the sentence has
         // to carry that class (M-F-287). "yet" sold a structural absence as a
