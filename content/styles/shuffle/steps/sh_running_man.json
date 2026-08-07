@@ -12,14 +12,17 @@
  "note": "Shuffle's running man is not hip-hop's: the slide is longer and the whole step stays lower. The two are separate steps with separate references, and reusing hip_hop's would be measuring one dance against another.",
  "calibration": {
   "status": "PENDING",
-  "why": "No reference has been harvested for this step, so every threshold below is UNSET rather than guessed. The step is DESCRIBED here — which phases it has, which quantity separates them, which joints do the work, what can go wrong. How much of each counts as right is a measurement, and measuring it is what the harvest is for.",
-  "unblockedBy": "content/references/sh_running_man.json built from >=3 independent instructors (catalogue 6.0); the thresholds are then DERIVED from their disagreement, never authored"
+  "scope": "VERDICT thresholds only",
+  "why": "İki farklı sayı sınıfı var ve pilotun ilk hâli ikisini birden boş bırakmıştı — bu, adımı hasat edilemez yapıyordu.\n① ARAMA parametreleri (phases[].enter valueDeg / minRateDegPerSec): videoda adımın NEREDE olduğunu bulur. Dansçı hakkında hüküm vermez; yanlış olursa kötü bir hasat olur, yanlış bir puan değil. Hasat hattı bunları OKUMAK ZORUNDA, yoksa çevrimi bulamaz — hh_bounce da böyle hasat edildi (168° / 40°/s, ölçümden ÖNCE yazılmış).\n② HÜKÜM eşikleri (measurability.tier, errors[].severity): dansçının ne kadar iyi olduğunu söyler. Bunlar ölçüm ister ve BOŞ kalır.",
+  "unblockedBy": "content/references/sh_running_man.json — ≥3 bağımsız eğitmen. Toleranslar onların ANLAŞMAZLIĞINDAN türetilir, yazılmaz; arama parametreleri ise hasadın GİRDİSİdir, çıktısı değil.",
+  "searchParametersAuthored": true,
+  "searchParameterBasis": "hh_bounce'un ölçülmüş diz-çevrimi eşiklerinden uyarlandı (165° vs 168°: shuffle'ın running man'i daha alçak durur; 35°/s vs 40°/s: kayma fazı sekmeden yavaş). Bunlar TAHMİN ve hasat onları düzeltecek — ama bir tahminle hasat edilebilir, tahminsiz edilemez."
  },
  "measurability": {
   "tier": null,
   "tierStatus": "Awaiting reference harvest: no take of this step has been measured, so its detectability is unknown. Not a low tier — an unmeasured one."
  },
- "cycleUnit": "one plant-and-slide per count",
+ "cycleUnit": "one lift-and-slide per count",
  "scoring": {
   "focusJoints": [
    "left_knee",
@@ -44,12 +47,11 @@
  },
  "phases": [
   {
-   "id": "plant",
+   "id": "top",
    "enter": {
     "metric": "knee_flexion_mean",
     "op": ">",
-    "valueDeg": null,
-    "valueStatus": "unset until harvest — the metric is the observation, the number is the measurement"
+    "valueDeg": 165
    },
    "requiredLandmarks": [
     "leftLeg",
@@ -57,34 +59,64 @@
     "torso"
    ],
    "timeoutMs": 2000,
-   "note": "One foot is flat and carrying the weight while the other knee is high. This is the shape a viewer reads as 'running'."
+   "note": "Taşıyan bacak neredeyse düz; kaldırılan diz henüz yükselmemiş."
+  },
+  {
+   "id": "lift",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "decreasing",
+    "minRateDegPerSec": 35
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 800,
+   "note": "Diz yükselirken ortalama diz açısı düşer."
+  },
+  {
+   "id": "bottom",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": "localMinimum"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "minDurationMs": 30,
+   "timeoutMs": 600,
+   "note": "Dizin en yüksek, açının en küçük olduğu an."
   },
   {
    "id": "slide",
    "enter": {
-    "metric": "shin_angle_rate",
-    "op": ">",
-    "valueDeg": null,
-    "valueStatus": "unset until harvest — the metric is the observation, the number is the measurement"
+    "metric": "knee_flexion_mean",
+    "op": "increasing",
+    "minRateDegPerSec": 35
    },
    "requiredLandmarks": [
     "leftLeg",
     "rightLeg",
     "torso"
    ],
-   "timeoutMs": 2000,
-   "note": "The planted foot slides back as the lifted knee drops. The slide is what stops the dancer travelling, and it is the half most beginners leave out."
+   "timeoutMs": 800,
+   "isTerminal": true,
+   "note": "Ayak geri kayarken bacak tekrar açılır. Kaymanın KENDİSİ diz açısıyla ölçülmüyor — bu faz onu ZAMANDA buluyor, ölçmüyor."
   }
  ],
  "scoredMoments": [
   {
-   "id": "rm_plant",
-   "phase": "plant",
+   "id": "rm_lift_top",
+   "phase": "bottom",
    "beat": 0,
    "label": "up"
   },
   {
-   "id": "rm_slide",
+   "id": "rm_recover",
    "phase": "slide",
    "beat": 1,
    "label": "back"

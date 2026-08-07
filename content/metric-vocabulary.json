@@ -22,7 +22,6 @@
   "right_thigh_back",
   "shin_angle_amplitude",
   "shin_angle_mean",
-  "shin_angle_rate",
   "side_agreement",
   "step_thigh_excursion",
   "thigh_rotation",
@@ -87,7 +86,8 @@
     "hh_bounce.phase:drop",
     "hh_bounce.phase:rise",
     "hh_bounce.phase:top",
-    "sh_running_man.phase:plant"
+    "sh_running_man.phase:bottom",
+    "sh_running_man.phase:lift"
    ],
    "state": "declared-only"
   },
@@ -138,13 +138,6 @@
    "readBy": [],
    "usedBy": [
     "sh_t_step.phase:point"
-   ],
-   "state": "declared-only"
-  },
-  "shin_angle_rate": {
-   "readBy": [],
-   "usedBy": [
-    "sh_running_man.phase:slide"
    ],
    "state": "declared-only"
   },

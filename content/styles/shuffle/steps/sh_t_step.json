@@ -13,7 +13,10 @@
  "calibration": {
   "status": "PENDING",
   "why": "No reference has been harvested for this step, so every threshold below is UNSET rather than guessed. The step is DESCRIBED here — which phases it has, which quantity separates them, which joints do the work, what can go wrong. How much of each counts as right is a measurement, and measuring it is what the harvest is for.",
-  "unblockedBy": "content/references/sh_t_step.json built from >=3 independent instructors (catalogue 6.0); the thresholds are then DERIVED from their disagreement, never authored"
+  "unblockedBy": "content/references/sh_t_step.json built from >=3 independent instructors (catalogue 6.0); the thresholds are then DERIVED from their disagreement, never authored",
+  "scope": "VERDICT thresholds AND search parameters",
+  "harvestable": false,
+  "whyNotHarvestableToday": "Bu adımın sürücüsü diz açısı değil, ayak bileği/uyluk DÖNÜŞÜ — ve hasat hattı bugün yalnız DİZ-ÇEVRİMİ şeklini tanıyor (prepare_take.py: id=='top' + minRateDegPerSec üzerinden knee-mean serisinde dip arıyor). Arama parametresi yazmak burada işe yaramaz: yazsam da okuyan yok. sh_running_man ise diz-çevrimi olduğu için BUGÜN hasat edilebilir. İkisini aynı dosyada tutmak kasıtlı: fark, stilin değil ADIMIN özelliği."
  },
  "measurability": {
   "tier": null,
