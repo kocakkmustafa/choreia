@@ -5,7 +5,7 @@ import 'package:choreia/app/recorded_summary.dart';
 
 import 'dart:typed_data';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_catalog.dart';
@@ -518,6 +518,51 @@ void main() {
               of: find.byKey(const Key('progress.recorded.ss_l1_basic')),
               matching: find.textContaining('Taught, not graded — ')),
           findsOneWidget);
+    });
+  });
+
+  group('the integrity sentence is ON SCREEN, not just in the type (C-172)',
+      () {
+    // Sabotage 2026-08-07: deleting the `integrityNote` block from
+    // `ProgressView` left all 180 tests green. The C-163 fix — the sentence
+    // that stops a reader believing their practice was recorded and lost —
+    // could have been removed and every gate would have agreed.
+    //
+    // A gate that accepts the DELETION of the sentence it protects guards a
+    // SILENCE, not an honesty.
+
+    ProgressSummary summaryWith(HistoryIntegrity integrity) =>
+        ProgressSummary.build(
+          history: const <SessionRecord>[],
+          catalog: const CourseCatalog(
+              lessons: <LessonInfo>[], blockedGates: <BlockedGate>[]),
+          integrity: integrity,
+        );
+
+    testWidgets('a build that records nothing SAYS so',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+          home: ProgressView(summary: summaryWith(HistoryIntegrity.notRecorded))));
+      await tester.pump();
+
+      expect(find.byKey(ProgressView.integrityNoteKey), findsOneWidget,
+          reason: 'nothing is being written and the screen does not say so — '
+              'the absence is silent again');
+      expect(find.textContaining('does not save'), findsOneWidget);
+      expect(find.textContaining('nothing of'), findsOneWidget,
+          reason: 'the clause that removes the false alarm must survive too');
+    });
+
+    testWidgets('a healthy history says NOTHING extra',
+        (WidgetTester tester) async {
+      // The positive twin. Without it, a view that printed the note
+      // unconditionally would pass the test above.
+      await tester.pumpWidget(MaterialApp(
+          home: ProgressView(
+              summary: summaryWith(
+                  HistoryIntegrity.opened(unreadable: 0, readable: 0)))));
+      await tester.pump();
+      expect(find.byKey(ProgressView.integrityNoteKey), findsNothing);
     });
   });
 }

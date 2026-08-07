@@ -414,6 +414,48 @@ void main() {
     });
   });
 
+  group('the protected sentence is still ON SCREEN (C-172)', () {
+    // A gate that accepts the DELETION of the sentence it protects guards a
+    // SILENCE, not an honesty. Measured by sabotage 2026-08-07: removing the
+    // `whyPermanent` render block left all 180 tests green — the content gate
+    // says a permanent lesson must SAY why, and nothing said it must REACH a
+    // reader.
+
+    testWidgets('whyPermanent reaches the card, not just the JSON',
+        (WidgetTester tester) async {
+      final StyleCard salsa = lib.cardFor('salsa_shines')!;
+      final LessonInfo permanent = salsa.lessons.firstWhere(
+          (LessonInfo l) => l.demoOnlyClass == 'permanent',
+          orElse: () => throw StateError('no permanent lesson to check'));
+      expect(permanent.whyPermanent, isNotNull);
+
+      await show(tester, 'salsa_shines');
+      final Finder block =
+          find.byKey(StyleDetailView.permanenceKey(permanent.id));
+      await scrollTo(tester, block);
+      expect(block, findsOneWidget,
+          reason: 'the strongest honesty claim in the app — "this limit will '
+              'not lift" — is in content and not on the screen');
+      expect(find.text(StyleStrings.permanentTitle), findsWidgets);
+      expect(find.textContaining(permanent.whyPermanent!.split('.').first),
+          findsWidgets,
+          reason: 'the heading rendered but the sentence did not');
+    });
+
+    testWidgets('a lesson that is NOT permanent gets no such block',
+        (WidgetTester tester) async {
+      // The positive twin: a block rendered unconditionally would pass the
+      // test above while telling every learner a limit is permanent.
+      final StyleCard salsa = lib.cardFor('salsa_shines')!;
+      final LessonInfo other = salsa.lessons.firstWhere(
+          (LessonInfo l) => l.whyPermanent == null,
+          orElse: () => throw StateError('every lesson is permanent'));
+
+      await show(tester, 'salsa_shines');
+      expect(find.byKey(StyleDetailView.permanenceKey(other.id)), findsNothing);
+    });
+  });
+
   group('camera limits on the page (C-161)', () {
     testWidgets('an unbuilt style shows them, under a note that says why',
         (WidgetTester tester) async {
