@@ -43,9 +43,23 @@ kapanabilir · `yöntem` = ölçüm yöntemi değişirse kapanabilir.
 | `single_correction_test` | Türetilmiş sıra; sıralanmamış kodun üste çıkmaması; mute kodun asla düzeltmeye terfi etmemesi | Sıranın **doğru** olduğunu — yalnız `unlockRule`'dan türediğini | Kodlar **gerçek judge koşusundan** türetiliyor; dayanak `unlockRule`'a çivili (`STEP_TOO_LARGE` girerse düşer). Faz bin'leri artık içerikten | yöntem |
 | `library_catalog_test` | Türetimin gerçek içerikle birebirliği; rozet kafesi; kural-tabanlı sayımlar | İçeriğin **doğru** olduğunu | Sayımlar kurala çevrildi (C-160); tripwire'lar isimli. **Sabotaj: doğru büyüme yeşil, gerekçesiz eksik kırmızı** | kod |
 | `style_detail_test` / `library_view_test` | Render, taşma, dürüstlük anahtarları | Görsel kaliteyi; **dokunuş yolunu** (simülatörde tıklama yok) | `deviceRunnable` manifestten türetiliyor; harness'ın cihazdan **daha müsamahakâr** olduğu isimli | kod (dokunuş) |
-| `pin_equality_test` | İki paketin tek ref'ten geldiği | — | ⚠️ **Bu envanterin açık kalemi:** regex tarıyor ama boş-değil koruması yok; ref deseni değişirse iddia vakum-doğru olabilir | kod |
+| `pin_equality_test` | İki paketin tek ref'ten geldiği; sürümlerin ne olduğu | Pin'in **doğru** commit olduğunu (yalnız AYNI olduğunu) | `entry()` içinde `isNotNull` kapıları + **pozitif ikiz** (lock'ta iki paket de gerçekten var). Sürüm sabitleri **kasıtlı tripwire** — pin bump'lanınca düşsün diye, gerekçesi kodda | kod |
 
 ---
+
+## ⚠️ Envanterin KENDİ yanlış pozitifi (düzeltildi)
+
+İlk sürüm `pin_equality_test`'i *"korumasız regex"* diye işaretledi. **Yanlıştı:**
+o dosya `isNotEmpty` yerine **`isNotNull`** kullanıyor ve ayrıca bir pozitif
+ikizi var — benim otomatik taramam yalnız üç kalıba bakıyordu.
+
+İki kez aynı şey oldu bu gece: burada, ve yayın envanterinde yorumdaki
+`content's own unlock rule` apostrofunu string sanan tarama. **Ders: envanter
+çıkarmak için yazılan tarama da bir kapıdır ve onun da kapsamı yazılmalıdır** —
+yoksa envanter, olmayan bulguyu rapor eder ve gerçek olanı kaçırır.
+
+Düzeltme yolu ikisinde de aynı oldu: **taramayı okuyup doğrula**, taramaya
+güvenme.
 
 ## ⛔ Envanterin kendi sınırı
 
