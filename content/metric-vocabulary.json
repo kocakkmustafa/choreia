@@ -1,0 +1,228 @@
+{
+ "schemaVersion": 1,
+ "whatThisIs": "Adım tanımlarındaki faz ve hata SÜRÜCÜLERİNİN sayımı. ELLE DÜZENLENMEZ — tools/validate_metric_vocabulary.py bunu yeniden hesaplar ve fark varsa kırmızı verir.",
+ "whyItExists": "İçerik, fazları ayıran ve hataları tetikleyen büyüklüklerin ADLARINI taşıyor. ÖLÇÜLDÜ: bu adların çoğunu hiçbir araç okumuyor. prepare_take.py fazları BİLİNEN ŞEKİLLERLE tanıyor (id=='top' + minRateDegPerSec), metrik ADINA bakmıyor; live_session errors'tan yalnız code ve status okuyor; DanceJudge hükmü referanstan çıkarıyor, içerikteki eşiklerden değil. Yani içerikteki eşik değerleri ÇALIŞTIRILMIYOR.",
+ "whyThisIsNotAutomaticallyADefect": "Bir adımın fazlarını ayıran büyüklüğü ADLANDIRMAK, o büyüklüğü ölçen kodu yazmanın ÖNKOŞULU. Kodu önce istemek, bu gece 31 stilin kuyruğunu kapalı gösteren hatanın ta kendisiydi. Kusur olan, ikisinin AYIRT EDİLEMEMESİ: okunan bir ad ile okuyucusunu bekleyen bir ad ekranda ve dosyada aynı görünüyor, ve ikincisi sessizce 'bunu ölçüyoruz'a dönüşüyor.",
+ "countedAt": "2026-08-07",
+ "interpreted": [
+  "cyclePhaseNear",
+  "trunk_tilt"
+ ],
+ "declaredOnly": [
+  "bottom_beat_phase",
+  "feet_settled",
+  "hip_lateral_shift",
+  "knee_flexion_amplitude",
+  "knee_flexion_lr_difference",
+  "knee_flexion_mean",
+  "leading_side",
+  "left_thigh_forward",
+  "loaded_leg_knee_change",
+  "movement_during_hold",
+  "right_thigh_back",
+  "shin_angle_amplitude",
+  "shin_angle_mean",
+  "shin_angle_rate",
+  "side_agreement",
+  "step_thigh_excursion",
+  "thigh_rotation",
+  "thigh_rotation_amplitude",
+  "timing_verdict",
+  "trunk_tilt_amplitude",
+  "weight_balance",
+  "weight_side"
+ ],
+ "metrics": {
+  "bottom_beat_phase": {
+   "readBy": [],
+   "usedBy": [
+    "hh_bounce.error:BOUNCE_INVERTED"
+   ],
+   "state": "declared-only"
+  },
+  "cyclePhaseNear": {
+   "readBy": [
+    "ss_shine_footwork_liveness.py"
+   ],
+   "usedBy": [
+    "ss_shine_footwork.phase:settle_a",
+    "ss_shine_footwork.phase:settle_b",
+    "ss_shine_footwork.phase:transfer_ab"
+   ],
+   "state": "interpreted"
+  },
+  "feet_settled": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.phase:hold_4"
+   ],
+   "state": "declared-only"
+  },
+  "hip_lateral_shift": {
+   "readBy": [],
+   "usedBy": [
+    "sh_t_step.error:WEIGHT_ON_FREE_FOOT"
+   ],
+   "state": "declared-only"
+  },
+  "knee_flexion_amplitude": {
+   "readBy": [],
+   "usedBy": [
+    "hh_bounce.error:NO_BOUNCE",
+    "sh_running_man.error:KNEE_TOO_LOW"
+   ],
+   "state": "declared-only"
+  },
+  "knee_flexion_lr_difference": {
+   "readBy": [],
+   "usedBy": [
+    "hh_bounce.error:ASYMMETRIC_BOUNCE"
+   ],
+   "state": "declared-only"
+  },
+  "knee_flexion_mean": {
+   "readBy": [],
+   "usedBy": [
+    "hh_bounce.phase:bottom",
+    "hh_bounce.phase:drop",
+    "hh_bounce.phase:rise",
+    "hh_bounce.phase:top",
+    "sh_running_man.phase:plant"
+   ],
+   "state": "declared-only"
+  },
+  "leading_side": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.error:WRONG_FOOT"
+   ],
+   "state": "declared-only"
+  },
+  "left_thigh_forward": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.phase:fwd_step"
+   ],
+   "state": "declared-only"
+  },
+  "loaded_leg_knee_change": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.error:NO_WEIGHT_TRANSFER",
+    "ss_shine_footwork.error:NO_WEIGHT_TRANSFER"
+   ],
+   "state": "declared-only"
+  },
+  "movement_during_hold": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.error:STEP_MISSED_ON_4"
+   ],
+   "state": "declared-only"
+  },
+  "right_thigh_back": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.phase:back_step"
+   ],
+   "state": "declared-only"
+  },
+  "shin_angle_amplitude": {
+   "readBy": [],
+   "usedBy": [
+    "sh_running_man.error:NO_SLIDE"
+   ],
+   "state": "declared-only"
+  },
+  "shin_angle_mean": {
+   "readBy": [],
+   "usedBy": [
+    "sh_t_step.phase:point"
+   ],
+   "state": "declared-only"
+  },
+  "shin_angle_rate": {
+   "readBy": [],
+   "usedBy": [
+    "sh_running_man.phase:slide"
+   ],
+   "state": "declared-only"
+  },
+  "side_agreement": {
+   "readBy": [],
+   "usedBy": [
+    "ss_shine_footwork.error:WRONG_FOOT"
+   ],
+   "state": "declared-only"
+  },
+  "step_thigh_excursion": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.error:STEP_TOO_LARGE",
+    "ss_shine_footwork.error:STEP_TOO_LARGE"
+   ],
+   "state": "declared-only"
+  },
+  "thigh_rotation": {
+   "readBy": [],
+   "usedBy": [
+    "sh_t_step.phase:pivot"
+   ],
+   "state": "declared-only"
+  },
+  "thigh_rotation_amplitude": {
+   "readBy": [],
+   "usedBy": [
+    "sh_t_step.error:NO_PIVOT"
+   ],
+   "state": "declared-only"
+  },
+  "timing_verdict": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.error:STEP_LATE",
+    "ss_shine_footwork.error:STEP_LATE"
+   ],
+   "state": "declared-only"
+  },
+  "trunk_tilt": {
+   "readBy": [
+    "build_reference.py",
+    "judge.dart",
+    "prepare_take.py"
+   ],
+   "usedBy": [
+    "hh_rock.phase:accent",
+    "hh_rock.phase:lean",
+    "hh_rock.phase:neutral",
+    "hh_rock.phase:return",
+    "sh_running_man.error:TRUNK_COLLAPSE"
+   ],
+   "state": "interpreted"
+  },
+  "trunk_tilt_amplitude": {
+   "readBy": [],
+   "usedBy": [
+    "hh_rock.error:NO_ROCK"
+   ],
+   "state": "declared-only"
+  },
+  "weight_balance": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.phase:back_close",
+    "ss_basic.phase:fwd_close",
+    "ss_basic.phase:ready"
+   ],
+   "state": "declared-only"
+  },
+  "weight_side": {
+   "readBy": [],
+   "usedBy": [
+    "ss_basic.phase:back_replace",
+    "ss_basic.phase:fwd_replace"
+   ],
+   "state": "declared-only"
+  }
+ }
+}
