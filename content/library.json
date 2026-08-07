@@ -736,6 +736,26 @@
    "scoring": "pose",
    "pack": "funk_styles",
    "originAttribution": "Vogue comes from the ballroom scene built by Black and Latino LGBTQ+ communities in Harlem and across New York, where houses formed as chosen families and competed at balls. It was a culture of survival long before it was a style anyone outside it borrowed, and the borrowing has usually been done without credit or return.",
+   "attributionSources": [
+    {
+     "title": "A Brief History of Voguing",
+     "publisher": "Smithsonian National Museum of African American History and Culture",
+     "url": "https://nmaahc.si.edu/explore/stories/brief-history-voguing",
+     "kind": "institutional"
+    },
+    {
+     "title": "Beyond the fab and the fun, the ballroom scene has deep meaning with deep roots",
+     "publisher": "Virginia Commonwealth University News (quoting Julian Kevon Glover, gender studies and dance)",
+     "url": "https://news.vcu.edu/article/2024/06/beyond-the-fab-and-the-fun-the-ballroom-scene-has-deep-meaning-with-deep-roots",
+     "kind": "scholar-quoted"
+    },
+    {
+     "title": "The Ballroom Scene Has Long Offered Radical Freedoms For Black and Brown Queer People",
+     "publisher": "TIME",
+     "url": "https://time.com/5941822/ballroom-voguing-queer-black-culture-renaissance/",
+     "kind": "journalism"
+    }
+   ],
    "description": "Movement built out of poses — lines, angles and hands, danced with the confidence the ballroom scene demands. At a ball its elements are named categories, each judged on its own terms, and each asks for something different.",
    "stepGlossary": [
     {
@@ -1283,12 +1303,20 @@
   }
  ],
  "originAttributionProvenance": {
-  "status": "UNSOURCED — general knowledge, written 2026-08-07",
-  "whatThisMeans": "Bu 34 atıf metni, bu repodaki DİĞER her içerik sınıfının aksine kaynak kaydı TAŞIMIYOR. Karşılaştırma: stepInventory.sourcedFrom bir araştırma turuna (R1 §2) işaret ediyor · ders evidence'ı hasat sondalarına · referans sources'ı videoId'lere. Atıf metinleri yalnız genel bilgiden yazıldı.",
-  "whyItMatters": "Bunlar YAŞAYAN TOPLULUKLAR hakkında kültürel iddialar — Vogue'un Siyah ve Latino LGBTQ+ ballroom kökeni, Bhangra'nın Pencap'ı, Hula'nın hālau geleneği. Ölçülmemiş bir eşik gibi: makul görünür, dayanağı yoktur, ve yanlışsa bedelini metnin sahibi olmayan insanlar öder.",
-  "whatWasAvoided": "Emin olunmayan tarih ve isim UYDURULMADI — kesin görünen bir uydurma yerine on yıl veya bölge yazıldı; dışarıdan verilen adlar böyle olduğu söylendi ('belly dance' bir dışarılı adı); kredinin ödenmediği yerler yazıldı.",
-  "whatIsStillOwed": "Kaynaklı atıf bir ARAŞTIRMA turudur (R-serisi), yazı turu değil — C-173'ün aynı şekli. Her stil için en az bir birincil/ikincil kaynak, ve kültürel ortaklık gerektiren stillerde (hula zaten onHold) topluluk doğrulaması.",
-  "surfaceRule": "Yüzey ASLA doğrulama iddia etmez. Tasarım mockup'ı 'reviewed with our salsa teacher panel · 6 names credited' gösteriyordu — kaynaksız metnin üstüne o cümle konulursa UYDURULMUŞ BİR KİMLİK olur. content_claims_test bunu kapı olarak koşuyor."
+  "status": "KISMEN KAYNAKLI — 1/34 atıf kaynak taşıyor (SAYILDI, beyan edilmedi)",
+  "sourcedStyles": [
+   "vogue"
+  ],
+  "correctionMade": {
+   "date": "2026-08-07",
+   "what": "Bu blok daha önce 'UNSOURCED' diyordu ve bunun bir ARAŞTIRMA TURU gerektirdiğini yazıyordu. İkincisi doğru, ama okunuşu yanlıştı: kaynağın BULUNAMAYACAĞI ima ediliyordu.",
+   "measured": "Koordinatörün sorusu üzerine bir atıf (vogue) GERÇEKTEN denendi. Smithsonian NMAAHC, isimli bir akademisyenden alıntı yapan üniversite haberi ve TIME dakikalar içinde bulundu; yazdığım metinle ÖRTÜŞTÜLER, düzeltme gerekmedi.",
+   "conclusion": "Maliyet bir TUR, bir İMKÂNSIZLIK değil. 'Bulunamaz' ile 'bakılmadı' aynı şey değildir — ve bu blok altı saat boyunca ikincisini birincisi gibi okutuyordu."
+  },
+  "whatThisMeans": "Bu 34 atıf metni genel bilgiden yazıldı. Kaynak taşıyanlar yukarıda SAYILI; taşımayanlar için iddia 'kaynağı yok' DEĞİL, 'henüz bakılmadı'.",
+  "whyItMatters": "Bunlar YAŞAYAN TOPLULUKLAR hakkında kültürel iddialar — Vogue'un Siyah ve Latino LGBTQ+ ballroom kökeni, Afrobeats, Bhangra. Yanlış bir atıf, eksik bir atıftan daha çok zarar verir.",
+  "whatWasAvoided": "Emin olunmayan tarih ve isim UYDURULMADI — kesin görünen bir uydurma yerine on yıl veya bölge düzeyinde kalındı.",
+  "surfaceRule": "Yüzey ASLA doğrulama iddia etmez. Kaynak taşıyan bir stil bile ekranda 'doğrulandı' demez — kaynak kaydı BİZİM içindir, kullanıcıya verilen bir rozet değil."
  },
  "culturalReviewLedger": {
   "whatThisIs": "KAYIT — hüküm DEĞİL. Bu blok hiçbir stilin `status` alanını etkilemez ve hiçbir yüzeye çıkmaz. Yalnız şunu okunur kılar: bir stilin kültürel-inceleme kararı VERİLDİ Mİ, yoksa hiç BAKILMADI mı. Bugüne kadar bu ikisi ayırt edilemiyordu.",

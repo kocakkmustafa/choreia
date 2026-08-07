@@ -478,6 +478,56 @@ def validate_cultural_review(rep: Report, lib: dict, where: str) -> None:
                              "style in this library")
 
 
+def validate_attribution_sources(rep: Report, lib: dict, where: str) -> None:
+    """Attribution sourcing is COUNTED, never declared.
+
+    The provenance block used to carry one blanket word — `UNSOURCED` — plus a
+    note that sourcing would take a research round. The note was true and the
+    word was read as something stronger: that sources could not be had. Nobody
+    had tried. One attribution (`vogue`) was then actually attempted and three
+    usable sources, including the Smithsonian's own history, turned up in
+    minutes and AGREED with the text already written.
+
+    So the tally lives here, derived from the styles themselves. A blanket
+    status can drift from reality in silence; a count cannot, because this
+    check recomputes it.
+    """
+    prov = lib.get("originAttributionProvenance") or {}
+    styles = [s for s in lib.get("styles", []) if s.get("originAttribution")]
+    sourced = [s["id"] for s in styles if s.get("attributionSources")]
+
+    declared = prov.get("sourcedStyles")
+    if declared is None:
+        rep.error(where, "originAttributionProvenance.sourcedStyles missing — "
+                         "the sourcing claim is a declaration again")
+    elif sorted(declared) != sorted(sourced):
+        rep.error(where, f"sourcedStyles says {sorted(declared)} but content "
+                         f"has {sorted(sourced)} — the tally drifted from the "
+                         "styles it counts")
+
+    status = str(prov.get("status", ""))
+    if sourced and f"{len(sourced)}/" not in status:
+        rep.error(where, f"provenance status '{status[:40]}...' does not carry "
+                         f"the measured count ({len(sourced)}/{len(styles)})")
+
+    # A source entry that cannot be followed is a citation-shaped decoration.
+    for s in styles:
+        for i, src in enumerate(s.get("attributionSources") or []):
+            for field in ("title", "publisher", "url", "kind"):
+                if not src.get(field):
+                    rep.error(where, f"'{s['id']}' source[{i}] has no {field} — "
+                                     "an unfollowable citation is worse than "
+                                     "none, it LOOKS checked")
+            if not str(src.get("url", "")).startswith("http"):
+                rep.error(where, f"'{s['id']}' source[{i}] url is not a link")
+
+    # The surface must never turn a source record into a badge. This is OUR
+    # bookkeeping; a dancer who sees "verified" reads a guarantee nobody made.
+    if "surfaceRule" not in prov:
+        rep.error(where, "provenance lost its surfaceRule — the rule that the "
+                         "screen never claims verification")
+
+
 def validate_limits_not_doubled(rep: Report, lib: dict,
                                 on_disk: dict[str, dict], where: str) -> None:
     """A style page must state its camera limits ONCE.
@@ -535,6 +585,7 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
 
     validate_cultural_review(rep, lib, where)
     validate_limits_not_doubled(rep, lib, styles_on_disk, where)
+    validate_attribution_sources(rep, lib, where)
 
     seen: set[str] = set()
     live: set[str] = set()
