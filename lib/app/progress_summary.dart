@@ -227,10 +227,36 @@ final class ProgressSummary {
   /// time, so resolving BPM tomorrow cannot reach back and re-grade sessions
   /// danced without a beat grid. A product that quietly back-filled scores
   /// would be inventing evidence about performances it never observed.
-  static const String retroactiveCreditNote =
-      'When a check opens up later, it applies from that point on. Practice '
-      'time already recorded stays a record of practice — it is not converted '
-      'into a score for something we were not measuring at the time.';
+  ///
+  /// WHY THIS TAKES THE FIDELITY (C-191)
+  /// -----------------------------------
+  /// The single-sentence version said "practice time ALREADY RECORDED stays a
+  /// record of practice" — true wherever a store exists, and a quiet lie in
+  /// the state this build actually ships. Nothing is written at all, so a
+  /// reader was told their practice was being kept, in a paragraph whose real
+  /// subject was something else entirely.
+  ///
+  /// It is the same defect as `historyNotRecorded` fixed at the TOP of this
+  /// screen, surviving one section lower because the earlier sweep asked
+  /// "which sentence describes the store" and this sentence describes a
+  /// POLICY — and only presupposes the store in passing. A presupposition is
+  /// the cheapest place for a false claim to hide: nobody re-reads the clause
+  /// that is not the point of the sentence.
+  static String retroactiveCreditNote(HistoryFidelity fidelity) =>
+      switch (fidelity) {
+        HistoryFidelity.notRecorded =>
+          'When a check opens up later, it applies from that point on — never '
+              'backwards over dancing we were not measuring at the time. '
+              'This build saves nothing, so there is no past practice waiting '
+              'to be re-scored either way.',
+        HistoryFidelity.ok ||
+        HistoryFidelity.partial ||
+        HistoryFidelity.unavailable =>
+          'When a check opens up later, it applies from that point on. '
+              'Practice time already recorded stays a record of practice — it '
+              'is not converted into a score for something we were not '
+              'measuring at the time.',
+      };
 
   factory ProgressSummary.build({
     required List<SessionRecord> history,

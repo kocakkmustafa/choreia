@@ -129,7 +129,9 @@ class ProgressView extends StatelessWidget {
                 Padding(
                   key: retroactiveNoteKey,
                   padding: const EdgeInsets.only(top: 10),
-                  child: Text(ProgressSummary.retroactiveCreditNote,
+                  child: Text(
+                      ProgressSummary.retroactiveCreditNote(
+                          summary.integrity.fidelity),
                       style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.48))),
                 ),
               ],

@@ -72,7 +72,18 @@ abstract final class LiveStrings {
         CameraFailure.noSuchCamera =>
           'We could not find a front camera on this device.',
         CameraFailure.alreadyRunning =>
-          'The camera is already in use by another part of the app.',
+          // NAMES OUR OWN FAULT (C-192). This said "in use by another part of
+          // the app" — and Choreia has exactly ONE camera surface, so there
+          // is no other part. The path cannot know what is holding the
+          // camera; what it CAN know is that the only thing this app ever
+          // opens is the previous lesson, so a session that failed to stop is
+          // the honest suspect and the only one the user can act on.
+          //
+          // The old sentence also ended the screen: a blamed stranger leaves
+          // nothing to do, which is the dead end M-F-268 forbids.
+          'The camera is still busy from the last lesson. Going back and '
+              'opening it again usually clears this — and if it does not, '
+              'that is a fault on our side, not something you did wrong.',
         CameraFailure.notRunning => 'The camera session is not running.',
         CameraFailure.permissionDenied =>
           // Never reached: permission has its own state. Handled so the
