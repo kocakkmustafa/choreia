@@ -23,6 +23,21 @@ final class CameraPoseSource {
 
   final MotionCameraController _controller;
 
+  /// A shutdown that has been ASKED FOR but has not finished.
+  ///
+  /// **Static because the camera is.** Each `LiveLessonPage` builds its own
+  /// `CameraPoseSource`, but there is one camera on the device, and closing it
+  /// is a platform-channel round trip. `State.dispose` is synchronous and
+  /// cannot await anything, so leaving one lesson fires `stop()` and returns
+  /// immediately — and opening the next lesson calls `start()` on a camera the
+  /// system is still tearing down. The plugin answers `already-running`, and
+  /// the second lesson of the session fails for a reason the first one caused.
+  ///
+  /// Measured on the N-TH-TIME axis: invisible at N=1 by construction, because
+  /// nothing has been stopped yet. Every check this app had asked "does the
+  /// screen work?", and the answer was yes — the first time.
+  static Future<void>? _shutdown;
+
   CameraSessionInfo? _session;
   CameraSessionInfo? get session => _session;
 
@@ -37,6 +52,12 @@ final class CameraPoseSource {
     required String modelId,
     CameraLens lens = CameraLens.front,
   }) async {
+    // Let any in-flight shutdown finish first. Not a retry and not a delay:
+    // the wait is exactly as long as the previous lesson's teardown, and zero
+    // when there was no previous lesson.
+    final Future<void>? pending = _shutdown;
+    if (pending != null) await pending;
+
     try {
       _session = await _controller.start(
         modelPath: modelPath,
@@ -54,7 +75,23 @@ final class CameraPoseSource {
     }
   }
 
-  Future<void> stop() async {
+  /// Deliberately NOT `async`.
+  ///
+  /// An `async` body would only register `_shutdown` after its first `await`,
+  /// which is one microtask too late for the caller that matters: `dispose()`
+  /// cannot await, so the next `start()` may already be running by then. This
+  /// shape publishes the pending shutdown SYNCHRONOUSLY, at call time.
+  Future<void> stop() {
+    final Future<void> run = _stopOnce();
+    _shutdown = run;
+    return run.whenComplete(() {
+      // Only clear the latch if it is still ours — a third lesson may have
+      // started its own teardown in the meantime.
+      if (identical(_shutdown, run)) _shutdown = null;
+    });
+  }
+
+  Future<void> _stopOnce() async {
     try {
       await _controller.stop();
     } on CameraException {
