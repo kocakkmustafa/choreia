@@ -385,4 +385,79 @@ void main() {
       }
     });
   });
+
+  group('a shipped claim must break when it STOPS being true (C-170)', () {
+    // NEW CRITERION (J-133): for a sentence already shipped, ask what the most
+    // PLAUSIBLE change is that would turn it into a lie. If that change is
+    // plausible, a gate is owed — nobody decides to start lying, they make a
+    // fix and a sentence quietly stops matching.
+    //
+    // Applied to the 62 limit lines, two candidates:
+    //
+    //   A. A style gains an authored `style.json`. Already covered: C-161
+    //      forbids `cameraLimits` on any style with a real honesty block, so
+    //      building content makes the suite red until the substitute is
+    //      removed. Verified by construction, not by hope.
+    //
+    //   B. THE BEAT GRID LANDS. Three limits say a beat grid is something we
+    //      do not have — and resolving it is on the founder's queue TODAY
+    //      (`tools/beat_annotate.py`, ~10 minutes). Nothing tied those
+    //      sentences to the content state that makes them true, so the day the
+    //      tap happens, three shipped claims become false and every gate stays
+    //      green. That is the gap this group closes.
+
+    test('claims about an absent beat grid are tied to its actual state', () {
+      final List<MapEntry<String, String>> claims = <MapEntry<String, String>>[
+        for (final StyleCard c in lib.cards)
+          for (final String l in c.entry.cameraLimits)
+            if (l.toLowerCase().contains('beat grid'))
+              MapEntry<String, String>(c.entry.id, l),
+      ];
+      expect(claims, isNotEmpty,
+          reason: 'no line mentions a beat grid — this gate would then be '
+              'measuring nothing (family lesson 4)');
+
+      // The content state those sentences depend on. While BOTH of these say
+      // unresolved, the claims are true; the moment either resolves, they must
+      // be re-read rather than left standing.
+      final Map<String, dynamic> style = (jsonDecode(
+              File('content/styles/salsa_shines/style.json').readAsStringSync())
+          as Map).cast<String, dynamic>();
+      final Map<String, dynamic> step = (jsonDecode(File(
+                  'content/styles/salsa_shines/steps/ss_shine_footwork.json')
+              .readAsStringSync()) as Map)
+          .cast<String, dynamic>();
+
+      expect('${style['bpmStatus']}', startsWith('DISPUTED'),
+          reason: 'the BPM is resolved now, so ${claims.length} shipped limit '
+              'lines saying we have no beat grid may be false: '
+              '${claims.map((MapEntry<String, String> e) => e.key).toList()}. '
+              'Re-read them before clearing this.');
+      expect('${step['beatsStatus']}', startsWith('PENDING'),
+          reason: 'beats are filled in now — same re-read is owed');
+      expect(step['beats'], isNull,
+          reason: 'a beat grid exists in content while three styles tell the '
+              'user there is none');
+    });
+
+    test('and the style-level ship gate agrees with those sentences', () {
+      // A second, independent tie. If the two ever disagree, one of them is
+      // already wrong and the suite should say so rather than pick a winner.
+      final Map<String, dynamic> style = (jsonDecode(
+              File('content/styles/salsa_shines/style.json').readAsStringSync())
+          as Map).cast<String, dynamic>();
+      final List<Object?> gates = style['shipGates'] as List? ?? const [];
+      final Iterable<Map<String, dynamic>> bpm = <Map<String, dynamic>>[
+        for (final Object? g in gates)
+          (g! as Map<String, dynamic>),
+      ].where((Map<String, dynamic> g) => g['gate'] == 'bpmResolved');
+
+      expect(bpm, hasLength(1),
+          reason: 'the bpmResolved gate is gone — the limit lines that lean on '
+              'it need re-reading');
+      expect(bpm.first['blocked'], isTrue,
+          reason: 'the BPM gate has opened while three styles still tell the '
+              'user we have no beat grid');
+    });
+  });
 }
