@@ -81,7 +81,7 @@
    "scoring": "pose",
    "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka",
    "originAttribution": "The fitness-class format is a late commercial packaging; the dancing inside it is not. Its steps are borrowed from Latin American social dances — salsa, merengue, cumbia, reggaeton — each with its own country and its own history, and the credit belongs to those dances rather than to the exercise format built on top of them.",
-   "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. You follow repeating blocks of salsa, merengue, cumbia and reggaeton footwork at a pace that keeps moving."
+   "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. The class runs on repeating blocks of salsa, merengue, cumbia and reggaeton footwork, at a pace that keeps moving."
   },
   {
    "id": "line_dance",
@@ -95,7 +95,7 @@
    "scoring": "pose",
    "note": "Step-sheet formatı kural motoruna birebir oturuyor; yayımlı step-sheet KOPYALANMAZ, orijinal diziler",
    "originAttribution": "Dancing in rows without a partner is old and widespread. The modern form draws on American country-western social dancing, which itself carries African-American and European communal dance traditions. Contemporary line dances are usually written by named choreographers and circulated as step sheets — those are their authors' work, and this app teaches its own sequences instead.",
-   "description": "Everybody faces the same way and dances the same sequence, no partner needed. You learn a short pattern of steps and turns, then repeat it as the dance rotates to face each wall in turn.",
+   "description": "Everybody faces the same way and dances the same sequence, no partner needed. A short pattern of steps and turns repeats, and the dance rotates to face each wall in turn.",
    "stepGlossary": [
     {
      "name": "Grapevine",
@@ -129,7 +129,7 @@
    "statusNote": "07-30 M-F-123 kafesi: `live` çünkü ss_l1_footwork SKORLANAN bir ders (tam-zincir, M-F-119: WRONG_FOOT + STEP_TOO_LARGE canlı, liveness testi kanıtlı) ve honesty.measured dolu. ⚠️ AÇIK GERİLİM — statü ≠ ship-hazırlığı: bpmStatus DISPUTED olduğu için validate_content hâlâ 'no lesson in this style may ship' uyarısını veriyor. Kafes DERS-DURUMUNA bakıyor (kullanıcı ship edildiğinde ne görecek), ship-kapısı AYRI bir eksen (BPM). İkisinin ilişkisi kafes tanımında YOK — koordinatöre soruldu; bu stil BPM çözülmeden yayına çıkmaz, statü live olsa da.",
    "note": "Adım config'i yazıldı (ss_basic) ama HENÜZ SHIP EDİLEMEZ: BPM hâlâ çözülmedi (C-032 kapandı — hareket-üzerinden BPM çıkmaz sokaktı, ölçüldü — ama beat_annotate ile müzik-ızgarası kurucunun canlı tap'ini bekliyor, henüz koşulmadı); ss_shine_footwork referansı 4 eğitmenle KURULDU (provisional) ama ss_basic'in kendi referans takeleri (collectedTakes) hâlâ 0 — adım-config↔referans bağı ss_shine_footwork için var, ss_basic için yok. Doğrulayıcının 'diskte içerik var ama yakında' uyarısı bu yüzden BEKLENEN — içerik hazır olmakla ship edilebilir olmak aynı şey değil",
    "originAttribution": "Shines are the solo passages of salsa, when partners step away from each other and dance alone. Salsa was formed by Cuban and Puerto Rican communities in New York through the 1960s and 70s, out of Cuban son and mambo and Puerto Rican traditions carried by people who had moved north. Core shines such as the Suzy Q are older still and long since public vocabulary.",
-   "description": "The solo footwork of salsa — the passages where partners let go and dance on their own. You work a quick-quick-slow pattern in a small space, keeping the steps tight and the count steady.",
+   "description": "The solo footwork of salsa — the passages where partners let go and dance on their own. The pattern is quick-quick-slow, danced in a small space with the steps kept tight and the count steady.",
    "stepGlossary": [
     {
      "name": "The basic",
@@ -249,7 +249,7 @@
     "Dutty Wine — boyun riski"
    ],
    "originAttribution": "Jamaican dancehall grew out of Kingston's sound-system culture from the late 1970s. Unusually among popular dances, its steps are individually named and datable, and most can be traced to a specific dancer and a specific moment — which makes crediting them possible in a way it often is not elsewhere.",
-   "description": "Jamaican dancehall is a vocabulary of named steps, each with its own attitude and its own moment. You learn them one at a time and then choose between them as the riddim moves."
+   "description": "Jamaican dancehall is a vocabulary of named steps, each with its own attitude and its own moment. Each step stands on its own, and dancers pick between them as the riddim moves."
   },
   {
    "id": "shuffle",
@@ -280,7 +280,7 @@
     "prop'lu figürler — avatar demo"
    ],
    "originAttribution": "'Belly dance' is an outsider's name. The dances it points at — raqs sharqi and raqs baladi in Arabic, oryantal dans in Turkish, and related regional forms — belong to Egypt, the Levant, Turkey and the wider region, and lived in family and community celebration long before any staged or exported version of them.",
-   "description": "A dance of the hips, ribs and spine, where the movement is isolated rather than travelled. You learn to move one part of the body while the rest stays still, which is harder and better than it sounds.",
+   "description": "A dance of the hips, ribs and spine, where the movement is isolated rather than travelled. One part of the body moves while the rest stays still — harder, and better, than it sounds.",
    "stepGlossary": [
     {
      "name": "Hip drop",
@@ -363,7 +363,7 @@
    ],
    "note": "TEK sayfa, 7 sekme. ISTD/WDSF Bronze→Gold yapısı ESİNLENİLİR; syllabus METNİ telifli, anlatım ORİJİNAL",
    "originAttribution": "The competitive 'Latin' syllabus was standardised in Britain in the early twentieth century out of dances that were not British: cha-cha and rumba from Cuba, samba from Brazil, jive from African-American swing, paso doble from Spanish sources. The codification is a real craft with its own history; it is not the origin of the dances, and the published syllabus texts belong to the bodies that wrote them.",
-   "description": "The technique behind the competitive Latin dances, practised without a partner. You drill weight, turnout, hip action and foot pressure — the parts that are yours to control whoever you are dancing with.",
+   "description": "The technique behind the competitive Latin dances, practised without a partner. The work is weight, turnout, hip action and foot pressure — the parts that stay yours whoever you are dancing with.",
    "stepGlossary": [
     {
      "name": "Cucaracha",
@@ -399,7 +399,7 @@
    ],
    "note": "PERKÜSİF ONSET: shuffle/flap/stamp ayrımı + zamanlama (K9). ISTD 6-seviye esinli",
    "originAttribution": "Tap was made in the United States, largely by Black American dancers, out of the meeting of African rhythmic dance with Irish and English step dancing — a meeting that happened under slavery and segregation, in circumstances its dancers did not choose. Its history is inseparable from that.",
-   "description": "Dancing that is also drumming: the shoes make the sound and the sound is the point. You learn to break a step into its separate hits and to place each one where you meant it.",
+   "description": "Dancing that is also drumming: the shoes make the sound and the sound is the point. The craft is breaking a step into its separate hits and placing each one where it was meant to land.",
    "stepGlossary": [
     {
      "name": "Shuffle",
@@ -524,7 +524,7 @@
    "scoring": "pose",
    "pack": "funk_styles",
    "originAttribution": "Vogue comes from the ballroom scene built by Black and Latino LGBTQ+ communities in Harlem and across New York, where houses formed as chosen families and competed at balls. It was a culture of survival long before it was a style anyone outside it borrowed, and the borrowing has usually been done without credit or return.",
-   "description": "Movement built out of poses — lines, angles and hands, danced with the confidence the ballroom scene demands. Its elements are named and judged, and each one asks for something different from you.",
+   "description": "Movement built out of poses — lines, angles and hands, danced with the confidence the ballroom scene demands. At a ball its elements are named categories, each judged on its own terms, and each asks for something different.",
    "stepGlossary": [
     {
      "name": "Hands performance",
@@ -651,7 +651,7 @@
    "scoring": "pose",
    "note": "Ev-desteği modu (sandalye/tezgâh)",
    "originAttribution": "Ballet was codified in the Italian and then French courts, which is why its vocabulary is French, and later developed further in Russia, Denmark and elsewhere. Barre work is its daily training practice rather than a dance in itself.",
-   "description": "The daily training practice of ballet, done holding a barre. You work through a fixed order of exercises that build turnout, control and line before anything travels across a floor.",
+   "description": "The daily training practice of ballet, done holding a barre. A fixed order of exercises builds turnout, control and line before anything travels across a floor.",
    "stepGlossary": [
     {
      "name": "Plié",
