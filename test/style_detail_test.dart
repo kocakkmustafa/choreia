@@ -107,7 +107,7 @@ void main() {
       expect(find.byKey(StyleDetailView.attributionGapKey), findsOneWidget,
           reason: 'an absent box would read as a dance with no origin, which '
               'is never true — the debt is carried in public instead');
-      expect(find.textContaining('We have not written this yet'), findsOneWidget);
+      expect(find.textContaining('We have not written this'), findsOneWidget);
     });
 
     testWidgets('clearance reasoning never stands in for credit',

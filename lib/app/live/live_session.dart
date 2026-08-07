@@ -88,10 +88,14 @@ final class LiveSession {
   }
 
   static String _whyFor(String code) => switch (code) {
-        'STEP_LATE' => 'We are not checking your timing yet. Getting that '
-            'right needs the beat of the music pinned down first, and we '
-            'have not measured it — so rather than guess, we are leaving '
-            'timing out and telling you.',
+        // NOT a deferral. There is no beat grid for this style at all, so
+        // this is a MISSING MEASUREMENT, not a late one — and the sentence has
+        // to carry that class (M-F-287). "yet" sold a structural absence as a
+        // schedule.
+        'STEP_LATE' => 'We do not check your timing. Doing that honestly needs '
+            'the beat of the music pinned down, and for this style it is not — '
+            'so rather than guess at a count and blame you for our own '
+            'uncertainty, we leave timing out and say so.',
         'NO_WEIGHT_TRANSFER' => 'We are not checking whether your weight '
             'really lands on the stepping foot. The difference we would be '
             'looking for is smaller than what the camera can reliably see, '

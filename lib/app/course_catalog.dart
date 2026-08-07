@@ -197,8 +197,8 @@ final class CourseCatalog {
               gates.add(BlockedGate(
                 scope: GateScope.errorCode,
                 id: stepId,
-                why: 'The movement description for this step is not written '
-                    'yet, so we cannot say which checks it needs — not that it '
+                why: 'The movement description for this step is not written, '
+                    'so we cannot say which checks it needs — not that it '
                     'needs none.',
               ));
             }

@@ -46,7 +46,7 @@ abstract final class LiveStrings {
   /// "Nothing yet" is NOT zero. A bare 0 next to "repetitions" reads as a
   /// score of nothing; the absence of a count is a different fact.
   static String cycles(int? n) =>
-      n == null ? 'No full repetition read yet' : '$n read so far';
+      n == null ? 'No full repetition read so far' : '$n read so far';
 
   static const String gatedTitle = 'What we are NOT checking';
   static const String measuredTitle = 'What we measured';

@@ -111,7 +111,7 @@ final class StyleView {
 /// raw `blockedBy` string — which reads like `beatsStatus:PENDING` and tells a
 /// dancer nothing.
 abstract final class AvailabilityStrings {
-  static const String comingSoon = 'Not open yet — no lesson here can be '
+  static const String comingSoon = 'Not open — no lesson here can be '
       'started today.';
 
   static const String onHold =
@@ -119,12 +119,11 @@ abstract final class AvailabilityStrings {
 
   /// Deliberately vague, deliberately non-technical.
   static const String genericGate =
-      'Not open yet — we are finishing a check on this style.';
+      'Not open — a check we run before opening a style has not cleared.';
 
   static const Map<String, String> _byGate = <String, String>{
-    'bpmResolved': 'Not open yet — we are still confirming the beat for this '
-        'style, and we will not grade your timing against a count we are not '
-        'sure of.',
+    'bpmResolved': 'Not open — the beat for this style is unconfirmed, and we '
+        'will not grade your timing against a count we are not sure of.',
   };
 
   static String gate(BlockedGate g) => _byGate[g.id] ?? genericGate;

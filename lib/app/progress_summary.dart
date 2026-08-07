@@ -239,7 +239,7 @@ final class ProgressSummary {
     // No judgement is stored, so none is reported. The reason names the missing
     // MECHANISM, not a missing effort by the user.
     const String reason =
-        'No lesson has been graded yet. Grading needs the camera check, and '
+        'No lesson has been graded. Grading needs the camera check, and '
         'that is not wired up in this build — so there is nothing here rather '
         'than a zero. Zeros would look like results.';
 
@@ -308,7 +308,7 @@ abstract final class ProgressStrings {
   static const String evaluatedSubtitle =
       'Judgements about how you did. Graded lessons only.';
 
-  static const String blockedSection = 'What we cannot check yet';
+  static const String blockedSection = 'What we cannot check';
   static const String blockedSubtitle =
       'Named, with the reason. We would rather tell you than leave it out.';
 
@@ -349,7 +349,7 @@ abstract final class ProgressStrings {
       'that would be wrong, we are not showing numbers until we can read it.';
 
   static const String emptyHistory =
-      'No practice recorded yet. Nothing has been hidden — there is simply '
+      'No practice recorded. Nothing has been hidden — there is simply '
       'nothing here.';
 
   /// The band column for a demo-only lesson: a mark that there IS no judgement,

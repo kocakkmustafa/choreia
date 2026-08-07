@@ -21,10 +21,10 @@
   "measuredNote": "Empty on purpose. This style grades nothing today. hh_bounce now HAS a reference (3 teachers, 2026-08-04) and is still ungraded — see notMeasured; a built reference is not the same as a gradeable one, and conflating them is exactly what this block exists to prevent.",
   "notMeasured": [
    "The Running Man — we have measured 4 independent teachers doing it, and we still will not grade it: what makes this step right or wrong is the timing of the ball and heel of the foot touching the floor, and toe landmarks are the least reliable points a single phone camera produces. We can show you the step; scoring it would be scoring our own noise.",
-   "The Roger Rabbit — reference built from 3 teachers, but they disagree about which way round the step is danced (mirrorConfident:false), so we cannot yet tell a mirrored performance from a wrong one. Shown, not graded, until more teachers settle it.",
+   "The Roger Rabbit — reference built from 3 teachers, but they disagree about which way round the step is danced (mirrorConfident:false), so we cannot tell a mirrored performance from a wrong one. Shown, not graded, until more teachers settle it.",
    "The Bounce — three independent teachers HAVE now been measured, and the step is still not graded, for a reason we only learned by measuring: those teachers agree with each other more closely than our own camera noise. 83% of the tolerance we would grade you against comes from that noise floor rather than from anything they actually disagree about; in the lessons we do grade, that share is 9-28%. The movement itself is detected fine — every dip clears the step's own thresholds. What we cannot honestly do is turn that into a number about you.",
    "Groove, feel and musicality — a camera cannot see whether the music is in you. Taught throughout, never scored (plan §22).",
-   "Rock and Groove — the step definitions are described but not authored yet, so there is nothing for the camera to check."
+   "Rock and Groove — the step definitions are described but not authored, so there is nothing for the camera to check."
   ]
  },
  "levels": [

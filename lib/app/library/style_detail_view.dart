@@ -23,9 +23,10 @@ import 'library_view.dart';
 ///
 /// **Where content has no attribution, the box does not disappear.** It renders
 /// a named gap instead. An absent box would read as a dance with no origin,
-/// which is never true; a visible "we have not written this yet" is a debt the
-/// screen carries in public. Measured 2026-08-07: 1 of 34 styles has
-/// `originAttribution`, so 33 pages currently show that gap.
+/// which is never true; a visible "we have not written this" is a debt the
+/// screen carries in public. Measured 2026-08-07: attribution has since been
+/// written for all 34 styles, so no page shows the gap today — the branch stays
+/// tested against a synthetic card so it cannot rot before the next style lands.
 ///
 /// THREE LESSON CLASSES, ONE CARD WEIGHT
 /// -------------------------------------
@@ -365,10 +366,10 @@ abstract final class StyleStrings {
   /// The named gap. Says who owes the work and refuses to imply the dance has
   /// no lineage — only that we have not written it down.
   static const String attributionMissing =
-      'We have not written this yet. Every dance in this catalogue was made by '
+      'We have not written this. Every dance in this catalogue was made by '
       'specific people in a specific place, and saying so properly takes more '
-      'than a sentence we could improvise here. This space stays open until '
-      'that is written, rather than being filled with something vague.';
+      'than a sentence we could improvise here. This space stays open rather '
+      'than being filled with something vague.';
 
   static const String boundaryTitle = 'WHAT WE DO AND DO NOT REPRODUCE';
 

@@ -106,7 +106,16 @@ void main() {
         (WidgetTester tester) async {
       await pumpAt(tester, LibraryView(library: lib));
 
-      final List<String> banned = <String>['coming soon', 'yakında', 'soon'];
+      // 'yet' is on this list by coordinator ruling (2026-08-07, via Ostinato):
+      // "gerekçenin varlığı 'yet'i affetmiyor — 'yet' bir zaman taahhüdü."
+      // A named reason after the word does not redeem it; the word itself
+      // promises a schedule we have not committed to.
+      final List<String> banned = <String>[
+        'coming soon',
+        'yakında',
+        'soon',
+        ' yet',
+      ];
       for (int i = 0; i < 40; i++) {
         final String screen = tester
             .widgetList<Text>(find.byType(Text))
