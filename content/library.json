@@ -1011,5 +1011,13 @@
    "name": "Dandiya-Raas",
    "reason": "çift-sopa vuruşmalı — solo öğrenilemez"
   }
- ]
+ ],
+ "originAttributionProvenance": {
+  "status": "UNSOURCED — general knowledge, written 2026-08-07",
+  "whatThisMeans": "Bu 34 atıf metni, bu repodaki DİĞER her içerik sınıfının aksine kaynak kaydı TAŞIMIYOR. Karşılaştırma: stepInventory.sourcedFrom bir araştırma turuna (R1 §2) işaret ediyor · ders evidence'ı hasat sondalarına · referans sources'ı videoId'lere. Atıf metinleri yalnız genel bilgiden yazıldı.",
+  "whyItMatters": "Bunlar YAŞAYAN TOPLULUKLAR hakkında kültürel iddialar — Vogue'un Siyah ve Latino LGBTQ+ ballroom kökeni, Bhangra'nın Pencap'ı, Hula'nın hālau geleneği. Ölçülmemiş bir eşik gibi: makul görünür, dayanağı yoktur, ve yanlışsa bedelini metnin sahibi olmayan insanlar öder.",
+  "whatWasAvoided": "Emin olunmayan tarih ve isim UYDURULMADI — kesin görünen bir uydurma yerine on yıl veya bölge yazıldı; dışarıdan verilen adlar böyle olduğu söylendi ('belly dance' bir dışarılı adı); kredinin ödenmediği yerler yazıldı.",
+  "whatIsStillOwed": "Kaynaklı atıf bir ARAŞTIRMA turudur (R-serisi), yazı turu değil — C-173'ün aynı şekli. Her stil için en az bir birincil/ikincil kaynak, ve kültürel ortaklık gerektiren stillerde (hula zaten onHold) topluluk doğrulaması.",
+  "surfaceRule": "Yüzey ASLA doğrulama iddia etmez. Tasarım mockup'ı 'reviewed with our salsa teacher panel · 6 names credited' gösteriyordu — kaynaksız metnin üstüne o cümle konulursa UYDURULMUŞ BİR KİMLİK olur. content_claims_test bunu kapı olarak koşuyor."
+ }
 }

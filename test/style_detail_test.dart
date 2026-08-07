@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/library/library_catalog.dart';
@@ -538,6 +539,119 @@ void main() {
       expect(find.byKey(StyleDetailView.cameraLimitsKey), findsNothing);
       expect(find.byKey(StyleDetailView.honestyKey), findsNothing);
       expect(find.byKey(StyleDetailView.attributionKey), findsOneWidget);
+    });
+  });
+
+  group('BUNU KİM GÖRÜYOR — her alan bir yüzeyde çiziliyor (C-176)', () {
+    // "Doğruluk denetimi pahalı, izleyici denetimi ucuz — ve ikincisi çoğu
+    // zaman birincisini de yapıyor" (JabLab J-147). Sorulan soru "bu doğru mu"
+    // değil, "bunu KİM görüyor": içeriğin var olması, birinin onu görmesi
+    // demek değil, ve bu ailede bir alan yazıp render etmemek ("içerik var,
+    // yüzeyi yok") ölçülmüş bir sınıf.
+    //
+    // Ölçüm 2026-08-07: 34 stilin HER alanı çiziliyor, çizilmeyen yok. Bu kapı
+    // o durumu çiviliyor — 32 stil daha yazılacak ve her yeni alan aynı
+    // soruyla karşılaşmalı.
+
+    testWidgets('34 stilin hiçbir alanı içerikte kalmıyor',
+        (WidgetTester tester) async {
+      // Uzun yüzey: kaydırma gerekmeden her blok ağaçta olsun. Dokunuş yolu
+      // olmadığı için (C-146) tek güvenilir yol bu.
+      tester.view.physicalSize = const Size(375, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      final List<String> unseen = <String>[];
+      for (final StyleCard c in lib.cards) {
+        await tester.pumpWidget(MaterialApp(
+            theme: ChoreiaTheme.dark, home: StyleDetailView(card: c)));
+        await tester.pump();
+        final String id = c.entry.id;
+        bool shown(Key k) => find.byKey(k).evaluate().isNotEmpty;
+
+        if (c.entry.originAttribution != null && !shown(StyleDetailView.attributionKey)) {
+          unseen.add('$id/originAttribution');
+        }
+        if (c.entry.description != null && !shown(StyleDetailView.descriptionKey)) {
+          unseen.add('$id/description');
+        }
+        if (c.entry.stepGlossary.isNotEmpty && !shown(StyleDetailView.glossaryKey)) {
+          unseen.add('$id/stepGlossary');
+        }
+        if (c.entry.cameraLimits.isNotEmpty && !shown(StyleDetailView.cameraLimitsKey)) {
+          unseen.add('$id/cameraLimits');
+        }
+        if (c.entry.onHoldReason != null &&
+            find.textContaining(c.entry.onHoldReason!.substring(0, 25))
+                .evaluate()
+                .isEmpty) {
+          unseen.add('$id/onHoldReason');
+        }
+      }
+
+      expect(lib.cards.length, greaterThan(30),
+          reason: 'katalog boşaldıysa bu kapı hiçbir şey ölçmez');
+      expect(unseen, isEmpty,
+          reason: 'bu alanlar içerikte var ve hiçbir yüzeyde çizilmiyor — '
+              'yazmak ilerleme gibi gelir, dansçı hiçbir şey görmez: $unseen');
+    });
+  });
+
+  group('atıf DOĞRULANMIŞ gibi sunulamaz (C-176)', () {
+    // JabLab'ın en pahalı vakası burada olurdu: 34 kültürel iddia, YAŞAYAN
+    // topluluklar hakkında, ve KAYNAK KAYDI YOK — oysa bu repodaki her diğer
+    // içerik sınıfı taşıyor (stepInventory.sourcedFrom · ders evidence ·
+    // referans sources). Durum content'e kaydedildi; bu kapı yüzeyin o
+    // durumdan FAZLASINI iddia etmemesini sağlıyor.
+
+    test('kaynak durumu içerikte KAYITLI ve dürüst', () {
+      final Map<String, dynamic> doc = (jsonDecode(
+              File('content/library.json').readAsStringSync()) as Map)
+          .cast<String, dynamic>();
+      final Object? prov = doc['originAttributionProvenance'];
+      expect(prov, isNotNull,
+          reason: '34 kültürel iddia kaynak kaydı olmadan duruyor ve bunu '
+              'söyleyen bir kayıt da yok');
+      final Map<String, dynamic> p = (prov! as Map).cast<String, dynamic>();
+      expect('${p['status']}', startsWith('UNSOURCED'),
+          reason: 'kaynak bulunduysa bu kaydı GÜNCELLE — kapı da, aşağıdaki '
+              'yasak da o gün yeniden okunmalı');
+      expect(p['whatIsStillOwed'], isNotNull);
+    });
+
+    testWidgets('yüzey ASLA panel/inceleme/doğrulama iddia etmez',
+        (WidgetTester tester) async {
+      // Tasarım mockup'ı "reviewed with our salsa teacher panel · 6 names
+      // credited" gösteriyordu. Kaynaksız metnin üstüne o cümle konulursa
+      // UYDURULMUŞ BİR KİMLİK olur — icat edilen gerekçenin en pahalı hâli.
+      final RegExp claim = RegExp(
+          r'reviewed with|teacher panel|names credited|verified by|'
+          r'in consultation with|fact-checked',
+          caseSensitive: false);
+
+      for (final String id in <String>['vogue', 'salsa_shines', 'hula', 'bhangra']) {
+        await show(tester, id);
+        final String screen = tester
+            .widgetList<Text>(find.byType(Text))
+            .map((Text t) => t.data ?? '')
+            .join(' ');
+        expect(claim.hasMatch(screen), isFalse,
+            reason: '$id sayfası atıf için bir doğrulama iddia ediyor, ama '
+                'metinlerin kaynak kaydı YOK');
+      }
+    });
+
+    test('hiçbir atıf metni kendi içinde doğrulama iddia etmez', () {
+      final RegExp claim = RegExp(
+          r'reviewed|verified|confirmed by|according to our|our panel',
+          caseSensitive: false);
+      final List<String> offenders = <String>[
+        for (final StyleCard c in lib.cards)
+          if (c.entry.originAttribution != null &&
+              claim.hasMatch(c.entry.originAttribution!))
+            c.entry.id,
+      ];
+      expect(offenders, isEmpty, reason: '$offenders');
     });
   });
 }
