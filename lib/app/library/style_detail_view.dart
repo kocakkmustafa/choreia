@@ -152,11 +152,31 @@ class StyleDetailView extends StatelessWidget {
         ],
       );
 
-  /// Why this style is shut, in the user's language — from the derivation, not
-  /// written here. Null when the style is open, because an open style has
-  /// nothing to explain.
+  /// What the badge means, in a sentence whose SUBJECT IS US (C-178).
+  ///
+  /// This used to return null for an openable style — "an open style has
+  /// nothing to explain". Measured: the one openable style in the app then
+  /// showed a bare `OPEN · NOT SCORED` with nothing under it, while every shut
+  /// style got a sentence supplying the subject ("we will not grade…", "no
+  /// lesson here can be started").
+  ///
+  /// A badge has no subject, and the reader supplies one. "NOT SCORED" with
+  /// nothing beside it reads as a verdict on THEIR practice — *your attempt
+  /// does not count* — when the true statement is about OUR instrument. That
+  /// inversion is the one this whole app is built to refuse
+  /// (ölçülemedi != başarısızlık), and it was sitting on the only style a
+  /// dancer can actually open.
   String? _statusSentence() =>
-      card.entry.onHoldReason ?? card.view.userFacingReason;
+      card.entry.onHoldReason ??
+      card.view.userFacingReason ??
+      _openStyleSentence();
+
+  /// The subject-carrying sentence for a style that IS open.
+  String? _openStyleSentence() => switch (card.badge) {
+        StyleBadge.openUngraded => StyleStrings.openUngradedMeaning,
+        StyleBadge.scored => StyleStrings.scoredMeaning,
+        _ => null,
+      };
 
   // ── Attribution ──────────────────────────────────────────────────────
 
@@ -514,6 +534,19 @@ abstract final class StyleStrings {
   static String excluded(String what) => 'Not taught here: $what';
 
   static String needs(List<String> items) => 'You will need: ${items.join(', ')}';
+
+  /// Subject: US and our instrument — never the dancer's effort.
+  static const String openUngradedMeaning =
+      'Open to practise. We do not put a number on these lessons, and that is '
+      'a fact about what we can measure — not about how you danced. Each '
+      'lesson says which measurement is missing.';
+
+  /// Written now so the branch exists before a style ever becomes scored; the
+  /// subject rule has to hold on the good news too.
+  static const String scoredMeaning =
+      'Open to practise, and we check part of it. What we check and what we '
+      'leave alone are both listed below — a lesson that is not scored is a '
+      'gap in our measuring, not in your dancing.';
 
   static const String glossaryTitle = 'Steps you will hear named';
 

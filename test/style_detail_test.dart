@@ -724,6 +724,71 @@ void main() {
               'kalırsa okur yalnız "kontrol ediyoruz" tarafını görür');
     });
   });
+
+  group('BU BAŞLIK KİMİN HAKKINDA — özne (C-178)', () {
+    // Kusur-sınıfı zinciri: sözcük → cümle → çerçeve → ÖZNE. Dördü de aynı
+    // kökten: DOĞRULUK, OKUNDUĞU YERDEN ÖLÇÜLÜR.
+    //
+    // Bir rozetin öznesi yoktur ve okuyan birini kendisi koyar. "NOT SCORED"
+    // yanında hiçbir şey yokken ONUN pratiği hakkında bir hüküm gibi okunur —
+    // 'senin denemen sayılmıyor' — oysa doğru cümle BİZİM aletimiz hakkında.
+
+    testWidgets('HER stil, rozetinin ne demek olduğunu söyleyen bir cümle taşır',
+        (WidgetTester tester) async {
+      // Ölçülen kusur: açılabilir stil için _statusSentence() null dönüyordu,
+      // yani uygulamada dansçının açabildiği TEK stil, öznesiz bir rozetle
+      // yalnız duruyordu. Kapalı stillerin hepsinde cümle vardı.
+      for (final StyleCard c in lib.cards) {
+        tester.view.physicalSize = const Size(375, 4000);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(MaterialApp(
+            theme: ChoreiaTheme.dark, home: StyleDetailView(card: c)));
+        await tester.pump();
+
+        final List<String> texts = tester
+            .widgetList<Text>(find.byType(Text))
+            .map((Text t) => t.data ?? '')
+            .where((String s) => s.length > 40)
+            .toList();
+        expect(texts, isNotEmpty,
+            reason: '${c.entry.id}: rozetin altında hiçbir açıklayıcı cümle '
+                'yok — okuyan özneyi kendisi koyar');
+      }
+    });
+
+    testWidgets('açılabilir stilin cümlesi ÖLÇÜMÜ özne yapar, dansçıyı değil',
+        (WidgetTester tester) async {
+      await show(tester, 'hip_hop_foundations');
+      expect(find.text(StyleStrings.openUngradedMeaning), findsOneWidget,
+          reason: 'uygulamada açılabilen tek stil, "NOT SCORED" rozetini '
+              'öznesiz taşıyordu');
+    });
+
+    test('özne cümleleri ÖLÇÜMÜ konu eder, kullanıcının çabasını değil', () {
+      // Yasak: dansçının performansını özne yapan biçimler. İzinli: bizim
+      // aletimizi özne yapanlar.
+      for (final MapEntry<String, String> e in <String, String>{
+        'openUngraded': StyleStrings.openUngradedMeaning,
+        'scored': StyleStrings.scoredMeaning,
+      }.entries) {
+        expect(e.value, contains('we'),
+            reason: '${e.key}: cümlenin öznesi biz olmalı');
+        expect(
+            RegExp(r'your (attempt|practice|dancing) (does not|will not) count',
+                    caseSensitive: false)
+                .hasMatch(e.value),
+            isFalse);
+        expect(
+            RegExp(r'not about how you danced|not in your dancing',
+                    caseSensitive: false)
+                .hasMatch(e.value),
+            isTrue,
+            reason: '${e.key}: ölçüm yokluğunun BAŞARISIZLIK OLMADIĞI açıkça '
+                'söylenmeli — bu uygulamanın çekirdek disiplini');
+      }
+    });
+  });
 }
 
 /// Asset paths declared under `flutter: assets:`.
