@@ -1019,5 +1019,34 @@
   "whatWasAvoided": "Emin olunmayan tarih ve isim UYDURULMADI — kesin görünen bir uydurma yerine on yıl veya bölge yazıldı; dışarıdan verilen adlar böyle olduğu söylendi ('belly dance' bir dışarılı adı); kredinin ödenmediği yerler yazıldı.",
   "whatIsStillOwed": "Kaynaklı atıf bir ARAŞTIRMA turudur (R-serisi), yazı turu değil — C-173'ün aynı şekli. Her stil için en az bir birincil/ikincil kaynak, ve kültürel ortaklık gerektiren stillerde (hula zaten onHold) topluluk doğrulaması.",
   "surfaceRule": "Yüzey ASLA doğrulama iddia etmez. Tasarım mockup'ı 'reviewed with our salsa teacher panel · 6 names credited' gösteriyordu — kaynaksız metnin üstüne o cümle konulursa UYDURULMUŞ BİR KİMLİK olur. content_claims_test bunu kapı olarak koşuyor."
+ },
+ "culturalReviewLedger": {
+  "whatThisIs": "KAYIT — hüküm DEĞİL. Bu blok hiçbir stilin `status` alanını etkilemez ve hiçbir yüzeye çıkmaz. Yalnız şunu okunur kılar: bir stilin kültürel-inceleme kararı VERİLDİ Mİ, yoksa hiç BAKILMADI mı. Bugüne kadar bu ikisi ayırt edilemiyordu.",
+  "whyItExists": "J-163 sınaması: `comingSoon` rozeti AÇILABİLİRLİK ekseninde gerçekten ölçülüyor (validate_content kafesi iki yönde de kapı). Ama aynı rozet SESSİZCE ikinci bir ekseni daha taşıyor — kültürel-inceleme — ve o eksende hiçbir ölçüm yapılmadı. Bulgu, yanlış bir rozet değil; ÇALIŞTIRILMAMIŞ bir inceleme ve onu kaydeden hiçbir yer olmaması.",
+  "criterion": "hula'nın onHoldReason'ından türetildi ve TEK yazılı ölçüt odur: yaşayan kültürel-manevi pratik + aktarımın kendisi biçimin parçası (hālau/kumu) → jenerik kaynakla içerik üretimi yasak, ortaklık şart.",
+  "flaggerIsRecallOriented": "Kapıdaki anahtar-kelime listesi SINIFLANDIRICI değil, ÇAĞIRICI. Fazla işaretlemek zararsız (yalnız 'birinin karar vermesi gerek' demektir); az işaretlemek zararlı. Bir rozeti anahtar-kelimeyle ATAMAK ise yasak — bu gece o denendi ve proxy 31 stilin 12'sini hiçbir kovaya koyamadı (C-181).",
+  "ledger": {
+   "hula": {
+    "ruling": "held",
+    "by": "kurucu direktifi (gece brifi 2026-08-07)",
+    "note": "onHold + gerekçe sayfada açıkça görünür; içerik üretilmedi."
+   },
+   "garba": {
+    "ruling": "open",
+    "by": null,
+    "note": "Kendi yazdığım atıf metni 'It is worship as much as it is dance' diyor ve Navratri'de tanrıça onuruna dans edildiğini söylüyor. hula ile AYNI SINIF OLDUĞU KANITLANMADI — hula'nınki aktarım-soyu kısıtı, garba ise kitlesel katılımlı bir halk formu. Ama ikisini ayıran hiçbir KAYIT da yok, ve gerçek şu ki garba için böyle bir inceleme hiç yapılmadı. Hüküm koordinatörün: bu bir dürüstlük/kapsam kararı, kod kararı değil."
+   },
+   "contemporary": {
+    "ruling": "cleared",
+    "by": "Choreia hattı, 2026-08-07 — KELİME-ANLAMI hükmü, kültürel hüküm DEĞİL",
+    "note": "Çağırıcı 'lineage' kelimesine bastı. Metindeki kullanım KOREOGRAFİK TEKNİK soyu ('each with a named lineage' = Graham, Cunningham, Limón çizgileri) — hula'nın ölçütündeki kısıtlı kültürel aktarım değil. Bu, kendi cümlem hakkında bir gözlem; bir topluluk hakkında bir karar değil. Çağırıcı fazla-işaretledi ve TAM DA BUNUN İÇİN böyle ayarlandı — kelime listesini daraltıp bu satırı sessizce yok etmek kapının kendisini bozardı."
+   },
+   "twerk_reggaeton": {
+    "ruling": "open",
+    "by": null,
+    "note": "Çağırıcı yine 'lineage'e bastı ve burada kelime-anlamı savunması İŞLEMİYOR: metin TARİHSEL soyu anlatıyor (New Orleans bounce → Batı/Orta Afrika) ve sahiplenme dinamiğini kendisi adlandırıyor ('treated as vulgar while they belonged to Black and Latino communities'). hula ölçütüyle aynı sınıf OLDUĞU kanıtlanmadı — twerk soy-kısıtlı bir pratik değil, sosyal/popüler bir dans. Ama emin değilim, ve emin olmadığımda savunmacı varsayılan 'open': bir satıra mal olur, 'cleared' ise bir sessizliğe (O-070). Zaten policyBucket 'sensual_expression' taşıyor — yani bu stil için bir hassasiyet kaydı VAR, kültürel-inceleme kaydı YOKTU. Hüküm koordinatörün."
+   }
+  },
+  "openQuestionForCoordinator": "① garba için ölçüt geçerli mi? ② Ölçüt yalnız hula'nın gerekçe metninin içinde yaşıyor — kendi başına bir kural olarak yazılmalı mı? ③ 32 stilin içeriği yazıldığında bu inceleme her yeni atıf metni için tekrar gerekecek; kapı şimdi kuruldu, hüküm mekanizması yok."
  }
 }

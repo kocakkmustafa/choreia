@@ -12,5 +12,5 @@ defect in the marker, not a stylistic choice — fix the comment, not this file.
 
 ## Data — content or a measurement the design assumes and the engine/content does not carry yet
 
-- **`lib/app/live/live_view.dart:264`** — "cycle N of <planned total>" not shown — unblocked by: LiveWatching (or the step config it is built from) carrying a planned-cycle count the live surface can read; today it carries cyclesSeen alone. See docs/design/PLACEHOLDER-REGISTER.md.
+- **`lib/app/live/live_view.dart:288`** — "cycle N of <planned total>" not shown — unblocked by: LiveWatching (or the step config it is built from) carrying a planned-cycle count the live surface can read; today it carries cyclesSeen alone. See docs/design/PLACEHOLDER-REGISTER.md.
 

@@ -408,6 +408,76 @@ VALID_FLAGS = {"green", "amber", "red"}
 VALID_SCORING = {"pose", "pose+onset", "onset"}
 
 
+# Recall-oriented flagger for the cultural-review ledger. These words RAISE a
+# style for a human ruling; they never assign one. Over-flagging costs a line in
+# the ledger, under-flagging ships an unreviewed claim about a living community,
+# so the list is deliberately loose.
+#
+# Why this is not the keyword classifier that was rejected: on 2026-08-07 a
+# keyword proxy was tried for splitting `comingSoon` into awaiting-content vs
+# awaiting-capability, and it put 12 of 31 styles in NEITHER bucket (C-181). A
+# proxy that ASSIGNS a class must be accurate; a proxy that CALLS FOR REVIEW
+# only has to over-include. Same technique, different job — and only the second
+# job is one keywords can hold.
+CULTURAL_REVIEW_WORDS = (
+    "worship", "devotional", "sacred", "spiritual", "ceremon", "ritual",
+    "prayer", "goddess", "deity", "temple", "shrine", "initiat", "lineage",
+    "halau", "hālau", "kumu",
+)
+
+VALID_RULINGS = {"held", "cleared", "open"}
+
+
+def validate_cultural_review(rep: Report, lib: dict, where: str) -> None:
+    """Every style whose own attribution claims a living devotional or
+    transmission-restricted practice must appear in the ledger.
+
+    What this gate does NOT do: decide whether such a style should be `onHold`.
+    That is a cultural and honesty ruling, and it belongs to a person. What it
+    does is make the difference between *ruled* and *never looked at* readable —
+    which is the thing that was missing when this was written. `hula` was held
+    by an explicit founder directive; `garba`'s own attribution says "It is
+    worship as much as it is dance" and nobody had ever considered it.
+
+    The gate is green while every flagged style carries SOME ruling, including
+    `open`. That is the point: an open question that is written down is a
+    different state from one nobody has noticed, and only the second is a
+    defect this repository can fix on its own.
+    """
+    ledger = (lib.get("culturalReviewLedger") or {}).get("ledger")
+    if not isinstance(ledger, dict):
+        rep.error(where, "culturalReviewLedger.ledger missing — styles making "
+                         "living-practice claims would have no review record")
+        return
+
+    for sid, entry in ledger.items():
+        ruling = (entry or {}).get("ruling")
+        if ruling not in VALID_RULINGS:
+            rep.error(where, f"cultural review of '{sid}' has ruling "
+                             f"'{ruling}' — expected one of "
+                             f"{sorted(VALID_RULINGS)}")
+
+    for s in lib.get("styles", []):
+        sid = s.get("id", "?")
+        text = (s.get("originAttribution") or "").lower()
+        hits = sorted({w for w in CULTURAL_REVIEW_WORDS if w in text})
+        if not hits:
+            continue
+        if sid not in ledger:
+            rep.error(where, f"'{sid}' attribution asserts a living practice "
+                             f"({', '.join(hits)}) but carries NO cultural "
+                             "review record. The criterion that put 'hula' "
+                             "onHold may or may not apply — the defect is that "
+                             "nobody ruled and nothing says so. Add it to "
+                             "culturalReviewLedger.ledger with ruling 'open' "
+                             "if the question is unanswered.")
+
+    for sid in ledger:
+        if sid not in {s.get("id") for s in lib.get("styles", [])}:
+            rep.error(where, f"cultural review names '{sid}', which is not a "
+                             "style in this library")
+
+
 def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
     """Checks the library registry against what actually exists.
 
@@ -427,6 +497,8 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
 
     if lib.get("schemaVersion") != SUPPORTED_SCHEMA:
         rep.error(where, "unsupported schemaVersion")
+
+    validate_cultural_review(rep, lib, where)
 
     seen: set[str] = set()
     live: set[str] = set()
