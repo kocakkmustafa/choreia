@@ -42,9 +42,30 @@ abstract final class ChoreiaColors {
   static const Color bright = Color(0xFFFBF2F5);
   static const Color _base = Color(0xFFF6EEF1);
 
-  /// Body text at a named opacity. One function so every screen draws from
-  /// the same ramp instead of each picking its own alpha.
-  static Color text(double opacity) => _base.withValues(alpha: opacity);
+  /// The faintest text this app will draw, whatever a call site asks for.
+  ///
+  /// Measured 2026-08-07 against the worst-case backdrop: below this, body and
+  /// label text falls under the 4.5:1 that WCAG 1.4.3 asks of type this size.
+  /// At this value the same text renders 4.66:1, and [bright] still sits 2.59x
+  /// above it — so the ramp keeps its hierarchy instead of flattening to one
+  /// safe tone, which is the cheap way to pass a contrast gate and the wrong
+  /// one.
+  static const double minReadableAlpha = 0.55;
+
+  /// Body text at a named opacity — CLAMPED to [minReadableAlpha].
+  ///
+  /// The clamp lives here rather than at the call sites on purpose (C-157).
+  /// 40 call sites asked for something below the floor, spread across every
+  /// screen, and the first fix of this class went only to the badge the brief
+  /// named — fixing the EXAMPLE and leaving the PATTERN. A floor on the token
+  /// covers the 40, and covers the ones written next week too.
+  ///
+  /// Call sites keep their own number because it still carries INTENT: 0.42
+  /// means "the quietest thing here" and stays quieter than 0.78 wherever both
+  /// clear the floor. What they can no longer do is ask for invisible.
+  static Color text(double opacity) => _base.withValues(
+        alpha: opacity < minReadableAlpha ? minReadableAlpha : opacity,
+      );
 
   static Color hairline(double opacity) =>
       Colors.white.withValues(alpha: opacity);
@@ -59,6 +80,16 @@ abstract final class ChoreiaColors {
 /// the words are read.
 abstract final class ChoreiaType {
   ChoreiaType._();
+
+  /// The colours [body] and [label] fall back to when a call site names none.
+  ///
+  /// Named constants rather than literals inside the factories so the contrast
+  /// gate can read the SAME value the widget draws. `label` in particular is
+  /// used bare by 14 call sites; that made its default a shared token, and a
+  /// shared token nobody measures is how JabLab shipped a 3.51:1 default
+  /// across a whole screen (J-116).
+  static final Color bodyDefaultColor = ChoreiaColors.text(0.78);
+  static final Color labelDefaultColor = ChoreiaColors.text(0.55);
 
   static TextStyle display(
           {double size = 34, Color? color, double height = 1.06}) =>
@@ -78,7 +109,7 @@ abstract final class ChoreiaType {
         fontSize: size,
         height: height,
         fontWeight: weight,
-        color: color ?? ChoreiaColors.text(0.78),
+        color: color ?? bodyDefaultColor,
       );
 
   /// Measurement/status language. `letterSpacing` is an em-multiplier here
@@ -91,7 +122,7 @@ abstract final class ChoreiaType {
         fontSize: size,
         fontWeight: FontWeight.w500,
         letterSpacing: letterSpacingEm * size,
-        color: color ?? ChoreiaColors.text(0.45),
+        color: color ?? labelDefaultColor,
       );
 }
 
@@ -262,7 +293,15 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: <Color>[
-                      color.withValues(alpha: 0.30),
+                      // 0.18, not 0.30 (C-157). The blob is DECORATION and the
+                      // text on top of it is CONTENT; at 0.30 its peak lifted
+                      // the background far enough that muted text needed alpha
+                      // 0.66 to stay legible, which would have flattened the
+                      // whole type ramp. Dimming the decoration bought the
+                      // floor back down to 0.55 and RAISED the hierarchy
+                      // spread from 1.86x to 2.59x — the trade runs the right
+                      // way round.
+                      color.withValues(alpha: 0.18),
                       color.withValues(alpha: 0),
                     ],
                   ),
@@ -317,7 +356,10 @@ class GlassPanel extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                base.withValues(alpha: 0.09),
+                // 0.06, not 0.09 — same reasoning as the backdrop blob
+                // (C-157): a panel tint that lightens the surface is paid for
+                // by every string sitting on it.
+                base.withValues(alpha: 0.06),
                 Colors.white.withValues(alpha: 0.02),
               ],
             ),

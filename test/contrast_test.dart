@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -68,9 +69,30 @@ void main() {
 
   final Color stage = ChoreiaColors.stage;
   final Color litBackdrop =
-      over(ChoreiaColors.rose.withValues(alpha: 0.30), stage);
+      over(ChoreiaColors.rose.withValues(alpha: 0.18), stage);
   final Color panel =
-      over(ChoreiaColors.rose.withValues(alpha: 0.09), litBackdrop);
+      over(ChoreiaColors.rose.withValues(alpha: 0.06), litBackdrop);
+
+  /// Every alpha any view actually asks [ChoreiaColors.text] for, READ FROM THE
+  /// SOURCE.
+  ///
+  /// Not a literal list (C-153): a hand-written set of "alphas we use" is an
+  /// assumption with nothing checking it, and the next screen written would not
+  /// be in it. Scanning `lib/` means a call site added tomorrow is measured
+  /// tomorrow.
+  List<double> textAlphasInUse() {
+    final RegExp call = RegExp(r'ChoreiaColors\.text\(\s*([0-9.]+)\s*\)');
+    final Set<double> out = <double>{};
+    for (final FileSystemEntity f
+        in Directory('lib').listSync(recursive: true)) {
+      if (f is! File || !f.path.endsWith('.dart')) continue;
+      for (final RegExpMatch m in call.allMatches(f.readAsStringSync())) {
+        final double? v = double.tryParse(m.group(1)!);
+        if (v != null) out.add(v);
+      }
+    }
+    return out.toList()..sort();
+  }
 
   /// The background a `StatusPill`'s text is read against.
   ///
@@ -150,6 +172,82 @@ void main() {
             reason: '$b renders at ${ratio.toStringAsFixed(2)}:1 — an honest '
                 'state nobody can see is the same as saying nothing');
       }
+    });
+  });
+
+  group('THE PATTERN, not one example (C-157)', () {
+    // C-156 measured the badge the brief names and called the class closed.
+    // JabLab hit the same wall one round later and named it: "I fixed the
+    // EXAMPLE, not the PATTERN". Measured here afterwards: 40 call sites across
+    // every screen were below the floor, and `ChoreiaType.label`'s own DEFAULT
+    // was one of them — the shared token, inherited by 14 bare call sites.
+
+    test('the scan finds real call sites', () {
+      final List<double> alphas = textAlphasInUse();
+      expect(alphas.length, greaterThan(10),
+          reason: 'if this regex stops matching, every assertion below passes '
+              'by measuring nothing (family lesson 4)');
+    });
+
+    test('EVERY text alpha any view asks for is legible', () {
+      for (final double asked in textAlphasInUse()) {
+        // Through the real token, so the clamp is part of what is measured —
+        // testing the raw number would measure a colour the app never draws.
+        final Color c = ChoreiaColors.text(asked);
+        for (final MapEntry<String, Color> bg in <String, Color>{
+          'panel': panel,
+          'backdrop': litBackdrop,
+        }.entries) {
+          final Color rendered = over(c, bg.value);
+          expect(contrast(rendered, bg.value), greaterThanOrEqualTo(4.5),
+              reason: 'text($asked) on ${bg.key} renders '
+                  '${contrast(rendered, bg.value).toStringAsFixed(2)}:1');
+        }
+      }
+    });
+
+    test('the shared type defaults are legible too', () {
+      // `ChoreiaType.label()` defaulted to text(0.45) and 14 call sites used it
+      // bare. This is the exact shape of JabLab's `JText.mono` default.
+      // The named tokens, NOT `ChoreiaType.label()` — building the TextStyle
+      // would pull google_fonts into a plain `test`, and the colour is the
+      // whole claim. Both the widget and this line read the same constant, so
+      // they cannot drift.
+      for (final MapEntry<String, Color> e in <String, Color>{
+        'label': ChoreiaType.labelDefaultColor,
+        'body': ChoreiaType.bodyDefaultColor,
+      }.entries) {
+        final Color c = e.value;
+        expect(contrast(over(c, panel), panel), greaterThanOrEqualTo(4.5),
+            reason: '${e.key}() default renders '
+                '${contrast(over(c, panel), panel).toStringAsFixed(2)}:1 for '
+                'every surface that uses it without naming a colour');
+      }
+    });
+
+    test('HIERARCHY SURVIVES the floor', () {
+      // The cheap way to pass every check above is to drag everything to the
+      // brightest tone, trading legibility for a flat page. The ramp has to
+      // stay a ramp.
+      final double brightest = contrast(ChoreiaColors.bright, panel);
+      final Color floor = ChoreiaColors.text(ChoreiaColors.minReadableAlpha);
+      final double faintest = contrast(over(floor, panel), panel);
+
+      expect(faintest, greaterThanOrEqualTo(4.5));
+      expect(brightest / faintest, greaterThanOrEqualTo(2.0),
+          reason: 'primary and faintest are only '
+              '${(brightest / faintest).toStringAsFixed(2)}x apart — the page '
+              'has been flattened to pass a contrast gate');
+    });
+
+    test('the floor is a FLOOR, not a rewrite of the ramp', () {
+      // Above the floor, a call site's own number must still decide. If the
+      // clamp ever applied everywhere, hierarchy would be gone silently.
+      expect(ChoreiaColors.text(0.86).a, greaterThan(ChoreiaColors.text(0.60).a));
+      expect(ChoreiaColors.text(0.20).a,
+          closeTo(ChoreiaColors.minReadableAlpha, 0.001),
+          reason: 'a sub-floor request must be lifted TO the floor, not left '
+              'alone and not pushed to full opacity');
     });
   });
 }
