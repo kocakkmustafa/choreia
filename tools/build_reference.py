@@ -658,6 +658,50 @@ def classify_disagreement(oriented: list[dict], consensus: dict[str, list[float]
             "maxDispersionDeg": round(max(disp), 2), "why": why}
 
 
+def model_provenance(sources: list[dict]) -> dict:
+    """Which pose model produced these takes — carried, never assumed.
+
+    THE FIELD EXISTED ALL ALONG AND WAS DROPPED HERE. `extract_landmarks.py`
+    stamps `model_version` and `model_sha256` into every fixture; this function
+    used to read `provenance.channel` out of the same dictionaries and let the
+    model fall on the floor. The information was not missing — it was not
+    carried, which reads identically from downstream and is worse, because
+    "unknown" invites a guess while "not carried" invites a fix.
+
+    Why it matters: the numbers in a reference (tolerances, disagreement, the
+    noise floor everything is compared against) are a property of the model
+    that produced them. A device running a different model compares a dancer
+    against angles that mean something else — measured by the family as real
+    (M-L-01), not hypothetical.
+
+    Mixed takes are an ERROR, not an average. A reference whose three
+    instructors were measured by two different models has no single meaning,
+    and silently blending them would bury exactly the defect this field is for.
+    """
+    seen: dict[str, str] = {}
+    for p in sources:
+        prov = p.get("provenance") or {}
+        version = prov.get("modelVersion") or p.get("modelVersion")
+        sha = prov.get("modelSha256") or p.get("modelSha256")
+        if version:
+            seen[version] = sha or ""
+    if not seen:
+        # Honest absence: the fixtures for this reference predate the stamp.
+        # `null` rather than a plausible-looking default — a guessed model id
+        # would make the equality gate PASS against a fiction.
+        return {
+            "modelVersion": None,
+            "modelSha256": None,
+            "why": "fixtures carried no model stamp; do not infer one",
+        }
+    if len(seen) > 1:
+        raise SystemExit(
+            f"takes were measured by DIFFERENT models: {sorted(seen)} — "
+            "a reference built from mixed models has no single meaning")
+    version, sha = next(iter(seen.items()))
+    return {"modelVersion": version, "modelSha256": sha or None}
+
+
 def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
     # Anchor-source homogeneity. Phase 0 means "left ankle furthest forward"
     # for an ankle-anchored take and "left knee highest" for a knee-anchored
@@ -981,6 +1025,9 @@ def build(prepared: list[dict], step: str, *, bins: int = PHASE_BINS) -> dict:
         "step": step,
         "built": True,
         "corePin": sources[0].get("corePin"),
+        # C-196: carried from the fixtures so the app can check that the model
+        # it RUNS is the model these numbers were MEASURED with.
+        **model_provenance(sources),
         "phaseBins": bins,
         "takeCount": len(oriented),
         "sources": [
