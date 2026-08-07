@@ -8,6 +8,7 @@ import 'camera_pose_source.dart';
 import 'live_session.dart';
 import 'live_state.dart';
 import 'live_view.dart';
+import 'pose_model.dart';
 
 /// Runs one lesson's live path and renders whatever it honestly reports.
 ///
@@ -87,9 +88,12 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
 
     // NO DEAD END (M-F-268): a refusal becomes a STATE, not an exception that
     // leaves the screen empty with nothing to do.
+    // The model is copied out of the bundle to a real file first — the
+    // plugin opens a filesystem path, not an asset key (see `pose_model.dart`
+    // for why that distinction was invisible until it was measured).
     final LiveState? refusal = await _camera.start(
-      modelPath: 'assets/pose_landmarker_full.task',
-      modelId: 'pose_landmarker_full',
+      modelPath: await materialisePoseModel(),
+      modelId: PoseModelPin.modelId,
     );
     if (!mounted) return;
     if (refusal != null) {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/library_view.dart';
+import 'package:choreia/app/live/pose_model.dart';
 import 'package:choreia/app/onboarding/first_run_flag.dart';
 import 'package:choreia/app/onboarding/first_run_view.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
@@ -288,44 +289,37 @@ void main() {
               'Kafes diski okur, kullanıcının elinde paket vardır (C-185)');
     });
 
-    test('AÇILAN KAPI BOŞLUĞA AÇILIYOR — poz modeli hiçbir yerde yok (C-186)',
+    test('açılan kapının artık ZEMİNİ VAR — ama koştuğu ölçülmedi (C-186)',
         () {
-      // The lesson is now reachable. It cannot RUN.
+      // For six hours this gate asserted the opposite: the lesson was
+      // reachable and could not run, because `LiveLessonPage` asked the
+      // camera for `assets/pose_landmarker_full.task` — a file that was not
+      // declared, not in the repository, not shipped by the plugin, and not
+      // even the right SHAPE (the plugin's contract wants an absolute
+      // filesystem path, not a bundle key).
       //
-      // `LiveLessonPage` starts the camera with
-      // `modelPath: 'assets/pose_landmarker_full.task'`. That file:
-      //   * is not declared in `pubspec.yaml`
-      //   * does not exist in the repository
-      //   * is not shipped by `motion_camera` (the plugin deliberately
-      //     bundles no model — "apps pin their own and ship it as an asset")
-      // and the argument is not even the right SHAPE: the plugin's contract
-      // says `modelPath` is an ABSOLUTE FILESYSTEM PATH, not a bundle key.
-      // `path_provider` is a declared dependency and is never imported in
-      // `lib/`, which is the shape of a provisioning step that was planned
-      // and never written.
+      // Three sibling lines had solved this months ago. The fix was their
+      // recipe, not an invention: a pinned model fetched and SHA-verified by
+      // a script, declared as an asset, and copied out of the bundle to a
+      // real file at launch.
       //
-      // Why this is pinned here and not merely noted: reaching a screen and
-      // the screen WORKING are different claims, and the reachability
-      // measurement above only makes the first. Without this the walk would
-      // read as "the core loop is live" — the exact overclaim this file was
-      // built to prevent, one layer further in.
-      const String declaredModel = 'assets/pose_landmarker_full.task';
-      final String source = File('lib/app/live/live_lesson_page.dart')
-          .readAsStringSync();
-      expect(source, contains(declaredModel),
-          reason: 'model yolu değişti — bu kapının konusu artık başka bir '
-              'dosya, metni güncelle');
+      // WHAT THIS STILL DOES NOT CLAIM: that a dancer can dance. The camera
+      // has never been opened on a device from this repository (C-146, no
+      // touch path), so "the model is present and correctly addressed" is the
+      // whole of the assertion. Reaching, running and WORKING are three
+      // claims, and this file has now measured two of them.
+      expect(File(PoseModelPin.assetPath).existsSync(), isTrue,
+          reason: 'model yerinde değil — `tool/fetch_pose_model.sh` koş');
+      expect(File('pubspec.yaml').readAsStringSync(), contains('assets/models/'),
+          reason: 'model beyan edilmemiş, yani cihaza girmez');
 
-      final bool onDisk = File(declaredModel).existsSync();
-      final bool declaredInPubspec =
-          File('pubspec.yaml').readAsStringSync().contains(declaredModel);
-
-      // Pinned as the CONTRADICTION, like C-185: it flips to red when fixed
-      // and says so, rather than passing quietly forever.
-      expect(onDisk || declaredInPubspec, isFalse,
-          reason: 'poz modeli artık geliyor — bu İYİ HABER. Ders ilk kez '
-              'gerçekten çalışabilir; bu kapıyı ve KATI ölçümün "ulaşmak ≠ '
-              'çalışmak" notunu güncelle.');
+      final String live =
+          File('lib/app/live/live_lesson_page.dart').readAsStringSync();
+      expect(live, contains('materialisePoseModel()'),
+          reason: 'canlı sayfa modeli GERÇEK bir dosya yoluna çevirmeden '
+              'kameraya veriyor — eklenti asset anahtarını açamaz');
+      expect(live, isNot(contains("'assets/pose_landmarker")),
+          reason: 'eski gömülü asset yolu geri geldi');
     });
 
     test('rota adları ölçülebilir kalmalı — isimsiz rota sayılamaz', () {

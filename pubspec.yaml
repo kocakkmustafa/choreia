@@ -68,6 +68,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lints: ^5.0.0
+  crypto: ^3.0.0
 
 flutter:
   uses-material-design: true
@@ -83,6 +84,12 @@ flutter:
     # the app for no runtime reader. Adding a reference means adding a line
     # here — and a forgotten line fails loudly at load, which is the failure
     # direction to prefer.
+    # Poz modeli. Dosya GIT'TE DEĞİL — aile kuralı `.task` ikililerini
+    # izlemiyor (9,4 MB her klonda taşınmaz); `tool/fetch_pose_model.sh`
+    # indirir/kopyalar ve SHA-256'sını doğrular. Dizin olarak beyan ediliyor
+    # çünkü dosyanın kendisi checkout'ta YOK ve dosya-adı beyanı boş bir
+    # ağaçta build'i kırardı.
+    - assets/models/
     - content/references/hh_bounce.json
     - content/references/hh_roger_rabbit.json
     - content/references/hh_running_man.json

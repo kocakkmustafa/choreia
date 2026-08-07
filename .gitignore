@@ -21,3 +21,8 @@ __pycache__/
 
 # iCloud dışına symlink'lenmiş build çıktısı (memory: feedback-lifeos-icloud-build)
 /build
+
+# Poz modeli ikilisi — aile kuralı `.task` dosyalarını izlemiyor (9,4 MB her
+# klonda taşınmaz). `tool/fetch_pose_model.sh` indirir/kopyalar ve SHA-256
+# doğrular; pin `lib/app/live/pose_model.dart`'ta yaşar.
+*.task
