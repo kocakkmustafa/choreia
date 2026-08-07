@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
@@ -35,17 +36,41 @@ void main() {
   /// This is the same class of limit `DiskBundle` already documents about
   /// itself: it exercises the loader and the derivation, not Flutter's asset
   /// plumbing.
-  const Set<String> deviceRunnable = <String>{'ss_shine_footwork'};
+  ///
+  /// DERIVED FROM `pubspec.yaml`, NOT HAND-WRITTEN (C-153). It used to be the
+  /// literal `{'ss_shine_footwork'}`, which is the exemption-list failure
+  /// JabLab measured: a constant asserting a fact about the world, with nothing
+  /// checking that the fact still holds. If `hh_bounce.json` were declared
+  /// tomorrow, that literal would stay unchanged and the "no lesson can be
+  /// started" test below would keep passing while the app gained a startable
+  /// lesson. Reading the manifest makes the assumption impossible to hold
+  /// stale.
+  late final Set<String> deviceRunnable;
+  setUpAll(() {
+    final Set<String> declared = _declaredAssets();
+    deviceRunnable = <String>{
+      for (final StyleCard c in lib.cards)
+        for (final LessonInfo l in c.lessons)
+          if (l.stepId != null &&
+              declared.contains('content/references/${l.stepId}.json'))
+            l.stepId!,
+    };
+    expect(deviceRunnable, isNotEmpty,
+        reason: 'if the manifest parser breaks, every assertion built on this '
+            'set silently becomes "nothing runs" and passes for the wrong '
+            'reason');
+  });
 
   Future<void> show(WidgetTester tester, String styleId,
-      {Set<String> runnable = deviceRunnable}) async {
+      {Set<String>? runnable}) async {
     tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(MaterialApp(
       theme: ChoreiaTheme.dark,
-      home:
-          StyleDetailView(card: lib.cardFor(styleId)!, runnableSteps: runnable),
+      home: StyleDetailView(
+          card: lib.cardFor(styleId)!,
+          runnableSteps: runnable ?? deviceRunnable),
     ));
     await tester.pump();
   }
@@ -316,21 +341,76 @@ void main() {
       expect(find.byKey(StyleDetailView.glossaryKey), findsNothing);
     });
 
-    test('MEASURED: intro on 33/34, glossary on 18/34', () {
-      final int described =
-          lib.cards.where((StyleCard c) => c.entry.description != null).length;
-      final int glossed = lib.cards
-          .where((StyleCard c) => c.entry.stepGlossary.isNotEmpty)
-          .length;
+    test('MEASURED: WHICH styles are unwritten, not merely how many', () {
+      // SETS, NOT COUNTS (C-153). `expect(described, 33)` passes while hula
+      // gains a description and some other style loses one — the count is
+      // preserved and the one omission that is a RULE rather than a backlog
+      // item has been quietly reversed.
+      final Set<String> undescribed = lib.cards
+          .where((StyleCard c) => c.entry.description == null)
+          .map((StyleCard c) => c.entry.id)
+          .toSet();
+      expect(undescribed, <String>{'hula'},
+          reason: 'hula is unwritten BY RULE — its on-hold reason forbids '
+              'producing content from generic sources. Any other style landing '
+              'here is a gap; hula leaving here is a rule being broken.');
 
-      expect(described, 33,
-          reason: 'every style except hula, which is unwritten by rule');
-      expect(glossed, 18,
-          reason: 'the 16 omissions are deliberate — a style whose vocabulary '
-              'IS the individual routine has no shared names to gloss, and '
-              'guessing plausible-sounding ones reads as knowledge and is not. '
-              'If this number moves, say which style gained a glossary and on '
-              'what basis.');
+      final Set<String> unglossed = lib.cards
+          .where((StyleCard c) => c.entry.stepGlossary.isEmpty)
+          .map((StyleCard c) => c.entry.id)
+          .toSet();
+      expect(
+          unglossed,
+          <String>{
+            'hula',
+            'kpop_point',
+            'tiktok_format',
+            'latin_fusion_fitness',
+            'heels',
+            'bollywood',
+            'contemporary',
+            'irish_dance',
+            'cumbia_solo',
+            'bhangra',
+            'samba_no_pe',
+            'dancehall',
+            'shuffle',
+            'merengue_solo',
+            'twerk_reggaeton',
+            'kizomba_zouk_solo',
+          },
+          reason: 'each omission has its own reason (routine-specific '
+              'vocabulary · steps belong to other styles · no settled named '
+              'vocabulary · not nameable with confidence). If this set moves, '
+              'say WHICH style changed and on what basis — a count would have '
+              'let a swap through.');
     });
   });
+}
+
+/// Asset paths declared under `flutter: assets:`.
+///
+/// A second copy of `content_assets_test.dart`'s parser, deliberately: that
+/// file gates the manifest, this one DERIVES from it, and importing across test
+/// files to share eight lines would couple two gates that should be able to
+/// fail independently. Both are pinned by their own non-empty assertions.
+Set<String> _declaredAssets() {
+  final List<String> lines = File('pubspec.yaml').readAsLinesSync();
+  final Set<String> out = <String>{};
+  bool inAssets = false;
+  for (final String line in lines) {
+    if (RegExp(r'^\s{2}assets:\s*$').hasMatch(line)) {
+      inAssets = true;
+      continue;
+    }
+    if (inAssets) {
+      final RegExpMatch? m = RegExp(r'^\s{4}-\s+(\S+)\s*$').firstMatch(line);
+      if (m != null) {
+        out.add(m.group(1)!);
+        continue;
+      }
+      if (line.trim().isNotEmpty && !line.trim().startsWith('#')) break;
+    }
+  }
+  return out;
 }

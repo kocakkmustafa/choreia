@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:test/test.dart';
 
@@ -68,29 +70,71 @@ void main() {
 
   group('the order cannot rot silently', () {
     test('every code the judge can emit is ranked or deliberately mute', () {
-      // The judge emits exactly four codes. Two carry verdicts and MUST be
-      // ranked; two are structurally noVerdict and must NOT be, because
-      // ranking them would imply they could become a correction.
-      const Set<String> emitted = <String>{
-        'STEP_TOO_LARGE',
-        'NO_WEIGHT_TRANSFER',
-        'STEP_LATE',
-        'WRONG_FOOT',
-      };
-      const Set<String> structurallyMute = <String>{
-        'NO_WEIGHT_TRANSFER',
-        'STEP_LATE',
-      };
+      // DERIVED FROM A REAL JUDGE RUN, NOT LISTED (C-153).
+      //
+      // This assertion previously compared `correctionPriority` against two
+      // hand-written sets of "codes the judge emits" and "codes that are
+      // structurally mute". That is the exemption-list failure JabLab measured:
+      // if DanceJudge gained a fifth code, the literals would not move, the
+      // difference would be computed from a fiction, and this test would stay
+      // green while the new code fell to the unranked fallback and lost every
+      // tie-break. Asking the judge removes the fiction.
+      final DanceReference shine = DanceReference.load(
+          File('${_findRepoRoot().path}/content/references/'
+              'ss_shine_footwork.json'));
+      final JudgeResult run = DanceJudge(reference: shine)
+          .judge(shine.angles, momentA: 1, momentB: 29);
 
-      final Set<String> mustRank = emitted.difference(structurallyMute);
-      expect(correctionPriority.toSet(), mustRank,
+      expect(run.findings, isNotEmpty,
+          reason: 'an empty run makes every set below vacuously equal — the '
+              'gate would pass by measuring nothing (family lesson 4)');
+
+      final Set<String> canCarryAVerdict = run.findings
+          .where((ErrorFinding f) => f.verdict != Verdict.noVerdict)
+          .map((ErrorFinding f) => f.code)
+          .toSet();
+
+      expect(correctionPriority.toSet(), canCarryAVerdict,
           reason: 'a new fireable code added to DanceJudge without a rank '
               'would fall to the unranked fallback and quietly lose every '
               'tie-break. Rank it, or prove it is structurally mute.');
+    });
+
+    test('a mute code is never ranked', () {
+      // The other direction, and it is not symmetric: ranking a structurally
+      // mute code would imply it could become a correction, which is exactly
+      // the claim `noVerdict` exists to refuse.
+      final DanceReference shine = DanceReference.load(
+          File('${_findRepoRoot().path}/content/references/'
+              'ss_shine_footwork.json'));
+      final Set<String> mute = DanceJudge(reference: shine)
+          .judge(shine.angles, momentA: 1, momentB: 29)
+          .findings
+          .where((ErrorFinding f) => f.verdict == Verdict.noVerdict)
+          .map((ErrorFinding f) => f.code)
+          .toSet();
+
+      expect(mute, isNotEmpty);
+      for (final String code in mute) {
+        expect(correctionPriority, isNot(contains(code)),
+            reason: '$code cannot carry a verdict, so ranking it says it '
+                'could be the one correction');
+      }
     });
 
     test('no duplicates — a duplicated rank is an ambiguous order', () {
       expect(correctionPriority.toSet(), hasLength(correctionPriority.length));
     });
   });
+}
+
+Directory _findRepoRoot() {
+  Directory d = Directory.current;
+  while (!File('${d.path}/pubspec.yaml').existsSync() ||
+      !Directory('${d.path}/content').existsSync()) {
+    final Directory up = d.parent;
+    if (up.path == d.path) throw StateError('repo root not found');
+    d = up;
+  }
+  return d;
 }

@@ -119,6 +119,44 @@ void main() {
     }
   });
 
+  test('every withheld entry is still REACHABLE FROM A LESSON', () {
+    // The claim the allowlist makes is not merely "this file exists". It is
+    // "this file exists, a lesson points at it, and we are choosing not to
+    // ship it". The middle clause was unverified until C-153: if
+    // `hh_l1_bounce` lost its `step` field tomorrow, the entry would become
+    // dead weight describing a chain that no longer runs, and every test here
+    // would stay green — the exemption-list failure JabLab measured, where a
+    // list keeps asserting something no code path produces.
+    final Set<String> reachable = <String>{};
+    for (final FileSystemEntity dir in Directory('content/styles').listSync()) {
+      final File styleFile = File('${dir.path}/style.json');
+      if (!styleFile.existsSync()) continue;
+      final Map<String, dynamic> style =
+          (jsonDecode(styleFile.readAsStringSync()) as Map)
+              .cast<String, dynamic>();
+      for (final Object? rawLevel in (style['levels'] as List? ?? const [])) {
+        for (final Object? rawLesson
+            in ((rawLevel as Map)['lessons'] as List? ?? const [])) {
+          final Object? stepId = (rawLesson as Map)['step'];
+          if (stepId is String) {
+            reachable.add('content/references/$stepId.json');
+          }
+        }
+      }
+    }
+
+    expect(reachable, isNotEmpty,
+        reason: 'no lesson names a step at all — this gate would then pass '
+            'vacuously for any allowlist entry');
+
+    for (final String path in knownUnshipped.keys) {
+      expect(reachable, contains(path),
+          reason: 'no lesson points at $path any more, so withholding it is '
+              'no longer a decision about anything. Remove the entry — a live '
+              'ruling that has become folklore is worse than no entry.');
+    }
+  });
+
   test('every reference a lesson can reach is actually shipped', () {
     final Set<String> declared = declaredAssets();
     final List<String> missing = <String>[];
