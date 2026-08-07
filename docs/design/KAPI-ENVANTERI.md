@@ -47,6 +47,29 @@ kapanabilir · `yöntem` = ölçüm yöntemi değişirse kapanabilir.
 
 ---
 
+## 🧱 KATMAN kapsamı (C-169)
+
+**Kapı yazarken ilk soru *"hangi kelimeler"* değil, *"hangi KATMANLAR"*.**
+İçerik iki katmanlı (`library.json` + `style.json`/`steps/*`), ve
+`content_claims_test` **yalnız birincisini** okuyordu — ikincide 53 parça
+kullanıcı metni hiç denetlenmemişti.
+
+⚠️ **Ve kurallar katmandan katmana TAŞINMIYOR.** İkinci katmanı kütüphane
+kurallarıyla taradım: **16 eşleşme, hepsi MEŞRU.** *"we check HOW you do the
+step"* bir dürüstlük bloğunda doğrudur — o bloğun konusu zaten **bizim ne
+yaptığımız**; *"(not graded)"* bir ders başlığında doğrudur. `we` yasağı stil
+**tanıtımları** için yazılmıştı, çünkü onlar **dansı** anlatır.
+
+Kuralları sorgulamadan taşımak kapının **bulgu ÜRETMESİ** demektir — caveat
+enflasyonunun kardeşi, ve o 16 sahte bulgu, gerçekten geçerli olan tek kuralı
+(vaat dili, her katmanda) gömerdi.
+
+| Katman | Denetlenen | Kural |
+|---|---|---|
+| `library.json` tanıtım | dansı anlatır | `we` YASAK · teslim-fiili YASAK · hüküm sözcüğü özneli |
+| `library.json` cameraLimits | sınırı anlatır | mekanizma vaadi YASAK · yetenek iddiası YASAK · **kalıplaşma YASAK** (C-168) |
+| `style.json` honesty/reason | **bizim ne yaptığımızı** anlatır | birinci şahıs DOĞRU · vaat dili YASAK · `whyPermanent` ↔ `demoOnlyClass` çelişemez |
+
 ## ⚠️ Envanterin KENDİ yanlış pozitifi (düzeltildi)
 
 İlk sürüm `pin_equality_test`'i *"korumasız regex"* diye işaretledi. **Yanlıştı:**

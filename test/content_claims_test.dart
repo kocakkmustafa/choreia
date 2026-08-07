@@ -1,3 +1,6 @@
+import 'package:choreia/app/course_catalog.dart';
+import 'dart:io';
+import 'dart:convert';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -185,6 +188,201 @@ void main() {
             if (claims.hasMatch(line)) '${c.entry.id}: $line',
       ];
       expect(offenders, isEmpty, reason: '$offenders');
+    });
+  });
+
+  group('a stated limit must be a REAL, SPECIFIC limit (C-168)', () {
+    // NEW FAMILY BOUNDARY: *declaring a limit that does not exist is not
+    // honesty, it is NOISE.* Honesty gates built one-way inflate the thing they
+    // protect — a caveat on everything is a caveat nobody reads, and the real
+    // limit disappears among the invented ones.
+    //
+    // This line carries the family's heaviest load of them: 62 limit lines
+    // across 31 styles tonight, with 32 more styles queued. Measured before
+    // this gate existed: mean pairwise overlap 0.023 — the lines really are
+    // distinct — but ONE pair sat at 0.43, both saying "that is a timing
+    // judgement, and timing needs a beat grid". Both limits are real; the
+    // SENTENCE was boilerplate, and boilerplate is where inflation starts.
+
+    const Set<String> stop = <String>{
+      'the', 'a', 'an', 'and', 'or', 'is', 'it', 'of', 'to', 'in', 'that',
+      'this', 'we', 'you', 'your', 'not', 'no', 'our', 'own', 'are', 'be',
+      'can', 'cannot', 'what', 'which', 'for', 'with', 'on', 'at', 'as',
+      'from', 'by', 'than', 'so', 'but', 'one', 'two', 'same', 'most', 'more',
+      'its', 'has', 'have', 'would', 'will', 'do', 'does', 'they', 'them',
+      'there', 'see', 'sees', 'seeing',
+    };
+
+    Set<String> words(String t) => RegExp(r"[a-z']+")
+        .allMatches(t.toLowerCase())
+        .map((RegExpMatch m) => m.group(0)!)
+        .where((String w) => !stop.contains(w))
+        .toSet();
+
+    test('no two styles state the same limit in the same words', () {
+      final List<MapEntry<String, String>> lines = <MapEntry<String, String>>[
+        for (final StyleCard c in lib.cards)
+          for (final String l in c.entry.cameraLimits)
+            MapEntry<String, String>(c.entry.id, l),
+      ];
+      expect(lines.length, greaterThan(20),
+          reason: 'too few lines for this comparison to mean anything');
+
+      final List<String> tooAlike = <String>[];
+      for (int i = 0; i < lines.length; i++) {
+        for (int j = i + 1; j < lines.length; j++) {
+          if (lines[i].key == lines[j].key) continue;
+          final Set<String> a = words(lines[i].value);
+          final Set<String> b = words(lines[j].value);
+          if (a.isEmpty || b.isEmpty) continue;
+          final double overlap =
+              a.intersection(b).length / a.union(b).length;
+          if (overlap > 0.40) {
+            tooAlike.add('${lines[i].key} ↔ ${lines[j].key} '
+                '(${overlap.toStringAsFixed(2)})');
+          }
+        }
+      }
+      expect(tooAlike, isEmpty,
+          reason: 'these limits are stated in near-identical words: $tooAlike. '
+              'Both may be real, but a boilerplate caveat reads as filler and '
+              'takes the real ones down with it.');
+    });
+
+    test('a style never states the same limit twice', () {
+      for (final StyleCard c in lib.cards) {
+        final List<String> ls = c.entry.cameraLimits;
+        for (int i = 0; i < ls.length; i++) {
+          for (int j = i + 1; j < ls.length; j++) {
+            final Set<String> a = words(ls[i]);
+            final Set<String> b = words(ls[j]);
+            if (a.isEmpty || b.isEmpty) continue;
+            expect(a.intersection(b).length / a.union(b).length,
+                lessThanOrEqualTo(0.40),
+                reason: '${c.entry.id} says the same thing twice');
+          }
+        }
+      }
+    });
+
+    test('a limit is a sentence about a limit, not a shrug', () {
+      // The cheapest way to satisfy "every unbuilt style needs a limits box"
+      // is a one-line placeholder. Length is a crude proxy, but a real limit
+      // names WHAT cannot be seen and WHY, and that does not fit in six words.
+      for (final StyleCard c in lib.cards) {
+        for (final String l in c.entry.cameraLimits) {
+          expect(l.split(' ').length, greaterThan(10),
+              reason: '${c.entry.id}: "$l" is too short to name a limit and '
+                  'its reason — a box filled to have a box is noise');
+        }
+      }
+    });
+  });
+
+  group('THE OTHER LAYER: style.json user text (C-169)', () {
+    // LAYER BEFORE WORDS. Every rule above reads `library.json` only, and
+    // `style.json` carries 53 more pieces of user-facing text — lesson reasons,
+    // honesty lines, `whyPermanent` — that no claims gate had ever seen.
+    //
+    // ⚠️ AND THE LIBRARY RULES DO NOT TRANSFER. Scanning this layer with them
+    // produced 16 hits and ALL SIXTEEN ARE CORRECT: "we check HOW you do the
+    // step" belongs in an honesty block, whose whole subject is what WE do;
+    // "(not graded)" belongs in a lesson title. The no-"we" rule was written
+    // for style DESCRIPTIONS, which are about the dance.
+    //
+    // Porting rules across layers unexamined is how a gate manufactures
+    // findings — the cousin of caveat inflation, and it would have buried the
+    // one rule that DOES hold here.
+    List<MapEntry<String, String>> styleTexts() {
+      final List<MapEntry<String, String>> out = <MapEntry<String, String>>[];
+      String en(Object? v) =>
+          (v is Map ? v['en'] as String? : v as String?) ?? '';
+      for (final FileSystemEntity e
+          in Directory('content/styles').listSync(recursive: true)) {
+        if (e is! File || !e.path.endsWith('style.json')) continue;
+        final Map<String, dynamic> d =
+            (jsonDecode(e.readAsStringSync()) as Map).cast<String, dynamic>();
+        final String id = d['id'] as String;
+        final Map<String, dynamic> h =
+            (d['honesty'] as Map?)?.cast<String, dynamic>() ?? const {};
+        for (final String k in const <String>['measured', 'notMeasured']) {
+          for (final Object? t in (h[k] as List? ?? const [])) {
+            out.add(MapEntry<String, String>('$id/$k', t! as String));
+          }
+        }
+        for (final Object? lv in (d['levels'] as List? ?? const [])) {
+          for (final Object? rl in ((lv! as Map)['lessons'] as List? ?? const [])) {
+            final Map<String, dynamic> l = (rl! as Map).cast<String, dynamic>();
+            for (final String k in const <String>[
+              'demoOnlyReason', 'lockedReason', 'whyPermanent', 'displayName',
+            ]) {
+              final String t = en(l[k]);
+              if (t.isNotEmpty) {
+                out.add(MapEntry<String, String>('$id/${l['id']}.$k', t));
+              }
+            }
+          }
+        }
+      }
+      return out;
+    }
+
+    test('the layer is actually being read', () {
+      expect(styleTexts().length, greaterThan(30),
+          reason: 'this scan found almost nothing — the gate is vacuous');
+    });
+
+    test('THE RULE THAT DOES TRANSFER: no promise language, any layer', () {
+      // Measured: 0 hits today, so this is a real rule being held rather than
+      // a bar lowered to fit. `yet` is banned family-wide (M-F-186); the rest
+      // are the same commitment worded differently.
+      final RegExp promise = RegExp(
+          r'\byet\b|\bsoon\b|\bwill be able\b|\bonce we\b|\bcoming\b',
+          caseSensitive: false);
+      final List<String> offenders = <String>[
+        for (final MapEntry<String, String> t in styleTexts())
+          if (promise.hasMatch(t.value)) '${t.key}: "${t.value}"',
+      ];
+      expect(offenders, isEmpty, reason: '$offenders');
+    });
+
+    test('"never scored" is claimed ONLY where content classes it permanent',
+        () {
+      // `whyPermanent` is the strongest honesty claim in the app — it says a
+      // limit will not lift. It must not appear on a lesson whose class says
+      // the limit is structural-and-possibly-solvable, or the two contradict
+      // on the same card.
+      for (final FileSystemEntity e
+          in Directory('content/styles').listSync(recursive: true)) {
+        if (e is! File || !e.path.endsWith('style.json')) continue;
+        final Map<String, dynamic> d =
+            (jsonDecode(e.readAsStringSync()) as Map).cast<String, dynamic>();
+        for (final Object? lv in (d['levels'] as List? ?? const [])) {
+          for (final Object? rl in ((lv! as Map)['lessons'] as List? ?? const [])) {
+            final Map<String, dynamic> l = (rl! as Map).cast<String, dynamic>();
+            if (l['whyPermanent'] == null) continue;
+            expect(l['demoOnlyClass'], 'permanent',
+                reason: '${l['id']} explains why a limit is permanent while '
+                    'its class says "${l['demoOnlyClass']}" — the card would '
+                    'carry both claims at once');
+          }
+        }
+      }
+    });
+
+    test('a permanent lesson SAYS why, or the class is an unsupported claim',
+        () {
+      // The reverse twin. Without it, `demoOnlyClass: permanent` would be a
+      // bare assertion — the strongest thing this app says about a limit,
+      // with nothing behind it.
+      for (final StyleCard c in lib.cards) {
+        for (final LessonInfo l in c.lessons) {
+          if (l.demoOnlyClass != 'permanent') continue;
+          expect(l.whyPermanent, isNotNull,
+              reason: '${l.id} is classed permanent and never says why');
+          expect(l.whyPermanent!.split(' ').length, greaterThan(10));
+        }
+      }
     });
   });
 }
