@@ -459,6 +459,37 @@ class StatusPill extends StatelessWidget {
       );
 }
 
+/// A title beside its status pill — which becomes a title ABOVE its status
+/// pill when there is not room for both.
+///
+/// Why not a `Row` with an `Expanded` title (C-158)
+/// -----------------------------------------------
+/// That was the shape in all three places this is used, and it overflowed by
+/// 62px at 2x text scale: `Expanded` makes the TITLE yield, but the pill beside
+/// it is rigid, and at large text the pill alone is wider than the row.
+///
+/// The obvious repairs are both wrong here. Truncating the pill would clip a
+/// status label — "OPEN · NOT GRADED" cut to "OPEN · NOT" is worse than no
+/// badge at all, and this app's badges are the honesty surface. Truncating the
+/// title hides which lesson you are looking at. `Wrap` is the only arrangement
+/// that keeps BOTH whole: they sit side by side while they fit, and the pill
+/// drops to its own line when they do not.
+class TitleWithPill extends StatelessWidget {
+  const TitleWithPill({super.key, required this.title, required this.pill});
+
+  final Widget title;
+  final Widget pill;
+
+  @override
+  Widget build(BuildContext context) => Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.start,
+        spacing: 10,
+        runSpacing: 8,
+        children: <Widget>[title, pill],
+      );
+}
+
 // ── App theme ────────────────────────────────────────────────────────────
 
 /// The MaterialApp theme. Purely cosmetic — no widget in this app depends on

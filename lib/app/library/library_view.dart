@@ -226,18 +226,12 @@ class _LibraryViewState extends State<LibraryView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(c.entry.displayName,
-                        style: ChoreiaType.display(size: 25)),
-                  ),
-                  const SizedBox(width: 10),
-                  StatusPill(
-                      label: LibraryStrings.badge(c.badge),
-                      tone: _tone(c.badge)),
-                ],
+              TitleWithPill(
+                title: Text(c.entry.displayName,
+                    style: ChoreiaType.display(size: 25)),
+                pill: StatusPill(
+                    label: LibraryStrings.badge(c.badge),
+                    tone: _tone(c.badge)),
               ),
               const SizedBox(height: 10),
               // The lesson count is CONTENT truth and belongs on an openable
@@ -266,19 +260,14 @@ class _LibraryViewState extends State<LibraryView> {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: ChoreiaColors.hairline(0.10)),
           ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(c.entry.displayName,
-                    style: ChoreiaType.body(
-                        size: 13.5, color: ChoreiaColors.text(0.8))),
-              ),
-              const SizedBox(width: 10),
-              StatusPill(
-                  label: LibraryStrings.badge(c.badge),
-                  tone: _tone(c.badge),
-                  filled: false),
-            ],
+          child: TitleWithPill(
+            title: Text(c.entry.displayName,
+                style: ChoreiaType.body(
+                    size: 13.5, color: ChoreiaColors.text(0.8))),
+            pill: StatusPill(
+                label: LibraryStrings.badge(c.badge),
+                tone: _tone(c.badge),
+                filled: false),
           ),
         ),
       );

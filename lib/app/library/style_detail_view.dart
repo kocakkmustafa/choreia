@@ -311,16 +311,9 @@ class StyleDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Text(l.displayName,
-                    style: ChoreiaType.display(size: 19)),
-              ),
-              const SizedBox(width: 10),
-              StatusPill(label: StyleStrings.kind(l.kind), tone: tone),
-            ],
+          TitleWithPill(
+            title: Text(l.displayName, style: ChoreiaType.display(size: 19)),
+            pill: StatusPill(label: StyleStrings.kind(l.kind), tone: tone),
           ),
           const SizedBox(height: 8),
           Text(StyleStrings.minutes(l.plannedMinutes),
