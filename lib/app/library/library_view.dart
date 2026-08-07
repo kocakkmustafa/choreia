@@ -302,18 +302,33 @@ class _LibraryViewState extends State<LibraryView> {
   String? _reason(StyleCard c) =>
       c.entry.onHoldReason ?? c.view.userFacingReason;
 
-  /// Rose carries a VERDICT, amber carries a STATUS (design brief §2 — the two
-  /// tones are a language and do not mix on one element). Nothing in this
-  /// catalogue is a verdict about the dancer, so rose appears only on the
-  /// scored badge, where it marks the presence of grading itself.
-  Color _tone(StyleBadge b) => switch (b) {
-        StyleBadge.scored => ChoreiaColors.rose,
-        StyleBadge.openUngraded => ChoreiaColors.amber,
-        StyleBadge.builtButGated => ChoreiaColors.amber,
-        StyleBadge.onHold => ChoreiaColors.amberDeep,
-        StyleBadge.inPreparation => ChoreiaColors.text(0.35),
-      };
+  Color _tone(StyleBadge b) => badgeTone(b);
 }
+
+/// The badge tone map — ONE copy.
+///
+/// Rose carries a VERDICT, amber carries a STATUS (design brief §2 — the two
+/// tones are a language and do not mix on one element). Nothing in this
+/// catalogue is a verdict about the dancer, so rose appears only on the scored
+/// badge, where it marks the presence of grading itself.
+///
+/// Public and top-level because it was DUPLICATED: an identical switch lived in
+/// `style_detail_view.dart`, so a tile and its own page could have disagreed
+/// about a style's colour after any one-sided edit. The duplication surfaced
+/// when `contrast_test.dart` needed to measure these tones and found two
+/// candidates for the truth — the same "two copies of a truth drift" rule this
+/// app applies to derived data (C-091), reaching styling.
+Color badgeTone(StyleBadge b) => switch (b) {
+      StyleBadge.scored => ChoreiaColors.rose,
+      StyleBadge.openUngraded => ChoreiaColors.amber,
+      StyleBadge.builtButGated => ChoreiaColors.amber,
+      StyleBadge.onHold => ChoreiaColors.amberDeep,
+      // 0.65, not 0.35. At 0.35 this measured 2.58:1 — below even the 3.0
+      // WCAG asks of non-text, on the badge worn by 31 of the 34 tiles. An
+      // honest state nobody can see is the same as saying nothing (C-156).
+      // It is still the quietest tone here; quiet is not the same as invisible.
+      StyleBadge.inPreparation => ChoreiaColors.text(0.65),
+    };
 
 /// Every user-facing string on the catalogue screen.
 ///

@@ -371,10 +371,25 @@ class StatusRing extends StatelessWidget {
   }
 }
 
-/// A named-status pill — "SCORED", "OPEN · NOT SCORED", "IN PREPARATION" and
-/// this app's own live/progress equivalents. Mono type; [filled] draws the
-/// tinted-and-bordered treatment the design reserves for a state that IS,
-/// leaving the hollow outline for a state that is named but not active yet.
+/// A named-status pill — "SCORED", "OPEN · NOT SCORED", "NOT BUILT" and this
+/// app's own live/progress equivalents. Mono type; [filled] draws the solid
+/// treatment the design reserves for a state that IS, leaving the hollow
+/// outline for a state that is named but not active.
+///
+/// THE FILL DARKENS, IT DOES NOT TINT (C-156)
+/// ------------------------------------------
+/// It used to be `tone.withValues(alpha: 0.14)` — the tone itself, lightening
+/// the pill. On a dark app with light labels that works against legibility:
+/// every pill raised its own background toward its own text. Measured against
+/// the worst-case backdrop (drifting blob at peak, plus a GlassPanel tint), the
+/// scored badge came out at **3.70:1** and the demo-only badge at **4.25:1**,
+/// both under the 4.5 WCAG 1.4.3 asks of text this size — and the brief makes a
+/// promise about the second one by name.
+///
+/// A scrim fixes every tone at once, which a per-tone tweak could not: the fill
+/// no longer depends on the tone, so a badge added tomorrow inherits the floor
+/// instead of needing its own measurement. The palette is untouched — same
+/// hues, same border, same type.
 class StatusPill extends StatelessWidget {
   const StatusPill(
       {super.key, required this.label, required this.tone, this.filled = true});
@@ -383,12 +398,18 @@ class StatusPill extends StatelessWidget {
   final Color tone;
   final bool filled;
 
+  /// How far the filled variant darkens what is behind it. Pinned by
+  /// `contrast_test.dart`; lowering it lowers every badge in the app.
+  static const double fillScrim = 0.25;
+
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          color: filled ? tone.withValues(alpha: 0.14) : null,
+          color: filled
+              ? Colors.black.withValues(alpha: fillScrim)
+              : null,
           border: Border.all(color: tone.withValues(alpha: filled ? 0.4 : 0.55)),
         ),
         child: Text(label,

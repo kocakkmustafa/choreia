@@ -295,7 +295,10 @@ class StyleDetailView extends StatelessWidget {
     final Color tone = switch (l.kind) {
       LessonKind.scored => ChoreiaColors.rose,
       LessonKind.demoOnly => ChoreiaColors.amber,
-      LessonKind.locked => ChoreiaColors.text(0.4),
+      // 0.7, not 0.4 — same measurement as the inPreparation badge (C-156).
+      // A locked lesson names the measurement it is missing; that sentence is
+      // worth nothing if its own label cannot be read.
+      LessonKind.locked => ChoreiaColors.text(0.7),
     };
 
     return GlassPanel(
@@ -407,13 +410,10 @@ class StyleDetailView extends StatelessWidget {
         ),
       );
 
-  Color _badgeTone() => switch (card.badge) {
-        StyleBadge.scored => ChoreiaColors.rose,
-        StyleBadge.openUngraded => ChoreiaColors.amber,
-        StyleBadge.builtButGated => ChoreiaColors.amber,
-        StyleBadge.onHold => ChoreiaColors.amberDeep,
-        StyleBadge.inPreparation => ChoreiaColors.text(0.35),
-      };
+  /// The SAME map the catalogue tile uses — see `badgeTone`. This used to be a
+  /// second copy of the switch, which meant a tile and its page could drift
+  /// apart on any one-sided edit.
+  Color _badgeTone() => badgeTone(card.badge);
 }
 
 /// The style page's copy.
