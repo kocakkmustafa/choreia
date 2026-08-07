@@ -90,10 +90,71 @@ def validate_step(path: Path, joints: set[str], rep: Report) -> dict:
     elif len(labels) != beats:
         rep.error(where, f"countLabels has {len(labels)} entries for {beats} beats")
 
-    tier = step.get("measurability", {}).get("tier")
-    if tier not in VALID_TIERS:
+    # A step may be DESCRIBED before it is CALIBRATED (C-200).
+    #
+    # Splitting the two is what unblocked 31 styles: harvesting a reference
+    # needs a step definition to tell it what to harvest, so demanding
+    # calibrated numbers up front made the whole content queue look shut when
+    # its first link was writing, not measuring.
+    #
+    # The line: "what IS this movement" is descriptive — phases, the quantity
+    # that separates them, which joints do the work, what can go wrong. "How
+    # GOOD is it" is judgement, and judgement needs calibration. Every
+    # judgement field may be null ONLY while a named `calibration` block says
+    # so, and the block's reason may not promise anything (M-F-186).
+    pending = step.get("calibration") or {}
+    calibrating = pending.get("status") == "PENDING"
+    if calibrating:
+        if not pending.get("why"):
+            rep.error(where, "calibration.status is PENDING with no `why` — "
+                             "an unexplained hold is indistinguishable from "
+                             "an oversight")
+        blurb = f"{pending.get('why', '')} {pending.get('unblockedBy', '')}"
+        for promise in ("will be", "coming soon", "soon", "once we", "yakında"):
+            if promise in blurb.lower():
+                rep.error(where, f"calibration reason promises ('{promise}') — "
+                                 "say what is MISSING and what would supply "
+                                 "it, never when")
+        if not pending.get("unblockedBy"):
+            rep.error(where, "calibration has no `unblockedBy` — a block "
+                             "nobody can lift is a block nobody will")
+
+    meas = step.get("measurability", {})
+    tier = meas.get("tier")
+    if tier is None and calibrating:
+        # Condition 3: the two may never both be filled. "Measured, and still
+        # waiting" is not a state — it is two authors disagreeing in one file.
+        if not meas.get("tierStatus"):
+            rep.error(where, "measurability.tier is null with no tierStatus — "
+                             "an absent tier reads as a LOW tier unless the "
+                             "absence says otherwise")
+    elif tier not in VALID_TIERS:
         rep.error(where, f"measurability.tier '{tier}' invalid")
-    if tier and not step.get("measurability", {}).get("rationale"):
+    elif meas.get("tierStatus"):
+        # THREE states, not two — found on this gate's first run, in a file
+        # written weeks before it (C-201).
+        #
+        # The gate was built assuming `tier` and `tierStatus` were mutually
+        # exclusive: either a step is measured or it is waiting. `ss_basic`
+        # is neither. It carries tier A as an INHERITED value and a status
+        # saying the measurement commissioned to confirm it came back
+        # undecided for a named structural reason — "Tier A is the INHERITED
+        # value, not a re-confirmed one. Do not cite it as measured."
+        #
+        # The original rule would have demanded one of them be deleted, and
+        # the cheap deletion is the warning — turning an honest "unverified"
+        # into a silent claim of measurement. A gate that makes the dishonest
+        # repair the easy one is worse than no gate.
+        #
+        # So the third state is legal and must SAY it is: an unverified tier
+        # declares itself, and only an undeclared pairing is a leftover.
+        if "UNVERIFIED" not in str(meas.get("tierStatus")).upper():
+            rep.error(where, "measurability has a tier AND a tierStatus that "
+                             "does not declare the tier UNVERIFIED. Either "
+                             "the status is a stale leftover, or the tier is "
+                             "inherited and the status must say so — a "
+                             "reader cannot tell those apart")
+    if tier and not meas.get("rationale"):
         rep.error(where, "measurability.rationale is required — a tier without a "
                          "reason is an opinion, not a gate")
 
@@ -143,9 +204,18 @@ def validate_step(path: Path, joints: set[str], rep: Report) -> dict:
         if not e.get("detect"):
             rep.error(where, f"error '{e.get('code')}' has no detect condition — "
                              "every error must bind to something measurable")
-        if e.get("severity") not in VALID_SEVERITIES:
+        sev = e.get("severity")
+        if sev is None and calibrating:
+            if not e.get("severityStatus"):
+                rep.error(where, f"error '{e.get('code')}' has no severity and "
+                                 "no severityStatus — silence about how bad "
+                                 "something is reads as 'not bad'")
+        elif sev not in VALID_SEVERITIES:
             rep.error(where, f"error '{e.get('code')}' severity "
-                             f"'{e.get('severity')}' invalid")
+                             f"'{sev}' invalid")
+        elif e.get("severityStatus"):
+            rep.error(where, f"error '{e.get('code')}' carries BOTH a severity "
+                             "and a severityStatus")
         for mid in e.get("detect", {}).get("atMoments", []) or []:
             if mid not in [m.get("id") for m in moments] + phase_ids:
                 rep.error(where, f"error '{e.get('code')}' references unknown "

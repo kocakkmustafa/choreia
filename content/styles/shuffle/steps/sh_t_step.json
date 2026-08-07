@@ -1,0 +1,127 @@
+{
+ "schemaVersion": 1,
+ "id": "sh_t_step",
+ "style": "shuffle",
+ "name": "T-Step",
+ "level": 1,
+ "beats": 2,
+ "countLabels": [
+  "1",
+  "2"
+ ],
+ "note": "Named for the T the feet make. Fast footwork at 60fps is the family's known blur risk (library.json note on this style) — a reason the harvest must record frame rate, not a reason to skip the step.",
+ "calibration": {
+  "status": "PENDING",
+  "why": "No reference has been harvested for this step, so every threshold below is UNSET rather than guessed. The step is DESCRIBED here — which phases it has, which quantity separates them, which joints do the work, what can go wrong. How much of each counts as right is a measurement, and measuring it is what the harvest is for.",
+  "unblockedBy": "content/references/sh_t_step.json built from >=3 independent instructors (catalogue 6.0); the thresholds are then DERIVED from their disagreement, never authored"
+ },
+ "measurability": {
+  "tier": null,
+  "tierStatus": "Awaiting reference harvest: no take of this step has been measured, so its detectability is unknown. Not a low tier — an unmeasured one."
+ },
+ "cycleUnit": "one pivot-and-point per count",
+ "scoring": {
+  "focusJoints": [
+   "left_thigh",
+   "right_thigh",
+   "left_shin",
+   "right_shin",
+   "left_hip",
+   "right_hip"
+  ],
+  "freeJoints": [
+   "left_upper_arm",
+   "right_upper_arm",
+   "left_forearm",
+   "right_forearm",
+   "trunk_tilt",
+   "left_shoulder",
+   "right_shoulder"
+  ],
+  "freeJointsRationale": "The upper body rides along; shuffle scenes differ on what it should do and this app takes no position."
+ },
+ "phases": [
+  {
+   "id": "pivot",
+   "enter": {
+    "metric": "thigh_rotation",
+    "op": ">",
+    "valueDeg": null,
+    "valueStatus": "unset until harvest — the metric is the observation, the number is the measurement"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 2000,
+   "note": "The weight foot twists on the ball while the body stays facing forward. The twist is the engine of the whole step."
+  },
+  {
+   "id": "point",
+   "enter": {
+    "metric": "shin_angle_mean",
+    "op": ">",
+    "valueDeg": null,
+    "valueStatus": "unset until harvest — the metric is the observation, the number is the measurement"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 2000,
+   "note": "The free foot taps out to the side and returns. It carries no weight, which is why it can be quick."
+  }
+ ],
+ "scoredMoments": [
+  {
+   "id": "ts_pivot",
+   "phase": "pivot",
+   "beat": 0,
+   "label": "twist"
+  },
+  {
+   "id": "ts_point",
+   "phase": "point",
+   "beat": 1,
+   "label": "out"
+  }
+ ],
+ "errors": [
+  {
+   "code": "NO_PIVOT",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "thigh_rotation_amplitude",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "thigh_rotation_amplitude"
+   ],
+   "note": "The free foot taps but the weight foot never twists, so the step becomes a side-touch and loses its name."
+  },
+  {
+   "code": "WEIGHT_ON_FREE_FOOT",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "hip_lateral_shift",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "hip_lateral_shift"
+   ],
+   "note": "Weight transfers onto the tapping foot, which makes the next pivot impossible and is why the step stalls at speed."
+  }
+ ],
+ "reference": {
+  "requiredTakes": 3,
+  "collectedTakes": 0,
+  "status": "not-started",
+  "note": ">=3 independent instructors required (catalogue 6.0). Tolerance is derived from their disagreement, never authored — which is why nothing here carries a number."
+ }
+}

@@ -213,6 +213,13 @@ void main() {
       'relatedDrill': 'authoring link', 'drillNote': 'authoring note',
       'calibrationNote': 'authoring note', 'kural7Note': 'authoring note',
       'firstAttemptFailed': 'authoring record',
+      'calibration': 'the DESCRIBED-not-yet-CALIBRATED hold (C-200). Read by '
+          '`validate_content`, never by the app: it governs which judgement '
+          'fields may be null while a step waits for its reference, and a '
+          'dancer must never see authoring state',
+      'severityStatus': 'why this error carries no severity yet — the same '
+          'hold, per error. Surfacing it would show a blank where a judgement '
+          'belongs and invite the reader to supply one',
     };
 
     test('every orphan key is either read or recorded as ours', () {

@@ -1,0 +1,143 @@
+{
+ "schemaVersion": 1,
+ "id": "sh_running_man",
+ "style": "shuffle",
+ "name": "Running Man",
+ "level": 1,
+ "beats": 2,
+ "countLabels": [
+  "1",
+  "2"
+ ],
+ "note": "Shuffle's running man is not hip-hop's: the slide is longer and the whole step stays lower. The two are separate steps with separate references, and reusing hip_hop's would be measuring one dance against another.",
+ "calibration": {
+  "status": "PENDING",
+  "why": "No reference has been harvested for this step, so every threshold below is UNSET rather than guessed. The step is DESCRIBED here — which phases it has, which quantity separates them, which joints do the work, what can go wrong. How much of each counts as right is a measurement, and measuring it is what the harvest is for.",
+  "unblockedBy": "content/references/sh_running_man.json built from >=3 independent instructors (catalogue 6.0); the thresholds are then DERIVED from their disagreement, never authored"
+ },
+ "measurability": {
+  "tier": null,
+  "tierStatus": "Awaiting reference harvest: no take of this step has been measured, so its detectability is unknown. Not a low tier — an unmeasured one."
+ },
+ "cycleUnit": "one plant-and-slide per count",
+ "scoring": {
+  "focusJoints": [
+   "left_knee",
+   "right_knee",
+   "left_hip",
+   "right_hip",
+   "left_shin",
+   "right_shin",
+   "trunk_tilt"
+  ],
+  "freeJoints": [
+   "left_upper_arm",
+   "right_upper_arm",
+   "left_forearm",
+   "right_forearm",
+   "left_elbow",
+   "right_elbow",
+   "left_shoulder",
+   "right_shoulder"
+  ],
+  "freeJointsRationale": "Arms in shuffle are personal and vary between scenes; nothing here is checked against a shape."
+ },
+ "phases": [
+  {
+   "id": "plant",
+   "enter": {
+    "metric": "knee_flexion_mean",
+    "op": ">",
+    "valueDeg": null,
+    "valueStatus": "unset until harvest — the metric is the observation, the number is the measurement"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 2000,
+   "note": "One foot is flat and carrying the weight while the other knee is high. This is the shape a viewer reads as 'running'."
+  },
+  {
+   "id": "slide",
+   "enter": {
+    "metric": "shin_angle_rate",
+    "op": ">",
+    "valueDeg": null,
+    "valueStatus": "unset until harvest — the metric is the observation, the number is the measurement"
+   },
+   "requiredLandmarks": [
+    "leftLeg",
+    "rightLeg",
+    "torso"
+   ],
+   "timeoutMs": 2000,
+   "note": "The planted foot slides back as the lifted knee drops. The slide is what stops the dancer travelling, and it is the half most beginners leave out."
+  }
+ ],
+ "scoredMoments": [
+  {
+   "id": "rm_plant",
+   "phase": "plant",
+   "beat": 0,
+   "label": "up"
+  },
+  {
+   "id": "rm_slide",
+   "phase": "slide",
+   "beat": 1,
+   "label": "back"
+  }
+ ],
+ "errors": [
+  {
+   "code": "NO_SLIDE",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "shin_angle_amplitude",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "shin_angle_amplitude"
+   ],
+   "note": "The knee lifts but the other foot never slides back, so the dancer travels forward across the room instead of running on the spot."
+  },
+  {
+   "code": "KNEE_TOO_LOW",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "knee_flexion_amplitude",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "knee_flexion_amplitude"
+   ],
+   "note": "The lift is there but small enough that the step reads as a march."
+  },
+  {
+   "code": "TRUNK_COLLAPSE",
+   "severity": null,
+   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+   "detect": {
+    "metric": "trunk_tilt",
+    "op": "<",
+    "valueDeg": null
+   },
+   "evidence": [
+    "trunk_tilt"
+   ],
+   "note": "The chest folds forward to meet the knee instead of the knee coming up to a tall body."
+  }
+ ],
+ "reference": {
+  "requiredTakes": 3,
+  "collectedTakes": 0,
+  "status": "not-started",
+  "note": ">=3 independent instructors required (catalogue 6.0). Tolerance is derived from their disagreement, never authored — which is why nothing here carries a number."
+ }
+}
