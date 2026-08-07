@@ -67,7 +67,19 @@ class StyleDetailView extends StatelessWidget {
       body: ChoreiaBackdrop(
         child: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 96, 16, 32),
+            // TOP PADDING IS A CONTENT MARGIN, NOT AN APPBAR OFFSET (C-154).
+            //
+            // It used to be 96. Measured 2026-08-07 at 375x812 with a 47pt
+            // notch inset: that left 96pt of DEAD SPACE between the AppBar's
+            // bottom edge and the first content. The cause is a double count —
+            // `extendBodyBehindAppBar: true` makes Scaffold hand the body a top
+            // inset that ALREADY INCLUDES the AppBar (47 status + 56 toolbar =
+            // 103), `SafeArea` consumes all of it, and the padding then added
+            // the AppBar's height a second time.
+            //
+            // Screen evidence found this; no test could. An overflow test asks
+            // whether content fits, never whether it starts where it should.
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
             children: <Widget>[
               _header(),
               const SizedBox(height: 20),
