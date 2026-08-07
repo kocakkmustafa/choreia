@@ -92,7 +92,26 @@ final class EvaluatedRow {
 /// The measured case this exists for is JabLab's: 40 of 50 lines corrupt and
 /// the summary said "10 sessions" with full confidence. The number was not
 /// wrong about what it counted; it was wrong about what it CLAIMED.
-enum HistoryFidelity { ok, partial, unavailable }
+enum HistoryFidelity {
+  ok,
+  partial,
+
+  /// The store existed and would not open.
+  unavailable,
+
+  /// There is NO store — nothing is written at all.
+  ///
+  /// Separate from [unavailable] because the sentences are opposites in the
+  /// way that matters to a person (C-163). "We could not open your practice
+  /// history" describes a mechanism that failed; a reader takes it to mean
+  /// their practice was recorded and is now out of reach. Nothing is recorded
+  /// in this build, so that reassurance — "until we can read it" — is a
+  /// failure mode invented for a thing that does not exist.
+  ///
+  /// The absence was not silent, it was TALKATIVE: the surface described the
+  /// mechanism while the mechanism was missing.
+  notRecorded,
+}
 
 final class HistoryIntegrity {
   const HistoryIntegrity._(this.fidelity, this.unreadableRecords,
@@ -116,19 +135,35 @@ final class HistoryIntegrity {
   static const HistoryIntegrity unavailable =
       HistoryIntegrity._(HistoryFidelity.unavailable, 0, 0);
 
+  /// Nothing is written in this build. See [HistoryFidelity.notRecorded].
+  static const HistoryIntegrity notRecorded =
+      HistoryIntegrity._(HistoryFidelity.notRecorded, 0, 0);
+
   final HistoryFidelity fidelity;
   final int unreadableRecords;
   final int readableRecords;
 
-  /// Whether totals may be shown at all. False only when the store never
-  /// opened — a partial reading still shows numbers, it just stops calling
-  /// them complete.
-  bool get showsTotals => fidelity != HistoryFidelity.unavailable;
+  /// Whether totals may be shown at all.
+  ///
+  /// An EXHAUSTIVE switch, not `!= unavailable` (C-163). The `!=` form treated
+  /// every future state as "show the numbers" by default, and it did exactly
+  /// that the moment [HistoryFidelity.notRecorded] was added — a build that
+  /// writes nothing would have shown totals for a record it never kept. The
+  /// compiler now refuses a new state until someone says which side it is on.
+  bool get showsTotals => switch (fidelity) {
+        HistoryFidelity.ok => true,
+        // A partial reading still shows numbers; it just stops calling them
+        // complete.
+        HistoryFidelity.partial => true,
+        HistoryFidelity.unavailable => false,
+        HistoryFidelity.notRecorded => false,
+      };
 
   /// The sentence for this state, or null when there is nothing to say.
   String? get note => switch (fidelity) {
         HistoryFidelity.ok => null,
         HistoryFidelity.unavailable => ProgressStrings.historyUnavailable,
+        HistoryFidelity.notRecorded => ProgressStrings.historyNotRecorded,
         // "SOME of it" and "NONE of it" are separate sentences on purpose.
         // Collapsing them would let "your totals are a floor" appear above a
         // screen whose floor is zero — technically true, and useless.
@@ -344,6 +379,13 @@ abstract final class ProgressStrings {
   ///
   /// Showing a zero here would say "you did nothing", which is a claim about
   /// the user made from our own failure (J-066).
+  /// Says the mechanism is ABSENT, and says the thing the old sentence took
+  /// away by accident: nothing has been lost.
+  static const String historyNotRecorded =
+      'Choreia does not save your practice in this build. Nothing you do here '
+      'is written down, so there is nothing to show you — and nothing of '
+      'yours has been lost.';
+
   static const String historyUnavailable =
       'We could not open your practice history. Rather than show you a zero '
       'that would be wrong, we are not showing numbers until we can read it.';

@@ -133,18 +133,20 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
           children: <Widget>[
             LibraryView(library: library),
             ProgressView(
-              // No `SessionStore` is wired up in this build (design-ahead §10),
-              // so history is not merely empty — it is UNREAD. `unavailable`
-              // rather than `opened(readable: 0)` because the second renders
-              // "No practice recorded yet", a claim about the USER, when the
-              // true statement is about the product. See the report: this
-              // deserves its own integrity state once storage lands, because
-              // "the store failed to open" and "there is no store" are not the
-              // same sentence either.
+              // No `SessionStore` is wired up in this build (design-ahead
+              // §10). This used to pass `unavailable`, whose sentence is "we
+              // could not open your practice history" — and that describes a
+              // store that exists and failed. A reader takes it to mean their
+              // practice was recorded and is now out of reach.
+              //
+              // `notRecorded` is the honest state: nothing is written, so
+              // nothing is missing (C-163). The publication inventory found
+              // this by asking the USER-side question — not "what is missing"
+              // but "which surface misinforms someone who opens the app today".
               summary: ProgressSummary.build(
                 history: const <SessionRecord>[],
                 catalog: library.allCourses,
-                integrity: HistoryIntegrity.unavailable,
+                integrity: HistoryIntegrity.notRecorded,
               ),
               catalog: library.allCourses,
             ),
