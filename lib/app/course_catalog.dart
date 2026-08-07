@@ -24,6 +24,7 @@ final class LessonInfo {
     this.stepId,
     this.reason,
     this.demoOnlyClass,
+    this.whyPermanent,
   });
 
   final String id;
@@ -52,6 +53,18 @@ final class LessonInfo {
 
   /// `permanent` | `structural-circular` — only for demo-only lessons.
   final String? demoOnlyClass;
+
+  /// Why this lesson will NEVER be scored, in the learner's language.
+  ///
+  /// The deepest honesty text in the whole app, and until 2026-08-07 nothing
+  /// read it: 11 lessons carried 184-383 characters each explaining that a
+  /// limit is permanent rather than pending, and every one of them was dropped
+  /// on the floor by a parser that did not know the key (C-167).
+  ///
+  /// `demoOnlyReason` says what is not scored. THIS says the limit will not
+  /// lift — and those are different promises. Without it, a reader can take
+  /// every ungraded lesson as a queue.
+  final String? whyPermanent;
 
   bool get isScored => kind == LessonKind.scored;
 }
@@ -162,6 +175,7 @@ final class CourseCatalog {
             stepId: l['step'] as String?,
             reason: reason,
             demoOnlyClass: l['demoOnlyClass'] as String?,
+            whyPermanent: _en(l['whyPermanent']),
           ));
 
           if (kind != LessonKind.scored) {

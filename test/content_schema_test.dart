@@ -118,4 +118,188 @@ void main() {
             'sets it any more — remove the entry rather than carrying a '
             'ruling about nothing');
   });
+
+  group('ORPHAN KEYS in style/step documents (C-167)', () {
+    // The gate above covers `library.json` only — my own scope note in
+    // KAPI-ENVANTERI said so. That left 4 parsers and 12 files unmeasured, and
+    // an unread key is where refuted claims survive (J-129): `errors[].severity`
+    // sat there carrying the very severity ladder C-136 declared not to exist,
+    // and `whyPermanent` carried 11 lessons' worth of learner copy nobody saw.
+
+    Set<String> readsOf(String variable) {
+      final String src = File('lib/app/course_catalog.dart').readAsStringSync() +
+          File('lib/app/library/library_catalog.dart').readAsStringSync();
+      return RegExp("\\b$variable\\['(\\w+)'\\]")
+          .allMatches(src)
+          .map((RegExpMatch m) => m.group(1)!)
+          .toSet();
+    }
+
+    /// Keys of a nested MAP (not a list), e.g. `honesty` / `copyright`.
+    Set<String> keysInMap(String glob, String key) {
+      final Set<String> out = <String>{};
+      for (final FileSystemEntity e
+          in Directory('content/styles').listSync(recursive: true)) {
+        if (e is! File || !e.path.endsWith('.json')) continue;
+        if (glob == 'style' && !e.path.endsWith('style.json')) continue;
+        final Map<String, dynamic> doc =
+            (jsonDecode(e.readAsStringSync()) as Map).cast<String, dynamic>();
+        final Object? node = doc[key];
+        if (node is Map) out.addAll(node.keys.cast<String>());
+      }
+      return out;
+    }
+
+    Set<String> keysAt(String glob, List<String> path) {
+      final Set<String> out = <String>{};
+      final Directory dir = Directory('content/styles');
+      for (final FileSystemEntity e in dir.listSync(recursive: true)) {
+        if (e is! File || !e.path.endsWith('.json')) continue;
+        if (glob == 'style' && !e.path.endsWith('style.json')) continue;
+        if (glob == 'step' && !e.path.contains('/steps/')) continue;
+        final Map<String, dynamic> doc =
+            (jsonDecode(e.readAsStringSync()) as Map).cast<String, dynamic>();
+        for (final Map<String, dynamic> node in _walk(doc, path)) {
+          out.addAll(node.keys);
+        }
+      }
+      return out;
+    }
+
+    /// Keys deliberately not parsed, each with the reason. Engine config,
+    /// authoring provenance and harvest bookkeeping are OURS; rendering them
+    /// would leak internal state to a dancer.
+    const Map<String, String> ours = <String, String>{
+      'schemaVersion': 'format version',
+      'id': 'the key itself', 'name': 'read via displayName',
+      'style': 'back-reference', 'level': 'read on the level node',
+      'status': 'lesson kind is derived from scored/demoOnly; see the '
+          'consistency check below',
+      'note': 'authoring notes', 'evidence': 'provenance',
+      'countSystem': 'engine selector', 'scoring': 'engine selector',
+      'bpmRange': 'engine input', 'bpmNote': 'authoring note',
+      'bpmStatus': 'authoring state', 'bpmCandidates': 'research record',
+      'errorTaxonomy': 'authoring inventory',
+      'stepInventory': 'authoring inventory',
+      'shipGatesNote': 'authoring note',
+      'unlockRule': 'DECLARED, NOT IMPLEMENTED — see C-164; nothing may render '
+          'it until progression exists',
+      'unlockRuleNote': 'authoring note',
+      '_whyUnlocked': 'authoring note', 'blockedBy': 'authoring note',
+      'demoOnlyClassBasis': 'authoring basis for demoOnlyClass',
+      'k10Note': 'authoring note', 'drillFor': 'authoring link',
+      'scoredWhat': 'per-lesson honesty — style-level honesty covers it today',
+      'notScoredWhat': 'same',
+      r'$comment': 'authoring note', 'measuredNote': 'authoring note',
+      'basis': 'clearance reasoning; the user-facing half is boundary',
+      'beats': 'engine input', 'beatsStatus': 'engine state',
+      'countLabels': 'engine input', 'countLabelsNote': 'authoring note',
+      'phases': 'engine input', 'scoredMoments': 'engine input',
+      'analysisWindow': 'engine input', 'cycleUnit': 'engine input',
+      'measurability': 'authoring tier record', 'reference': 'build record',
+      'sourceDerivation': 'build record', 'advisorReview': 'review record',
+      'omittedFromStyleTaxonomy': 'authoring note',
+      'harvestProbe3_reevaluation': 'harvest record',
+      'harvestProbe4_footLevel': 'harvest record',
+      'detect': 'engine rule', 'measurement': 'engine rule',
+      'severity': 'READ BY A TEST, not by the app — it is the derivation basis '
+          'for correctionPriority (C-167); the engine ranks codes, content '
+          'declares the rungs',
+      'relatedDrill': 'authoring link', 'drillNote': 'authoring note',
+      'calibrationNote': 'authoring note', 'kural7Note': 'authoring note',
+      'firstAttemptFailed': 'authoring record',
+    };
+
+    test('every orphan key is either read or recorded as ours', () {
+      final Map<String, Set<String>> scopes = <String, Set<String>>{
+        // `StyleProse.fromJson` reads through `json[...]`, so the style
+        // top-level has TWO parsers and both must count. Missing the second
+        // one reported `honesty`/`copyright` as orphaned when they are the
+        // most-read keys in the file.
+        'style.json top': keysAt('style', const <String>[])
+            .difference(readsOf('style'))
+            .difference(readsOf('json')),
+        'honesty{}':
+            keysInMap('style', 'honesty').difference(readsOf('honesty')),
+        'copyright{}':
+            keysInMap('style', 'copyright').difference(readsOf('copyright')),
+        'levels[]': keysAt('style', const <String>['levels'])
+            .difference(readsOf('level')),
+        'lessons[]': keysAt('style', const <String>['levels', 'lessons'])
+            .difference(readsOf('l')),
+        'steps top': keysAt('step', const <String>[]).difference(readsOf('step')),
+        'errors[]':
+            keysAt('step', const <String>['errors']).difference(readsOf('code')),
+      };
+
+      expect(scopes.values.every((Set<String> s) => true), isTrue);
+      expect(keysAt('style', const <String>[]), isNotEmpty,
+          reason: 'the walker found nothing — every check below is vacuous');
+
+      final Map<String, List<String>> unexplained = <String, List<String>>{
+        for (final MapEntry<String, Set<String>> e in scopes.entries)
+          if (e.value.difference(ours.keys.toSet()).isNotEmpty)
+            e.key: e.value.difference(ours.keys.toSet()).toList()..sort(),
+      };
+
+      expect(unexplained, isEmpty,
+          reason: 'content sets these and nothing reads them, and no reason is '
+              'recorded: $unexplained. An unread key is where a refuted claim '
+              'survives — `errors[].severity` carried the severity ladder '
+              'C-136 said did not exist.');
+    });
+
+    test('the ours-list describes reality, not a memory', () {
+      final Set<String> everywhere = <String>{
+        ...keysAt('style', const <String>[]),
+        ...keysAt('style', const <String>['levels']),
+        ...keysAt('style', const <String>['levels', 'lessons']),
+        ...keysAt('step', const <String>[]),
+        ...keysAt('step', const <String>['errors']),
+        ...keysInMap('style', 'honesty'),
+        ...keysInMap('style', 'copyright'),
+      };
+      final Set<String> stale = ours.keys.toSet().difference(everywhere);
+      expect(stale, isEmpty,
+          reason: '$stale is exempted but no document sets it any more');
+    });
+
+    test('a dropped key never CONTRADICTS what the app derives', () {
+      // `lessons[].status` is not parsed — kind comes from scored/demoOnly.
+      // They agree today and nothing checked that they must.
+      for (final FileSystemEntity e
+          in Directory('content/styles').listSync(recursive: true)) {
+        if (e is! File || !e.path.endsWith('style.json')) continue;
+        final Map<String, dynamic> doc =
+            (jsonDecode(e.readAsStringSync()) as Map).cast<String, dynamic>();
+        for (final Object? lv in (doc['levels'] as List? ?? const [])) {
+          for (final Object? rl in ((lv! as Map)['lessons'] as List? ?? const [])) {
+            final Map<String, dynamic> l = (rl! as Map).cast<String, dynamic>();
+            if (l['status'] != 'locked') continue;
+            expect(l['scored'], isNot(true),
+                reason: '${l['id']} declares status:locked and scored:true — '
+                    'the dropped key contradicts the derivation');
+            expect(l['demoOnly'], isNot(true),
+                reason: '${l['id']} declares status:locked and demoOnly:true');
+          }
+        }
+      }
+    });
+  });
+}
+
+/// Walks `path` (a chain of list-valued keys) and returns the maps found.
+List<Map<String, dynamic>> _walk(Map<String, dynamic> doc, List<String> path) {
+  if (path.isEmpty) return <Map<String, dynamic>>[doc];
+  List<Map<String, dynamic>> level = <Map<String, dynamic>>[doc];
+  for (final String key in path) {
+    final List<Map<String, dynamic>> next = <Map<String, dynamic>>[];
+    for (final Map<String, dynamic> node in level) {
+      for (final Object? child in (node[key] as List? ?? const [])) {
+        next.add((child! as Map).cast<String, dynamic>());
+      }
+    }
+    level = next;
+  }
+  return level;
 }

@@ -58,6 +58,7 @@ class StyleDetailView extends StatelessWidget {
   static const Key glossaryKey = Key('style.glossary');
 
   static Key lessonKey(String id) => Key('style.lesson.$id');
+  static Key permanenceKey(String id) => Key('style.permanent.$id');
 
   @override
   Widget build(BuildContext context) {
@@ -330,6 +331,35 @@ class StyleDetailView extends StatelessWidget {
                 style: ChoreiaType.body(
                     size: 12.5, color: ChoreiaColors.text(0.75))),
           ],
+          // PERMANENT is a different promise from NOT SCORED (C-167).
+          //
+          // Without this line every ungraded lesson reads as a queue: "not
+          // scored" invites "not scored yet". Content had written the
+          // distinction for 11 lessons — 184 to 383 characters each — and a
+          // parser that did not know the key dropped all of it.
+          if (l.whyPermanent != null) ...<Widget>[
+            const SizedBox(height: 10),
+            Container(
+              key: permanenceKey(l.id),
+              padding: const EdgeInsets.only(left: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: tone.withValues(alpha: 0.35), width: 2),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(StyleStrings.permanentTitle,
+                      style: ChoreiaType.label(size: 9.5, color: tone)),
+                  const SizedBox(height: 5),
+                  Text(l.whyPermanent!,
+                      style: ChoreiaType.body(
+                          size: 12, color: ChoreiaColors.text(0.7))),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 14),
           if (o.canStart)
             FilledButton(
@@ -504,6 +534,9 @@ abstract final class StyleStrings {
 
   static const String measuredTitle = 'WE CHECK THIS';
   static const String notMeasuredTitle = 'WE DO NOT CHECK THIS';
+
+  /// Names the difference between "not scored" and "never scored".
+  static const String permanentTitle = 'THIS ONE WILL NOT CHANGE';
 
   static const String start = 'Start';
 

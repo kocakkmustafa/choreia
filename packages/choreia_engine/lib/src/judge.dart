@@ -237,18 +237,26 @@ final class JudgeResult {
 
 /// Fired codes ordered most-blocking first — the basis for [JudgeResult.correction].
 ///
-/// **DERIVED, NOT INVENTED.** `content/styles/salsa_shines/style.json`, level 1:
+/// **DERIVED, NOT INVENTED — and the primary basis was found LATE (C-167).**
 ///
-/// > `unlockRule.description`: "3 consecutive attempts at ss_shine_footwork
-/// > with shapeScore >= 0.75 and **zero WRONG_FOOT**"
+/// PRIMARY: `content/styles/salsa_shines/steps/ss_shine_footwork.json` gives
+/// every error code an explicit `severity`, on a three-rung ladder:
 ///
-/// WRONG_FOOT blocks progression; STEP_TOO_LARGE does not, and the rule's own
-/// note explains which codes were deliberately excluded and why. Content made
-/// the severity statement about exactly this pair before this list existed.
+/// > `WRONG_FOOT: critical` · `STEP_LATE: major` · `STEP_TOO_LARGE: minor`
 ///
-/// The basis is pinned by a test: if STEP_TOO_LARGE ever enters that unlock
-/// rule, the derivation is void and this order must be re-derived rather than
-/// defended.
+/// CORROBORATION: level 1's `unlockRule` gates progression on "zero
+/// WRONG_FOOT" and does not mention STEP_TOO_LARGE.
+///
+/// ⚠️ **The order below was first derived from the unlock rule alone, because
+/// C-136 stated — and I repeated — that "Choreia has no severity ladder, so
+/// picking the most important would be threshold-invention". That claim was
+/// FALSE.** The ladder existed the whole time, in `errors[].severity`, which no
+/// parser reads: an orphan key is where refuted and unnoticed claims survive
+/// (J-129). The two sources agree exactly, so the ORDER is right — but it was
+/// right by agreement, not by completeness.
+///
+/// Both bases are pinned by tests. If the ladder and the unlock rule ever
+/// disagree, this order is void and must be re-derived rather than defended.
 const List<String> correctionPriority = <String>[
   'WRONG_FOOT',
   'STEP_TOO_LARGE',

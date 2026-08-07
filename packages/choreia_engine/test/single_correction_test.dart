@@ -131,6 +131,68 @@ void main() {
       expect(correctionPriority.toSet(), hasLength(correctionPriority.length));
     });
   });
+  group('the order matches the ladder content actually declares (C-167)', () {
+    test('correctionPriority IS the severity order, derived from content', () {
+      // The basis this file originally cited was the unlock rule alone,
+      // because C-136 said no severity ladder existed. It did — every error
+      // code carries `severity`, and no parser reads it. Deriving the expected
+      // order here means the const can no longer drift from the ladder.
+      final Map<String, dynamic> step = (jsonDecode(File(
+                  '${_findRepoRoot().path}/content/styles/salsa_shines/steps/'
+                  'ss_shine_footwork.json')
+              .readAsStringSync()) as Map)
+          .cast<String, dynamic>();
+
+      const Map<String, int> rung = <String, int>{
+        'critical': 0,
+        'major': 1,
+        'minor': 2,
+      };
+
+      final List<Map<String, dynamic>> fireable = <Map<String, dynamic>>[
+        for (final Object? e in (step['errors'] as List))
+          if (!'${(e! as Map)['status']}'.startsWith('blocked'))
+            (e as Map).cast<String, dynamic>(),
+      ];
+      expect(fireable, isNotEmpty,
+          reason: 'no fireable code was found — this test would then compare '
+              'two empty lists');
+
+      for (final Map<String, dynamic> e in fireable) {
+        expect(rung.containsKey(e['severity']), isTrue,
+            reason: '${e['code']} carries severity "${e['severity']}", which '
+                'is not on the ladder — the order below cannot be derived');
+      }
+
+      final List<Map<String, dynamic>> bySeverity = fireable.toList()
+        ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+            rung[a['severity']]!.compareTo(rung[b['severity']]!));
+
+      expect(
+          correctionPriority,
+          <String>[
+            for (final Map<String, dynamic> e in bySeverity) e['code'] as String,
+          ],
+          reason: 'the single-correction order no longer matches the severity '
+              'ladder content declares');
+    });
+
+    test('the two independent bases still agree', () {
+      // If they ever diverge, the order is not "derived" any more — it is a
+      // choice between two contents, and that is a ruling, not a lookup.
+      final String styleDoc = File(
+              '${_findRepoRoot().path}/content/styles/salsa_shines/style.json')
+          .readAsStringSync();
+      expect(styleDoc, contains('zero WRONG_FOOT'));
+
+      final int at = styleDoc.indexOf('zero WRONG_FOOT');
+      expect(styleDoc.substring(at, (at + 900).clamp(0, styleDoc.length)),
+          isNot(contains('STEP_TOO_LARGE')),
+          reason: 'the unlock rule now names STEP_TOO_LARGE too, so it no '
+              'longer corroborates the severity ladder');
+    });
+  });
+
 }
 
 Directory _findRepoRoot() {
