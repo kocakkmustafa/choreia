@@ -478,6 +478,49 @@ def validate_cultural_review(rep: Report, lib: dict, where: str) -> None:
                              "style in this library")
 
 
+# Phrases that assert the READER'S OWN HISTORY — what they have already done,
+# seen or been told. Deliberately MULTI-WORD and few.
+#
+# The wide scan that produced this list matched 7 places on single words
+# (`first`, `again`, `next`, `already`); six were innocent — "step out and back
+# AGAIN" is a direction, "the NEXT one" is the next beat, "at FIRST" is about
+# learning a craft rather than about the reader. A recall-oriented scan is the
+# right instrument for FINDING candidates and the wrong one for a gate, because
+# a gate ASSIGNS a verdict and assigning needs precision (C-181). So the scan
+# stayed loose, and this list is what survived reading all seven.
+NTH_TIME_CLAIMS = (
+    "you have seen", "as you saw", "last time", "welcome back",
+    "you already", "by now you", "remember when", "again this time",
+    "you have learned", "you will remember",
+)
+
+
+def validate_nth_time_claims(rep: Report, lib: dict, where: str) -> None:
+    """Content may not assume how many times a dancer has been here.
+
+    A style page has no visit counter, a glossary has no reading history, and
+    the app records nothing at all. Any sentence that assumes a second visit is
+    asserting a context no code path carries — true at N=1 by accident, false
+    every time after.
+    """
+    for s in lib.get("styles", []):
+        texts = [
+            (f, s.get(f) or "")
+            for f in ("description", "originAttribution", "onHoldReason")
+        ]
+        texts += [(f"gloss:{g.get('name')}", g.get("gloss") or "")
+                  for g in (s.get("stepGlossary") or [])]
+        texts += [("cameraLimits", t) for t in (s.get("cameraLimits") or [])]
+        for field, text in texts:
+            low = text.lower()
+            for claim in NTH_TIME_CLAIMS:
+                if claim in low:
+                    rep.error(where, f"'{s.get('id')}' {field} assumes the "
+                                     f"reader's own history (\"{claim}\") — "
+                                     "nothing counts visits, so this is true "
+                                     "at N=1 by accident and false after")
+
+
 def validate_attribution_sources(rep: Report, lib: dict, where: str) -> None:
     """Attribution sourcing is COUNTED, never declared.
 
@@ -586,6 +629,7 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
     validate_cultural_review(rep, lib, where)
     validate_limits_not_doubled(rep, lib, styles_on_disk, where)
     validate_attribution_sources(rep, lib, where)
+    validate_nth_time_claims(rep, lib, where)
 
     seen: set[str] = set()
     live: set[str] = set()
