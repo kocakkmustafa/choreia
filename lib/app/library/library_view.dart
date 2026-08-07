@@ -308,7 +308,14 @@ class _LibraryViewState extends State<LibraryView> {
 /// candidates for the truth — the same "two copies of a truth drift" rule this
 /// app applies to derived data (C-091), reaching styling.
 Color badgeTone(StyleBadge b) => switch (b) {
-      StyleBadge.scored => ChoreiaColors.rose,
+      // roseBright, not rose (C-159). Raising the demo-only badge to the
+      // legibility floor in C-156 pushed it PAST the graded one — 9.59 against
+      // 8.08, so "not graded" was reading louder than "graded". The brief's
+      // promise has two sides: a floor (demo-only must not look second class)
+      // and a ceiling (it must not look FIRST class either). Using the
+      // palette's existing brighter rose puts them level at 1.017x, which
+      // leaves the distinction where it belongs — in the HUE, not the volume.
+      StyleBadge.scored => ChoreiaColors.roseBright,
       StyleBadge.openUngraded => ChoreiaColors.amber,
       StyleBadge.builtButGated => ChoreiaColors.amber,
       StyleBadge.onHold => ChoreiaColors.amberDeep,

@@ -121,7 +121,7 @@ void main() {
 
   group('THE PROMISE: demo-only is not second class', () {
     test('the demo-only badge is legible where it is used', () {
-      const Color tone = ChoreiaColors.amber;
+      final Color tone = badgeTone(StyleBadge.openUngraded);
       final Color bg = pillBackground(on: panel, filled: true);
       final double ratio = contrast(tone, bg);
 
@@ -148,14 +148,33 @@ void main() {
     test('demo-only is not dimmer than the graded badge it sits beside', () {
       // The promise is comparative, so the measurement has to be too. A badge
       // that clears 4.5 while the graded one clears 9 still LOOKS lesser.
+      // Read through `badgeTone`, not by naming the colours (C-153): stating
+      // `ChoreiaColors.rose` here is a second copy of what the badge map says,
+      // and it went stale the moment the scored badge changed tone — this
+      // assertion kept comparing against a colour the app no longer draws.
       final Color bg = pillBackground(on: panel, filled: true);
-      final double demo = contrast(ChoreiaColors.amber, bg);
-      final double scored = contrast(ChoreiaColors.rose, bg);
+      final double demo = contrast(badgeTone(StyleBadge.openUngraded), bg);
+      final double scored = contrast(badgeTone(StyleBadge.scored), bg);
 
-      expect(demo, greaterThanOrEqualTo(scored * 0.8),
+      expect(demo, greaterThanOrEqualTo(scored * 0.85),
           reason: 'demo-only ($demo) reads markedly fainter than graded '
               '($scored). "Not second class" is a visual claim, and a large '
               'contrast gap breaks it even when both are technically legible.');
+
+      // THE CEILING — the same ruling applied wrongly (C-159).
+      //
+      // The cheap way to satisfy the floor above is to make the demo-only
+      // badge the loudest thing on screen, and that breaks the same promise
+      // from the other side: a catalogue whose visual headline is "not graded"
+      // misdescribes itself as surely as one that whispers it. Raising amber
+      // to the legibility floor did exactly this — 9.59 against rose's 8.08 —
+      // and nothing caught it, because the gate only had a floor.
+      //
+      // Two statuses, equally legible, told apart by HUE. Volume is not the
+      // channel carrying that difference and must not start to.
+      expect(demo, lessThanOrEqualTo(scored * 1.05),
+          reason: 'demo-only ($demo) now reads LOUDER than graded ($scored). '
+              '"Not second class" does not mean first class.');
     });
   });
 

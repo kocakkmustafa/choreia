@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/style_availability.dart';
@@ -15,14 +18,33 @@ import 'support/test_catalog.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  bool isParked(StyleCard c) =>
+      c.badge == StyleBadge.onHold;
+
   group('the catalogue is content, not a hand-written list', () {
-    test('all 34 styles come from content/library.json', () async {
+    test('every style in the content file reaches the catalogue', () async {
+      // A RULE, NOT A COUNT (C-160). This asserted `hasLength(34)`, which is
+      // today's inventory rather than the property worth defending — and a
+      // 35th style, correctly added, would have turned it red. Correct growth
+      // must not look like a defect. What actually matters is that the loader
+      // drops nothing and invents nothing.
       final LibraryCatalog lib = await testLibrary();
-      expect(lib.entries, hasLength(34),
-          reason: 'the roadmap is DERIVED. If this file ever needs a literal '
-              'style list to make this pass, the rule "türetimli listeler elle '
-              'yazılmaz" has been broken somewhere upstream.');
-      expect(lib.entries.map((LibraryEntry e) => e.id).toSet(), hasLength(34),
+      final Map<String, dynamic> doc = (jsonDecode(
+              File('content/library.json').readAsStringSync()) as Map)
+          .cast<String, dynamic>();
+      final List<String> declared = <String>[
+        for (final Object? s in (doc['styles'] as List))
+          (s as Map)['id'] as String,
+      ];
+
+      expect(declared, isNotEmpty,
+          reason: 'if the content file cannot be read, every comparison below '
+              'is between two empty lists (family lesson 4)');
+      expect(lib.entries.map((LibraryEntry e) => e.id).toList(), declared,
+          reason: 'the roadmap is DERIVED — same ids, same order, nothing '
+              'dropped and nothing added. A literal style list anywhere in the '
+              'app would break this.');
+      expect(declared.toSet(), hasLength(declared.length),
           reason: 'duplicate ids would silently double a tile');
     });
 
@@ -78,19 +100,33 @@ void main() {
 
     test('the honest headline: ZERO scored styles can be opened today',
         () async {
-      final LibraryTally t = LibraryTally.from((await testLibrary()).cards);
+      final List<StyleCard> cards = (await testLibrary()).cards;
+      final LibraryTally t = LibraryTally.from(cards);
 
-      expect(t.total, 34);
+      expect(t.total, greaterThan(30));
+
+      // THE TRIPWIRE — deliberately exact, and it is a RULE about the surface,
+      // not an inventory count. The design's stat panel says "1 scored"; that
+      // is the CONTENT count, and the only scored style is release-gated, so a
+      // dancer can open no scored style at all. If this ever becomes non-zero
+      // the panel's wording and the prose rules in `content_claims_test` both
+      // need re-reading — which is why it fails loudly instead of adapting.
       expect(t.scored, 0,
-          reason: "the design's stat panel says '1 scored'. That is the "
-              'CONTENT count. The only scored style is release-gated, so a '
-              'dancer can open no scored style at all — repeating the content '
-              'count on the surface would be the C-101 proxy defect.');
-      expect(t.openUngraded, 1);
-      expect(t.builtButGated, 1);
-      expect(t.onHold, 1);
-      expect(t.inPreparation, 31);
-      expect(t.openable, 1);
+          reason: 'repeating the content count on the surface would be the '
+              'C-101 proxy defect');
+
+      // The rest are RULES, not counts (C-160): writing content for a style is
+      // correct progress and must not read as a regression.
+      expect(t.openable, t.scored + t.openUngraded,
+          reason: 'openable is exactly the two open buckets, whatever their '
+              'sizes');
+      for (final StyleCard c in cards) {
+        final bool authored = c.courses != null;
+        expect(c.badge == StyleBadge.inPreparation, !authored && !isParked(c),
+            reason: '${c.entry.id}: "in preparation" must mean exactly "no '
+                'authored document", in both directions — not a number that '
+                'happens to be 31 today');
+      }
     });
 
     test('the five badge buckets account for every style, with none double '

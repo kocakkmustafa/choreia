@@ -359,9 +359,14 @@ void main() {
           .where((StyleCard c) => c.entry.stepGlossary.isEmpty)
           .map((StyleCard c) => c.entry.id)
           .toSet();
-      expect(
-          unglossed,
-          <String>{
+
+      // ASYMMETRIC ON PURPOSE (C-160). Writing a glossary is correct progress
+      // and must not read as a regression, so a style LEAVING this set passes
+      // silently. A style ENTERING it is the thing worth catching: it means a
+      // new style shipped with no vocabulary and no recorded reason.
+      // `containsAll` would be the wrong direction — it is `subsetOf` that
+      // says "no new unexplained omissions".
+      const Set<String> explainedOmissions = <String>{
             'hula',
             'kpop_point',
             'tiktok_format',
@@ -378,12 +383,20 @@ void main() {
             'merengue_solo',
             'twerk_reggaeton',
             'kizomba_zouk_solo',
-          },
-          reason: 'each omission has its own reason (routine-specific '
-              'vocabulary · steps belong to other styles · no settled named '
-              'vocabulary · not nameable with confidence). If this set moves, '
-              'say WHICH style changed and on what basis — a count would have '
-              'let a swap through.');
+      };
+
+      expect(explainedOmissions.containsAll(unglossed), isTrue,
+          reason: 'a style has no glossary and no recorded reason: '
+              '${unglossed.difference(explainedOmissions)}. Each existing '
+              'omission has one (routine-specific vocabulary · steps belong to '
+              'other styles · no settled named vocabulary · not nameable with '
+              'confidence) — a new one needs its own.');
+
+      // hula is the one omission that is a RULE rather than a backlog item,
+      // so it is pinned exactly in both directions.
+      expect(unglossed, contains('hula'),
+          reason: 'hula must stay unglossed — its on-hold reason forbids '
+              'producing content from generic sources');
     });
   });
 }

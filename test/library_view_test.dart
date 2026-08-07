@@ -77,9 +77,12 @@ void main() {
         await tester.pump();
       }
 
-      expect(seen, hasLength(34),
+      // A RULE, not the number 34 (C-160): every style the catalogue declares
+      // must reach the grid. A 35th style added correctly should make this
+      // test do MORE work, not turn red.
+      expect(seen, lib.entries.map((LibraryEntry e) => e.id).toSet(),
           reason: 'a style missing from the grid is scope hidden from the '
-              'user; the ones that reached this screen were: ${seen.length}');
+              'user; ${seen.length} of ${lib.entries.length} arrived');
     });
 
     testWidgets('the panel says one style is open and none of it is graded',
