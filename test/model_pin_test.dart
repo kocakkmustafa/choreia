@@ -80,6 +80,52 @@ void main() {
     });
   });
 
+  group('🔴🔴 ÖLÇÜLDÜ: hasat MODELİ ile uygulamanın modeli UYUŞMUYOR (C-196)',
+      () {
+    test('harvest.py hangi varyantı çağırıyor', () {
+      // The extractor's own default is `heavy`, and this repo's harvest passes
+      // `heavy` explicitly. Every reference artefact in `content/references/`
+      // was produced by that pipeline.
+      final String harvest = File('tools/harvest.py').readAsStringSync();
+      final RegExpMatch? m =
+          RegExp(r'"--variant",\s*"(\w+)"').firstMatch(harvest);
+      expect(m, isNotNull,
+          reason: 'harvest.py artık --variant geçmiyor — hangi modelle hasat '
+              'edildiği yeniden bilinmez oldu');
+      expect(m!.group(1), 'heavy',
+          reason: 'hasat varyantı değişti. Referanslar YENİDEN üretilmediyse '
+              'eski artefaktlar hâlâ eski modelin sayılarını taşıyor');
+    });
+
+    test('UYUŞMAZLIK çivili: hasat heavy, uygulama full', () {
+      // Measured 2026-08-07: JabLab and Ostinato harvest with `full` AND ship
+      // `full` — consistent. Choreia harvests with `heavy` and, since the pose
+      // pipeline landed an hour before this test, ships `full`. I copied a
+      // sibling line's pin along with its recipe, and the pin was the one part
+      // that had to match MY OWN references, not theirs.
+      //
+      // Why this is pinned rather than fixed here: both repairs are real
+      // decisions, not cleanups. Shipping `heavy` keeps every measured number
+      // in the artefacts meaningful but triples the model (9.4 -> 30.6 MB) on
+      // a product whose whole subject is fast movement. Re-harvesting with
+      // `full` keeps the app light and invalidates every tolerance, every
+      // disagreement figure and the entire honesty block — a measurement
+      // round, not an edit. That is a scope call.
+      //
+      // Why no user is harmed TODAY: the single openable lesson is
+      // `demoOnly`, issues no score, and says in its own words that a number
+      // here would mostly measure our uncertainty. An unverified pairing
+      // cannot mislead through a number that is never shown. The day anything
+      // scores, this stops being a record and becomes a blocker.
+      expect(PoseModelPin.modelId, 'pose_landmarker_full/float16/1');
+      expect(File('tools/harvest.py').readAsStringSync(),
+          contains('"--variant", "heavy"'),
+          reason: 'UYUŞMAZLIK KAPANMIŞ OLABİLİR — bu iyi haber. İki taraf da '
+              'aynı varyantı söylüyorsa bu kaydı sil ve yerine GERÇEK '
+              'eşitlik kapısını koy.');
+    });
+  });
+
   group('🔴 ÖLÇÜLDÜ: referanslar hangi modelle üretildiğini SÖYLEMİYOR', () {
     test('hiçbir referans model kimliği taşımıyor — ve bu kapatılamayan bir '
         'kapı', () {
