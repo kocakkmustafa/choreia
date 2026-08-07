@@ -48,7 +48,26 @@
     "groove/feel — kamera göremez"
    ],
    "note": "07-29 DÜZELTME: status 'live' idi ve YANLIŞTI — statusValues live'ı 'kursları açık, SKORLANIYOR' diye tanımlıyor, ama bu stilin skorlanan tek dersi yok (honesty.measured BOŞ: hh_bounce'ın referansı yok, Running Man Tier C, Roger Rabbit mirrorConfident:false). Eski not '≥3 bağımsız eğitmen ÖLÇÜLDÜ (C-030)' doğruydu ama ölçüm SKORLANAN derse dönüşmedi — 'ölçtüm' ile 'skorluyorum' aynı şey değil. validate_content artık bu çelişkiyi kapı olarak yakalıyor.",
-   "originAttribution": "Hip-hop's foundational party dances were made by Black American young people at parties, in parks and in clubs from the 1970s onward — in New York, and, for much of the groove vocabulary, in the funk scenes of California. What is taught here is social-dance vocabulary that belongs to those communities, not any one choreographer's routine."
+   "originAttribution": "Hip-hop's foundational party dances were made by Black American young people at parties, in parks and in clubs from the 1970s onward — in New York, and, for much of the groove vocabulary, in the funk scenes of California. What is taught here is social-dance vocabulary that belongs to those communities, not any one choreographer's routine.",
+   "description": "The party-dance foundations the rest of hip-hop is built on — a steady bounce, a rock through the chest, and the named steps that grew out of them. You dance them on the spot, to the count, before anything gets fancy.",
+   "stepGlossary": [
+    {
+     "name": "Bounce",
+     "gloss": "The steady up-and-down through the knees that most hip-hop grooves sit on."
+    },
+    {
+     "name": "Rock",
+     "gloss": "A tilt through the chest and hips, driven from the body rather than the feet."
+    },
+    {
+     "name": "Running Man",
+     "gloss": "Running on the spot without travelling — the feet slide back as the knee lifts."
+    },
+    {
+     "name": "Roger Rabbit",
+     "gloss": "The Running Man's mirror image: the leg kicks back as the body leans forward."
+    }
+   ]
   },
   {
    "id": "latin_fusion_fitness",
@@ -61,7 +80,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka",
-   "originAttribution": "The fitness-class format is a late commercial packaging; the dancing inside it is not. Its steps are borrowed from Latin American social dances — salsa, merengue, cumbia, reggaeton — each with its own country and its own history, and the credit belongs to those dances rather than to the exercise format built on top of them."
+   "originAttribution": "The fitness-class format is a late commercial packaging; the dancing inside it is not. Its steps are borrowed from Latin American social dances — salsa, merengue, cumbia, reggaeton — each with its own country and its own history, and the credit belongs to those dances rather than to the exercise format built on top of them.",
+   "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. You follow repeating blocks of salsa, merengue, cumbia and reggaeton footwork at a pace that keeps moving."
   },
   {
    "id": "line_dance",
@@ -74,7 +94,26 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "Step-sheet formatı kural motoruna birebir oturuyor; yayımlı step-sheet KOPYALANMAZ, orijinal diziler",
-   "originAttribution": "Dancing in rows without a partner is old and widespread. The modern form draws on American country-western social dancing, which itself carries African-American and European communal dance traditions. Contemporary line dances are usually written by named choreographers and circulated as step sheets — those are their authors' work, and this app teaches its own sequences instead."
+   "originAttribution": "Dancing in rows without a partner is old and widespread. The modern form draws on American country-western social dancing, which itself carries African-American and European communal dance traditions. Contemporary line dances are usually written by named choreographers and circulated as step sheets — those are their authors' work, and this app teaches its own sequences instead.",
+   "description": "Everybody faces the same way and dances the same sequence, no partner needed. You learn a short pattern of steps and turns, then repeat it as the dance rotates to face each wall in turn.",
+   "stepGlossary": [
+    {
+     "name": "Grapevine",
+     "gloss": "Step to the side, behind, side, then touch or turn."
+    },
+    {
+     "name": "Heel dig",
+     "gloss": "Tapping the heel forward without taking weight."
+    },
+    {
+     "name": "Kick ball change",
+     "gloss": "A kick, then two quick weight changes."
+    },
+    {
+     "name": "Pivot turn",
+     "gloss": "A half turn taken on the balls of both feet."
+    }
+   ]
   },
   {
    "id": "salsa_shines",
@@ -89,7 +128,22 @@
    "contentOnDisk": true,
    "statusNote": "07-30 M-F-123 kafesi: `live` çünkü ss_l1_footwork SKORLANAN bir ders (tam-zincir, M-F-119: WRONG_FOOT + STEP_TOO_LARGE canlı, liveness testi kanıtlı) ve honesty.measured dolu. ⚠️ AÇIK GERİLİM — statü ≠ ship-hazırlığı: bpmStatus DISPUTED olduğu için validate_content hâlâ 'no lesson in this style may ship' uyarısını veriyor. Kafes DERS-DURUMUNA bakıyor (kullanıcı ship edildiğinde ne görecek), ship-kapısı AYRI bir eksen (BPM). İkisinin ilişkisi kafes tanımında YOK — koordinatöre soruldu; bu stil BPM çözülmeden yayına çıkmaz, statü live olsa da.",
    "note": "Adım config'i yazıldı (ss_basic) ama HENÜZ SHIP EDİLEMEZ: BPM hâlâ çözülmedi (C-032 kapandı — hareket-üzerinden BPM çıkmaz sokaktı, ölçüldü — ama beat_annotate ile müzik-ızgarası kurucunun canlı tap'ini bekliyor, henüz koşulmadı); ss_shine_footwork referansı 4 eğitmenle KURULDU (provisional) ama ss_basic'in kendi referans takeleri (collectedTakes) hâlâ 0 — adım-config↔referans bağı ss_shine_footwork için var, ss_basic için yok. Doğrulayıcının 'diskte içerik var ama yakında' uyarısı bu yüzden BEKLENEN — içerik hazır olmakla ship edilebilir olmak aynı şey değil",
-   "originAttribution": "Shines are the solo passages of salsa, when partners step away from each other and dance alone. Salsa was formed by Cuban and Puerto Rican communities in New York through the 1960s and 70s, out of Cuban son and mambo and Puerto Rican traditions carried by people who had moved north. Core shines such as the Suzy Q are older still and long since public vocabulary."
+   "originAttribution": "Shines are the solo passages of salsa, when partners step away from each other and dance alone. Salsa was formed by Cuban and Puerto Rican communities in New York through the 1960s and 70s, out of Cuban son and mambo and Puerto Rican traditions carried by people who had moved north. Core shines such as the Suzy Q are older still and long since public vocabulary.",
+   "description": "The solo footwork of salsa — the passages where partners let go and dance on their own. You work a quick-quick-slow pattern in a small space, keeping the steps tight and the count steady.",
+   "stepGlossary": [
+    {
+     "name": "The basic",
+     "gloss": "Forward and back on 1-2-3, hold on 4, then the same the other way."
+    },
+    {
+     "name": "Suzy Q",
+     "gloss": "A travelling step where the feet twist heel-toe across each other."
+    },
+    {
+     "name": "Shine footwork",
+     "gloss": "The solo patterns danced in place when partners let go."
+    }
+   ]
   },
   {
    "id": "tiktok_format",
@@ -102,7 +156,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "Orijinal kombolar; isimli viral koreografi öğretilmez",
-   "originAttribution": "Short dances made to spread on social platforms through the 2010s and 2020s. A great many of them were created by Black teenagers — often girls — whose choreography travelled worldwide while their names did not, and that pattern of uncredited borrowing is part of this form's history. This app teaches general movement vocabulary and reproduces no named creator's routine."
+   "originAttribution": "Short dances made to spread on social platforms through the 2010s and 2020s. A great many of them were created by Black teenagers — often girls — whose choreography travelled worldwide while their names did not, and that pattern of uncredited borrowing is part of this form's history. This app teaches general movement vocabulary and reproduces no named creator's routine.",
+   "description": "Short dances made to be learned from a phone screen and danced back into one. They are built from a handful of sharp, repeatable moves timed to a specific fragment of a song."
   },
   {
    "id": "kpop_point",
@@ -116,7 +171,8 @@
    "scoring": "pose",
    "cautionClass": "high",
    "note": "Ajans içeriği yüksek-dikkat; bağımsız eğitmen kanalları öncelikli. Ayna-modu zorunlu",
-   "originAttribution": "The 'point' is the signature hook section of a Korean pop song's choreography, a convention of the Korean idol industry that grew from the 1990s onward. These routines are the work of named choreographers and production companies. They are not reproduced here; what can be taught is the movement vocabulary they draw on."
+   "originAttribution": "The 'point' is the signature hook section of a Korean pop song's choreography, a convention of the Korean idol industry that grew from the 1990s onward. These routines are the work of named choreographers and production companies. They are not reproduced here; what can be taught is the movement vocabulary they draw on.",
+   "description": "The signature hook section of a Korean pop routine — the part everyone recognises and copies. It is dense, precise and short, and it rewards clean shapes over big movement."
   },
   {
    "id": "bachata_solo",
@@ -129,7 +185,22 @@
    "countSystem": "bachata_1234_tap",
    "scoring": "pose",
    "note": "Yalnız 2 kanal bulundu — ek tarama görevi",
-   "originAttribution": "Bachata comes from the Dominican Republic, growing out of guitar music of the mid-twentieth century that was for decades dismissed as rural and disreputable by the country's elite before it became a national music and then a social dance danced worldwide."
+   "originAttribution": "Bachata comes from the Dominican Republic, growing out of guitar music of the mid-twentieth century that was for decades dismissed as rural and disreputable by the country's elite before it became a national music and then a social dance danced worldwide.",
+   "description": "Bachata danced on your own: a four-step pattern side to side, with a tap or a hip on the fourth. The feel lives in the knees and hips rather than in how far you travel.",
+   "stepGlossary": [
+    {
+     "name": "Side basic",
+     "gloss": "Three steps to the side and a tap or hip on the fourth."
+    },
+    {
+     "name": "Forward basic",
+     "gloss": "The same four counts taken forward and back."
+    },
+    {
+     "name": "Hip motion",
+     "gloss": "The hip lift on the fourth count that gives bachata its shape."
+    }
+   ]
   },
   {
    "id": "afrobeats",
@@ -143,7 +214,26 @@
    "scoring": "pose",
    "trendPack": "amapiano",
    "note": "Amapiano döner trend-paketi: sabit müfredat değil, viral döngü. Köken-atıf kutusu zorunlu",
-   "originAttribution": "Afrobeats is a West African popular music movement centred on Nigeria and Ghana from the 2000s, and its dances — azonto, shaku shaku, zanku and others — each came out of particular urban scenes and particular dancers. It is a different thing from Fela Kuti's Afrobeat, and the two are often confused."
+   "originAttribution": "Afrobeats is a West African popular music movement centred on Nigeria and Ghana from the 2000s, and its dances — azonto, shaku shaku, zanku and others — each came out of particular urban scenes and particular dancers. It is a different thing from Fela Kuti's Afrobeat, and the two are often confused.",
+   "description": "The dances of West African pop — a family of named steps that arrive with the songs and spread fast. Most are led from the legs and shoulders, danced light and loose on the spot.",
+   "stepGlossary": [
+    {
+     "name": "Azonto",
+     "gloss": "A Ghanaian step built on bent knees and mimed hand gestures."
+    },
+    {
+     "name": "Shaku shaku",
+     "gloss": "Crossed hands at the forehead over a light, skipping leg."
+    },
+    {
+     "name": "Zanku / legwork",
+     "gloss": "Fast, loose lower-leg movement danced on the spot."
+    },
+    {
+     "name": "Gwara gwara",
+     "gloss": "A leg sweep and lean, from South African house dancing."
+    }
+   ]
   },
   {
    "id": "dancehall",
@@ -158,7 +248,8 @@
    "safetyExclusions": [
     "Dutty Wine — boyun riski"
    ],
-   "originAttribution": "Jamaican dancehall grew out of Kingston's sound-system culture from the late 1970s. Unusually among popular dances, its steps are individually named and datable, and most can be traced to a specific dancer and a specific moment — which makes crediting them possible in a way it often is not elsewhere."
+   "originAttribution": "Jamaican dancehall grew out of Kingston's sound-system culture from the late 1970s. Unusually among popular dances, its steps are individually named and datable, and most can be traced to a specific dancer and a specific moment — which makes crediting them possible in a way it often is not elsewhere.",
+   "description": "Jamaican dancehall is a vocabulary of named steps, each with its own attitude and its own moment. You learn them one at a time and then choose between them as the riddim moves."
   },
   {
    "id": "shuffle",
@@ -171,7 +262,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "≥60fps önerisi — hızlı ayak işi",
-   "originAttribution": "The shuffle developed in Melbourne's rave and underground club scene from the late 1980s and 1990s, and later picked up related 'cutting shapes' variants from UK dance scenes. It is a club dance made by dancers on floors, with no single author."
+   "originAttribution": "The shuffle developed in Melbourne's rave and underground club scene from the late 1980s and 1990s, and later picked up related 'cutting shapes' variants from UK dance scenes. It is a club dance made by dancers on floors, with no single author.",
+   "description": "A fast shuffling footwork danced to four-on-the-floor electronic music. The whole dance lives below the knees — the upper body stays quiet while the feet slide and kick."
   },
   {
    "id": "belly_dance",
@@ -187,7 +279,26 @@
     "shimmy — landmark çözünürlüğü altında",
     "prop'lu figürler — avatar demo"
    ],
-   "originAttribution": "'Belly dance' is an outsider's name. The dances it points at — raqs sharqi and raqs baladi in Arabic, oryantal dans in Turkish, and related regional forms — belong to Egypt, the Levant, Turkey and the wider region, and lived in family and community celebration long before any staged or exported version of them."
+   "originAttribution": "'Belly dance' is an outsider's name. The dances it points at — raqs sharqi and raqs baladi in Arabic, oryantal dans in Turkish, and related regional forms — belong to Egypt, the Levant, Turkey and the wider region, and lived in family and community celebration long before any staged or exported version of them.",
+   "description": "A dance of the hips, ribs and spine, where the movement is isolated rather than travelled. You learn to move one part of the body while the rest stays still, which is harder and better than it sounds.",
+   "stepGlossary": [
+    {
+     "name": "Hip drop",
+     "gloss": "An accented drop of one hip, isolated from the rest of the body."
+    },
+    {
+     "name": "Shimmy",
+     "gloss": "A fast shiver of the hips or shoulders, driven from the legs."
+    },
+    {
+     "name": "Undulation",
+     "gloss": "A rolling wave through the chest, belly and hips."
+    },
+    {
+     "name": "Figure eight",
+     "gloss": "The hips tracing a horizontal or vertical eight."
+    }
+   ]
   },
   {
    "id": "bollywood",
@@ -200,7 +311,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "Mudra: el-landmark varsa skorlu, yoksa demo",
-   "originAttribution": "Film dance from the Hindi-language film industry in Mumbai, which from the mid-twentieth century blended Indian classical forms such as kathak and bharatanatyam with folk traditions including bhangra and garba, and with Western popular dance. Individual film routines are their choreographers' work and are not reproduced here."
+   "originAttribution": "Film dance from the Hindi-language film industry in Mumbai, which from the mid-twentieth century blended Indian classical forms such as kathak and bharatanatyam with folk traditions including bhangra and garba, and with Western popular dance. Individual film routines are their choreographers' work and are not reproduced here.",
+   "description": "Film dance from Hindi cinema — expressive, rhythmic and unafraid of scale. It borrows from Indian classical and folk forms and from Western popular dance, often within a single song."
   },
   {
    "id": "merengue_solo",
@@ -213,7 +325,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "Bachata/shines deseninin birebir tekrarı — en ucuz ekleme",
-   "originAttribution": "Merengue is the national dance of the Dominican Republic, danced there long before it was promoted abroad, and it carries the same African and European meeting that shaped the island's music."
+   "originAttribution": "Merengue is the national dance of the Dominican Republic, danced there long before it was promoted abroad, and it carries the same African and European meeting that shaped the island's music.",
+   "description": "A simple, insistent march danced on the spot or side to side, with the hips carrying what the feet keep plain. It is the most quickly learned of the Latin social dances and the hardest to make look good."
   },
   {
    "id": "cumbia_solo",
@@ -225,7 +338,8 @@
    "legalFlag": "green",
    "countSystem": "8count",
    "scoring": "pose",
-   "originAttribution": "Cumbia began on Colombia's Caribbean coast, in the meeting of Indigenous, African and Spanish traditions, and then travelled: Mexico, Argentina, Peru and others each grew their own cumbia with its own step and its own feel. Naming it one dance understates it."
+   "originAttribution": "Cumbia began on Colombia's Caribbean coast, in the meeting of Indigenous, African and Spanish traditions, and then travelled: Mexico, Argentina, Peru and others each grew their own cumbia with its own step and its own feel. Naming it one dance understates it.",
+   "description": "A dragging, unhurried step danced with one foot brushing the floor, in a small circle or a shuffle. Every country that took up cumbia bent it a different way, so the feel varies more than the footwork."
   },
   {
    "id": "ballroom_latin_solo",
@@ -248,7 +362,26 @@
     "Tango solo"
    ],
    "note": "TEK sayfa, 7 sekme. ISTD/WDSF Bronze→Gold yapısı ESİNLENİLİR; syllabus METNİ telifli, anlatım ORİJİNAL",
-   "originAttribution": "The competitive 'Latin' syllabus was standardised in Britain in the early twentieth century out of dances that were not British: cha-cha and rumba from Cuba, samba from Brazil, jive from African-American swing, paso doble from Spanish sources. The codification is a real craft with its own history; it is not the origin of the dances, and the published syllabus texts belong to the bodies that wrote them."
+   "originAttribution": "The competitive 'Latin' syllabus was standardised in Britain in the early twentieth century out of dances that were not British: cha-cha and rumba from Cuba, samba from Brazil, jive from African-American swing, paso doble from Spanish sources. The codification is a real craft with its own history; it is not the origin of the dances, and the published syllabus texts belong to the bodies that wrote them.",
+   "description": "The technique behind the competitive Latin dances, practised without a partner. You drill weight, turnout, hip action and foot pressure — the parts that are yours to control whoever you are dancing with.",
+   "stepGlossary": [
+    {
+     "name": "Cucaracha",
+     "gloss": "A side step that presses into the floor without travelling."
+    },
+    {
+     "name": "Spot turn",
+     "gloss": "A turn taken on the spot, one foot crossing in front."
+    },
+    {
+     "name": "New York",
+     "gloss": "A checked step to the side with the arms opening in opposition."
+    },
+    {
+     "name": "Hip action",
+     "gloss": "The settling of the hip that follows a straightened knee."
+    }
+   ]
   },
   {
    "id": "tap",
@@ -265,7 +398,26 @@
     "sert zemin"
    ],
    "note": "PERKÜSİF ONSET: shuffle/flap/stamp ayrımı + zamanlama (K9). ISTD 6-seviye esinli",
-   "originAttribution": "Tap was made in the United States, largely by Black American dancers, out of the meeting of African rhythmic dance with Irish and English step dancing — a meeting that happened under slavery and segregation, in circumstances its dancers did not choose. Its history is inseparable from that."
+   "originAttribution": "Tap was made in the United States, largely by Black American dancers, out of the meeting of African rhythmic dance with Irish and English step dancing — a meeting that happened under slavery and segregation, in circumstances its dancers did not choose. Its history is inseparable from that.",
+   "description": "Dancing that is also drumming: the shoes make the sound and the sound is the point. You learn to break a step into its separate hits and to place each one where you meant it.",
+   "stepGlossary": [
+    {
+     "name": "Shuffle",
+     "gloss": "Two sounds from one foot: brush out, brush back."
+    },
+    {
+     "name": "Flap",
+     "gloss": "Brush forward and step down — two sounds, weight transferred."
+    },
+    {
+     "name": "Ball change",
+     "gloss": "A quick weight change between the ball of one foot and the other."
+    },
+    {
+     "name": "Time step",
+     "gloss": "A repeating rhythmic phrase used to set tempo and trade with musicians."
+    }
+   ]
   },
   {
    "id": "locking",
@@ -278,7 +430,26 @@
    "countSystem": "8count",
    "scoring": "pose",
    "pack": "funk_styles",
-   "originAttribution": "Locking was created by Don Campbell in Los Angeles around 1970 — one of the rare street dances whose invention is attributed to a single named dancer, and it was originally called Campbellocking after him. It spread through his group and through television."
+   "originAttribution": "Locking was created by Don Campbell in Los Angeles around 1970 — one of the rare street dances whose invention is attributed to a single named dancer, and it was originally called Campbellocking after him. It spread through his group and through television.",
+   "description": "A funk style built on stopping — you move fast, freeze hard, and hold the pause a beat longer than feels comfortable. The freeze is the punchline and the timing is the joke.",
+   "stepGlossary": [
+    {
+     "name": "Lock",
+     "gloss": "The sudden stop that names the dance — arrive and hold."
+    },
+    {
+     "name": "Point",
+     "gloss": "An extended arm and finger, usually straight out of a lock."
+    },
+    {
+     "name": "Wrist roll",
+     "gloss": "A circling of the hands that carries you between locks."
+    },
+    {
+     "name": "Scoobot",
+     "gloss": "A travelling step with a kick and a hop, danced side to side."
+    }
+   ]
   },
   {
    "id": "popping",
@@ -292,7 +463,26 @@
    "scoring": "pose",
    "pack": "funk_styles",
    "note": "Hit'ler RhythmEngine'e birebir uyum",
-   "originAttribution": "Popping came out of the funk scenes of Fresno and Los Angeles in the 1970s, with Boogaloo Sam and the Electric Boogaloos central to its development and its spread. The related boogaloo and related Californian funk styles are distinct dances, often flattened together by outsiders."
+   "originAttribution": "Popping came out of the funk scenes of Fresno and Los Angeles in the 1970s, with Boogaloo Sam and the Electric Boogaloos central to its development and its spread. The related boogaloo and related Californian funk styles are distinct dances, often flattened together by outsiders.",
+   "description": "A funk style built on the pop: a sharp contraction of a muscle that snaps the body on the beat. Around it sit smoother illusions — waves, glides and robotics — that make the hits land harder.",
+   "stepGlossary": [
+    {
+     "name": "Pop / hit",
+     "gloss": "A sharp muscle contraction that snaps the body on the beat."
+    },
+    {
+     "name": "Wave",
+     "gloss": "An impulse passed through the arms or body so it reads as travelling."
+    },
+    {
+     "name": "Glide",
+     "gloss": "Footwork that makes you look like you are sliding rather than stepping."
+    },
+    {
+     "name": "Robot",
+     "gloss": "Movement broken into separate mechanical segments, with pauses between."
+    }
+   ]
   },
   {
    "id": "waacking",
@@ -305,7 +495,22 @@
    "countSystem": "8count",
    "scoring": "pose",
    "pack": "funk_styles",
-   "originAttribution": "Waacking was created in Black and Latino LGBTQ+ clubs in Los Angeles in the 1970s, danced to disco, by people who in many cases could not be publicly out anywhere else. It is a dance that came from a refuge, and a number of its originators were lost to the AIDS epidemic before it was widely credited."
+   "originAttribution": "Waacking was created in Black and Latino LGBTQ+ clubs in Los Angeles in the 1970s, danced to disco, by people who in many cases could not be publicly out anywhere else. It is a dance that came from a refuge, and a number of its originators were lost to the AIDS epidemic before it was widely credited.",
+   "description": "Fast arm work danced to disco, all whips, circles and stops, with the poses between them doing as much as the movement. It is a dance about presence as much as speed.",
+   "stepGlossary": [
+    {
+     "name": "Whack / arm swing",
+     "gloss": "A fast circular arm strike that stops dead on the beat."
+    },
+    {
+     "name": "Pose",
+     "gloss": "The held shape between the arm work — half the dance lives here."
+    },
+    {
+     "name": "Spin",
+     "gloss": "A turn used to change facing and reset the arms."
+    }
+   ]
   },
   {
    "id": "vogue",
@@ -318,7 +523,30 @@
    "countSystem": "8count",
    "scoring": "pose",
    "pack": "funk_styles",
-   "originAttribution": "Vogue comes from the ballroom scene built by Black and Latino LGBTQ+ communities in Harlem and across New York, where houses formed as chosen families and competed at balls. It was a culture of survival long before it was a style anyone outside it borrowed, and the borrowing has usually been done without credit or return."
+   "originAttribution": "Vogue comes from the ballroom scene built by Black and Latino LGBTQ+ communities in Harlem and across New York, where houses formed as chosen families and competed at balls. It was a culture of survival long before it was a style anyone outside it borrowed, and the borrowing has usually been done without credit or return.",
+   "description": "Movement built out of poses — lines, angles and hands, danced with the confidence the ballroom scene demands. Its elements are named and judged, and each one asks for something different from you.",
+   "stepGlossary": [
+    {
+     "name": "Hands performance",
+     "gloss": "Storytelling with the hands and arms, close to the face and body."
+    },
+    {
+     "name": "Catwalk",
+     "gloss": "A walk with the hips and shoulders swinging against each other."
+    },
+    {
+     "name": "Duckwalk",
+     "gloss": "Travelling low in a squat, kicking one foot forward at a time."
+    },
+    {
+     "name": "Floor performance",
+     "gloss": "Work taken down to the ground without losing line or control."
+    },
+    {
+     "name": "Spins and dips",
+     "gloss": "A turn that drops into a controlled fall onto the back leg."
+    }
+   ]
   },
   {
    "id": "jazz",
@@ -330,7 +558,26 @@
    "legalFlag": "green",
    "countSystem": "8count",
    "scoring": "pose",
-   "originAttribution": "Jazz dance grew out of African-American vernacular dance alongside jazz music from the early twentieth century, in social halls before theatres. The studio and stage forms taught today are descendants of that social dancing, and often carry its steps under other names."
+   "originAttribution": "Jazz dance grew out of African-American vernacular dance alongside jazz music from the early twentieth century, in social halls before theatres. The studio and stage forms taught today are descendants of that social dancing, and often carry its steps under other names.",
+   "description": "The studio descendant of African-American social dance: isolations, sharp lines, and steps that travel with attitude. It sits underneath most commercial and musical-theatre dancing you have seen.",
+   "stepGlossary": [
+    {
+     "name": "Jazz square",
+     "gloss": "Four steps tracing a box: cross, back, side, forward."
+    },
+    {
+     "name": "Pas de bourrée",
+     "gloss": "Three quick steps that change your weight and facing."
+    },
+    {
+     "name": "Chassé",
+     "gloss": "A travelling step where one foot chases the other."
+    },
+    {
+     "name": "Isolation",
+     "gloss": "Moving one body part while the rest stays still."
+    }
+   ]
   },
   {
    "id": "samba_no_pe",
@@ -343,7 +590,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "Karnaval solo samba. Gafieira ayrı SKU DEĞİL — ileri-stil katmanı",
-   "originAttribution": "Samba no pé is the solo footwork of Brazilian samba, an Afro-Brazilian form that grew in the communities of Bahia and Rio de Janeiro and is carried today by the samba schools and their carnival. The dance and the drumming are one tradition, not two."
+   "originAttribution": "Samba no pé is the solo footwork of Brazilian samba, an Afro-Brazilian form that grew in the communities of Bahia and Rio de Janeiro and is carried today by the samba schools and their carnival. The dance and the drumming are one tradition, not two.",
+   "description": "The solo footwork of Brazilian samba — a bouncing three-step danced in the time of two, fast and low. The bounce comes from the knees, not from jumping."
   },
   {
    "id": "solo_jazz_charleston",
@@ -356,7 +604,26 @@
    "countSystem": "8count",
    "scoring": "pose",
    "note": "Shim Sham = sabit 32-count rutin → DTW-dostu",
-   "originAttribution": "Solo jazz and the Charleston are African-American social dances of the 1920s and 30s, danced in Harlem and far beyond it, and named in the Charleston's case for the South Carolina city. They were popular dances of their moment before they were anybody's heritage style."
+   "originAttribution": "Solo jazz and the Charleston are African-American social dances of the 1920s and 30s, danced in Harlem and far beyond it, and named in the Charleston's case for the South Carolina city. They were popular dances of their moment before they were anybody's heritage style.",
+   "description": "The social dances of the 1920s and 30s, danced alone: swinging kicks, bouncy footwork and named steps with names as good as the steps. It is dance built for a live band and it still feels like it.",
+   "stepGlossary": [
+    {
+     "name": "Charleston",
+     "gloss": "Rock back and kick forward, swinging from the hips."
+    },
+    {
+     "name": "Suzie Q",
+     "gloss": "Travelling sideways with the feet twisting heel-toe."
+    },
+    {
+     "name": "Boogie back",
+     "gloss": "Travelling backwards with a bouncing shuffle."
+    },
+    {
+     "name": "Shorty George",
+     "gloss": "Walking forward low, knees together, pointing at the floor."
+    }
+   ]
   },
   {
    "id": "bhangra",
@@ -369,7 +636,8 @@
    "countSystem": "dhol",
    "scoring": "pose",
    "note": "Dhol ritmi RhythmEngine'e uygun; müfredat ORİJİNAL geliştirilir",
-   "originAttribution": "Bhangra is a harvest dance of the Punjab, the region now divided between India and Pakistan, tied to Baisakhi and to the farming year. It has a second life as a British-Punjabi popular music and club form from the 1980s, made by the children of migrants — both are real bhangra and they are not the same dance."
+   "originAttribution": "Bhangra is a harvest dance of the Punjab, the region now divided between India and Pakistan, tied to Baisakhi and to the farming year. It has a second life as a British-Punjabi popular music and club form from the 1980s, made by the children of migrants — both are real bhangra and they are not the same dance.",
+   "description": "A high-energy Punjabi dance of raised arms, bouncing shoulders and stamping feet, danced to the dhol drum. It is meant to be big — the small version does not work."
   },
   {
    "id": "ballet_barre",
@@ -382,7 +650,30 @@
    "countSystem": "adagio_allegro",
    "scoring": "pose",
    "note": "Ev-desteği modu (sandalye/tezgâh)",
-   "originAttribution": "Ballet was codified in the Italian and then French courts, which is why its vocabulary is French, and later developed further in Russia, Denmark and elsewhere. Barre work is its daily training practice rather than a dance in itself."
+   "originAttribution": "Ballet was codified in the Italian and then French courts, which is why its vocabulary is French, and later developed further in Russia, Denmark and elsewhere. Barre work is its daily training practice rather than a dance in itself.",
+   "description": "The daily training practice of ballet, done holding a barre. You work through a fixed order of exercises that build turnout, control and line before anything travels across a floor.",
+   "stepGlossary": [
+    {
+     "name": "Plié",
+     "gloss": "A bend of the knees over the toes, the basis of every jump and landing."
+    },
+    {
+     "name": "Tendu",
+     "gloss": "A stretch of the foot along the floor until only the toe touches."
+    },
+    {
+     "name": "Dégagé",
+     "gloss": "A tendu that keeps going until the foot leaves the floor."
+    },
+    {
+     "name": "Rond de jambe",
+     "gloss": "A circling of the leg, on the floor or in the air."
+    },
+    {
+     "name": "Relevé",
+     "gloss": "A rise onto the balls of the feet."
+    }
+   ]
   },
   {
    "id": "contemporary",
@@ -397,7 +688,8 @@
    "demoOnly": [
     "yer frazları — floorwork"
    ],
-   "originAttribution": "Contemporary dance descends from the modern dance of the early twentieth century, made by choreographers — many of them women — who deliberately refused ballet's codified vocabulary and built their own. It is less a single technique than a family of them, each with a named lineage."
+   "originAttribution": "Contemporary dance descends from the modern dance of the early twentieth century, made by choreographers — many of them women — who deliberately refused ballet's codified vocabulary and built their own. It is less a single technique than a family of them, each with a named lineage.",
+   "description": "A family of techniques descended from twentieth-century modern dance, built on weight, breath and release rather than on a fixed vocabulary. Floorwork and falling are technique here, not accidents."
   },
   {
    "id": "flamenco",
@@ -413,7 +705,26 @@
     "flamenko ayakkabısı önerilir"
    ],
    "note": "Zapateado = onset skorlama; palmas bonus",
-   "originAttribution": "Flamenco was formed in Andalusia, in southern Spain, with Romani (Gitano) communities at its centre, alongside Andalusian, Moorish and Jewish influences, and it grew among people who were persecuted there. Cante, guitar and dance are one art; teaching the dance alone is already a simplification."
+   "originAttribution": "Flamenco was formed in Andalusia, in southern Spain, with Romani (Gitano) communities at its centre, alongside Andalusian, Moorish and Jewish influences, and it grew among people who were persecuted there. Cante, guitar and dance are one art; teaching the dance alone is already a simplification.",
+   "description": "Percussive footwork, carriage and hand work, danced to guitar and song. The dance answers the music rather than decorating it, which is why the counting matters more than the steps at first.",
+   "stepGlossary": [
+    {
+     "name": "Zapateado",
+     "gloss": "The percussive footwork — heel, toe and sole, each its own sound."
+    },
+    {
+     "name": "Braceo",
+     "gloss": "The carriage and circling of the arms."
+    },
+    {
+     "name": "Marcaje",
+     "gloss": "Marking time with the body while the song takes the foreground."
+    },
+    {
+     "name": "Remate",
+     "gloss": "A short ending flourish that closes a phrase."
+    }
+   ]
   },
   {
    "id": "irish_dance",
@@ -426,7 +737,8 @@
    "countSystem": "reel_jig",
    "scoring": "pose+onset",
    "note": "Hard-shoe = onset; soft-shoe = poz+sıçrama kadraj kalibrasyonu. TEK lineage seçilir",
-   "originAttribution": "Irish dance covers both the social forms — céilí and set dancing, danced together — and the competitive step dance most familiar abroad. Its transmission survived long periods when Irish cultural practice was suppressed, and the modern competitive form was shaped substantially in the twentieth century."
+   "originAttribution": "Irish dance covers both the social forms — céilí and set dancing, danced together — and the competitive step dance most familiar abroad. Its transmission survived long periods when Irish cultural practice was suppressed, and the modern competitive form was shaped substantially in the twentieth century.",
+   "description": "Sharp, quick footwork with the upper body held still, danced on the balls of the feet. The legs do everything and they do it in a very small amount of space."
   },
   {
    "id": "kizomba_zouk_solo",
@@ -441,7 +753,8 @@
    "demoOnly": [
     "cambré — skor baskısı YOK, güvenlik çerçevesi"
    ],
-   "originAttribution": "Kizomba came from Angola, growing out of semba, and took shape alongside Cape Verdean and French Antillean zouk music. It is an African dance with a specific history, frequently marketed abroad as though it were generically 'Latin'."
+   "originAttribution": "Kizomba came from Angola, growing out of semba, and took shape alongside Cape Verdean and French Antillean zouk music. It is an African dance with a specific history, frequently marketed abroad as though it were generically 'Latin'.",
+   "description": "A slow, grounded walking dance from Angola, practised here on your own. The step is simple and the difficulty is all in the weight — where it sits and how long it takes to arrive."
   },
   {
    "id": "garba",
@@ -455,7 +768,22 @@
    "scoring": "pose",
    "seasonal": "Navratri",
    "note": "YALNIZ solo footwork + tef/el çırpma tekniği. Dandiya-Raas kapsam DIŞI (çift-sopa, solo öğrenilemez)",
-   "originAttribution": "Garba is a devotional circle dance of Gujarat, in western India, danced during Navratri in honour of the goddess. It is worship as much as it is dance, and the circle around the lamp or image is the point of the form rather than a staging choice."
+   "originAttribution": "Garba is a devotional circle dance of Gujarat, in western India, danced during Navratri in honour of the goddess. It is worship as much as it is dance, and the circle around the lamp or image is the point of the form rather than a staging choice.",
+   "description": "A circle dance for Navratri, built on clapping patterns and a turning step that carries you around the centre. It is danced for hours, so it starts gently and it is meant to.",
+   "stepGlossary": [
+    {
+     "name": "Do taali",
+     "gloss": "The two-clap step — the pattern most garba starts from."
+    },
+    {
+     "name": "Tran taali",
+     "gloss": "The three-clap step, faster and with a turn."
+    },
+    {
+     "name": "Circle step",
+     "gloss": "The travelling step that carries the whole circle around the centre."
+    }
+   ]
   },
   {
    "id": "twerk_reggaeton",
@@ -469,7 +797,8 @@
    "scoring": "pose",
    "policyBucket": "sensual_expression",
    "note": "3/4 kamera açısı modu. Store-policy turu bu kovaya BİRLİKTE bakar — W4 öncesi kurucu onayı",
-   "originAttribution": "Twerk's immediate lineage runs through New Orleans bounce, and behind that through West and Central African dances in which isolated hip and glute movement is long-established technique. Reggaeton grew from Panama and Puerto Rico out of reggae en español and dancehall. Both were treated as vulgar while they belonged to Black and Latino communities and as fashionable once they did not."
+   "originAttribution": "Twerk's immediate lineage runs through New Orleans bounce, and behind that through West and Central African dances in which isolated hip and glute movement is long-established technique. Reggaeton grew from Panama and Puerto Rico out of reggae en español and dancehall. Both were treated as vulgar while they belonged to Black and Latino communities and as fashionable once they did not.",
+   "description": "Isolated hip and glute movement danced to reggaeton and its relatives — technique that is far older and far more controlled than its reputation. The control comes from the lower back and the legs."
   },
   {
    "id": "heels",
@@ -482,7 +811,8 @@
    "countSystem": "8count",
    "scoring": "pose",
    "safetyOnboarding": "ayakkabı güvenliği ZORUNLU",
-   "originAttribution": "Heels is a studio style rather than a community dance — it took shape in commercial dance studios, largely in Los Angeles, drawing on jazz, on waacking and on burlesque and cabaret traditions. Much of what gives it its character was carried in by queer dancers from those older forms."
+   "originAttribution": "Heels is a studio style rather than a community dance — it took shape in commercial dance studios, largely in Los Angeles, drawing on jazz, on waacking and on burlesque and cabaret traditions. Much of what gives it its character was carried in by queer dancers from those older forms.",
+   "description": "A studio style danced in heels, drawing on jazz, waacking and cabaret. Standing, walking and turning all change in heels, so the first work is not choreography but balance."
   },
   {
    "id": "breaking",
@@ -498,7 +828,30 @@
     "power move'lar — güvenlik uyarısıyla"
    ],
    "note": "Toprock/uprock SKORLU",
-   "originAttribution": "Breaking was created by Black and Puerto Rican young people in the Bronx in the early 1970s, as part of the same emerging hip-hop culture as DJing, MCing and writing. Its crews and its named moves have documented originators, and the dance existed for decades before institutions took an interest in it."
+   "originAttribution": "Breaking was created by Black and Puerto Rican young people in the Bronx in the early 1970s, as part of the same emerging hip-hop culture as DJing, MCing and writing. Its crews and its named moves have documented originators, and the dance existed for decades before institutions took an interest in it.",
+   "description": "Danced upright and on the floor: you start on your feet, drop, work through footwork, and finish on a freeze. It is the most athletic dance here and the one with the clearest structure.",
+   "stepGlossary": [
+    {
+     "name": "Toprock",
+     "gloss": "The upright dancing you open with, before going down to the floor."
+    },
+    {
+     "name": "Go-down",
+     "gloss": "The transition that takes you from standing into floorwork."
+    },
+    {
+     "name": "Footwork",
+     "gloss": "Steps danced on hands and feet, circling around your own centre."
+    },
+    {
+     "name": "Freeze",
+     "gloss": "A held shape, usually balanced on hands, that stops the phrase."
+    },
+    {
+     "name": "Power move",
+     "gloss": "Continuous spinning momentum — the acrobatic end of the dance."
+    }
+   ]
   },
   {
    "id": "hula",

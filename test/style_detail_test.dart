@@ -65,9 +65,15 @@ void main() {
       await show(tester, 'vogue');
       expect(find.byKey(StyleDetailView.attributionKey), findsOneWidget);
       expect(find.byKey(StyleDetailView.attributionGapKey), findsNothing);
-      expect(find.textContaining('ballroom'), findsOneWidget,
-          reason: "Vogue's lineage is the one piece of attribution content "
-              'currently written, and it must reach the screen');
+      expect(
+          find.descendant(
+            of: find.byKey(StyleDetailView.attributionKey),
+            matching: find.textContaining('ballroom'),
+          ),
+          findsOneWidget,
+          reason: "Vogue's lineage must reach the screen IN THE ATTRIBUTION "
+              'BOX. Asserting it anywhere on the page stopped meaning that '
+              "once the intro — which also says 'ballroom' — was written.");
     });
 
     testWidgets('every style in the real catalogue shows real attribution',
@@ -238,6 +244,7 @@ void main() {
     testWidgets('an unbuilt style shows no lesson list and no invented content',
         (WidgetTester tester) async {
       await show(tester, 'bachata_solo');
+      await scrollTo(tester, find.byKey(StyleDetailView.noLessonsKey));
       expect(find.byKey(StyleDetailView.noLessonsKey), findsOneWidget);
       expect(find.byKey(StyleDetailView.lessonKey('any')), findsNothing);
       expect(find.byKey(StyleDetailView.honestyKey), findsNothing,
@@ -248,10 +255,82 @@ void main() {
     testWidgets('a style with a safety note shows it before the lessons',
         (WidgetTester tester) async {
       await show(tester, 'heels');
+      await scrollTo(tester, find.byKey(StyleDetailView.cautionKey));
       expect(find.byKey(StyleDetailView.cautionKey), findsOneWidget,
           reason: "content marks this style 'ayakkabı güvenliği ZORUNLU' and a "
               'mandatory safety note that only appears once lessons exist is a '
               'note that arrives too late');
+    });
+  });
+
+  group('intro and glossary (C-151)', () {
+    testWidgets('a style with an intro shows it above the attribution box',
+        (WidgetTester tester) async {
+      await show(tester, 'breaking');
+      expect(find.byKey(StyleDetailView.descriptionKey), findsOneWidget);
+    });
+
+    testWidgets('HULA is deliberately unwritten and still explains itself',
+        (WidgetTester tester) async {
+      // Its on-hold reason forbids producing content from generic sources
+      // without a halau/kumu partnership. A description and a step list are
+      // exactly that, so both are absent BY RULE — and the page must still say
+      // something rather than render as an empty style.
+      final StyleCard hula = lib.cardFor('hula')!;
+      expect(hula.entry.description, isNull,
+          reason: 'writing "what you do in this dance" from books is the thing '
+              'the on-hold reason forbids');
+      expect(hula.entry.stepGlossary, isEmpty);
+
+      await show(tester, 'hula');
+      expect(find.byKey(StyleDetailView.descriptionKey), findsNothing);
+      expect(find.byKey(StyleDetailView.glossaryKey), findsNothing);
+      expect(find.byKey(StyleDetailView.attributionKey), findsOneWidget);
+      expect(find.textContaining('hālau'), findsWidgets,
+          reason: 'the page carries the reason instead of the content');
+    });
+
+    testWidgets('a glossary never reads as a curriculum',
+        (WidgetTester tester) async {
+      await show(tester, 'vogue');
+      final Finder glossary = find.byKey(StyleDetailView.glossaryKey);
+      await scrollTo(tester, glossary);
+      expect(glossary, findsOneWidget);
+
+      // The note is the load-bearing part: vogue is NOT BUILT, so a list of
+      // named steps under it is the easiest thing on this page to misread.
+      expect(find.text(StyleStrings.glossaryNote), findsOneWidget);
+      await scrollTo(tester, find.byKey(StyleDetailView.noLessonsKey));
+      expect(find.byKey(StyleDetailView.noLessonsKey), findsOneWidget,
+          reason: 'the same page must say plainly that nothing is built — a '
+              'glossary without that is a curriculum');
+    });
+
+    testWidgets('a style with no glossary renders no glossary section',
+        (WidgetTester tester) async {
+      // The positive twin. 16 of 34 have none, deliberately; a section that
+      // rendered an empty heading would turn a considered omission into a
+      // broken-looking page.
+      expect(lib.cardFor('kpop_point')!.entry.stepGlossary, isEmpty);
+      await show(tester, 'kpop_point');
+      expect(find.byKey(StyleDetailView.glossaryKey), findsNothing);
+    });
+
+    test('MEASURED: intro on 33/34, glossary on 18/34', () {
+      final int described =
+          lib.cards.where((StyleCard c) => c.entry.description != null).length;
+      final int glossed = lib.cards
+          .where((StyleCard c) => c.entry.stepGlossary.isNotEmpty)
+          .length;
+
+      expect(described, 33,
+          reason: 'every style except hula, which is unwritten by rule');
+      expect(glossed, 18,
+          reason: 'the 16 omissions are deliberate — a style whose vocabulary '
+              'IS the individual routine has no shared names to gloss, and '
+              'guessing plausible-sounding ones reads as knowledge and is not. '
+              'If this number moves, say which style gained a glossary and on '
+              'what basis.');
     });
   });
 }

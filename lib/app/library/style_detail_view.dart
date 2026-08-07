@@ -53,6 +53,8 @@ class StyleDetailView extends StatelessWidget {
   static const Key lessonsKey = Key('style.lessons');
   static const Key noLessonsKey = Key('style.noLessons');
   static const Key cautionKey = Key('style.caution');
+  static const Key descriptionKey = Key('style.description');
+  static const Key glossaryKey = Key('style.glossary');
 
   static Key lessonKey(String id) => Key('style.lesson.$id');
 
@@ -69,7 +71,18 @@ class StyleDetailView extends StatelessWidget {
             children: <Widget>[
               _header(),
               const SizedBox(height: 20),
+              if (card.entry.description != null) ...<Widget>[
+                Text(card.entry.description!,
+                    key: descriptionKey,
+                    style: ChoreiaType.body(
+                        size: 14.5, color: ChoreiaColors.text(0.82))),
+                const SizedBox(height: 20),
+              ],
               _attributionSection(),
+              if (card.entry.stepGlossary.isNotEmpty) ...<Widget>[
+                const SizedBox(height: 20),
+                _glossarySection(),
+              ],
               if (_cautions().isNotEmpty) ...<Widget>[
                 const SizedBox(height: 16),
                 _cautionSection(),
@@ -171,6 +184,43 @@ class StyleDetailView extends StatelessWidget {
       ),
     );
   }
+
+  // ── Step glossary ────────────────────────────────────────────────────
+  //
+  // NAMES, NOT A CURRICULUM. This is the single easiest thing on the page to
+  // misread: a list of steps under a style that is not built reads as "here is
+  // what we teach". The heading, the note and the flat chip treatment all work
+  // against that — no chip is tappable, none carries a status pill, and none
+  // is styled like the lesson cards below it.
+
+  Widget _glossarySection() => Column(
+        key: glossaryKey,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(StyleStrings.glossaryTitle, style: ChoreiaType.display(size: 21)),
+          const SizedBox(height: 4),
+          Text(StyleStrings.glossaryNote,
+              style:
+                  ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55))),
+          const SizedBox(height: 12),
+          for (final GlossaryEntry g in card.entry.stepGlossary)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(g.name,
+                      style: ChoreiaType.label(
+                          size: 10.5, color: ChoreiaColors.text(0.72))),
+                  const SizedBox(height: 3),
+                  Text(g.gloss,
+                      style: ChoreiaType.body(
+                          size: 12.5, color: ChoreiaColors.text(0.66))),
+                ],
+              ),
+            ),
+        ],
+      );
 
   // ── Cautions ─────────────────────────────────────────────────────────
 
@@ -378,6 +428,14 @@ abstract final class StyleStrings {
   static String excluded(String what) => 'Not taught here: $what';
 
   static String needs(List<String> items) => 'You will need: ${items.join(', ')}';
+
+  static const String glossaryTitle = 'Steps you will hear named';
+
+  /// The sentence that stops a glossary reading as a curriculum.
+  static const String glossaryNote =
+      'Names, not lessons. These are what the steps are called so you can '
+      'follow along and look them up — none of them is taught or graded here, '
+      'and a name on this list is not a promise of a lesson behind it.';
 
   static const String lessonsTitle = 'Lessons';
 

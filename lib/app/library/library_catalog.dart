@@ -191,6 +191,8 @@ final class LibraryEntry {
     this.legalFlag,
     this.onHoldReason,
     this.originAttribution,
+    this.description,
+    this.stepGlossary = const <GlossaryEntry>[],
     this.brandWarning,
     this.safetyOnboarding,
     this.cautionClass,
@@ -208,6 +210,14 @@ final class LibraryEntry {
         legalFlag: json['legalFlag'] as String?,
         onHoldReason: json['onHoldReason'] as String?,
         originAttribution: json['originAttribution'] as String?,
+        description: json['description'] as String?,
+        stepGlossary: <GlossaryEntry>[
+          for (final Object? g in (json['stepGlossary'] as List? ?? const []))
+            GlossaryEntry(
+              name: (g as Map)['name'] as String,
+              gloss: g['gloss'] as String,
+            ),
+        ],
         brandWarning: json['brandWarning'] as String?,
         safetyOnboarding: json['safetyOnboarding'] as String?,
         cautionClass: json['cautionClass'] as String?,
@@ -240,6 +250,29 @@ final class LibraryEntry {
   /// [StyleCard.attributionIsMissing].
   final String? originAttribution;
 
+  /// What this dance is and what a person actually does in it.
+  ///
+  /// Null for `hula` alone, and that is the point rather than an oversight:
+  /// its own on-hold reason forbids producing content from generic sources
+  /// without a halau/kumu partnership, and a written description of "what you
+  /// do in this dance" is exactly that. The page carries the reason instead.
+  final String? description;
+
+  /// Names a learner will hear, each with a plain one-line gloss.
+  ///
+  /// **VOCABULARY, NOT LESSONS.** Nothing here is taught, openable or graded,
+  /// and the surface has to keep saying so — a list of step names under a
+  /// style is the easiest thing on this screen to misread as a curriculum.
+  ///
+  /// Empty for 16 of the 34, and the omissions are deliberate: a style whose
+  /// vocabulary IS the individual routine (`kpop_point`, `tiktok_format`) has
+  /// no shared names to gloss, `latin_fusion_fitness` borrows its steps from
+  /// styles that gloss them on their own pages, and the rest were left empty
+  /// where the names could not be given with confidence. Guessing
+  /// plausible-sounding step names reads as knowledge and is not — the same
+  /// failure as inventing a threshold.
+  final List<GlossaryEntry> stepGlossary;
+
   /// A trademark that must not appear in copy (`latin_fusion_fitness`).
   final String? brandWarning;
 
@@ -259,6 +292,14 @@ final class LibraryEntry {
     if (value is String) return value;
     return null;
   }
+}
+
+/// One named step and what it means, in plain words.
+final class GlossaryEntry {
+  const GlossaryEntry({required this.name, required this.gloss});
+
+  final String name;
+  final String gloss;
 }
 
 /// What a library tile actually says.
