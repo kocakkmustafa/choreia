@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/library_view.dart';
@@ -72,6 +73,12 @@ void main() {
     final String longestReason =
         longestOf(lessons.map((LessonInfo l) => l.reason));
 
+    final int mostLimits = all
+        .map((StyleCard c) => c.entry.cameraLimits.length)
+        .fold(0, (int a, int b) => a > b ? a : b);
+    final String longestLimit =
+        longestOf(all.expand((StyleCard c) => c.entry.cameraLimits));
+
     final List<StyleProse> prose = lib.proseByStyle.values.toList();
     final String longestMeasured =
         longestOf(prose.expand((StyleProse p) => p.measured));
@@ -99,6 +106,15 @@ void main() {
                 a.join().length >= b.join().length ? a : b),
         safetyOnboarding:
             longestOf(all.map((StyleCard c) => c.entry.safetyOnboarding)),
+        // The status sentence at the top of the page. Found MISSING by the
+        // coverage gate below, not by inspection — the composite had been
+        // rendering the shortest possible banner while claiming to be the
+        // worst case.
+        onHoldReason:
+            longestOf(all.map((StyleCard c) => c.entry.onHoldReason)),
+        cameraLimits: <String>[
+          for (int i = 0; i < mostLimits; i++) longestLimit,
+        ],
         safetyExclusions: all
             .map((StyleCard c) => c.entry.safetyExclusions)
             .reduce((a, b) => a.join().length >= b.join().length ? a : b),
@@ -246,5 +262,40 @@ void main() {
       expect(tester.takeException(), isNull,
           reason: 'the catalogue overflowed at 2x while scrolling (drag $i)');
     }
+  });
+
+  test('the composite covers EVERY field the page renders (C-162)', () {
+    // The composite auto-feeds from content, but only through the fields its
+    // builder names — so a field added to the schema is invisible to it until
+    // someone remembers. `cameraLimits` was exactly that: written, rendered,
+    // and absent from the worst case for as long as it took to notice.
+    //
+    // Scanning the view for what it actually reads is the same discipline that
+    // fixed the exemption lists (C-153): the builder can no longer fall behind
+    // the page without this failing.
+    final String view =
+        File('lib/app/library/style_detail_view.dart').readAsStringSync();
+    final Set<String> rendered = RegExp(r'card\.entry\.(\w+)')
+        .allMatches(view)
+        .map((RegExpMatch m) => m.group(1)!)
+        .toSet();
+    expect(rendered.length, greaterThan(4),
+        reason: 'the scan found almost nothing — it is measuring nothing');
+
+    final String builder = File('test/worst_case_page_test.dart')
+        .readAsStringSync();
+    // Only the builder body, so a field mentioned solely in this assertion
+    // does not count as covered.
+    final String body = builder.substring(
+        builder.indexOf('StyleCard worstCase()'),
+        builder.indexOf('test(\'the composite really is worse'));
+
+    final List<String> uncovered = <String>[
+      for (final String f in rendered)
+        if (!body.contains('$f:') && !body.contains('.$f')) f,
+    ];
+    expect(uncovered, isEmpty,
+        reason: 'the style page renders $uncovered but the worst-case builder '
+            'never sets it, so the longest version of it is never measured');
   });
 }

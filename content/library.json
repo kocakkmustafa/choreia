@@ -81,7 +81,11 @@
    "scoring": "pose",
    "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka",
    "originAttribution": "The fitness-class format is a late commercial packaging; the dancing inside it is not. Its steps are borrowed from Latin American social dances — salsa, merengue, cumbia, reggaeton — each with its own country and its own history, and the credit belongs to those dances rather than to the exercise format built on top of them.",
-   "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. The class runs on repeating blocks of salsa, merengue, cumbia and reggaeton footwork, at a pace that keeps moving."
+   "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. The class runs on repeating blocks of salsa, merengue, cumbia and reggaeton footwork, at a pace that keeps moving.",
+   "cameraLimits": [
+    "Whether you are working hard. Effort is heart rate and breath, and a camera reads neither — it sees where your limbs are, not what they cost you.",
+    "The bounce that carries a whole class. Sustained low-amplitude movement is where the difference between teachers is smaller than our own measurement noise."
+   ]
   },
   {
    "id": "line_dance",
@@ -113,6 +117,10 @@
      "name": "Pivot turn",
      "gloss": "A half turn taken on the balls of both feet."
     }
+   ],
+   "cameraLimits": [
+    "Whether you are on the same count as the room. That is a timing judgement, and timing needs a beat grid we do not have for this style.",
+    "Which wall you are facing. A single fixed camera loses you the moment the dance turns you away from it."
    ]
   },
   {
@@ -157,7 +165,11 @@
    "scoring": "pose",
    "note": "Orijinal kombolar; isimli viral koreografi öğretilmez",
    "originAttribution": "Short dances made to spread on social platforms through the 2010s and 2020s. A great many of them were created by Black teenagers — often girls — whose choreography travelled worldwide while their names did not, and that pattern of uncredited borrowing is part of this form's history. This app teaches general movement vocabulary and reproduces no named creator's routine.",
-   "description": "Short dances made to be learned from a phone screen and danced back into one. They are built from a handful of sharp, repeatable moves timed to a specific fragment of a song."
+   "description": "Short dances made to be learned from a phone screen and danced back into one. They are built from a handful of sharp, repeatable moves timed to a specific fragment of a song.",
+   "cameraLimits": [
+    "Whether it looks good on camera, which is the entire point of this form. Framing, angle and timing to the edit are the craft here, and none of them is a joint angle.",
+    "Facial performance. Our reading is of bodies, and half of what makes these dances land is above the shoulders."
+   ]
   },
   {
    "id": "kpop_point",
@@ -172,7 +184,11 @@
    "cautionClass": "high",
    "note": "Ajans içeriği yüksek-dikkat; bağımsız eğitmen kanalları öncelikli. Ayna-modu zorunlu",
    "originAttribution": "The 'point' is the signature hook section of a Korean pop song's choreography, a convention of the Korean idol industry that grew from the 1990s onward. These routines are the work of named choreographers and production companies. They are not reproduced here; what can be taught is the movement vocabulary they draw on.",
-   "description": "The signature hook section of a Korean pop routine — the part everyone recognises and copies. It is dense, precise and short, and it rewards clean shapes over big movement."
+   "description": "The signature hook section of a Korean pop routine — the part everyone recognises and copies. It is dense, precise and short, and it rewards clean shapes over big movement.",
+   "cameraLimits": [
+    "Sharpness — the stop at the end of a movement, which is what separates this from ordinary dancing. Judging it needs the beat pinned down, and that is a measurement we do not have.",
+    "Unison. These routines are built to be danced by several people at once, and one camera watching one dancer cannot see the thing being judged."
+   ]
   },
   {
    "id": "bachata_solo",
@@ -200,6 +216,10 @@
      "name": "Hip motion",
      "gloss": "The hip lift on the fourth count that gives bachata its shape."
     }
+   ],
+   "cameraLimits": [
+    "Whether your weight truly arrived on the stepping foot. The knee-angle change that would show it sits inside our own landmark noise (M-F-117), so any answer would mostly be jitter.",
+    "The hip on the fourth count, as a feeling rather than a shape. We can see where your hip is; we cannot see whether you let it happen or pushed it."
    ]
   },
   {
@@ -233,6 +253,10 @@
      "name": "Gwara gwara",
      "gloss": "A leg sweep and lean, from South African house dancing."
     }
+   ],
+   "cameraLimits": [
+    "Feel. These steps are danced loose, and looseness is not a position — two dancers can hit identical angles and only one of them is dancing.",
+    "Foot detail on the fast legwork. Toe and heel are the least reliable points a phone camera produces, and this vocabulary lives there."
    ]
   },
   {
@@ -249,7 +273,11 @@
     "Dutty Wine — boyun riski"
    ],
    "originAttribution": "Jamaican dancehall grew out of Kingston's sound-system culture from the late 1970s. Unusually among popular dances, its steps are individually named and datable, and most can be traced to a specific dancer and a specific moment — which makes crediting them possible in a way it often is not elsewhere.",
-   "description": "Jamaican dancehall is a vocabulary of named steps, each with its own attitude and its own moment. Each step stands on its own, and dancers pick between them as the riddim moves."
+   "description": "Jamaican dancehall is a vocabulary of named steps, each with its own attitude and its own moment. Each step stands on its own, and dancers pick between them as the riddim moves.",
+   "cameraLimits": [
+    "Attitude, which is most of what makes a dancehall step correct. It is carried in the face, the timing and the intent, and none of those is a limb position.",
+    "Floor contact in the low steps. Contact timing is the weakest thing a single camera resolves."
+   ]
   },
   {
    "id": "shuffle",
@@ -263,7 +291,11 @@
    "scoring": "pose",
    "note": "≥60fps önerisi — hızlı ayak işi",
    "originAttribution": "The shuffle developed in Melbourne's rave and underground club scene from the late 1980s and 1990s, and later picked up related 'cutting shapes' variants from UK dance scenes. It is a club dance made by dancers on floors, with no single author.",
-   "description": "A fast shuffling footwork danced to four-on-the-floor electronic music. The whole dance lives below the knees — the upper body stays quiet while the feet slide and kick."
+   "description": "A fast shuffling footwork danced to four-on-the-floor electronic music. The whole dance lives below the knees — the upper body stays quiet while the feet slide and kick.",
+   "cameraLimits": [
+    "The slide. What makes a shuffle read is friction against the floor — how the foot moves ACROSS it, not where the foot is.",
+    "Speed at the point where it stops being resolvable. Fast lower-leg work blurs, and a blurred landmark is a guess wearing a number."
+   ]
   },
   {
    "id": "belly_dance",
@@ -298,6 +330,10 @@
      "name": "Figure eight",
      "gloss": "The hips tracing a horizontal or vertical eight."
     }
+   ],
+   "cameraLimits": [
+    "Isolation quality — whether the rest of you really stayed still. Small unintended movement is exactly the size of our noise floor, so 'clean' and 'nearly clean' look the same to us.",
+    "Muscle-driven detail like a shimmy's origin. We see the result on the surface; the technique underneath is not visible to a camera."
    ]
   },
   {
@@ -312,7 +348,11 @@
    "scoring": "pose",
    "note": "Mudra: el-landmark varsa skorlu, yoksa demo",
    "originAttribution": "Film dance from the Hindi-language film industry in Mumbai, which from the mid-twentieth century blended Indian classical forms such as kathak and bharatanatyam with folk traditions including bhangra and garba, and with Western popular dance. Individual film routines are their choreographers' work and are not reproduced here.",
-   "description": "Film dance from Hindi cinema — expressive, rhythmic and unafraid of scale. It borrows from Indian classical and folk forms and from Western popular dance, often within a single song."
+   "description": "Film dance from Hindi cinema — expressive, rhythmic and unafraid of scale. It borrows from Indian classical and folk forms and from Western popular dance, often within a single song.",
+   "cameraLimits": [
+    "Mudras and fine hand shape. Finger landmarks are below the resolution we work at, and in the classical vocabulary the hand IS the meaning.",
+    "Expression. This is a dance form built on telling a story with the face, and we do not read faces."
+   ]
   },
   {
    "id": "merengue_solo",
@@ -326,7 +366,11 @@
    "scoring": "pose",
    "note": "Bachata/shines deseninin birebir tekrarı — en ucuz ekleme",
    "originAttribution": "Merengue is the national dance of the Dominican Republic, danced there long before it was promoted abroad, and it carries the same African and European meeting that shaped the island's music.",
-   "description": "A simple, insistent march danced on the spot or side to side, with the hips carrying what the feet keep plain. It is the most quickly learned of the Latin social dances and the hardest to make look good."
+   "description": "A simple, insistent march danced on the spot or side to side, with the hips carrying what the feet keep plain. It is the most quickly learned of the Latin social dances and the hardest to make look good.",
+   "cameraLimits": [
+    "Weight transfer, for the same measured reason as every other march-like step: the change we would look for is smaller than what the camera reliably sees.",
+    "Whether the hips are moving because the legs made them, or because you pushed them. The shape is the same; the technique is not."
+   ]
   },
   {
    "id": "cumbia_solo",
@@ -339,7 +383,11 @@
    "countSystem": "8count",
    "scoring": "pose",
    "originAttribution": "Cumbia began on Colombia's Caribbean coast, in the meeting of Indigenous, African and Spanish traditions, and then travelled: Mexico, Argentina, Peru and others each grew their own cumbia with its own step and its own feel. Naming it one dance understates it.",
-   "description": "A dragging, unhurried step danced with one foot brushing the floor, in a small circle or a shuffle. Every country that took up cumbia bent it a different way, so the feel varies more than the footwork."
+   "description": "A dragging, unhurried step danced with one foot brushing the floor, in a small circle or a shuffle. Every country that took up cumbia bent it a different way, so the feel varies more than the footwork.",
+   "cameraLimits": [
+    "The drag. This step is defined by one foot brushing the floor, and floor contact is the weakest measurement a single camera makes.",
+    "Which regional cumbia you are dancing. We would be comparing you against one version of a dance that has many, and we are not going to call the others wrong."
+   ]
   },
   {
    "id": "ballroom_latin_solo",
@@ -381,6 +429,10 @@
      "name": "Hip action",
      "gloss": "The settling of the hip that follows a straightened knee."
     }
+   ],
+   "cameraLimits": [
+    "Foot pressure — which part of the foot is carrying you, and how hard. This is most of Latin technique and it is invisible from outside.",
+    "Whether the hip settled because the knee straightened, or because you moved it. The end position is identical; the technique is the whole difference."
    ]
   },
   {
@@ -417,6 +469,10 @@
      "name": "Time step",
      "gloss": "A repeating rhythmic phrase used to set tempo and trade with musicians."
     }
+   ],
+   "cameraLimits": [
+    "The sound, which is the entire art form. A camera has no ears, so we would be watching a dance whose point we cannot perceive.",
+    "Which part of the shoe made contact. Toe, heel and edge are separate instruments here and they are the least reliable points we track."
    ]
   },
   {
@@ -449,6 +505,10 @@
      "name": "Scoobot",
      "gloss": "A travelling step with a kick and a hop, danced side to side."
     }
+   ],
+   "cameraLimits": [
+    "The stop. Locking is defined by arriving and HOLDING, and judging a hold needs timing we cannot measure without a beat grid.",
+    "Comic timing. The pause is a joke with a length, and we have no way to say whether yours landed."
    ]
   },
   {
@@ -482,6 +542,10 @@
      "name": "Robot",
      "gloss": "Movement broken into separate mechanical segments, with pauses between."
     }
+   ],
+   "cameraLimits": [
+    "The pop itself. It is a muscle contraction, not a change of position — the limb barely moves, which is exactly the size our measurements cannot separate from noise.",
+    "Smoothness in waves and glides. What makes them work is the absence of visible steps between frames, and frames are all we have."
    ]
   },
   {
@@ -510,6 +574,10 @@
      "name": "Spin",
      "gloss": "A turn used to change facing and reset the arms."
     }
+   ],
+   "cameraLimits": [
+    "Speed at the whip. Fast arm work blurs, and we would rather say nothing than score a blur.",
+    "Presence. The poses between the arms are the dance, and whether a pose reads is not a matter of where your elbow is."
    ]
   },
   {
@@ -546,6 +614,10 @@
      "name": "Spins and dips",
      "gloss": "A turn that drops into a controlled fall onto the back leg."
     }
+   ],
+   "cameraLimits": [
+    "Hands. Hand performance is a whole category of this dance and finger landmarks are below the resolution we work at.",
+    "Whether it reads. Vogue is judged at balls on line, drama and confidence — none of which is a measurement, and all of which is the point."
    ]
   },
   {
@@ -577,6 +649,10 @@
      "name": "Isolation",
      "gloss": "Moving one body part while the rest stays still."
     }
+   ],
+   "cameraLimits": [
+    "Line — whether an extension finishes. The last few degrees of a stretch are where jazz technique lives and where our tolerance is widest.",
+    "Attack. The same shape arrived at sharply or lazily is the same shape to us."
    ]
   },
   {
@@ -591,7 +667,11 @@
    "scoring": "pose",
    "note": "Karnaval solo samba. Gafieira ayrı SKU DEĞİL — ileri-stil katmanı",
    "originAttribution": "Samba no pé is the solo footwork of Brazilian samba, an Afro-Brazilian form that grew in the communities of Bahia and Rio de Janeiro and is carried today by the samba schools and their carnival. The dance and the drumming are one tradition, not two.",
-   "description": "The solo footwork of Brazilian samba — a bouncing three-step danced in the time of two, fast and low. The bounce comes from the knees, not from jumping."
+   "description": "The solo footwork of Brazilian samba — a bouncing three-step danced in the time of two, fast and low. The bounce comes from the knees, not from jumping.",
+   "cameraLimits": [
+    "The bounce, at the speed it actually happens. Samba's footwork is fast and low, which is the combination our landmarks resolve worst.",
+    "Whether the bounce comes from the knees or from jumping. The vertical travel can look alike; the technique does not."
+   ]
   },
   {
    "id": "solo_jazz_charleston",
@@ -623,6 +703,10 @@
      "name": "Shorty George",
      "gloss": "Walking forward low, knees together, pointing at the floor."
     }
+   ],
+   "cameraLimits": [
+    "Swing — whether you are riding the rhythm or marching through it. That is a timing judgement, and timing needs a beat grid.",
+    "Bounce quality. The pulse that makes this dance swing is small, continuous and inside our noise floor."
    ]
   },
   {
@@ -637,7 +721,11 @@
    "scoring": "pose",
    "note": "Dhol ritmi RhythmEngine'e uygun; müfredat ORİJİNAL geliştirilir",
    "originAttribution": "Bhangra is a harvest dance of the Punjab, the region now divided between India and Pakistan, tied to Baisakhi and to the farming year. It has a second life as a British-Punjabi popular music and club form from the 1980s, made by the children of migrants — both are real bhangra and they are not the same dance.",
-   "description": "A high-energy Punjabi dance of raised arms, bouncing shoulders and stamping feet, danced to the dhol drum. It is meant to be big — the small version does not work."
+   "description": "A high-energy Punjabi dance of raised arms, bouncing shoulders and stamping feet, danced to the dhol drum. It is meant to be big — the small version does not work.",
+   "cameraLimits": [
+    "Energy, which is the form's own standard. A big bhangra and a small one can trace similar angles.",
+    "Shoulder detail at speed. Fast repeated movement blurs, and a blurred landmark is not a measurement."
+   ]
   },
   {
    "id": "ballet_barre",
@@ -673,6 +761,10 @@
      "name": "Relevé",
      "gloss": "A rise onto the balls of the feet."
     }
+   ],
+   "cameraLimits": [
+    "Turnout's source — whether rotation comes from the hip or is forced at the knee and foot. From outside they look alike, and the difference is the one that injures people.",
+    "Weight distribution over the foot. Ballet is largely a conversation with the floor, and we cannot see pressure."
    ]
   },
   {
@@ -689,7 +781,11 @@
     "yer frazları — floorwork"
    ],
    "originAttribution": "Contemporary dance descends from the modern dance of the early twentieth century, made by choreographers — many of them women — who deliberately refused ballet's codified vocabulary and built their own. It is less a single technique than a family of them, each with a named lineage.",
-   "description": "A family of techniques descended from twentieth-century modern dance, built on weight, breath and release rather than on a fixed vocabulary. Floorwork and falling are technique here, not accidents."
+   "description": "A family of techniques descended from twentieth-century modern dance, built on weight, breath and release rather than on a fixed vocabulary. Floorwork and falling are technique here, not accidents.",
+   "cameraLimits": [
+    "Weight and release, which is what the technique is about. Whether you fell or lowered yourself produces similar paths and opposite intentions.",
+    "Floorwork. A single front-facing camera loses most of a body once it is on the ground."
+   ]
   },
   {
    "id": "flamenco",
@@ -724,6 +820,10 @@
      "name": "Remate",
      "gloss": "A short ending flourish that closes a phrase."
     }
+   ],
+   "cameraLimits": [
+    "The footwork's sound. Zapateado is percussion, and we cannot hear it — the parts of flamenco a camera can see are not the parts it is judged on.",
+    "Compás. Flamenco's counting is the discipline of the form and judging it needs a beat grid we do not have."
    ]
   },
   {
@@ -738,7 +838,11 @@
    "scoring": "pose+onset",
    "note": "Hard-shoe = onset; soft-shoe = poz+sıçrama kadraj kalibrasyonu. TEK lineage seçilir",
    "originAttribution": "Irish dance covers both the social forms — céilí and set dancing, danced together — and the competitive step dance most familiar abroad. Its transmission survived long periods when Irish cultural practice was suppressed, and the modern competitive form was shaped substantially in the twentieth century.",
-   "description": "Sharp, quick footwork with the upper body held still, danced on the balls of the feet. The legs do everything and they do it in a very small amount of space."
+   "description": "Sharp, quick footwork with the upper body held still, danced on the balls of the feet. The legs do everything and they do it in a very small amount of space.",
+   "cameraLimits": [
+    "Foot contact and sound in the hard-shoe forms — the least reliable measurement we make, on the thing that decides whether it is right.",
+    "Turnout and crossing at the speed this dance moves. The positions are precise and the tempo is exactly where our landmarks degrade."
+   ]
   },
   {
    "id": "kizomba_zouk_solo",
@@ -754,7 +858,11 @@
     "cambré — skor baskısı YOK, güvenlik çerçevesi"
    ],
    "originAttribution": "Kizomba came from Angola, growing out of semba, and took shape alongside Cape Verdean and French Antillean zouk music. It is an African dance with a specific history, frequently marketed abroad as though it were generically 'Latin'.",
-   "description": "A slow, grounded walking dance from Angola, practised here on your own. The step is simple and the difficulty is all in the weight — where it sits and how long it takes to arrive."
+   "description": "A slow, grounded walking dance from Angola, practised here on your own. The step is simple and the difficulty is all in the weight — where it sits and how long it takes to arrive.",
+   "cameraLimits": [
+    "Weight, which is the entire technique here. How long it takes to arrive is the dance, and the change we would measure is inside our noise floor.",
+    "Groundedness. Whether you are connected to the floor or hovering above it is felt, not seen."
+   ]
   },
   {
    "id": "garba",
@@ -783,6 +891,10 @@
      "name": "Circle step",
      "gloss": "The travelling step that carries the whole circle around the centre."
     }
+   ],
+   "cameraLimits": [
+    "The clap. It is half the pattern and a camera has no ears.",
+    "Whether you are with the circle. This is a group dance, and one camera watching one person cannot see the thing that makes it work."
    ]
   },
   {
@@ -798,7 +910,11 @@
    "policyBucket": "sensual_expression",
    "note": "3/4 kamera açısı modu. Store-policy turu bu kovaya BİRLİKTE bakar — W4 öncesi kurucu onayı",
    "originAttribution": "Twerk's immediate lineage runs through New Orleans bounce, and behind that through West and Central African dances in which isolated hip and glute movement is long-established technique. Reggaeton grew from Panama and Puerto Rico out of reggae en español and dancehall. Both were treated as vulgar while they belonged to Black and Latino communities and as fashionable once they did not.",
-   "description": "Isolated hip and glute movement danced to reggaeton and its relatives — technique that is far older and far more controlled than its reputation. The control comes from the lower back and the legs."
+   "description": "Isolated hip and glute movement danced to reggaeton and its relatives — technique that is far older and far more controlled than its reputation. The control comes from the lower back and the legs.",
+   "cameraLimits": [
+    "Control versus momentum. The same movement driven from the lower back or thrown with the whole body looks similar and is not the same technique.",
+    "Isolation quality, for the measured reason that unintended movement elsewhere is the size of our noise floor."
+   ]
   },
   {
    "id": "heels",
@@ -812,7 +928,11 @@
    "scoring": "pose",
    "safetyOnboarding": "ayakkabı güvenliği ZORUNLU",
    "originAttribution": "Heels is a studio style rather than a community dance — it took shape in commercial dance studios, largely in Los Angeles, drawing on jazz, on waacking and on burlesque and cabaret traditions. Much of what gives it its character was carried in by queer dancers from those older forms.",
-   "description": "A studio style danced in heels, drawing on jazz, waacking and cabaret. Standing, walking and turning all change in heels, so the first work is not choreography but balance."
+   "description": "A studio style danced in heels, drawing on jazz, waacking and cabaret. Standing, walking and turning all change in heels, so the first work is not choreography but balance.",
+   "cameraLimits": [
+    "Balance — the actual difficulty of this style. Whether you are stable or recovering is a continuous negotiation we cannot see from joint angles.",
+    "Ankle and foot detail, which the shoe hides from the camera as well as from us."
+   ]
   },
   {
    "id": "breaking",
@@ -851,6 +971,10 @@
      "name": "Power move",
      "gloss": "Continuous spinning momentum — the acrobatic end of the dance."
     }
+   ],
+   "cameraLimits": [
+    "Anything inverted or on the floor. Our pose reading is built for an upright body facing a camera, and most of breaking is neither.",
+    "Power and momentum. Whether a move is controlled or barely survived is the difference every judge cares about and none of it is a position."
    ]
   },
   {

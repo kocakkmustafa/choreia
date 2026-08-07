@@ -53,6 +53,7 @@ class StyleDetailView extends StatelessWidget {
   static const Key lessonsKey = Key('style.lessons');
   static const Key noLessonsKey = Key('style.noLessons');
   static const Key cautionKey = Key('style.caution');
+  static const Key cameraLimitsKey = Key('style.cameraLimits');
   static const Key descriptionKey = Key('style.description');
   static const Key glossaryKey = Key('style.glossary');
 
@@ -104,6 +105,10 @@ class StyleDetailView extends StatelessWidget {
               if (card.prose != null && !card.prose!.isEmpty) ...<Widget>[
                 const SizedBox(height: 24),
                 _honestySection(card.prose!),
+              ],
+              if (card.entry.cameraLimits.isNotEmpty) ...<Widget>[
+                const SizedBox(height: 24),
+                _cameraLimitsSection(),
               ],
             ],
           ),
@@ -361,6 +366,41 @@ class StyleDetailView extends StatelessWidget {
     );
   }
 
+  // ── What a camera cannot see ─────────────────────────────────────────
+  //
+  // The honesty block for a style with nothing built. It sits at the BOTTOM,
+  // after the lessons section has already said plainly that nothing exists —
+  // reading "what a camera cannot see" before that could be taken as the
+  // caveat on a product that is here, rather than a fact about the dance.
+
+  Widget _cameraLimitsSection() => Column(
+        key: cameraLimitsKey,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(StyleStrings.limitsTitle, style: ChoreiaType.display(size: 21)),
+          const SizedBox(height: 4),
+          Text(StyleStrings.limitsNote,
+              style:
+                  ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55))),
+          const SizedBox(height: 12),
+          GlassPanel(
+            tint: ChoreiaColors.amber,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                for (final String line in card.entry.cameraLimits)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(line,
+                        style: ChoreiaType.body(
+                            size: 12.5, color: ChoreiaColors.text(0.76))),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      );
+
   // ── Honesty ──────────────────────────────────────────────────────────
 
   Widget _honestySection(StyleProse p) => Column(
@@ -447,6 +487,14 @@ abstract final class StyleStrings {
   static const String noLessons =
       'Nothing is built for this style. It is in the catalogue because we '
       'intend to teach it, and there is no lesson behind the name today.';
+
+  static const String limitsTitle = 'What a camera cannot see here';
+
+  /// The sentence that stops this from reading as a caveat on a live product.
+  static const String limitsNote =
+      'About this dance and a phone camera — not about lessons. Nothing is '
+      'built for this style, and these are the parts we would still not be '
+      'able to read if it were.';
 
   static const String honestyTitle = 'What this style can tell you';
 

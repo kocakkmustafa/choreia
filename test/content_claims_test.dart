@@ -119,4 +119,72 @@ void main() {
             'above were written while nothing was — re-read them before '
             'relaxing anything.');
   });
+
+  group('the honesty block an unbuilt style CAN have (C-161)', () {
+    test('every style that could have camera limits has them', () {
+      // A RULE, not a count (C-160). Two styles carry a real `honesty` block
+      // in their own document and need no substitute; hula is unwritten by its
+      // own on-hold reason. Everything else must say what a camera cannot see
+      // in it — and a 35th unbuilt style added tomorrow falls under this
+      // automatically.
+      final Iterable<StyleCard> owed = lib.cards.where((StyleCard c) =>
+          c.courses == null && c.entry.id != 'hula');
+      expect(owed, isNotEmpty);
+
+      final List<String> silent = <String>[
+        for (final StyleCard c in owed)
+          if (c.entry.cameraLimits.isEmpty) c.entry.id,
+      ];
+      expect(silent, isEmpty,
+          reason: 'these styles say nothing about what we cannot see in them: '
+              '$silent');
+    });
+
+    test('a style with a REAL honesty block does not get the substitute', () {
+      for (final StyleCard c in lib.cards.where((c) => c.courses != null)) {
+        expect(c.entry.cameraLimits, isEmpty,
+            reason: '${c.entry.id} has measured honesty in its own document. A '
+                'second, weaker block beside it would let a claim about the '
+                'DANCE be read as a claim about the measurements we took.');
+        expect(c.prose!.notMeasured, isNotEmpty,
+            reason: '${c.entry.id} must carry the real block if it is skipping '
+                'the substitute');
+      }
+    });
+
+    test('hula carries neither, and that is the rule', () {
+      final StyleCard hula = lib.cardFor('hula')!;
+      expect(hula.entry.cameraLimits, isEmpty);
+      expect(hula.entry.onHoldReason, isNotNull,
+          reason: 'the page must still have something to say');
+    });
+
+    test('a camera limit never promises a future measurement', () {
+      // The danger specific to this field: "a camera cannot see X" is one word
+      // away from "a camera cannot see X YET", which would turn a statement
+      // about a sensor into a roadmap.
+      final RegExp promise = RegExp(
+          r'\byet\b|\bsoon\b|coming|\bwill be able\b|\bonce we\b',
+          caseSensitive: false);
+      final List<String> offenders = <String>[
+        for (final StyleCard c in lib.cards)
+          for (final String line in c.entry.cameraLimits)
+            if (promise.hasMatch(line)) '${c.entry.id}: $line',
+      ];
+      expect(offenders, isEmpty, reason: '$offenders');
+    });
+
+    test('and never claims a measurement we do not make', () {
+      // The other direction: a limit that says "we check Y" would be a
+      // capability claim smuggled into a limits list — the J-113 shape.
+      final RegExp claims =
+          RegExp(r'\bwe (check|measure|score|grade)\b', caseSensitive: false);
+      final List<String> offenders = <String>[
+        for (final StyleCard c in lib.cards)
+          for (final String line in c.entry.cameraLimits)
+            if (claims.hasMatch(line)) '${c.entry.id}: $line',
+      ];
+      expect(offenders, isEmpty, reason: '$offenders');
+    });
+  });
 }

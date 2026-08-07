@@ -193,6 +193,7 @@ final class LibraryEntry {
     this.originAttribution,
     this.description,
     this.stepGlossary = const <GlossaryEntry>[],
+    this.cameraLimits = const <String>[],
     this.brandWarning,
     this.safetyOnboarding,
     this.cautionClass,
@@ -211,6 +212,7 @@ final class LibraryEntry {
         onHoldReason: json['onHoldReason'] as String?,
         originAttribution: json['originAttribution'] as String?,
         description: json['description'] as String?,
+        cameraLimits: LibraryEntry._strings(json['cameraLimits']),
         stepGlossary: <GlossaryEntry>[
           for (final Object? g in (json['stepGlossary'] as List? ?? const []))
             GlossaryEntry(
@@ -272,6 +274,23 @@ final class LibraryEntry {
   /// plausible-sounding step names reads as knowledge and is not — the same
   /// failure as inventing a threshold.
   final List<GlossaryEntry> stepGlossary;
+
+  /// What one phone camera cannot see in THIS dance.
+  ///
+  /// The honesty block for a style that has none. The two authored styles carry
+  /// a real `honesty` block — `measured` / `notMeasured`, every line traceable
+  /// to a measurement someone actually took. The other 32 have no lessons and
+  /// no pipeline, so they cannot have that: writing "we do not check X" about a
+  /// style with nothing built would describe a product that does not exist.
+  ///
+  /// This says the thing that IS true of an unbuilt style — a limit of the
+  /// dance and the sensor, present tense, true whether or not a lesson is ever
+  /// built. Every line reuses a limit this app has already measured (toe/heel
+  /// contact · weight transfer inside the noise floor · left/right on a
+  /// symmetric movement · anything the dancer HEARS) rather than inventing one.
+  ///
+  /// Empty for `hula`, by the same rule that leaves its description empty.
+  final List<String> cameraLimits;
 
   /// A trademark that must not appear in copy (`latin_fusion_fitness`).
   final String? brandWarning;

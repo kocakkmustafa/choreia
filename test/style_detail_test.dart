@@ -399,6 +399,44 @@ void main() {
               'producing content from generic sources');
     });
   });
+
+  group('camera limits on the page (C-161)', () {
+    testWidgets('an unbuilt style shows them, under a note that says why',
+        (WidgetTester tester) async {
+      await show(tester, 'tap');
+      final Finder section = find.byKey(StyleDetailView.cameraLimitsKey);
+      await scrollTo(tester, section);
+      expect(section, findsOneWidget);
+
+      // The note is the load-bearing part: without it, "what a camera cannot
+      // see" reads as the caveat on a working product rather than a fact about
+      // the dance.
+      expect(find.text(StyleStrings.limitsNote), findsOneWidget);
+
+      // And the page must still say plainly that nothing is built.
+      await scrollTo(tester, find.byKey(StyleDetailView.noLessonsKey));
+      expect(find.byKey(StyleDetailView.noLessonsKey), findsOneWidget);
+    });
+
+    testWidgets('an authored style shows the REAL honesty block instead',
+        (WidgetTester tester) async {
+      await show(tester, 'salsa_shines');
+      final Finder honesty = find.byKey(StyleDetailView.honestyKey);
+      await scrollTo(tester, honesty);
+      expect(honesty, findsOneWidget);
+      expect(find.byKey(StyleDetailView.cameraLimitsKey), findsNothing,
+          reason: 'a measured block and a substitute block on one page would '
+              'let a claim about the dance be read as a measurement');
+    });
+
+    testWidgets('hula shows neither block and still explains itself',
+        (WidgetTester tester) async {
+      await show(tester, 'hula');
+      expect(find.byKey(StyleDetailView.cameraLimitsKey), findsNothing);
+      expect(find.byKey(StyleDetailView.honestyKey), findsNothing);
+      expect(find.byKey(StyleDetailView.attributionKey), findsOneWidget);
+    });
+  });
 }
 
 /// Asset paths declared under `flutter: assets:`.
@@ -426,4 +464,5 @@ Set<String> _declaredAssets() {
     }
   }
   return out;
+
 }
