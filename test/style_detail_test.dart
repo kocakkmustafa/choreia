@@ -216,35 +216,51 @@ void main() {
   group('no button promises a door that does not open', () {
     testWidgets('MEASURED: no lesson in the app can be started today',
         (WidgetTester tester) async {
-      // This is the honest state of the whole app, asserted rather than
-      // described. Of the 15 declared lessons, 4 name a step; of those, only
-      // `ss_shine_footwork` has a reference the bundle serves — and it belongs
-      // to the release-gated style. When any of that changes, this test fails
-      // LOUDLY and gets its number updated, which is the point.
+      // The honest state of the whole app, asserted rather than described.
+      // Was 0 until 2026-08-07 12:0x, when `hh_bounce` was declared in
+      // `pubspec.yaml` and `hip_hop_foundations` finally became openable on a
+      // device — the badge had been claiming `demoOpen` all along (C-185).
+      //
+      // ⚠️ REACHING A LESSON IS NOT THE LESSON WORKING. The pose model the
+      // live page asks for ships nowhere (C-186), so this 1 counts a door
+      // that opens, not a room with a floor. Pinned in
+      // `reachability_test.dart`; named here so this number is never read as
+      // "the core loop is live".
       int startable = 0;
       for (final StyleCard c in lib.cards) {
         startable +=
             c.offers(deviceRunnable).where((LessonOffer o) => o.canStart).length;
       }
-      expect(startable, 0,
-          reason: 'if this is now non-zero, a lesson became runnable — verify '
-              'its reference is BUNDLED (pubspec assets), not merely on disk');
+      expect(startable, 1,
+          reason: 'başlatılabilir ders sayısı değişti — referansının diskte '
+              'DEĞİL, pubspec\'te BEYANLI olduğunu doğrula (C-185)');
 
+      // The release-gated style stays shut regardless: its bpm range is
+      // DISPUTED, so no lesson in it may ship at all.
       await show(tester, 'salsa_shines');
       expect(find.widgetWithText(FilledButton, StyleStrings.start), findsNothing,
-          reason: 'a Start button here would call LiveLessonPage, which loads '
-              'its reference asset with no error handling — an unhandled '
-              'exception behind a button');
+          reason: 'yayın kapısı kapalı bir stilde Start düğmesi, kapının '
+              'kendisini anlamsız kılar');
     });
 
     testWidgets('a blocked lesson gets a sentence, never a greyed-out button',
         (WidgetTester tester) async {
       await show(tester, 'hip_hop_foundations');
-      // A disabled "Start" says the door might open if you tried harder.
-      expect(find.widgetWithText(FilledButton, StyleStrings.start), findsNothing);
+      // This style now has exactly ONE startable lesson, so a Start button is
+      // expected — what must NOT exist is a DISABLED one. A greyed-out
+      // "Start" says the door might open if you tried harder; a sentence says
+      // what is missing and whose job it is.
+      for (final FilledButton b
+          in tester.widgetList<FilledButton>(find.byType(FilledButton))) {
+        expect(b.onPressed, isNotNull,
+            reason: 'ölü/soluk bir Start düğmesi var — engel cümleyle '
+                'anlatılmalı, düğmeyi soluklaştırarak değil');
+      }
 
+      // The measured blockers in this style: one lesson lacks a measurement,
+      // four have no lesson built. Both must be named in words.
       final Finder sentence = find
-          .textContaining(StyleStrings.blocked(LessonBlock.referenceMissing));
+          .textContaining(StyleStrings.blocked(LessonBlock.measurementMissing));
       await scrollTo(tester, sentence);
       expect(sentence, findsWidgets,
           reason: 'the blocked reason names what is missing, in words');
@@ -252,9 +268,19 @@ void main() {
 
     testWidgets('a step with no servable reference is blocked AS a reference '
         'gap, not as something else', (WidgetTester tester) async {
+      // NO LESSON IS IN THIS STATE ANY MORE. `hh_bounce` used to be the
+      // subject and shipped on 2026-08-07; every reference on disk is now
+      // declared. That is a good outcome and a testing problem: the class is
+      // still reachable — the next style pack to arrive without its reference
+      // lands here — and deleting the test because today's subject recovered
+      // would be a gate that preserves silence (C-172).
+      //
+      // So the derivation is exercised directly, with the real catalogue and
+      // an EMPTY runnable set, which is exactly what a step whose reference
+      // does not serve looks like to `LessonOffer`.
       final StyleCard hh = lib.cardFor('hip_hop_foundations')!;
       final LessonOffer bounce = hh
-          .offers(deviceRunnable)
+          .offers(const <String>{})
           .firstWhere((LessonOffer o) => o.lesson.id == 'hh_l1_bounce');
 
       expect(bounce.lesson.stepId, 'hh_bounce');
@@ -263,6 +289,14 @@ void main() {
               'else could be blocking it — if this reports styleShut or '
               'noLessonBuilt, the reasons are being ordered wrongly and a '
               'dancer gets a true sentence answering the wrong question');
+
+      // And the same lesson with the REAL runnable set is now open — the two
+      // assertions together prove the block is derived from servability, not
+      // from a property of the lesson itself.
+      final LessonOffer live = hh
+          .offers(deviceRunnable)
+          .firstWhere((LessonOffer o) => o.lesson.id == 'hh_l1_bounce');
+      expect(live.block, isNull);
     });
   });
 

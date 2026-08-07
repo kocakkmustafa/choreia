@@ -83,6 +83,7 @@ flutter:
     # the app for no runtime reader. Adding a reference means adding a line
     # here — and a forgotten line fails loudly at load, which is the failure
     # direction to prefer.
+    - content/references/hh_bounce.json
     - content/references/hh_roger_rabbit.json
     - content/references/hh_running_man.json
     - content/references/ss_shine_footwork.json

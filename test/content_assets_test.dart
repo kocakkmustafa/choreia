@@ -97,19 +97,22 @@ void main() {
   /// class of the limit (family lesson 5 — write the limit's CLASS, not just
   /// its existence), and the test below proves each listed file really exists,
   /// so this list cannot quietly rot into a lie once the gap is closed.
-  const Map<String, String> knownUnshipped = <String, String>{
-    'content/references/hh_bounce.json':
-        'Built and measured (3 sources, none thin) but carries '
-            'mirrorConfident:false, where the one shipped reference '
-            '(ss_shine_footwork) carries true. Whether a reference that cannot '
-            'resolve left from right may ship for a DEMO-ONLY lesson — which '
-            'issues measurements and never a side-dependent verdict — is a '
-            'product ruling, not a build fix. Raised to the coordinator '
-            '2026-08-07; withheld until it is answered, because shipping a '
-            'reference that failed a gate is worse than shipping none. NOTE: '
-            "library.json's own note claims this step has NO reference, which "
-            'is measurably wrong — the file is 74 KB on disk.',
-  };
+  // EMPTY since 2026-08-07 12:0x — C-143 was ruled and `hh_bounce` shipped.
+  //
+  // The entry that lived here withheld a reference carrying
+  // `mirrorConfident: false` while the question "may such a reference back a
+  // DEMO-ONLY lesson, which issues measurements and never a side-dependent
+  // verdict" was open. The ruling turned on a second measurement, not on the
+  // original question: `library.json` already registered the style
+  // `demoOpen`, so withholding the file did not hide a lesson — it left the
+  // BADGE lying on every device (C-185).
+  //
+  // Kept as an empty map rather than deleted. The mechanism is the point: a
+  // reference that is built, reachable from a lesson, and deliberately not
+  // shipped must be NAMED here with the class of its limit, or the test below
+  // fails. Deleting the map would mean the next withheld file is silent, and
+  // silence is exactly what this file exists to prevent.
+  const Map<String, String> knownUnshipped = <String, String>{};
 
   test('the known-unshipped list describes reality, not a memory', () {
     for (final String path in knownUnshipped.keys) {
