@@ -531,20 +531,38 @@ abstract final class StyleStrings {
 
   static const String limitsTitle = 'What a camera cannot see here';
 
-  /// The sentence that stops this from reading as a caveat on a live product.
+  /// The sentence that stops this from reading as a caveat on a live product
+  /// — AND from reading as a complete list (C-177).
+  ///
+  /// "These are the parts" was a closed set, printed directly under a step
+  /// glossary. Every sentence in both blocks was true and the FRAME made them
+  /// say something false: five named steps above, two named limits below, and
+  /// a reader concludes the other three are checked. A true sentence in the
+  /// wrong frame is read wrong.
   static const String limitsNote =
       'About this dance and a phone camera — not about lessons. Nothing is '
-      'built for this style, and these are the parts we would still not be '
-      'able to read if it were.';
+      'built for this style. These are examples, not a full list: plenty more '
+      'would be out of reach too, and naming a few is not a promise about the '
+      'rest.';
 
   static const String honestyTitle = 'What this style can tell you';
 
+  /// THE TWO LISTS ARE NOT A PARTITION, and the frame used to imply they were
+  /// (C-177).
+  ///
+  /// `measured` is COMPLETE — it is exactly what gets scored, and nothing
+  /// outside it is. `notMeasured` is a SAMPLE: the things not checked are
+  /// unbounded, and content names the ones worth naming. Two headings in the
+  /// same register, side by side, read as a closed partition — which quietly
+  /// UNDER-states the limits, the one direction this app must never err in.
   static const String honestyNote =
-      'And what it cannot. Both lists come from measurements, not from what we '
-      'would prefer to claim.';
+      'The first list is complete — nothing outside it is scored. The second '
+      'is not, and cannot be: it names the limits worth naming, not every '
+      'thing we do not check. Both come from measurements rather than from '
+      'what we would prefer to claim.';
 
-  static const String measuredTitle = 'WE CHECK THIS';
-  static const String notMeasuredTitle = 'WE DO NOT CHECK THIS';
+  static const String measuredTitle = 'WE CHECK THIS — ALL OF IT';
+  static const String notMeasuredTitle = 'WE DO NOT CHECK THIS — AMONG OTHERS';
 
   /// Names the difference between "not scored" and "never scored".
   static const String permanentTitle = 'THIS ONE WILL NOT CHANGE';

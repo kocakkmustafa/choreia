@@ -654,6 +654,76 @@ void main() {
       expect(offenders, isEmpty, reason: '$offenders');
     });
   });
+
+  group('ÇERÇEVE DE BİR İDDİADIR (C-177)', () {
+    // "Doğru bir cümle yanlış bir çerçevede yanlış okunur." Bu kapı tek tek
+    // cümlelerin doğruluğunu değil, KOMŞULUKLARIN ürettiği iddiayı ölçüyor —
+    // bu gece bulunan iki kusurun ikisi de her cümlesi doğru olan bloklardı.
+
+    test('sınır listesi TAM LİSTE gibi sunulamaz', () {
+      // Ölçülen kusur: not "these are the parts" diyordu (kapalı küme) ve
+      // hemen ÜSTÜNDE 5 maddelik adım sözlüğü vardı. Birlikte okununca:
+      // "işte adımlar · işte göremediklerimiz" → geri kalanı kontrol ediliyor.
+      expect(StyleStrings.limitsNote, contains('not a full list'),
+          reason: 'sınırlar örneklem; kapalı küme gibi sunmak, adlandırılmayan '
+              'her şeyin kontrol edildiği iddiasını üretir');
+      expect(StyleStrings.limitsNote, isNot(contains('these are the parts')));
+    });
+
+    testWidgets('sözlük ve sınırlar aynı sayfadayken not MUTLAKA görünür',
+        (WidgetTester tester) async {
+      // Komşuluk kapısı: kusuru üreten şey ikisinin YAN YANA olmasıydı, tek
+      // başına hiçbiri değil. Sözlüğü olan her stilde not aranıyor.
+      for (final StyleCard c in lib.cards) {
+        if (c.entry.stepGlossary.isEmpty || c.entry.cameraLimits.isEmpty) {
+          continue;
+        }
+        tester.view.physicalSize = const Size(375, 4000);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(MaterialApp(
+            theme: ChoreiaTheme.dark, home: StyleDetailView(card: c)));
+        await tester.pump();
+
+        expect(find.text(StyleStrings.limitsNote), findsOneWidget,
+            reason: '${c.entry.id}: sözlük ve sınırlar aynı sayfada ve '
+                '"tam liste değil" notu görünmüyor');
+        expect(find.text(StyleStrings.glossaryNote), findsOneWidget,
+            reason: '${c.entry.id}: sözlük "ders değil" notu olmadan '
+                'duruyor');
+      }
+    });
+
+    test('iki dürüstlük listesi BÖLÜNTÜ gibi sunulamaz', () {
+      // measured TAM (skorlanan her şey), notMeasured ÖRNEKLEM (kontrol
+      // edilmeyen sonsuz). Aynı registerde yan yana iki başlık kapalı bir
+      // bölüntü okutur — ve bu, sınırları EKSİK gösterir, yani bu uygulamanın
+      // asla yanılmaması gereken yön.
+      expect(StyleStrings.measuredTitle, contains('ALL OF IT'));
+      expect(StyleStrings.notMeasuredTitle, contains('AMONG OTHERS'));
+      expect(StyleStrings.honestyNote, contains('complete'));
+      expect(StyleStrings.honestyNote, contains('is not, and cannot be'),
+          reason: 'ikinci listenin tamamlanamaz olduğu SÖYLENMELİ — yoksa '
+              'dört madde, kontrol edilmeyen her şey sanılır');
+    });
+
+    testWidgets('authored stilde iki liste birlikte ve notuyla görünür',
+        (WidgetTester tester) async {
+      // Gerçek telefon genişliğinde + kaydırarak: salsa 9 uzun ders taşıyor ve
+      // sayfa herhangi bir sabit yüzeye sığmıyor. Yükseklik büyütmek yerine
+      // kaydırmak, gerçek okuma yolunu ölçüyor.
+      await show(tester, 'salsa_shines');
+      final Finder note = find.text(StyleStrings.honestyNote);
+      await scrollTo(tester, note);
+
+      expect(note, findsOneWidget,
+          reason: 'iki liste notsuz yan yana durursa bölüntü okunur');
+      expect(find.text(StyleStrings.measuredTitle), findsOneWidget);
+      expect(find.text(StyleStrings.notMeasuredTitle), findsOneWidget,
+          reason: 'iki başlık aynı ekranda olmalı — biri kaydırma dışında '
+              'kalırsa okur yalnız "kontrol ediyoruz" tarafını görür');
+    });
+  });
 }
 
 /// Asset paths declared under `flutter: assets:`.
