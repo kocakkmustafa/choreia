@@ -3,6 +3,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:motion_core/motion_core.dart' show SessionRecord;
 
 import '../library/library_catalog.dart';
+import '../onboarding/first_run_flag.dart';
+import '../onboarding/first_run_view.dart';
 import '../library/library_view.dart';
 import '../progress_summary.dart';
 import '../progress_view.dart';
@@ -33,12 +35,20 @@ import '../theme.dart';
 /// all; the choice lives entirely in [_destinations] and changing it touches
 /// nothing else.
 class ChoreiaShell extends StatefulWidget {
-  const ChoreiaShell({super.key, this.bundleOverride});
+  const ChoreiaShell({
+    super.key,
+    this.bundleOverride,
+    this.flagOverride,
+  });
 
   /// Lets a test drive the shell off repository files instead of the asset
   /// bundle — `rootBundle.loadString` deadlocks under `flutter test` in this
   /// setup (see `test/support/test_catalog.dart` for the measurement).
   final Future<LibraryCatalog> Function()? bundleOverride;
+
+  /// Lets a test drive the first-run screen without touching the filesystem.
+  /// Defaults to the real marker file; see `FileFirstRunFlag`.
+  final FirstRunFlag? flagOverride;
 
   static const Key libraryTabKey = Key('shell.tab.library');
   static const Key progressTabKey = Key('shell.tab.progress');
@@ -52,6 +62,27 @@ class ChoreiaShell extends StatefulWidget {
 class _ChoreiaShellState extends State<ChoreiaShell> {
   int _index = 0;
   late Future<LibraryCatalog> _catalog = _load();
+  late final FirstRunFlag _flag =
+      widget.flagOverride ?? const FileFirstRunFlag();
+
+  /// `null` until the flag has been read. The intro must not flash on top of
+  /// the catalogue for one frame and then vanish — a returning user should
+  /// never see it at all, so the shell waits for the answer rather than
+  /// guessing `false` and correcting itself.
+  bool? _introSeen;
+
+  @override
+  void initState() {
+    super.initState();
+    _flag.hasSeenIntro().then((bool seen) {
+      if (mounted) setState(() => _introSeen = seen);
+    });
+  }
+
+  Future<void> _dismissIntro() async {
+    await _flag.markSeen();
+    if (mounted) setState(() => _introSeen = true);
+  }
 
   Future<LibraryCatalog> _load() => widget.bundleOverride != null
       ? widget.bundleOverride!()
@@ -69,7 +100,16 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
           // product when it is a fact about a failure. NO DEAD END (M-F-268) —
           // the branch always offers an action.
           if (snap.hasError) return _failure();
-          if (!snap.hasData) return _loading();
+          if (!snap.hasData || _introSeen == null) return _loading();
+          if (_introSeen == false) {
+            // Built from the SAME catalogue the library will show, so the
+            // intro can never quote a different inventory than the screen
+            // behind it.
+            return FirstRunView(
+              tally: LibraryTally.from(snap.data!.cards),
+              onContinue: _dismissIntro,
+            );
+          }
           return _shell(snap.data!);
         },
       );

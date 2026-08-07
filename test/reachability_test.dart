@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/library_view.dart';
+import 'package:choreia/app/onboarding/first_run_flag.dart';
+import 'package:choreia/app/onboarding/first_run_view.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
 import 'package:choreia/app/progress_view.dart';
 import 'package:choreia/app/shell/choreia_shell.dart';
@@ -91,16 +93,37 @@ void main() {
     library = await LibraryCatalog.load(DeviceBundle(declared));
   });
 
-  Widget app(NavigatorObserver spy) => MaterialApp(
+  /// A FRESH INSTALL by default — which is the only walk that matches what a
+  /// new user experiences. Passing `seen: true` measures the returning user.
+  Widget app(NavigatorObserver spy, {bool introSeen = false}) => MaterialApp(
         navigatorObservers: <NavigatorObserver>[spy],
-        home: ChoreiaShell(bundleOverride: () async => library),
+        home: ChoreiaShell(
+          bundleOverride: () async => library,
+          flagOverride: MemoryFirstRunFlag(seen: introSeen),
+        ),
       );
+
+  /// Dismisses the first-run screen the way a user does: by pressing the
+  /// button on it. Never by setting the flag behind the UI — a walk that
+  /// skips a screen cannot report on whether that screen has an exit.
+  Future<void> passIntro(WidgetTester tester) async {
+    expect(find.byType(FirstRunView), findsOneWidget,
+        reason: 'taze kurulumda tanıtım ekranı görünmüyor');
+    await tester.tap(find.byKey(FirstRunView.continueKey));
+    await _settle(tester);
+  }
 
   group('kaç ekrana GİDİLEBİLİR — ölçüm, iddia değil', () {
     testWidgets('KATI okuma: ayrı rota sayısı', (WidgetTester tester) async {
       final _RouteSpy spy = _RouteSpy();
       await tester.pumpWidget(app(spy));
       await _settle(tester);
+
+      // 0 — the first-run screen. A PLACE, not a route: it is drawn inside
+      // the shell's own route, so it changes what a new user sees without
+      // changing what the strict count measures. Counted in the loose
+      // reading below.
+      await passIntro(tester);
 
       // 1 — the shell itself. `MaterialApp.home` is a route the user is
       // standing on, so it counts; it is the floor, not a destination.
@@ -164,6 +187,7 @@ void main() {
       final _RouteSpy spy = _RouteSpy();
       await tester.pumpWidget(app(spy));
       await _settle(tester);
+      await passIntro(tester);
 
       // The shell's two destinations. Switched by `IndexedStack`, so the route
       // never changes — invisible to the strict count, and yet a user plainly
@@ -179,15 +203,24 @@ void main() {
           reason: 'kütüphane sekmesine geri dönülemiyor');
 
       final Finder card =
-          find.byKey(LibraryView.tileKey(library.cards.first.entry.id));
+          find.byKey(LibraryView.tileKey('hip_hop_foundations'));
       await tester.ensureVisible(card);
       await _settle(tester);
       await tester.tap(card);
       await _settle(tester);
       expect(find.byType(StyleDetailView), findsOneWidget);
 
-      // library + progress + style detail = 3.
-      expect(spy.pushed.length + 2, 3,
+      final Finder startButton = find.widgetWithText(FilledButton, 'Start');
+      await _scrollTo(tester, startButton);
+      await tester.ensureVisible(startButton);
+      await _settle(tester);
+      await tester.tap(startButton);
+      await _settle(tester);
+
+      // GEVŞEK = 5: tanıtım · kütüphane · ilerleme · stil sayfası · canlı ders.
+      // Üçü rota (spy), ikisi (tanıtım, ilerleme sekmesi) itilmeden geçilen
+      // yer — ve bir kullanıcı ikisini de "bir yere gittim" diye yaşıyor.
+      expect(spy.pushed.length + 3, 5,
           reason: 'GEVŞEK sayı beklenenden farklı. Rotalar: ${spy.pushed}');
     });
 
