@@ -1,5 +1,37 @@
 #!/usr/bin/env python3
-"""Reference harvest pilot: probe → download → extract → gate.
+"""_disconnected (C-212, koordinatör ölçümü, 2026-08-12): Reference harvest
+PİLOT — GERÇEK boru hattından KOPUK. ÇALIŞTIRMAYIN.
+
+    Bir aracın VARLIĞI, onun boru hattına BAĞLI olduğu anlamına gelmez.
+    Provenance kaydı, kaydettiği şeyin var olduğunu KANITLAMAZ.
+
+ÖLÇÜLDÜ: bu betiğin `--fetch`i çıktıyı `harvest/fixtures/<step>/<id>.json`'a
+yazar (repo-yerel, gitignored). Ama `tools/prepare_take.py` /
+`tools/classify_source.py` (dolayısıyla TÜM C-207 dispatch hattı)
+`~/motion-harvest/choreia/landmarks/<id>.full.json`'dan okur — TAMAMEN
+FARKLI yol VE isimlendirme. Kanıt: `harvest/PILOT-PROVENANCE.json`
+`hh_cabbage_patch` için 4 gerçek take kaydediyor (gerçek modelVersion/SHA
+ile — yani bu araç GERÇEKTEN koştu) ama o video id'lerin HİÇBİRİ
+`~/motion-harvest/choreia/landmarks/`de YOK. Çıktı üretildi, gerçek depoya
+hiç ulaşmadı. Mevcut 53 fixture BAŞKA bir yoldan geldi.
+
+DOĞRU ARAÇLAR:
+  triyaj   tools/probe_candidates.py --step X ID [ID...]  (GERÇEK çözünürlük/
+           aspect-ratio kontrolü yapar — bu betiğin `--probe`u yalnız süreye
+           bakar, R14'te YANLIŞ araçla kullanıldı, sonuç doğru çıktı ama
+           tekrar edilmemeli)
+  fetch    motion-core harvest_rig `harvest.py run --url ... --app choreia
+           --library ~/motion-harvest/choreia` — HANGİ KOPYA (paylaşımlı ağaç
+           vs `~/motion-worktrees/coordinator-main`) kullanılacağı 2026-08-12
+           itibarıyla KOORDİNATÖRDE (iki kopya 172 satır farklı, M-F-280
+           sınıfı bayatlık — bkz. DEFTER C-213)
+
+SİLİNMEDİ: silmek NEDEN kopuk olduğunu da silerdi. Aşağıdaki kod, tarihsel
+kayıt olarak duruyor (`harvest/PILOT-PROVENANCE.json` ona atıf veriyor) ama
+`main()` artık HİÇBİR ALT KOMUTU ÇALIŞTIRMAZ — yalnız bu notu basar.
+
+--- ESKİ DOCSTRING (artık geçerli değil, tarihsel bağlam için tutuluyor) ---
+Reference harvest pilot: probe → download → extract → gate.
 
 Deliberately staged. Probing is metadata-only and costs nothing, so it runs
 first and answers the questions that decide whether a download is worth doing at
@@ -10,10 +42,6 @@ survives the probe gets fetched.
 Retention rule (C-024): the media is working material, not product. Landmarks,
 angles, beat grids and provenance are kept; the video and its audio are deleted
 once extraction succeeds.
-
-Usage:
-  python3 tools/harvest.py --probe                 # metadata only, no download
-  python3 tools/harvest.py --fetch <step>          # download probed candidates
 """
 
 from __future__ import annotations
@@ -261,20 +289,13 @@ def fetch_and_extract(step: str, *, keep_media: bool = False) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--probe", action="store_true",
-                    help="metadata only, downloads nothing")
-    ap.add_argument("--fetch", metavar="STEP",
-                    help="download + extract probed candidates for a step")
-    ap.add_argument("--keep-media", action="store_true",
-                    help="debug only; violates the retention rule if committed")
-    args = ap.parse_args()
-    if args.probe:
-        probe_all()
-        return 0
-    if args.fetch:
-        return fetch_and_extract(args.fetch, keep_media=args.keep_media)
-    ap.print_help()
+    # _disconnected (C-212): hiçbir alt komut ÇALIŞTIRILMAZ. Bu betiğin
+    # çıktısı gerçek depoya hiç ulaşmıyordu (bkz. modül docstring'i) — burayı
+    # sessizce çalışır bırakmak, tam olarak aynı hatanın bir sonraki tur
+    # tarafından SESSİZCE tekrarlanmasına izin verirdi. `ap.print_help()`
+    # yerine isimle DURDURUYOR: bir yardım metni okunmayabilir, bir hata
+    # okunur.
+    print(__doc__)
     return 1
 
 

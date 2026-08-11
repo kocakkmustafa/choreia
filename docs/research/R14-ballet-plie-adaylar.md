@@ -71,22 +71,37 @@ mekanizma, isim değil davranış paylaşıyor). Diz fleksiyonu baskın değişk
 DEĞİLSE (ör. `wwXH3fFdtog`'da segment grand-plié'ye kayarsa genlik `hh_bounce`
 referansından belirgin ayrışır) bu ÖLÇÜLECEK, varsayılmayacak.
 
-## `--probe` sonucu (koordinatör onayı, metadata-only — 2026-08-12)
+## `--probe` sonucu — YANLIŞ ARAÇLA, sonradan düzeltildi (2026-08-12)
 
-`python3 tools/harvest.py --probe` koşturuldu. 7 adayın 7'si de `candidate`
-verdiktiyle döndü (süre 44-702s, hepsi kullanılabilir aralıkta), **7 ayrı
-kanal doğrulandı** (elle `yt-dlp` kontrolümle birebir tutarlı — sürpriz yok).
-`bhm-Mek3Qws` de dahil: **reddedilmedi**, kanal adı gerçekten "Haynes
-Manuals" olarak doğrulandı ama bu RET gerekçesi değil, sıralamada en sona
-konmasının gerekçesi (koordinatör: *şüphe bir sıralama gerekçesidir, eleme
-gerekçesi değil*). Çıktı `harvest/probe.json`'a yazıldı (gitignored, ürün
-deposunun parçası değil).
+İlk turda `python3 tools/harvest.py --probe` koşturuldu (7/7 candidate, 7
+ayrı kanal, süre 44-702s). **Bu YANLIŞ araçtı** — koordinatör ölçtü:
+`tools/harvest.py` gerçek boru hattından KOPUK (bkz. DEFTER C-212, dosya
+artık `_disconnected` işaretli, `--probe`/`--fetch` artık çalışmıyor). Süre
+verisi kendisi yanlış değildi ama yöntem (yalnız süre kontrolü) ailenin
+gerçek triyaj standardı değil.
+
+## GERÇEK triyaj — `tools/probe_candidates.py` (2026-08-12, düzeltme)
+
+```
+python3 tools/probe_candidates.py --step bb_plie ON8ptc6ymF0 k70uyYKlIU0 \
+  27skzncX3Ms wdhihrgXGYI wwXH3fFdtog I3aP1J-xH7c bhm-Mek3Qws
+```
+
+**6/7 ADAY**, gerçek akış çözünürlüğüyle doğrulandı (başlıktan/tahminden
+DEĞİL): `ON8ptc6ymF0` 3840x2160 · `k70uyYKlIU0` 1920x1080 · `27skzncX3Ms`
+3840x2160 · `wdhihrgXGYI` 1920x1080 · `wwXH3fFdtog` 3840x2160 ·
+`I3aP1J-xH7c` 1280x720 — hepsi yatay. **`bhm-Mek3Qws` REDDEDİLDİ** — ama
+şüpheyle değil: bu aracın eşiği 60s, video 44s, **ÖLÇÜLEN süre** eleme
+gerekçesi oldu (kanal kimliği şüphesi hâlâ doğrulanmadı, ayrı kaldı).
+**6 aday / 6 ayrı eğitmen** — referans tüketim sözleşmesinin (§3 kural 6)
+5-take eşiğini fetch öncesinden rahatça karşılıyor.
 
 ## Sınır — bu turda YAPILMAYAN
 
-- Hiçbir video indirilmedi, hiçbir landmark çıkarılmadı (`--fetch` koşulmadı).
+- Hiçbir video indirilmedi, hiçbir landmark çıkarılmadı (`--fetch`
+  koşulmadı — ne eski disconnected araçla ne başka biriyle).
+- **Fetch aracı KARARSIZ:** `motion-core` harvest_rig'in iki kopyası (paylaşımlı
+  ağaç vs `~/motion-worktrees/coordinator-main`) 172 satır farklı ve hangisinin
+  53 mevcut fixture'ı ürettiği ÖLÇÜLEMEDİ (DEFTER C-213, koordinatörde açık).
 - Eşik icat edilmedi, `ballet_barre` için hiçbir `steps/*.json` yazılmadı.
-- `bhm-Mek3Qws`in kimliği (gerçekten bir dans kanalı mı, tek video mu çok
-  video mu) ölçülmedi, yalnız kanal ADI doğrulandı — hasat sırasında EN SON
-  denenip, düşerse havuzdan sessizce değil İSİMLE çıkarılmalı.
 - `JubuC3Lh1i4` `CANDIDATES`e hiç eklenmedi — aday değil, elenemedi.
