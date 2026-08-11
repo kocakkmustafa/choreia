@@ -122,6 +122,17 @@ TRUNK_TILT = "trunk_tilt"
 
 
 def core_joint_ids() -> set[str]:
+    """İKİ AYRI ARIZA SINIFI, İKİ AYRI ÇIKIŞ (koordinatör hükmü, C-210):
+    kardeş repo checkout edilmemişse ORTAM eksikliği (exit 2, ne yeşil ne
+    kırmızı) — pin okunamıyorsa GERÇEK problem (kırmızı). Aynı sözleşme
+    validate_content.py'de; buraya kopyalanmasının sebebi bu dosyanın
+    kendi CORE_REPO/CORE_PIN sabitlerini bağımsız taşıması (M-F-03 — core
+    yalnız OKUNUR, ve iki aracın verdiktleri birbirine kenetlenmez)."""
+    if not (CORE_REPO / ".git").exists():
+        print(f"ORTAM YOK: motion-core kardeş repo olarak checkout "
+             f"edilmemiş ({CORE_REPO}) — bu araç burada koşamadı")
+        raise SystemExit(2)
+
     r = subprocess.run(
         ["git", "-C", str(CORE_REPO), "show", f"{CORE_PIN}:{CORE_JOINTS_PATH}"],
         capture_output=True, text=True,

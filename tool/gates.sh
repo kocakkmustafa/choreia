@@ -21,10 +21,23 @@ set -u
 cd "$(dirname "$0")/.."
 
 fail=0
+skipped=0
 run() {
   local name="$1"; shift
   printf '── %s\n' "$name"
-  if "$@" > /tmp/choreia-gate.$$ 2>&1; then
+  "$@" > /tmp/choreia-gate.$$ 2>&1
+  local code=$?
+  if [ "$code" -eq 0 ]; then
+    tail -1 /tmp/choreia-gate.$$
+  elif [ "$code" -eq 2 ]; then
+    # ÜÇÜNCÜ HÂL (koordinatör hükmü, C-210): "ortam yok" ne yeşil ne
+    # kırmızı. Yerel eksiklik (harvest havuzu boş, motion-core kardeş repo
+    # checkout edilmemiş) repo-geneli commit'i BLOKLAMAZ — ama "hepsi
+    # yeşil"e SESSİZCE karışmaz da; ayrı sayılır, ayrı görünür. Kod bunu
+    # exit 2 ile işaretler; koşucu adına ve içeriğine BAKMAZ, yalnız çıkış
+    # koduna — isim etiket kalıp davranışı belirlemesin diye.
+    skipped=$((skipped+1))
+    echo "   ⚪ ORTAM YOK"
     tail -1 /tmp/choreia-gate.$$
   else
     fail=1
@@ -62,4 +75,8 @@ if [ "$fail" -ne 0 ]; then
   exit 1
 fi
 echo
-echo "✅ hepsi yeşil"
+if [ "$skipped" -ne 0 ]; then
+  echo "✅ hepsi yeşil ($skipped ortam-yok ADIYLA atlandı — yukarıda ⚪)"
+else
+  echo "✅ hepsi yeşil"
+fi

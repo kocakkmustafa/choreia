@@ -150,8 +150,13 @@ def fetch_and_extract(step: str, *, keep_media: bool = False) -> int:
     venv_py = (REPO.parents[1] / "motion-core" / "lib" / "tools" /
                "fixture_pipeline" / ".venv" / "bin" / "python")
     if not extractor.exists() or not venv_py.exists():
-        print(f"extraction pipeline not found: {extractor}")
-        return 1
+        # ORTAM YOK (koordinatör hükmü, C-210), GERÇEK HASAT ARIZASI DEĞİL:
+        # motion-core kardeş repo checkout edilmemiş/kurulmamış — bu, "0
+        # kullanılabilir aday" (return 1) ile AYNI sınıf değil, hiçbiri
+        # denenemedi demek. exit 2 çağıranın ikisini ayırt etmesini sağlar.
+        print(f"ORTAM YOK: extraction pipeline bulunamadı ({extractor}) — "
+             "motion-core kardeş repo checkout/kurulum eksik")
+        return 2
 
     ok = 0
     for r in rows:

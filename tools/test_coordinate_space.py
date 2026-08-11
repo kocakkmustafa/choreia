@@ -79,16 +79,16 @@ def aspect_of(video_id: str) -> float:
 def main() -> int:
     files = sorted(glob.glob(f"{LIB}/*.full.json"))
     if not files:
-        # A5(b), koordinatör sevki: önceden bu satır 0 dönerdi ve
-        # gates.sh'in `tail -1` özetinde gerçek bir "N fixture, 0 hata"
-        # geçişinden AYIRT EDİLEMİYORDU — "0 dosya = OK" bir ÖLÇÜM değil
-        # bir VARSAYIMDI (taze klonda / harvest havuzu boşken sessizce
-        # vakum-yeşil). Kırmızı YAPILMADI (yerel veri eksikliği repo-geneli
-        # commit'i bloklamamalı) ama son satır artık İSİMLE söylüyor —
-        # gerçek bir "OK"la karıştırılamaz.
-        print("ATLANDI (0 fixture): ~/motion-harvest/choreia/landmarks boş — "
-              "coordinate-space regresyonu bu koşumda ÖLÇÜLMEDİ, doğrulanmadı")
-        return 0
+        # A5(b), koordinatör hükmü (C-210): "ortam yok" ÜÇÜNCÜ HÂLDİR — ne
+        # yeşil ne kırmızı. Önceden bu satır 0 dönerdi ve gates.sh'in
+        # `tail -1` özetinde gerçek bir "N fixture, 0 hata" geçişinden
+        # AYIRT EDİLEMİYORDU — "0 dosya = OK" bir ÖLÇÜM değil VARSAYIMDI.
+        # Exit 2, tool/gates.sh'in ORTAM-YOK sözleşmesi: kırmızı SAYILMAZ
+        # (yerel veri eksikliği repo-geneli commit'i bloklamaz) ama "hepsi
+        # yeşil"e sessizce karışmaz da — ayrı sayılır, son satırda İSİMLE.
+        print("ORTAM YOK: ~/motion-harvest/choreia/landmarks boş — "
+              "coordinate-space regresyonu bu koşumda ÖLÇÜLMEDİ")
+        return 2
 
     print("Aynı vücut, iki farklı kare en-boyunda yeniden ölçülüyor "
           "(16:9 ve 9:16).\n")

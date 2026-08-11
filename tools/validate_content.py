@@ -38,8 +38,24 @@ VALID_SEVERITIES = {"safety", "critical", "major", "minor", "info"}
 
 
 def core_joint_ids() -> set[str]:
-    """Joint ids declared in the pinned motion_core's StandardJoints."""
+    """Joint ids declared in the pinned motion_core's StandardJoints.
+
+    İKİ AYRI ARIZA SINIFI, İKİ AYRI ÇIKIŞ (koordinatör hükmü, C-210):
+    kardeş repo HİÇ checkout edilmemişse bu bir ORTAM eksikliği — taze bir
+    klonda/başka bir makinede beklenir, ürün kusuru değil (exit 2, ne
+    yeşil ne kırmızı — bkz. tool/gates.sh). Kardeş repo ORADA ama pin
+    okunamıyorsa (yanlış dal, çekilmemiş tag) bu GERÇEK bir problem — o
+    hâlâ kırmızı (exit 1 / SystemExit varsayılanı). Önceden ikisi AYNI
+    opak hatayı üretiyordu ve taze klondaki geliştirici "içerik bozuk"
+    sanabilirdi (O-084 sınıfı risk).
+    """
     import subprocess
+
+    if not (CORE_REPO / ".git").exists():
+        print(f"ORTAM YOK: motion-core kardeş repo olarak checkout "
+             f"edilmemiş ({CORE_REPO}) — bu kapı burada koşamadı, içerik "
+             "ÖLÇÜLMEDİ")
+        raise SystemExit(2)
 
     r = subprocess.run(
         ["git", "-C", str(CORE_REPO), "show", f"{CORE_PIN}:{CORE_JOINTS_PATH}"],
