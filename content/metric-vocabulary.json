@@ -37,7 +37,9 @@
    "usedBy": [
     "hh_bounce.error:BOUNCE_INVERTED"
    ],
-   "state": "declared-only"
+   "state": "declared-only",
+   "family": "rhythm",
+   "familyNote": "C-207: DAİMA kapsam dışı (ritim/zamanlama puanı bu üründe yok) — 'henüz yorumlanmadı' değil 'asla yorumlanmayacak'. jointRef yok, olmayacak."
   },
   "cyclePhaseNear": {
    "readBy": [
@@ -91,7 +93,10 @@
     "dh_bounce.phase:top",
     "hh_bounce.phase:bottom"
    ],
-   "state": "declared-only"
+   "state": "declared-only",
+   "family": "flexion",
+   "jointRef": ["left_knee", "right_knee"],
+   "familyNote": "C-207: hasat hattının cycleUnit.driver dispatch'i (tools/prepare_take.py `_driver_series`) bunu artık isimle okuyor — ama `readBy`/`state` DEĞİŞMEDİ, çünkü validate_metric_vocabulary.py'nin okuyucu tespiti hâlâ kaynakta LİTERAL DİZGE arıyor ve dinamik (JSON-güdümlü) dispatch literal iz bırakmıyor. Bu, kaydın yanlışlığı değil, ölçüm YÖNTEMİNİN bir sınırı — C-202'nin kendi dersi gereği (elle yazılmış bir isim listesi kendi kendini onaylar) bu sınır KAPATILMADI, yalnız burada isimle NOT edildi."
   },
   "leading_side": {
    "readBy": [],
@@ -113,7 +118,9 @@
     "ss_basic.error:NO_WEIGHT_TRANSFER",
     "ss_shine_footwork.error:NO_WEIGHT_TRANSFER"
    ],
-   "state": "declared-only"
+   "state": "declared-only",
+   "family": "composite",
+   "familyNote": "C-207: koordinatör (b) — bileşim semantiği (önce weight_side sorulur, SONRA o bacağın diz-fleksiyon değişimi okunur) ölçülmedi, ilk kesime İCAT EDİLMİYOR. jointRef yok; isimli ret 'outOfScope:composite'."
   },
   "movement_during_hold": {
    "readBy": [],
@@ -178,7 +185,9 @@
     "ss_basic.error:STEP_LATE",
     "ss_shine_footwork.error:STEP_LATE"
    ],
-   "state": "declared-only"
+   "state": "declared-only",
+   "family": "rhythm",
+   "familyNote": "C-207: DAİMA kapsam dışı — bkz. bottom_beat_phase.familyNote"
   },
   "trunk_tilt": {
    "readBy": [
@@ -194,7 +203,10 @@
     "hh_rock.phase:return",
     "sh_running_man.error:TRUNK_COLLAPSE"
    ],
-   "state": "interpreted"
+   "state": "interpreted",
+   "family": "orientation",
+   "jointRef": ["trunk_tilt"],
+   "familyNote": "C-207: hh_rock'un cycleUnit.driver'ı da bu — önceden select_by_phase_driver() sürücü adına bakmadan KOŞULSUZ diz serisi okuyordu (hh_rock hiç çalıştırılmadıysa fark edilmemiş sessiz bir yanlış-dispatch). Artık `_driver_series` family='orientation' için jointRef'i doğrudan joint_series() çıktısından okur."
   },
   "trunk_tilt_amplitude": {
    "readBy": [],

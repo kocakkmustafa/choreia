@@ -1,5 +1,5 @@
 #!/bin/bash
-# Üç koşucunun HEPSİ, ve çıkış kodları GERÇEKTEN kontrol edilerek.
+# Koşucuların HEPSİ, ve çıkış kodları GERÇEKTEN kontrol edilerek.
 #
 # NİYE VAR (C-205): bu depoda commit öncesi kapı YOKTU. Kullandığım kalıp
 #
@@ -41,6 +41,20 @@ run "validate_content"    python3 tools/validate_content.py
 run "metric vocabulary"   python3 tools/validate_metric_vocabulary.py
 run "model provenance"    bash -c 'cd tools && python3 test_model_provenance.py'
 run "coordinate space"    bash -c 'cd tools && python3 test_coordinate_space.py'
+
+# Hasat aracı öz-testleri (C-207, koordinatör sevki, A1 bulgusu).
+#
+# Bu 7 aracın kendi `--self-test`i vardı ve HİÇBİRİ buraya bağlı değildi —
+# "7/7 yeşil" hasat hattı kodunu hiç KAPSAMIYORDU. Tam da enter.metric
+# dispatch'inin yaşadığı bölge. Kendi kapsamı olmayan bir kapı, o bölgede
+# olan biteni ölçmez; adı buraya eklenmek KAPSAMIN kendisi.
+run "prepare_take self-test"        python3 tools/prepare_take.py --self-test
+run "probe_knee_dips self-test"     python3 tools/probe_knee_dips.py --self-test
+run "movement_isolator self-test"   python3 tools/movement_isolator.py --self-test
+run "camera_angle_gate self-test"   python3 tools/camera_angle_gate.py --self-test
+run "build_reference self-test"     python3 tools/build_reference.py --self-test
+run "beat_annotate self-test"       python3 tools/beat_annotate.py --self-test
+run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
 
 if [ "$fail" -ne 0 ]; then
   echo

@@ -419,6 +419,50 @@ def overlap(a: tuple[int, int], b: tuple[int, int]) -> tuple[int, int] | None:
     return (lo, hi) if hi - lo > 0 else None
 
 
+_METRIC_VOCAB_PATH = REPO / "content" / "metric-vocabulary.json"
+
+# Aileler (C-207 tasarımı — docs/design/HASAT-METRIK-TASARIMI.md, koordinatör
+# onaylı). Metrik ADLARI değil metrik SINIFLARI: dördü de bu tasarımın kendisi
+# tanımlıyor, C-202'nin "türetimli liste elle yazıldı" hatasını tekrarlamıyor
+# çünkü content'ten türetilmiyor, content'in ÜZERİNE bir taksonomi kuruyor.
+_FAMILY_FLEXION = "flexion"          # core AngleKind.flexion — işaretsiz derece
+_FAMILY_ORIENTATION = "orientation"  # core AngleKind.orientation/trunkTilt — işaretli derece
+_FAMILY_RHYTHM = "rhythm"            # DAİMA kapsam dışı — ürün sınırı, eksik kayıt değil
+_FAMILY_COMPOSITE = "composite"      # HENÜZ kapsam dışı — bileşim semantiği ölçülmedi
+
+
+def _metric_vocabulary_entry(driver: str) -> dict:
+    """`driver` content/metric-vocabulary.json'da KAYITLI mı, family+jointRef
+    taşıyor mu? İsimli ret — sessiz varsayılan yok (C-207, koordinatör (a)).
+
+    Şekli değil adı bilinmeyen sürücü için son sözleşme burada: adım id'si
+    değil DRIVER ADI + hangi durumla karşılaştığı mesajda taşınır, ki bir
+    sonraki oturum "bulunamaz" ile "bakılmadı"yı ayırt edebilsin.
+    """
+    vocab = json.loads(_METRIC_VOCAB_PATH.read_text(encoding="utf-8"))
+    entry = (vocab.get("metrics") or {}).get(driver)
+    if entry is None:
+        raise SystemExit(
+            f"sürücü '{driver}' content/metric-vocabulary.json'da hiç yok — "
+            "adlandırılmamış bir metrik faz-sürücülü seçime giremez")
+    family = entry.get("family")
+    if family == _FAMILY_RHYTHM:
+        raise SystemExit(
+            f"sürücü '{driver}' aile 'rhythm' — DAİMA kapsam dışı (ritim/"
+            "zamanlama puanı bu üründe yok; 'henüz yok' değil 'asla "
+            "olmayacak' — docs/design/HASAT-METRIK-TASARIMI.md §1)")
+    if family == _FAMILY_COMPOSITE:
+        raise SystemExit(
+            f"sürücü '{driver}' aile 'composite' — ilk kesimde kapsam dışı "
+            "(bileşim semantiği ölçülmedi, icat edilmiyor — koordinatör (b))")
+    if family not in (_FAMILY_FLEXION, _FAMILY_ORIENTATION) or not entry.get("jointRef"):
+        raise SystemExit(
+            f"sürücü '{driver}' metric-vocabulary.json'da var ama family/"
+            f"jointRef eksik veya bilinmeyen (family={family!r}) — isimsiz "
+            "varsayılan yok, kayıt tamamlanmadan hasat edilemez")
+    return entry
+
+
 def kinematic_unit(step: str | None) -> dict | None:
     """Adım config'i KİNEMATİK bir çevrim birimi beyan ediyor mu? (M-F-231)
 
@@ -436,13 +480,31 @@ def kinematic_unit(step: str | None) -> dict | None:
     import json as _json  # noqa: PLC0415
     for p in REPO.glob(f"content/styles/*/steps/{step}.json"):
         cfg = _json.loads(p.read_text(encoding="utf-8"))
-        unit = cfg.get("cycleUnit") or None
-        if unit and unit.get("driver") and unit.get("dipsPerCycle"):
-            unit = dict(unit)
-            unit["_phases"] = cfg.get("phases") or []
-            unit["_errors"] = cfg.get("errors") or []
-            return unit
-        return None
+        raw = cfg.get("cycleUnit")
+        if raw is None:
+            return None
+        if not isinstance(raw, dict):
+            # ŞEKİL KAPISI (C-207, koordinatör (c)). Düz-dizge cycleUnit
+            # "bu adım kinematik dispatch İSTEMİYOR, yalnız insan-okur
+            # açıklama taşıyor" demektir — MEŞRU (bugün 4 adım böyle: dh_bounce,
+            # sm_samba_no_pe, sh_running_man, sh_t_step) ama SESSİZ değil.
+            # Önceki davranış `raw.get('driver')`'ı kontrolsüz çağırıp
+            # AttributeError ile çöküyordu — ölçüldü, iki adımda (bkz. DEFTER
+            # C-204 düzeltmesi). Bu turda bu 4 adım NESNEYE ÇEVRİLMİYOR
+            # (koordinatör (c)): önce çökme isimli-rete, SONRA ölçerek nesneye.
+            print(f"[kinematic_unit] '{step}': cycleUnit dizge ({raw!r}) — "
+                 "faz-sürücülü seçim ATLANIYOR, eski (ankara-çapa) yol kullanılıyor")
+            return None
+        driver, dips = raw.get("driver"), raw.get("dipsPerCycle")
+        if not driver or not dips:
+            return None
+        entry = _metric_vocabulary_entry(driver)  # isimli ret burada olur
+        unit = dict(raw)
+        unit["_phases"] = cfg.get("phases") or []
+        unit["_errors"] = cfg.get("errors") or []
+        unit["_family"] = entry["family"]
+        unit["_jointRef"] = entry["jointRef"]
+        return unit
     return None
 
 
@@ -486,7 +548,12 @@ def _phase_thresholds_from(phases: list) -> tuple[float | None, float | None]:
 
 def _knee_mean_series(frames) -> list[float]:
     """Ortalama diz açısı serisi. Tek diz görünmüyorsa NaN — yarım kanıttan
-    tam sayı üretmek görünürlük kapısının engellemek için var olduğu şey."""
+    tam sayı üretmek görünürlük kapısının engellemek için var olduğu şey.
+
+    Yalnız ÇAPANIN diz-korobarasyonu için kalır (find_anchor'ın knee_swing'i,
+    her zaman diz — sürücüden BAĞIMSIZ, tasarım gereği). Sürücüye göre seri
+    seçimi `_driver_series`'e taşındı (C-207) — bu fonksiyon artık
+    `select_by_phase_driver`/`prepare`'in genel dispatch yolunda KULLANILMIYOR."""
     j = joint_series(frames)
     left, right = j.get("left_knee") or [], j.get("right_knee") or []
     out: list[float] = []
@@ -494,6 +561,27 @@ def _knee_mean_series(frames) -> list[float]:
         a, b = left[i], right[i]
         out.append(float("nan") if (a != a or b != b) else (a + b) / 2.0)
     return out
+
+
+def _driver_series(frames, unit: dict) -> list[float]:
+    """`unit['_family']`/`unit['_jointRef']`'e göre AÇI SERİSİ — sürücü-göre
+    seçimin TEK dispatch noktası (C-207). `kinematic_unit()` bunları ÖNCEDEN
+    doğrulamıştır (isimli ret orada olur); burada yeniden doğrulama YOK,
+    yalnız okunur — önceki hatanın (select_by_phase_driver + prepare'in
+    KOŞULSUZCA diz serisi okuması, sürücü adı ne olursa olsun) yerini alır.
+    """
+    j = joint_series(frames)
+    ref = unit["_jointRef"]
+    if unit["_family"] == _FAMILY_FLEXION:
+        left, right = j.get(ref[0]) or [], j.get(ref[1]) or []
+        out: list[float] = []
+        for i in range(min(len(left), len(right))):
+            a, b = left[i], right[i]
+            out.append(float("nan") if (a != a or b != b) else (a + b) / 2.0)
+        return out
+    # orientation: TEK adlı seri (bugün yalnız trunk_tilt) — joint_series()
+    # çıktısında adıyla doğrudan var.
+    return j.get(ref[0]) or []
 
 
 def select_by_phase_driver(iso, feasible, fps: float, unit: dict) -> tuple:
@@ -524,7 +612,11 @@ def select_by_phase_driver(iso, feasible, fps: float, unit: dict) -> tuple:
     dips_per_cycle = float(unit["dipsPerCycle"])
     scored = []
     for seg, mv in feasible:
-        rep = detect_dips(_knee_mean_series(iso[seg[0]:seg[1]]), fps,
+        # C-207: sürücünün KENDİ ailesine göre seri — önceden burası
+        # KOŞULSUZCA diz serisi okuyordu (unit['driver'] ne olursa olsun).
+        # hh_rock'un sürücüsü trunk_tilt; bu yol hiç ölçülmeden hep diz
+        # okuyor olabilirdi ve isim etiket kalıp davranışı belirlemezdi.
+        rep = detect_dips(_driver_series(iso[seg[0]:seg[1]], unit), fps,
                           top_deg=top, rate_deg_s=rate)
         gap = rep["medianInterDipSeconds"]
         if not rep["dipCount"] or not gap:
@@ -561,14 +653,17 @@ def prepare(video_id: str, step: str | None = None) -> dict:
     # HİÇBİRİNİ içermiyordu. Tüm-vücut enerjisi "adım oluyor mu"nun VEKİLİDİR
     # ve bounce gibi bedeni yerinde tutan bir adımda vekil adımla anlaşmıyor.
     #
-    # Alan sözlüğü BURADA kalır: rig'e hangi eklem/hangi adım/hangi birim
-    # olduğu söylenmez, yalnız sinyal ve kendi birimindeki taban verilir.
+    # C-207: seri artık sürücünün KENDİ ailesinden — önceden bu yorum
+    # "rig'e hangi eklem olduğu söylenmez" diyordu ama kod her zaman diz
+    # okuyordu; niyet ile davranış AYRIŞMIŞTI ve isim etiket kalıyordu.
+    # `kinematic_unit()` artık driver'ı isimli-ret'le doğruluyor, burası
+    # yalnız sonucu (`unit['_family']`/`_jointRef`) okuyor.
     unit = kinematic_unit(step)
     if unit:
         cfg_amp = _standing_still_floor(unit)
         moves = find_movement_windows(
             iso, fps=fps, max_windows=40,
-            driver_series=_knee_mean_series(iso),
+            driver_series=_driver_series(iso, unit),
             # Vekil kapı KAPALI: yerine adımın KENDİ "yerinde duruyor"
             # eşiği geçiyor (config'in NO_BOUNCE tanımı), yani daha zayıf
             # değil DAHA DOĞRUDAN bir kapı.

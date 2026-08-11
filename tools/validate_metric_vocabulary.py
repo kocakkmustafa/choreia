@@ -37,6 +37,31 @@ def measure() -> dict[str, list[str]]:
     return metrics
 
 
+# C-207 (koordinatör onaylı tasarım): tool/prepare_take.py'nin
+# `_metric_vocabulary_entry` isimli-ret sözleşmesiyle AYNI dört aile. Burada
+# TEKRAR yazılmasının sebebi bu betiğin prepare_take'i import ETMEMESİ
+# (bağımsız, içerik-yalnız bir doğrulayıcı kalması istendi) — drift riski,
+# ikisi de aynı dört ismi taşıdığı için küçük ve isimle görünür.
+_KNOWN_FAMILIES = {"flexion", "orientation", "rhythm", "composite"}
+_FAMILIES_NEEDING_JOINT_REF = {"flexion", "orientation"}
+
+
+def cycle_unit_drivers() -> dict[str, list[str]]:
+    """Hangi sürücü adı, hangi adım(lar)ın `cycleUnit.driver`'ında geçiyor?
+
+    Yalnız NESNE şekilli `cycleUnit` sayılır — düz-dizge olanlar (C-207,
+    koordinatör (c)) kinematik dispatch'e hiç girmiyor, bu yüzden family/
+    jointRef'e ihtiyaçları yok ve burada aranmazlar.
+    """
+    drivers: dict[str, list[str]] = {}
+    for f in sorted(glob.glob(str(REPO / "content/styles/*/steps/*.json"))):
+        d = json.loads(Path(f).read_text(encoding="utf-8"))
+        cu = d.get("cycleUnit")
+        if isinstance(cu, dict) and cu.get("driver"):
+            drivers.setdefault(cu["driver"], []).append(d["id"])
+    return drivers
+
+
 def readers_of(names: set[str]) -> dict[str, list[str]]:
     srcs = {}
     for pat in ("tools/*.py", "lib/**/*.dart",
@@ -82,8 +107,30 @@ def main() -> int:
         if m in metrics and e.get("state") != want:
             errs.append(f"{m}: kayıt '{e.get('state')}', ölçüm '{want}'")
 
+    # C-207: cycleUnit.driver olarak KULLANILAN her sürücü family+jointRef
+    # taşımalı — taşımıyorsa tools/prepare_take.py `kinematic_unit()` zaten
+    # isimli SystemExit ile duracak, ama bu ölçüm commit ANINDA yakalar,
+    # yalnız o adım hasat edilmeye ÇALIŞILDIĞINDA değil (sessiz varsayılan
+    # yok — kayıt eksikse commit'ten ÖNCE kırmızı, sonra değil).
+    drivers = cycle_unit_drivers()
+    driver_errs: list[str] = []
+    for driver, steps in sorted(drivers.items()):
+        entry = (rec.get("metrics") or {}).get(driver)
+        where = f"{driver} (cycleUnit.driver: {', '.join(steps)})"
+        if entry is None:
+            driver_errs.append(f"{where}: metric-vocabulary.json'da hiç yok")
+            continue
+        family = entry.get("family")
+        if family not in _KNOWN_FAMILIES:
+            driver_errs.append(f"{where}: family={family!r} bilinmeyen "
+                               f"(bilinenler: {sorted(_KNOWN_FAMILIES)})")
+        elif family in _FAMILIES_NEEDING_JOINT_REF and not entry.get("jointRef"):
+            driver_errs.append(f"{where}: family={family!r} ama jointRef yok")
+    if driver_errs:
+        errs.append(f"cycleUnit.driver kayıtları eksik/bozuk: {driver_errs}")
+
     print(f"metrik sürücüsü: {len(metrics)} · yorumlanan {len(interpreted)} · "
-          f"yalnız-beyan {len(declared)}")
+          f"yalnız-beyan {len(declared)} · cycleUnit.driver {len(drivers)}")
     for e in errs:
         print(f"  ERROR {e}")
     print("OK" if not errs else f"FAILED ({len(errs)})")
