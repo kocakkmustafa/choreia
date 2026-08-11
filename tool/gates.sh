@@ -54,6 +54,7 @@ run "validate_content"    python3 tools/validate_content.py
 run "metric vocabulary"   python3 tools/validate_metric_vocabulary.py
 run "model provenance"    bash -c 'cd tools && python3 test_model_provenance.py'
 run "coordinate space"    bash -c 'cd tools && python3 test_coordinate_space.py'
+run "network dependency"  python3 tools/network_dependency_check.py
 
 # Hasat aracı öz-testleri (C-207, koordinatör sevki, A1 bulgusu).
 #
