@@ -36,6 +36,12 @@ CANDIDATES: dict[str, list[str]] = {
     "hh_cabbage_patch": ["0iweU5HmAUQ", "V6w_9vWXXjE", "N4STZCPuhf0", "EUuqLa1oqo8"],
     "hh_roger_rabbit": ["bdY2Pwqj-9A", "pua9UszdO24", "DEFnniCN7ok", "blWeCJW2Peo"],
     "hh_running_man": ["lYpRasK4c9k", "k22Bm2pMyD4", "UO9Ehsdt2IE"],
+    # R14 (2026-08-11): 4 saf + 1 varyant-riskli + 1 derleme-riskli + 1
+    # kimliği-şüpheli, bu SIRAYLA (koordinatör onaylı, kanıta dayalı —
+    # şüphe bir eleme gerekçesi değil, sıralama gerekçesi). `JubuC3Lh1i4`
+    # dahil EDİLMEDİ: yt-dlp boş döndü, sebep ölçülmedi, aday değil.
+    "bb_plie": ["ON8ptc6ymF0", "k70uyYKlIU0", "27skzncX3Ms", "wdhihrgXGYI",
+                "wwXH3fFdtog", "I3aP1J-xH7c", "bhm-Mek3Qws"],
 }
 
 # A single-step tutorial that runs half an hour is a class, not a step demo.
