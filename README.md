@@ -10,4 +10,14 @@ Telefon kamerası kullanıcıyı tam-vücut izler; adımları, zamanlamayı ve f
 
 > ⚠️ Hazırlık aşaması — üretim kodu, kurucu "Choreia'ya başlayalım" dediğinde V0 kapısıyla açılır.
 
+## Kurulum (bir kez, klonlandıktan sonra)
+
+```
+tool/hooks/install.sh
+```
+
+Commit kapısını (`tool/gates.sh`) her commit öncesi otomatik koşan bir
+pre-commit hook'una bağlar (C-206). Bu adım atlanırsa `tool/gates.sh` yalnız
+elle koşulur — kırmızı bir süitle commit engellenmez.
+
 _Bu repo YULA AI Holding portföyünün parçasıdır._

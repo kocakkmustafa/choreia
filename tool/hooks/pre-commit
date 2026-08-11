@@ -1,0 +1,21 @@
+#!/bin/bash
+# COMMIT KAPISI — DEPOYA ALINMIŞ HÂLİ (C-206, koordinatör sevki).
+#
+# NİYE BURADA, `.git/hooks/` DEĞİL: `.git/hooks/pre-commit` asla izlenmez —
+# taze bir klonda hiç var olmaz. C-205'in kurduğu kapı tam da bu yüzden
+# yalnız BU makinede ve BU oturumun alışkanlığında yaşıyordu; depoda değil.
+# Aynı boşluk Lissom'da da ölçüldü (L-275'in kendi hook'u da `.git/hooks/`
+# içinde, izlenmiyor) — aile geneli bir sınıf, tek hatta özgü değil.
+#
+# `tool/hooks/install.sh` bunu `core.hooksPath` ile devreye sokar; o adım
+# ATLANIRSA bu dosya hiçbir şey yapmaz (git onu hiç görmez) — o yüzden
+# kurulum kanıtı KENDİSİ ayrı doğrulanmalı (bkz. install.sh'nin altındaki not
+# ve DEFTER C-206), "dosya var" ile "git bu dosyayı kullanıyor" ayrı iddialar.
+#
+# ⛔ BORU HATTI YOK — `false | tail -1` çıkış kodu 0 döner (ölçüldü, C-205).
+# ⚠️ `dirname $0` KULLANILMAZ — C-205'te hook `.git/hooks/`'tan koşarken bu
+#    depo köküne değil `.git/`e gitmişti (yanlış gerekçeyle "doğru" durdu).
+#    Depo kökü daima `git rev-parse` ile bulunur, çağıran yol ne olursa olsun.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+exec tool/gates.sh
