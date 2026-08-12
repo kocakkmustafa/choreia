@@ -72,6 +72,13 @@ run "identity read"       python3 tools/identity_read.py
 # Defter git-dışı workspace'te → taze klonda exit 2 (⚪ ORTAM YOK).
 run "closure authority"   python3 tools/closure_authority.py
 
+# Defter tazeliği (C-267, A6). Kapı kısıtına uygun: A tablosunun KENDİ kalemini
+# doğruluyor — ve `closure_authority`den BAŞKA bir şey ölçüyor: o kapanış
+# otoritesine bakar, defter bir hafta bayat olsa da yeşil kalır. Bu kapı
+# SINIRA bakar: ① commit indi/kaydı yok ② kayıt yazıldı/işi inmedi.
+# Defter git-dışı → taze klonda exit 2 (⚪ ORTAM YOK).
+run "ledger freshness"    python3 tools/ledger_freshness_check.py
+
 # Hasat aracı öz-testleri (C-207, koordinatör sevki, A1 bulgusu).
 #
 # Bu 7 aracın kendi `--self-test`i vardı ve HİÇBİRİ buraya bağlı değildi —
@@ -86,6 +93,7 @@ run "build_reference self-test"     python3 tools/build_reference.py --self-test
 run "beat_annotate self-test"       python3 tools/beat_annotate.py --self-test
 run "identity_read self-test"     python3 tools/identity_read.py --self-test
 run "closure_authority self-test" python3 tools/closure_authority.py --self-test
+run "ledger_freshness self-test"  python3 tools/ledger_freshness_check.py --self-test
 run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
 
 if [ "$fail" -ne 0 ]; then
