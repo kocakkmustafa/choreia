@@ -1,180 +1,188 @@
 {
- "schemaVersion": 1,
- "id": "sh_running_man",
- "style": "shuffle",
- "name": "Running Man",
- "level": 1,
- "beats": 2,
- "countLabels": [
-  "1",
-  "2"
- ],
- "note": "Shuffle's running man is not hip-hop's: the slide is longer and the whole step stays lower. The two are separate steps with separate references, and reusing hip_hop's would be measuring one dance against another.",
- "searchParameters": {
-  "status": "ESTIMATED",
-  "scope": "phases[].enter valueDeg + minRateDegPerSec",
-  "basis": "hh_bounce'un ölçülmüş diz-çevrimi eşiklerinden uyarlandı (165° vs 168°: shuffle'ın running man'i daha alçak durur; 35°/s vs 40°/s: kayma fazı sekmeden yavaş). Bunlar TAHMİN ve hasat onları düzeltecek — ama bir tahminle hasat edilebilir, tahminsiz edilemez.",
-  "whyThisMayBeAuthored": "Bir arama parametresi dansçı hakkında HÜKÜM VERMEZ — videoda adımın NEREDE olduğunu bulur. Yanlışsa kötü bir HASAT olur (bize görünür), yanlış bir PUAN değil (kullanıcıya görünmez).",
-  "correctedBy": "hasadın kendisi"
- },
- "calibration": {
-  "status": "PENDING",
-  "scope": "VERDICT thresholds only — arama parametreleri TARİF tarafında",
-  "why": "Bu adımın hiçbir referansı hasat edilmedi, dolayısıyla dansçının ne kadar iyi olduğunu söyleyen her alan BOŞ. Tolerans, eğitmenlerin ANLAŞMAZLIĞINDAN türetilir; yazılmaz.",
-  "unblockedBy": "content/references/sh_running_man.json — ≥3 bağımsız eğitmen. Toleranslar onların ANLAŞMAZLIĞINDAN türetilir, yazılmaz; arama parametreleri ise hasadın GİRDİSİdir, çıktısı değil."
- },
- "measurability": {
-  "tier": null,
-  "tierStatus": "Awaiting reference harvest: no take of this step has been measured, so its detectability is unknown. Not a low tier — an unmeasured one."
- },
- "cycleUnit": "one lift-and-slide per count",
- "scoring": {
-  "focusJoints": [
-   "left_knee",
-   "right_knee",
-   "left_hip",
-   "right_hip",
-   "left_shin",
-   "right_shin",
-   "trunk_tilt"
+  "schemaVersion": 1,
+  "id": "sh_running_man",
+  "style": "shuffle",
+  "name": "Running Man",
+  "level": 1,
+  "beats": 2,
+  "countLabels": [
+    "1",
+    "2"
   ],
-  "freeJoints": [
-   "left_upper_arm",
-   "right_upper_arm",
-   "left_forearm",
-   "right_forearm",
-   "left_elbow",
-   "right_elbow",
-   "left_shoulder",
-   "right_shoulder"
+  "note": "Shuffle's running man is not hip-hop's: the slide is longer and the whole step stays lower. The two are separate steps with separate references, and reusing hip_hop's would be measuring one dance against another.",
+  "searchParameters": {
+    "status": "ESTIMATED",
+    "scope": "phases[].enter valueDeg + minRateDegPerSec",
+    "basis": "hh_bounce'un ölçülmüş diz-çevrimi eşiklerinden uyarlandı (165° vs 168°: shuffle'ın running man'i daha alçak durur; 35°/s vs 40°/s: kayma fazı sekmeden yavaş). Bunlar TAHMİN ve hasat onları düzeltecek — ama bir tahminle hasat edilebilir, tahminsiz edilemez.",
+    "whyThisMayBeAuthored": "Bir arama parametresi dansçı hakkında HÜKÜM VERMEZ — videoda adımın NEREDE olduğunu bulur. Yanlışsa kötü bir HASAT olur (bize görünür), yanlış bir PUAN değil (kullanıcıya görünmez).",
+    "correctedBy": "hasadın kendisi"
+  },
+  "calibration": {
+    "status": "PENDING",
+    "scope": "VERDICT thresholds only — arama parametreleri TARİF tarafında",
+    "why": "Bu adımın hiçbir referansı hasat edilmedi, dolayısıyla dansçının ne kadar iyi olduğunu söyleyen her alan BOŞ. Tolerans, eğitmenlerin ANLAŞMAZLIĞINDAN türetilir; yazılmaz.",
+    "unblockedBy": "content/references/sh_running_man.json — ≥3 bağımsız eğitmen. Toleranslar onların ANLAŞMAZLIĞINDAN türetilir, yazılmaz; arama parametreleri ise hasadın GİRDİSİdir, çıktısı değil."
+  },
+  "measurability": {
+    "tier": null,
+    "tierStatus": "Awaiting reference harvest: no take of this step has been measured, so its detectability is unknown. Not a low tier — an unmeasured one."
+  },
+  "cycleUnit": {
+    "driver": "knee_flexion_mean",
+    "dipsPerCycle": 2,
+    "derivedFrom": "phases + ÖLÇÜLEN dönüşümlülük",
+    "rationale": "Faz zinciri top -> lift -> bottom -> slide, `slide` terminal, yani zincir TEK bir kaldır-kaydırı anlatıyor = 1 diz çöküşü. Tam çevrim bunun İKİ katı, ve bu ALAN BİLGİSİYLE DEĞİL ÖLÇÜLEREK belirlendi: measure_tempo.py antisimetrik kanalı (önde-gelen-ayak, roller değişince işaret değiştirir) simetrik kanala (yalnız hareket enerjisi) oranlıyor; oran ~2 ise adım DÖNÜŞÜMLÜ ve tam çevrim antisimetrik olandır. 2026-08-12'de inen take'lerde ÖLÇÜLDÜ: EP3Q3ttFwtU oran 1,955 (çevrim 1,793s) · 7g9PH1Qa4LM oran 2,000 (çevrim 1,68s), ikisi de 'alternating'. => tam çevrim = 2 yarım-çevrim = 2 kaldır-kaydır = 2 çöküş.",
+    "unitAgreementMeasured": "`dipsPerCycle` ile `beats` AYNI çevrimi mi adlandırıyor: KODDA ölçüldü. dipsPerCycle yalnız `periodSeconds = çöküşAralığı × dipsPerCycle` olarak tüketiliyor (prepare_take.py), periodSeconds ise yalnız take'ler ARASI harmonik-çelişki kapısında (build_reference.py) — yani birimi 'faz ekseni take'ler arasında aynı şeyi anlatsın' tanımlıyor. `beats` ise `bpm = beats × 60 / cycleSeconds` olarak tüketiliyor (measure_tempo.py) ve oradaki cycleSeconds ANTİSİMETRİK (tam, dönüşümlü) periyot. İkisi de tam dönüşümlü çevrimi adlandırıyor => birim çatışması YOK.",
+    "limits": "⚠️ Dönüşümlülük 5 take'in 2'sinde ölçülebildi (diğer üçü aynı pencere kapısına takılı) ve birim BEŞİNE birden uygulanıyor. ⚠️ Ve `beats: 2`nin kendisi DOĞRULANMADI: shuffle'ın `style.json`u yok, dolayısıyla karşılaştırılacak `bpmRange` de yok. dipsPerCycle bu sorudan BAĞIMSIZ — çevrim kaç sayıma yayılırsa yayılsın, dönüşümlü çevrimde 2 çöküş var.",
+    "correctedBy": "hasadın kendisi — take'ler arası harmonik çelişki kapısı"
+  },
+  "scoring": {
+    "focusJoints": [
+      "left_knee",
+      "right_knee",
+      "left_hip",
+      "right_hip",
+      "left_shin",
+      "right_shin",
+      "trunk_tilt"
+    ],
+    "freeJoints": [
+      "left_upper_arm",
+      "right_upper_arm",
+      "left_forearm",
+      "right_forearm",
+      "left_elbow",
+      "right_elbow",
+      "left_shoulder",
+      "right_shoulder"
+    ],
+    "freeJointsRationale": "Arms in shuffle are personal and vary between scenes; nothing here is checked against a shape."
+  },
+  "phases": [
+    {
+      "id": "top",
+      "enter": {
+        "metric": "knee_flexion_mean",
+        "op": ">",
+        "valueDeg": 165
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
+      "timeoutMs": 2000,
+      "note": "Taşıyan bacak neredeyse düz; kaldırılan diz henüz yükselmemiş."
+    },
+    {
+      "id": "lift",
+      "enter": {
+        "metric": "knee_flexion_mean",
+        "op": "decreasing",
+        "minRateDegPerSec": 35
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
+      "timeoutMs": 800,
+      "note": "Diz yükselirken ortalama diz açısı düşer."
+    },
+    {
+      "id": "bottom",
+      "enter": {
+        "metric": "knee_flexion_mean",
+        "op": "localMinimum"
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
+      "minDurationMs": 30,
+      "timeoutMs": 600,
+      "note": "Dizin en yüksek, açının en küçük olduğu an."
+    },
+    {
+      "id": "slide",
+      "enter": {
+        "metric": "knee_flexion_mean",
+        "op": "increasing",
+        "minRateDegPerSec": 35
+      },
+      "requiredLandmarks": [
+        "leftLeg",
+        "rightLeg",
+        "torso"
+      ],
+      "timeoutMs": 800,
+      "isTerminal": true,
+      "note": "Ayak geri kayarken bacak tekrar açılır. Kaymanın KENDİSİ diz açısıyla ölçülmüyor — bu faz onu ZAMANDA buluyor, ölçmüyor."
+    }
   ],
-  "freeJointsRationale": "Arms in shuffle are personal and vary between scenes; nothing here is checked against a shape."
- },
- "phases": [
-  {
-   "id": "top",
-   "enter": {
-    "metric": "knee_flexion_mean",
-    "op": ">",
-    "valueDeg": 165
-   },
-   "requiredLandmarks": [
-    "leftLeg",
-    "rightLeg",
-    "torso"
-   ],
-   "timeoutMs": 2000,
-   "note": "Taşıyan bacak neredeyse düz; kaldırılan diz henüz yükselmemiş."
-  },
-  {
-   "id": "lift",
-   "enter": {
-    "metric": "knee_flexion_mean",
-    "op": "decreasing",
-    "minRateDegPerSec": 35
-   },
-   "requiredLandmarks": [
-    "leftLeg",
-    "rightLeg",
-    "torso"
-   ],
-   "timeoutMs": 800,
-   "note": "Diz yükselirken ortalama diz açısı düşer."
-  },
-  {
-   "id": "bottom",
-   "enter": {
-    "metric": "knee_flexion_mean",
-    "op": "localMinimum"
-   },
-   "requiredLandmarks": [
-    "leftLeg",
-    "rightLeg",
-    "torso"
-   ],
-   "minDurationMs": 30,
-   "timeoutMs": 600,
-   "note": "Dizin en yüksek, açının en küçük olduğu an."
-  },
-  {
-   "id": "slide",
-   "enter": {
-    "metric": "knee_flexion_mean",
-    "op": "increasing",
-    "minRateDegPerSec": 35
-   },
-   "requiredLandmarks": [
-    "leftLeg",
-    "rightLeg",
-    "torso"
-   ],
-   "timeoutMs": 800,
-   "isTerminal": true,
-   "note": "Ayak geri kayarken bacak tekrar açılır. Kaymanın KENDİSİ diz açısıyla ölçülmüyor — bu faz onu ZAMANDA buluyor, ölçmüyor."
+  "scoredMoments": [
+    {
+      "id": "rm_lift_top",
+      "phase": "bottom",
+      "beat": 0,
+      "label": "up"
+    },
+    {
+      "id": "rm_recover",
+      "phase": "slide",
+      "beat": 1,
+      "label": "back"
+    }
+  ],
+  "errors": [
+    {
+      "code": "NO_SLIDE",
+      "severity": null,
+      "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+      "detect": {
+        "metric": "shin_angle_amplitude",
+        "op": "<",
+        "valueDeg": null
+      },
+      "evidence": [
+        "shin_angle_amplitude"
+      ],
+      "note": "The knee lifts but the other foot never slides back, so the dancer travels forward across the room instead of running on the spot."
+    },
+    {
+      "code": "KNEE_TOO_LOW",
+      "severity": null,
+      "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+      "detect": {
+        "metric": "knee_flexion_amplitude",
+        "op": "<",
+        "valueDeg": null
+      },
+      "evidence": [
+        "knee_flexion_amplitude"
+      ],
+      "note": "The lift is there but small enough that the step reads as a march."
+    },
+    {
+      "code": "TRUNK_COLLAPSE",
+      "severity": null,
+      "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
+      "detect": {
+        "metric": "trunk_tilt",
+        "op": "<",
+        "valueDeg": null
+      },
+      "evidence": [
+        "trunk_tilt"
+      ],
+      "note": "The chest folds forward to meet the knee instead of the knee coming up to a tall body."
+    }
+  ],
+  "reference": {
+    "requiredTakes": 3,
+    "collectedTakes": 0,
+    "status": "not-started",
+    "note": ">=3 independent instructors required (catalogue 6.0). Tolerance is derived from their disagreement, never authored — which is why nothing here carries a number."
   }
- ],
- "scoredMoments": [
-  {
-   "id": "rm_lift_top",
-   "phase": "bottom",
-   "beat": 0,
-   "label": "up"
-  },
-  {
-   "id": "rm_recover",
-   "phase": "slide",
-   "beat": 1,
-   "label": "back"
-  }
- ],
- "errors": [
-  {
-   "code": "NO_SLIDE",
-   "severity": null,
-   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
-   "detect": {
-    "metric": "shin_angle_amplitude",
-    "op": "<",
-    "valueDeg": null
-   },
-   "evidence": [
-    "shin_angle_amplitude"
-   ],
-   "note": "The knee lifts but the other foot never slides back, so the dancer travels forward across the room instead of running on the spot."
-  },
-  {
-   "code": "KNEE_TOO_LOW",
-   "severity": null,
-   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
-   "detect": {
-    "metric": "knee_flexion_amplitude",
-    "op": "<",
-    "valueDeg": null
-   },
-   "evidence": [
-    "knee_flexion_amplitude"
-   ],
-   "note": "The lift is there but small enough that the step reads as a march."
-  },
-  {
-   "code": "TRUNK_COLLAPSE",
-   "severity": null,
-   "severityStatus": "unset until harvest — how BADLY this reads is a judgement about calibrated data",
-   "detect": {
-    "metric": "trunk_tilt",
-    "op": "<",
-    "valueDeg": null
-   },
-   "evidence": [
-    "trunk_tilt"
-   ],
-   "note": "The chest folds forward to meet the knee instead of the knee coming up to a tall body."
-  }
- ],
- "reference": {
-  "requiredTakes": 3,
-  "collectedTakes": 0,
-  "status": "not-started",
-  "note": ">=3 independent instructors required (catalogue 6.0). Tolerance is derived from their disagreement, never authored — which is why nothing here carries a number."
- }
 }

@@ -529,11 +529,28 @@ def _standing_still_floor(unit: dict) -> float:
     ve bu eklem hakkında hiçbir şey söylemiyor.
 
     Eşik yoksa 0.0 döner (kapı kapanır, uydurulmaz).
+
+    ⚠️ "Eşik yok" İKİ BİÇİMDE gelir ve ikisi de burada aynı yere çıkar:
+    hata kaydı HİÇ yoktur, ya da kayıt VARDIR ama `valueDeg` **null**dur
+    (kalibre edilmemiş adımlarda `severityStatus: "unset until harvest"` ile
+    birlikte — `sh_running_man` böyle). İkincisi 2026-08-12'de ölçüldü:
+    eşleşme metrik+op'a bakıp `float(None)` çağırıyor ve **çöküyordu**.
+
+    📌 Bu kusur YENİ DEĞİL, YENİ ERİŞİLEBİLİR: yalnız `cycleUnit`i YAPISAL
+    olan bir adım buraya gelir, ve o güne dek yapısal olan iki adımın ikisi de
+    kalibreydi. C-207'nin şekil kapısı GİRİŞİ korudu, ARKASINDAKİ ODAYI
+    korumadı. ⇒ *Bir üst-akış kusuru düzeltildiği anda, ondan sonraki
+    denetlenmemiş varsayım ERİŞİLEBİLİR hâle gelir.*
+
+    ⛔ Burada eşik UYDURULMUYOR: null, yokluğun ta kendisi olarak okunuyor ve
+    fonksiyon kendi belgelenmiş 0.0'ına düşüyor.
     """
     for err in unit.get("_errors") or []:
         det = err.get("detect") or {}
         if (det.get("metric") == f"{unit['driver'].replace('_mean', '')}_amplitude"
-                and det.get("op") == "<"):
+                and det.get("op") == "<"
+                # null eşik = BEYAN EDİLMEMİŞ eşik = yok.
+                and det.get("valueDeg") is not None):
             return float(det["valueDeg"])
     return 0.0
 

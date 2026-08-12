@@ -89,6 +89,25 @@ TERMS: dict[str, dict] = {
         "confusable": ["bachata", "cha cha", "merengue"],
         "cites": {},
     },
+    # `hh_running_man`in AYNASI — ve ayırt eden şey ADIM adı değil DANS adı:
+    # "running man" iki dansta da geçer, hiçbir şeyi ayırmaz. Adımın kendi
+    # notu ayrımı yapıyor ("Shuffle's running man is NOT hip-hop's"), o yüzden
+    # `own` dansı, `confusable` karıştırılan dansı taşıyor.
+    #
+    # ⚠️ `melbourne` ASR-KIRILGAN (sözlükte yok) ve bunu BİLEREK bırakıyoruz —
+    # koordinatör hükmü 2026-08-12. Ölçüt ÜYELİK, kırılganlık değil: dans
+    # "Melbourne shuffle", yani terim bu adımın kimliğinin PARÇASI.
+    # Kırılganlık üyeliği değil SONUCUN SINIFINI değiştirir; ölçüldü:
+    #   own=[shuffl, melbourne] -> 7g9PH1Qa4LM = ÖLÇÜLEMEDİ
+    #   own=[shuffl]            -> 7g9PH1Qa4LM = KANIT_YOK
+    # Kırılgan terimi ATARAK `KANIT_YOK`a geçmek, "ölçemedik"i "ölçtük,
+    # bulamadık"a çevirmek olurdu — yani körlüğü İDDİAYI ARTIRAN yönde lehe
+    # yorumlamak. Yasak (M-F-580). `ÖLÇÜLEMEDİ` dürüst sınıftır.
+    "sh_running_man": {
+        "own": ["shuffl", "melbourne"],
+        "confusable": ["hip hop", "hip-hop"],
+        "cites": {"content/styles/shuffle/steps/sh_running_man.json": "hip-hop"},
+    },
 }
 
 
