@@ -292,6 +292,33 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
                 rep.error(where, f"ship gate '{gid}' is blocked without an "
                                  "`unblockedBy` — a block with no named lifting "
                                  "condition is indistinguishable from a dead end")
+            # AİLE KURALI (koordinatör hükmü 2026-08-12, C-247): engelleyen her
+            # kapı İKİ yönü de taşır — AÇAN yol (`unblockedBy`) ve ÖLÇÜLÜP
+            # KAPATILMIŞ yollar (`closedPaths`).
+            #
+            # Niye: bu depoda tek engelleyen kapı `unblockedBy` taşıyordu ama
+            # kapalı yolu taşımıyordu, ve kapalı yol (C-032) BAŞKA bir dosyada
+            # duruyordu. Sonuç ölçüldü: aynı çıkmaz sokağa ikinci kez girildi
+            # (C-244), maliyeti bir turdu. *Bir kapı, açılış yolunu taşıyıp
+            # kapalı yolu taşımıyorsa, onu okuyan herkesi kapalı yola bir kez
+            # daha davet eder.*
+            #
+            # ⚠️ ÜÇÜNCÜ HÂL ZORUNLU: kapalı yol bilinmiyorsa alan BOŞ
+            # bırakılmaz, `"none-known"` yazılır — boş bir alan "yok" ile
+            # "bakılmadı"yı ayırt ettirmez.
+            cp = g.get("closedPaths")
+            if g.get("blocked") and not cp:
+                rep.error(where, f"ship gate '{gid}' is blocked without "
+                                 "`closedPaths` — a gate that carries only the "
+                                 "way IN invites every reader back down the "
+                                 "measured-and-closed path. If none is known, "
+                                 'write "none-known" rather than leaving it out')
+            if cp is not None and cp != "none-known" and (
+                    not isinstance(cp, list) or not all(isinstance(x, str) and x
+                                                        for x in cp)):
+                rep.error(where, f"ship gate '{gid}' `closedPaths` must be a "
+                                 'non-empty list of strings, or the literal '
+                                 '"none-known"')
 
     rng = style.get("bpmRange")
     if rng is None:
