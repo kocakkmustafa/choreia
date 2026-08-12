@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:choreia/app/live/live_state.dart';
 import 'package:choreia/app/live/live_view.dart';
 import 'package:choreia_engine/choreia_engine.dart';
@@ -15,8 +17,21 @@ void main() {
   ];
   const String note = 'We do not check that this is the right step.';
 
+  /// [openSettings] defaults to a WORKING callback — which is not what the app
+  /// ships. `LiveLessonPage` builds this screen with `onOpenSettings: null`
+  /// (C-140: nothing in the dependency set can open the OS settings page), so
+  /// until this parameter existed every test in this file handed the screen a
+  /// callback no device ever has. The M-F-268 "no dead end" gate below was
+  /// therefore measuring a screen the app never builds: green, and blind to
+  /// the one branch where the dead end actually lives.
+  ///
+  /// The default is left as-is deliberately — flipping it would silently
+  /// rewrite what the other tests mean. The production value is measured
+  /// separately, from the production file, in `kalıcı ret dalı` below.
   Future<void> show(WidgetTester tester, LiveState state,
-          {int? cycles, bool permanent = false}) =>
+          {int? cycles,
+          bool permanent = false,
+          VoidCallback? openSettings = _stubOpenSettings}) =>
       tester.pumpWidget(MaterialApp(
         home: LiveView(
           state: state,
@@ -25,7 +40,7 @@ void main() {
           cyclesRead: cycles,
           permissionPermanentlyDenied: permanent,
           onRetry: () {},
-          onOpenSettings: () {},
+          onOpenSettings: openSettings,
         ),
       ));
 
@@ -96,6 +111,38 @@ void main() {
       // A "try again" that cannot possibly work is worse than no button.
       expect(find.text(LiveStrings.tryAgain), findsNothing);
       expect(find.text(LiveStrings.openSettings), findsOneWidget);
+    });
+
+    testWidgets(
+        'kalıcı ret dalı — CİHAZDAKİ hâl: tek eylem ÖLÜ (C-140 çivilendi)',
+        (WidgetTester tester) async {
+      // The production value is READ FROM PRODUCTION, never retyped here. The
+      // two tests above pass `onOpenSettings: () {}` and so describe a screen
+      // no device builds — that is the whole reason this branch's dead end
+      // survived a green "NO DEAD END" gate.
+      final String page =
+          File('lib/app/live/live_lesson_page.dart').readAsStringSync();
+      expect(page, contains('onOpenSettings: null'),
+          reason: 'üretim artık gerçek bir geri-çağrı geçiriyor olabilir — '
+              'aşağıdaki ÖLÜ-DÜĞME çivisi o hâlde kusuru DONDURUR, ikisi '
+              'aynı commit’te güncellenmeli');
+
+      await show(tester, const LivePermissionDenied(),
+          permanent: true, openSettings: null);
+
+      // ÇİVİLENEN ŞEY BİR KUSUR, BİR TASARIM DEĞİL. A user reaches this branch
+      // by denying the camera twice; the only control on it is a button
+      // labelled "Open settings" that is greyed out. M-F-268 says the branch
+      // must offer an action — this one offers the SHAPE of one.
+      final FilledButton button =
+          tester.widget<FilledButton>(find.byKey(LiveView.actionKey));
+      expect(button.onPressed, isNull,
+          reason: 'düğme artık basılabilir — kusur kapandıysa bu çivi ve '
+              'C-140 birlikte güncellenmeli, çivi sessizce geçmemeli');
+
+      // What keeps this from being a TOTAL dead end today: the sentence still
+      // says where to go, even though the app cannot take the user there.
+      expect(find.text(LiveStrings.permanentlyDenied), findsOneWidget);
     });
 
     testWidgets('"never started" is NOT zero', (WidgetTester tester) async {
@@ -192,3 +239,10 @@ void main() {
     });
   });
 }
+
+/// The callback the PRODUCTION wiring does not have.
+///
+/// A top-level function so it can be a `show()` default; named rather than
+/// inline so the diff between "what the fake hands the screen" and "what the
+/// app hands the screen" (`null`) is a thing you can point at.
+void _stubOpenSettings() {}
