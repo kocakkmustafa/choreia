@@ -135,3 +135,71 @@ edemezse sayılır. *Bir aracın sayısı, saydığı birimin tanımı kadar iyi
 | 3 | `mNmQ3nDGIPI` (Dance Insanity, 847s) | **derleme** | başlık chasse VE cucaracha'yı birlikte adlandırıyor — `4BRd2E8vBic`/`l3r4bPhikGQ` sınıfı. ⚠️ Dance Insanity **`salsa_shines`te kullanılmış** (R8 emsaline göre not, diskalifiye değil) |
 | 4 | `rQl_bcIB6wg` (Dance Today, 894s) | **dans adlandırılmamış** | *"Ballroom Latin lesson"* hangi dans olduğunu söylemiyor — cha-cha mı rumba mı; bu stilin yapısal kimlik riski tam burada |
 | 5 | `Ix8rnEj-Yas` (Hoa Binh Vo) | **yeniden-yükleme şüphesi** | dedup imzası `mNmQ3nDGIPI` ile eşleşirse eğitmen sayılmaz |
+
+---
+
+## 4. HASAT SONUCU — taban-altı, ve sebebi TEK bir eşik
+
+**6 aday koşuldu, 6 ayrı sonuç sınıfı** (hiçbiri "olmadı" kovasına atılmadı):
+
+| aday | kanal | sonuç | sınıf |
+|---|---|---|---|
+| `bdf_bFVbHBA` | Social Dance Online | ✅ **İNDİ** | kanonik damga, `romMode` transkriptle `unknown→active` |
+| `mNmQ3nDGIPI` | Dance Insanity | ✅ **İNDİ** (yeniden denemede) | ilk denemede **HTTP 403** — *araç arızası*, malzeme hükmü DEĞİL; geçici olduğu **ölçüldü** |
+| `oTIN8Hlv5MQ` | HowcastArtsRec | ⛔ rig triyajı | **üst-gövde oranı 0,58 < 0,6** (baş-kırpık kadraj) |
+| `rQl_bcIB6wg` | Dance Today | ⛔ rig triyajı | **netlik 32 < 40** (bulanık kaynak) |
+| `Ix8rnEj-Yas` | Hoa Binh Vo | ⛔ **dedup** | *"kopya: mNmQ3nDGIPI ile eşleşti"* |
+| `VikJ4T_R3aI` | Dance Insanity | ⛔ triyaj | kanal zaten sayıldı |
+
+### ✅ Hasat ÖNCESİ ölçümüm doğrulandı: araç 5 dedi, ben 4 dedim, gerçek 4
+
+`Ix8rnEj-Yas`ı **dedup'ın karar verebilmesi için** hasat ettim (`mNmQ3nDGIPI`
+kütüphaneye indikten sonra — aksi hâlde karşılaştıracağı şey olmazdı) ve
+algısal imza **kopya** dedi. `probe_candidates`'in eğitmen-tekliği kanal
+ADINA bakıyor; başka ad altındaki yeniden-yüklemeyi göremiyor.
+*Bir aracın sayısı, saydığı birimin tanımı kadar iyidir* — ve bu kez sınama
+**gerçek bir kopyayla** yapıldı, varsayımla değil.
+
+### Kimlik: yapısal risk TEMİZLENDİ (ders düzeyi)
+
+İnen iki kaynağın transkripti: **cha-cha 19 / 4**, **rumba+samba+salsa 0 / 0**.
+Önceden kaydettiğim yapısal risk ("cucaracha rumba/samba'da da var") **her
+iki kaynakta da gerçekleşmedi**.
+
+### 🪤 Ve sayacım ÜÇÜNCÜ kez yanlış saydı — bu kez TELAFFUZ yüzünden
+
+İlk okumada *"cucaracha = 0"* çıktı ve *"adım hiç adlandırılmıyor"* diye
+yazacaktım. Metni okuyunca göründü:
+- `bdf_bFVbHBA` 6,5s: *"It's called the **kukaraches**"*
+- `mNmQ3nDGIPI` 0,0s: *"**Kukuracep** Compact Chasse in Chacha"*
+
+ASR, İngilizce olmayan adım adlarını **fonetik olarak yazıyor**; tam-dizge
+sayacı **sıfır** üretiyor. Ve bu, sıfırı tam olarak **kimlik riskinin en
+yüksek olduğu** yerlerde üretir: adı İngilizce bir sözcük olmayan stiller
+(Latin, Afro-diasporik…).
+→ R17'nin transkript kanalının **adıyla yazılması gereken sınırı**: terim
+listesi ASR transliterasyonlarını kapsamazsa, kanal en çok gerektiği yerde
+yanlış sıfır verir.
+**Kontrol edildi:** R17 §5'in **9 ⚠️ segmentinin 9'unda da** yakın-yazım
+taraması **hiçbir şey bulmadı** — o hükümler ayakta (terimleri İngilizce).
+
+### SONUÇ: 2 bağımsız eğitmen — taban (≥3) ALTINDA
+
+Ve sebebi tek bir eşikte toplanıyor: **`probe_candidates`'in 60s alt sınırı.**
+Ölçüldü — süre tabanının altında kalan cha-cha cucaracha malzemesi:
+
+| video | süre | kanal |
+|---|---|---|
+| `EnhBMty4rTs` | 25s | SYLLABUS Dance-Sport |
+| `nicH8jBAi0Q` | 22s | SYLLABUS Dance-Sport |
+
+**2 klip / 1 AYRI eğitmen.** Yani taban tam bir eğitmen uzakta, ve o eğitmenin
+malzemesi **var ama eşiğin altında**.
+
+Eşiğin gerekçesi kayıtlı: *"Tek-adım eğitimi bundan kısaysa teaser'dır."*
+**Ama cucaracha kısa bir balo salonu figürü** ve syllabus kanalları onu
+tanımı gereği **izole ve kısa** gösteriyor — 22s'lik bir klip ~120 BPM'de
+10+ çevrim taşır, yani *çevrim* açısından ince değil.
+⛔ **Eşiğe DOKUNULMADI** (eşik icadı yasak; tasarım koordinatörde).
+Karar noktası adıyla: *kısa balo-salonu figürleri için süre tabanı ayrı mı
+olmalı, yoksa `cc_cucaracha` taban-altı olarak mı kayda geçsin?*
