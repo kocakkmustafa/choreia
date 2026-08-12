@@ -61,6 +61,11 @@ run "network dependency"  python3 tools/network_dependency_check.py
 # Transkript havuzu yoksa exit 2 (⚪ ORTAM YOK) — C-210'un üçüncü hâli.
 run "identity read"       python3 tools/identity_read.py
 
+# Kapanış otoritesi (C-249). Bir yer "C-NNN kapandı" diyorsa, C-NNN'in KENDİ
+# durum sütunu da öyle demeli. Otorite A; B işaretçi, C hiç değil.
+# Defter git-dışı workspace'te → taze klonda exit 2 (⚪ ORTAM YOK).
+run "closure authority"   python3 tools/closure_authority.py
+
 # Hasat aracı öz-testleri (C-207, koordinatör sevki, A1 bulgusu).
 #
 # Bu 7 aracın kendi `--self-test`i vardı ve HİÇBİRİ buraya bağlı değildi —
@@ -74,6 +79,7 @@ run "camera_angle_gate self-test"   python3 tools/camera_angle_gate.py --self-te
 run "build_reference self-test"     python3 tools/build_reference.py --self-test
 run "beat_annotate self-test"       python3 tools/beat_annotate.py --self-test
 run "identity_read self-test"     python3 tools/identity_read.py --self-test
+run "closure_authority self-test" python3 tools/closure_authority.py --self-test
 run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
 
 if [ "$fail" -ne 0 ]; then
