@@ -131,7 +131,7 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
       bool permanent = false;
       if (refusal is LivePermissionDenied) {
         final Future<bool> Function() probe =
-            widget.permanentlyDeniedProbe ?? _askOs;
+            widget.permanentlyDeniedProbe ?? askOsPermanentlyDenied;
         try {
           permanent = await probe();
         } on Object {
@@ -158,16 +158,6 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
     });
   }
 
-  /// Ostinato's rule, adapted UNCHANGED (`camera_session.dart`
-  /// `permissionState`): `isRestricted` is permanent too. Choreia asks
-  /// `.status` rather than `request()` because the camera plugin has already
-  /// done the asking by the time we get a refusal — re-requesting here would
-  /// pop a second dialog for a question the OS just answered.
-  Future<bool> _askOs() async {
-    final PermissionStatus perm = await Permission.camera.status;
-    return perm.isPermanentlyDenied || perm.isRestricted;
-  }
-
   String _stepPath(String id) {
     final String style = widget.styleId ??
         (id.startsWith('ss_') ? 'salsa_shines' : 'hip_hop_foundations');
@@ -187,4 +177,30 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
         // M-F-268'in yasakladığı ölü-sonun kendisi. Artık gerçek bir çağrı.
         onOpenSettings: widget.openSettings ?? openAppSettings,
       );
+}
+
+/// Asks the OS whether camera access is refused for good.
+///
+/// **Ostinato's rule, adapted UNCHANGED** (`camera_session.dart`
+/// `permissionState`): `isRestricted` counts as permanent too. A device under
+/// parental controls or an MDM policy never shows the dialog at all, so the
+/// old "second refusal reads as permanent" heuristic could not see that case
+/// even in principle.
+///
+/// Choreia asks `.status` rather than `request()` because the camera plugin
+/// has already done the asking by the time we get a refusal — re-requesting
+/// here would pop a second dialog for a question the OS just answered.
+///
+/// **TOP-LEVEL, not a private method on the State, and that is the point.**
+/// While this lived inside `_LiveLessonPageState` the only way to exercise it
+/// was to build the whole page — so the branch shipped unexercised, and a
+/// test could only reach it by injecting `permanentlyDeniedProbe`, which
+/// REPLACES this function and therefore proves nothing about the rule inside
+/// it. Lissom measured that exact class the same morning (L-283: "kodda
+/// vardı, hiç koşulmamıştı"). Reachable from a test, the platform channel can
+/// be stubbed and the real chain — channel → plugin → this rule — driven end
+/// to end.
+Future<bool> askOsPermanentlyDenied() async {
+  final PermissionStatus perm = await Permission.camera.status;
+  return perm.isPermanentlyDenied || perm.isRestricted;
 }
