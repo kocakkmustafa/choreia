@@ -145,3 +145,69 @@ noktası tam da bu: ikisi ayırt edilemez, ve ayırt edilemiyorsa ikisi de aynı
 şekilde güvenilmezdir.
 
 ⛔ Hüküm verilmedi, düzeltme yapılmadı — sevk öyle diyordu.
+
+---
+
+## 3. Kimlik probu YAYINLANMIŞ referanslara uygulandı — iki liste
+
+Koordinatör sevki: leave-one-out probunu yayınlanmış referansların kaynaklarına
+uygula; **yalnız içeriğinde ayırt edici hipotez BEYAN EDİLMİŞ** olanlara.
+Hipotez yoksa prob soruyu soramaz → o kalemler *"mekanik olarak sorulamaz"*
+diye adıyla listelenir, **uydurma hipotez kurulmaz**.
+
+### 🔴 Sevkin öngörmediği YAPISAL ön koşul: prob **≥4 kaynak** ister
+
+Leave-one-out, bir take'i çıkarıp kalanların konsensüsünü kurmaktır. 3 kaynaklı
+bir referansta kalan **2**'dir ve `build_reference` kendi kapısıyla **reddeder**:
+
+```
+✗ hh_bounce: 2 kullanılabilir take — >=3 gerekli (M-C-04)
+```
+
+**`hh_running_man` cevaplanabilirdi çünkü 4 kaynağı vardı.** Yayınlanmış
+diğer üç referansın **üçü de tam 3 kaynaklı** → hipotez olsa bile prob koşmaz.
+Bu, 12/13 borcunun maliyetini değiştirir: borcun **9'u**, o referanslara
+4'üncü bir kaynak inene kadar **proba açık değil**.
+
+### LİSTE 1 — mekanik olarak CEVAPLANAN (1 referans · 4 kaynak)
+
+| referans | kaynak | hipotez | sonuç |
+|---|---|---|---|
+| hh_running_man | `KV-sxd_pQ9w` | `sh_running_man.json` → bacak | ayrışma yok |
+| hh_running_man | `UO9Ehsdt2IE` | aynı | ayrışma yok (çıkarılınca dispersiyon **artıyor**) |
+| hh_running_man | `Wd29rBfAzkI` | aynı | **ayrışıyor — ama KOL eklemlerinde** (bacak −0,82°) → koordinatör hükmü: TUTULUR |
+| hh_running_man | `ZpTgAZBYNrU` | aynı | ayrışma yok (§1, beş eksen) |
+
+### LİSTE 2 — mekanik olarak CEVAPLANAMAYAN (3 referans · 9 kaynak)
+
+| referans | kaynak sayısı | beyan edilmiş hipotez | niçin sorulamıyor |
+|---|---|---|---|
+| **hh_bounce** | 3 | ✅ **İKİ tane** — `dh_bounce.json`: *"dip daha uzun oturur, alçalış daha yavaştır"* (→ DİZ) · `hh_rock.json`: *"bounce dizden, rock GÖĞÜS ve KALÇADAN sürülür"* (→ GÖVDE/KALÇA) | **yalnız taban:** 3 kaynak → LOO 2'ye düşer, araç reddeder |
+| **hh_roger_rabbit** | 3 | ❌ **YOK** — hiçbir adım notu onu karıştırılabilir bir adımdan ayırt etmiyor | **iki sebep:** hipotez yok **ve** taban |
+| **ss_shine_footwork** | 3 | ⚠️ **yalnız RİTİM** — en yakın ayrım `ss_basic.json`: *"4 ve 8 sayıları TUTULUR, basılmaz"* | **iki sebep:** ritim sözleşmeyle **daima kapsam dışı** (`timing_verdict`/`bottom_beat_phase`) **ve** taban |
+
+🪤 **Adıyla anılmaya değer:** kayıtta kimlik sorusu YAZILI olan **tek** kaynak
+(`4BRd2E8vBic`, R13: *"segment bounce mı rock mu"*) tam da mekanik olarak
+**sorulamayan** referansta duruyor.
+
+### `hh_bounce` için TARAMA (prob DEĞİL) — sınırı adıyla
+
+Prob koşamıyor ama 3'lü kümenin **kendi** dispersiyon çıktısı okunabilir. Bu,
+take'e **ATFEDEMEZ**; yalnız *"bu referansta hipotez-ŞEKLİNDE bir uyuşmazlık
+var mı"* der.
+
+`disagreement` listesi 17 eklemden **10**'unu taşıyor; **listede OLMAYANLAR**
+(= raporlanacak kadar uyuşmazlık göstermeyenler): `left_knee` · `right_knee` ·
+`trunk_tilt` · `right_hip` · `right_thigh` · `right_shoulder` ·
+`right_upper_arm`. Yani **her iki hipotezin öngördüğü bölge de** (diz · gövde/
+kalça) listede yok; mevcut tek kalça girdisi `left_hip` = 3,0°, küme medyanının
+(6,02°) altında. Listeye hâkim olanlar **kollar**: `left_elbow` 12,0 ·
+`right_elbow` 12,0 · `left_forearm` 9,7 · `right_forearm` 8,4.
+
+**POZİTİF KONTROL:** bu kanal diz/gövdeyi bildirebiliyor — `hh_running_man`in
+listesi **17/17 eklemi** taşıyor (`left_knee`, `trunk_tilt` dahil). `hh_bounce`ta
+bildirmemiş olması ölçülmüş bir sessizlik, kanal körlüğü değil.
+
+**Okunuşu:** `hh_bounce`ta hipotez-şeklinde bir uyuşmazlık **görünmüyor**;
+uyuşmazlık kol üslubunda toplanmış — bir diz-sürücülü adımda beklenen yer.
+Bu bir **tarama sonucudur, hüküm değil**: hangi take'ten geldiğini söyleyemez.
