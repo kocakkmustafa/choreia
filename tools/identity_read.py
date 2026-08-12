@@ -283,14 +283,28 @@ def shipped_references() -> list[Path]:
     return out
 
 
-def verdict(counts_own: int, counts_conf: int, words: int) -> str:
+def verdict(counts_own: int, counts_conf: int, words: int,
+            *, blind_terms: bool = False) -> str:
+    """⛔ ÖLÇÜLEMEDİ, `KANIT_YOK`tan AYRI BİR HÂLDİR (koordinatör hükmü):
+
+        ***BİR SESSİZLİK, ALETİN KÖRLÜĞÜYLE AÇIKLANABİLİYORSA,
+           O BİR ÖLÇÜM DEĞİLDİR.***
+
+    `KANIT_YOK` = **veri sessiz** (ölçüldü, terim geçmiyor).
+    `OLCULEMEDI` = **alet kör** (adım terimlerinden en az biri ASR-kırılgan,
+    yani bu hücredeki sıfır *yokluğun* değil *körlüğün* sonucu olabilir).
+
+    İkisini aynı kovaya koymak, bu turda kendi bayrağımda düzelttiğim kusurun
+    ta kendisi olurdu: **arıza yönü zıt olan iki sınıfı aynı kutuya koymak
+    yön bilgisini yok eder.** ⛔ Panzehir aranmıyor — bu hücre ölçülemez
+    kalabilir; ölçülemez olduğunu YAZMAK yeterli."""
     if words == 0:
-        return "SESSIZ"
+        return "OLCULEMEDI" if blind_terms else "SESSIZ"
     if counts_conf > counts_own:
         return "KIRMIZI"
     if counts_own > counts_conf:
         return "TEYIT"
-    return "KANIT_YOK"
+    return "OLCULEMEDI" if blind_terms else "KANIT_YOK"
 
 
 def read_lesson(video: str, terms: dict) -> tuple[str, int, int, int, list[str]]:
@@ -307,6 +321,10 @@ def read_lesson(video: str, terms: dict) -> tuple[str, int, int, int, list[str]]
     text = _fold(" ".join(x["text"] for x in json.loads(p.read_text(encoding="utf-8"))))
     o = sum(text.count(_fold(w)) for w in terms["own"])
     c = sum(text.count(_fold(w)) for w in terms["confusable"])
+    # Adımın terimlerinden en az biri ASR-kırılgansa, bu adımdaki her SIFIR
+    # şüphelidir — elle liste değil, TÜRETİLMİŞ kural.
+    fragile_terms = [t for t in terms["own"] + terms["confusable"]
+                     if asr_fragile(t)[0]]
 
     blind = []
     for term in terms["own"] + terms["confusable"]:
@@ -318,7 +336,8 @@ def read_lesson(video: str, terms: dict) -> tuple[str, int, int, int, list[str]]
         hits = near_hits(text, term)
         if hits:
             blind.append(f"{term}~{'/'.join(hits[:3])}")
-    return (verdict(o, c, len(text.split())), o, c, len(text.split()), blind)
+    return (verdict(o, c, len(text.split()), blind_terms=bool(fragile_terms)),
+            o, c, len(text.split()), blind)
 
 
 def main() -> int:
@@ -417,7 +436,9 @@ def write_register(rows: list[tuple]) -> None:
         "|---|---|---|---|---|---|",
     ]
     label = {"TEYIT": "✅ kendi adımı baskın", "KIRMIZI": "🔴 **ÇÜRÜTÜYOR**",
-             "KANIT_YOK": "⚠️ kanıt yok", "SESSIZ": "🔇 sessiz",
+             "KANIT_YOK": "⚠️ kanıt yok (veri sessiz)",
+             "OLCULEMEDI": "⛔ **ÖLÇÜLEMEDİ** (araç kör — adımın terimi ASR-kırılgan)",
+             "SESSIZ": "🔇 sessiz",
              "TRANSKRIPT_YOK": "⚪ transkript yok", "TERIM_YOK": "⚪ terim seti yok"}
     for step, v, vd, o, c, w, blind in rows:
         note = " ⚠️ **SAYAÇ KÖR:** " + ", ".join(blind) if blind else ""
@@ -451,6 +472,28 @@ def write_register(rows: list[tuple]) -> None:
         "metin ASCII'ye indirgenip sonra küçültülüyor. Kayıt duruyor çünkü",
         "**giderilmiş bir kırılganlık, olmayan bir kırılganlık değildir** —",
         "katlama kaldırılırsa öz-test 5 FAIL ile öter.",
+        "",
+        "",
+        "## ⚠️ Hükmün KAPSAMADIĞI yön — ölçüldü, karar koordinatörde",
+        "",
+        "`OLCULEMEDI` yeniden sınıflandırması **sıfır** veren hücrelere",
+        "uygulanıyor. Ama kırılgan terimin **hangi tarafta** olduğu arıza",
+        "yönünü değiştiriyor:",
+        "",
+        "| kırılgan taraf | kaçan şey | yön |",
+        "|---|---|---|",
+        "| **own** | kendi adımının anılması | `kanıt-yok` aslında **teyit** olabilir |",
+        "| **confusable** | karıştırılabilir adımın anılması | **`teyit` aslında ÇÜRÜTME olabilir** ← daha tehlikeli |",
+        "",
+        "Ölçüldü: `hh_bounce` conf-kırılgan (`dancehall`) · `hh_running_man`",
+        "conf-kırılgan (`melbourne`) · `ss_shine_footwork` **her iki tarafı da**",
+        "kırılgan (`salsa` / `bachata`,`merengue`) · `hh_roger_rabbit` temiz.",
+        "",
+        "→ Yani **`teyit` hükümlerinin bir kısmı da** kırılgan bir karşıtlık",
+        "terimine dayanıyor olabilir. Bu **uygulanmadı** — hüküm yalnız sıfır",
+        "veren hücreleri kapsıyordu, ve *bir ölçütü ayırt ettiğini SANDIĞIN",
+        "yönde ölçmeden genişletmek* bugün bir kez zaten kapıya gürültü",
+        "eklemişti. Karar koordinatörde.",
         "",
         "**Açık kalem:** `4BRd2E8vBic` — ders düzeyinde çürütme sinyali",
         "(bounce 32 ↔ rock 50) ama **segment penceresi sessiz**. İki ayrı",

@@ -24,14 +24,14 @@ mahkûmiyet.
 | hh_bounce | `DEWpw4n8Lkw` | ✅ kendi adımı baskın | 20 | 1 | 2468 |
 | hh_bounce | `ovIZAyDuJSg` | ✅ kendi adımı baskın | 27 | 0 | 900 |
 | hh_roger_rabbit | `35sk_G8Vf9o` | ✅ kendi adımı baskın | 5 | 0 | 1022 |
-| hh_roger_rabbit | `5MQEtoEKdEw` | ⚠️ kanıt yok | 4 | 4 | 742 |
+| hh_roger_rabbit | `5MQEtoEKdEw` | ⚠️ kanıt yok (veri sessiz) | 4 | 4 | 742 |
 | hh_roger_rabbit | `selXuuAWI64` | ✅ kendi adımı baskın | 2 | 0 | 329 |
 | hh_running_man | `KV-sxd_pQ9w` | ✅ kendi adımı baskın | 6 | 2 | 531 |
 | hh_running_man | `UO9Ehsdt2IE` | ✅ kendi adımı baskın | 9 | 0 | 1145 |
 | hh_running_man | `Wd29rBfAzkI` | ✅ kendi adımı baskın | 4 | 0 | 1837 |
 | hh_running_man | `ZpTgAZBYNrU` | ✅ kendi adımı baskın | 6 | 2 | 609 |
 | ss_shine_footwork | `SHGkSbJm2Iw` | ✅ kendi adımı baskın | 7 | 0 | 669 |
-| ss_shine_footwork | `jjP8bKWCg9U` | ⚠️ kanıt yok | 0 | 0 | 577 |
+| ss_shine_footwork | `jjP8bKWCg9U` | ⛔ **ÖLÇÜLEMEDİ** (araç kör — adımın terimi ASR-kırılgan) | 0 | 0 | 577 |
 | ss_shine_footwork | `w4opJ2ezmd4` | ✅ kendi adımı baskın | 2 | 0 | 1812 |
 
 ## Segment düzeyi — AYRI bir granül, tek sayıya indirilmez
@@ -73,6 +73,28 @@ olduğunu belirler; tek bayrakta birleştirmek bu ayrımı yok ederdi.
 metin ASCII'ye indirgenip sonra küçültülüyor. Kayıt duruyor çünkü
 **giderilmiş bir kırılganlık, olmayan bir kırılganlık değildir** —
 katlama kaldırılırsa öz-test 5 FAIL ile öter.
+
+
+## ⚠️ Hükmün KAPSAMADIĞI yön — ölçüldü, karar koordinatörde
+
+`OLCULEMEDI` yeniden sınıflandırması **sıfır** veren hücrelere
+uygulanıyor. Ama kırılgan terimin **hangi tarafta** olduğu arıza
+yönünü değiştiriyor:
+
+| kırılgan taraf | kaçan şey | yön |
+|---|---|---|
+| **own** | kendi adımının anılması | `kanıt-yok` aslında **teyit** olabilir |
+| **confusable** | karıştırılabilir adımın anılması | **`teyit` aslında ÇÜRÜTME olabilir** ← daha tehlikeli |
+
+Ölçüldü: `hh_bounce` conf-kırılgan (`dancehall`) · `hh_running_man`
+conf-kırılgan (`melbourne`) · `ss_shine_footwork` **her iki tarafı da**
+kırılgan (`salsa` / `bachata`,`merengue`) · `hh_roger_rabbit` temiz.
+
+→ Yani **`teyit` hükümlerinin bir kısmı da** kırılgan bir karşıtlık
+terimine dayanıyor olabilir. Bu **uygulanmadı** — hüküm yalnız sıfır
+veren hücreleri kapsıyordu, ve *bir ölçütü ayırt ettiğini SANDIĞIN
+yönde ölçmeden genişletmek* bugün bir kez zaten kapıya gürültü
+eklemişti. Karar koordinatörde.
 
 **Açık kalem:** `4BRd2E8vBic` — ders düzeyinde çürütme sinyali
 (bounce 32 ↔ rock 50) ama **segment penceresi sessiz**. İki ayrı
