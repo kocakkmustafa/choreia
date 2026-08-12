@@ -284,7 +284,7 @@ def shipped_references() -> list[Path]:
 
 
 def verdict(counts_own: int, counts_conf: int, words: int,
-            *, blind_terms: bool = False) -> str:
+            *, blind_terms: bool = False, conf_blind: bool = False) -> str:
     """⛔ ÖLÇÜLEMEDİ, `KANIT_YOK`tan AYRI BİR HÂLDİR (koordinatör hükmü):
 
         ***BİR SESSİZLİK, ALETİN KÖRLÜĞÜYLE AÇIKLANABİLİYORSA,
@@ -303,7 +303,23 @@ def verdict(counts_own: int, counts_conf: int, words: int,
     if counts_conf > counts_own:
         return "KIRMIZI"
     if counts_own > counts_conf:
-        return "TEYIT"
+        # ⚖️ ASİMETRİK GENİŞLETME (koordinatör hükmü). `teyit` şu demek:
+        # "kendi adımım N kez anılıyor, karıştırılabilir adım SIFIR kez."
+        # Karşıtlık terimi ASR-kırılgansa o SIFIR bir yokluk değil KÖRLÜK
+        # olabilir → teyidin dayandığı sıfır ölçülmemiş bir sıfırdır.
+        #
+        #   ***KÖRLÜK, İDDİAYI ARTIRAN YÖNDE ASLA LEHE YORUMLANMAZ;
+        #      İDDİAYI AZALTAN YÖNDE İSE ZATEN ZARARSIZDIR.***
+        #
+        # own-kırılgan → kaçan şey KENDİ adımımın anılması → iddiayı AZALTIR
+        #   → DOKUNULMAZ (terfi ettirmek, ölçmediğimizden fazlasını iddia
+        #     etmek olurdu).
+        # conf-kırılgan → kaçan şey ÇÜRÜTME → iddiayı ARTIRIR → DÜŞÜRÜLÜR.
+        #
+        # ⛔ Ama `OLCULEMEDI`ye çevrilmez: bu hücrede KENDİ tarafın ölçüsü
+        # GERÇEK (sayıldı, sıfır değil); kör olan YALNIZ karşıtlık. Bütünü
+        # ölçülemez saymak, ölçülmüş bir yarıyı ölçülmemiş saymak olurdu.
+        return "TEYIT_KARSITLIK_KOR" if conf_blind else "TEYIT"
     return "OLCULEMEDI" if blind_terms else "KANIT_YOK"
 
 
@@ -325,6 +341,7 @@ def read_lesson(video: str, terms: dict) -> tuple[str, int, int, int, list[str]]
     # şüphelidir — elle liste değil, TÜRETİLMİŞ kural.
     fragile_terms = [t for t in terms["own"] + terms["confusable"]
                      if asr_fragile(t)[0]]
+    conf_fragile = [t for t in terms["confusable"] if asr_fragile(t)[0]]
 
     blind = []
     for term in terms["own"] + terms["confusable"]:
@@ -336,7 +353,8 @@ def read_lesson(video: str, terms: dict) -> tuple[str, int, int, int, list[str]]
         hits = near_hits(text, term)
         if hits:
             blind.append(f"{term}~{'/'.join(hits[:3])}")
-    return (verdict(o, c, len(text.split()), blind_terms=bool(fragile_terms)),
+    return (verdict(o, c, len(text.split()), blind_terms=bool(fragile_terms),
+                    conf_blind=bool(conf_fragile)),
             o, c, len(text.split()), blind)
 
 
@@ -435,7 +453,9 @@ def write_register(rows: list[tuple]) -> None:
         "| referans | kaynak | ders düzeyi | kendi | karışt. | sözcük |",
         "|---|---|---|---|---|---|",
     ]
-    label = {"TEYIT": "✅ kendi adımı baskın", "KIRMIZI": "🔴 **ÇÜRÜTÜYOR**",
+    label = {"TEYIT": "✅ kendi adımı baskın",
+             "TEYIT_KARSITLIK_KOR": "🟡 **TEYİT — karşıtlık ölçülemedi** "
+                                    "(kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan)", "KIRMIZI": "🔴 **ÇÜRÜTÜYOR**",
              "KANIT_YOK": "⚠️ kanıt yok (veri sessiz)",
              "OLCULEMEDI": "⛔ **ÖLÇÜLEMEDİ** (araç kör — adımın terimi ASR-kırılgan)",
              "SESSIZ": "🔇 sessiz",
@@ -522,6 +542,16 @@ def self_test() -> int:
         got = verdict(o, c, w)
         if got != want:
             fails.append(f"verdict({o},{c},{w}) = {got}, beklenen {want}")
+
+    # ASİMETRİ — hükmün özü, ve iki YÖN ayrı ayrı sınanıyor. Tek yönü
+    # sınamak, asimetriyi simetriyle karıştırırdı.
+    if verdict(3, 0, 50, blind_terms=True, conf_blind=True) != "TEYIT_KARSITLIK_KOR":
+        fails.append("conf-kırılgan teyit DÜŞÜRÜLMÜYOR — iddiayı artıran körlük")
+    if verdict(3, 0, 50, blind_terms=True, conf_blind=False) != "TEYIT":
+        fails.append("own-kırılgan teyit DÜŞÜRÜLDÜ — iddiayı azaltan körlük "
+                     "zararsızdır, dokunulmamalıydı")
+    if verdict(0, 0, 50, blind_terms=True, conf_blind=True) != "OLCULEMEDI":
+        fails.append("kırılgan terimli SIFIR hâlâ KANIT_YOK sayılıyor")
 
     # 3) KÖK eşleme gerçekten çekimli biçimi yakalıyor mu? (C-231'in ölçülmüş
     #    vakası: "when you're shuffling" tam-sözcük sayımıyla KAÇIYORDU.)

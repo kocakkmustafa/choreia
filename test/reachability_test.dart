@@ -183,6 +183,81 @@ void main() {
           reason: 'Start basıldı ama canlı ders rotasına gidilmedi');
     });
 
+    testWidgets('YÜRÜYÜŞ EKSİK YÜRÜNMEDİ — aday = varılan ⊎ varılamayan',
+        (WidgetTester tester) async {
+      // ⚠️ SÖZLEŞME (d) — ve Lissom'un kendi maddesini KÖR yazmasından alınan
+      // ders: **bir bölme denetimi, iki tarafı AYNI KAYNAKTAN okuyorsa
+      // denetim değil TANIMDIR.** Aday kümesi bu yüzden yürüyüşten DEĞİL,
+      // `lib/` KAYNAĞINDAN ada göre üretiliyor (`…View` / `…Page`).
+      //
+      // Niye gerekli: yürüyüş "kaç yere vardım" sayıyordu ama "kaç yere
+      // VARAMADIM" hiç sorulmuyordu — eksik yürünen bir yürüyüş, sessizce
+      // daha küçük ve "doğru" görünen bir sayı üretir. *"0 kusur" en kolay
+      // sahtelenen sayıdır.*
+      final Set<String> candidates = <String>{};
+      for (final FileSystemEntity e
+          in Directory('lib').listSync(recursive: true)) {
+        if (e is! File || !e.path.endsWith('.dart')) continue;
+        for (final RegExpMatch m in RegExp(
+                r'^class ([A-Za-z_]+(?:View|Page)) extends Stat',
+                multiLine: true)
+            .allMatches(e.readAsStringSync())) {
+          candidates.add(m.group(1)!);
+        }
+      }
+      expect(candidates.length, greaterThan(3),
+          reason: 'kaynak taraması aday bulamadı — denetim vakumda');
+
+      final Set<String> reached = <String>{};
+      void snapshot() {
+        for (final String c in candidates) {
+          if (find.byWidgetPredicate((Widget w) => w.runtimeType.toString() == c)
+              .evaluate()
+              .isNotEmpty) {
+            reached.add(c);
+          }
+        }
+      }
+
+      final _RouteSpy spy = _RouteSpy();
+      await tester.pumpWidget(app(spy));
+      await _settle(tester);
+      snapshot();                      // tanıtım
+      await passIntro(tester);
+      snapshot();                      // kütüphane
+      await tester.tap(find.byKey(ChoreiaShell.progressTabKey));
+      await _settle(tester);
+      snapshot();                      // ilerleme
+      await tester.tap(find.byKey(ChoreiaShell.libraryTabKey));
+      await _settle(tester);
+      final Finder card =
+          find.byKey(LibraryView.tileKey('hip_hop_foundations'));
+      await tester.ensureVisible(card);
+      await _settle(tester);
+      await tester.tap(card);
+      await _settle(tester);
+      snapshot();                      // stil sayfası
+
+      // VARILAMAYANLAR — adıyla ve SEBEBİYLE. Boş bırakılamaz: sebebi
+      // olmayan bir dışlama, denetimi tekrar tanıma çevirir.
+      const Map<String, String> unreachableInWalk = <String, String>{
+        'LiveLessonPage': 'widget testinde açılamaz: `rootBundle` üzerinden '
+            'referans + poz modeli yükler, ikisi de bu ortamda yok. KATI '
+            'sayımda ROTASI ölçülüyor (`spy.pushed`), ama EKRANI değil.',
+        'LiveView': 'yalnız `LiveLessonPage`in gövdesi olarak çizilir; o '
+            'açılamadığı için bu da açılamıyor. AYRI testi var '
+            '(`live_view_test.dart`, 7 hâlin hepsi).',
+      };
+
+      final Set<String> unreached = candidates.difference(reached);
+      expect(unreached, unreachableInWalk.keys.toSet(),
+          reason: 'BÖLME BOZULDU. Varılamayan küme değişti: $unreached. '
+              'Yeni bir ekran yürüyüşe girmediyse SEBEBİNİ yaz; girdiyse '
+              'listeden çıkar. Eşitlik: aday = varılan ⊎ varılamayan.');
+      expect(reached.union(unreachableInWalk.keys.toSet()), candidates,
+          reason: 'aday kümesi ile toplam ayrıştı');
+    });
+
     testWidgets('GEVŞEK okuma: rota + itilmeden geçilen yerler',
         (WidgetTester tester) async {
       final _RouteSpy spy = _RouteSpy();

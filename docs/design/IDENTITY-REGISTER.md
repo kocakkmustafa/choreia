@@ -2,7 +2,7 @@
 
 # Choreia — Kimlik Kütüğü (kabul edilmiş kaynaklar)
 
-14 kabul edilmiş kaynak · **11 teyit** · **1 çürütme** · kalanı kanıt-yok.
+14 kabul edilmiş kaynak · **2 teyit** · **1 çürütme** · kalanı kanıt-yok.
 
 **Bu kütük bir KAPI DEĞİL.** Kapı yalnız *çürütme*de öter; kanıt-yok
 bloklamaz çünkü transkript sessizliği **kaynak videonun** özelliğidir,
@@ -19,20 +19,20 @@ mahkûmiyet.
 
 | referans | kaynak | ders düzeyi | kendi | karışt. | sözcük |
 |---|---|---|---|---|---|
-| hh_bounce | `1IVtcoqMrBA` | ✅ kendi adımı baskın | 36 | 0 | 944 |
+| hh_bounce | `1IVtcoqMrBA` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 36 | 0 | 944 |
 | hh_bounce | `4BRd2E8vBic` | 🔴 **ÇÜRÜTÜYOR** | 32 | 50 | 2070 |
-| hh_bounce | `DEWpw4n8Lkw` | ✅ kendi adımı baskın | 20 | 1 | 2468 |
-| hh_bounce | `ovIZAyDuJSg` | ✅ kendi adımı baskın | 27 | 0 | 900 |
+| hh_bounce | `DEWpw4n8Lkw` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 20 | 1 | 2468 |
+| hh_bounce | `ovIZAyDuJSg` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 27 | 0 | 900 |
 | hh_roger_rabbit | `35sk_G8Vf9o` | ✅ kendi adımı baskın | 5 | 0 | 1022 |
 | hh_roger_rabbit | `5MQEtoEKdEw` | ⚠️ kanıt yok (veri sessiz) | 4 | 4 | 742 |
 | hh_roger_rabbit | `selXuuAWI64` | ✅ kendi adımı baskın | 2 | 0 | 329 |
-| hh_running_man | `KV-sxd_pQ9w` | ✅ kendi adımı baskın | 6 | 2 | 531 |
-| hh_running_man | `UO9Ehsdt2IE` | ✅ kendi adımı baskın | 9 | 0 | 1145 |
-| hh_running_man | `Wd29rBfAzkI` | ✅ kendi adımı baskın | 4 | 0 | 1837 |
-| hh_running_man | `ZpTgAZBYNrU` | ✅ kendi adımı baskın | 6 | 2 | 609 |
-| ss_shine_footwork | `SHGkSbJm2Iw` | ✅ kendi adımı baskın | 7 | 0 | 669 |
+| hh_running_man | `KV-sxd_pQ9w` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 6 | 2 | 531 |
+| hh_running_man | `UO9Ehsdt2IE` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 9 | 0 | 1145 |
+| hh_running_man | `Wd29rBfAzkI` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 4 | 0 | 1837 |
+| hh_running_man | `ZpTgAZBYNrU` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 6 | 2 | 609 |
+| ss_shine_footwork | `SHGkSbJm2Iw` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 7 | 0 | 669 |
 | ss_shine_footwork | `jjP8bKWCg9U` | ⛔ **ÖLÇÜLEMEDİ** (araç kör — adımın terimi ASR-kırılgan) | 0 | 0 | 577 |
-| ss_shine_footwork | `w4opJ2ezmd4` | ✅ kendi adımı baskın | 2 | 0 | 1812 |
+| ss_shine_footwork | `w4opJ2ezmd4` | 🟡 **TEYİT — karşıtlık ölçülemedi** (kendi kanıtı ayakta, karşıtlık terimi ASR-kırılgan) | 2 | 0 | 1812 |
 
 ## Segment düzeyi — AYRI bir granül, tek sayıya indirilmez
 
