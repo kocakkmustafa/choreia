@@ -126,51 +126,79 @@ void main() {
     });
   });
 
-  group('🔴 ÖLÇÜLDÜ: referanslar hangi modelle üretildiğini SÖYLEMİYOR', () {
-    test('hiçbir referans model kimliği taşımıyor — ve bu kapatılamayan bir '
-        'kapı', () {
-      // The live judge compares a dancer against these artefacts. Which pose
-      // model produced them decides what the numbers in them MEAN — and the
-      // family has already measured that two bundles of the same variant give
-      // different angles at the same file size.
-      //
-      // JabLab's `model_pin_test` enforces `modelId == fixtures.modelVersion`.
-      // That gate CANNOT be built here, because the field does not exist:
-      // Choreia's references record `corePin` and nothing about the model,
-      // and neither `harvest.py` nor `build_reference.py` stamps one.
-      //
-      // So this test asserts the GAP, not the guarantee. It is not a check
-      // that passes — it is a record that fails the day the gap closes, at
-      // which point the real equality gate replaces it.
-      final List<String> withProvenance = <String>[];
-      for (final File f in Directory('content/references')
-          .listSync()
-          .whereType<File>()
-          .where((File f) =>
-              f.path.endsWith('.json') && !f.path.contains('decisions'))) {
+  // C-230: BU KAYIT KAPANDI, YERİNE GERÇEK KAPI GELDİ.
+  //
+  // Buradaki eski test bir BOŞLUĞU çiviliyordu: "hiçbir referans model
+  // kimliği taşımıyor". Kendi gerekçe metni ne yapılacağını da yazıyordu —
+  // *"bir referans artık taşıyorsa bu kaydı sil ve yerine GERÇEK kapıyı koy:
+  // PoseModelPin.modelId ile artefaktın alanı BİREBİR eşit olmalı"*. Boşluk
+  // `hh_bounce` yeniden kurulunca kapandı ve test tam da tasarlandığı gibi
+  // kırmızı yandı.
+  //
+  // 🪤 Kapanışın YARISI tuzaktı: ilk yeniden kurulumda artefakt alanları
+  // TAŞIYORDU ama değerleri `null`'dı — kaydediyormuş gibi görünüp
+  // kaydetmeyen bir alan, yani eski dürüst yokluktan DAHA KÖTÜ. Sebep
+  // ölçüldü: fixture damgayı ÜST DÜZEYDE taşıyor, `prepare_take` ise yalnız
+  // `provenance`ı toptan kopyalıyordu; `build_reference` ikisini de okumayı
+  // zaten biliyordu. Zincirin iki ucu hazırdı, ortadaki halka düşürüyordu.
+  group('model kimliği — artık KAYIT değil KAPI (C-230)', () {
+    test('damga TAŞIYAN her referans uygulamanın piniyle BİREBİR eşit', () {
+      final Map<String, Map<String, dynamic>> stamped =
+          <String, Map<String, dynamic>>{};
+      final List<String> unstamped = <String>[];
+      // KAPSAM `pubspec`ten TÜRETİLİR, dizin listesinden değil. Dizin
+      // derleme defteri de taşıyor (`.keyset-baseline.json`) ve elle bir
+      // dışlama listesi yazmak, bir sonraki defter dosyasında sessizce
+      // yanlış olurdu. Bu kapı CİHAZA GİREN artefaktları ölçmeli — o küme
+      // `pubspec`in kendisidir (aynı kaynak `reachability_test`te de
+      // kullanılıyor: diskte olan ≠ uygulamada olan, C-143).
+      final List<File> refs = File('pubspec.yaml')
+          .readAsLinesSync()
+          .map((String l) => l.trim())
+          .where((String l) => l.startsWith('- content/references/'))
+          .map((String l) => File(l.substring('- '.length)))
+          .toList();
+
+      for (final File f in refs) {
         final Map<String, dynamic> ref =
             (jsonDecode(f.readAsStringSync()) as Map).cast<String, dynamic>();
-        if (ref.keys.any((String k) => k.toLowerCase().contains('model'))) {
-          withProvenance.add(f.uri.pathSegments.last);
+        final String name = f.uri.pathSegments.last;
+        if (ref['modelVersion'] != null || ref['modelSha256'] != null) {
+          stamped[name] = ref;
+        } else {
+          unstamped.add(name);
         }
       }
 
-      expect(withProvenance, isEmpty,
-          reason: 'BİR REFERANS ARTIK MODEL KİMLİĞİ TAŞIYOR ($withProvenance) '
-              '— bu iyi haber. Bu kaydı sil ve yerine GERÇEK kapıyı koy: '
-              'PoseModelPin.modelId ile artefaktın alanı BİREBİR eşit olmalı '
-              '(JabLab model_pin_test deseni).');
-
-      // The vacuum guard: if the loop reads nothing, the emptiness above is
-      // meaningless.
-      expect(
-          Directory('content/references')
-              .listSync()
-              .whereType<File>()
-              .where((File f) => f.path.endsWith('.json'))
-              .length,
-          greaterThan(1),
+      // VAKUM KORUMASI, iki yönlü: hiç dosya okunmadıysa ya da hiçbiri damga
+      // taşımıyorsa aşağıdaki eşitlikler HİÇBİR ŞEY ölçmez.
+      expect(refs.length, greaterThan(1),
           reason: 'hiç referans okunmadı — bu test hiçbir şey ölçmüyor');
+      expect(stamped, isNotEmpty,
+          reason: 'hiçbir referans model damgası taşımıyor — kapı ölçecek bir '
+              'şey bulamadı. `prepare_take` damgayı yine düşürüyor olabilir '
+              '(C-230) ya da artefaktlar eski yolla üretilmiş.');
+
+      stamped.forEach((String name, Map<String, dynamic> ref) {
+        expect(ref['modelVersion'], PoseModelPin.modelId,
+            reason: '$name uygulamanın kullandığından BAŞKA bir modelle '
+                'üretilmiş — içindeki her açı, tolerans ve anlaşmazlık sayısı '
+                'başka bir ölçüm aletinin çıktısı');
+        expect(ref['modelSha256'], PoseModelPin.sha256,
+            reason: '$name aynı model ADINI taşıyor ama BAŞKA bir dosyadan '
+                'üretilmiş — aile aynı varyantın iki paketinin aynı açıları '
+                'vermediğini ölçtü');
+      });
+
+      // KALAN BOŞLUK, ADIYLA. Bu liste bir kusur kaydıdır, bir tasarım değil:
+      // bu üç referans damga eklenmeden ÖNCE kuruldu. Biri yeniden kurulduğu
+      // gün bu satır kırmızı yanar ve liste küçültülür — kapı kendiliğinden
+      // sıkılaşır, ve boşluk sessizce kalıcılaşamaz.
+      expect(unstamped,
+          <String>['hh_roger_rabbit.json', 'hh_running_man.json',
+            'ss_shine_footwork.json'],
+          reason: 'damgasız referans kümesi değişti. KÜÇÜLDÜYSE iyi haber — '
+              'listeyi güncelle. BÜYÜDÜYSE bir referans damgasını KAYBETTİ.');
     });
   });
 }

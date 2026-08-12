@@ -786,6 +786,20 @@ def prepare(video_id: str, step: str | None = None) -> dict:
         "anchorAxis": anchor.get("axis"),
         "joints": joint_series(frames) if anchor.get("ok") else None,
         "provenance": doc.get("provenance", {}),
+        # MODEL DAMGASI — bilgi eksik DEĞİLDİ, burada DÜŞÜRÜLÜYORDU (C-230,
+        # C-197'nin aynı sınıfı başka dosyada). Fixture bunları ÜST DÜZEYDE
+        # taşıyor, `provenance`ın İÇİNDE değil; yukarıdaki toptan kopya onları
+        # kapsamıyordu. `build_reference` ikisini de okumayı ZATEN biliyor
+        # (`prov.get("modelVersion") or p.get("modelVersion")`) — yani zincirin
+        # iki ucu hazırdı, ortadaki halka taşımıyordu.
+        #
+        # Niye önemli: canlı hakem dansçıyı bu artefaktlara karşı ölçüyor ve
+        # hangi poz modelinin ürettiği, içindeki sayıların NE ANLAMA geldiğini
+        # belirliyor. Alan olmadan `model_pin_test` gerçek eşitlik kapısını
+        # kuramıyordu; `null` ile olsaydı daha da kötü olurdu — kaydediyormuş
+        # gibi görünüp kaydetmeyen bir alan.
+        "modelVersion": doc.get("modelVersion"),
+        "modelSha256": doc.get("modelSha256"),
     }
     if driver_pick:
         # BEYAN EDİLEN BİRİM görünür olmalı: aşağı akıştaki harmonik kapı
