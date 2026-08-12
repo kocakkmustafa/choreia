@@ -273,3 +273,48 @@ değil. Segment düzeyinde bile bu bir *ders konusu* kanıtıdır, hareket kanı
 değil — leave-one-out'un yerine geçmez, **onun ulaşamadığı yerde** konuşur.
 Ve sessiz bir segment (`4BRd2E8vBic`) hiçbir şey söylemez: **sessizlik
 aklanma değildir.**
+
+---
+
+## 5. OKUMA TURU koşuldu (14/14) — ve kendi "14/14 açık" iddiamı DÜZELTİYOR
+
+Koordinatöre *"transkript kanalı borcu 14/14 AÇIK yapıyor"* diye raporlamıştım.
+**Yanlış nitelemeydi, ve hatanın şekli bugünün tekrar eden sınıfı:**
+**aracın KOŞABİLMESİ ile aracın CEVAP ÜRETMESİ ayrı şeylerdir.** Transkript
+14/14'te *mevcut* — ama segment düzeyinde **yalnız 5'inde hüküm üretiyor.**
+
+### Segment düzeyi (asıl soru — referansın kurulduğu pencere)
+
+| hüküm | sayı |
+|---|---|
+| ✅ kendi adımı baskın | **5** |
+| ⚠️ pencerede kanıt YOK | **9** |
+| 🔴 karıştırılabilir baskın | **0** |
+
+### İki düzeyin çapraz tablosu — ve niçin ikisi de gerekli
+
+| ders düzeyi | segment düzeyi | sayı | okunuşu |
+|---|---|---|---|
+| ✅ | ✅ | **5** | iki düzeyde de kendi adımı — **en güçlü hâl** |
+| ✅ | ⚠️ | **6** | dersin konusu doğru, ama seçilen pencerede kimse adı söylemiyor |
+| ⚠️ | ⚠️ | 2 | hiçbir düzeyde kanıt yok (`5MQEtoEKdEw`, `jjP8bKWCg9U`) |
+| 🔴 | ⚠️ | 1 | **`4BRd2E8vBic`** — ders karıştırılabilir baskın (bounce 32 ↔ rock 50), pencere sessiz |
+
+**Sessizlik BEKLENEN, ve bu kanalın yapısal sınırı:** eğitmen adımı önce
+**anlatıyor**, sonra **sessizce gösteriyor** — hasat hattı ise tam o
+gösterim penceresini seçiyor (hareket + kamera-temiz). Yani kanal, en çok
+ihtiyaç duyulan yerde en sessiz. Pencereler 4–38s; birinde toplam **2 sözcük**
+var (`KV-sxd_pQ9w`).
+
+### Borcun DÜRÜST hâli
+
+- **5/14** segment düzeyinde okunabildi (transkriptin verebileceği en güçlü kanıt).
+- **6/14** yalnız ders düzeyinde okunabildi — *"bu ders bu adımı öğretiyor"*,
+  **"bu pencere o adımı gösteriyor" DEĞİL.**
+- **2/14** hiçbir düzeyde kanıt vermiyor.
+- **1/14** (`4BRd2E8vBic`) ders düzeyinde **kırmızı**, segment sessiz → **açık
+  kalem**; ne aklandı ne mahkûm, ve **sessizlik aklanma değildir**.
+
+⛔ **Sınır, üçüncü kez ve aynen:** transkript **söyleneni** ölçer, **yapılanı**
+değil. Leave-one-out'un **yerine geçmez**; onun ulaşamadığı yerde konuşur —
+ve şimdi ölçüldü ki **çoğu yerde de susuyor.**
