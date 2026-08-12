@@ -93,3 +93,89 @@ yazılıyor. Bu turun kendi dersi burada uygulanıyor: *`l3r4bPhikGQ`'nun
 **Hasat sırası, riske göre (en düşükten):** `ovIZAyDuJSg` → `lRbEjAar9yQ` →
 `8TuimkcTqPk` → kalanlar. **Sıra sonuca göre değil, ÖNCEDEN yazılan riske
 göre belirlendi.**
+
+---
+
+## 4. HASAT SONUCU — dördüncü kaynak İNDİ
+
+`ovIZAyDuJSg` (DTC) kanonik rig'le çekildi: `harvestRig.sha=63a0b3ed…`,
+`dirty=false`, `onMainLineage=true`, `romMode=active`,
+`referenceEligible=True`, 18187 kare @23,976fps. Hazırlık: **38,58s segment**
+(mevcut dördün en uzunu), periyot 0,625s.
+
+### ⚪ Önce bir ORTAM tuzağı — ve "red" sanılabilirdi
+
+İlk kurulumda kaynak-uygunluk kapısı `ovIZAyDuJSg`yi **dışladı**:
+`verdict: unknown`, `spokenWords: **-1**`, *"transkript yok — başlıktan hüküm
+verilmez (fail-closed)"*.
+
+Bu **kaynağın kusuru DEĞİLDİ.** `spokenWords: -1` "konuşma yok" demek değil
+"transkript yok" demek; rig'in transkript aşaması `faster-whisper kurulu
+değil` diye **atlanmıştı** (scratchpad venv'inde paket yoktu). Önceden
+kaydettiğim *"Follow Along ders değil olabilir"* riskiyle **aynı görünüyordu**
+ama sebebi başkaydı — ve o riski doğrulanmış saysaydım **ortam eksikliğini
+malzeme hükmü diye raporlamış** olurdum.
+
+Paket kuruldu, **yalnız transkript aşaması** yeniden koşuldu (indirme/çıkarım
+tekrarlanmadı, rig'in kendi `transcribe()`'ı çağrıldı, manifest **diskten
+yüklendi** — alanları elle doldurmak provenance uydurmak olurdu):
+**53 segment, 900 sözcük.** Yani video öğretim dili TAŞIYOR; önceden
+kaydettiğim risk **gerçekleşmedi**.
+
+### Referans: 3 kaynak → 4 kaynak
+
+| ölçü | 3 kaynak | 4 kaynak |
+|---|---|---|
+| `takeCount` | 3 | **4** |
+| çevrim toplamı | 83 | **144** (+%73) |
+| `thinTakes` | — | **boş** |
+| toleransın **gürültü tabanından** gelen payı (ortalama) | **%59,1** | **%30,4** |
+| `statusBases` | 3 | **2** — `low-amplitude-vs-family` **ÇÖZÜLDÜ** |
+| medyan dispersiyon | 5,72° | **7,91°** |
+| `status` | provisional | provisional (mirror-ambiguity · source-count-below-target) |
+
+**İki sayı birlikte okunmalı, tek başına ikisi de yanıltır:** dispersiyon
+YÜKSELDİ ama gürültü-tabanı payı **yarıya indi**. Bu bir gerileme değil,
+beklenen sonuç — dördüncü eğitmenle birlikte **gerçek** eğitmen ayrışması
+ölçülebilir hâle geldi; önceden bandın çoğu 6,0°'lik gürültü tabanından
+geliyordu. Bant artık **ölçümden** yapılmış, gürültüden değil.
+
+`provisional` sürüyor çünkü kalan iki gerekçe kaynak sayısıyla çözülmüyor:
+ayna belirsizliği, ve §6.0'ın **tercih ettiği 6** eğitmene hâlâ uzak (4).
+
+### Kimlik probu — artık KOŞABİLİR (≥4 kaynak)
+
+⚠️ **Ölçüm alanı düzeltildi:** ilk koşumda `disagreement` listesi kullanıldı ve
+sonuç **artefakt** çıktı (`nan`, eklem sayısı 16↔10 arası oynuyor) — o liste
+**eşikli**, yani her kurulum farklı eklem KÜMESİ bildiriyor ve medyanları
+kıyaslamak farklı şeyleri kıyaslamak olur. `toleranceDeg` her kurulumda
+**17/17** eklem taşıyor; ölçüm ona taşındı.
+
+| çıkarılan | tüm eklemler Δ° | **DİZ** Δ° (`dh_bounce` hipotezi) | **GÖVDE/KALÇA** Δ° (`hh_rock` hipotezi) |
+|---|---|---|---|
+| `1IVtcoqMrBA` | −1,17 | **+0,00** | −0,72 |
+| `4BRd2E8vBic` | +0,62 | **+0,00** | −0,85 |
+| `DEWpw4n8Lkw` | −0,16 | **+0,00** | −0,51 |
+| **`ovIZAyDuJSg` ★** | **−5,06** | **+0,00** | −0,84 |
+
+**Hüküm — `ovIZAyDuJSg` ayrışmıyor, TUTULUR:**
+- **GÖVDE/KALÇA** (`hh_rock` hipotezi): dördü de −0,51…−0,85 aralığında;
+  yeni kaynak (−0,84) aykırı değil, `4BRd2E8vBic` (−0,85) ondan da büyük.
+  **Ayrışma yok.**
+- **Tüm eklemler** Δ −5,06 dördün en büyüğü, **ama bu kimlik kanıtı DEĞİL**:
+  bu take 144 çevrimin **61'ini** (%42) taşıyor; en kalın kaynağı çıkarmak
+  bandı en çok değiştirir. `hh_running_man`de `Wd29rBfAzkI`'nin −9,25'i için
+  yazdığım aynı ayrım: *iyileşmenin boyu, dışlamanın gerekçesi değil.*
+
+### 🔴 Üçüncü bir "cevaplanamaz" sınıfı bulundu: **bölge ölçüm TAŞIMIYOR**
+
+**DİZ sütunu dört take'te de tam olarak +0,00.** Sebep ölçüldü: `left_knee`
+ve `right_knee` toleransının **%100'ü** hem 3- hem 4-kaynaklı kurulumda
+gürültü tabanından geliyor (`toleranceSourceFloorPct`). Yani diz bandı hangi
+take'in çıkarıldığından **bağımsız** — çünkü hiç ölçümden yapılmamış.
+
+→ **`dh_bounce` hipotezi (dip daha uzun/alçalış daha yavaş → DİZ) bu
+referansta MEKANİK OLARAK SORULAMAZ**, ve sebebi ne "hipotez yok" ne "taban
+altı": **öngörülen bölge ölçüm taşımıyor.** Koordinatörün çerçevesine
+**üçüncü** bir cevaplanamazlık sınıfı.
+`hh_rock` hipotezi (GÖVDE/KALÇA) ise sorulabildi ve cevaplandı.
