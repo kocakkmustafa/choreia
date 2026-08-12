@@ -89,3 +89,55 @@ iki araştırma turundan **birini** doğrular.
 ⛔ **Bu belge hiçbir şey ATAMIYOR.** `beats`i doldurmak içerik kararıdır ve
 bende değil. Canlı tap **hâlâ gerekebilir** — ama artık *"tempoyu ölç"* için
 değil, *"beyanı doğrula"* için, ve ikisi aynı büyüklükte iş değil.
+
+---
+
+## 🔴 DÜZELTME (aynı gün, sonraki tur) — kendi sonucumu geri alıyorum
+
+Yukarıda *"belirsizliğin TAMAMI tek bir `null` alanda (`ss_shine_footwork.beats`)
+toplanıyor"* yazdım ve kurucu kaleminin **küçüldüğünü** raporladım.
+**İki ölçüm bunu çürüttü, ikisi de deponun kendi kaydında zaten vardı.**
+
+### ① `countLabels: ["a","b"]` SAYIM DEĞİL, FAZ etiketi
+
+Adımın kendi `phases` dizisi: **`settle_a` · `transfer_ab` · `settle_b`.**
+Yani `a`/`b` **müzikal sayım değil**, çevrimin **kinematik fazları**.
+→ `beats == len(countLabels)` düzeni (7/7, hepsi **sayısal** etiketli
+adımlarda) bu adıma **uzatılamaz**: farklı bir kategori.
+*Kısıt, kanıt değildir* — ve burada kısıt bile değilmiş.
+
+### ② C-032 bunu ZATEN ölçmüş, ve benden DAHA KESKİN
+
+DEFTER C-032 (aylar önce):
+> *"Muhtemel sebep: iki tur **FARKLI BÜYÜKLÜK** ölçmüş — salsa'nın
+> quick-quick-slow'unda **3 adım 4 müzikal vuruşa yayılıyor**, 'adım hissi'
+> ile müzikal vuruş **~2× fark eder**."*
+
+Ve `library.json`'ın kendi notu: *"C-032 kapandı — **hareket-üzerinden BPM
+çıkmaz sokaktı, ÖLÇÜLDÜ** — ama `beat_annotate` ile müzik-ızgarası kurucunun
+canlı tap'ini bekliyor."*
+
+**Yani benim (c) türetimim — hasat çevrim/dk × `beats` — tam olarak
+"hareket-üzerinden BPM"dir, ve o yol ölçülüp KAPATILMIŞ.** Sebebi de
+kayıtlı: salsa'da adım↔vuruş oranı **3:4**, yani temiz bir tamsayı çarpanı
+**yok**; `beats` beyan edilse bile hareketten müziğe geçiş bir çarpma
+işlemi değil.
+
+### Geriye ne kalıyor — küçülen şey kalem değil, BELİRSİZLİK
+
+| iddia | durum |
+|---|---|
+| (a) İki tur 2× ilişkisinde, iki yönde tam kapsama | ✅ **ayakta** — C-032'nin *"muhtemel sebep"* dediğini **hesapla doğruladı** |
+| (b) Sayma kuralı var, çözülmüş stilde doğrulandı | ✅ **ayakta** |
+| (c) Belirsizliğin tamamı `beats`te, kurucu kalemi küçülüyor | 🔴 **GERİ ALINDI** |
+
+**Kurucu kalemi küçülmedi.** Canlı tap *"beyanı doğrula"* değil, **hâlâ
+*"müzik ızgarasını kur"*** — çünkü hareket o ızgarayı veremiyor, ve bu
+**ölçülmüş** (C-032), varsayılmış değil.
+
+🪤 **Ve kendi hatamın şekli:** bugün beş kez *"bir aracın/sayının ölçtüğü şey
+adının söylediği şey olmayabilir"* dedim. Burada **etiketin adına** güvendim:
+`countLabels` **"count"** diyor, ama içindekiler **faz**. Ve deponun kapalı
+bir bulgusunu **aramadan** yeni bir yol açtığımı sandım — ***kapalı bir
+kaydı okumamak, onu yeniden açmaz; yalnız aynı çıkmaz sokağa ikinci kez
+girer.***
