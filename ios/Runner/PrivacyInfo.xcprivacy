@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  CHOREIA — gizlilik manifesti (C-266, A8).
+
+	  Dört anahtarın dördü de ÖLÇÜLEREK dolduruldu; hiçbiri kopyalanmadı.
+	  Kardeş hat Lissom'un manifesti okundu ama içeriği devralınmadı: bağımlılık
+	  kümeleri farklı, ve *bir beyan, başka bir ağacın ölçümünden devralınamaz.*
+
+	  NSPrivacyTracking = false
+	    Ölçüm: `tools/network_dependency_check.py` exit 0 — "3 yüzey, 0 yükleyici
+	    izi, 3 kayıtlı bağımlılık (yaml+lock taranmış)". Bağımlılık kümesinde
+	    hiçbir reklam/analitik SDK'sı yok.
+
+	  NSPrivacyTrackingDomains = []
+	    İzleme yoksa izleme alan adı da yoktur. (Apple: NSPrivacyTracking false
+	    iken bu dizi boş OLMAK ZORUNDA.)
+
+	  NSPrivacyCollectedDataTypes = []
+	    Ölçüm: uygulamada oturum kalıcılığı YOK — `SessionStore` yalnız OKUNUYOR,
+	    `lib/` genelinde hiçbir yazma yok, ve ilerleme ekranı bunu kendi
+	    sözleriyle söylüyor (`HistoryIntegrity.notRecorded`). Kameradan gelen
+	    kareler cihazda işlenir; hiçbir şey cihazdan ÇIKMAZ.
+
+	  NSPrivacyAccessedAPITypes = []
+	    ⚠️ BU BOŞLUK BİR VARSAYIM DEĞİL, BİR ÖLÇÜMDÜR — ve kapısı var.
+	    Runner hedefinin KENDİ kaynakları (AppDelegate.swift · SceneDelegate.swift
+	    · GeneratedPluginRegistrant.m) gerekçe-gerektiren hiçbir API çağırmıyor;
+	    `tools/privacy_manifest_check.py` bunu HER KOŞUMDA yeniden tarar ve
+	    ayrışırsa kırmızı yanar (ikinci yön). Çağıran bileşenler kendi
+	    manifestlerini TAŞIYOR ve bu pakette ölçüldü: Flutter motoru
+	    (FileTimestamp 0A2A.1/C617.1 + SystemBootTime 35F9.1) · motion_camera ·
+	    permission_handler_apple · path_provider_foundation.
+	    ⇒ Dart tarafındaki dosya erişimi (`FileFirstRunFlag`, `materialisePoseModel`)
+	    `stat`i MOTORUN ikilisinde çağırır, Runner'ın kendi ikilisinde değil.
+	-->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array/>
+</dict>
+</plist>

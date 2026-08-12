@@ -56,6 +56,12 @@ run "model provenance"    bash -c 'cd tools && python3 test_model_provenance.py'
 run "coordinate space"    bash -c 'cd tools && python3 test_coordinate_space.py'
 run "network dependency"  python3 tools/network_dependency_check.py
 
+# Gizlilik manifesti (C-266, A8). Kapı kısıtına uygun: A tablosunun KENDİ
+# kalemini doğruluyor. İki yön: ① manifest Xcode projesine 4/4 bağlı mı
+# (bağlı değilse depoda durur, PAKETE GİRMEZ) ② boş `NSPrivacyAccessedAPITypes`
+# beyanı Runner kaynağıyla hâlâ uyuşuyor mu (boşluk da bir iddiadır).
+run "privacy manifest"    python3 tools/privacy_manifest_check.py
+
 # Kimlik okuması (C-233, koordinatör hükmü). Kapı YALNIZ ÇÜRÜTMEDE öter;
 # kanıt-yok BLOKLAMAZ ve `docs/design/IDENTITY-REGISTER.md` kütüğünde sayılır.
 # Transkript havuzu yoksa exit 2 (⚪ ORTAM YOK) — C-210'un üçüncü hâli.
