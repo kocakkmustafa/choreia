@@ -234,7 +234,40 @@ def asr_fragile(term: str) -> tuple[bool, str]:
     words = {w.strip().lower() for w in WORDLIST.read_text(errors="ignore").splitlines()}
     if term in words:
         return (False, "İngilizce sözlük sözcüğü")
-    return (True, "sözlükte yok — ASR fonetik yazabilir")
+    # ⚠️ KÖK ve BİLEŞİK yanlış pozitifi — kütükte ölçüldü: `bounc` (kök),
+    # `hip-hop` (tireli), `dancehall` (bileşik) sözlükte yok ama ASR bunları
+    # DÜZGÜN yazıyor. "Sözlükte yok" tek başına ASR kırılganlığı DEĞİLDİR;
+    # kırılganlık, sözcüğün İngilizce ses dizgesine YABANCI olmasıdır.
+    if any(w.startswith(term) for w in words):
+        return (False, f"kök — sözlükte '{term}…' ile başlayan sözcük var")
+    parts = [x for x in re.split(r"[-\s]", term) if x]
+    if len(parts) > 1 and all(pt in words for pt in parts):
+        return (False, "bileşik/tireli — parçaları sözlük sözcüğü")
+    return (True, "sözlükte yok, kökü de yok — ASR fonetik yazabilir")
+
+
+def case_fragile(term: str) -> tuple[bool, str]:
+    """İKİNCİ BAYRAK (koordinatör hükmü) — ve `asr_fragile`den AYRI TUTULUYOR,
+    çünkü ARIZA YÖNLERİ ZIT:
+
+      `asr_fragile`  = VERİNİN beklenenden farklı yazılması → AÇIK düşer
+                       (sessiz yanlış sıfır; kimse fark etmez)
+      `case_fragile` = BİZİM SORGUMUZUN bozulması          → KAPALI düşer
+                       (yanlış kırmızı; gürültü yapar, görülür)
+
+    Yön, hangisinin ACİL olduğunu belirler: sessizce yalan söyleyen acildir,
+    gürültü yapan değildir. Tek bayrakta birleştirmek bu ayrımı yok ederdi.
+
+    ⚠️ VE BU BAYRAK KARAKTER SINIFIYLA ÇÖZÜLMEZ (koordinatör ölçümü):
+    `ı`nın büyüğü ASCII `I`dır, yani `YAKINDA` **saf ASCII**tir ve
+    `[A-Za-z]+` onu zaten tokenleştirir. Ölçüldü: düz `.lower()`
+    `'YAKINDA'` → `'yakinda'` ≠ `'yakında'`. Çözen şey karakter sınıfı
+    değil `_fold()`tur — bir dili KARAKTERİNDEN tanıyan kapı, o dilin
+    BÜYÜK kipinde kördür."""
+    up = term.upper()
+    return (up.lower() != _fold(up),
+            "düz .lower() katlamayla ayrışıyor" if up.lower() != _fold(up)
+            else "kip-bağımsız")
 
 
 def shipped_references() -> list[Path]:
@@ -399,6 +432,26 @@ def write_register(rows: list[tuple]) -> None:
         "türetilemez — 2026-08-12 ölçümü R17 §5'te: **5 teyit · 9 kanıt yok ·",
         "0 çürütme.**",
         "",
+        "",
+        "## Terim bayrakları — İKİ AYRI SINIF, arıza YÖNLERİ zıt",
+        "",
+        "`asr-fragile` = **verinin** beklenenden farklı yazılması → **AÇIK**",
+        "düşer (sessiz yanlış sıfır). `case-fragile` = **bizim sorgumuzun**",
+        "bozulması → **KAPALI** düşer (yanlış kırmızı). Yön, hangisinin ACİL",
+        "olduğunu belirler; tek bayrakta birleştirmek bu ayrımı yok ederdi.",
+        "",
+        "| adım | terim | asr-fragile (açık düşer) | case-fragile (kapalı düşer) |",
+        "|---|---|---|---|",
+        *[f"| {st} | `{t}` | {'⚠️ evet' if asr_fragile(t)[0] else '— hayır'} "
+          f"({asr_fragile(t)[1]}) | {'⚠️ evet' if case_fragile(t)[0] else '— hayır'} "
+          f"({case_fragile(t)[1]}) |"
+          for st, cfg in TERMS.items() for t in cfg["own"] + cfg["confusable"]],
+        "",
+        "⛔ `case-fragile` bugün **katlama ile giderildi** (`_fold`): terim ve",
+        "metin ASCII'ye indirgenip sonra küçültülüyor. Kayıt duruyor çünkü",
+        "**giderilmiş bir kırılganlık, olmayan bir kırılganlık değildir** —",
+        "katlama kaldırılırsa öz-test 5 FAIL ile öter.",
+        "",
         "**Açık kalem:** `4BRd2E8vBic` — ders düzeyinde çürütme sinyali",
         "(bounce 32 ↔ rock 50) ama **segment penceresi sessiz**. İki ayrı",
         "aletin ikisi de hüküm veremedi; leave-one-out'a havale.",
@@ -452,12 +505,24 @@ def self_test() -> int:
                        ("the best one", "bachata"), ("a quick visit", "bachata")]:
         if near_hits(text, term):
             fails.append(f"kaba anahtar gürültüsü geri geldi: {term}~{text!r}")
-    # 4b) asr-fragile ÖLÇÜLÜYOR mu — İngilizce sözcük sağlam, yabancı ad kırılgan
+    # 4b) İKİ BAYRAK ayrı ayrı ÖLÇÜLÜYOR mu (koordinatör hükmü, yönleri zıt)
     if WORDLIST.exists():
         if asr_fragile("rock")[0]:
             fails.append("'rock' kırılgan sayıldı — İngilizce sözlük sözcüğü")
         if not asr_fragile("cucaracha")[0]:
             fails.append("'cucaracha' sağlam sayıldı — sözlükte olmamalı")
+        # KÖK ve BİLEŞİK yanlış pozitifleri — kütükte GERÇEKTEN ölçüldü ve
+        # düzeltildi; bu ikisi olmadan bayrak "sözlükte yok"u kırılganlık
+        # sanar ve kaydı YANLIŞ bir iddiayla doldurur.
+        if asr_fragile("bounc")[0]:
+            fails.append("'bounc' kırılgan sayıldı — kök, ASR düzgün yazar")
+        if asr_fragile("hip-hop")[0]:
+            fails.append("'hip-hop' kırılgan sayıldı — bileşik, parçaları sözlükte")
+    # case-fragile AYRI bayrak: İngilizce kip-bağımsız, Türkçe değil
+    if case_fragile("rock")[0]:
+        fails.append("'rock' kip-kırılgan sayıldı")
+    if not case_fragile("şaşırtma")[0]:
+        fails.append("Türkçe terim kip-kırılgan sayılmadı — bayrak ölçmüyor")
 
     # 4c) TÜRKÇE KİP + TOKENLEŞTİRME — bugün UYKUDA olan kör nokta (C-237).
     #     Terimlerin hepsi İngilizce olduğu için bu sınama SENTETİK bir

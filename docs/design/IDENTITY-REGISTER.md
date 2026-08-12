@@ -42,6 +42,38 @@ hazırlanmış segment gerektirir (`prepare_take`), yani bu kütükten
 türetilemez — 2026-08-12 ölçümü R17 §5'te: **5 teyit · 9 kanıt yok ·
 0 çürütme.**
 
+
+## Terim bayrakları — İKİ AYRI SINIF, arıza YÖNLERİ zıt
+
+`asr-fragile` = **verinin** beklenenden farklı yazılması → **AÇIK**
+düşer (sessiz yanlış sıfır). `case-fragile` = **bizim sorgumuzun**
+bozulması → **KAPALI** düşer (yanlış kırmızı). Yön, hangisinin ACİL
+olduğunu belirler; tek bayrakta birleştirmek bu ayrımı yok ederdi.
+
+| adım | terim | asr-fragile (açık düşer) | case-fragile (kapalı düşer) |
+|---|---|---|---|
+| hh_bounce | `bounc` | — hayır (kök — sözlükte 'bounc…' ile başlayan sözcük var) | — hayır (kip-bağımsız) |
+| hh_bounce | `hip hop` | — hayır (çok sözcüklü: hip=sağlam, hop=sağlam) | — hayır (kip-bağımsız) |
+| hh_bounce | `hip-hop` | — hayır (bileşik/tireli — parçaları sözlük sözcüğü) | — hayır (kip-bağımsız) |
+| hh_bounce | `rock` | — hayır (İngilizce sözlük sözcüğü) | — hayır (kip-bağımsız) |
+| hh_bounce | `dancehall` | ⚠️ evet (sözlükte yok, kökü de yok — ASR fonetik yazabilir) | — hayır (kip-bağımsız) |
+| hh_roger_rabbit | `roger` | — hayır (İngilizce sözlük sözcüğü) | — hayır (kip-bağımsız) |
+| hh_roger_rabbit | `running man` | — hayır (çok sözcüklü: running=sağlam, man=sağlam) | — hayır (kip-bağımsız) |
+| hh_roger_rabbit | `shuffl` | — hayır (kök — sözlükte 'shuffl…' ile başlayan sözcük var) | — hayır (kip-bağımsız) |
+| hh_running_man | `running man` | — hayır (çok sözcüklü: running=sağlam, man=sağlam) | — hayır (kip-bağımsız) |
+| hh_running_man | `shuffl` | — hayır (kök — sözlükte 'shuffl…' ile başlayan sözcük var) | — hayır (kip-bağımsız) |
+| hh_running_man | `melbourne` | ⚠️ evet (sözlükte yok, kökü de yok — ASR fonetik yazabilir) | — hayır (kip-bağımsız) |
+| ss_shine_footwork | `shine` | — hayır (İngilizce sözlük sözcüğü) | — hayır (kip-bağımsız) |
+| ss_shine_footwork | `salsa` | ⚠️ evet (sözlükte yok, kökü de yok — ASR fonetik yazabilir) | — hayır (kip-bağımsız) |
+| ss_shine_footwork | `bachata` | ⚠️ evet (sözlükte yok, kökü de yok — ASR fonetik yazabilir) | — hayır (kip-bağımsız) |
+| ss_shine_footwork | `cha cha` | — hayır (çok sözcüklü: cha=sağlam, cha=sağlam) | — hayır (kip-bağımsız) |
+| ss_shine_footwork | `merengue` | ⚠️ evet (sözlükte yok, kökü de yok — ASR fonetik yazabilir) | — hayır (kip-bağımsız) |
+
+⛔ `case-fragile` bugün **katlama ile giderildi** (`_fold`): terim ve
+metin ASCII'ye indirgenip sonra küçültülüyor. Kayıt duruyor çünkü
+**giderilmiş bir kırılganlık, olmayan bir kırılganlık değildir** —
+katlama kaldırılırsa öz-test 5 FAIL ile öter.
+
 **Açık kalem:** `4BRd2E8vBic` — ders düzeyinde çürütme sinyali
 (bounce 32 ↔ rock 50) ama **segment penceresi sessiz**. İki ayrı
 aletin ikisi de hüküm veremedi; leave-one-out'a havale.
