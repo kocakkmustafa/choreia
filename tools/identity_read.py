@@ -124,11 +124,38 @@ ADJUDICATED: dict[str, dict] = {
 WORDLIST = Path("/usr/share/dict/words")
 
 
+# ASCII VARSAYIMI ZİNCİRİN ÜÇ HALKASINDA AYRI AYRI OTURUYOR (C-237), ve üçü
+# de AYRI AYRI kırılıyor. Sentetik Türkçe terim `şaşırtma` ile ölçüldü:
+#   ① tokenleştirme  `[A-Za-z]+` → 'ŞAŞIRTMA' iki parçaya bölünüyor: ['A','IRTMA']
+#   ② kip katlama    'ŞAŞIRTMA'.lower() = 'şaşirtma' ≠ 'şaşırtma' (noktasız I
+#                    noktalı i'ye düşüyor), ve 'İ'.lower() = 'i' + U+0307
+#   ③ fonetik kod    re.sub(r'[^a-z]') → 'artma' (ş ve ı sessizce siliniyor)
+#
+# ⚠️ BUGÜN UYKUDA: tüm terimler İngilizce. Kapatılma sebebi *"bugün lazım"*
+# değil — **bugün lazım olmadığı için ucuz; lazım olduğu gün kimse buraya
+# bakmayacak.** Ve bu, bu kusur SINIFINI çözmek için yazılmış kodda o sınıfın
+# yeni bir örneğiydi: çözen de aynı varsayımla yazıyor.
+_FOLD = str.maketrans({
+    "İ": "i", "I": "i", "ı": "i", "Ş": "s", "ş": "s", "Ğ": "g", "ğ": "g",
+    "Ç": "c", "ç": "c", "Ö": "o", "ö": "o", "Ü": "u", "ü": "u",
+})
+
+
+def _fold(w: str) -> str:
+    """Türkçe harfleri ASCII karşılığına indirger, SONRA küçültür.
+
+    Sıra önemli: `.lower()` ÖNCE çağrılırsa `İ` birleşik noktaya, `I` ise
+    noktalı `i`ye düşer ve ikisi de yanlış olur. Kaba bir fonetik kova
+    kuruyoruz — `I`/`ı`/`İ` üçünü de `i`ye toplamak burada doğru; Türkçe
+    doğru kip DEĞİL, kip-bağımsız EŞLEŞME hedefleniyor."""
+    return w.translate(_FOLD).lower()
+
+
 def _soundex(w: str) -> str:
     """Kaba fonetik anahtar. NİYE: ASR İngilizce olmayan adım adlarını
     DUYDUĞU GİBİ yazıyor ('cucaracha' → 'kukaraches'/'Kukuracep', ölçüldü),
     ve tam-dizge sayacı bunlara SIFIR der."""
-    w = re.sub(r"[^a-z]", "", w.lower())
+    w = re.sub(r"[^a-z]", "", _fold(w))
     if not w:
         return ""
     codes = {**dict.fromkeys("bfpv", "1"), **dict.fromkeys("cgjkqsxz", "2"),
@@ -167,6 +194,7 @@ def near_hits(text: str, term: str) -> list[str]:
     yalnız gereksiz değil, ZARARLI: gerçek vakayı eler, yanlışını geçirirdi.
     Bir ölçütü, ayırt ettiğini SANDIĞIN yönde ölçmeden eklemek, kapıya
     gürültü eklemektir."""
+    term = _fold(term)
     key = _soundex(term)
     # ⚠️ ANAHTAR DOLU DEĞİLSE TARAMA YAPILMAZ, ve bu bir eşik değil terimin
     # KENDİ ÖZELLİĞİ: anahtar 4 semboldür; terim onu doldurmuyorsa (sonu
@@ -177,8 +205,10 @@ def near_hits(text: str, term: str) -> list[str]:
     if key.endswith("0"):
         return []
     hits = []
-    for tok in set(re.findall(r"[A-Za-z]+", text)):
-        t = tok.lower()
+    # Unicode harf sınıfı: `[A-Za-z]+` Türkçe sözcüğü PARÇALIYORDU
+    # ('ŞAŞIRTMA' → ['A','IRTMA'], ölçüldü).
+    for tok in set(re.findall(r"[^\W\d_]+", text, re.UNICODE)):
+        t = _fold(tok)
         if t == term or term in t:
             continue
         if abs(len(t) - len(term)) > 3:
@@ -237,13 +267,17 @@ def read_lesson(video: str, terms: dict) -> tuple[str, int, int, int, list[str]]
     p = TRANSCRIPTS / f"{video}.transcript.json"
     if not p.exists():
         return ("TRANSKRIPT_YOK", 0, 0, 0, [])
-    text = " ".join(x["text"] for x in json.loads(p.read_text(encoding="utf-8"))).lower()
-    o = sum(text.count(w) for w in terms["own"])
-    c = sum(text.count(w) for w in terms["confusable"])
+    # `.lower()` DEĞİL `_fold()`: sayacın kendisi de Türkçe kip körlüğüne
+    # açıktı. Yakın-taramayı katlayıp sayacı katlamamak, sessiz sıfırı
+    # ORTADAN KALDIRMAZ — yalnız onu bulan kanalı susturur (terim katlanınca
+    # tam eşleşme olur ve "yakın" sayılmaz).
+    text = _fold(" ".join(x["text"] for x in json.loads(p.read_text(encoding="utf-8"))))
+    o = sum(text.count(_fold(w)) for w in terms["own"])
+    c = sum(text.count(_fold(w)) for w in terms["confusable"])
 
     blind = []
     for term in terms["own"] + terms["confusable"]:
-        if text.count(term):
+        if text.count(_fold(term)):
             continue
         fragile, _ = asr_fragile(term)
         if not fragile:
@@ -424,6 +458,24 @@ def self_test() -> int:
             fails.append("'rock' kırılgan sayıldı — İngilizce sözlük sözcüğü")
         if not asr_fragile("cucaracha")[0]:
             fails.append("'cucaracha' sağlam sayıldı — sözlükte olmamalı")
+
+    # 4c) TÜRKÇE KİP + TOKENLEŞTİRME — bugün UYKUDA olan kör nokta (C-237).
+    #     Terimlerin hepsi İngilizce olduğu için bu sınama SENTETİK bir
+    #     Türkçe adım adıyla yapılır: kusur lazım olduğu gün kimse buraya
+    #     bakmayacak, o yüzden ucuzken çivileniyor.
+    tr = "şaşırtma"
+    if _fold("ŞAŞIRTMA") != _fold(tr):
+        fails.append("Türkçe BÜYÜK kip katlanmıyor — sayaç 'ŞAŞIRTMA'yı kaçırır")
+    if _fold("SASIRTMA") != _fold(tr):
+        fails.append("aksansız yazım katlanmıyor — 'SASIRTMA' kaçar")
+    if _fold("HİP-HOP") != "hip-hop":
+        fails.append("'İ' katlanmıyor: .lower() birleşik nokta üretiyor")
+    if _fold("ŞAŞIRTMA").count(_fold(tr)) != 1:
+        fails.append("sayaç yolu katlanmamış — Türkçe terimde SESSİZ SIFIR")
+    # NEGATİF İKİZ: ilgisiz Türkçe metin eşleşmemeli, yoksa "yakalıyor"
+    # iddiası her şeyi yakalayan bir eşleyicide de doğru olurdu.
+    if near_hits("bugün hava çok güzel oldu", tr):
+        fails.append("ilgisiz Türkçe metin sentetik terime eşleşti")
 
     # 5) Kapsam pubspec'ten mi geliyor? (dizin listesi derleme defteri taşır)
     refs = shipped_references()
