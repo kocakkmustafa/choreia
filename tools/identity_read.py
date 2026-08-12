@@ -115,8 +115,16 @@ ADJUDICATED: dict[str, dict] = {
         "why": "AÇIK KALEM (koordinatör hükmü 2026-08-12). Ders düzeyinde "
                "çürütme sinyali var ama SEGMENT penceresi SESSİZ (bounce 0 · "
                "rock 0, R17 §5) — iki ayrı aletin ikisi de hüküm veremedi. "
-               "Kapatılmadı, leave-one-out'a havale edildi. Sessizlik ne "
-               "aklanmadır ne mahkûmiyet.",
+               "LEAVE-ONE-OUT KOŞULDU (2026-08-12, C-255) ve ÜÇÜNCÜ ALET DE "
+               "hüküm veremedi: üç ön koşulun üçü de sağlanıyordu, ama "
+               "`hh_rock` hipotezinin öngördüğü GÖVDE/KALÇA bölgesinin üç "
+               "ekleminden İKİSİ saf gürültü tabanı (`trunk_tilt` %100, "
+               "`right_hip` %95); ölçüm taşıyan tek eklem `left_hip`, ve dört "
+               "take'in leave-one-out yayılımı 0,34° — 6,00°'lik tabanın "
+               "~18 KATI ALTINDA. Sonuç: BUGÜNKÜ ALETLERLE ÖLÇÜLEMEZ. "
+               "Geri dönüş adresi: bant taban-baskın olmaktan çıkınca "
+               "(kaynak sayısı arttıkça taban payı düşüyor — 4. kaynakla "
+               "%59→%30 ölçüldü) soru yeniden sorulabilir.",
     },
 }
 
