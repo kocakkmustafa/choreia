@@ -203,3 +203,48 @@ tanımı gereği **izole ve kısa** gösteriyor — 22s'lik bir klip ~120 BPM'de
 ⛔ **Eşiğe DOKUNULMADI** (eşik icadı yasak; tasarım koordinatörde).
 Karar noktası adıyla: *kısa balo-salonu figürleri için süre tabanı ayrı mı
 olmalı, yoksa `cc_cucaracha` taban-altı olarak mı kayda geçsin?*
+
+---
+
+## 5. ③(a) ÖLÇÜMÜ — çevrim sayısı türetilebilir mi? **HAYIR**
+
+Koordinatörün bağlayıcı sırası: **(a) ölç → türetilemiyorsa DUR.** Ölçüldü.
+
+**① Çevrim sayısı LANDMARK ister.** `tools/measure_tempo.py` kare-kare eklem
+serisi üzerinde çalışıyor (`symmetric_series(frames)`), yani **indirme +
+poz-çıkarımı sonrası**. Süre tabanı ise **indirme ÖNCESİ** triyajda —
+vekilin var olma sebebi tam olarak bu: gerçek ölçü, kendisini besleyen
+kapının **aşağısında** yaşıyor.
+
+**② İndirme öncesi elde ne var:** yt-dlp düz-liste metadata'sı **44 alan**
+taşıyor ve tempoya dair tek alan **`duration`**. BPM/vuruş/fps yok.
+
+→ **Vekili amaçla değiştirmek bugün mümkün değil.** Koordinatörün kuralı
+gereği durdum: *ölçülebilir bir vekili ölçülemez bir amaçla değiştirmek daha
+kötüdür.*
+
+### Ve iki ek ölçüm, kararı büsbütün netleştiriyor
+
+**③ TABAN BİR DEĞİL İKİ, ve rig'inki DAHA YÜKSEK:**
+
+| kapı | eşik | ne zaman |
+|---|---|---|
+| `tools/probe_candidates.py` (Choreia) | **60s** | indirme ÖNCESİ |
+| `harvest_rig/triage.py` (aile rig'i) | **90s** — *"shorts eleme"* | indirme SONRASI |
+
+Yani Choreia'nın 60s'ini indirsem bile **22s/25s klipler rig'in 90s'inde
+elenir**. Tek eşiği gevşetmek yetmez; karar iki hattı birden ilgilendirir.
+
+**④ Ama mekanizma TASARIM GEREĞİ var:** rig'in kendi docstring'i diyor ki
+*"Eşikler parametriktir; bir app kendi havuzunda farklı eşik isterse
+**config'ten** değiştirir, kod değişmez."* Yani bir gün farklı bir taban
+istenirse bu bir **kod** değil **config** kararı — ve hâlâ koordinatörün
+kalemi.
+
+### SONUÇ — ② kayda geçiyor, sebebiyle
+
+**`cc_cucaracha`: TABAN-ALTI (2/3 bağımsız eğitmen).**
+Sebep, tahmin değil ölçüm: ***malzeme VAR (1 eğitmen daha, 2 klip), vekil
+onu göremiyor*** — ve vekili amaçla (çevrim sayısı) değiştirmek indirme
+öncesinde mümkün değil, çünkü çevrim sayısı indirmenin ARKASINDA.
+Borç dürüst kalıyor: kapatılmadı, uydurulmadı, eşik oynatılmadı.
