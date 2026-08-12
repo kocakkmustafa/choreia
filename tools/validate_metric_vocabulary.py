@@ -107,6 +107,25 @@ def main() -> int:
         if m in metrics and e.get("state") != want:
             errs.append(f"{m}: kayıt '{e.get('state')}', ölçüm '{want}'")
 
+    # C-221: YETİM SATIR — kayıtta olup içerikte HİÇ geçmeyen bir ad, yukarıdaki
+    # `if m in metrics` koruması yüzünden bu ölçümden sessizce geçiyordu.
+    # `interpreted`/`declaredOnly` listeleri iki yönlü karşılaştırılıyor ama
+    # `metrics` SÖZLÜĞÜ yalnız tek yönlü okunuyordu.
+    #
+    # Niye kusur: bu dosyanın kendi sözleşmesi "içerikten yeniden hesaplanır,
+    # fark varsa kırmızı" — hesaplanan kümede olmayan bir satır tam olarak bir
+    # farktır, ve C-202'nin adlandırdığı zararın üçüncü biçimi: okunan ad ile
+    # okuyucusunu bekleyen ad ayrıldı, ama İÇERİĞİN HİÇ ANMADIĞI ad ayrılmadı.
+    # Sonraki tur onu "demek ki bunu ölçüyoruz" diye okur.
+    #
+    # GERÇEK SABOTAJLA ölçüldü (iç öz-test değil): kayda `hayalet_surucu`
+    # eklendi, `tool/gates.sh` YEŞİL kaldı ve commit GEÇTİ — delik varsayım
+    # değil, ölçüm.
+    orphans = sorted(set(rec.get("metrics") or {}) - set(metrics))
+    if orphans:
+        errs.append(f"kayıtta olup içerikte HİÇ geçmeyen ad: {orphans} — kayıt "
+                    f"içerikten türer, kendi başına ad taşıyamaz")
+
     # C-207: cycleUnit.driver olarak KULLANILAN her sürücü family+jointRef
     # taşımalı — taşımıyorsa tools/prepare_take.py `kinematic_unit()` zaten
     # isimli SystemExit ile duracak, ama bu ölçüm commit ANINDA yakalar,
