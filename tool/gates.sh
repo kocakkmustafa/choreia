@@ -56,6 +56,11 @@ run "model provenance"    bash -c 'cd tools && python3 test_model_provenance.py'
 run "coordinate space"    bash -c 'cd tools && python3 test_coordinate_space.py'
 run "network dependency"  python3 tools/network_dependency_check.py
 
+# Kimlik okuması (C-233, koordinatör hükmü). Kapı YALNIZ ÇÜRÜTMEDE öter;
+# kanıt-yok BLOKLAMAZ ve `docs/design/IDENTITY-REGISTER.md` kütüğünde sayılır.
+# Transkript havuzu yoksa exit 2 (⚪ ORTAM YOK) — C-210'un üçüncü hâli.
+run "identity read"       python3 tools/identity_read.py
+
 # Hasat aracı öz-testleri (C-207, koordinatör sevki, A1 bulgusu).
 #
 # Bu 7 aracın kendi `--self-test`i vardı ve HİÇBİRİ buraya bağlı değildi —
@@ -68,6 +73,7 @@ run "movement_isolator self-test"   python3 tools/movement_isolator.py --self-te
 run "camera_angle_gate self-test"   python3 tools/camera_angle_gate.py --self-test
 run "build_reference self-test"     python3 tools/build_reference.py --self-test
 run "beat_annotate self-test"       python3 tools/beat_annotate.py --self-test
+run "identity_read self-test"     python3 tools/identity_read.py --self-test
 run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
 
 if [ "$fail" -ne 0 ]; then
