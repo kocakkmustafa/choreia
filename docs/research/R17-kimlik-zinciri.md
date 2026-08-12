@@ -211,3 +211,65 @@ bildirmemiş olması ölçülmüş bir sessizlik, kanal körlüğü değil.
 **Okunuşu:** `hh_bounce`ta hipotez-şeklinde bir uyuşmazlık **görünmüyor**;
 uyuşmazlık kol üslubunda toplanmış — bir diz-sürücülü adımda beklenen yer.
 Bu bir **tarama sonucudur, hüküm değil**: hangi take'ten geldiğini söyleyemez.
+
+---
+
+## 4. DÖRDÜNCÜ KANAL — kimlik sorusu TRANSKRİPTTEN sorulabiliyor
+
+`ballroom_latin_solo` hasadı sırasında tesadüfen ölçüldü: yeni inen kaynağın
+kimliğini **eğitmenin kendi sözlerinden** doğruladım ("cha-cha" 19, rumba/
+samba/salsa **0**). Sonra genelleştirildi.
+
+**Ön koşul yok denecek kadar az:** transkript. Ve ölçüldü —
+**kabul edilmiş 14 kaynağın 14'ünde de transkript VAR.**
+Yani bu kanal, leave-one-out probunun üç ön koşulunun (≥4 kaynak · beyan
+edilmiş hipotez · ölçüm taşıyan bölge) **hiçbirini** gerektirmiyor.
+
+**Karşıtlık terimleri içeriğin KENDİ notlarından türetildi**, uydurulmadı:
+`dh_bounce.json` (dancehall ≠ hip-hop bounce) · `hh_rock.json` (rock göğüs/
+kalçadan, bounce dizden) · `sh_running_man.json` (shuffle ≠ hip-hop running
+man).
+
+### 🪤 Önce kendi sayacım YANLIŞTI — ve onu çıktıyı OKUYARAK yakaladım
+
+İlk koşumda tam-sözcük sayımı kullandım. `ZpTgAZBYNrU`nun segmentinde
+183,8s'de eğitmen *"same thing when you're **shuffling**"* diyor ama sayacım
+`shuffle=0` raporladı: **"shuffling" içinde "shuffle" geçmiyor.** Çekimli
+biçimler sessizce düşüyordu. Kök eşlemeye (`shuffl`, `bounc`) geçildi.
+*Bir sayacın sıfırı, saydığı biçimin kapsamı kadar iyidir.*
+
+### Tüm-video sonucu (14 kabul edilmiş kaynak)
+
+| hüküm | sayı | kaynaklar |
+|---|---|---|
+| ✅ kendi adımı **baskın** | **11** | 1IV · DEW · ovIZ · 35sk · selX · KV · UO · Wd · **ZpT** · SHG · w4op |
+| ⚠️ ikisi de zayıf/eşit | 2 | `5MQEtoEKdEw` (4↔4) · `jjP8bKWCg9U` (0↔0) |
+| 🔴 karıştırılabilir **baskın** | 1 | `4BRd2E8vBic` (bounce 32 ↔ rock **50**) |
+
+### Segment düzeyi — asıl soru, ve iki sonucu da değiştiriyor
+
+Tüm-video sayımı **dersin konusunu** ölçer, **seçilen segmenti** değil.
+`l3r4bPhikGQ`'nun dışlaması zaten segment düzeyinde yapılmıştı; aynısı
+uygulandı (transkript zaman damgaları × hazırlanan segment penceresi):
+
+- **`4BRd2E8vBic`** — segment 628–649s. Pencerede **bounce 0 · rock 0**;
+  tek yakın replik 612,5s *"Teaching these things separate"*.
+  → **Tüm-video kırmızısı segmente TAŞINMIYOR.** Hüküm: *"rock çıktı"*
+  DEĞİL, **"segment kimlik konuşması taşımıyor"** — ne aklandı ne mahkûm.
+  Kendi 🔴 okumamı düzeltmem gereken yer burasıydı.
+- **`ZpTgAZBYNrU`** — segment 177–194s. Pencerede **running man 2 · shuffl 1**.
+  Kendi adımı baskın. → **C-220'nin ÜÇÜNCÜ bağımsız kanıtı** (leave-one-out'un
+  beş ekseni · tüm-video sayımı · segment sayımı). Koordinatörün TUT hükmü
+  üçüncü kez, bağımsız bir aletle doğrulandı.
+
+### Ne değişti: borcun ŞEKLİ
+
+12/13'lük *"kimlik sorusu kayıtta yok"* borcu, prob için **9/12 kapalıydı**
+(≥4 kaynak ön koşulu). Bu kanal onu **14/14 açık** hâle getiriyor — çünkü
+transkript zaten var. **Kalan iş bir ARAMA turu değil, bir OKUMA turu.**
+
+⛔ **Sınırı adıyla:** transkript eğitmenin **söylediğini** ölçer, **yaptığını**
+değil. Segment düzeyinde bile bu bir *ders konusu* kanıtıdır, hareket kanıtı
+değil — leave-one-out'un yerine geçmez, **onun ulaşamadığı yerde** konuşur.
+Ve sessiz bir segment (`4BRd2E8vBic`) hiçbir şey söylemez: **sessizlik
+aklanma değildir.**
