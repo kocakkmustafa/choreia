@@ -80,3 +80,69 @@ destekleyen ayrı bir bulgudur ve ayrıca yazılır.
 uyuşan tek çift **%2** ayrışmıştı (1,71 ↔ 1,75) ve ayrışan çift **%170**;
 aradaki boşluk bir mertebe genişliğinde, yani band **hangi tarafa düşeceğini
 belirlemiyor** — yalnız *"ikisinden birine yakın"* demeyi tanımlıyor.
+
+---
+
+# SONUÇ — ölçüt mühürlendikten (`05570bf`) SONRA koşuldu
+
+## Ölçüm
+
+| take | pencere | süre | anti (acf) | sim (acf) | yarım | aracın hükmü |
+|---|---|---|---|---|---|---|
+| **`HUOjOJvPJc8`** | [8600, 9066] *(merkezden ±100 kare)* | 15,56s | **3,305** (0,837) | 3,272 (0,439) | — | `non_alternating` |
+| `EP3Q3ttFwtU` | [3795, 4168] *(zaten yeterli)* | 15,56s | 1,710 (0,361) | — | 1,001 | `alternating` |
+| `7g9PH1Qa4LM` | [975, 1525] *(zaten yeterli)* | 22,00s | 3,240 (0,183) | — | 1,840 | `alternating` |
+
+## Ön kayıtlı okuma kuralının verdiği sınıf
+
+**`HUOjOJvPJc8` antisimetrik tepe = 3,305 s.**
+H1 bandı **2,836–3,836** ✅ · H2 bandı 1,418–1,918 ✗
+
+> ## ⇒ **H1 — çevrim GERÇEKTEN iki katı. Harmonik çelişki GERÇEK.**
+> Ve doğrulama beklenenden güçlü: çöküş-türevi periyot **3,336** ↔ bağımsız
+> kanal **3,305** — **%0,9 içinde**, bu turun en sıkı uyumu.
+> **H2 çürütüldü:** 3,305, 1,668'e hiçbir okumayla yakın değil.
+
+**Ve H3 de desteklendi (ayrı eksen, ön kayıtta yazıldığı gibi):** kanal
+**8,88 s'de sustu, 15,56 s'de uyandı** ⇒ önceki sessizliğin sebebi
+**segment uzunluğuydu**. İki bulgu birlikte doğru: *H3 sessizliği açıklıyor,
+H1 değeri.*
+
+## 🔴 Bunun sonucu: taban 2'ye iniyor
+
+Çelişki **gerçek** ⇒ `HUOjOJvPJc8` **düşer** ⇒ kullanılabilir take **2**
+(`EP3Q3ttFwtU`, `7g9PH1Qa4LM`) ⇒ **M-C-04 (≥3) TUTMAZ ⇒ referans
+ÜRETİLMEZ.** Ön kayıtta yazılan sonuç, ölçülerek geldi.
+
+## ⭐ VE ÖNCEKİ RAPORUMU DÜZELTİYORUM: birim 1/3'te değil, 2/3'te doğrulandı
+
+R22'de *"`dipsPerCycle=2`: 1'de doğrulandı, 1'de çelişti, 1'de ölçülemedi"*
+yazmıştım. Uzatılmış pencere `HUOjOJvPJc8`i **ölçülemedi**den
+**doğrulandı**ya taşıdı:
+
+| take | çöküş-türevi | bağımsız kanal | ayrışma |
+|---|---|---|---|
+| `HUOjOJvPJc8` | 3,336 | **3,305** | **%0,9** ✅ |
+| `EP3Q3ttFwtU` | 1,750 | **1,710** | **%2,3** ✅ |
+| `7g9PH1Qa4LM` | 1,200 | **3,240** | **%170** ⚠️ |
+
+⇒ **Birim 2/3'te doğrulandı.** Ve çelişkiyi çıkaran şey **birim değil, TEMPO**:
+iki eğitmen aynı adımı ~1,9× farklı hızda yapıyor, ve harmonik kapı bunu
+*"aynı çevrimde kesilmemiş"* diye okuyor.
+
+## ⚠️ İki şeyi ÖLÇTÜM ama SINIFLANDIRMADA KULLANMIYORUM
+
+**① `HUOjOJvPJc8` `non_alternating` okundu**, diğer ikisi `alternating`.
+Aracın kendi cümlesi: *"simetrik kanalda yarım-çevrim tepesi YOK → adım
+dönüşümlü değil"* — ve gerçekten sim (3,272) ≈ anti (3,305). Bu, take'ler
+arasında **ölçülmüş bir fark**, ama **ne anlama geldiğini yorumlamıyorum**:
+bir dans açıklaması üretmek (*"eğitmen yavaş gösteriyor"*, *"çift sekme"*)
+alan iddiası olurdu ve elimde kaynak yok.
+📌 Yine de birimi bozmuyor: çevrim 3,305 s ve çöküş aralığı 1,668 s ⇒ çevrimde
+**2 çöküş** — `dipsPerCycle = 2` bu take'te de **tutuyor**.
+
+**② Ayrışan take, en ZAYIF tepeye sahip olan** (`7g9PH1Qa4LM`, acf **0,183**;
+diğerleri 0,361 ve 0,837). ⛔ **Bunu sınıflandırmada KULLANMIYORUM:** bir acf
+eşiği **ön kayıtta yazılmadı**, ve sonucu gördükten sonra *"zayıftı, saymayalım"*
+demek tam olarak yasaklanan hamledir. Sayı **olduğu gibi** raporlanıyor;
+eşik yazmak isteyen varsa **başka bir turda, aday görmeden** yazar.
