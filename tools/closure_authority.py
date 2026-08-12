@@ -79,11 +79,14 @@ ASSERTION = re.compile(
 # tutar.* Ve taşınanlar her koşumda ADIYLA basılır: susturulmuyor, sayılıyor.
 #
 # ⛔ Bunlar DÜZELTİLMEDİ — düzeltme ayrı bir sıra (koordinatör hükmü).
-CARRIED: dict[str, str] = {
-    "C-032": "**config'te DISPUTED işaretlendi**",
-    "C-057": "açık",
-    "C-140": "**AÇIK — koordinatör kararı bekliyor**",
-}
+# 2026-08-12: ÜÇÜ DE DÜZELTİLDİ (koordinatör sevki, C-253) → taban çizgisi
+# BOŞ. Ve boş kalması bir başarı değil bir DURUM: yeni bir ayrışma çıkarsa
+# kapı doğrudan kırmızı yanar, taşıyacak bir şey yok.
+#
+# ⚠️ Buraya bir kalem eklemek "muaf tut" demek DEĞİL, "bu ayrışma BİLİNİYOR
+# ve durumu ŞU metinde donduruldu" demektir — metin değişirse eşleşme bozulur
+# ve kalem yeniden kırmızı yanar.
+CARRIED: dict[str, str] = {}
 
 
 def authority() -> dict[str, tuple[bool, str]]:
