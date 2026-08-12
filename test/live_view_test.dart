@@ -114,34 +114,41 @@ void main() {
     });
 
     testWidgets(
-        'kalıcı ret dalı — CİHAZDAKİ hâl: tek eylem ÖLÜ (C-140 çivilendi)',
+        'kalıcı ret dalı — CİHAZDAKİ hâl: düğme GERÇEKTEN basılabilir (C-140 kapandı)',
         (WidgetTester tester) async {
-      // The production value is READ FROM PRODUCTION, never retyped here. The
-      // two tests above pass `onOpenSettings: () {}` and so describe a screen
-      // no device builds — that is the whole reason this branch's dead end
-      // survived a green "NO DEAD END" gate.
+      // The production value is READ FROM PRODUCTION, never retyped here.
+      // This assertion is the reason the fix and this pin had to land in the
+      // same commit: while `onOpenSettings: null` shipped, the pin below
+      // asserted the button was DEAD, and leaving that pin in place after the
+      // fix would have frozen the defect it was written to expose.
       final String page =
           File('lib/app/live/live_lesson_page.dart').readAsStringSync();
-      expect(page, contains('onOpenSettings: null'),
-          reason: 'üretim artık gerçek bir geri-çağrı geçiriyor olabilir — '
-              'aşağıdaki ÖLÜ-DÜĞME çivisi o hâlde kusuru DONDURUR, ikisi '
-              'aynı commit’te güncellenmeli');
+      expect(page, isNot(contains('onOpenSettings: null')),
+          reason: 'üretim ölü düğmeye geri döndü (C-140 geri geldi)');
+      expect(page, contains('openAppSettings'),
+          reason: 'ayarları açan gerçek çağrı kayboldu — düğme yine bir '
+              'eylemin ŞEKLİNİ sunar hâle gelmiş olabilir');
 
+      // Rendered with the value production actually passes: a real callback.
+      bool opened = false;
       await show(tester, const LivePermissionDenied(),
-          permanent: true, openSettings: null);
+          permanent: true, openSettings: () => opened = true);
 
-      // ÇİVİLENEN ŞEY BİR KUSUR, BİR TASARIM DEĞİL. A user reaches this branch
-      // by denying the camera twice; the only control on it is a button
-      // labelled "Open settings" that is greyed out. M-F-268 says the branch
-      // must offer an action — this one offers the SHAPE of one.
       final FilledButton button =
           tester.widget<FilledButton>(find.byKey(LiveView.actionKey));
-      expect(button.onPressed, isNull,
-          reason: 'düğme artık basılabilir — kusur kapandıysa bu çivi ve '
-              'C-140 birlikte güncellenmeli, çivi sessizce geçmemeli');
+      expect(button.onPressed, isNotNull,
+          reason: 'kalıcı ret dalının tek kontrolü yine DEVRE DIŞI — '
+              'M-F-268 ölü-sonu');
 
-      // What keeps this from being a TOTAL dead end today: the sentence still
-      // says where to go, even though the app cannot take the user there.
+      // Found and enabled is still not "works": press it.
+      await tester.tap(find.byKey(LiveView.actionKey));
+      await tester.pump();
+      expect(opened, isTrue,
+          reason: 'düğme basılabilir görünüyor ama basıldığında hiçbir şey '
+              'çağırmıyor');
+
+      // The sentence stays: a working button does not remove the need to say
+      // where the switch is.
       expect(find.text(LiveStrings.permanentlyDenied), findsOneWidget);
     });
 

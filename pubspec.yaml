@@ -64,6 +64,19 @@ dependencies:
   # single answer once, not five times.
   google_fonts: ^6.2.1
 
+  # C-222 (koordinatör hükmü (A), 2026-08-12). NİYE VAR: kamera izni KALICI
+  # olarak reddedildiğinde ekranın tek kontrolü "Open settings" etiketli ÖLÜ
+  # bir düğmeydi (C-140) — bağımlılık kümesinde OS ayarlarını açabilen hiçbir
+  # şey yoktu. Artık var.
+  #
+  # ⛔ İCAT DEĞİL, ADAPTASYON — ve referans ÖLÇÜLDÜ, varsayılmadı:
+  # ailenin 5 hattından 4'ü bu paketi zaten taşıyor (Gravita/Ostinato/JabLab
+  # ^12.0.3, Lissom ^11.3.1), yani yeni bir gizlilik yüzeyi AÇILMIYOR —
+  # Choreia aykırı olan taraftı. Sürüm dörtlünün çoğunluğuyla hizalandı.
+  # `openAppSettings`i GERÇEKTEN çağıran tek hat **Ostinato**tur (JabLab
+  # değil — onun `openSettings`i uygulama-içi ayar sayfasıdır, ölçüldü).
+  permission_handler: ^12.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

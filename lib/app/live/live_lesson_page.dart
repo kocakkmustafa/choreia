@@ -3,6 +3,11 @@ import 'dart:convert';
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// Tam paket, `show` listesi DEĞİL — ölçüldü: `isPermanentlyDenied`/
+// `isRestricted`/`status` bu pakette UZANTI (extension) üyeleri, ve bir
+// `show` listesi uzantıları gizler. Ostinato da API'yi kullandığı dosyada
+// tam import ediyor (`camera_session.dart`).
+import 'package:permission_handler/permission_handler.dart';
 
 import 'camera_pose_source.dart';
 import 'live_session.dart';
@@ -27,10 +32,32 @@ class LiveLessonPage extends StatefulWidget {
     required this.stepId,
     required this.lessonClass,
     this.styleId,
+    this.permanentlyDeniedProbe,
+    this.openSettings,
   });
 
   final String stepId;
   final String lessonClass;
+
+  /// Asks the OS whether camera access is refused for good.
+  ///
+  /// **A SEAM, and it exists because the answer used to be GUESSED.** Until
+  /// C-222 this page inferred "permanent" from a second refusal in a row —
+  /// a heuristic wrong in both directions: a policy-restricted device is
+  /// permanent on the FIRST refusal, and declining twice on purpose does not
+  /// mean the switch was turned off for good.
+  ///
+  /// Injected rather than called inline for the reason JabLab injects the
+  /// same question into its controller: a platform channel cannot answer
+  /// under `flutter test`, so a screen that asks one directly cannot be
+  /// walked at all. Default is the real query.
+  final Future<bool> Function()? permanentlyDeniedProbe;
+
+  /// Opens the OS settings page. Defaults to `permission_handler`'s
+  /// `openAppSettings` — the same call Ostinato makes, which is the only
+  /// line in the family that actually opens settings (measured; JabLab's
+  /// `openSettings` is its own in-app page).
+  final VoidCallback? openSettings;
 
   /// Which style's `steps/` directory holds this step's document.
   ///
@@ -49,9 +76,9 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
   List<GatedCheck> _gated = const <GatedCheck>[];
   int? _cycles;
 
-  /// A second refusal reads as permanent. Getting this wrong in the other
-  /// direction is the worse failure: a "try again" button that can never
-  /// work (M-F-268).
+  /// Answered by the OS, not inferred from how many times we were refused
+  /// (C-222). Still defaults to `false`, so an unanswerable probe offers
+  /// "try again" rather than a settings trip the user may not need.
   bool _permanentlyDenied = false;
 
   final CameraPoseSource _camera = CameraPoseSource();
@@ -97,10 +124,26 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
     );
     if (!mounted) return;
     if (refusal != null) {
-      setState(() {
-        if (refusal is LivePermissionDenied && _state is LivePermissionDenied) {
-          _permanentlyDenied = true;
+      // ASK, do not infer. Ostinato's rule, adapted unchanged: `isRestricted`
+      // counts as permanent too — a device under parental controls or an MDM
+      // policy never shows the dialog at all, and the old second-refusal
+      // heuristic could not see that case even in principle.
+      bool permanent = false;
+      if (refusal is LivePermissionDenied) {
+        final Future<bool> Function() probe =
+            widget.permanentlyDeniedProbe ?? _askOs;
+        try {
+          permanent = await probe();
+        } on Object {
+          // An unanswerable probe is not a permanent denial. Failing the
+          // other way would strand a user on a settings screen they never
+          // needed — the direction of this default is chosen, not accidental.
+          permanent = false;
         }
+      }
+      if (!mounted) return;
+      setState(() {
+        _permanentlyDenied = permanent;
         _state = refusal;
       });
       return;
@@ -113,6 +156,16 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
         if (s is LiveWatching && s.cyclesSeen > 0) _cycles = s.cyclesSeen;
       });
     });
+  }
+
+  /// Ostinato's rule, adapted UNCHANGED (`camera_session.dart`
+  /// `permissionState`): `isRestricted` is permanent too. Choreia asks
+  /// `.status` rather than `request()` because the camera plugin has already
+  /// done the asking by the time we get a refusal — re-requesting here would
+  /// pop a second dialog for a question the OS just answered.
+  Future<bool> _askOs() async {
+    final PermissionStatus perm = await Permission.camera.status;
+    return perm.isPermanentlyDenied || perm.isRestricted;
   }
 
   String _stepPath(String id) {
@@ -129,18 +182,9 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
         cyclesRead: _cycles,
         permissionPermanentlyDenied: _permanentlyDenied,
         onRetry: _start,
-        // KNOWN DEFECT, carried forward deliberately (C-140, DEFTER
-        // 2026-08-07): there is no way to open the OS settings page from this
-        // app — neither `motion_camera` nor any current dependency exposes
-        // one — so the permanently-denied branch's button has nothing to call.
-        // It was `() {}` (an enabled button that silently does nothing) before
-        // this file existed; passing null at least disables it rather than
-        // faking an action.
-        //
-        // NOT fixed here because the fix is a dependency decision
-        // (`permission_handler`) and this turn's brief is explicit that the
-        // live screen is preserved, not renegotiated. Named, not silently
-        // inherited.
-        onOpenSettings: null,
+        // C-140 KAPANDI (koordinatör hükmü (A), C-222). Buraya `null`
+        // geçiliyordu ve ekranın tek kontrolü DEVRE DIŞI bir düğmeydi —
+        // M-F-268'in yasakladığı ölü-sonun kendisi. Artık gerçek bir çağrı.
+        onOpenSettings: widget.openSettings ?? openAppSettings,
       );
 }
