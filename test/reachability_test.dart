@@ -194,19 +194,76 @@ void main() {
       // VARAMADIM" hiç sorulmuyordu — eksik yürünen bir yürüyüş, sessizce
       // daha küçük ve "doğru" görünen bir sayı üretir. *"0 kusur" en kolay
       // sahtelenen sayıdır.*
-      final Set<String> candidates = <String>{};
-      for (final FileSystemEntity e
-          in Directory('lib').listSync(recursive: true)) {
-        if (e is! File || !e.path.endsWith('.dart')) continue;
-        for (final RegExpMatch m in RegExp(
-                r'^class ([A-Za-z_]+(?:View|Page)) extends Stat',
-                multiLine: true)
-            .allMatches(e.readAsStringSync())) {
-          candidates.add(m.group(1)!);
-        }
-      }
+      // (a) İKİ BAĞIMSIZ TÜRETİM — sözleşme: *desenin kendisi de ölçülür.*
+      // Tek kanal, kapsamı YAZANIN ADLANDIRMA ALIŞKANLIĞI kadar bırakır;
+      // Gravita'da ölçülen arıza tam buydu (`OnboardingFlow` hiç aday
+      // olmuyordu).
+      //
+      // ⚠️ Ostinato'nun YAPI kanalı (`Scaffold(` kuran sınıf) BURAYA
+      // GEÇMİYOR ve bu ÖLÇÜLDÜ: Choreia'da `Scaffold` TEK bir kabukta,
+      // hedefler `IndexedStack` gövdesi olarak takılıyor → `LibraryView` ve
+      // `ProgressView` `Scaffold` kurmuyor ama gerçek hedefler. Kopyalasaydım
+      // ikisini hayalet ilan ederdim. Bu ağacın yapısal imzası MONTAJ NOKTASI:
+      // rota oluşturucusu · kabuk sekmesi · ilk-koşu kaplaması.
+      final Map<String, String> lib = <String, String>{
+        for (final FileSystemEntity e
+            in Directory('lib').listSync(recursive: true))
+          if (e is File && e.path.endsWith('.dart'))
+            e.path: e.readAsStringSync(),
+      };
+      Set<String> matches(RegExp re, [int group = 1]) => <String>{
+            for (final String src in lib.values)
+              for (final RegExpMatch m in re.allMatches(src)) m.group(group)!,
+          };
+
+      final Set<String> byName = matches(
+          RegExp(r'^class ([A-Za-z_]+(?:View|Page)) extends Stat',
+              multiLine: true));
+      final Set<String> byStructure = <String>{
+        ...matches(RegExp(r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
+            r'([A-Z][A-Za-z_]*)\(')),
+        // ⚠️ Kabuk sekmeleri BLOKTAN okunuyor, satır girintisinden DEĞİL.
+        // İlk yazımım `^\s{10,}X\(\s*$` deseniydi ve `ProgressView`i
+        // görüp `LibraryView`i KAÇIRDI — çünkü birinin argümanları alt
+        // satırda, ötekininki aynı satırda. *Bir desenin kapsamı, yazarının
+        // BİÇİMLENDİRME alışkanlığı kadardı* — (a)'nın uyarısının boşluk
+        // karakteri hâli, ve testin kendisi yakaladı.
+        for (final String src in lib.values)
+          for (final RegExpMatch blok in RegExp(
+                  r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
+                  r'([\s\S]*?)\n\s*\],')
+              .allMatches(src))
+            ...RegExp(r'\b([A-Z][A-Za-z_]*)\(')
+                .allMatches(blok.group(1)!)
+                .map((RegExpMatch m) => m.group(1)!),
+        ...matches(RegExp(r'_introSeen == false[\s\S]{0,200}?return\s+'
+            r'([A-Z][A-Za-z_]*)\(')),
+      };
+      final Set<String> candidates = byName.union(byStructure);
+
       expect(candidates.length, greaterThan(3),
           reason: 'kaynak taraması aday bulamadı — denetim vakumda');
+      expect(byStructure.difference(byName), isEmpty,
+          reason: 'YAPIDA monte edilen bir ekranı AD deseni kaçırıyor — '
+              'desenin kapsamı adlandırma alışkanlığının altında kaldı '
+              '(Gravita M-F-575 sınıfı)');
+
+      // (e) ELLE KÜME — kaynak DEĞİL, türetimin POZİTİF KONTROLÜ.
+      //
+      // ⚠️ ŞERH 1: bu küme bir ALT SINIRDIR, **tam envanter DEĞİLDİR**.
+      // ⚠️ ŞERH 2: buraya ekleme yapmak envanter güncellemesi DEĞİL,
+      //    KONTROLÜN TABANINI yükseltmektir.
+      //
+      // Gerekçe (JabLab M-F-575): türetim `_XState` elemesiyle her
+      // StatefulWidget ekranını yok etmişti ve YAKALAYAN ŞEY ELLE KÜMEYDİ.
+      const Set<String> knownFloor = <String>{
+        'FirstRunView', 'LibraryView', 'ProgressView', 'StyleDetailView',
+        'LiveLessonPage',
+      };
+      expect(candidates.containsAll(knownFloor), isTrue,
+          reason: 'türetim, bilinen tabanı KAPSAMIYOR — eksik: '
+              '${knownFloor.difference(candidates)}. Elle küme kaynak değil '
+              'kontroldür: türetim onu yutuyorsa türetim bozuktur.');
 
       final Set<String> reached = <String>{};
       void snapshot() {
@@ -248,6 +305,35 @@ void main() {
             'açılamadığı için bu da açılamıyor. AYRI testi var '
             '(`live_view_test.dart`, 7 hâlin hepsi).',
       };
+
+      // (c) SEBEP DE ÖLÇÜLÜR — sözleşme: *yanlış bir sebep, sebepsizlikten
+      // daha kötüdür: denetimi DOĞRULANMIŞ gösterir.* (Ostinato'nun sebebi
+      // ölçülünce yanlış çıktı.) Bu iki gerekçe artık HER KOŞUMDA kaynaktan
+      // yeniden türetiliyor; iddia olarak durmuyorlar.
+      final String livePage = lib.entries
+          .firstWhere((MapEntry<String, String> e) =>
+              e.key.endsWith('live_lesson_page.dart'))
+          .value;
+      expect(livePage.contains('rootBundle.loadString'), isTrue,
+          reason: 'gerekçe BAYAT: `LiveLessonPage` artık rootBundle okumuyor '
+              'olabilir — o hâlde widget testinde açılamama sebebi değişti');
+      expect(livePage.contains('materialisePoseModel()'), isTrue,
+          reason: 'gerekçe BAYAT: poz modeli artık yüklenmiyor olabilir');
+      final Iterable<String> liveViewUsers = lib.entries
+          .where((MapEntry<String, String> e) =>
+              RegExp(r'\bLiveView\(').hasMatch(e.value) &&
+              !e.key.endsWith('live_view.dart'))
+          .map((MapEntry<String, String> e) => e.key.split('/').last);
+      expect(liveViewUsers, <String>['live_lesson_page.dart'],
+          reason: 'gerekçe BAYAT: `LiveView` artık yalnız `LiveLessonPage`in '
+              'gövdesi değil — başka bir yerden de kuruluyor: $liveViewUsers');
+      // Ve YAPI kanalı bunu bağımsız olarak doğruluyor: `LiveView` ADDA var,
+      // YAPIDA yok — hiçbir montaj noktasında geçmiyor.
+      expect(byName.difference(byStructure), <String>{'LiveView'},
+          reason: 'ad-yalnız ekran kümesi değişti: '
+              '${byName.difference(byStructure)}. ADDA ekran görünüp YAPIDA '
+              'monte edilmeyen her sınıf, varılamayan kovasında SEBEBİYLE '
+              'yer almalı.');
 
       final Set<String> unreached = candidates.difference(reached);
       expect(unreached, unreachableInWalk.keys.toSet(),
