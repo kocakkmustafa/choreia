@@ -33,6 +33,25 @@ void main() {
     return b.toString();
   }
 
+  /// One file, with comments stripped — the single-file twin of [appCode].
+  ///
+  /// 🔴 THE MISSING HALF, AND IT COST A RED. The whole-app scan has stripped
+  /// comments since its first version (a doc comment discussing a rule is not
+  /// the app saying it), but the per-file reads went through raw source — so
+  /// the moment a comment EXPLAINED why `HistoryIntegrity.notRecorded` no
+  /// longer applies, the assertion that it no longer appears went red on the
+  /// explanation itself.
+  ///
+  /// The family knows this class in its dangerous direction: *a text-scanning
+  /// gate counts comments as code*, so a `// GuardName` comment passes a gate
+  /// whose guard has been ripped out, silently. This is the same defect with
+  /// the sign flipped — loud instead of silent, and therefore cheap. Fixing it
+  /// where the READER lives closes both directions at once.
+  String code(String path) => lib(path)
+      .split('\n')
+      .where((String l) => !l.trimLeft().startsWith('//'))
+      .join('\n');
+
   /// The same, with comments stripped.
   ///
   /// Needed because the string scans below look for what the app SAYS, and a
@@ -52,50 +71,66 @@ void main() {
   });
 
   group('a surface must not describe a mechanism that is absent', () {
-    test('THE FINDING: history is reported as UNWRITTEN, not as unreadable',
-        () {
-      // EVIDENCE: nothing in `lib/` ever writes a session. `SessionStore` is
-      // only ever READ (`store.recent()` in progress_summary and
-      // recorded_summary); no call site constructs one or appends to it, and
-      // the shell hands `ProgressSummary.build` an empty history by hand.
-      final String src = appSource();
-      final bool anythingWrites = RegExp(
-              r'\.append\(|\.write\(|SessionStore\s*\(|JsonlSessionStore\s*\(')
-          .hasMatch(src);
-      expect(anythingWrites, isFalse,
-          reason: 'a session store now exists — re-check whether '
-              '`notRecorded` is still the honest state, because it stops '
-              'being true the moment anything is written');
+    test('THE FINDING, INVERTED 2026-08-13: the app writes now, so it may no '
+        'longer say it does not', () {
+      // 🔔 THIS ASSERTION FIRED, AND THAT WAS ITS JOB.
+      //
+      // Its previous form asserted that NOTHING in `lib/` writes a session,
+      // with the reason written as a trigger rather than a rule: *"a session
+      // store now exists — re-check whether `notRecorded` is still the honest
+      // state, because it stops being true the moment anything is written"*.
+      // The moment arrived. A gate that fires on its own product's progress is
+      // the enemy of that product only if it is SILENCED; this one named the
+      // condition under which it should be turned around, so it is turned
+      // around rather than deleted.
+      //
+      // The claim it now defends is the mirror of the old one: the write
+      // exists, therefore the *"we do not save"* sentence must be gone from
+      // the surface. The talkative-absence class has a talkative-PRESENCE
+      // twin — a surface that keeps apologising for a mechanism that has
+      // since been built teaches the learner to ignore it.
+      final bool anythingWrites =
+          RegExp(r'\.append\(').hasMatch(appCode());
+      expect(anythingWrites, isTrue,
+          reason: 'hiçbir şey oturum yazmıyor — o hâlde ilerleme yüzeyi '
+              '`notRecorded` demeliydi; bu testin ESKİ hâline dönülmeli');
 
-      // So the surface must say ABSENT, not FAILED. "We could not open your
-      // practice history … until we can read it" describes a store that
-      // exists and failed, and a reader takes it to mean their practice was
-      // recorded and is out of reach.
-      expect(src, contains('HistoryIntegrity.notRecorded'),
-          reason: 'the shell must report the absent state, not the failure '
-              'state');
+      // WHERE the write is, not merely THAT one exists. A `.append(` anywhere
+      // in `lib/` would satisfy the line above; the claim is about the live
+      // lesson specifically, because that is the only place a session ends.
+      expect(code('lib/app/live/live_lesson_page.dart'), contains('.append('),
+          reason: 'yazma canlı dersten çıktı — oturumu bitiren başka bir yer '
+              'mi var, yoksa yazma kayboldu mu?');
 
-      // Scoped to the SHELL, not the whole app: `ProgressSummary.from` uses
-      // `unavailable` correctly, for a real store that refuses to open. The
-      // first version of this assertion banned it everywhere and would have
-      // forced a correct branch to be deleted — an over-broad test turning a
-      // right answer red (C-160).
-      expect(lib('lib/app/shell/choreia_shell.dart'),
-          isNot(contains('HistoryIntegrity.unavailable')),
-          reason: 'the shell has no store at all, so "failed to open" is the '
-              'wrong sentence there');
+      // And the surface must have STOPPED saying the opposite. Scoped to the
+      // shell for the same reason the old assertion was: `notRecorded` is a
+      // legitimate state of the type, it is simply no longer this app's.
+      expect(code('lib/app/shell/choreia_shell.dart'),
+          isNot(contains('HistoryIntegrity.notRecorded')),
+          reason: 'kabuk hâlâ "bu uygulama kaydetmiyor" diyor, oysa az önceki '
+              'ders diske yazıldı — eski hâliyle DOĞRU olan cümle artık '
+              'yanlış');
 
+      // POSITIVE CONTROL — the sentence itself still exists and still says
+      // what it says. Without this the assertion above would also pass if
+      // `HistoryIntegrity.notRecorded` were deleted outright, which is a
+      // different change with different consequences (the type would lose the
+      // ability to describe an app that genuinely keeps nothing).
       final String? said = HistoryIntegrity.notRecorded.note;
       expect(said, isNotNull);
-      expect(said, contains('does not save'),
-          reason: 'the sentence must name the absence outright');
-      expect(said, contains('nothing of'),
-          reason: 'and must remove the alarm the old wording created — a '
-              'reader of "we could not open your history" believes something '
-              'of theirs is lost');
-      expect(said, isNot(contains('could not open')));
+      expect(said, contains('does not save'));
       expect(HistoryIntegrity.notRecorded.showsTotals, isFalse,
           reason: 'no numbers may be shown for a record that was never kept');
+
+      // The shell now needs the FAILURE state instead: a store that will not
+      // open is a thing that can happen the moment there is a store at all.
+      expect(code('lib/app/shell/choreia_shell.dart'),
+          contains('HistoryIntegrity.unavailable'),
+          reason: 'artık bir depo var, ve açılmama ihtimali onunla birlikte '
+              'geldi — kabuk bu dalı çizmiyorsa boş geçmişle ayırt edilemez');
+      expect(appCode(), contains('ProgressSummary.from'),
+          reason: 'ilerleme özeti hâlâ elle kuruluyor — depodan okunmuyorsa '
+              'yazılanın yüzeye çıktığı iddia edilemez');
     });
 
     test('the unlock rule content declares is not SPOKEN to anyone', () {

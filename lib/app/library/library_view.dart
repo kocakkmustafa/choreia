@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../live/live_environment.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
 import 'library_catalog.dart';
@@ -31,9 +32,18 @@ import 'style_detail_view.dart';
 /// screen comes from [LibraryTally], which counts derived badges, so the panel
 /// cannot drift from what the tiles below it show.
 class LibraryView extends StatefulWidget {
-  const LibraryView({required this.library, super.key});
+  const LibraryView({
+    required this.library,
+    this.env = const LiveEnvironment(),
+    super.key,
+  });
 
   final LibraryCatalog library;
+
+  /// Forwarded, untouched, to whatever lesson the learner opens. This widget
+  /// has no business knowing what a bundle or a store is — it carries the
+  /// object rather than its three parts precisely so it cannot half-forward it.
+  final LiveEnvironment env;
 
   static const Key tallyKey = Key('library.tally');
   static const Key emptyFilterKey = Key('library.emptyFilter');
@@ -279,6 +289,7 @@ class _LibraryViewState extends State<LibraryView> {
             builder: (_) => StyleDetailView(
               card: c,
               runnableSteps: widget.library.runnableSteps,
+              env: widget.env,
             ),
           ),
         ),

@@ -1,14 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:motion_core/motion_core.dart' show SessionRecord;
+import 'package:motion_core/motion_core.dart' show SessionRecord, SessionStore;
 
+import '../history/session_store_access.dart';
 import '../library/library_catalog.dart';
+import '../live/live_environment.dart';
 import '../onboarding/first_run_flag.dart';
 import '../onboarding/first_run_view.dart';
 import '../library/library_view.dart';
 import '../progress_summary.dart';
 import '../progress_view.dart';
 import '../theme.dart';
+
+/// How long the shell waits for the practice record before calling it
+/// unreachable.
+///
+/// Generous on purpose: this is a local file, and a value tight enough to trip
+/// on a slow phone would report a healthy record as lost. Named rather than
+/// inlined so a test can drive the clock past it without copying the number.
+const Duration historyReadTimeout = Duration(seconds: 10);
 
 /// The app's navigation shell.
 ///
@@ -39,7 +51,18 @@ class ChoreiaShell extends StatefulWidget {
     super.key,
     this.bundleOverride,
     this.flagOverride,
+    this.env = const LiveEnvironment(),
   });
+
+  /// The device-only dependencies of the whole flow — content bundle, pose
+  /// source, session store — held HERE and forwarded down.
+  ///
+  /// The store in particular is read by this widget and written by the lesson
+  /// three screens away. Two independent defaults would agree today and
+  /// diverge the day one of them changes, silently: the app writes one file,
+  /// the progress screen reads another, and the symptom is an empty history —
+  /// indistinguishable from a learner who has not practised.
+  final LiveEnvironment env;
 
   /// Lets a test drive the shell off repository files instead of the asset
   /// bundle — `rootBundle.loadString` deadlocks under `flutter test` in this
@@ -54,6 +77,7 @@ class ChoreiaShell extends StatefulWidget {
   static const Key progressTabKey = Key('shell.tab.progress');
   static const Key loadFailureKey = Key('shell.loadFailure');
   static const Key loadingKey = Key('shell.loading');
+  static const Key historyLoadingKey = Key('shell.historyLoading');
 
   @override
   State<ChoreiaShell> createState() => _ChoreiaShellState();
@@ -71,12 +95,111 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   /// guessing `false` and correcting itself.
   bool? _introSeen;
 
+  /// The practice record, READ FROM THE STORE.
+  ///
+  /// `null` until the first read completes, and the progress tab shows a WAIT
+  /// while it is — never a placeholder summary. Every value a placeholder
+  /// could carry is a claim: an empty history says "you have not practised",
+  /// an `unavailable` says "we lost it". There is no honest filler.
+  ///
+  /// ⚠️ The wait is scoped to that ONE tab, deliberately. Blocking the whole
+  /// shell on it — which is how this was first written — makes the app's
+  /// launch wait on a disk read that the catalogue and the intro do not need,
+  /// and a store slow to open would hold the entire app on its loading
+  /// sentence.
+  ProgressSummary? _progress;
+
+  /// Cancelled on dispose — see [_withinTimeout].
+  Timer? _historyTimer;
+
   @override
   void initState() {
     super.initState();
     _flag.hasSeenIntro().then((bool seen) {
       if (mounted) setState(() => _introSeen = seen);
     });
+    _catalog.then((LibraryCatalog library) => _refreshProgress(library));
+  }
+
+  /// Re-read the history. Called once at launch and again whenever the learner
+  /// goes to the progress tab, which is the only moment they can be looking at
+  /// it — a session finished a second ago must not be missing from the screen
+  /// that exists to show it.
+  Future<void> _refreshProgress(LibraryCatalog library) async {
+    ProgressSummary next;
+    try {
+      // ⏱ BOUNDED, and the bound is not defensive decoration.
+      //
+      // A store that THROWS is handled by the catch below. A store that
+      // never ANSWERS is not: a hang is not an exception, so without this the
+      // tab sits on "Reading your practice record…" forever, with nothing to
+      // do and nothing said — the dead end M-F-268 forbids, introduced by the
+      // very change that made this screen read anything at all.
+      //
+      // Not hypothetical: `getApplicationSupportDirectory()` under
+      // `flutter test` neither completes nor throws (measured — the
+      // navigability gate caught this the same hour), and a device with a
+      // wedged platform channel is the same shape.
+      //
+      // The timeout FAILS INTO `unavailable`, never into an empty history:
+      // "we could not open your record" and "you have no record" are the two
+      // readings this surface spends the most effort keeping apart.
+      next = await _withinTimeout(() async {
+        final SessionStore store =
+            await (widget.env.storeOpener ?? openAppSessionStore)();
+        return ProgressSummary.from(store: store, catalog: library.allCourses);
+      });
+    } on Object {
+      // The store could not be OPENED, or did not answer in time — a
+      // different fact from an empty history, and the distinction is the whole
+      // reason this branch exists. `ProgressSummary.from` draws it for read
+      // failures; opening happens before that call, so it has to be drawn
+      // again here.
+      next = ProgressSummary.build(
+        history: const <SessionRecord>[],
+        catalog: library.allCourses,
+        integrity: HistoryIntegrity.unavailable,
+      );
+    }
+    if (mounted) setState(() => _progress = next);
+  }
+
+  /// [work], or a [TimeoutException] once [historyReadTimeout] has passed.
+  ///
+  /// Hand-rolled rather than `Future.timeout` because the timer must be
+  /// CANCELLABLE. `Future.timeout` owns its timer, and a store that never
+  /// answers therefore leaves one alive after the widget is gone — a leak in
+  /// production and a hard failure in any test that disposes the tree
+  /// (`flutter_test` asserts on pending timers, which is how this was found:
+  /// five onboarding tests went red on a screen they do not even open).
+  ///
+  /// The timer is also cancelled on SUCCESS, so a healthy read leaves nothing
+  /// behind either.
+  Future<ProgressSummary> _withinTimeout(
+      Future<ProgressSummary> Function() work) {
+    final Completer<ProgressSummary> out = Completer<ProgressSummary>();
+    _historyTimer?.cancel();
+    _historyTimer = Timer(historyReadTimeout, () {
+      if (!out.isCompleted) {
+        out.completeError(TimeoutException(
+            'practice record did not answer', historyReadTimeout));
+      }
+    });
+    work().then((ProgressSummary v) {
+      if (!out.isCompleted) out.complete(v);
+    }, onError: (Object e, StackTrace st) {
+      if (!out.isCompleted) out.completeError(e, st);
+    });
+    return out.future.whenComplete(() {
+      _historyTimer?.cancel();
+      _historyTimer = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _historyTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _dismissIntro() async {
@@ -88,7 +211,10 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
       ? widget.bundleOverride!()
       : LibraryCatalog.load(rootBundle);
 
-  void _retry() => setState(() => _catalog = _load());
+  void _retry() {
+    setState(() => _catalog = _load());
+    _catalog.then((LibraryCatalog library) => _refreshProgress(library));
+  }
 
   @override
   Widget build(BuildContext context) => FutureBuilder<LibraryCatalog>(
@@ -126,6 +252,23 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                     ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.6)),
               ),
             ),
+          ),
+        ),
+      );
+
+  /// The progress tab before its first read lands.
+  ///
+  /// Says WHAT is being waited for. "Loading…" would leave a learner unable to
+  /// tell a slow read from an empty record, and those are the two readings
+  /// this surface spends the most effort keeping apart.
+  Widget _historyLoading() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            ShellStrings.historyLoading,
+            key: ChoreiaShell.historyLoadingKey,
+            textAlign: TextAlign.center,
+            style: ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.6)),
           ),
         ),
       );
@@ -171,30 +314,37 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         body: IndexedStack(
           index: _index,
           children: <Widget>[
-            LibraryView(library: library),
-            ProgressView(
-              // No `SessionStore` is wired up in this build (design-ahead
-              // §10). This used to pass `unavailable`, whose sentence is "we
-              // could not open your practice history" — and that describes a
-              // store that exists and failed. A reader takes it to mean their
-              // practice was recorded and is now out of reach.
-              //
-              // `notRecorded` is the honest state: nothing is written, so
-              // nothing is missing (C-163). The publication inventory found
-              // this by asking the USER-side question — not "what is missing"
-              // but "which surface misinforms someone who opens the app today".
-              summary: ProgressSummary.build(
-                history: const <SessionRecord>[],
+            LibraryView(library: library, env: widget.env),
+            // READ FROM THE STORE (2026-08-13). This used to hand
+            // `ProgressSummary.build` an empty history and
+            // `HistoryIntegrity.notRecorded` by hand, because nothing in the
+            // app wrote a session — the surface was honest and the app was
+            // empty. Now a finished lesson is appended, so `notRecorded` would
+            // be the lie: it says "this app does not save", and it does.
+            //
+            // The three states downstream still hold and are still drawn by
+            // the store's own answers: `ok` · `partial(n)` (some lines
+            // unreadable — totals are a floor and say so) · `unavailable`
+            // (could not open; no numbers shown).
+            if (_progress == null)
+              _historyLoading()
+            else
+              ProgressView(
+                summary: _progress!,
                 catalog: library.allCourses,
-                integrity: HistoryIntegrity.notRecorded,
               ),
-              catalog: library.allCourses,
-            ),
           ],
         ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _index,
-          onDestinationSelected: (int i) => setState(() => _index = i),
+          onDestinationSelected: (int i) {
+            setState(() => _index = i);
+            // Re-read on ARRIVAL, not on a timer: the learner may have
+            // finished a lesson since this summary was built, and a progress
+            // screen that is one session stale is a progress screen that
+            // denies the practice you just did.
+            if (i == 1) _refreshProgress(library);
+          },
           backgroundColor: ChoreiaColors.oxblood.withValues(alpha: 0.55),
           indicatorColor: ChoreiaColors.rose.withValues(alpha: 0.16),
           surfaceTintColor: Colors.transparent,
@@ -235,6 +385,10 @@ abstract final class ShellStrings {
   /// The design's own instruction for its LOADING state: "no spinner tricks ·
   /// plain wait". Followed literally, as `LiveView` already does.
   static const String loading = 'Opening the catalogue…';
+
+  /// NOT "loading": a learner must be able to tell a slow read from an empty
+  /// record, and this screen's whole job is keeping those two apart.
+  static const String historyLoading = 'Reading your practice record…';
 
   /// Names what failed and what it means, without a technical detail. The
   /// catalogue is a bundled asset, so this failing means the install is

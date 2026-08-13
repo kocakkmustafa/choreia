@@ -6,12 +6,13 @@ import 'package:choreia/app/live/pose_model.dart';
 import 'package:choreia/app/onboarding/first_run_flag.dart';
 import 'package:choreia/app/onboarding/first_run_view.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
+import 'package:choreia/app/live/live_environment.dart';
 import 'package:choreia/app/progress_view.dart';
 import 'package:choreia/app/shell/choreia_shell.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/round_trip_store.dart';
 import 'support/test_catalog.dart';
 
 /// **The navigability measurement.** How many separate screens can a user
@@ -42,46 +43,6 @@ import 'support/test_catalog.dart';
 /// Neither reading counts a screen that exists in `lib/` but has no trigger.
 /// **A line's presence is not its cue** — the whole reason this line's
 /// `ProgressView` sat fully tested and unreachable for weeks.
-/// The reference files `pubspec.yaml` actually ships, parsed from the manifest
-/// rather than from the directory listing.
-///
-/// `content/references/` is declared FILE BY FILE (the directory also holds
-/// build-time bookkeeping that must not ship), so "on disk" and "in the app"
-/// are different sets — and only the second one exists on a device.
-Set<String> declaredReferences() => File('pubspec.yaml')
-    .readAsLinesSync()
-    .map((String l) => l.trim())
-    .where((String l) => l.startsWith('- content/references/'))
-    .map((String l) => l.substring('- content/references/'.length)
-        .replaceAll('.json', ''))
-    .toSet();
-
-/// A bundle that fails for an undeclared reference the way a real device does.
-///
-/// WHY THIS EXISTS: `DiskBundle` reads the filesystem, so it happily returns a
-/// file `pubspec.yaml` never ships. Measuring reachability through it produced
-/// a Start button the device would never paint — and the walk then crashed in
-/// `LiveLessonPage`, which loads from `rootBundle` and got the real answer.
-/// A fake must imitate the FAILURE MODE, not just the signature (C-115); this
-/// one was imitating the wrong machine entirely.
-class DeviceBundle extends DiskBundle {
-  DeviceBundle(this.declared);
-
-  final Set<String> declared;
-
-  @override
-  Future<ByteData> load(String key) async {
-    if (key.startsWith('content/references/')) {
-      final String step =
-          key.substring('content/references/'.length).replaceAll('.json', '');
-      if (!declared.contains(step)) {
-        throw FlutterError('asset not declared in pubspec.yaml: $key');
-      }
-    }
-    return super.load(key);
-  }
-}
-
 void main() {
   late LibraryCatalog library;
   late Set<String> declared;
@@ -101,6 +62,14 @@ void main() {
         home: ChoreiaShell(
           bundleOverride: () async => library,
           flagOverride: MemoryFirstRunFlag(seen: introSeen),
+          // An EMPTY store, injected for the same reason the bundle and the
+          // flag are: this file measures where a user can GO, and the real
+          // opener is a platform channel that neither answers nor throws under
+          // `flutter test`. Left out, the progress tab renders its "reading
+          // your record" wait and the loose count silently loses a
+          // destination — which is exactly what this gate caught when the
+          // store was first wired in.
+          env: LiveEnvironment(storeOpener: () async => RoundTripStore()),
         ),
       );
 
@@ -298,12 +267,28 @@ void main() {
       // VARILAMAYANLAR — adıyla ve SEBEBİYLE. Boş bırakılamaz: sebebi
       // olmayan bir dışlama, denetimi tekrar tanıma çevirir.
       const Map<String, String> unreachableInWalk = <String, String>{
-        'LiveLessonPage': 'widget testinde açılamaz: `rootBundle` üzerinden '
-            'referans + poz modeli yükler, ikisi de bu ortamda yok. KATI '
-            'sayımda ROTASI ölçülüyor (`spy.pushed`), ama EKRANI değil.',
+        // ⚠️ SEBEP DEĞİŞTİ 2026-08-13 — ve eskisi ARTIK YANLIŞTI, ki bunu
+        // yakalayan şey aşağıdaki bayatlık probu oldu. Eski gerekçe *"widget
+        // testinde AÇILAMAZ"* diyordu; bugün açılabiliyor. Açılmıyor olmasının
+        // sebebi bu YÜRÜYÜŞÜN cihaz varsayılanlarıyla koşması: burada ölçülen
+        // şey nereye GİDİLEBİLDİĞİ, ve kamerası+paketi enjekte edilmiş bir
+        // kabuk o soruyu cevaplamaz.
+        //
+        // *Bir dışlamanın gerekçesi, dışlananın kendisi kadar denetlenir* —
+        // ve bu satır, gerekçenin kendisinin bayatlayabildiğinin kanıtı.
+        'LiveLessonPage': 'bu yürüyüş kabuğu CİHAZ varsayılanlarıyla kuruyor '
+            '(gerçek kamera + `rootBundle` + gerçek depo), o yüzden ekran '
+            'burada çizilmiyor. ARTIK YÜRÜNEBİLİR: `LiveEnvironment` enjekte '
+            'edilerek baştan sona yürünüyor — `first_walk_test.dart`. KATI '
+            'sayımda ROTASI ölçülüyor (`spy.pushed`), EKRANI orada.',
         'LiveView': 'yalnız `LiveLessonPage`in gövdesi olarak çizilir; o '
             'açılamadığı için bu da açılamıyor. AYRI testi var '
-            '(`live_view_test.dart`, 7 hâlin hepsi).',
+            '(`live_view_test.dart`, 7 hâlin hepsi) ve `first_walk_test` '
+            'içinde gerçek oturumda çiziliyor.',
+        'SessionResultView': 'bir oturumu BİTİRMEDEN varılamaz, ve oturum bu '
+            'yürüyüşte hiç başlamıyor (yukarıdaki sebep). Tek girişi '
+            '`LiveLessonPage._finish`; `first_walk_test.dart` oraya '
+            'düğmeyle varıyor.',
       };
 
       // (c) SEBEP DE ÖLÇÜLÜR — sözleşme: *yanlış bir sebep, sebepsizlikten
@@ -314,11 +299,36 @@ void main() {
           .firstWhere((MapEntry<String, String> e) =>
               e.key.endsWith('live_lesson_page.dart'))
           .value;
-      expect(livePage.contains('rootBundle.loadString'), isTrue,
-          reason: 'gerekçe BAYAT: `LiveLessonPage` artık rootBundle okumuyor '
-              'olabilir — o hâlde widget testinde açılamama sebebi değişti');
+      // ① Sayfa hâlâ CİHAZ varsayılanına düşüyor mu — gerekçenin ilk yarısı.
+      expect(livePage.contains('widget.env.bundle ?? rootBundle'), isTrue,
+          reason: 'gerekçe BAYAT: `LiveLessonPage` artık `rootBundle`a '
+              'düşmüyor olabilir — o hâlde bu yürüyüşte çizilmeme sebebi '
+              'değişti');
       expect(livePage.contains('materialisePoseModel()'), isTrue,
           reason: 'gerekçe BAYAT: poz modeli artık yüklenmiyor olabilir');
+      expect(livePage.contains('widget.env.source?.call() ?? _CameraSource()'),
+          isTrue,
+          reason: 'gerekçe BAYAT: poz kaynağı artık kameraya düşmüyor olabilir');
+
+      // ② Ve gerekçenin İKİNCİ yarısı: "başka bir yerde yürünüyor" iddiası.
+      //
+      // 🔴 Bu satır olmadan dışlama yarım bir doğrudur. Bir ekranı *"burada
+      // değil, şurada yürünüyor"* diye dışlamak, ŞURASI silindiği gün sessizce
+      // *"hiçbir yerde yürünmüyor"*a döner — ve gerekçe hâlâ ikna edici
+      // görünür. Dışlamanın dayandığı yürüyüşün VARLIĞI da ölçülür.
+      final File walk = File('test/first_walk_test.dart');
+      expect(walk.existsSync(), isTrue,
+          reason: 'gerekçe BAYAT: dışlamanın dayandığı yürüyüş dosyası YOK');
+      final String walkSrc = walk.readAsStringSync();
+      for (final String screen in unreachableInWalk.keys) {
+        expect(walkSrc, contains(screen),
+            reason: 'gerekçe BAYAT: `$screen` burada dışlanıyor ve '
+                '`first_walk_test.dart` ona hiç değinmiyor — dışlama '
+                'dayanaksız kaldı');
+      }
+      expect(walkSrc, contains('LiveEnvironment('),
+          reason: 'gerekçe BAYAT: o yürüyüş artık ortamı enjekte etmiyor, '
+              'yani buradaki "cihaz varsayılanı" ayrımı anlamsızlaştı');
       final Iterable<String> liveViewUsers = lib.entries
           .where((MapEntry<String, String> e) =>
               RegExp(r'\bLiveView\(').hasMatch(e.value) &&

@@ -5,6 +5,32 @@ import 'package:motion_core/motion_core.dart';
 
 import 'live_state.dart';
 
+/// Everything the live page needs from a source of poses.
+///
+/// **Extracted so the live page can be WALKED.** `LiveSession` was already
+/// replay-driven — it takes a `Stream<PoseFrame>` and runs identically under a
+/// fixture and under a device. The PAGE was not: it constructed a
+/// [CameraPoseSource] inline, so the one screen where a lesson actually
+/// happens could not be entered by any test, and the navigability measurement
+/// had to list it as unreachable WITH A REASON rather than walk it.
+///
+/// This is Lissom's `8843a30` shape, measured rather than copied: the bridge
+/// there was not a new pattern either — it was a screen that could not reach a
+/// seam the rest of the code already had. Same here, one layer up.
+abstract interface class PoseSource {
+  /// Acquire whatever this source needs and start producing frames.
+  ///
+  /// Returns the typed refusal, or `null` for "started". Everything a real
+  /// camera needs to locate first (the pose model on disk) belongs to the
+  /// IMPLEMENTATION — a caller that had to materialise a model before opening
+  /// a fixture would be doing device work to replay a recording.
+  Future<LiveState?> begin();
+
+  Stream<PoseFrame> frames();
+
+  Future<void> stop();
+}
+
 /// Opens the camera and turns its envelopes into `PoseFrame`s.
 ///
 /// Kept OUT of [LiveSession] on purpose: the session takes a

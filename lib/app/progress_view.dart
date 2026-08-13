@@ -178,7 +178,10 @@ class ProgressView extends StatelessWidget {
                 style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
             Text(
                 ProgressStrings.sessionsCompleted(
-                    row.completedSessions, row.sessions),
+                    row.completedSessions, row.sessions,
+                    // No target, no "finished" — the row's own planned total
+                    // is the only thing that can say whether one existed.
+                    anyTarget: row.plannedCycles > 0),
                 style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
             // Unmeasured work is named on the row it happened in — an aggregate
             // elsewhere would tell the user something went unchecked without

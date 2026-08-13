@@ -432,11 +432,35 @@ abstract final class ProgressStrings {
     return rem == 0 ? '${h}h practised' : '${h}h ${rem}m practised';
   }
 
-  static String cycles(int completed, int planned) =>
-      '$completed of $planned cycles';
+  /// Cycles read, against a target ONLY when one exists.
+  ///
+  /// **A ratio is a claim about a plan, and Choreia's lessons declare none**
+  /// (see `noDeclaredTarget`). Rendering "6 of 0 cycles" is a broken sentence;
+  /// rendering "6 of 6" — which is what storing the attempt as the target
+  /// would produce — is worse, because it reads as a target the learner hit.
+  /// So the ratio appears when there is something to compare against, and a
+  /// bare fact when there is not.
+  ///
+  /// The rule is `planned <= 0`, not `== 0`: a negative target is a bug
+  /// upstream, and the safe rendering of a bug is the sentence that claims
+  /// least.
+  static String cycles(int completed, int planned) => planned <= 0
+      ? (completed == 1 ? '1 cycle read' : '$completed cycles read')
+      : '$completed of $planned cycles';
 
-  static String sessionsCompleted(int completed, int total) =>
-      '$completed of $total sessions finished';
+  /// How many of these sessions were finished.
+  ///
+  /// [anyTarget] is FALSE when no session in the row declared a target — and
+  /// then "finished" is not a fact this app holds. `SessionRecord.isComplete`
+  /// is `attempted >= planned`, so with no target it is true for EVERY record;
+  /// printing "1 of 1 sessions finished" would be reporting the arithmetic of
+  /// an absent plan as an achievement. The count of sessions is still a fact,
+  /// so it is the one that is shown.
+  static String sessionsCompleted(int completed, int total,
+          {required bool anyTarget}) =>
+      anyTarget
+          ? '$completed of $total sessions finished'
+          : (total == 1 ? '1 session' : '$total sessions');
 
   static String demoOnlyMark(String? reason) =>
       reason == null ? 'Taught, not graded' : 'Taught, not graded — $reason';

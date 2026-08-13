@@ -226,7 +226,35 @@ void main() {
       expect(ProgressStrings.duration(3661), '1h 1m practised');
       expect(ProgressStrings.duration(7200), '2h practised');
       expect(ProgressStrings.cycles(3, 8), '3 of 8 cycles');
-      expect(ProgressStrings.sessionsCompleted(1, 2), '1 of 2 sessions finished');
+      expect(ProgressStrings.sessionsCompleted(1, 2, anyTarget: true),
+          '1 of 2 sessions finished');
+    });
+
+    test('NO DECLARED TARGET — the ratio disappears, the fact stays', () {
+      // Choreia lessons declare no cycle target (`noDeclaredTarget`), so every
+      // record this app writes today arrives here with `planned == 0`. Both
+      // halves are pinned because both were wrong in an obvious way before:
+      // "3 of 0 cycles" is a broken sentence, and storing the attempt as the
+      // target would have rendered "3 of 3" — a target hit, for a target
+      // nobody set.
+      expect(ProgressStrings.cycles(3, 0), '3 cycles read');
+      expect(ProgressStrings.cycles(1, 0), '1 cycle read');
+      expect(ProgressStrings.cycles(0, 0), '0 cycles read');
+
+      // `SessionRecord.isComplete` is `attempted >= planned`, so with no
+      // target EVERY record reads as complete. Printing "1 of 1 sessions
+      // finished" would report the arithmetic of an absent plan as an
+      // achievement.
+      expect(ProgressStrings.sessionsCompleted(2, 2, anyTarget: false),
+          '2 sessions');
+      expect(ProgressStrings.sessionsCompleted(1, 1, anyTarget: false),
+          '1 session');
+
+      // POSITIVE CONTROL — the no-target branch must not swallow the real one.
+      // Without this, deleting the ratio entirely would still pass.
+      expect(ProgressStrings.cycles(3, 8), contains(' of '));
+      expect(ProgressStrings.sessionsCompleted(1, 2, anyTarget: true),
+          contains('finished'));
     });
   });
 

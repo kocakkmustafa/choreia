@@ -48,6 +48,13 @@ abstract final class LiveStrings {
   static String cycles(int? n) =>
       n == null ? 'No full repetition read so far' : '$n read so far';
 
+  /// Ends the session and takes the learner to what was kept.
+  ///
+  /// "Finish" rather than "Stop": stopping is what the back arrow does, and it
+  /// keeps nothing. The word has to carry the difference, because the two
+  /// controls sit on the same screen and only one of them writes.
+  static const String finish = 'Finish session';
+
   static const String gatedTitle = 'What we are NOT checking';
   static const String measuredTitle = 'What we measured';
   static const String findingsTitle = 'What we noticed';
@@ -121,6 +128,7 @@ class LiveView extends StatelessWidget {
     this.permissionPermanentlyDenied = false,
     this.onRetry,
     this.onOpenSettings,
+    this.onFinish,
   });
 
   final LiveState state;
@@ -137,11 +145,31 @@ class LiveView extends StatelessWidget {
   final VoidCallback? onRetry;
   final VoidCallback? onOpenSettings;
 
+  /// Ends the session and writes it. Null while a write is already in flight,
+  /// which is what stops one practice being appended twice.
+  final VoidCallback? onFinish;
+
   static const Key bodyKey = Key('live.body');
   static const Key gatedKey = Key('live.gated');
   static const Key notMeasuredKey = Key('live.notMeasured');
   static const Key actionKey = Key('live.action');
   static const Key alsoSawKey = Key('live.alsoSaw');
+  static const Key finishKey = Key('live.finish');
+
+  /// Whether the camera has produced anything this session could keep.
+  ///
+  /// The finish control appears for exactly these states, and the rule is
+  /// about the RECORD, not about tidiness: in `LiveIdle` nothing has started,
+  /// and under a permission or camera failure nothing was ever seen — offering
+  /// to "finish" there would promise to keep a session that does not exist.
+  /// Those branches already carry their own action (M-F-268), so nothing is
+  /// left without a way forward.
+  bool get _sessionUnderway => switch (state) {
+        LiveNoPerson() || LiveWatching() || LiveMeasured() || LiveJudged() =>
+          true,
+        LiveIdle() || LivePermissionDenied() || LiveCameraUnavailable() =>
+          false,
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +195,19 @@ class LiveView extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
             children: <Widget>[
               ..._forState(),
+              // THE TERMINAL. Until this existed the live path had no exit
+              // that kept anything: the back arrow discarded the session, so
+              // nothing was ever written and the progress surface was
+              // hard-wired to say this app does not save. Placed directly
+              // under the reading it ends, above the always-on limits.
+              if (_sessionUnderway) ...<Widget>[
+                const SizedBox(height: 18),
+                FilledButton(
+                  key: finishKey,
+                  onPressed: onFinish,
+                  child: const Text(LiveStrings.finish),
+                ),
+              ],
               const SizedBox(height: 20),
               _gatedSection(),
               const SizedBox(height: 14),

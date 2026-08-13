@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../course_catalog.dart';
+import '../live/live_environment.dart';
 import '../live/live_lesson_page.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
@@ -38,8 +39,14 @@ class StyleDetailView extends StatelessWidget {
   const StyleDetailView({
     required this.card,
     this.runnableSteps = const <String>{},
+    this.env = const LiveEnvironment(),
     super.key,
   });
+
+  /// Forwarded to the lesson this page starts. See [LiveEnvironment] for why
+  /// it travels as one object through the two screens that only relay it.
+
+  final LiveEnvironment env;
 
   final StyleCard card;
 
@@ -399,8 +406,11 @@ class StyleDetailView extends StatelessWidget {
                   settings: RouteSettings(name: 'live/${l.id}'),
                   builder: (_) => LiveLessonPage(
                     stepId: l.stepId!,
+                    lessonId: l.id,
                     styleId: l.styleId,
+                    lessonName: l.displayName,
                     lessonClass: l.isScored ? 'scored' : 'demoOnly',
+                    env: env,
                   ),
                 ),
               ),
