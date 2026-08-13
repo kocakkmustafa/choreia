@@ -15,8 +15,15 @@ import 'package:motion_core/motion_core.dart';
 /// rule nobody can find, and because these cases (a session of only-unjudgeable
 /// frames, a camera that never opened) are cheap here and expensive there.
 void main() {
-  SessionTally tally({String lessonClass = ChoreiaLessonClass.demoOnly}) =>
-      SessionTally(lessonId: 'hh_l1_bounce', lessonClass: lessonClass);
+  SessionTally tally({
+    String lessonClass = ChoreiaLessonClass.demoOnly,
+    int? cycleTarget,
+  }) =>
+      SessionTally(
+        lessonId: 'hh_l1_bounce',
+        lessonClass: lessonClass,
+        cycleTarget: cycleTarget,
+      );
 
   LiveState judged() => const LiveJudged(
         result: JudgeResult(findings: <ErrorFinding>[], measurements: {}),
@@ -107,7 +114,7 @@ void main() {
       t.observe(judged(), s(180));
 
       final SessionRecord r = t.toRecord(endedAt: DateTime.utc(2026, 8, 13, 9));
-      expect(r.plannedUnits, noDeclaredTarget);
+      expect(r.plannedUnits, absentTargetOnTheWire);
       expect(r.unitsCompleted, 2);
       expect(r.unitLabel, choreiaUnitLabel);
       expect(r.lessonId, 'hh_l1_bounce');
@@ -122,6 +129,40 @@ void main() {
           reason: 'hedefsiz bir kayıt için bu DAİMA true — yüzeyin bunu '
               '"bitirdin" diye okumaması gerekiyor, ve okumadığı '
               'progress_test\'te çivili');
+    });
+
+    test('POZİTİF KONTROL — bir ders hedef İLAN EDERSE o sayı kayda geçer, '
+        've `isComplete` anlam kazanır', () {
+      // NİYE VAR: üstteki test tek başına YOKLUĞU ölçmüyor. `plannedUnits == 0`
+      // beklentisi, `toRecord` içinde `plannedUnits: 0` yazan bir HARDCODE'a
+      // karşı da aynen geçer — yani o test bir DALIN varlığını değil, bir
+      // sabitin değerini kanıtlıyor. Yokluğun bir dal olduğu ancak sıfır
+      // OLMAYAN bir kardeş ölçümle görülür (pozitif kontrolün "veride
+      // söylenecek şey var mı" katmanı).
+      //
+      // Bugün hiçbir ders `cycleTarget` taşımıyor ve bu KASITLI: sayı, ölçülmüş
+      // bir `cycleTargetBasis` ister (content/SCHEMA.md, `validate_content.py`
+      // kapısı). Burada verilen 4, içerik iddiası değil FIXTURE — kablonun iki
+      // ucunun bağlı olduğunu göstermek için.
+      final SessionTally t = tally(cycleTarget: 4);
+      t.observe(judged(), s(10));
+      t.observe(judged(), s(20));
+
+      final SessionRecord r = t.toRecord(endedAt: DateTime.utc(2026, 8, 14));
+      expect(r.plannedUnits, 4,
+          reason: 'ders hedef ilan etti ve kayıt onu taşımıyor — hedef zinciri '
+              'içerikten kayda bağlı değil');
+      expect(r.plannedUnits, isNot(absentTargetOnTheWire),
+          reason: 'hedefli kayıt yokluk kodlamasıyla aynı değeri taşıyorsa '
+              'yüzey ikisini AYIRT EDEMEZ');
+
+      // VE ŞİMDİ anlamlı: 2 < 4, yani bu oturum hedefine ulaşmadı. Hedefsiz
+      // hâlde bu her zaman true'ydu; artık gerçekten bir şey ölçüyor.
+      expect(r.isComplete, isFalse,
+          reason: '2 döngü 4 hedefin altında ve kayıt "tamamlandı" diyor — '
+              'hedef varken `isComplete` ARİTMETİK olmaktan çıkıp ölçüm '
+              'olmalıydı');
+      expect(t.toRecord(endedAt: DateTime.utc(2026, 8, 14)).attemptedUnits, 2);
     });
 
     test('the class is stored AT WRITE TIME, whatever it is', () {

@@ -114,6 +114,7 @@ void main() {
         catalog: catalog,
         totals: const RecordedSummary(
           sessions: 0,
+          targetedSessions: 0,
           completed: 0,
           workedSeconds: 0,
           scoredSessions: 0,
@@ -531,9 +532,9 @@ void main() {
           rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
         ],
         catalog: real,
-        totals: const RecordedSummary(sessions: 2, completed: 2,
-            workedSeconds: 1200, scoredSessions: 1, demoOnlySessions: 1,
-            unmeasuredUnits: 0),
+        totals: const RecordedSummary(sessions: 2, targetedSessions: 0,
+            completed: 0, workedSeconds: 1200, scoredSessions: 1,
+            demoOnlySessions: 1, unmeasuredUnits: 0),
       );
       await tester.pumpWidget(Directionality(
         textDirection: TextDirection.ltr,

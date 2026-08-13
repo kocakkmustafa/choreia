@@ -400,6 +400,44 @@ def validate_style(path: Path, steps: dict[str, dict], rep: Report) -> dict:
             lid = ls.get("id", "<no id>")
             if "scored" not in ls:
                 rep.error(where, f"lesson '{lid}' does not declare `scored`")
+
+            # ── cycleTarget: the ABSENCE is the default, and a present value
+            # has to survive two ways of being useless (C-273, H-4 ③).
+            #
+            # NOT validated by "is it there" — that would be a gate on a field
+            # nothing ships yet, and this repo's rule is that a gate verifies an
+            # A-table item, not itself. What it verifies is the DENOMINATOR
+            # promise on the result surface: a ratio is a claim about a plan,
+            # and both failure modes below put a false sentence on a screen
+            # that already exists.
+            if "cycleTarget" in ls:
+                target = ls["cycleTarget"]
+                # `isinstance(True, int)` is True in Python — a JSON `true`
+                # would sail through a bare int check and reach the wire as 1,
+                # i.e. a one-cycle target nobody wrote. Bool is excluded by
+                # name, not by hoping the author never types it.
+                if isinstance(target, bool) or not isinstance(target, int):
+                    rep.error(where, f"lesson '{lid}' cycleTarget must be an "
+                                     f"integer, got {target!r}")
+                elif target < 1:
+                    rep.error(where, f"lesson '{lid}' cycleTarget is {target} — "
+                                     "must be >= 1. The family's plannedUnits "
+                                     "field is a non-nullable int and 0 is how "
+                                     "ABSENCE is encoded on the wire, so a "
+                                     "target of 0 is not a target the surface "
+                                     "can tell apart from no target at all: "
+                                     "content would believe it set a plan and "
+                                     "the screen would show none")
+                if not str(ls.get("cycleTargetBasis") or "").strip():
+                    rep.error(where, f"lesson '{lid}' declares cycleTarget "
+                                     "without cycleTargetBasis — a target "
+                                     "renders as '6 of 8 cycles', which blames "
+                                     "the learner for falling short of a "
+                                     "number. Say where the number came from, "
+                                     "measured (same bar as `honesty`): "
+                                     "'the richest reference take carries 12 "
+                                     "cycles' is a basis, '8 is a good number' "
+                                     "is not")
             # A lesson may be graded, locked, or demo-only. Anything else is
             # an ungraded lesson with no stated reason — the silent case.
             if not ls.get("scored"):

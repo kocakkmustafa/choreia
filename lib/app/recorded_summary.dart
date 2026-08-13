@@ -39,6 +39,7 @@ const String choreiaUnitLabel = 'cycle';
 final class RecordedSummary {
   const RecordedSummary({
     required this.sessions,
+    required this.targetedSessions,
     required this.completed,
     required this.workedSeconds,
     required this.scoredSessions,
@@ -47,6 +48,27 @@ final class RecordedSummary {
   });
 
   final int sessions;
+
+  /// Records that DECLARED a cycle target (`plannedUnits > 0`).
+  ///
+  /// **The denominator, and it exists because the numerator was about to go
+  /// silently wrong.** `SessionRecord.isComplete` is `attempted >= planned`, so
+  /// a record with no target is complete by arithmetic — every Choreia record
+  /// ever written, since no lesson could declare a target until `cycleTarget`
+  /// landed in the content schema. That made [completed] a harmless
+  /// always-everything, and nothing rendered it.
+  ///
+  /// The day ONE lesson declares a target, a bare `where(isComplete).length`
+  /// stops being harmless and becomes MIXED: target-less records still count as
+  /// finished, target-having ones only when the learner reached the number, and
+  /// the sum answers no question anyone asked. `RecordedRow` already carried
+  /// this guard (`ProgressStrings.sessionsCompleted(anyTarget:)`); the totals
+  /// did not. Added on the turn that added the capability — a latent defect and
+  /// the feature that activates it belong in one commit.
+  final int targetedSessions;
+
+  /// Sessions that reached their declared target — counted ONLY over
+  /// [targetedSessions]. Zero, and meaningless, when [anyTarget] is false.
   final int completed;
   final int workedSeconds;
 
@@ -63,7 +85,20 @@ final class RecordedSummary {
   /// claim 3 cycles when the user danced 4.
   final int unmeasuredUnits;
 
-  int get stoppedEarly => sessions - completed;
+  /// Whether "finished" is a fact this history holds at all.
+  ///
+  /// False means no record declared a target, and then [completed] and
+  /// [stoppedEarly] are not small numbers — they are not numbers ABOUT
+  /// anything, and a surface must show [sessions] instead.
+  bool get anyTarget => targetedSessions > 0;
+
+  /// Sessions that declared a target and did not reach it.
+  ///
+  /// Measured against [targetedSessions], never [sessions]: subtracting a
+  /// target-scoped count from an all-records count would report every
+  /// target-less session as "stopped early" — an accusation manufactured out
+  /// of an absent plan.
+  int get stoppedEarly => targetedSessions - completed;
 
   /// Human-readable duration. Seconds are NOT shown: at practice-session scale
   /// second precision carries no information, only an impression of precision.
@@ -78,13 +113,22 @@ final class RecordedSummary {
   static Future<RecordedSummary> from(SessionStore store) async {
     final List<SessionRecord> all = await store.recent();
     int worked = 0;
+    int targeted = 0;
     int done = 0;
     int scored = 0;
     int demo = 0;
     int unmeasured = 0;
     for (final SessionRecord r in all) {
       worked += r.workedSeconds;
-      if (r.isComplete) done++;
+      // `> 0`, not `!= 0`: a negative target is an upstream bug, and the safe
+      // reading of a bug is the one that claims least — an unreadable plan is
+      // an absent plan, not a plan the learner beat. Same rule as
+      // `ProgressStrings.cycles`, so the totals and the row cannot disagree
+      // about whether a target exists.
+      if (r.plannedUnits > 0) {
+        targeted++;
+        if (r.isComplete) done++;
+      }
       unmeasured += r.unmeasuredUnits;
       // Counted through the CORE's least-privilege read, not a local string
       // compare: an unknown or misspelled class must never land in `scored`,
@@ -97,6 +141,7 @@ final class RecordedSummary {
     }
     return RecordedSummary(
       sessions: all.length,
+      targetedSessions: targeted,
       completed: done,
       workedSeconds: worked,
       scoredSessions: scored,

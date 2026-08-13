@@ -410,6 +410,7 @@ class StyleDetailView extends StatelessWidget {
                     styleId: l.styleId,
                     lessonName: l.displayName,
                     lessonClass: l.isScored ? 'scored' : 'demoOnly',
+                    cycleTarget: l.cycleTarget,
                     env: env,
                   ),
                 ),

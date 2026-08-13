@@ -52,6 +52,7 @@ class LiveLessonPage extends StatefulWidget {
     required this.stepId,
     required this.lessonId,
     required this.lessonClass,
+    this.cycleTarget,
     this.styleId,
     this.lessonName,
     this.env = const LiveEnvironment(),
@@ -75,6 +76,13 @@ class LiveLessonPage extends StatefulWidget {
   final String lessonId;
 
   final String lessonClass;
+
+  /// The lesson's declared cycle target, straight from `LessonInfo`.
+  ///
+  /// Passed rather than looked up here: this page already receives the lesson
+  /// it is running, and a second lookup against the catalogue is a second place
+  /// the answer could differ from the one the library screen showed.
+  final int? cycleTarget;
 
   /// What the result screen calls this lesson. Falls back to the step id
   /// rather than to a blank: an unnamed heading is worse than a technical one.
@@ -116,6 +124,7 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
   late final SessionTally _tally = SessionTally(
     lessonId: widget.lessonId,
     lessonClass: widget.lessonClass,
+    cycleTarget: widget.cycleTarget,
   );
 
   /// Real elapsed time, started when the page opens. Read only through

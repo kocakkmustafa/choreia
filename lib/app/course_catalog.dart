@@ -21,6 +21,7 @@ final class LessonInfo {
     required this.displayName,
     required this.kind,
     required this.plannedMinutes,
+    this.cycleTarget,
     this.stepId,
     this.reason,
     this.demoOnlyClass,
@@ -45,6 +46,22 @@ final class LessonInfo {
   /// Content's own estimate, in MINUTES. Carried as a number with its unit
   /// named in the field, so a surface cannot render it as a bare figure.
   final int plannedMinutes;
+
+  /// How many cycles this lesson IS, when content declares a number.
+  ///
+  /// **Null is the normal case and it is a DECLARATION, not a gap** — no
+  /// lesson shipping today names one, because naming one requires a measured
+  /// basis (`cycleTargetBasis`, enforced by `validate_content.py`) and nothing
+  /// in this content has one yet. A ratio is a claim about a plan; inventing
+  /// the plan to have something to divide by is how "6 of 8 cycles" ends up on
+  /// a screen blaming the learner for a number this app made up.
+  ///
+  /// Typed `int?` rather than sentinel-zero HERE, at the product boundary,
+  /// even though the family's `SessionRecord.plannedUnits` is a non-nullable
+  /// `int` and absence crosses that wire as `0`. The encoding lives in exactly
+  /// one place (`SessionTally.toRecord`); every reader above it gets a type
+  /// that cannot be confused with a target of nothing.
+  final int? cycleTarget;
 
   /// Why this lesson is not scored, in the user's language. Non-null whenever
   /// [kind] is not [LessonKind.scored]: an ungraded lesson without a stated
@@ -172,6 +189,12 @@ final class CourseCatalog {
             displayName: _en(l['displayName']) ?? l['id'] as String,
             kind: kind,
             plannedMinutes: (l['minutes'] as num?)?.toInt() ?? 0,
+            // No `?? 0` twin here, deliberately: `plannedMinutes` falls back to
+            // zero because a missing estimate and a zero-minute lesson are both
+            // just "no time shown", while a missing TARGET and a target of zero
+            // are different claims. The absent case must survive as null all
+            // the way to the one line that encodes it for the wire.
+            cycleTarget: (l['cycleTarget'] as num?)?.toInt(),
             stepId: l['step'] as String?,
             reason: reason,
             demoOnlyClass: l['demoOnlyClass'] as String?,

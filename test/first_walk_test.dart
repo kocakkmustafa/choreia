@@ -229,7 +229,7 @@ void main() {
       expect(r.unitsCompleted, greaterThan(0),
           reason: 'dans eden bir gövde replay edildi ve motor tek bir tam '
               'döngü bile okumadı — fixture bu referansa karşı çalışmıyor');
-      expect(r.plannedUnits, noDeclaredTarget,
+      expect(r.plannedUnits, absentTargetOnTheWire,
           reason: 'bu derste ilan edilmiş bir döngü hedefi YOK; başka bir '
               'değer yüzeye "hedefe ulaşıldı" yazdırır');
 

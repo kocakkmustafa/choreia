@@ -12,9 +12,23 @@ import 'live_state.dart';
 /// the decision here rather than in `setState` is what lets the rules below be
 /// tested without a camera, a device or a widget tree.
 final class SessionTally {
-  SessionTally({required this.lessonId, required this.lessonClass});
+  SessionTally({
+    required this.lessonId,
+    required this.lessonClass,
+    this.cycleTarget,
+  });
 
   final String lessonId;
+
+  /// The lesson's declared cycle target, or null when it declares none.
+  ///
+  /// **Read from CONTENT, per lesson — it used to be an app-wide constant**
+  /// whose own doc asserted a fact about the catalogue ("no lesson in this app
+  /// declares a target"). That is a content claim living in code, and content
+  /// claims in code go stale the day content moves without anything going red.
+  /// Now the absent case is `null` because the lesson said nothing, not because
+  /// the app believes something about every lesson (C-273, H-4 ③).
+  final int? cycleTarget;
 
   /// The class AT WRITE TIME (`scored` / `demoOnly`) — the core stores it
   /// rather than deriving it later, so a lesson promoted tomorrow does not
@@ -102,35 +116,40 @@ final class SessionTally {
         completedAt: endedAt,
         workedSeconds: workedSeconds,
         unitsCompleted: _cycles,
-        plannedUnits: noDeclaredTarget,
+        plannedUnits: cycleTarget ?? absentTargetOnTheWire,
         unitLabel: choreiaUnitLabel,
         unmeasuredUnits: unmeasuredUnits,
       );
 }
 
-/// What Choreia writes into [SessionRecord.plannedUnits] because **no lesson
-/// in this app declares a target**.
+/// How an ABSENT target crosses the wire — an ENCODING, not a product opinion.
 ///
-/// Measured, not assumed: `hh_bounce.json` declares `beats: 1`,
-/// `cycleUnit.dipsPerCycle: 1` and `style.json` declares `minutes: 8`. Not one
-/// of them says how many repetitions a lesson IS, and deriving a count from
-/// minutes needs a tempo — the exact quantity `beatsStatus: PENDING` says this
-/// app does not have.
+/// The family's [SessionRecord.plannedUnits] is a non-nullable `int` (promoted
+/// schema, five apps, pinned), so "no target" needs a value. Zero is that
+/// value, and this is the only place in Choreia that knows it: above this line
+/// absence is `int?`, and a reader who never sees this constant cannot mistake
+/// it for a target of nothing.
 ///
-/// Every other value would put a false sentence on a screen that already
-/// exists, and both directions were checked before this one was chosen:
+/// **What this is NOT any more:** until C-273 the same zero was a constant
+/// called `noDeclaredTarget`, documented as "what Choreia writes because no
+/// lesson in this app declares a target" — a claim about the CATALOGUE, made
+/// in code, that nothing would have falsified on the day a lesson declared one.
+/// The claim now lives where it can be checked: `cycleTarget` in
+/// `content/SCHEMA.md`, gated by `validate_content.py`.
+///
+/// Both wrong alternatives were checked before zero was chosen, and they are
+/// worth keeping written down because they are what a plausible refactor would
+/// reach for:
 ///
 ///   · `plannedUnits = attemptedUnits` renders "6 of 6 cycles" — a target hit,
 ///     for a target nobody set. The strongest possible over-claim, dressed as
 ///     arithmetic.
 ///   · any invented constant renders "6 of 8 cycles" and blames the learner
-///     for falling short of a number this app made up.
+///     for falling short of a number this app made up. (This is now
+///     structurally hard rather than merely discouraged: content may only
+///     declare a target WITH a measured `cycleTargetBasis`.)
 ///
-/// So the record says the target is absent, and the SURFACE is what must not
-/// turn that absence into a claim — `ProgressStrings.cycles` renders a bare
-/// fact when this is 0, and never "of 0".
-///
-/// ⚠️ This is a floor, not a decision to keep forever. The day content
-/// declares a per-lesson cycle target, this constant is the one place that
-/// changes.
-const int noDeclaredTarget = 0;
+/// Surfaces must never render this as a denominator: `ProgressStrings.cycles`
+/// and `RecordedSummary.anyTarget` both read `<= 0` / `> 0` as absence, so
+/// "of 0" cannot reach a screen.
+const int absentTargetOnTheWire = 0;

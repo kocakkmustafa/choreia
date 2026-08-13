@@ -48,8 +48,24 @@ Ders **çıplak id string'i OLAMAZ**; durumunu beyan eder, yoksa skorlanmayan bi
 | `step` | ilgili `steps/<id>.json` (varsa; demo-only derslerde olmayabilir) |
 | `scored` | **ZORUNLU bool.** `true` ise `_whyUnlocked` gerekçesi beklenir |
 | `scoredWhat[]` / `notScoredWhat[]` | skorlu derste kullanıcıya ne söylendiği |
+| `cycleTarget` | **OPSİYONEL int ≥ 1** — bu dersin kaç döngü OLDUĞU. Yoksa hedef yoktur (aşağıda) |
+| `cycleTargetBasis` | `cycleTarget` varsa **ZORUNLU** — sayının nereden geldiği, ölçülmüş gerekçesiyle |
 | `status: "locked"` + `lockedReason` | ölçüm henüz YOK → ders kapalı. Gerekçe **kullanıcı dilinde**, ve eksik ÖLÇÜMÜN adıyla (`blockedBy` makine-okur karşılığı) |
 | `demoOnly: true` + `demoOnlyReason` | **K10:** ölçülemeyen hareket ELENMEZ, demo-only işaretlenir ve nedeni kullanıcıya söylenir. `evidence` alanı gerekçenin ölçüm dayanağını gösterir |
+
+### `cycleTarget` — hedefin YOKLUĞU da bir beyandır (C-273)
+
+**Alan opsiyoneldir ve varsayılanı YOKLUKTUR — bu geriye uyumun kendisi:** bugünkü altı dersin hiçbiri alanı taşımıyor, hepsi geçerli kalıyor, ve davranış bit-özdeş sürüyor. Yeni alan bir *yetenek* ekler, bir *iddia* eklemez.
+
+Daha önce yokluk uygulama düzeyinde bir **sabitle** ifade ediliyordu (`noDeclaredTarget`, `session_tally.dart`), ve o sabitin belgesi *"bu uygulamada hiçbir ders hedef ilan etmez"* diye bir **içerik gerçeği** iddia ediyordu. Kodda tutulan içerik iddiası, içerik değiştiği gün sessizce bayatlar — bu depoda bedeli ödenmiş sınıf (C-272 ⑥: bir düzeltme, kendi kapısının kanıtını geçersiz kıldı; Progress'in bayat cümlesi). Artık yokluk **ders-başına okunur**, uygulama-başına varsayılmaz.
+
+| Kural | Neden |
+|---|---|
+| `cycleTarget` yoksa → hedef YOK | Yüzey `ProgressStrings.cycles` ile *"6 cycles read"* der, oran DEĞİL |
+| `cycleTarget` varsa `>= 1` | `0` ve negatif, kablo biçiminde yokluktan **ayırt edilemez** (`SessionRecord.plannedUnits` aile paketinde `int`, nullable değil — yokluk `0` ile kodlanır). `cycleTarget: 0` yazan içerik, hedef koyduğunu sanır ve koymamış olur |
+| `cycleTarget` varsa `cycleTargetBasis` ZORUNLU | Bir oran, bir **plan hakkında iddiadır**. Dayanaksız bir sayı ekrana *"6 of 8 cycles"* yazar ve kullanıcıyı **bizim uydurduğumuz** bir sayının gerisinde kalmakla suçlar. Gerekçe biçimi `honesty` ile aynı bağlayıcılıkta: *"referansın en zengin çekimi 12 çevrim taşıyor"* geçerli, *"8 iyi bir sayı"* değil |
+
+**Neden `beats`/`minutes` bunu zaten çözmüyor:** `hh_bounce.json` `beats: 1`, `cycleUnit.dipsPerCycle: 1`, `style.json` `minutes: 8` ilan ediyor — hiçbiri dersin kaç TEKRAR olduğunu söylemiyor, ve dakikadan çevrim türetmek bir tempo ister: `beatsStatus: PENDING`'in tam da elimizde olmadığını söylediği nicelik.
 
 ### Statü kafesi — `library.json` (M-F-123, aile standardı)
 

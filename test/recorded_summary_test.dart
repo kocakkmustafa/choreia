@@ -130,6 +130,61 @@ void main() {
     });
   });
 
+  group('"finished" is only a fact when a target exists (C-273)', () {
+    // NİYE BU GRUP VAR: `cycleTarget` içerik şemasına girene kadar Choreia'nın
+    // HER kaydı `plannedUnits: 0` taşıyordu, ve `isComplete` `attempted >=
+    // planned` olduğu için hepsi "tamamlandı" sayılıyordu. Zararsızdı —
+    // `completed` hiçbir yerde render edilmiyor. Bir ders hedef ilan ettiği gün
+    // zararsızlık biter: sayı KARIŞIR (hedefsizler aritmetikle tamam,
+    // hedefliler ölçümle) ve hiçbir sorunun cevabı olmaz. `RecordedRow`un bu
+    // koruması vardı (`sessionsCompleted(anyTarget:)`), toplamların YOKTU.
+
+    test('hedefsiz bir geçmiş "tamamlandı" sayısı ÜRETMEZ', () async {
+      await store.append(rec(units: 6, planned: 0));
+      await store.append(rec(units: 2, planned: 0));
+
+      final RecordedSummary s = await RecordedSummary.from(store);
+      expect(s.sessions, 2, reason: 'oturum sayısı bir GERÇEK, o durmalı');
+      expect(s.anyTarget, isFalse);
+      expect(s.completed, 0,
+          reason: 'hiçbir kayıt hedef ilan etmedi; "2 tamamlandı" olmayan bir '
+              'planın aritmetiğini başarı diye rapor etmek olurdu');
+      expect(s.stoppedEarly, 0,
+          reason: 'hedefsiz oturumları "erken bıraktın" saymak, olmayan bir '
+              'plandan üretilmiş bir SUÇLAMADIR');
+    });
+
+    test('KARIŞIK geçmiş: payda yalnız hedefli kayıtlar', () async {
+      // Üç kayıt, iki dünya: ikisi hedefsiz (bugünün her kaydı), biri hedefli
+      // ve hedefinin altında. Kusurlu hâlde `completed` 2 (iki hedefsiz kayıt
+      // aritmetikle "tamam") ve payda 3 olurdu — "2 of 3 finished" cümlesi,
+      // içinde tek bir bitmiş oturum OLMAYAN bir geçmiş için.
+      await store.append(rec(units: 6, planned: 0));
+      await store.append(rec(units: 2, planned: 0));
+      await store.append(rec(units: 3, planned: 8));
+
+      final RecordedSummary s = await RecordedSummary.from(store);
+      expect(s.sessions, 3);
+      expect(s.anyTarget, isTrue);
+      expect(s.completed, 0,
+          reason: 'tek hedefli kayıt 3/8 ile hedefin altında — "tamamlandı" '
+              'sayısı hedefsiz kayıtlardan BESLENMEMELİ');
+      expect(s.targetedSessions, 1,
+          reason: 'payda hedef ilan eden kayıt sayısıdır, toplam kayıt değil');
+      expect(s.stoppedEarly, 1);
+    });
+
+    test('negatif hedef YOKLUK okunur — bir arızanın güvenli okuması', () async {
+      // `> 0`, `!= 0` değil. Yukarı akışta bozulmuş bir hedef, kullanıcıyı
+      // "hedefini aştın" diye ödüllendirmemeli; en az iddia eden okuma yokluk.
+      await store.append(rec(units: 5, planned: -3));
+      final RecordedSummary s = await RecordedSummary.from(store);
+      expect(s.anyTarget, isFalse);
+      expect(s.completed, 0);
+      expect(s.targetedSessions, 0);
+    });
+  });
+
   group('unmeasured cycles reach the summary', () {
     test('an unmeasurable cycle is COUNTED, not dropped', () async {
       await store.append(rec(
