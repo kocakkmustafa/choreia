@@ -216,4 +216,38 @@ void main() {
       }
     });
   });
+
+  test('BİR SAYAÇ DA BİR İDDİADIR: "6 LESSONS" yanında OPEN rozeti varken '
+      'altısını da yapabilirsin demektir (C-283)', () {
+    // 🔴 ASİMETRİ: kapalı stil dalı HEP özenliydi —
+    //   "9 LESSONS WRITTEN · 1 GRADED · NONE OPEN"  (üç kelime iş yapıyor)
+    // AÇILABİLİR dal ise çıplaktı: "6 LESSONS · NONE GRADED", ve o altı
+    // dersten TAM OLARAK BİRİ başlatılabiliyordu. Kart TARANIR; `OPEN`
+    // rozetinin yanında çıplak bir sayı "altı ders yapabilirsin" diye okunur.
+    // ⇒ ZOR VAKAYA GÖSTERİLEN ÖZEN, KOLAY VAKAYA GEÇMEZ — gated dal riskli
+    //   GÖRÜNDÜĞÜ için ilgiyi topladı, risk öbür taraftaydı.
+    final StyleCard open = lib.cardFor('hip_hop_foundations')!;
+
+    // POZİTİF KONTROL — vaka gerçekten AYIRT EDİCİ olmalı: toplam ile
+    // başlatılabilir sayısı eşitse bu testin ölçtüğü fark yoktur.
+    final int startable = open
+        .offers(lib.runnableSteps)
+        .where((LessonOffer o) => o.canStart)
+        .length;
+    expect(open.isOpenable, isTrue);
+    expect(startable, lessThan(open.lessons.length),
+        reason: 'bu stilde her ders başlatılabiliyor — kusurun popülasyonu '
+            'yok, test vakumda');
+    expect(startable, greaterThan(0),
+        reason: 'hiçbiri başlatılamıyorsa stil zaten açılabilir sayılmamalıydı');
+
+    final String line = LibraryStrings.lessonLine(open, startable: startable);
+    expect(line, contains('WRITTEN'),
+        reason: 'sayı bir ENVANTER; "6 LESSONS" çıplak hâliyle yapılabilir '
+            'altı ders vaat ediyor');
+    expect(line, contains('$startable OPEN'),
+        reason: 'şu an ne yapılabileceğini söyleyen sayı satırda yok: $line');
+    expect(line, isNot(contains('${open.lessons.length} OPEN')),
+        reason: 'envanter sayısı açılabilir sayısı yerine geçmiş: $line');
+  });
 }

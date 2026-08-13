@@ -247,7 +247,12 @@ class _LibraryViewState extends State<LibraryView> {
               // The lesson count is CONTENT truth and belongs on an openable
               // card; on a gated one it would read as an inventory the user can
               // reach. Both are shown, worded to say which is which.
-              Text(LibraryStrings.lessonLine(c),
+              Text(
+                  LibraryStrings.lessonLine(c,
+                      startable: c
+                          .offers(widget.library.runnableSteps)
+                          .where((LessonOffer o) => o.canStart)
+                          .length),
                   style: ChoreiaType.label(
                       size: 10, color: ChoreiaColors.text(0.48))),
               if (_reason(c) != null) ...<Widget>[
@@ -405,17 +410,37 @@ abstract final class LibraryStrings {
               'a scheduling one.',
       };
 
-  /// What a card says about its lessons — worded so a gated style's inventory
-  /// cannot read as something reachable.
-  static String lessonLine(StyleCard c) {
+  /// What a card says about its lessons — worded so a style's inventory cannot
+  /// read as something reachable.
+  ///
+  /// 🔴 **THE CARE WAS ON ONE BRANCH ONLY (C-283).** The gated branch has
+  /// always said `9 LESSONS WRITTEN · 1 GRADED · NONE OPEN` — three words doing
+  /// real work (*written*, *none open*). The OPENABLE branch said a bare
+  /// `6 LESSONS · NONE GRADED` next to an `OPEN` badge, and of those six
+  /// exactly **one** could be started. This line is a TILE: it is scanned, not
+  /// read, and next to `OPEN` a bare count reads as *six lessons you can do*.
+  ///
+  /// Same class as `C-282` (badge vs body) one screen earlier, and the same
+  /// shape as `C-279`: ⇒ ***CARE APPLIED TO THE HARD CASE DOES NOT TRANSFER TO
+  /// THE EASY ONE*** — the gated branch got the attention precisely because it
+  /// looked like the risky one, and the risk was on the other side.
+  ///
+  /// [startable] is passed rather than derived here: only the catalogue knows
+  /// which references the bundle actually serves, and a count computed from
+  /// content alone would claim lessons the device cannot open — the exact
+  /// distinction `LibraryCatalog.runnableSteps` exists to make.
+  static String lessonLine(StyleCard c, {required int startable}) {
     if (c.lessons.isEmpty) return 'NO LESSONS BUILT';
     final int total = c.lessons.length;
     final int scored = c.scoredLessonCount;
     final String lessons = '$total ${total == 1 ? 'lesson' : 'lessons'}';
-    final String graded =
-        scored == 0 ? 'none graded' : '$scored graded';
-    return c.isOpenable
-        ? '$lessons · $graded'.toUpperCase()
-        : '$lessons written · $graded · none open'.toUpperCase();
+    final String graded = scored == 0 ? 'none graded' : '$scored graded';
+    if (!c.isOpenable) {
+      return '$lessons written · $graded · none open'.toUpperCase();
+    }
+    // `written` on this branch too: the number is an inventory, and the count
+    // that answers "what can I do right now" is the one beside it.
+    final String open = startable == 0 ? 'none open' : '$startable open';
+    return '$lessons written · $graded · $open'.toUpperCase();
   }
 }
