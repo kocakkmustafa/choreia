@@ -167,10 +167,28 @@ abstract final class IntroStrings {
   /// privacy promise drift, and the one that drifts is always the one nobody
   /// is looking at — `content_claims_test` pins them equal so an edit to
   /// either fails the build.
+  /// ⚠️ `no video is recorded` — the two words carry the whole point, and they
+  /// were added because THIS FIX BROKE THE SCREEN (C-277, H-10 / Lissom's
+  /// class read from the other direction).
+  ///
+  /// The card used to end *"nothing is recorded or uploaded"*. True on its own
+  /// — the subject is video. But the last card on the same screen now says
+  /// *"What you practise is kept on this phone"*, and a learner reading both
+  /// meets one screen that appears to say nothing is kept AND that something
+  /// is. `recorded` was doing double duty: video in one clause, saved in the
+  /// reader's ear in the other.
+  ///
+  /// **And the ambiguity is NEW, caused by the honest fix.** Before C-275 the
+  /// last card said *"Nothing you do is saved anywhere"* — which AGREED with
+  /// the misreading. The screen was internally consistent and externally
+  /// FALSE; correcting the false half made it true and incoherent.
+  ///
+  /// ⇒ ***COHERENCE IS A PROPERTY OF THE SET, NOT OF THE MEMBERS — SO FIXING
+  /// ONE SENTENCE CAN BREAK A SCREEN THAT EVERY TEST STILL PASSES.***
   static const String camera =
       'Choreia watches your dancing to give you feedback on your steps. '
       'Video never leaves your phone — we only read the positions of your '
-      'joints, and nothing is recorded or uploaded.';
+      'joints, and no video is recorded or uploaded.';
 
   static const String musicTitle = 'YOUR OWN MUSIC';
 

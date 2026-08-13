@@ -245,13 +245,32 @@ void main() {
       // arızası fazla-yakalamak; o cümle DOĞRU ve kalmalı.
       const String privacyTruth =
           'Video never leaves your phone — we only read the positions of your '
-          'joints, and nothing is recorded or uploaded.';
+          'joints, and no video is recorded or uploaded.';
       expect(deniesSaving.any(privacyTruth.contains), isFalse,
           reason: 'desen, video hakkındaki DOĞRU cümleyi de yakalıyor — bir '
               'kapı, koruduğu ürünün dürüst cümlesini cezalandıramaz');
-      expect(app, contains('nothing is recorded or uploaded'),
-          reason: 'gizlilik cümlesi yüzeyden kayboldu — yukarıdaki ② kontrolü '
-              'artık var olmayan bir şeyi koruyor');
+
+      // VE CÜMLENİN ÖZNESİ ADLANDIRILMIŞ OLMALI (C-277). Çıplak *"nothing is
+      // recorded"*, aynı ekranın son kartındaki *"kept on this phone"* ile
+      // birlikte okunduğunda ekranı KENDİ İÇİNDE çelişkili yapıyordu:
+      // `recorded` bir cümlede video, okuyucunun kulağında saklama.
+      // Her iki cümle de tek başına doğruydu ve her test yeşildi.
+      // ⇒ TUTARLILIK KÜMENİN ÖZELLİĞİDİR, ÜYELERİN DEĞİL.
+      final String onboarding = code('lib/app/onboarding/first_run_view.dart');
+      expect(onboarding, isNot(contains('nothing is recorded')),
+          reason: 'gizlilik cümlesi öznesini kaybetti: çıplak "nothing is '
+              'recorded", aynı ekranın "kept on this phone" cümlesiyle '
+              'çelişik okunur');
+      expect(onboarding, contains('no video is recorded'),
+          reason: 'gizlilik iddiası yüzeyden kayboldu — kamera kartı artık '
+              'videonun saklanmadığını SÖYLEMİYOR');
+
+      // POZİTİF KONTROL: kontrol, yakalamak için yazıldığı çıplak biçimi
+      // gerçekten ayırt ediyor mu — yoksa iki assert de aynı şeye bakıyordur.
+      const String bare = 'and nothing is recorded or uploaded.';
+      const String named = 'and no video is recorded or uploaded.';
+      expect(bare.contains('nothing is recorded'), isTrue);
+      expect(named.contains('nothing is recorded'), isFalse);
 
       // VE YERİNE GEÇEN CÜMLE GERÇEĞİ SÖYLÜYOR MU. Yalnız silmek, A3'ün
       // yasakladığı sessiz yüzeyi bırakırdı: kullanıcı pratiğine ne olduğunu

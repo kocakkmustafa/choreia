@@ -81,6 +81,54 @@ ile yeniden ölçüldü. *(C-269 ⑥'nın aynısı, aynı gün, aynı belgede.)*
 
 ⚠️ **BU BULGU BEŞ HATTI DA İLGİLENDİRİR** — H-6 `HERKESE` yazılmıştı.
 
+### ✅ 1.c — ENGEL KALKTI: profil üretildi, telefonu kapsıyor (C-278, H-9 sevkiyle)
+
+Koordinatör **H-9**'da hem 1.b'deki bulgumu bağımsız doğruladı hem çareyi verdi:
+`xcodebuild -allowProvisioningUpdates` → app'e özel taze profil. **Uyguladım, ve çare
+tek başına YETMEDİ** — niye yetmediği bu belgenin en pahalı satırı:
+
+| # | komut | sonuç | gömülen profil | telefon |
+|---|---|---|---|---|
+| ① | `-destination 'generic/platform=iOS' -allowProvisioningUpdates` | **BUILD SUCCEEDED**, exit 0 | `T5HZGYBWK8.*` (**bayat joker**) | ❌ |
+| ② | `-destination 'platform=iOS,id=00008120-001804D83E13C01E' -allowProvisioningUpdates` | **BUILD SUCCEEDED**, exit 0 | **`T5HZGYBWK8.com.yulalab.choreia`**, 4 cihaz | ✅ |
+
+**İkisi de yeşil. İkisi de exit 0. Yalnız biri kurulabilir.**
+
+> ### 🔴 ***`-allowProvisioningUpdates` PROVISIONING'İ YALNIZ KENDİSİNE VERİLEN HEDEFİ TATMİN EDECEK KADAR GÜNCELLER.***
+> Genel (`generic`) hedefte tatmin edilecek bir **cihaz yoktur** ⇒ cihaz-bayatı bir joker
+> "yeterli" sayılır, portala hiç gidilmez, **hiçbir profil üretilmez.** Bayrak sessizce
+> **no-op**'tur. Sonuç: yeşil derleme, kurulamayan paket (JabLab'ın `0xe8008012`'si).
+
+Bu, H-9'un kendi kuralının bir katman derini:
+> H-9: *bir imzanın geçmesi, kurulabildiği anlamına gelmez.*
+> **EK: ve bunu düzeltmesi gereken bayrak, HEDEF KAPSAMINDA çalışır.**
+
+🪤 **VE `.entitlements` HİPOTEZİ ÖLÇÜLDÜ, YANLIŞ.** Ostinato'nun notu *"`.entitlements`
+yoksa app-özel profil şart değil"* diyor; üç hattın üçünde de (choreia · gravita ·
+ostinato) entitlements dosyası **YOK** ve `CODE_SIGN_ENTITLEMENTS` sayısı **0**. Ayırt
+eden entitlements değil, **hedef**.
+
+**ZİNCİRİN BUGÜNKÜ HÂLİ — beş halkanın beşi de yerinde:**
+
+| # | halka | durum |
+|---|---|---|
+| 1 | App ID `com.yulalab.choreia` | ✅ `PDRAB4FYBS` |
+| 2 | Cihaz kayıtlı | ✅ UDID `00008120-001804D83E13C01E`, `available (paired)`, devmode `enabled` |
+| 3 | Geliştirme sertifikası | ✅ `Apple Development: kocakmkaan@outlook.com` |
+| 4 | Özel anahtar bu makinede | ✅ |
+| 5 | **Provizyon profili** | ✅ **`T5HZGYBWK8.com.yulalab.choreia`, 4 cihaz, telefon DAHİL** |
+| — | cihaz için imzalı derleme | ✅ `Identifier=com.yulalab.choreia` |
+
+⚠️ **HESAP DURUMU DEĞİŞTİ:** profil kurucunun geliştirici hesabında **üretildi** (H-9 bunu
+rutin geliştirme altyapısı sayıp yetki verdi, ve bildirilmesini şart koştu — koordinatöre
+bildirildi). **Jokere DOKUNULMADI**: o beş app'i ilgilendiren paylaşımlı bir artefakt.
+
+> ### ⛔ KALAN TEK ADIM: **kurulum**, ve o §3'ün (b) sınırı.
+> H-9 §3'ün **(a)** maddesini (profil üretimi) adıyla kaldırdı; **(b)** — *"kurucunun
+> telefonuna kurulum yapılmaz"* — ele alınmadı. Komşu sınıra verilmiş bir izinle kesin bir
+> sınırı sessizce aşmak, bu belgenin baştan reddettiği şeydir. **Koordinatöre soruldu.**
+> 📌 Kurulum anında ayrıca ölçülecek: cihazın tüneli şu an `disconnected` (localNetwork).
+
 ---
 
 ## 2. 🪤 BU ÖLÇÜM BENİ YANLIŞ BİR P0'DAN DÖNDÜRDÜ — kaydı dursun
