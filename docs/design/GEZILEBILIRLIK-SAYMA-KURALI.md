@@ -116,6 +116,28 @@ olabilir** — bu Choreia'ya özgü değil.
 gözlüyor ve budanmayan bir `trail` tutuyor: sonuç yüzeyine **varıldığı
 ölçülüyor**; sayılmadığı tek yer A7'nin KATI rakamı.
 
+### 🔢 İKİ PENCERE ARTIK NESİRDE DEĞİL, ÖLÇÜMDE (H-4 ②, 2026-08-13)
+
+Koordinatör hükmü: *karar aile düzeyinde işlenene kadar hat KATI'yı **iki
+pencereyle** raporlar.* Yukarıdaki `3` ve `4` **artık bu tablodan okunmuyor** —
+`test/first_walk_test.dart` her koşumda ikisini de türetiyor:
+
+```
+KATI (pushReplacement HARİÇ) = 1 (kabuk) + spy.pushedEver.length  → 3
+KATI (pushReplacement DAHİL) = 1 (kabuk) + spy.trail.length       → 4
+```
+
+Niye ölçüm: **bu tablodaki iki sayı, kod değiştiği gün hiçbir şeyi kırmadan
+bayatlar.** Bu dosyanın kendi konusu tam olarak o sınıf (*bir ölçütün kelimesi
+bayatladı*), ve aynı kusuru kendi çözümünde tekrarlamak tuhaf olurdu.
+
+⭐ **Ve ölçülen asıl şey sayılar değil, ARADAKİ FARK.** Test `dahil − hariç = 1`
+ve `replaced.length == 1` çivilerini de taşıyor: `pushReplacement` bir gün
+kalkarsa iki pencere **çakışır** ve bu açık sorunun konusu kalmaz — o gün test
+kırmızı vererek *"tartışılacak bir şey yok, kuralı kapat"* der. Farkı ölçmeyen
+bir kapı, anlaşmazlığın **çözüldüğünü** göremez ve açık bölüm burada sonsuza
+kadar durur.
+
 ---
 
 ## Bu kuralın ölçmediği şey — adıyla

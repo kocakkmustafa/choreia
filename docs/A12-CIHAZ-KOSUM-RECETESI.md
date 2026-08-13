@@ -30,6 +30,57 @@ an koşu dakikalar sürsün diye reçete önden yazıldı.
 
 > ### ⛔ Kalan tek engel: **profil**. Diğer dört halka yerinde.
 
+### 🔄 1.b — YENİDEN ÖLÇÜM 2026-08-14 (H-6 sevkiyle) — hüküm DÜZELTİLDİ
+
+Koordinatör hükmü **H-6**, yukarıdaki 5. satırın **yanlış dizine** baktığını
+söyledi ve düzeltti: Xcode'un güncel dizini
+`~/Library/Developer/Xcode/UserData/Provisioning Profiles/`, ve orada
+**`T5HZGYBWK8.*` JOKERİ** var — *"beş Motion app'ini birden kapsıyor, gereken
+yalnız profil tazeleme."*
+
+**Dizin düzeltmesi DOĞRU. Jokerin kapsadığı iddiası ÖLÇÜLDÜ ve YANLIŞ.**
+
+| ölçüm | sonuç |
+|---|---|
+| dizindeki dosya | **12** (10 `.mobileprovision` + 1 `.provisionprofile` + 1) — eski satırın *"tek profil"*i gerçekten yanlış dizindenmiş |
+| `com.yulalab.choreia` profili | ⛔ **hâlâ YOK** — onda da, hiçbirinde de |
+| telefonun GERÇEK UDID'si | `00008120-001804D83E13C01E` (`devicectl list devices --json-output`) |
+| jokerin (`T5HZGYBWK8.*`) cihaz listesi | **1 cihaz: `00008132-001A70163AD3801C`** — bu telefon **DEĞİL** |
+| telefonu taşıyan profiller | **5/5 açık App-ID geliştirme profili** (`lifeos` · `lifeos.LifeOSWidget` · `burunfarki` · `braavolabs.mobile` · `ostinato`) |
+| telefonu taşımayan tek geliştirme profili | **JOKERİN KENDİSİ** |
+
+> ### 🔴 ⇒ JOKER, DEPODAKİ **TEK BAYAT** GELİŞTİRME PROFİLİ. H-6'yı harfiyen izleyen bir hat **derleyebilir ve KURULUMDA düşer.**
+
+**Niye kimse fark etmedi — vekil kırılmış:** H-6'nın dayanağı *"imzalı cihaz
+derlemesi geçti (`-allowProvisioningUpdates` olmadan)"*. Ama **`codesign` bir
+profilin CİHAZ LİSTESİNİ doğrulamaz**; onu doğrulayan **kurulumdur**. Derleme
+başarısı, *"cihaz kapsanıyor"* demenin kısayoluydu — ve kısayol kırıldı.
+Bu, bu depoda ölçülmüş üçüncü vekil kusuru (`certificateType` filtresi, C-269 ⑥ ·
+`Navigator.push` ↔ *ayrı rota*, C-271 ④).
+
+> ***BİR DERLEMENİN GEÇMESİ, KURULACAĞININ KANITI DEĞİLDİR — imza kimliği
+> doğrular, cihazı doğrulayan kurulumdur.***
+
+**İYİ HABER, VE YOL BU:** telefon takıma **kayıtlı** (beş profilin beşi de
+taşıyor) ⇒ eksik olan kayıt değil, **`com.yulalab.choreia` için açık App-ID
+profili**. Ve tazeleme yolunun çalıştığı **bugün ölçüldü**:
+`com.yulalab.ostinato` profili **2026-08-13'te üretilmiş** (son kullanma
+`2027-08-13T21:14:13Z`) ve **4 cihaz** taşıyor, telefon dahil. ⇒ aynı adım
+Choreia için atılırsa telefon kendiliğinden içine girer.
+
+⛔ **Jokeri tazeleyerek çözmeye ÇALIŞMA:** joker `get-task-allow: true` taşıyan
+eski bir geliştirme profili ve tek cihazı yabancı; onu güncellemek hesap-düzeyi
+bir artefaktı beş app adına değiştirmek olur (§3'ün tam olarak reddettiği şey).
+**Choreia'nın kendi açık profili** istenir.
+
+📌 **Ayrıca bu ölçümün kendisi bir tuzaktan döndü:** ilk karşılaştırma
+`grep -c 'JC47C38DP6'` idi ve **0** verdi — ama `JC47C38DP6` ASC'nin **kaynak
+kimliği**, profildeki ise **UDID**. İki farklı türden dizgeyi karşılaştırıp
+*"cihaz profilde yok"* demek doğru sonuca **yanlış yoldan** varmak olurdu; UDID
+ile yeniden ölçüldü. *(C-269 ⑥'nın aynısı, aynı gün, aynı belgede.)*
+
+⚠️ **BU BULGU BEŞ HATTI DA İLGİLENDİRİR** — H-6 `HERKESE` yazılmıştı.
+
 ---
 
 ## 2. 🪤 BU ÖLÇÜM BENİ YANLIŞ BİR P0'DAN DÖNDÜRDÜ — kaydı dursun
@@ -79,9 +130,21 @@ girişliyken Runner hedefi seçilirse profil kendiliğinden üretilir ve kurulur
 | `certificates` | `72VHCWMV79` |
 | `devices` | `JC47C38DP6` |
 
-Sonra dönen `profileContent` (base64) çözülüp
-`~/Library/MobileDevice/Provisioning Profiles/` altına `.mobileprovision` olarak
-yazılır.
+Sonra dönen `profileContent` (base64) çözülüp `.mobileprovision` olarak **şu
+dizine** yazılır:
+
+```
+~/Library/Developer/Xcode/UserData/Provisioning Profiles/
+```
+
+> 🔴 **DÜZELTİLDİ 2026-08-14 (H-6).** Bu satır önce
+> `~/Library/MobileDevice/Provisioning Profiles/` diyordu — **ölü yol.** Ölçüm:
+> eski dizinde **1** dosya (ve o, 1. bölümün *"makinede kurulu tek profil"*
+> ölçümünü üreten bayat `BurunFarki AppStore 0623`), güncel dizinde **12**.
+> Reçete eski yola yazsaydı komut **başarıyla** koşar, dosya diske **iner**, ve
+> Xcode profili **hiç görmezdi** — hata mesajı olmayan bir başarısızlık.
+> ⇒ ***BİR ÖLÇÜMÜN "YOK"U, DİZİN SEÇİMİ KADAR GEÇERLİDİR*** (H-6'nın kendi
+> cümlesi; burada ikinci kez, yazma yönünde ısırıyordu).
 
 ### 4b. Kurulum ve koşu
 
@@ -160,6 +223,12 @@ anda). Bu koşulda `simctl` çağrıları öldürülüyor ve WebDriverAgent hiç
    ⇒ ***DONANIMIN VARLIĞI, DONANIMIN ERİŞİLEBİLİRLİĞİ DEĞİLDİR*** — ve aradaki
    fark bir gün değil saatler içinde oluştu. Profil geldiğinde ilk iş cihazın
    yeniden `available` olduğunu **ölçmek**, varsaymak değil.
+   ✅ **2026-08-14 yeniden ölçüm: `available (paired)`** — ve maddenin kendi
+   öğüdü işledi: `unavailable` kalıcı bir durum değildi. Ek olarak ilk kez
+   ölçülenler: `developerModeStatus: enabled` · osVersion **26.6** · UDID
+   `00008120-001804D83E13C01E`. ⚠️ Not: `devicectl`in *Identifier* sütunu
+   (`882CC2EC-…`) bir **CoreDevice** kimliğidir, UDID **değil** — imza
+   işlerinde karşılaştırılacak dizge `hardwareProperties.udid`.
 2. **Profil üretiminin gerçekten yeteceği** — üretilmedi, dolayısıyla imzanın
    uçtan uca tuttuğu **denenmedi**. Zincirin ilk dört halkası ölçüldü; beşincinin
    *yokluğu* ölçüldü, *yeterliliği* değil.

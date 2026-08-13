@@ -211,6 +211,45 @@ void main() {
       expect(spy.pushed, <String>['style/$styleId', 'result/$lessonId'],
           reason: 'yığının SON hâli beklenenden farklı: ${spy.pushed}');
 
+      // ── KATI, İKİ PENCEREYLE (koordinatör hükmü H-4 ②) ────────────────
+      //
+      // Sayma kuralının KATI ölçütü tek bir kelime: `Navigator.push`. Bu
+      // yürüyüşün son adımı `pushReplacement` ⇒ kullanıcının GERÇEKTEN vardığı
+      // sonuç yüzeyi o ölçütün dışında kalıyor (C-271 ④). Kuralın kendi cümlesi
+      // ise *"ayrı ROTA: gidersin ve geri dönebilirsin"* diyor ve sonuç yüzeyi
+      // bunu karşılıyor — yani ölçütün KELİMESİ ile ölçtüğü ŞEY ayrışmış.
+      //
+      // ⛔ BU TEST BİR KAZANAN SEÇMEZ, VE SEÇMEMESİ HÜKMÜN KENDİSİ: kural beş
+      // hattın KARŞILAŞTIRILABİLİR sayması için yazıldı; neyin sayıldığını tek
+      // taraflı değiştirmek karşılaştırılabilirliği ölçmek yerine bozar.
+      // Ölçülen şey ANLAŞMAZLIĞIN BÜYÜKLÜĞÜ — hakem koordinatör.
+      //
+      // +1'ler kabuk: `MaterialApp.home` itilmez ama kullanıcı üstünde durur
+      // (kuralın kendi maddesi: *zemin, hedef değil*).
+      const int shellFloor = 1;
+      final int strictExcludingReplace = shellFloor + spy.pushedEver.length;
+      final int strictIncludingReplace = shellFloor + spy.trail.length;
+
+      expect(strictExcludingReplace, 3,
+          reason: 'KATI (pushReplacement HARİÇ) değişti. İtilenler: '
+              '${spy.pushedEver}. Bu sayı hattın faz sırasını belirliyor — '
+              'testi güncellemeden ÖNCE koordinatöre söyle.');
+      expect(strictIncludingReplace, 4,
+          reason: 'KATI (pushReplacement DAHİL) değişti. İz: ${spy.trail}');
+
+      // VE FARKIN KENDİSİ ÇİVİLİ. `pushReplacement` bir gün kalkarsa iki
+      // pencere ÇAKIŞIR ve açık soru konusuz kalır — o gün bu assert kırmızı
+      // vererek "artık tartışılacak bir şey yok, kuralı kapat" der. Farkı
+      // ölçmeyen bir test, anlaşmazlığın çözüldüğünü göremez.
+      expect(strictIncludingReplace - strictExcludingReplace, 1,
+          reason: 'iki pencere arasındaki fark 1 değil — ya yeni bir '
+              'pushReplacement eklendi ya var olan kalktı. Her iki durumda da '
+              'AÇIK sorunun konusu değişti: docs/design/'
+              'GEZILEBILIRLIK-SAYMA-KURALI.md §AÇIK güncellenmeli.');
+      expect(spy.replaced, hasLength(1),
+          reason: 'farkı üreten tek yer değiştirmedir; sayısı değiştiyse '
+              'yukarıdaki iki pencere de artık başka şey ölçüyor');
+
       // ── the record ────────────────────────────────────────────────────
       final List<SessionRecord> history = store.records;
       expect(history, hasLength(1),
@@ -461,6 +500,16 @@ class _RouteSpy extends NavigatorObserver {
   /// replaced by its own result.
   final List<String> trail = <String>[];
 
+  /// Everywhere reached by `Navigator.push` SPECIFICALLY, never pruned.
+  ///
+  /// [pushed] is the live stack and [trail] is every arrival by any means;
+  /// neither can answer "how many places did a PUSH take us to", which is the
+  /// one question the strict counting rule's wording actually asks. Kept
+  /// separate rather than derived by subtracting [replaced] from [trail]: a
+  /// derivation would silently become wrong the first time a route is both
+  /// pushed and later replaced by something else.
+  final List<String> pushedEver = <String>[];
+
   final List<(String, String)> replaced = <(String, String)>[];
 
   String _name(Route<dynamic>? r) => r?.settings.name ?? '(isimsiz)';
@@ -469,6 +518,7 @@ class _RouteSpy extends NavigatorObserver {
   void didPush(Route<dynamic> route, Route<dynamic>? previous) {
     if (previous != null) {
       pushed.add(_name(route));
+      pushedEver.add(_name(route));
       trail.add(_name(route));
     }
   }
