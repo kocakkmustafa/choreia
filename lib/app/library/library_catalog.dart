@@ -136,19 +136,48 @@ final class LibraryCatalog {
   /// Computed on every call, never cached — same reasoning as
   /// [StyleView.derive] itself. The moment the BPM gate opens, every surface
   /// must change together, and that only holds while nobody stored the answer.
+  ///
+  /// **`excluded` STYLES ARE NOT CARDS** (2026-08-13). `Availability.excluded`
+  /// documents itself as *"Out of scope. Rendered silently — no 'why not'
+  /// page"* and returns a null `userFacingReason` accordingly. But nothing
+  /// enforced the silence: [StyleCard.badge] mapped `excluded` into the SAME
+  /// bucket as `comingSoon` (`inPreparation`), so an out-of-scope style would
+  /// have appeared in the catalogue wearing a "we are preparing this" badge
+  /// **with no sentence under it** — a promise of future work for something
+  /// nobody is building, and a silent unopenable surface at the same time.
+  ///
+  /// Two contradictory intents lived in one file and neither was wrong on its
+  /// own. Nothing showed, because the population is zero: content declares
+  /// `demoOpen 1 · comingSoon 31 · live 1 · onHold 1` and no `excluded` at all.
+  /// ⇒ ***A BRANCH WITH NO POPULATION IS NOT A BRANCH THAT WORKS — IT IS A
+  /// BRANCH NOBODY HAS SEEN.*** The library's own copy is what makes this a
+  /// defect rather than a preference: it tells the reader the list IS the whole
+  /// plan.
+  ///
+  /// The filter is here rather than at each surface on purpose: a rule applied
+  /// per-screen is a rule the next screen forgets.
   List<StyleCard> get cards => <StyleCard>[
         for (final LibraryEntry e in entries)
-          StyleCard(
-            entry: e,
-            view: StyleView.derive(
-              styleId: e.id,
-              contentStatus: e.contentStatus,
-              blockedGates:
-                  coursesByStyle[e.id]?.blockedGates ?? const <BlockedGate>[],
+          if (e.contentStatus != excludedStatus)
+            StyleCard(
+              entry: e,
+              view: StyleView.derive(
+                styleId: e.id,
+                contentStatus: e.contentStatus,
+                blockedGates:
+                    coursesByStyle[e.id]?.blockedGates ?? const <BlockedGate>[],
+              ),
+              courses: coursesByStyle[e.id],
+              prose: proseByStyle[e.id],
             ),
-            courses: coursesByStyle[e.id],
-            prose: proseByStyle[e.id],
-          ),
+      ];
+
+  /// Styles content declares OUT OF SCOPE, named so the filter above and any
+  /// test can agree on one string. Zero of them today — the constant exists so
+  /// the first one that appears does not have to be discovered on a screen.
+  List<LibraryEntry> get excludedEntries => <LibraryEntry>[
+        for (final LibraryEntry e in entries)
+          if (e.contentStatus == excludedStatus) e,
       ];
 
   StyleCard? cardFor(String styleId) {

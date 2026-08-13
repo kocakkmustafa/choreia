@@ -20,8 +20,25 @@ enum Availability {
   onHold,
 
   /// Out of scope. Rendered silently — no "why not" page.
+  ///
+  /// **The silence is enforced upstream, not here** (2026-08-13):
+  /// `LibraryCatalog.cards` drops these entries, so an `excluded` style never
+  /// reaches a surface and the null [StyleView.userFacingReason] below is
+  /// correct BY CONSTRUCTION rather than by nobody having written one yet.
+  ///
+  /// Until then the two halves disagreed: this comment said "silently", and
+  /// `StyleCard.badge` put `excluded` in the same bucket as `comingSoon`, so
+  /// the style would have been listed as "in preparation" with no sentence.
+  /// Neither half was wrong alone.
   excluded,
 }
+
+/// The content value that means "out of scope".
+///
+/// One string, one place. It appears in a derivation branch, a catalogue
+/// filter and a test; three literals drift and the drift is silent — a style
+/// spelled `Excluded` would simply become `comingSoon` and be listed.
+const String excludedStatus = 'excluded';
 
 /// One style as a surface should present it.
 ///
@@ -63,7 +80,7 @@ final class StyleView {
     // Order matters. `excluded` and `onHold` are declarations about the style
     // itself and are not overridden by gates: a style nobody is building has
     // no meaningful release state.
-    if (contentStatus == 'excluded') {
+    if (contentStatus == excludedStatus) {
       return StyleView._(styleId, contentStatus, release, Availability.excluded,
           null);
     }
