@@ -206,8 +206,37 @@ abstract final class IntroStrings {
         'their own page — where the dance comes from, what its steps are '
         'called, and what a camera can and cannot see of it — but no lesson '
         'yet, and we would rather show you an empty shelf than a fake one. '
-        'Nothing you do is saved anywhere in this version.';
+        '$_storage';
   }
+
+  /// What happens to a finished session — and it used to say the OPPOSITE.
+  ///
+  /// 🔴 **THE SENTENCE HERE WAS FALSE, AND IT WAS THE FIRST THING A NEW USER
+  /// READ.** It said *"Nothing you do is saved anywhere in this version."*
+  /// True when written; `C-268` built the session store, `C-269` measured it
+  /// opening and writing on a real simulator, and this line never moved. So
+  /// the app told every new learner their practice would be discarded, and
+  /// then kept it.
+  ///
+  /// **Why it survived a gate built for exactly this class.** `C-269 ④` added
+  /// the talkative-PRESENCE check — *"the mechanism exists, so the surface may
+  /// no longer deny it"* — but it hunted a SYMBOL
+  /// (`HistoryIntegrity.notRecorded`) in ONE file (the shell). This screen made
+  /// the identical claim in prose, with no symbol to find, so the gate looked
+  /// straight past it.
+  ///
+  /// ⇒ **A CLAIM IS NOT A SYMBOL.** The gate now scans the whole of `lib/` for
+  /// the claim family rather than one identifier in one file
+  /// (`publication_inventory_test`).
+  ///
+  /// **And why it was invisible to a reader, too:** it was concatenated onto a
+  /// sentence that IS derived live from the catalogue (`tally`). A stale claim
+  /// glued to a fresh one borrows its look of freshness — so it is split out
+  /// here, as its own named thing that a gate can point at.
+  static const String _storage =
+      'What you practise is kept on this phone, so the progress tab can show '
+      'you what you have actually done. It stays here — nothing about your '
+      'practice is sent anywhere.';
 
   static const String continueLabel = 'Open the catalogue';
 }

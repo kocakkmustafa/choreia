@@ -135,6 +135,133 @@ void main() {
               'yazılanın yüzeye çıktığı iddia edilemez');
     });
 
+    test('VE İDDİA, TÜM lib/ İÇİNDE — bir iddia bir SEMBOL DEĞİLDİR (C-275)',
+        () {
+      // 🔴 NİYE VAR: yukarıdaki assert 2026-08-13'te kuruldu ve aynı yalanı
+      // ÜÇ EKRAN ÖTEDE kaçırdı. Onboarding'in son kartı, uygulamayı ilk açan
+      // herkese *"Nothing you do is saved anywhere in this version."* diyordu
+      // — depo `C-268`'de kuruldu, `C-269` simülatörde yazdığını ölçtü.
+      //
+      // Kapı niye görmedi: **SEMBOL** arıyordu (`HistoryIntegrity.notRecorded`)
+      // ve yalnız **BİR dosyada** (kabuk). Onboarding aynı iddiayı düz metinle,
+      // sembolsüz kuruyordu.
+      //
+      // ⇒ ***BİR İDDİA BİR SEMBOL DEĞİLDİR*** — ve bir kapının kapsamı, avladığı
+      // kusurun kapsamı kadar geniş olmak zorundadır. Bu yüzden tarama tüm
+      // `lib/` üzerinde, ve dizgeler üzerinde.
+      //
+      // ⚠️ DİZGELER DAR SEÇİLDİ, ve bu bir ayar değil bir ŞART: gizlilik kartı
+      // *"nothing is recorded or uploaded"* diyor ve o cümle VİDEO hakkında,
+      // DOĞRU, ve kalmalı. Geniş bir desen ("nothing is recorded") o doğru
+      // cümleyi kırmızıya boyardı ⇒ kapı, koruduğu ürünün dürüst cümlesini
+      // cezalandırırdı. Desenler **oturum saklamayı** inkâr eden kalıplara
+      // bağlı.
+      const List<String> deniesSaving = <String>[
+        'saved anywhere',
+        'does not save',
+        'do not save',
+        'is saved anywhere',
+        'nothing is saved',
+      ];
+
+      // ── ÖNCE İKİ KAPININ ÇELİŞKİSİ, ve nasıl çözüldüğü ────────────────
+      //
+      // Yukarıdaki C-269 assert'inin POZİTİF KONTROLÜ, `historyNotRecorded`ın
+      // *'does not save'* demeye DEVAM ETMESİNİ şart koşuyor; buradaki tarama
+      // ise o cümleyi yasaklıyor. Gerekçesi sağlamdı: *tip, hiçbir şey
+      // saklamayan bir uygulamayı tarif edebilmeyi kaybetmemeli.* Kusur o
+      // gerekçede değil, YERİNDE: yetenek **TİPE** aittir, ama kontrol onu
+      // Choreia'nın **kullanıcı metnine** çivilemişti — ve bu, yalanı yerinde
+      // dondurdu.
+      //
+      // ⇒ Çözüm cümleyi yasaklamak DEĞİL, cümlenin **ulaşılamaz** olduğunu
+      // ölçmek. `HistoryFidelity.notRecorded` bir durum eşlemesidir: o duruma
+      // varılırsa cümle DOĞRUDUR. Yalan, onboarding'in aynı şeyi **koşulsuz**
+      // söylemesiydi. Korunacak şey bu yüzden ulaşılamazlığın kendisi.
+      final String progress = code('lib/app/progress_summary.dart');
+      final String shell = code('lib/app/shell/choreia_shell.dart');
+      final RegExp builds = RegExp(r'HistoryIntegrity\.notRecorded');
+
+      // POZİTİF KONTROL — ARAÇ BULABİLİYOR MU. Sıfır iki şeyden gelebilir:
+      // temiz bir ağaçtan, ya da hiçbir şeye uymayan bir desenden. İkisi
+      // ekranda AYNI görünür, ve ayırt edilmezse bu assert kendi vakumunda
+      // sonsuza kadar yeşil kalır.
+      expect(builds.hasMatch('final x = HistoryIntegrity.notRecorded;'), isTrue,
+          reason: 'desen, yakalamak için yazıldığı dizgeyi bile bulamıyor');
+
+      expect(builds.allMatches(appCode()).length, 0,
+          reason: 'Choreia içinde HİÇBİR YER `HistoryIntegrity.notRecorded` '
+              'durumunu kurmamalı (bildirimi sınıfın içinde, o yüzden nitelikli '
+              'kullanım = dışarıdan inşa). Bir yer kuruyorsa "bu uygulama '
+              'kaydetmiyor" cümlesi kullanıcıya ULAŞABİLİR hâle gelmiştir, ve '
+              'o cümle C-268 depoyu kurduğundan beri YANLIŞ.');
+      expect(shell, isNot(contains('HistoryIntegrity.notRecorded')),
+          reason: 'kabuk o durumu yeniden kuruyor');
+
+      // ŞİMDİ TARAMA — ve dışlanan tek şey bir DOSYA değil, adı konmuş TEK
+      // SABİTİN kendi bildirimi. Dosya bazlı dışlama, bu turun avladığı
+      // kusurun ta kendisi olurdu (kapsamı kusurdan dar bir kapı).
+      //
+      // 🪤 VE DIŞLAMA KAYNAK METNİ ÜZERİNDE, ÇALIŞMA-ZAMANI DEĞERİ ÜZERİNDE
+      // DEĞİL. İlk yazımım `replaceAll(ProgressStrings.historyNotRecorded, …)`
+      // idi — sabit kaynakta ÜÇ BİTİŞİK LİTERAL olarak yazılı, birleşmiş dizge
+      // kaynakta hiç GEÇMİYOR ⇒ `replaceAll` sessizce hiçbir şey yapmadı.
+      const String marker = '<durum-eslemesi/ulasilamaz>';
+      final String app = appCode().replaceAll(
+          RegExp(r'static const String historyNotRecorded =[\s\S]*?;'), marker);
+
+      // POZİTİF KONTROL ⓪ — VE SIRASI KONTROLÜN PARÇASI. Bunu ilk yazışımda
+      // döngüden SONRA koymuştum; döngü önce düştü, kontrol hiç koşmadı ve
+      // hata mesajı sebebi göstermedi. ⇒ ***KORUDUĞU İDDİADAN SONRA GELEN BİR
+      // POZİTİF KONTROL ATEŞLEYEMEZ.***
+      expect(app, contains(marker),
+          reason: 'dışlanacak bildirim kaynakta bulunamadı — desen boşa koştu, '
+              'yani aşağıdaki tarama dışladığını sandığı şeyi dışlamıyor');
+      expect(app, isNot(contains('nothing of yours has been lost')),
+          reason: 'bildirim kısmen çıkarıldı: gövdesi taramada kaldı ⇒ dışlama '
+              'sınırı `;`de değil, yanlış yerde bitiyor');
+
+      for (final String phrase in deniesSaving) {
+        expect(app, isNot(contains(phrase)),
+            reason: 'lib/ içinde bir yüzey KOŞULSUZ olarak "$phrase" diyor — '
+                'oysa canlı ders diske YAZIYOR (yukarıdaki assert bunu '
+                'ölçüyor). Mekanizma var, yüzey yok diyor: talkative-PRESENCE.');
+      }
+
+      expect(progress, contains('does not save'),
+          reason: 'durum cümlesi kayboldu — o hâlde yukarıdaki dışlama artık '
+              'var olmayan bir şeyi koruyor ve kaldırılmalı');
+
+      // POZİTİF KONTROL ①: TARAYICI BULABİLİYOR MU. Desenlerin hiçbiri
+      // eşleşmiyorsa bunun sebebi "yüzey temiz" olabilir — ya da tarama
+      // BOŞLUKTA koşuyor olabilir. Sentetik bir metne karşı ölçülüyor.
+      const String synthetic =
+          'One style is open today. Nothing you do is saved anywhere.';
+      expect(deniesSaving.any(synthetic.contains), isTrue,
+          reason: 'desen kümesi, kaçırdığı CÜMLENİN TA KENDİSİNİ bile '
+              'yakalayamıyor — kapı vakumda yeşil');
+
+      // POZİTİF KONTROL ②: GİZLİLİK CÜMLESİ ELENMİYOR MU. Kapının en olası
+      // arızası fazla-yakalamak; o cümle DOĞRU ve kalmalı.
+      const String privacyTruth =
+          'Video never leaves your phone — we only read the positions of your '
+          'joints, and nothing is recorded or uploaded.';
+      expect(deniesSaving.any(privacyTruth.contains), isFalse,
+          reason: 'desen, video hakkındaki DOĞRU cümleyi de yakalıyor — bir '
+              'kapı, koruduğu ürünün dürüst cümlesini cezalandıramaz');
+      expect(app, contains('nothing is recorded or uploaded'),
+          reason: 'gizlilik cümlesi yüzeyden kayboldu — yukarıdaki ② kontrolü '
+              'artık var olmayan bir şeyi koruyor');
+
+      // VE YERİNE GEÇEN CÜMLE GERÇEĞİ SÖYLÜYOR MU. Yalnız silmek, A3'ün
+      // yasakladığı sessiz yüzeyi bırakırdı: kullanıcı pratiğine ne olduğunu
+      // hâlâ bilmezdi.
+      expect(code('lib/app/onboarding/first_run_view.dart'),
+          contains('kept on this phone'),
+          reason: 'yanlış cümle kaldırıldı ama yerine DOĞRUSU konmadı — '
+              'kullanıcı pratiğine ne olduğunu öğrenemiyor');
+    });
+
     test('THE TWIN: a surface must not call ABSENT a mechanism that is '
         'PRESENT — the Evaluated reason', () {
       // FOUND BY WALKING THE BUILT APP, not by reading the code. On the
