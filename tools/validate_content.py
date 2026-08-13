@@ -757,6 +757,107 @@ def validate_limits_not_doubled(rep: Report, lib: dict,
                              "measured, once general. Keep the measured one")
 
 
+# Turkish letters that CANNOT survive a trip through ASCII. Deliberately not a
+# word list: a word list ages, a script does not.
+#
+# `re.IGNORECASE` is not used anywhere near this — the family's measured trap is
+# that `.lower()` and `-i` are blind on `İ`, and this pattern names both cases
+# explicitly instead of folding them.
+TURKISH_LETTERS = re.compile(r"[şŞğĞıİçÇöÖüÜ]")
+
+
+def user_facing_library_fields() -> set[str]:
+    """Which `library.json` fields the APP actually reads — derived, not listed.
+
+    Read out of `library_catalog.dart` rather than hardcoded here, so a field
+    added to the parser tomorrow is covered by the language gate on the same
+    day. A hardcoded list would be a second place the truth lives, and the
+    second place is always the one that goes stale.
+
+    Comments are stripped first: this repo has already paid for a text gate
+    that counted a comment as code.
+    """
+    src = (REPO / "lib" / "app" / "library" / "library_catalog.dart").read_text(
+        encoding="utf-8")
+    src = "\n".join(l for l in src.split("\n")
+                    if not l.lstrip().startswith("//"))
+    return set(re.findall(r"json\['([a-zA-Z]+)'\]", src))
+
+
+def _strings(value, path: str):
+    """Every string inside a value, with its dotted path. Lists and nested maps
+    included — the first version of this scan checked `isinstance(str)` at the
+    top level only and MISSED `hardwareRequired`, a list, which the style page
+    renders. Under-counting by 40% while looking complete."""
+    if isinstance(value, str):
+        yield path, value
+    elif isinstance(value, list):
+        for i, v in enumerate(value):
+            yield from _strings(v, f"{path}[{i}]")
+    elif isinstance(value, dict):
+        for k, v in value.items():
+            yield from _strings(v, f"{path}.{k}")
+
+
+def validate_surface_language(rep: Report, lib: dict, where: str) -> None:
+    """No string that REACHES A USER may be written in the working language.
+
+    **Found by walking the built app** (C-276): the library screen showed
+    Hula's card with an internal Turkish planning note on it — addressed to the
+    team ("this reason is written explicitly on the page"), not to a learner.
+    The product language is English (`content/SCHEMA.md`: `name` is `{en: ...}`,
+    "ürün dili İngilizce").
+
+    **SCOPE IS THE WHOLE POINT.** Internal fields (`note`, `$comment`,
+    `statusNote`, style-level `demoOnly` plan notes) are the team's own ledger
+    and are deliberately Turkish; flagging them would make this gate a nuisance
+    that gets silenced. So the scan covers exactly the fields the app PARSES,
+    and that set is derived from the parser itself.
+
+    ⚠️ **THIS GATE IS A FLOOR, NOT A CENSUS, AND IT SAYS SO.** It detects
+    Turkish by SCRIPT, so Turkish written in pure ASCII is invisible to it —
+    measured, not feared: `tap.hardwareRequired` carried `"sert zemin"`
+    (= hard floor), fully ASCII, and the first scan of this very defect walked
+    straight past it. The structural fix is to move user-facing fields under the
+    `{en: ...}` convention the schema already uses for `name`, which turns the
+    question from linguistic into structural. Until that ruling lands, this
+    catches the cases it can and does not pretend to catch the rest.
+    """
+    fields = user_facing_library_fields()
+
+    # POSITIVE CONTROL ① — the derivation found something. An empty set makes
+    # every check below vacuously true, and a parser refactor (or a rename of
+    # `json[...]` access) would produce exactly that silently.
+    if len(fields) < 5:
+        rep.error(where, f"user-facing field derivation returned {len(fields)} "
+                         "fields — the parser was probably refactored and this "
+                         "gate is now scanning nothing")
+        return
+
+    # POSITIVE CONTROL ② — the detector detects. A pattern that matches nothing
+    # and a surface that is clean look identical from here.
+    if not TURKISH_LETTERS.search("ayakkabı güvenliği ZORUNLU"):
+        rep.error(where, "Turkish detector does not match a known Turkish "
+                         "string — the scan below is running in a vacuum")
+        return
+
+    # POSITIVE CONTROL ③ — and it does NOT match ordinary English, or every
+    # string would be flagged and the gate would be turned off within a day.
+    if TURKISH_LETTERS.search("Flamenco shoes and a hard floor"):
+        rep.error(where, "Turkish detector matches plain English — it would "
+                         "flag the whole catalogue")
+        return
+
+    for style in lib.get("styles", []):
+        sid = style.get("id", "<no id>")
+        for field in sorted(fields):
+            for path, text in _strings(style.get(field), field):
+                if TURKISH_LETTERS.search(text):
+                    rep.error(where, f"style '{sid}' {path} reaches the USER "
+                                     "and is not written in the product "
+                                     f"language: {text[:70]!r}")
+
+
 def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
     """Checks the library registry against what actually exists.
 
@@ -778,6 +879,7 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
         rep.error(where, "unsupported schemaVersion")
 
     validate_cultural_review(rep, lib, where)
+    validate_surface_language(rep, lib, where)
     validate_limits_not_doubled(rep, lib, styles_on_disk, where)
     validate_attribution_sources(rep, lib, where)
     validate_nth_time_claims(rep, lib, where)
@@ -884,7 +986,76 @@ def validate_library(rep: Report, styles_on_disk: dict[str, dict]) -> None:
               f"{min(waves)}-{max(waves)}; {len(live)} live")
 
 
+def self_test() -> int:
+    """Proves the surface-language check WORKS **and IS WIRED IN**.
+
+    🔴 WRITTEN BECAUSE BOTH HALVES FAILED IN ONE TURN, SILENTLY (C-276). While
+    sabotage-testing this very gate I restored the file with
+    `git checkout tools/validate_content.py` — but the gate was UNCOMMITTED, so
+    the restore DELETED it. `validate_content.py` then exited 0. Re-adding the
+    function was not enough either: its CALL SITE had gone with it, and the
+    script exited 0 again, twice reporting a clean catalogue while the check no
+    longer existed.
+
+    ⇒ ***A CHECK THAT IS NEVER CALLED IS INDISTINGUISHABLE FROM A CHECK THAT
+    PASSES.*** Nothing in the suite could tell those apart, because both produce
+    exit 0 and a green line in `gates.sh`.
+
+    Two lessons, both encoded below: the function must FIRE on a known-bad
+    input, and `validate_library` must actually REACH it — read from the live
+    function object via `inspect`, not from a grep of the file, so a stale copy
+    on disk cannot satisfy it.
+    """
+    import inspect
+
+    fails: list[str] = []
+
+    def check(ok: bool, what: str) -> None:
+        if not ok:
+            fails.append(what)
+
+    dirty = {"styles": [
+        {"id": "probe", "onHoldReason": "ayakkabı güvenliği ZORUNLU"}]}
+    clean = {"styles": [
+        {"id": "probe", "onHoldReason": "On hold until we can build it well."}]}
+
+    rep = Report()
+    validate_surface_language(rep, dirty, "self-test")
+    check(len(rep.errors) == 1, "Türkçe kullanıcı-alanı YAKALANMADI")
+
+    rep = Report()
+    validate_surface_language(rep, clean, "self-test")
+    check(not rep.errors, "İngilizce kullanıcı-alanı yanlışlıkla yakalandı")
+
+    # INTERNAL fields must stay untouched — this is what keeps the gate from
+    # becoming a nuisance that someone silences.
+    rep = Report()
+    validate_surface_language(
+        rep, {"styles": [{"id": "probe", "note": "iç plan notu — şğıİç"}]},
+        "self-test")
+    check(not rep.errors, "iç `note` alanı yakalandı — kapı gürültü üretiyor")
+
+    # THE WIRING, from the live function object.
+    src = inspect.getsource(validate_library)
+    check("validate_surface_language" in src,
+          "validate_library kapıyı ÇAĞIRMIYOR — kapı var ama koşmuyor")
+    # Positive control on the wiring check itself: it must be capable of
+    # saying no. Without this, a bug that made `src` always truthy would make
+    # the line above vacuous.
+    check("validate_nothing_at_all" not in src,
+          "bağlantı kontrolü her şeyi bulur — vakumda")
+
+    for f in fails:
+        print(f"  ✗ {f}")
+    print("SELF-TEST OK (6 kontrol, 3'ü pozitif/negatif kontrol)"
+          if not fails else f"SELF-TEST FAILED ({len(fails)})")
+    return 1 if fails else 0
+
+
 def main() -> int:
+    if "--self-test" in sys.argv:
+        return self_test()
+
     joints = core_joint_ids()
     rep = Report()
 

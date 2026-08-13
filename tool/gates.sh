@@ -95,6 +95,12 @@ run "identity_read self-test"     python3 tools/identity_read.py --self-test
 run "closure_authority self-test" python3 tools/closure_authority.py --self-test
 run "ledger_freshness self-test"  python3 tools/ledger_freshness_check.py --self-test
 run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
+# C-276. Diğer öz-testlerden farklı bir şey ölçüyor: ötekiler bir ARACIN
+# doğruluğunu kanıtlıyor, bu bir KONTROLÜN BAĞLI OLDUĞUNU. Sebebi ölçülmüş —
+# `validate_content.py`nin yüzey-dili kontrolü aynı gece iki kez sessizce
+# devre dışı kaldı (önce fonksiyon, sonra çağrı) ve script her seferinde
+# exit 0 verdi. Çağrılmayan bir kontrol, geçen bir kontrolden ayırt edilemez.
+run "validate_content self-test" python3 tools/validate_content.py --self-test
 
 if [ "$fail" -ne 0 ]; then
   echo

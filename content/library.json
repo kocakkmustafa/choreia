@@ -79,7 +79,7 @@
    "legalFlag": "amber",
    "countSystem": "8count",
    "scoring": "pose",
-   "brandWarning": "\"Zumba\" adı KULLANILMAZ — tescilli marka",
+   "brandWarning": "We do not use the name \"Zumba\" — it is a registered trademark of another company, and this style page is not affiliated with it.",
    "originAttribution": "The fitness-class format is a late commercial packaging; the dancing inside it is not. Its steps are borrowed from Latin American social dances — salsa, merengue, cumbia, reggaeton — each with its own country and its own history, and the credit belongs to those dances rather than to the exercise format built on top of them.",
    "description": "A fitness class built from Latin social-dance steps, danced for the workout rather than for a partner. The class runs on repeating blocks of salsa, merengue, cumbia and reggaeton footwork, at a pace that keeps moving.",
    "stepGlossary": [
@@ -590,8 +590,8 @@
    "countSystem": "8count",
    "scoring": "pose+onset",
    "hardwareRequired": [
-    "tap ayakkabısı",
-    "sert zemin"
+    "tap shoes",
+    "a hard floor"
    ],
    "note": "PERKÜSİF ONSET: shuffle/flap/stamp ayrımı + zamanlama (K9). ISTD 6-seviye esinli",
    "originAttribution": "Tap was made in the United States, largely by Black American dancers, out of the meeting of African rhythmic dance with Irish and English step dancing — a meeting that happened under slavery and segregation, in circumstances its dancers did not choose. Its history is inseparable from that.",
@@ -1015,9 +1015,7 @@
    "legalFlag": "green",
    "countSystem": "compas",
    "scoring": "pose+onset",
-   "hardwareRequired": [
-    "flamenko ayakkabısı önerilir"
-   ],
+   "hardwareRequired": [],
    "note": "Zapateado = onset skorlama; palmas bonus",
    "originAttribution": "Flamenco was formed in Andalusia, in southern Spain, with Romani (Gitano) communities at its centre, alongside Andalusian, Moorish and Jewish influences, and it grew among people who were persecuted there. Cante, guitar and dance are one art; teaching the dance alone is already a simplification.",
    "description": "Percussive footwork, carriage and hand work, danced to guitar and song. The dance answers the music rather than decorating it, which is why the counting matters more than the steps at first.",
@@ -1198,7 +1196,7 @@
    "legalFlag": "amber",
    "countSystem": "8count",
    "scoring": "pose",
-   "safetyOnboarding": "ayakkabı güvenliği ZORUNLU",
+   "safetyOnboarding": "Shoe safety is not optional in this style — everything here is danced in heels, and balance comes before choreography.",
    "originAttribution": "Heels is a studio style rather than a community dance — it took shape in commercial dance studios, largely in Los Angeles, drawing on jazz, on waacking and on burlesque and cabaret traditions. Much of what gives it its character was carried in by queer dancers from those older forms.",
    "description": "A studio style danced in heels, drawing on jazz, waacking and cabaret. Standing, walking and turning all change in heels, so the first work is not choreography but balance.",
    "stepGlossary": [
@@ -1276,7 +1274,7 @@
    "status": "onHold",
    "legalFlag": "green",
    "scoring": "pose",
-   "onHoldReason": "Yaşayan kültürel-manevi pratik. hālau/kumu-hula ORTAKLIĞI olmadan yapılmaz; jenerik kaynakla içerik üretimi YASAK. Sayfada bu gerekçe açıkça yazılır.",
+   "onHoldReason": "Hula is a living cultural and spiritual practice, taught inside a hālau under a kumu hula — that relationship is the form, not a framing around it. We are not going to build lessons for it from general-purpose sources, and we would rather leave this page empty than do that. It is on hold until it can be done in partnership with hula practitioners, and that is a decision rather than a place in a queue.",
    "originAttribution": "Hula is a Native Hawaiian practice in which dance, chant (mele), genealogy and spiritual life are one thing. It is taught within a hālau under a kumu hula, and that relationship is the form — not an optional traditional framing around it. Hula was suppressed and nearly severed under missionary and colonial rule, and its survival is the direct result of people who kept teaching it anyway."
   }
  ],
