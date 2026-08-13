@@ -853,6 +853,62 @@ void main() {
                 'söylenmeli — bu uygulamanın çekirdek disiplini');
       }
     });
+
+    testWidgets('BİR ROZET, DOKUNUŞUN NE YAPACAĞINA DAİR SÖZDÜR (C-282)',
+        (WidgetTester tester) async {
+      // 🔴 EKRANDA BULUNDU. "The Running Man (not graded)" kartı rozetinde
+      // `OPEN · NOT GRADED` diyordu; hemen ALTINDAKİ kutu ise "There is
+      // nothing built to walk you through this one … an empty one today."
+      // İkisi de özenle yazılmıştı; birlikte kart hem "açık" hem "açılacak
+      // bir şey yok" diyordu.
+      //
+      // ROZET TARANIR, GÖVDE OKUNUR: dokunup dokunmayacağına karar veren
+      // hızlı okuyucu, yavaş okuyucuya sonradan yanlış olduğu söylenen
+      // iddiayı alır. ⇒ FAZLA-İDDİA EDEN BİR ROZETİ, ONU DÜZELTEN BİR
+      // PARAGRAF YUMUŞATMAZ.
+      await show(tester, 'hip_hop_foundations');
+      final StyleCard card = lib.cardFor('hip_hop_foundations')!;
+      final List<LessonOffer> offers = card.offers(deviceRunnable);
+      final Iterable<LessonOffer> demo = offers.where(
+          (LessonOffer o) => o.lesson.kind == LessonKind.demoOnly);
+
+      // POZİTİF KONTROL — iki popülasyon da VAR. Biri boşsa aşağıdaki
+      // iddialardan biri hiç ölçülmez ve test kendi vakumunda yeşil görünür.
+      expect(demo.where((LessonOffer o) => o.canStart), isNotEmpty,
+          reason: 'başlatılabilir demo dersi yok — OPEN rozetinin doğru '
+              'olduğu vaka ölçülemiyor');
+      expect(demo.where((LessonOffer o) => !o.canStart), isNotEmpty,
+          reason: 'başlatılamayan demo dersi yok — bu testin avladığı kusurun '
+              'popülasyonu boş');
+
+      for (final LessonOffer o in demo) {
+        final Finder card_ = find.byKey(StyleDetailView.lessonKey(o.lesson.id));
+        // Katlamanın altındaki kart `ListView` tarafından hiç KURULMAZ —
+        // Lissom'un H-10'daki kapı tuzağı: yalnız `pump` anında çizilmişe
+        // bakan bir tarama, suçluyu göremez.
+        await scrollTo(tester, card_);
+        expect(card_, findsOneWidget);
+        final Finder open = find.descendant(
+            of: card_, matching: find.textContaining('OPEN'));
+        if (o.canStart) {
+          expect(open, findsOneWidget,
+              reason: '${o.lesson.id} BAŞLATILABİLİR ve rozeti bunu '
+                  'söylemiyor — eksik-iddia da bir yanlış');
+        } else {
+          expect(open, findsNothing,
+              reason: '${o.lesson.id} başlatılamıyor ama rozeti OPEN diyor: '
+                  'dokunuşun bir şey yapacağına dair söz veriliyor, ve kartın '
+                  'kendi gövdesi bunu çürütüyor');
+          // Ve sessizleşmedi: sınıfını hâlâ söylüyor.
+          expect(
+              find.descendant(
+                  of: card_, matching: find.textContaining('NOT GRADED')),
+              findsOneWidget,
+              reason: 'rozet OPEN\'i kaybederken sınıfını da kaybetti — '
+                  'kullanıcı dersin ne olduğunu artık okuyamıyor');
+        }
+      }
+    });
   });
 }
 

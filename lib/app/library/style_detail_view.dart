@@ -357,7 +357,9 @@ class StyleDetailView extends StatelessWidget {
         children: <Widget>[
           TitleWithPill(
             title: Text(l.displayName, style: ChoreiaType.display(size: 19)),
-            pill: StatusPill(label: StyleStrings.kind(l.kind), tone: tone),
+            pill: StatusPill(
+                label: StyleStrings.kind(l.kind, canStart: o.canStart),
+                tone: tone),
           ),
           const SizedBox(height: 8),
           Text(StyleStrings.minutes(l.plannedMinutes),
@@ -613,9 +615,31 @@ abstract final class StyleStrings {
 
   static const String start = 'Start';
 
-  static String kind(LessonKind k) => switch (k) {
+  /// The lesson's badge — and [canStart] is in the signature because the badge
+  /// was making a claim the card then withdrew.
+  ///
+  /// 🔴 FOUND BY WALKING (C-282). *The Running Man (not graded)* carried
+  /// `OPEN · NOT GRADED` while the grey box directly beneath it said *"There
+  /// is nothing built to walk you through this one — only the note above. It
+  /// is a real lesson in the plan and an empty one today."* Both were written
+  /// carefully; together the card says the lesson is open AND that there is
+  /// nothing to open.
+  ///
+  /// **The badge is SCANNED and the body is READ**, so the fast reader — the
+  /// one deciding whether to tap — gets the claim the slow reader is later
+  /// told is false. ⇒ *a badge that over-claims is not softened by a paragraph
+  /// that corrects it.*
+  ///
+  /// **Nothing is invented here.** `OPEN` is dropped rather than replaced with
+  /// a new word: `LessonOffer.canStart` already exists, the card already
+  /// renders the block reason, and inventing badge vocabulary is the
+  /// catalogue's business (and a design call). Removing a false assertion is
+  /// not.
+  static String kind(LessonKind k, {required bool canStart}) => switch (k) {
         LessonKind.scored => 'GRADED',
-        LessonKind.demoOnly => 'OPEN · NOT GRADED',
+        // `OPEN` is a promise about what a tap does. Only make it when a tap
+        // does something.
+        LessonKind.demoOnly => canStart ? 'OPEN · NOT GRADED' : 'NOT GRADED',
         LessonKind.locked => 'LOCKED',
       };
 
