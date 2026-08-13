@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/progress_summary.dart';
 import 'package:choreia/app/progress_view.dart';
@@ -377,16 +378,105 @@ void main() {
 
     testWidgets('every blocked gate is NAMED on screen, with its reason',
         (WidgetTester tester) async {
+      // ⚠️ ÖLÇÜT DEĞİŞTİ, İDDİA DEĞİŞMEDİ (C-279). Bu test eskiden `g.id`yi
+      // ekranda ARIYORDU — yani *"adlandırılmış olsun"* iddiasını *"ham
+      // kimliğiyle görünsün"* diye ölçüyordu, ve o ölçüt kusuru YERİNDE
+      // ÇİVİLİYORDU: bir ders için doğru ad içerikte zaten yazılı.
+      // (C-275'in çelişkisiyle aynı şekil: bir kontrol, koruduğu sanılan
+      // kusurun devam etmesini şart koşabilir.)
       await pump(tester, summaryOf(<SessionRecord>[]));
       for (final BlockedGate g in catalog.blockedGates) {
+        final String shown = g.scope == GateScope.lesson
+            ? (catalog.lessonById(g.id)?.displayName ?? g.id)
+            : g.id;
         expect(
             find.descendant(
                 of: find.byKey(ProgressView.blockedSectionKey),
-                matching: find.textContaining(g.id)),
+                matching: find.textContaining(shown)),
             findsOneWidget,
             reason: '${g.id} is blocked but not on the screen — silence is a '
                 'lie (J-066)');
       }
+    });
+
+    testWidgets('BİR DERS KENDİ ADIYLA ANILIR, ham kimliğiyle DEĞİL (C-279)',
+        (WidgetTester tester) async {
+      // Bu bölüm uygulamanın en gururlu yüzeyi ("What we cannot check") ve
+      // kullanıcıya `hh_l1_bounce` diye hitap ediyordu. C-268 ⑥ ile aynı
+      // sınıf, bir yüzey ötede: BİR SINIFI BİR YÜZEYDE KAPATMAK, KOMŞU
+      // YÜZEYDE KAPATMIŞ OLMAZ.
+      await pump(tester, summaryOf(<SessionRecord>[]));
+
+      final Iterable<BlockedGate> lessonGates = catalog.blockedGates
+          .where((BlockedGate g) => g.scope == GateScope.lesson);
+
+      // POZİTİF KONTROL ① — ölçülecek popülasyon var mı. Boş bir küme
+      // üzerinde aşağıdaki döngü hiç koşmaz ve test kendi vakumunda yeşil
+      // görünür (C-270'in sıfır-payda dersi).
+      expect(lessonGates, isNotEmpty,
+          reason: 'ders kapsamlı bloklu kapı YOK — bu testin ölçtüğü şey '
+              'kalmamış, iddiası yeniden okunmalı');
+
+      int renamed = 0;
+      for (final BlockedGate g in lessonGates) {
+        final String? name = catalog.lessonById(g.id)?.displayName;
+        if (name == null || name == g.id) continue;
+        renamed++;
+        expect(
+            find.descendant(
+                of: find.byKey(ProgressView.blockedSectionKey),
+                matching: find.textContaining(name)),
+            findsOneWidget,
+            reason: '"$name" içerikte kullanıcı için yazılmış ad, ve ekranda '
+                'yok — yerine ${g.id} yazılıyorsa dürüstlük bölümü kullanıcıya '
+                'iç kimlikle hitap ediyor demektir');
+        expect(
+            find.descendant(
+                of: find.byKey(ProgressView.blockedSectionKey),
+                matching: find.text(g.id)),
+            findsNothing,
+            reason: '${g.id} ham kimliği hâlâ bir başlık olarak çiziliyor');
+      }
+
+      // POZİTİF KONTROL ② — adların gerçekten FARKLI olduğu bir vaka bulundu
+      // mu. Her ders adı kimliğine eşit olsaydı yukarıdaki `continue` her
+      // turda çalışır ve test hiçbir şey ölçmeden geçerdi.
+      expect(renamed, greaterThan(0),
+          reason: 'hiçbir dersin adı kimliğinden farklı değil — bu testin '
+              'ayırt edebileceği bir şey yok, vakumda yeşil');
+    });
+
+    test('VE KABUK KATALOĞU GERÇEKTEN GEÇİRİYOR — yoksa düzeltme üretimde '
+        'sessizce NO-OP (C-279)', () {
+      // NİYE VAR: yukarıdaki widget testleri `ProgressView`e kataloğu ELDEN
+      // veriyor. `catalog` alanı nullable; kabuk onu geçirmeyi bırakırsa her
+      // test yeşil kalır ve ekran ham kimliklere geri döner — düzeltmenin
+      // yük taşımadığı, yalnız testte taşıdığı hâl.
+      //
+      // ⚠️ SINIRI YAZILI: bu bir METİN taraması, çalışan bir dikiş kanıtı
+      // değil. Yorumlar sıyrılıyor (bu depo bir kapının yorumu kod sayması
+      // yüzünden bir kırmızı ödedi), ama ölçtüğü şey "kaynakta bu satır var",
+      // "bu değer çalışma anında null değil" DEĞİL. Daha güçlü kanıt A1
+      // yürüyüşünün kendisi.
+      final String shell = File('lib/app/shell/choreia_shell.dart')
+          .readAsStringSync()
+          .split('\n')
+          .where((String l) => !l.trimLeft().startsWith('//'))
+          .join('\n');
+
+      // POZİTİF KONTROL — okuma boş değil; boş bir okuma her iddiayı
+      // vakumda doğru yapar.
+      expect(shell.length, greaterThan(2000),
+          reason: 'kabuk kaynağı okunamadı — aşağıdaki iddia vakumda');
+
+      expect(shell, contains('ProgressView('),
+          reason: 'kabuk artık ProgressView çizmiyor — bu testin konusu '
+              'değişti');
+      expect(shell, contains('catalog: library.allCourses'),
+          reason: 'kabuk ProgressView\'e kataloğu GEÇİRMİYOR ⇒ '
+              '`_gateLabel` her satırda ham kimliğe düşer ve "What we cannot '
+              'check" bölümü kullanıcıya hh_l1_bounce diye hitap eder — '
+              'testler yeşil kalarak');
     });
 
     testWidgets('the no-retroactive-credit statement is present',

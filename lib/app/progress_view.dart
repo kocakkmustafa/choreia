@@ -242,6 +242,33 @@ class ProgressView extends StatelessWidget {
         ),
       );
 
+  /// What to CALL a blocked gate on screen.
+  ///
+  /// 🔴 **FOUND BY WALKING (C-279).** This section is the app's proudest
+  /// surface — *"What we cannot check"*, named with the reason — and it was
+  /// addressing the learner in internal identifiers: `hh_l1_bounce`,
+  /// `ss_weight_shift`, `hh_bounce_wall`. Every one of those lessons already
+  /// has a name written FOR THE USER in content (*"The bounce (not graded)"*),
+  /// and the screen was throwing it away.
+  ///
+  /// **The same class as `C-268 ⑥`, one surface over.** There the RECORD
+  /// carried a step id where a lesson id belonged and rendered under its raw
+  /// key; the fix was applied to the history path and this path kept the
+  /// defect. ⇒ ***BİR SINIFI BİR YÜZEYDE KAPATMAK, KOMŞU YÜZEYDE KAPATMIŞ
+  /// OLMAZ*** — and the two are far enough apart that no test noticed.
+  ///
+  /// **Scope is deliberate: LESSONS ONLY.** A lesson's display name is not
+  /// invented here — content already wrote it for a reader. `GateScope.style`
+  /// (`bpmResolved`) and `GateScope.errorCode` (`STEP_LATE`,
+  /// `NO_WEIGHT_TRANSFER`) have no user-facing name anywhere, and making one up
+  /// would be authoring copy rather than using it. They stay as they are, and
+  /// the question of what a learner should call them is raised rather than
+  /// answered.
+  String _gateLabel(BlockedGate g) => switch (g.scope) {
+        GateScope.lesson => catalog?.lessonById(g.id)?.displayName ?? g.id,
+        GateScope.style || GateScope.errorCode => g.id,
+      };
+
   Widget _blockedRow(BlockedGate g) => Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: GlassPanel(
@@ -252,7 +279,7 @@ class ProgressView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(g.id,
+              Text(_gateLabel(g),
                   style: ChoreiaType.label(
                       size: 9.5, color: ChoreiaColors.amberDeep, letterSpacingEm: 0.1)),
               const SizedBox(height: 6),
