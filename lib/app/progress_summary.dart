@@ -159,6 +159,42 @@ final class HistoryIntegrity {
         HistoryFidelity.notRecorded => false,
       };
 
+  /// Whether an EMPTY list may be reported as "there is nothing here".
+  ///
+  /// 🔴 **FOUND ON SCREEN (C-280).** The Recorded section rendered
+  /// `ProgressStrings.emptyHistory` — *"No practice recorded. Nothing has been
+  /// hidden — there is simply nothing here."* — whenever the row list was
+  /// empty, **without asking why it was empty.** During a walk the store failed
+  /// to open, and the screen said, in the same view:
+  ///
+  ///   *"We could not open your practice history."*  (the note, correct)
+  ///   *"…there is simply nothing here."*            (the section, a LIE)
+  ///
+  /// An unreadable history and an empty one produce the same empty list and
+  /// mean opposite things. Claiming the second from the first is precisely the
+  /// *"you did nothing"* statement this file avoids everywhere else — a claim
+  /// about the USER manufactured out of OUR failure (J-066).
+  ///
+  /// Separate from [showsTotals] on purpose: that one answers *may I print
+  /// NUMBERS*, this one answers *may I assert ABSENCE*. They are different
+  /// questions and `partial` is where they visibly part — a partial read still
+  /// shows the numbers it has, and still cannot call the gaps empty.
+  ///
+  /// Exhaustive for the same reason [showsTotals] is (C-163): a new state must
+  /// not inherit "yes" by default.
+  bool get canClaimEmpty => switch (fidelity) {
+        // Read cleanly, nothing in it. The only honest empty.
+        HistoryFidelity.ok => true,
+        // Some records could not be read. If the readable ones came to zero,
+        // the unreadable ones are exactly what we cannot speak for.
+        HistoryFidelity.partial => false,
+        HistoryFidelity.unavailable => false,
+        // Nothing is written by design, so nothing being here is a FACT about
+        // the build rather than a guess about the user — and the note above
+        // already says which.
+        HistoryFidelity.notRecorded => true,
+      };
+
   /// The sentence for this state, or null when there is nothing to say.
   String? get note => switch (fidelity) {
         HistoryFidelity.ok => null,
@@ -435,6 +471,18 @@ abstract final class ProgressStrings {
   static const String emptyHistory =
       'No practice recorded. Nothing has been hidden — there is simply '
       'nothing here.';
+
+  /// What the Recorded section says when the list is empty **and we cannot say
+  /// why** — see `HistoryIntegrity.canClaimEmpty`.
+  ///
+  /// Says the DIFFERENCE out loud rather than going silent. A blank section
+  /// under a "could not open" note would leave the learner to guess which of
+  /// the two it meant, and the guess a blank invites is "nothing" — the very
+  /// reading this string exists to prevent.
+  static const String unknownHistory =
+      'We cannot show what is here, because your practice history could not '
+      'be read. That is not the same as it being empty — if you have '
+      'practised, it is still there.';
 
   /// The band column for a demo-only lesson: a mark that there IS no judgement,
   /// which is different from a judgement of zero.

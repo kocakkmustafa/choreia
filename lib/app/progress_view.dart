@@ -52,6 +52,10 @@ class ProgressView extends StatelessWidget {
   /// The history-integrity sentence, when there is one to say.
   static const Key integrityNoteKey = Key('progress.integrityNote');
 
+  /// The one line the Recorded section shows when it has no rows — and
+  /// WHICH line it is is the claim (C-280).
+  static const Key emptyReasonKey = Key('progress.emptyReason');
+
   @override
   Widget build(BuildContext context) {
     final String? integrityNote = summary.integrity.note;
@@ -92,7 +96,14 @@ class ProgressView extends StatelessWidget {
               accent: ChoreiaColors.rose,
               children: summary.recorded.isEmpty
                   ? <Widget>[
-                      Text(ProgressStrings.emptyHistory,
+                      // WHY it is empty decides what may be SAID about it.
+                      // An unreadable history and an empty one produce the
+                      // same empty list and mean opposite things (C-280).
+                      Text(
+                          summary.integrity.canClaimEmpty
+                              ? ProgressStrings.emptyHistory
+                              : ProgressStrings.unknownHistory,
+                          key: emptyReasonKey,
                           style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.6)))
                     ]
                   : summary.recorded.map(_recordedRow).toList(growable: false),

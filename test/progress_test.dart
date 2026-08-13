@@ -492,6 +492,58 @@ void main() {
               'belongs beside that list');
     });
 
+    testWidgets('OKUNAMAYAN GEÇMİŞ, BOŞ GEÇMİŞ DEĞİLDİR (C-280)',
+        (WidgetTester tester) async {
+      // 🔴 EKRANDA BULUNDU. Yürüyüş sırasında depo açılamadı ve aynı ekran
+      // şunları YAN YANA söyledi:
+      //   "We could not open your practice history."   (not — doğru)
+      //   "…there is simply nothing here."             (bölüm — YALAN)
+      // Okunamayan bir geçmiş ile boş bir geçmiş AYNI boş listeyi üretir ve
+      // ZIT şeyler demektir; ikincisini birincisinden iddia etmek, bu dosyanın
+      // her yerde kaçındığı "sen hiçbir şey yapmadın" cümlesidir — BİZİM
+      // arızamızdan üretilmiş, KULLANICI hakkında bir iddia (J-066).
+      final ProgressSummary s = ProgressSummary.build(
+        history: const <SessionRecord>[],
+        catalog: catalog,
+        integrity: HistoryIntegrity.unavailable,
+      );
+      await pump(tester, s);
+
+      expect(
+          inSection(ProgressView.recordedSectionKey,
+              ProgressStrings.unknownHistory),
+          findsOneWidget,
+          reason: 'depo AÇILAMADI ve bölüm bunu söylemiyor');
+      expect(
+          inSection(
+              ProgressView.recordedSectionKey, ProgressStrings.emptyHistory),
+          findsNothing,
+          reason: 'okunamayan geçmiş "there is simply nothing here" diye '
+              'raporlanıyor — arızamızdan kullanıcı hakkında iddia üretiliyor');
+
+      // VE SESSİZ DE KALMIYOR (A3): boş bir bölüm, altında hangi cümle olursa
+      // olsun "hiçbir şey yok" diye okunur — davet ettiği tahmin tam olarak
+      // engellenmek isteneni.
+      expect(find.byKey(ProgressView.emptyReasonKey), findsOneWidget);
+    });
+
+    testWidgets('ve BOŞ geçmiş hâlâ boş diyebiliyor — payda kontrolü (C-280)',
+        (WidgetTester tester) async {
+      // NEGATİF KONTROL: yukarıdaki düzeltme her boşluğu "bilinmiyor"a
+      // çevirseydi, temiz okunmuş ve gerçekten boş bir geçmiş de kaybolurdu.
+      await pump(tester, summaryOf(<SessionRecord>[]));
+      expect(
+          inSection(
+              ProgressView.recordedSectionKey, ProgressStrings.emptyHistory),
+          findsOneWidget,
+          reason: 'temiz okunan boş geçmiş artık boş diyemiyor — düzeltme '
+              'fazla kapsadı');
+      expect(
+          inSection(ProgressView.recordedSectionKey,
+              ProgressStrings.unknownHistory),
+          findsNothing);
+    });
+
     testWidgets('empty history says so without hiding anything',
         (WidgetTester tester) async {
       await pump(tester, summaryOf(<SessionRecord>[]));
