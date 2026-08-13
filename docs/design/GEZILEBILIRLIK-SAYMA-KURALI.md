@@ -86,6 +86,38 @@ gizlemek olur.
 
 ---
 
+## ⚠️ AÇIK — `pushReplacement` kuralın DIŞINDA kaldı (2026-08-13, koordinatörde)
+
+KATI'nın ölçütü yukarıda tek: **`Navigator.push`**. `C-268`'de eklenen sonuç
+yüzeyine **`pushReplacement`** ile gidiliyor — biten bir oturuma geri
+yürünemesin diye. Sonuç: `didPush` **hiç çağrılmıyor**, `_RouteSpy` görmüyor,
+ve kullanıcının gerçekten vardığı bir yer KATI sayıda **görünmüyor**.
+
+Oysa kuralın kendi tanımı şu: *"ayrı ROTA. Bir yere GİDERSİN ve geri
+DÖNEBİLİRSİN."* Sonuç yüzeyi bunu karşılıyor (gidilir; oradan stil sayfasına
+dönülür). Karşılamayan şey **vekil**: `Navigator.push`, *"ayrı rota"* demenin
+kısayoluydu — ve kısayol kırıldı.
+
+> ***BİR ÖLÇÜTÜN KELİMESİ, ÖLÇTÜĞÜ ŞEYİN KELİMESİ OLMAYABİLİR.***
+
+| okuma | Choreia KATI | gerekçe |
+|---|---|---|
+| **(a) vekile sadık** — yalnız `didPush` | **3** (bugünkü sayı) | değiştirme bir itme değildir |
+| **(b) tanıma sadık** — ayrı rota, gidilir ve dönülür | **4** | sonuç yüzeyi ayrı bir rotadır |
+
+⛔ **Hat bunu tek taraflı değiştirmez.** Bu kural beş hattın
+**karşılaştırılabilir** sayması için yazıldı; neyin sayıldığını tek başına
+değiştirmek karşılaştırılabilirliği ölçmek yerine **bozmak** olur. Ölçüm
+`docs/research/R26-kapali-kalemlerin-yeniden-olcumu.md` §④'te; karar
+koordinatörde. ⚠️ **`pushReplacement` kullanan her hat aynı boşluğa sahip
+olabilir** — bu Choreia'ya özgü değil.
+
+📌 Bu arada `test/first_walk_test.dart`in kendi tanığı `didReplace`'i de
+gözlüyor ve budanmayan bir `trail` tutuyor: sonuç yüzeyine **varıldığı
+ölçülüyor**; sayılmadığı tek yer A7'nin KATI rakamı.
+
+---
+
 ## Bu kuralın ölçmediği şey — adıyla
 
 Gezilebilirlik **varılabilirliği** ölçer, **yararlılığı** değil.
