@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/library_view.dart';
 import 'package:choreia/app/live/pose_model.dart';
@@ -410,15 +411,88 @@ void main() {
       // `mirrorConfident: false`, so shipping it may be deliberate. What must
       // not happen is the gap changing without anyone noticing — a reference
       // silently added to the app, or a shipped one silently dropped.
-      // C-143 kapandı 2026-08-07: hh_bounce beyan edildi. Artık diskteki
-      // her referans uygulamaya giriyor, ve kapı bunu İKİ YÖNDE tutuyor —
-      // beyansız yeni bir dosya da, diskte olmayan bir beyan da kırmızı.
+      // 2026-08-07'de `hh_bounce` beyan edildi; artık diskteki her referans
+      // uygulamaya giriyor ve kapı bunu İKİ YÖNDE tutuyor — beyansız yeni bir
+      // dosya da, diskte olmayan bir beyan da kırmızı.
+      //
+      // ⚠️ AMA C-143 BİTMİŞ DEĞİL, ve bu satır bir zamanlar öyle diyordu
+      // (2026-08-13'te düzeltildi). Kaydın KENDİ durum sütunu:
+      // "AÇIK — koordinatör kararı bekliyor". Beyan **mekaniği** kapandı;
+      // kaydın sorduğu ÜRÜN HÜKMÜ (`mirrorConfident: false` taşıyan bir
+      // referans sevk edilmeli mi) hâlâ koordinatörde.
+      //
+      // ⇒ ***BİR KUSURUN MEKANİĞİNİ DÜZELTMEK, O KUSURUN SORDUĞU SORUYU
+      // CEVAPLAMAZ*** — ve iki şeyi aynı satırda kapalı ilan etmek, cevabı
+      // beklenen soruyu görünmez yapar. Bunu `closure_authority` kapısı
+      // yakaladı: bu yorumun iddiası bir DEFTER kaydına sızmıştı ve kapı
+      // *"kaydın kendi sütunu AÇIK diyor"* diye kırmızı verdi (C-272 ③).
       expect(onDisk.difference(declared), isEmpty,
           reason: 'diskte olup uygulamaya girmeyen referans var — kullanıcı '
               'onu açamaz ve rozet onu vaat ediyor olabilir (C-185)');
       expect(declared.difference(onDisk), isEmpty,
           reason: 'pubspec diskte olmayan bir referansı bildiriyor — '
               'yüklemede gürültüsüzce patlar');
+    });
+
+    test('ÜÇÜNCÜ KÜME: pakete giren ama HİÇBİR DERSİN yükleyemeyeceği '
+        'referanslar — SAYILIR, yasaklanmaz', () {
+      // C-143'ün kapısı iki yönü tutuyor: diskte olan bildirilmiş mi,
+      // bildirilen diskte var mı. İkisi de **dosya** hakkında. Kimsenin
+      // sormadığı üçüncü soru şu: *bildirilen bir referansı yükleyebilecek
+      // bir DERS var mı?*
+      //
+      // `LiveLessonPage` referansı yalnız `stepId` üzerinden açar; hiçbir
+      // dersin `stepId`'si olmayan bir referans, cihaza iner ve orada
+      // **hiçbir kod yolunun okuyamayacağı** bayt olarak durur.
+      //
+      // ⛔ BU BİR YASAK DEĞİL, ve olmaması kasıtlı: C-143 tam da bu
+      // dosyaları BİLDİREREK kapandı ("diskte olup uygulamaya girmeyen
+      // referans var" kırmızısını temizleyerek). Kapıyı ters çevirmek o
+      // hükmü çiğnerdi. Ölçülen şey **küme**: yenisi sessizce eklenemez,
+      // ve eklendiği gün bedeli baytıyla görünür.
+      final Set<String> namedByALesson = <String>{
+        for (final StyleCard c in library.cards)
+          for (final LessonInfo l in c.lessons)
+            if (l.stepId != null) l.stepId!,
+      };
+      // POZİTİF KONTROL: türetim boş dönerse aşağıdaki fark HER ŞEYİ
+      // "ulaşılamaz" ilan eder ve test kendi vakumunda yeşil görünür.
+      expect(namedByALesson, isNotEmpty,
+          reason: 'hiçbir ders bir adım adlandırmıyor — türetim bozuk, '
+              'ölçüm vakumda');
+
+      final Set<String> shippedUnloadable =
+          declared.difference(namedByALesson);
+      final int bytes = shippedUnloadable.fold<int>(
+          0,
+          (int a, String s) =>
+              a + File('content/references/$s.json').lengthSync());
+
+      expect(shippedUnloadable, <String>{'hh_roger_rabbit', 'hh_running_man'},
+          reason: 'pakete giren ama hiçbir dersin yükleyemeyeceği referans '
+              'kümesi DEĞİŞTİ: $shippedUnloadable ($bytes bayt). Yeni bir '
+              'referans bildirildiyse ya onu adlandıran ders eksik, ya da '
+              'bildirim erken. Küme küçüldüyse bir ders bağlandı — bu iyi '
+              'haber, sayıyı güncelle.');
+
+      // Bedeli ADIYLA: bir sayı, penceresi yazılmadan başka bir sayıyla
+      // karşılaştırılamaz — bu yüzden bayt burada, ölçüldüğü yerde duruyor.
+      expect(bytes, greaterThan(150 * 1024),
+          reason: 'iki referansın toplam boyutu beklenenden küçük — '
+              '$bytes bayt. Bu satır bedelin GÖRÜNÜR kalması için var; '
+              'küçüldüyse sebebini yaz.');
+
+      // Ve ikisinin de dersi NİYE yok, ölçülerek: `hh_l1_running_man`
+      // yazılmış bir DERS ama `step` alanı yok VE adım belgesi de yok, yani
+      // eksik olan kablolama değil İÇERİK (A4'ün A′ sınıfı, hasat turu).
+      // `hh_roger_rabbit` ise hiçbir derse ait değil — sözlükte bir ad.
+      expect(File('content/styles/hip_hop_foundations/steps/'
+              'hh_running_man.json')
+          .existsSync(),
+          isFalse,
+          reason: 'adım belgesi YAZILMIŞ — o hâlde eksik olan yalnız '
+              '`step` kablolaması ve bu HATTIN kalemi (A4 sınıf B); '
+              'gerekçe bayatladı');
     });
 
     test('demoOpen rozeti CİHAZDA fazla-satıyor — kafesin kaynağı disk, '
