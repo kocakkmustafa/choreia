@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/progress_summary.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:motion_core/motion_core.dart';
 
 /// Which surface MISINFORMS someone who opens the app today?
 ///
@@ -131,6 +133,46 @@ void main() {
       expect(appCode(), contains('ProgressSummary.from'),
           reason: 'ilerleme özeti hâlâ elle kuruluyor — depodan okunmuyorsa '
               'yazılanın yüzeye çıktığı iddia edilemez');
+    });
+
+    test('THE TWIN: a surface must not call ABSENT a mechanism that is '
+        'PRESENT — the Evaluated reason', () {
+      // FOUND BY WALKING THE BUILT APP, not by reading the code. On the
+      // simulator the Progress tab still read "Grading needs the camera check,
+      // and that is not wired up in this build" — and the camera check IS
+      // wired: `LiveLessonPage` opens the camera, `LiveSession` reads cycles
+      // and `DanceJudge` produces findings on screen.
+      //
+      // The sentence was TRUE when it was written. Nothing about it looked
+      // wrong afterwards, because a claim about an absence does not break when
+      // the absence ends — it just quietly starts lying. That is the whole
+      // reason this check exists at the STRING, not at the mechanism.
+      final String reason = ProgressSummary.build(
+        history: const <SessionRecord>[],
+        catalog: CourseCatalog.fromStyles(const <Map<String, dynamic>>[]),
+      ).evaluatedUnavailableReason!;
+
+      // EVIDENCE that the mechanism is present, re-derived every run rather
+      // than asserted once: the live page drives a judge over camera frames.
+      final String live = code('lib/app/live/live_lesson_page.dart');
+      expect(live, contains('DanceJudge('),
+          reason: 'canlı yol artık yargılamıyor olabilir — o hâlde cümlenin '
+              '"kamera kontrolü bağlı değil" demesi yeniden DOĞRU olur ve bu '
+              'kapı ters çevrilmeli');
+      expect(live, contains('_source.begin()'));
+
+      expect(reason, isNot(contains('not wired up')),
+          reason: 'kamera kontrolü BAĞLI ve yüzey bağlı değil diyor — mevcut '
+              'bir mekanizmayı yok ilan etmek, yok olanı var ilan etmenin '
+              'ikizidir');
+      // And it must still say what IS missing, or the fix would be to delete
+      // the sentence — which leaves an empty section explaining nothing (A3).
+      expect(reason, contains('not kept'),
+          reason: 'eksik olan şey ADLANDIRILMIYOR: saklanan kayıtta hüküm '
+              'alanı YOK, eksik olan bu');
+      expect(reason, contains('zero'),
+          reason: 'sıfır göstermeme gerekçesi düştü — "0" bir sonuç gibi '
+              'okunur ve bu cümlenin ilk işi buydu');
     });
 
     test('the unlock rule content declares is not SPOKEN to anyone', () {

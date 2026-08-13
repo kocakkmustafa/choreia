@@ -299,10 +299,26 @@ final class ProgressSummary {
 
     // No judgement is stored, so none is reported. The reason names the missing
     // MECHANISM, not a missing effort by the user.
+    //
+    // ⚠️ REWRITTEN 2026-08-13, and the old one had gone FALSE UNDER OUR FEET.
+    // It said "grading needs the camera check, and that is not wired up in this
+    // build". The camera check IS wired — the live path opens the camera, reads
+    // cycles and shows findings. What is not kept is the JUDGEMENT: the record
+    // this app stores has no verdict field, deliberately (the core's own note:
+    // "recording zeros before the camera bridge would draw zeros on tomorrow's
+    // progress chart").
+    //
+    // Found by WALKING the built app on a simulator, not by reading the code —
+    // the sentence was true when it was written and nobody had reason to
+    // re-read it. ⇒ *A SENTENCE ABOUT WHAT IS MISSING GOES STALE THE DAY THE
+    // MISSING THING ARRIVES, AND NOTHING ABOUT IT LOOKS WRONG.*
     const String reason =
-        'No lesson has been graded. Grading needs the camera check, and '
-        'that is not wired up in this build — so there is nothing here rather '
-        'than a zero. Zeros would look like results.';
+        'No lesson has been graded. The camera does read your steps and tells '
+        'you what it saw while you practise — but that reading is not kept: '
+        'what we save has no verdict in it, on purpose, so a session never '
+        'turns into a score here. The one lesson open today is taught rather '
+        'than graded in any case. Nothing here, rather than a zero — zeros '
+        'would look like results.';
 
     return ProgressSummary(
       recorded: recorded,
