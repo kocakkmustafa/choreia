@@ -129,6 +129,54 @@ bildirildi). **Jokere DOKUNULMADI**: o beş app'i ilgilendiren paylaşımlı bir
 > sınırı sessizce aşmak, bu belgenin baştan reddettiği şeydir. **Koordinatöre soruldu.**
 > 📌 Kurulum anında ayrıca ölçülecek: cihazın tüneli şu an `disconnected` (localNetwork).
 
+#### 📎 Ham ölçüm — komut + çıktı (beyan değil)
+
+Cihazın gerçek kimliği (`devicectl`in *Identifier* sütunu **CoreDevice** kimliğidir, UDID
+değil — imza işinde karşılaştırılacak olan `hardwareProperties.udid`):
+
+```
+xcrun devicectl list devices --json-output /tmp/dev.json
+  → udid   00008120-001804D83E13C01E
+    model  iPhone 14 Pro Max (iPhone15,3) · osVersion 26.6
+    state  available (paired) · tunnel disconnected · developerMode enabled
+```
+
+Derleme ① — **genel hedef**:
+
+```
+xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Debug \
+  -destination 'generic/platform=iOS' -allowProvisioningUpdates build
+  → ** BUILD SUCCEEDED **   exit 0
+
+security cms -D -i Runner.app/embedded.mobileprovision
+  → Name    iOS Team Provisioning Profile: *
+    app-id  T5HZGYBWK8.*
+    cihaz   1          TELEFON KAPSANIYOR MU: 0     ← kurulamaz
+```
+
+Derleme ② — **cihazı adıyla veren hedef**, tek fark:
+
+```
+xcodebuild … -destination 'platform=iOS,id=00008120-001804D83E13C01E' \
+  -allowProvisioningUpdates build
+  → ** BUILD SUCCEEDED **   exit 0
+
+security cms -D -i Runner.app/embedded.mobileprovision
+  → Name    iOS Team Provisioning Profile: com.yulalab.choreia
+    app-id  T5HZGYBWK8.com.yulalab.choreia
+    cihaz   4          TELEFON KAPSANIYOR MU: 1     ← kurulabilir
+codesign -d --verbose=2 Runner.app
+  → Identifier=com.yulalab.choreia
+    Authority=Apple Development: kocakmkaan@outlook.com (W2BWHNL5L2)
+```
+
+🪤 **Ve bu ölçümde bir tuzaktan dönüldü:** ①'den sonra profil dizini **10→11** oldu ve bir
+an *"profil üretildi"* sanılacaktı. Tarihlere bakınca yeni profil
+**`com.yulalab.gravita`**, `2026-08-13T21:58:30Z` — **bu derlemeden ÖNCE**, yani başka bir
+hattın işi. Dizini beş hat paylaşıyor.
+> ***PAYLAŞILAN BİR DİZİNDE SAYININ ARTMASI, SENİN ÜRETTİĞİNİN KANITI DEĞİLDİR***
+> — kesin ölçüm dizinde değil, **pakette**: `Runner.app/embedded.mobileprovision`.
+
 ---
 
 ## 2. 🪤 BU ÖLÇÜM BENİ YANLIŞ BİR P0'DAN DÖNDÜRDÜ — kaydı dursun
