@@ -38,7 +38,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-DEFTER = REPO.parent / "workspace" / "DEFTER.md"
+DEFTER = REPO / "workspace" / "DEFTER.md"
 
 # ⛔ `.lower()` YOK — `'İ'.lower()` birleşik nokta üretir ve Türkçe büyük
 # kipte yanlış sıfır verir (C-236'da ölçüldü). `re.IGNORECASE` ölçülüp `İ`yi
@@ -149,8 +149,9 @@ def main() -> int:
 
     if not DEFTER.exists():
         print(f"⚪ ORTAM YOK: {DEFTER} yok — kapanış otoritesi OKUNAMADI, "
-              "doğrulanmadı. (Defter git-dışı workspace'te; taze klonda "
-              "bulunmaz.)")
+              "doğrulanmadı. (Defter 2026-08-15'ten beri depo İÇİNDE — "
+              "`app/workspace/DEFTER.md`; taze klonda GELİR. Yoksa artık "
+              "ortam eksikliği değil, GERÇEK bir kayıp belirtisidir.)")
         return 2
 
     auth = authority()

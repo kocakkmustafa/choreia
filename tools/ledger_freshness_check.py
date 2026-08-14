@@ -37,7 +37,8 @@ anılmamış kayıt, **ve o EN BÜYÜK kimlik olmalı**.
 
 BU KAPININ ÖLÇMEDİĞİ
 --------------------
-- **mtime'a bakmaz** — defter git-dışı, `touch` tazeliği taklit eder. İçerik ölçer.
+- **mtime'a bakmaz** — `touch` tazeliği taklit eder. İçerik ölçer. (Defter 2026-08-15'te
+  depo içine alındı; mtime artık git'ten de gelebilir — kural aynı sebeple geçerli.)
 - Bir kaydın **DOĞRULUĞUNU** ölçmez, yalnız **varlığını** ve **bağını**.
 - `R` numaraları atıf **sayılmaz** (taban çizgisinden sonra commit `C-NNN` anmalı).
 """
@@ -144,7 +145,9 @@ def main() -> int:
 
     if not DEFTER.exists():
         print(f"⚪ ORTAM YOK: {DEFTER} yok — defter tazeliği OKUNAMADI, "
-              "doğrulanmadı. (Defter git-dışı workspace'te; taze klonda bulunmaz.)")
+              "doğrulanmadı. (Defter 2026-08-15'ten beri depo İÇİNDE — "
+              "`app/workspace/DEFTER.md`; taze klonda GELİR. Yoksa artık "
+              "ortam eksikliği değil, GERÇEK bir kayıp belirtisidir.)")
         return 2
 
     ledger = {int(r[2:]) for r in authority()}

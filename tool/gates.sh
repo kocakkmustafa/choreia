@@ -69,14 +69,15 @@ run "identity read"       python3 tools/identity_read.py
 
 # Kapanış otoritesi (C-249). Bir yer "C-NNN kapandı" diyorsa, C-NNN'in KENDİ
 # durum sütunu da öyle demeli. Otorite A; B işaretçi, C hiç değil.
-# Defter git-dışı workspace'te → taze klonda exit 2 (⚪ ORTAM YOK).
+# Defter 2026-08-15'ten beri depo İÇİNDE (`app/workspace/`) → taze klonda GELİR.
+# exit 2 (⚪ ORTAM YOK) artık nadir olmalı; olursa gerçek kayıp belirtisidir.
 run "closure authority"   python3 tools/closure_authority.py
 
 # Defter tazeliği (C-267, A6). Kapı kısıtına uygun: A tablosunun KENDİ kalemini
 # doğruluyor — ve `closure_authority`den BAŞKA bir şey ölçüyor: o kapanış
 # otoritesine bakar, defter bir hafta bayat olsa da yeşil kalır. Bu kapı
 # SINIRA bakar: ① commit indi/kaydı yok ② kayıt yazıldı/işi inmedi.
-# Defter git-dışı → taze klonda exit 2 (⚪ ORTAM YOK).
+# Defter depo içinde (bkz. yukarı) → taze klonda GELİR.
 run "ledger freshness"    python3 tools/ledger_freshness_check.py
 
 # Hasat aracı öz-testleri (C-207, koordinatör sevki, A1 bulgusu).
