@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:choreia/app/progress_summary.dart';
@@ -131,6 +132,71 @@ void main() {
       expect(s.integrity.fidelity, HistoryFidelity.ok);
       expect(s.integrity.note, isNull);
       expect(s.totals!.sessions, 2);
+    });
+
+    // F1 audit (H-21): the app's OWN test/ tree had no wrong-typed-JSON or
+    // unknown-schema-version case — `recorded_summary_test.dart` deliberately
+    // deferred both to `motion_core`'s pinned package test suite, which does
+    // not run under this app's `flutter test`. Closing that gap here rather
+    // than trusting the deferral: a store this app OPENS is a contract this
+    // app should verify, pin or no pin.
+    test(
+        'SABOTAJ — GEÇERLİ JSON + YANLIŞ TİP (H-21): "as num" cast '
+        '`FormatException` DEĞİL `TypeError` atar; çökmeden partial okunur',
+        () async {
+      final File f = File('${tmp.path}/wrong_type.jsonl');
+      final JsonlSessionStore store = JsonlSessionStore(f);
+      await store.append(rec('hh_l1_bounce'));
+      await store.append(rec('ss_l1_footwork'));
+
+      final List<String> lines = await f.readAsLines();
+      expect(lines.length, 2);
+      // Sentaks GEÇERLİ, alan TİPİ yanlış — `FormatException` bunu yakalamaz,
+      // yakalayan `(j['workedSeconds'] as num)` cast'inin attığı `TypeError`.
+      final Map<String, dynamic> wrongType =
+          jsonDecode(lines.first) as Map<String, dynamic>;
+      wrongType['workedSeconds'] = 'not-a-number';
+      await f.writeAsString('${jsonEncode(wrongType)}\n${lines.last}\n');
+
+      final int unreadable = await store.unreadableRecords();
+      expect(unreadable, 1,
+          reason: 'geçerli-JSON+yanlış-tip satırı ÇÖKMEMELİ, kayıp SAYILMALI');
+
+      final ProgressSummary s = await ProgressSummary.from(
+        store: store,
+        catalog: await testCatalog(),
+      );
+      expect(s.integrity.fidelity, HistoryFidelity.partial);
+      expect(s.totals, isNotNull);
+      expect(s.totals!.sessions, 1,
+          reason: 'sağlam kalan satır okunmaya devam etmeli');
+    });
+
+    test(
+        'SABOTAJ — BİLİNMEYEN ŞEMA SÜRÜMÜ (H-21): istisna değil, adlandırılmış '
+        'atlama — çökmeden kayıp sayılır', () async {
+      final File f = File('${tmp.path}/unknown_version.jsonl');
+      final JsonlSessionStore store = JsonlSessionStore(f);
+      await store.append(rec('hh_l1_bounce'));
+      await store.append(rec('ss_l1_footwork'));
+
+      final List<String> lines = await f.readAsLines();
+      final Map<String, dynamic> future =
+          jsonDecode(lines.first) as Map<String, dynamic>;
+      future['v'] = 999; // henüz yazılmamış, gelecekteki bir şema
+      await f.writeAsString('${jsonEncode(future)}\n${lines.last}\n');
+
+      final int unreadable = await store.unreadableRecords();
+      expect(unreadable, 1,
+          reason: 'gelecekteki bir şema sürümü ÇÖKMEMELİ, kayıp SAYILMALI');
+
+      final ProgressSummary s = await ProgressSummary.from(
+        store: store,
+        catalog: await testCatalog(),
+      );
+      expect(s.integrity.fidelity, HistoryFidelity.partial);
+      expect(s.totals, isNotNull);
+      expect(s.totals!.sessions, 1);
     });
   });
 

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:motion_camera/motion_camera.dart' show CameraFailure;
 import 'package:motion_core/motion_core.dart';
 // Tam paket, `show` listesi DEĞİL — ölçüldü: `isPermanentlyDenied`/
 // `isRestricted`/`status` bu pakette UZANTI (extension) üyeleri, ve bir
@@ -315,10 +316,27 @@ class _CameraSource implements PoseSource {
   final CameraPoseSource _camera = CameraPoseSource();
 
   @override
-  Future<LiveState?> begin() async => _camera.start(
+  Future<LiveState?> begin() async {
+    try {
+      return await _camera.start(
         modelPath: await materialisePoseModel(),
         modelId: PoseModelPin.modelId,
       );
+    } on Object catch (e) {
+      // NO DEAD END (M-F-268), same shape as `_writeRecord`'s catch below.
+      //
+      // F1 audit (H-20/21): before this, `materialisePoseModel` was the one
+      // persistent store in the app with ZERO exception handling anywhere in
+      // its call chain — a model the app could not place on disk (full
+      // storage, a sandbox/permission fault) threw straight out of
+      // `initState`'s fire-and-forget `_start()`, uncaught. The camera
+      // plugin's OWN model-load failure already has a state and a sentence
+      // (`CameraFailure.modelLoadFailed`, `LiveStrings.cameraProblem`) —
+      // this reuses both for the file-materialisation failure, which had
+      // neither.
+      return LiveCameraUnavailable(CameraFailure.modelLoadFailed, '$e');
+    }
+  }
 
   @override
   Stream<PoseFrame> frames() => _camera.frames();
