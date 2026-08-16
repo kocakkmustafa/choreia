@@ -68,11 +68,33 @@ RECORD = re.compile(r"\bC-(\d{3})\b")
 
 
 def cited_ids() -> set[int]:
-    """Commit mesajlarında (konu + gövde) anılan her `C-NNN`."""
-    out = subprocess.run(
-        ["git", "log", "--format=%s%n%b"],
-        cwd=REPO, capture_output=True, text=True, check=True).stdout
-    return {int(m) for m in RECORD.findall(out)}
+    """Commit KONUSUNDA anılan her `C-NNN`. Gövde TARANMAZ — kasıtlı, aşağıya bak.
+
+    ⚠️ 2026-08-16'ya kadar `--format=%s%n%b` (konu+gövde) idi ve GENİŞ tarafı
+    YANLIŞ yöne genişti: `②`nin gedik-susturması `r not in cited` üzerinden
+    çalışıyor, yani GÖVDEDE geçen salt bir DÜZYAZI anması (*"bu yaklaşım
+    C-901e benziyor"* — kapatma iddiası bile değil) gerçekten yapılmamış bir
+    işi "anıldı" saydırıp ②'yi SESSİZCE susturabiliyordu. Ölçüldü (saf
+    `verdict()` ile, senkron: `ledger={266,901}, cited={266,901}` (901
+    yalnız düzyazıyla "anıldı") → `errors=[]` — gedik GÖRÜNMEDİ.
+    Gravita'nın sınıfının AYNASI: onunki YANLIŞ ALARM (tavan şişer, commit
+    reddedilir — ACITIR, GÖRÜNÜR); bu SESSİZ KALMA (gedik susar, kapı yeşil
+    kalır — ACITMAZ, o yüzden daha pahalı).
+    ⇒ Konuya daraltıldı: bu depoda kapanış iddiaları HEP konu satırında
+    (`grep`le doğrulandı, 224 commit) — ① için 51 taban-altı kimlik artık
+    `cited` dışında kalıyor ama HİÇBİRİ `> BASELINE` değil (en büyüğü 236),
+    yani ②'yi hiç etkilemiyorlar; ① yalnızca DARALDI (`cited` küçüldü ⇒
+    `cited-ledger` küçüldü veya aynı kaldı, asla büyümedi — ölçüldü, 0→0).
+    """
+    return extract_cited(subprocess.run(
+        ["git", "log", "--format=%s"],
+        cwd=REPO, capture_output=True, text=True, check=True).stdout)
+
+
+def extract_cited(subject_lines: str) -> set[int]:
+    """SAF — ayrıştırma, git'ten ayrı. Sabotaj gerçek geçmişe dokunmadan koşsun diye
+    (`verdict()`ün deseni, satır ~87)."""
+    return {int(m) for m in RECORD.findall(subject_lines)}
 
 
 def tree_dirty() -> bool:
@@ -173,7 +195,7 @@ def main() -> int:
 
 
 def self_test() -> int:
-    """Sekiz senaryo. İki yön AYRI AYRI, ve iki POZİTİF kontrol.
+    """On iki senaryo. İki yön AYRI AYRI, ve iki POZİTİF kontrol.
 
     Pozitif kontrol olmadan bir kapı denetim değil YASAK olur: her şeye kırmızı
     yanan bir kapı da "sabotajı yakaladı" der.
@@ -209,6 +231,40 @@ def self_test() -> int:
     check("iki uçuşan", {266, 267, 268}, {266}, True,
           want_red=True, want_in="C-267")
 
+    # ⑤b SESSİZ SUSTURMA (bu ölçümün asıl konusu, H-35). `extract_cited`in
+    # KENDİSİ bunu ölçemez — kör bir regex tarayıcı, "bu metin GÖVDE" diye
+    # bir şey bilmez, verdiğin HER C-NNN'i bulur (bu doğru, ⑤c'de ayrıca
+    # ölçülüyor). Susturmayı KAPATAN şey `cited_ids()`ün git'e SORDUĞU şey:
+    # gövdeyi hiç İSTEMEMEK (`--format=%s`, gövdesiz). O yüzden burada
+    # `verdict()`ü GERÇEK bir kayıt + onu içermeyen bir `cited` ile sınıyoruz
+    # — narrowing'in sonucu bu, mekanizması ⑤c'de.
+    check("sessiz susturma önlendi (verdict, dar cited ile)", {266, 901}, {266},
+          False, want_red=True, want_in="C-901")
+
+    # ⑤c `extract_cited` KENDİ İŞİNİ yapıyor mu — kör tarayıcı, verilen HER
+    # metni tarar (bu İSTENEN: filtre onun işi değil, git'in). Bu, ⑤b'nin
+    # varsaydığı "cited_ids() gövdeyi hiç görmez" iddiasının TERSİNİ sınar:
+    # eğer birileri git komutunu yanlışlıkla `%b`ye geri çevirirse, o gövde
+    # metni BURAYA gelir ve extract_cited onu SESSİZCE atlamaz — bulur, ve
+    # sorun git çağrısına geri döner, ayrıştırıcıya değil.
+    if 901 not in extract_cited("bu yaklaşım C-901 ile aynı"):
+        fails.append("extract_cited kendisine verilen C-901'i bulamadı — "
+                      "ayrıştırıcı kırık (narrowing git çağrısında olmalı, "
+                      "burada DEĞİL)")
+
+    # ⑤d UÇTAN UCA, GERÇEK GEÇMİŞE KARŞI: bu depoda H-35 ölçümüyle BİLİNEN
+    # gövde-yalnız kimlikler (C-7, C-9, C-19 — taban altı, zararsız) artık
+    # GERÇEK `cited_ids()`de YOK olmalı; narrowing git seviyesinde gerçekten
+    # etkili mi diye tek kanıt budur (`extract_cited` bunu KENDİ BAŞINA
+    # kanıtlayamaz, ⑤c'nin gösterdiği gibi).
+    if DEFTER.exists():
+        real_cited = cited_ids()
+        known_body_only = {7, 9, 19}
+        leaked = known_body_only & real_cited
+        if leaked:
+            fails.append(f"cited_ids() hâlâ gövde-yalnız kimlikleri görüyor: "
+                         f"{sorted(leaked)} — git --format narrow DEĞİL")
+
     # ⑥ kirli ağaç, anılmamış kayıt EN BÜYÜK değil → gedik ortada
     check("ortadaki gedik", {266, 267, 268}, {266, 268}, True,
           want_red=True, want_in="C-267")
@@ -223,7 +279,7 @@ def self_test() -> int:
 
     for f in fails:
         print(f"  FAIL: {f}")
-    print(f"SELF-TEST {'OK' if not fails else 'FAILED'} (9 kontrol, "
+    print(f"SELF-TEST {'OK' if not fails else 'FAILED'} (12 kontrol, "
           "2'si pozitif kontrol)")
     return 1 if fails else 0
 
