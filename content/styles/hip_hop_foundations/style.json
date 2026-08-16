@@ -51,7 +51,7 @@
       "blockedBy": "content/references/hh_bounce.json statusBases includes low-amplitude-vs-family — median joint tolerance is 83% floor-derived (6.0 deg noise floor) against 9-28% for the accepted references",
       "unblockedBy": "a rebuild with >=6 independent teachers whose measured disagreement exceeds the 6.0 deg floor, bringing the median floor-derived share into the 9-28% band; the tier question reopens on that measurement, not on a judgement call"
      },
-     "evidence": "content/references/hh_bounce.json (3 instructors, provisional, cycleUnit dipsPerCycle=1) + steps/hh_bounce.json measurability.tierWithdrawn (A -> B, resolvedBy low-amplitude-vs-family, 2026-08-04) — R13 tur-5 / defter C-127"
+     "evidence": "content/references/hh_bounce.json (4 instructors, provisional, cycleUnit dipsPerCycle=1) + steps/hh_bounce.json measurability.tierWithdrawn (A -> B, resolvedBy low-amplitude-vs-family, 2026-08-04, measured against the 3-source reference of that date — the 4th source was added afterward and the tolerance-floor share has not been recomputed against it, see tierWithdrawn.staleCountNote) — R13 tur-5 / defter C-127"
     },
     {
      "id": "hh_l1_rock",

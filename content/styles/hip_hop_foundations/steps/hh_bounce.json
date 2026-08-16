@@ -26,7 +26,8 @@
       "promotionPath": {
         "blockedBy": "instructor disagreement below the 6.0 deg noise floor at 3 sources",
         "unblockedBy": "a rebuild with >=6 independent teachers in which measured disagreement exceeds the floor — i.e. the median floor-derived share falls into the 9-28% band the accepted references occupy. The tier question reopens with THAT data, not with an opinion."
-      }
+      },
+      "staleCountNote": "2026-08-16, Choreia hattı: the evidence[] entries above (3 sources / 'all three sources' / the 28%-9%-22% comparison) describe the 2026-08-04 measurement AS MEASURED THAT DAY — left unedited, they are a historical record, not a stale claim about today. A 4th source (ovIZAyDuJSg, DTC, 61 dips) was added to content/references/hh_bounce.json afterward and the tolerance-floor share has NOT been recomputed against it. Flagged, not fixed: recomputing needs a real build_reference.py run, not a guess, and could move the verdict either way — though promotionPath.unblockedBy already requires >=6 sources, so 4 does not clear the bar regardless of what the exact share turns out to be. Left open for a session with room to run it."
     }
   },
 
