@@ -103,6 +103,24 @@
      "whyPermanent": {
       "en": "Groove is not a quantity a camera can see. Two dancers can produce almost the same joint angles and only one of them is grooving; the difference lives in the music and in you, not in the geometry we can measure. We teach it throughout and we will not put a number on it."
      }
+    },
+    {
+     "id": "hh_l1_roger_rabbit",
+     "displayName": {
+      "en": "The Roger Rabbit (not graded)"
+     },
+     "scored": false,
+     "demoOnly": true,
+     "demoOnlyReason": {
+      "en": "This one we can teach but not grade, and the reason is different from our other demo-only steps: it isn't that the camera can't see the Roger Rabbit clearly, it's that our own teachers don't agree on which way round it faces. Three instructors' footage should settle a consistent left-or-right convention and it hasn't, so we cannot tell a correctly-mirrored performance from a genuinely backwards one. You get the step and three teachers' versions of it; the number is missing because our reference isn't settled, not because your movement is unclear."
+     },
+     "evidence": "content/references/hh_roger_rabbit.json (3 instructors, provisional, mirrorConfident:false) — cycles 8/5/4 individually clear the M-F-38 sufficiency bar, but per-source orientation margins (0.0182/0.0102/0.0053) all fall below build_reference.py's MIRROR_MARGIN=0.03 confidence threshold",
+     "minutes": 8,
+     "demoOnlyClass": "structural-circular",
+     "promotionPath": {
+      "blockedBy": "content/references/hh_roger_rabbit.json mirrorConfident:false — all 3 sources individually produced low-margin orientation fits against the other two's consensus, none reaching the decisive threshold",
+      "unblockedBy": "additional independent instructor sources with a decisive (>=0.03 margin) orientation fit, rebuilding mirrorConfident:true; 11 already-harvested candidates exist but are blocked on missing transcripts (workspace/DEFTER.md C-303), itself waiting on the pending speech-to-text install permission (motion-core/workspace/devir/KURUCU-PAKETI.md 1c)"
+     }
     }
    ],
    "unlockRule": null,
