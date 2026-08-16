@@ -52,8 +52,11 @@ void main() {
       const LiveCameraUnavailable(CameraFailure.modelLoadFailed, 'detail'),
       const LiveNoPerson(<QualityIssue>{QualityIssue.outOfFrame}),
       const LiveWatching(cyclesSeen: 0),
+      // F1 audit (H-24): was `{'left_knee': 12.5}` — snake_case, which let a
+      // broken camelCase→words transform look correct. `judge.dart` only
+      // ever produces camelCase keys; the fixture now matches production.
       const LiveMeasured(
-          measurements: <String, double>{'left_knee': 12.5},
+          measurements: <String, double>{'kneeDeltaDeg': 12.5},
           gated: gated,
           notMeasuredNote: note),
       LiveJudged(
@@ -170,13 +173,40 @@ void main() {
     await show(
         tester,
         const LiveMeasured(
-            measurements: <String, double>{'left_knee': 12.5},
+            measurements: <String, double>{'kneeDeltaDeg': 12.5},
             gated: gated,
             notMeasuredNote: note));
     expect(find.text(LiveStrings.measuredTitle), findsOneWidget);
     // kural-8 on the surface: a demo-only lesson has no verdict section at
     // all — and cannot, because `LiveMeasured` carries no findings field.
     expect(find.text(LiveStrings.findingsTitle), findsNothing);
+  });
+
+  testWidgets(
+      'SABOTAJ (H-24) — camelCase ölçüm anahtarı HAM görünmez, kelimelere '
+      'ayrılır, tekrar eden birim düşer', (WidgetTester tester) async {
+    // GERÇEK anahtarlar `judge.dart`dan (`kneeDeltaDeg` · `identityLegShapeDeg`
+    // · `identityWorstJointDeg`) — sentetik/snake_case değil. `hh_l1_bounce`
+    // (bugün başlatılabilen TEK ders) `demoOnly`, ve HER zaman bu kartla
+    // çiziliyor: burada kırılan şey teorik değil, canlı yüzeyin ta kendisi.
+    await show(
+        tester,
+        const LiveMeasured(measurements: <String, double>{
+          'kneeDeltaDeg': 12.5,
+          'identityLegShapeDeg': 7.25,
+          'identityWorstJointDeg': 3.0,
+        }, gated: gated, notMeasuredNote: note));
+    // ÖNCE, negatif: hiçbir HAM anahtar ekranda YOK.
+    expect(find.textContaining('kneeDeltaDeg'), findsNothing,
+        reason: 'ham anahtar sızdı — kullanıcı asla görmemesi gereken bir '
+            'iç tanımlayıcı');
+    expect(find.textContaining('identityLegShapeDeg'), findsNothing);
+    expect(find.textContaining('identityWorstJointDeg'), findsNothing);
+    // SONRA, pozitif: doğru kelimelere ayrılmış, ilk harf büyük, tekrar eden
+    // "Deg" birimi düşmüş (değer zaten '°' taşıyor — `LiveStrings` deseni).
+    expect(find.text('Knee delta'), findsOneWidget);
+    expect(find.text('Identity leg shape'), findsOneWidget);
+    expect(find.text('Identity worst joint'), findsOneWidget);
   });
 
   group('SINGLE CORRECTION (C-136 (b), ruled 2026-08-07)', () {

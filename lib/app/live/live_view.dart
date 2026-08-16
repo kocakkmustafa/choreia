@@ -99,6 +99,37 @@ abstract final class LiveStrings {
       };
 }
 
+/// Turns a raw [JudgeResult.measurements] key into words a learner can read.
+///
+/// **F1 audit (H-24): this was a no-op wearing a working function's shape.**
+/// `_measuredCard` called `m.key.replaceAll('_', ' ')` — correct for a
+/// snake_case key, and every key `judge.dart` actually produces
+/// (`kneeDeltaDeg`, `identityWorstJointDeg`, …) is camelCase, so the
+/// underscore replace never matched anything. The ONE currently-startable
+/// lesson (`hh_l1_bounce`) is `demoOnly` and always renders through this
+/// card — every real user who has ever opened it saw the raw identifier
+/// `kneeDeltaDeg` next to a bare degree figure. The widget test that should
+/// have caught this used `'left_knee'` as its fixture — snake_case, so the
+/// broken transform happened to look correct against unrealistic data
+/// (`live_view_test.dart`, fixed alongside this).
+///
+/// Strips the trailing unit suffix (`Deg` — the value is already rendered
+/// with a `°`, so keeping it in the label would say the same thing twice),
+/// splits camelCase AND snake_case alike (defensive: nothing in this file
+/// should assume one specific key convention going forward), lowercases,
+/// then capitalises only the first word — matching this file's own
+/// sentence-case label style (`LiveStrings.watching`, `LiveStrings.noPerson`).
+String _measurementLabel(String key) {
+  final String stripped =
+      key.endsWith('Deg') ? key.substring(0, key.length - 3) : key;
+  final String spaced = stripped
+      .replaceAllMapped(
+          RegExp(r'(?<=[a-z0-9])(?=[A-Z])'), (Match m) => ' ')
+      .replaceAll('_', ' ')
+      .toLowerCase();
+  return spaced.isEmpty ? spaced : spaced[0].toUpperCase() + spaced.substring(1);
+}
+
 /// The live lesson screen.
 ///
 /// [LiveState] is `sealed`, so the compiler REQUIRES every case below. That is
@@ -417,7 +448,7 @@ class LiveView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
-                      child: Text(m.key.replaceAll('_', ' '),
+                      child: Text(_measurementLabel(m.key),
                           style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.68))),
                     ),
                     const SizedBox(width: 8),
