@@ -8,13 +8,17 @@ projeden (Flutter 3.41.1 — bu makinedeki `flutter --version` ile
 DOĞRULANDI, Ostinato'nunkiyle birebir aynı sürüm) ÖLÇÜLDÜ, uydurulmadı.
 Depodaki dosya bu hash'lerden BİRİNE eşitse hâlâ şablon demektir.
 
-DURUM (ölçüldü, H-56): Choreia'nın 25/25 ikon/açılış varlığı ŞU AN hâlâ
-stok — sıfır özelleştirme. Bu yüzden bu araç `tool/gates.sh`e KASITLI
-OLARAK BAĞLANMADI: her koşumda kırmızı yanan bir kapı, gerçek bir ikon
-gelene kadar TÜM commit'leri durdururdu — Ostinato'nunki de aynı sebeple
-ayrı bir betik (gates.sh'te değil). Bu, gerçek bir kusuru gizlemek DEĞİL:
-bulgu bu turda DEFTER'e adıyla yazıldı (C-296) ve gerçek ikon üretilip
-bağlandığında bu araç `main()`in kendi çıktısıyla KAPANIŞI kanıtlayacak.
+DURUM (ölçüldü, H-56/C-296): Choreia'nın 25/25 ikon/açılış varlığı ŞU AN
+hâlâ stok — sıfır özelleştirme. İLK YAZILIŞTA bu araç KASITLI OLARAK
+`tool/gates.sh`e bağlanmamıştı (Ostinato'nunki `tools/run_gates.sh`e
+bağlı olduğu HALDE — bu yanlış gerekçelendirilmiş bir varsayımdı, ölçmeden
+"muhtemelen bağlı değildir" denmişti). Orkestratör düzeltti: BAĞLANMAMIŞ
+bir kapı koşmayan bir kapıdır (H-48/L-178 sınıfı — okuyucusu/çağıranı
+olmayan bir kural). Şimdi BAĞLI, ama H-50'nin MUTABAKAT KAYDI deseniyle
+(`RECONCILED_STOCK_2026_08_16`, aşağıda) — muafiyet değil, adlı+tarihli
+bir bekleme kaydı: kapı KOŞAR, bilinen 25 varlık için kırmızı YANMAZ, ama
+KAYITTA OLMAYAN yeni bir stok varlık YİNE öter. D8 gerçek varlıkları
+bağlandığında kayıttan tek tek çıkarılmalı.
 """
 from __future__ import annotations
 
@@ -86,29 +90,78 @@ def storyboard_still_white() -> bool:
     return p.exists() and STORYBOARD_STILL_WHITE in p.read_text(encoding="utf-8")
 
 
+# MUTABAKAT KAYDI (H-50 deseni — Ostinato'nun RETENTION_WRITERS_RECONCILED'i),
+# MUAFİYET DEĞİL. Orkestratör kararı (H-56 devamı, 2026-08-16): kapı BAĞLANIR
+# ama şu ANDA BİLİNEN stok varlıklar adıyla+tarihiyle kayda geçirilir, kapı
+# yalnız BU listedeki dosyaları/kontrolü muaf sayar — BAŞKA HİÇBİR VARLIĞI
+# DEĞİL. Bu yüzden LİTERAL, elle yazılmış bir küme — `DECLARED_DEFAULT_MD5`in
+# anahtarlarından TÜRETİLMEZ; türetilseydi bu kayıt hiçbir şeyi taşımaz,
+# gelecekte eklenecek her yeni dosyayı da sessizce muaf sayardı.
+#
+# KAPANIŞ YOLU: D8 (mor zemin + dans-figürü silüeti) gerçek varlıkları
+# bağlandığında, İLGİLİ dosya(lar) bu kümeden TEK TEK çıkarılır — küme
+# küçüldükçe kapının kapsamı GENİŞLER, tersi değil. `C-296`da ölçülen bu
+# tam liste; yeni bir dosya BU LİSTEDE OLMADAN stoksa (örn. biri yanlışlıkla
+# gerçek bir varlığı stoka geri çevirirse) kapı YİNE öter.
+RECONCILED_STOCK_2026_08_16: frozenset[str] = frozenset({
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png",
+    "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png",
+    "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png",
+    "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png",
+    "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png",
+    "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+    "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+    "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+    "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+    "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+    "android/app/src/main/res/drawable/launch_background.xml",
+    "android/app/src/main/res/drawable-v21/launch_background.xml",
+})
+RECONCILED_STORYBOARD_WHITE_2026_08_16 = True
+
+
 def main() -> int:
     current = measure()
     still_default = find_still_default(DECLARED_DEFAULT_MD5, current)
     missing = find_missing(current)
     changed = len(current) - len(still_default) - len(missing)
 
+    unreconciled_stock = [r for r in still_default
+                           if r not in RECONCILED_STOCK_2026_08_16]
+    reconciled_hits = [r for r in still_default
+                        if r in RECONCILED_STOCK_2026_08_16]
+
     violations = []
-    if still_default:
+    if unreconciled_stock:
         violations.append(
-            f"[şablon] {len(still_default)}/{len(current)} varlık HÂLÂ "
-            f"Flutter'ın stok görseliyle birebir aynı (MD5 eşleşti): "
-            + ", ".join(still_default))
+            f"[şablon, KAYITLI DEĞİL] {len(unreconciled_stock)} varlık HÂLÂ "
+            f"Flutter'ın stok görseliyle birebir aynı VE mutabakat kaydında "
+            f"yok — yeni bir gerileme: " + ", ".join(unreconciled_stock))
     if missing:
         violations.append(
             f"[eksik] {len(missing)} beklenen dosya YOK: " + ", ".join(missing))
-    if storyboard_still_white():
+    if storyboard_still_white() and not RECONCILED_STORYBOARD_WHITE_2026_08_16:
         violations.append(
             f"[açılış zemini] {STORYBOARD} hâlâ saf beyaz "
             f"(`{STORYBOARD_STILL_WHITE}`) — LaunchImage değişmiş olsa "
             f"bile açılış ekranı beyaz zeminle açılır")
 
     if violations:
-        print(f"⛔ {len(violations)} ŞABLON-VARLIK İHLALİ:")
+        print(f"⛔ {len(violations)} ŞABLON-VARLIK İHLALİ (mutabakat kaydı "
+              f"dışında):")
         for v in violations:
             print(f"   - {v}")
         print(f"   ⚠️ DECLARED_DEFAULT_MD5 Flutter 3.41.1'den ölçüldü — SDK "
@@ -118,10 +171,16 @@ def main() -> int:
               f"kontrol edilmeli.")
         return 1
 
-    print(f"✅ şablon-varlık denetimi TEMİZ — {changed}/{len(current)} "
-          f"varlık stok Flutter görsellerinden GERÇEKTEN farklı (MD5 "
-          f"karşılaştırmalı), açılış zemini {STORYBOARD_STILL_WHITE!r} "
-          f"DEĞİL")
+    if reconciled_hits or (storyboard_still_white() and RECONCILED_STORYBOARD_WHITE_2026_08_16):
+        print(f"⚠️ MUTABAKAT KAYDI YÜRÜRLÜKTE (D8, C-296, 2026-08-16): "
+              f"{len(reconciled_hits)} varlık + açılış zemini hâlâ stok, "
+              f"KAYITLI ve İZLENİYOR — kapı bu dosyalar İÇİN kırmızı YANMAZ. "
+              f"D8 gerçek varlıkları bağlandığında bu kayıttan tek tek "
+              f"çıkarılmalı, yoksa bir regresyon sessizce kalıcılaşır.")
+
+    print(f"✅ şablon-varlık denetimi TEMİZ (kayıtlı istisnalar dışında) — "
+          f"{changed}/{len(current)} varlık stok Flutter görsellerinden "
+          f"GERÇEKTEN farklı (MD5 karşılaştırmalı)")
     return 0
 
 
@@ -141,8 +200,20 @@ def selftest() -> int:
     assert find_missing(with_missing) == ["a.png"]
     assert find_still_default(declared, with_missing) == []
 
-    print("✅ şablon-varlık öz-testi GEÇTİ — hâlâ-stok/değişmiş/eksik "
-          "sınıflandırması sentetik veriyle doğrulandı")
+    # MUTABAKAT KAYDI mantığı: kayıtlı bir stok isabetinin kırmızı ÜRETMEMESİ,
+    # KAYITSIZ bir isabetin ürettiği (H-56 sonrası eklendi). `still_stock`
+    # yukarıda a.png+c.xml'i stok döndürüyordu — burada sentetik bir kayıt
+    # kümesiyle ikisi AYRIŞTIRILIYOR: biri kayıtlı (susmalı), biri değil
+    # (ötmeli). Gerçek kodun `main()`daki filtre satırının aynısı, izole.
+    reconciled = frozenset({"a.png"})
+    still_default_hits = find_still_default(declared, still_stock)
+    unreconciled = [r for r in still_default_hits if r not in reconciled]
+    reconciled_hits = [r for r in still_default_hits if r in reconciled]
+    assert unreconciled == ["c.xml"], unreconciled
+    assert reconciled_hits == ["a.png"], reconciled_hits
+
+    print("✅ şablon-varlık öz-testi GEÇTİ — hâlâ-stok/değişmiş/eksik/"
+          "mutabakat-kaydı sınıflandırması sentetik veriyle doğrulandı")
     return 0
 
 

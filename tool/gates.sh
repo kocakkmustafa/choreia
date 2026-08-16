@@ -62,6 +62,14 @@ run "network dependency"  python3 tools/network_dependency_check.py
 # beyanı Runner kaynağıyla hâlâ uyuşuyor mu (boşluk da bir iddiadır).
 run "privacy manifest"    python3 tools/privacy_manifest_check.py
 
+# Şablon varlık denetimi (H-56/C-296, D8). İlk yazılışta BAĞLANMAMIŞTI —
+# "Ostinato'nunki de bağlı değil" varsayımı ölçülmeden yapılmıştı ve
+# yanlıştı (Ostinato'nunki `tools/run_gates.sh`e bağlı). BAĞLANMAMIŞ kapı
+# koşmayan kapıdır. H-50'nin mutabakat-kaydı deseniyle bağlandı: bilinen
+# 25 stok varlık için kırmızı YANMAZ (adlı+tarihli kayıt, dosyanın
+# kendisinde), ama kayıtta OLMAYAN yeni bir stok varlık yine öter.
+run "template assets"    python3 tools/validate_template_assets.py
+
 # Kimlik okuması (C-233, koordinatör hükmü). Kapı YALNIZ ÇÜRÜTMEDE öter;
 # kanıt-yok BLOKLAMAZ ve `docs/design/IDENTITY-REGISTER.md` kütüğünde sayılır.
 # Transkript havuzu yoksa exit 2 (⚪ ORTAM YOK) — C-210'un üçüncü hâli.
@@ -102,6 +110,7 @@ run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --sel
 # devre dışı kaldı (önce fonksiyon, sonra çağrı) ve script her seferinde
 # exit 0 verdi. Çağrılmayan bir kontrol, geçen bir kontrolden ayırt edilemez.
 run "validate_content self-test" python3 tools/validate_content.py --self-test
+run "template_assets self-test" python3 tools/validate_template_assets.py --selftest
 
 if [ "$fail" -ne 0 ]; then
   echo
