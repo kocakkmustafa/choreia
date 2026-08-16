@@ -119,9 +119,6 @@ RECONCILED_STOCK_2026_08_16: frozenset[str] = frozenset({
     "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png",
     "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png",
     "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png",
-    "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png",
-    "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png",
-    "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png",
     "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
     "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
     "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
@@ -130,7 +127,29 @@ RECONCILED_STOCK_2026_08_16: frozenset[str] = frozenset({
     "android/app/src/main/res/drawable/launch_background.xml",
     "android/app/src/main/res/drawable-v21/launch_background.xml",
 })
-RECONCILED_STORYBOARD_WHITE_2026_08_16 = True
+#: H-59/C-30x, 2026-08-16: LaunchImage üçlüsü + storyboard zemini GERÇEK
+#: varlıkla değişti (stage #0A0508 zemin, rose ring glifi) — kayıttan
+#: ÇIKARILDI (küme küçüldü), bayrak kapandı. `False` olarak KALIYOR (silmek
+#: değil): bir regresyon (biri yanlışlıkla beyaza geri döndürürse) kapı
+#: yeniden ötsün diye.
+RECONCILED_STORYBOARD_WHITE_2026_08_16 = False
+
+
+def reconciliation_parts(reconciled_hits: list[str],
+                          storyboard_reconciled: bool) -> list[str]:
+    """Mutabakat mesajının HANGİ parçalarının gerçekten geçerli olduğu.
+
+    Ayrı fonksiyon H-59/2026-08-16 düzeltmesinden: `main()` içine gömülü
+    sabit metin, yalnız `reconciled_hits` true olduğunda bile "+ açılış
+    zemini hâlâ stok" basıyordu — storyboard GERÇEKTEN düzelmiş olsa dahi.
+    İki koşul burada AYRI değerlendirilir ki sentetik veriyle sınanabilsin.
+    """
+    parts = []
+    if reconciled_hits:
+        parts.append(f"{len(reconciled_hits)} varlık")
+    if storyboard_reconciled:
+        parts.append("açılış zemini")
+    return parts
 
 
 def main() -> int:
@@ -171,9 +190,11 @@ def main() -> int:
               f"kontrol edilmeli.")
         return 1
 
-    if reconciled_hits or (storyboard_still_white() and RECONCILED_STORYBOARD_WHITE_2026_08_16):
+    storyboard_reconciled = storyboard_still_white() and RECONCILED_STORYBOARD_WHITE_2026_08_16
+    parts = reconciliation_parts(reconciled_hits, storyboard_reconciled)
+    if parts:
         print(f"⚠️ MUTABAKAT KAYDI YÜRÜRLÜKTE (D8, C-296, 2026-08-16): "
-              f"{len(reconciled_hits)} varlık + açılış zemini hâlâ stok, "
+              f"{' + '.join(parts)} hâlâ stok, "
               f"KAYITLI ve İZLENİYOR — kapı bu dosyalar İÇİN kırmızı YANMAZ. "
               f"D8 gerçek varlıkları bağlandığında bu kayıttan tek tek "
               f"çıkarılmalı, yoksa bir regresyon sessizce kalıcılaşır.")
@@ -211,6 +232,24 @@ def selftest() -> int:
     reconciled_hits = [r for r in still_default_hits if r in reconciled]
     assert unreconciled == ["c.xml"], unreconciled
     assert reconciled_hits == ["a.png"], reconciled_hits
+
+    # SABOTAJ (H-59): mesaj metni GERÇEKTEN true olanı mı söylüyor, yoksa
+    # `reconciled_hits` tek başına true olduğunda storyboard'u da mı yalan
+    # yere "hâlâ stok" diyor? Ölçülen kendi hatasıydı: storyboard fix'ten
+    # SONRA bile "+ açılış zemini hâlâ stok" basıyordu — üç senaryo üçünü de
+    # ayırt eder.
+    only_assets = reconciliation_parts(["a.png"], False)
+    assert only_assets == ["1 varlık"], only_assets
+    assert "açılış zemini" not in only_assets, only_assets
+
+    only_storyboard = reconciliation_parts([], True)
+    assert only_storyboard == ["açılış zemini"], only_storyboard
+
+    both = reconciliation_parts(["a.png", "b.png"], True)
+    assert both == ["2 varlık", "açılış zemini"], both
+
+    neither = reconciliation_parts([], False)
+    assert neither == [], neither
 
     print("✅ şablon-varlık öz-testi GEÇTİ — hâlâ-stok/değişmiş/eksik/"
           "mutabakat-kaydı sınıflandırması sentetik veriyle doğrulandı")
