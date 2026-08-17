@@ -3,7 +3,33 @@
 **Bu, `RECIPE.md`nin YERİNE geçmiyor** — reçete adım adım yürüyüşü anlatır (tek doğru kaynak,
 tekrarlanmıyor burada). Bu dosya reçeteye ekli, TARİHLİ bir **hazır mı** anlık görüntüsü.
 
-## 🟡 Durum: KISMEN HAZIR — ön-uçuş temiz, yürüyüş GÖRSEL olarak doğrulanmadı
+## 🟡 Durum: KISMEN HAZIR — ön-uçuş temiz, yürüyüşün BİR ekranı GERÇEKTEN görüldü, ötesi giriş-köprüsü arızasından engellendi
+
+## 🟢 GÜNCELLEME (aynı gün) — STYLES sekmesi gerçekten görüldü, `C-308`'in iki bulgusunu ekrandan doğruladı
+
+İlk yazımdan sonra `choreia-hatti` simülatörüne erişim ikinci denemede verildi ve uygulama
+zaten kurulu+açık çıktı. Ekranda GERÇEKTEN görülen metin, `docs/store/listing.json`
+(`C-308`) yazılırken kod okumasından çıkarılan iki kritik bulguyu birebir doğruladı:
+
+- **"34 styles are in the catalogue. One of them is open to practise right now, and none
+  of the open ones is graded."**
+- **Hip-Hop Foundations — "OPEN·NOT SCORED — 7 LESSONS WRITTEN·NONE GRADED·1 OPEN"**
+- **Salsa Shines — "BUILT·NOT OPEN — 9 LESSONS WRITTEN·1 GRADED·NONE OPEN — Not open — the
+  beat for this style is unconfirmed, and we will not grade your timing against a count we
+  are not sure of."**
+
+Bu, `C-308`'in `$onlyOneStartableLessonWhy` ve `$salsaExcludedWhy` notlarını KOD-ÇIKARIMINDAN
+EKRAN-KANITINA yükseltiyor — listing.json'ın metnini değiştirmiyor (zaten doğruydu), ama
+kanıt sınıfını güçlendiriyor.
+
+### 🔴 Yeni bulgu — giriş (tap/swipe/HOME) köprüsü bu oturumda tamamen yanıtsız
+
+Ekran görüntüsü çalıştı ama `tap` (2 farklı koordinat), `swipe` ve sistem-seviyeli
+`button:HOME` — DÖRDÜ DE ekranı hiç değiştirmedi. HOME düğmesinin yanıtsız kalması giriş
+köprüsünün TAMAMEN kapalı olduğunun kesin kanıtı (izin sorunu değil — erişim verilmişti).
+Bu yüzden Bounce dersine girip canlı kamera ekranını görmek bu turda mümkün olmadı — aile-
+geneli "kamera köprüsü canlılığı hiç ölçülmedi" sorusunun bir kardeşi: bu turda "giriş
+köprüsü canlılığı" da ölçülemedi.
 
 ## Bugünün taze ölçümü
 
@@ -27,34 +53,29 @@ tek bir geliştirme profili üretilmiş, ikinci (Store) profil yok. Betik yine d
 yazıldı (aynı hazırlık, gerçekleşmeden önce) — Choreia bir yayın-provası turu koşturduğunda
 bu kusura karşı zaten bağışık.
 
-## 🔴 Eksik kalan — yürüyüş adımı GÖRSEL olarak doğrulanamadı
+## 🔴 Eksik kalan — 15/16 satır hâlâ kod-okuması, giriş köprüsü arızalı
 
-`RECIPE.md`nin §3 tablosu bu turda yazıldı ama **kod-okumasından** — `choreia-hatti`
-simülatörüne erişim istendi ve reddedildi/bekliyordu:
+İlk denemede `choreia-hatti` simülatörüne erişim reddedildi/bekliyordu (muhtemelen paralel
+koşan eş-oturumlardan biri aynı kaynağı tutuyordu — `ListAgents` o an 8 aktif Motion-ailesi
+oturumu gösterdi). İkinci denemede erişim VERİLDİ ve `screenshot` çalıştı — ama ardından
+denenen `tap`/`swipe`/`button:HOME` (yukarıdaki 🟢 bölüm) HİÇBİRİ ekranı değiştirmedi.
+Yani engel değişti: önce erişim reddi, şimdi çalışan bir ekran-yakalama + yanıtsız bir
+giriş köprüsü. Sonuç aynı — STYLES sekmesi (madde 9) dışında tabloya GÖRSEL kanıt eklenemedi.
 
-```
-mcp__Claude_Code_iOS_Simulator__control{action:"attach"} →
-"The user has not granted Claude access to choreia-hatti (iOS 26.5) (a recent
-request was declined or is awaiting a response)."
-```
-
-Muhtemel sebep: bu gece paralel koşan sekiz eş-oturumdan biri aynı simülatör/panel kaynağını
-tutuyor olabilir (`ListAgents` bu turda 8 aktif Motion-ailesi oturumu gösterdi). Tekrar
-denemedim — araç talimatı aynı çağrıyı döngüde tekrarlamamayı söylüyor ("or try again later"
-ipucu var ama kök sebep kurucunun tek-tık izniyle çözülüyor, bu oturumda zorlanamaz).
-
-**Sonuç: RECIPE.md'nin §3 tablosu Gravita'nınkinden FARKLI bir kanıt sınıfı taşıyor** —
-Gravita'nınki gerçek ekran görüntüsünden, Choreia'nınki her satırın kaynak dosya+satırına
-bağlı birebir kod metninden. İkisi de "iddia değil" ama ikincisi "ekranda GÖRÜLDÜ" değil,
-"kodda YAZILI" — RECIPE.md'nin kendi başlığında bu fark adıyla ayrıldı, karıştırılmadı.
+**RECIPE.md'nin §3 tablosu artık İKİ kanıt sınıfını bir arada taşıyor, satır satır
+işaretli:** madde 9 🟢 gerçek ekrandan (Gravita'nın yöntemiyle aynı), geri kalan 15 satır
+🔴 kod-okumasından (dosya+satır kaynaklı, birebir metin ama görülmedi). Bu karışıklık
+yaratmasın diye RECIPE.md'nin başında ve ilgili satırda adıyla ayrıldı.
 
 ## Sıradaki
 
-- Bir sonraki turda `choreia-hatti` simülatörüne erişim iste (kurucunun panel içinden
-  "Let Claude use it" onayı gerekebilir) → `RECIPE.md`'nin §3 tablosunu gerçek ekran
-  görüntüleriyle DOĞRULA veya DÜZELT.
-- Kamera köprüsünün canlılığı (aile-geneli açık soru) bu paketin de yakalayamadığı bir
-  eksen — yalnız gerçek bir telefonda ölçülebilir.
+- Bir sonraki turda giriş köprüsünü tekrar dene (erişim artık sorun DEĞİL — sorun tap/swipe/
+  HOME'un yanıtsız kalması; başka bir oturum penceresi/kilit tutuyor olabilir, ya da ortamın
+  kendi bir sınırı) → geçerse `RECIPE.md`'nin kalan 15 satırını gerçek ekran görüntüleriyle
+  DOĞRULA veya DÜZELT.
+- Kamera köprüsünün canlılığı (aile-geneli açık soru) VE şimdi giriş köprüsünün canlılığı —
+  ikisi de bu paketin yakalayamadığı bir eksen, yalnız gerçek bir telefonda/çalışan bir giriş
+  köprüsünde ölçülebilir.
 
 ## Kaynaklar
 

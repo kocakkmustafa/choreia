@@ -61,15 +61,22 @@ anında `signal 11` ile ölür. Yalnız `--release` (AOT derleme) cihazda GERÇE
 
 ## 3 — Yürüyüş (kurucu eli ister — beklenen kanıt listesi)
 
-🔴 **BU TABLO KOD-OKUMASINDAN türetildi, bu turda simülatör/cihaz ekran görüntüsüyle
-DOĞRULANMADI** — Gravita'nın kendi tablosunun aksine (o, gerçek simülatör ekran
-görüntülerinden türetilmişti). `choreia-hatti` simülatörüne bu oturumda erişim istendi
-(`mcp__Claude_Code_iOS_Simulator__control attach/screenshot`) ve **reddedildi/bekliyor**
-("The user has not granted Claude access to choreia-hatti... a recent request was declined
-or is awaiting a response") — muhtemelen bu gece paralel koşan sekiz eş-oturumdan biri aynı
-simülatörü tutuyor. Aşağıdaki her satır kaynak dosya+satırıyla işaretli (birebir kod
-metni, tahmin değil) ama GÖRSEL doğrulama henüz yapılmadı — bu, cihaz gününün kendisinin
-ilk işi.
+🟡 **GÜNCELLEME (aynı gün, ikinci deneme) — erişim bu kez VERİLDİ, madde 9 GERÇEKTEN
+GÖRÜLDÜ, ama giriş (tap/swipe/HOME) köprüsü bu oturumda YANITSIZ.** `choreia-hatti`
+simülatörüne ilk denemede erişim reddedilmişti; ikinci denemede (`ListAgents` eş-oturum
+sayısı 8'den 5'e düşmüştü) `screenshot` GERÇEKTEN çalıştı ve uygulama zaten kurulu+açık
+çıktı (STYLES sekmesi, aşağıda madde 9 — metnin BİREBİR AYNISI ekranda görüldü, tahmin
+değil). Ardından `tap` (Hip-Hop Foundations kartı, iki farklı koordinat), `swipe` (yukarı
+kaydırma) ve son olarak sistem-seviyeli `button:HOME` denendi — **DÖRDÜ DE ekranı hiç
+değiştirmedi** (saat 07:17→07:18 ilerledi, içerik birebir aynı kaldı). HOME düğmesinin bile
+yanıtsız kalması giriş köprüsünün bu oturumda TAMAMEN kapalı olduğunun kesin kanıtı —
+izin sorunu değil (erişim verilmişti), ekran-yakalama çalışıyor ama dokunuş/tuş hiçbir yere
+ulaşmıyor. Araç talimatı aynı çağrıyı döngüde tekrarlamamayı söylüyor, daha fazla denenmedi.
+
+**Sonuç, madde bazında ayrıldı:** madde 9 (STYLES sekmesi) 🟢 GERÇEKTEN GÖRÜLDÜ — aşağıdaki
+metin ekrandan birebir. Diğer tüm satırlar hâlâ 🔴 KOD-OKUMASI (Gravita'nın tablosunun
+aksine, simülatör ekran görüntüsüyle doğrulanmadı) — giriş köprüsü çalışmadığı için
+ötesine geçilemedi.
 
 | # | Ekran/eylem | Beklenen (kod kaynağı) | Kaynak |
 |---|---|---|---|
@@ -81,7 +88,7 @@ ilk işi.
 | 6 | Onboarding — "WHERE THIS IS TODAY" kartı | Katalogdan CANLI türetilir: "One style has a lesson you can open today, out of N in the catalogue..." — bu turda `N` ölçülmedi (kod, `content/library.json`den çalışma-zamanında sayıyor) | `first_run_view.dart:218-227` `IntroStrings.today()` |
 | 7 | "Open the catalogue" düğmesi | STYLES sekmesine geçer | `first_run_view.dart:259` + `choreia_shell.dart:382` |
 | 8 | Kamera izni | Sistem izin diyaloğu (uygulamanın kendi ekranı DEĞİL) — metin adım 3'teki ile birebir aynı olmalı | `ios/Runner/Info.plist` `NSCameraUsageDescription` |
-| 9 | STYLES sekmesi | hip_hop_foundations açık (demoOpen rozeti); salsa_shines `builtButGated` rozetiyle (puanlı dersi var ama BPM kapısı kapalı — bkz `C-308`); diğer üçü (dancehall/samba_no_pe/shuffle) "yakında" | `content/library.json` + `library_catalog.dart` `StyleBadge` |
+| 9 | STYLES sekmesi | 🟢 **GERÇEKTEN GÖRÜLDÜ** (2026-08-17, `choreia-hatti`): "34 styles are in the catalogue. One of them is open to practise right now, and none of the open ones is graded." · filtreler "ALL·34 / OPEN NOW·1 / NOT OPEN·33" · **"Hip-Hop Foundations — OPEN·NOT SCORED — 7 LESSONS WRITTEN·NONE GRADED·1 OPEN"** · **"Salsa Shines — BUILT·NOT OPEN — 9 LESSONS WRITTEN·1 GRADED·NONE OPEN — Not open — the beat for this style is unconfirmed, and we will not grade your timing against a count we are not sure of."** — `C-308`nin iki kritik bulgusunu (yalnız Bounce açılabilir; salsa'nın puanlı dersi var ama erişilemez) BİREBİR, koddan değil EKRANDAN doğruluyor | Ekran görüntüsü (bu oturumda görüldü, dosya olarak kaydedilmedi) + `content/library.json` + `library_catalog.dart` `StyleBadge` |
 | 10 | hip_hop_foundations'a gir | Level 1: Bounce (açılabilir, "not graded"), Rock (kilitli), Running Man/Groove/Roger Rabbit (bilgilendirici sayfa — `step` yok, "Start" düğmesi YOK); Level 2: iki drill (bilgilendirici) | `content/styles/hip_hop_foundations/style.json` + `library_catalog.dart:476` `_offer()` |
 | 11 | Bounce'a gir, "Start" | Kamera izni zaten verildiyse doğrudan canlı ekrana geçer | `live_view.dart` |
 | 12 | Canlı ekran | Kamera görüntüsü/iskelet ÇİZİLMEZ (grep doğrulandı, sıfır `CameraPreview`/`CustomPainter`) — yalnız metin: "Watching. Keep going — we read a full repetition at a time." + sayaç "N read so far" | `live_view.dart` `LiveStrings.watching`/`cycles()` |
