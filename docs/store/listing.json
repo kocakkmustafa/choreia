@@ -1,7 +1,7 @@
 {
   "$doc": "Magaza liste metni TASLAGI — makine-okur kaynak. Insan-okur baglam: docs/store/STORE-LISTING-TASLAK.md. Desen: ostinato/app/docs/store/listing.json (aile emsali, en yeni tamamlanan D6, ayni claim-audit yapisi). Gonderim KURUCU kalemi (B7) — bu dosya yalniz TASLAK, onay bekliyor. SUBMIT edilmiyor. H-58 uyarinca yazildiktan sonra orkestratore bildirilir, yan yana okuma yapilir — bu commit TEK BASINA yeterli degil.",
   "appStore": {
-    "name": "Choreia",
+    "name": "Choreia: Learn to Dance",
     "subtitle": "Hip-hop dance practice",
     "promotionalText": "Camera-tracked hip-hop practice. The Bounce counts your repetitions and shows exactly what it measured against three real teachers — no score yet, and we say why.",
     "keywords": "dance,hip hop,dance practice,camera coach,pose tracking,rep counter,dance tutorial,step by step"
@@ -33,5 +33,8 @@
     ]
   },
   "$notClaimed": "Bu taslak 'cihazda dogrulandi/kanitlandi' turunde hicbir cumle icermiyor. Description'daki her cumle BUGUN kod-gercegine dayanir (style.json + library.json + library_catalog.dart + live_view.dart + motion_camera paketi grep, bu oturumda dogrudan okundu), plan/PRD hedefine degil. Cihaz-performansi/upload/submit iddiasi tasimaz — B7 kurucu kalemi.",
-  "$claimAuditWhy": "D6 taslagi, YAYIN-YOLU-CHOREIA.md madde 2 (2026-08-17, orkestrator sevki). Ostinato'nun $claimAuditWhy denetiminin uc dersi (saklama-yalani · olculuyor-ama-gosterilmiyor · asiri-iddia 'graded') ONCEDEN uygulandi: (1) saklama — session store JSONL, video hic tutmuyor, Info.plist'in kendi cumlesiyle DOGRUDAN tutarli, ayri bir kopya yazilmadi. (2) olculuyor-ama-gosterilmiyor sinifinin BU OTURUMDA BULUNAN IKI YENI ORNEGI: (a) salsa'nin puanli dersi var ama ULASILAMAZ ($salsaExcludedWhy) — description'dan CIKARILDI; (b) uc demoOnly hip-hop dersi 'gosteriliyor' ama kameraya HIC baglanmiyor ($onlyOneStartableLessonWhy) — 'INTERACTIVE' vs 'SHOWN, NOT YET INTERACTIVE' ayrimiyla adiyla ayrildi. (3) asiri-iddia — description 'graded'/'scored' kelimesini yalniz OLUMSUZLUKLA kullaniyor ('does not turn that into a single score'), 'coach' kelimesi HIC gecmiyor (Ostinato'nun aksine — Choreia'nin bugunku tek dersi puansiz, 'coach' kelimesi bir degerlendirme vaat eder gibi okunurdu)."
+  "$claimAuditWhy": "D6 taslagi, YAYIN-YOLU-CHOREIA.md madde 2 (2026-08-17, orkestrator sevki). Ostinato'nun $claimAuditWhy denetiminin uc dersi (saklama-yalani · olculuyor-ama-gosterilmiyor · asiri-iddia 'graded') ONCEDEN uygulandi: (1) saklama — session store JSONL, video hic tutmuyor, Info.plist'in kendi cumlesiyle DOGRUDAN tutarli, ayri bir kopya yazilmadi. (2) olculuyor-ama-gosterilmiyor sinifinin BU OTURUMDA BULUNAN IKI YENI ORNEGI: (a) salsa'nin puanli dersi var ama ULASILAMAZ ($salsaExcludedWhy) — description'dan CIKARILDI; (b) uc demoOnly hip-hop dersi 'gosteriliyor' ama kameraya HIC baglanmiyor ($onlyOneStartableLessonWhy) — 'INTERACTIVE' vs 'SHOWN, NOT YET INTERACTIVE' ayrimiyla adiyla ayrildi. (3) asiri-iddia — description 'graded'/'scored' kelimesini yalniz OLUMSUZLUKLA kullaniyor ('does not turn that into a single score'), 'coach' kelimesi HIC gecmiyor (Ostinato'nun aksine — Choreia'nin bugunku tek dersi puansiz, 'coach' kelimesi bir degerlendirme vaat eder gibi okunurdu).",
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
+  "$urlWhy": "Kurucu karari 2026-08-17 (H-85): supportUrl+privacyPolicyUrl Apple'in ZORUNLU alanlari, bes app ORTAK sayfa kullanir. Sayfalar yulalab.com'da yazildi (/privacy/motion bes app icin ortak politika; /support Motion'i kapsayacak sekilde guncellendi). Deger hat tarafindan SECILMEDI, kurucu karari olarak yazildi."
 }
