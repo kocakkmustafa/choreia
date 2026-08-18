@@ -1031,3 +1031,46 @@ sözleşmesinin yeniden kullanımı önerisi (roadmap'in ham "eksik hücrede exi
 kilitleyebilirdi).
 
 **Sıradaki:** Motion Orchestration'dan slot kararı bekleniyor; PREP kadansında (/loop 45-60dk) devam.
+
+---
+
+## Tur: SOLO OTURUM v3, CHO-P0-001 KABUL — 2026-08-19
+
+**Bağlam değişti:** 14-oturumlu üretim hattı orkestrasyonu 2026-08-19'da kurucu kararıyla İPTAL edildi;
+bu oturum artık `SOLO-KICKOFF-PROMPTLARI-2026-08-19.md` sözleşmesi altında bağımsız çalışıyor —
+orkestratör/koordinatör/mesajlaşma YOK, onaylar bu pencerede kurucuya soruluyor.
+
+**Kickoff'un düzeltilmiş teşhisiyle başlandı:** "salsa_shines=live ama erişilemez" bir dürüstlük ihlali
+DEĞİL (R27 + C-315'in dünkü ölçümü zaten bunu bulmuştu) — gerçek açık iş yalnız CHO-P0-001'in formal
+evidence paketinin hiç var olmaması ve 2026-08-17'den kalan doğrulanmamış giriş-köprüsü sorunuydu.
+
+**Bu turda kapanan (C-316, evidence: `docs/evidence/production-line/CHO-P0-001/`):**
+
+1. **34 stilin TAMAMI** (R27'nin dizin-örneklemesi değil) `catalog_cross_check.py` ile programatik
+   doğrulandı — 0 yapısal uyuşmazlık. `comingSoon` sayısı gerçekte **31**, R27'nin "29"u düzeltildi
+   (sonuç aynı kaldı: sahte/aşırı-iddia yok). 3 stilin (`dancehall`/`shuffle`/`samba_no_pe`) klasörü var
+   ama `style.json`u yok — kafes kuralıyla hâlâ tutarlı, öksüz değil (adları `prepare_take.py` +
+   `metric-vocabulary.json`da zaten geçiyor).
+2. **Giriş-köprüsü yeniden test edildi ve temizlendi.** `choreia-hatti`/`choreia-narrow` (Choreia'ya özel
+   simülatörler) boyunca tap/HOME sorunsuz çalıştı; yalnız paylaşımlı (Choreia'ya özel olmayan, ekranında
+   Burun Farkı ikonu görülen) iPad simülatörü birkaç dakika eş-oturum çekişmesi gösterdi, zorlamadan
+   beklenince düzeldi. 2026-08-17'nin kendi "muhtemelen çekişme" hipotezi doğrulandı — köprüde yapısal
+   kusur yok. Detay: `input-bridge-retest.md`.
+3. **Dört-viewport gerçek ekran kanıtı** üretildi (iPhone 13 mini/17 Pro/17 Pro Max + iPad Pro 13" —
+   iPad iPadOS uyumluluk-penceresinde render ediyor, native tam-ekran değil, ayrı not edildi, bu task'ın
+   kapsamı değil). Dördü de birebir aynı dürüstlük metnini gösterdi.
+4. **"Kilitli kart tamamlanmış ders üretmiyor" testi** zaten `style_detail_test.dart` +
+   `reachability_test.dart`ta VARDI (yeni yazılmadı, bulunup kanıt matrisine bağlandı) — her `Start`
+   düğmesinin `onPressed != null` olduğu, engellenen derslerin düğme yerine cümle aldığı zaten kanıtlı.
+   "Premium entitlement üretmiyor" yarısı boş kümedir — `lib/services/` henüz yok (CHO-P1-005 kapsamı).
+5. **Kod/içerik değişikliği YAPILMADI** — envanter 0 uyuşmazlık verdi, mevcut UI zaten roadmap'in istediği
+   davranışı taşıyordu. Bu tur doğrulama+biçimlendirmeydi (C-315: "malzeme var, format yok").
+6. **Taze `gates.sh` koşumu** (dünkü iddiaya güvenmeden): 269 flutter + 36 engine + 23 self-test, 25/25
+   yeşil, exit 0.
+
+**Kuruculara hatırlatma (EXTERNAL_GATE, bu turda kapatılmadı):** Salsa BPM çözümü kurucunun ~10 dk canlı
+tap işi (`tools/beat_annotate.py`; paket `scratch/2026-08-19-motion-orch/MANUAL-MOTION-CHOREIA-BPM-20260819.yaml`)
+— pencerede hatırlatıldı, yanıt bekleniyor. CHO-P0-001'i bloklamıyor (katalog dürüstlüğü BPM kapısının
+durumundan bağımsız), CHO-P0-003/W1 içerik-tamlığı işine ilgili.
+
+**Sıradaki:** CHO-P0-002 (offline/privacy/signing/CI baseline).

@@ -1,0 +1,50 @@
+Total styles declared in library.json: 34
+
+id                           wave  status      dirExists  styleJson  stepFiles
+------------------------------------------------------------------------------
+hip_hop_foundations          1     demoOpen    True       True       ['hh_bounce.json', 'hh_rock.json']
+latin_fusion_fitness         1     comingSoon  False      False      []
+line_dance                   1     comingSoon  False      False      []
+salsa_shines                 1     live        True       True       ['ss_basic.json', 'ss_shine_footwork.json']
+tiktok_format                1     comingSoon  False      False      []
+kpop_point                   2     comingSoon  False      False      []
+bachata_solo                 2     comingSoon  False      False      []
+afrobeats                    2     comingSoon  False      False      []
+dancehall                    2     comingSoon  True       False      ['dh_bounce.json']
+shuffle                      2     comingSoon  True       False      ['sh_running_man.json', 'sh_t_step.json']
+belly_dance                  2     comingSoon  False      False      []
+bollywood                    2     comingSoon  False      False      []
+merengue_solo                2     comingSoon  False      False      []
+cumbia_solo                  2     comingSoon  False      False      []
+ballroom_latin_solo          3     comingSoon  False      False      []
+tap                          3     comingSoon  False      False      []
+locking                      3     comingSoon  False      False      []
+popping                      3     comingSoon  False      False      []
+waacking                     3     comingSoon  False      False      []
+vogue                        3     comingSoon  False      False      []
+jazz                         3     comingSoon  False      False      []
+samba_no_pe                  3     comingSoon  True       False      ['sm_samba_no_pe.json']
+solo_jazz_charleston         3     comingSoon  False      False      []
+bhangra                      3     comingSoon  False      False      []
+ballet_barre                 4     comingSoon  False      False      []
+contemporary                 4     comingSoon  False      False      []
+flamenco                     4     comingSoon  False      False      []
+irish_dance                  4     comingSoon  False      False      []
+kizomba_zouk_solo            4     comingSoon  False      False      []
+garba                        4     comingSoon  False      False      []
+twerk_reggaeton              4     comingSoon  False      False      []
+heels                        5     comingSoon  False      False      []
+breaking                     5     comingSoon  False      False      []
+hula                         None  onHold      False      False      []
+
+STRUCTURAL MISMATCHES (status vs style.json presence): NONE -- 0/34
+
+comingSoon styles that DO have a directory with orphaned steps/*.json but no
+style.json (still lattice-consistent -- style.json absence is what the rule
+checks, not directory absence; these are known/tracked raw step fixtures, see
+tools/prepare_take.py and content/metric-vocabulary.json references):
+  - dancehall: ['dh_bounce.json']
+  - shuffle: ['sh_running_man.json', 'sh_t_step.json']
+  - samba_no_pe: ['sm_samba_no_pe.json']
+
+comingSoon total: 31 (R27 2026-08-18 said '29' -- exhaustive count today is 31; R27's figure undercounted by not exhaustively listing every entry, though its conclusion -- 'no fake/oversold status' -- holds)
