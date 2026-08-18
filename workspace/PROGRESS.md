@@ -997,3 +997,37 @@ yalnız eşiği aşan iki dosyada, bu yüzden "bundle sorunu" gibi göründü.
 3. **`gates.sh`'in üçüncü hâli (`exit 2`)** ayrı sabote edilmedi.
 4. **`motion_camera` gizlilik manifestinin podspec'i** — motion-core alanı,
    koordinatörde. Dokunulmadı.
+
+---
+
+# 🏭 VARDİYA 2026-08-18 — üretim hattı bootstrap, baseline yeniden mühürlendi, bildirilen P0 ölçümle sorgulandı (C-315)
+
+**Bağlam değişti:** oturum artık `URETIM-HATTI-OTURUM-PROTOKOLU-2026-08-18.md` altında, orkestratörü
+**Motion Orchestration**, hattı PREP lane. Önceki "design linki bekleniyor" bekleme modu (`YENI-OTURUM-PROMPT.md`
+üst bloğu) bu kickoff'la SÜPERSEDE edildi — production-line kickoff artık kanonik.
+
+**Baseline yeniden ölçüldü (iddiaya değil):** `app` HEAD `9b472de`, ağaç temiz, `origin/main` ile 0/0,
+common pin (`motion_core`+`motion_camera`) tam 40-karakter `f13bdc93...` doğrulandı. `bash tool/gates.sh`
+**tamamen yeşil**: 269 flutter + 36 engine test, `flutter analyze` 0 uyarı, tüm özel validator/self-test geçti.
+
+**Bildirilen P0 yeniden ölçüldü, çerçevesi doğrulanmadı:** kickoff "`salsa_shines=live` ama runtime'da
+erişilemez — dürüstlük ihlali" diyordu. Ölçüm: semptom doğru ama bu **C-101→C-103→C-138'de (07-30) zaten
+bulunmuş, M-F-130'a bağlanmış, `style_availability.dart`'a mimari kilitlenmiş, 2026-08-17'de gerçek
+simülatör ekranından DA doğrulanmış** (`docs/device-day/PAKET.md`) kasıtlı bir davranış — kapalı ship-gate
+sağlıklı content-status'u isimli gerekçeyle ezer, "live" rozeti kullanıcıya hiç sızmaz. Olası okuma: 08-18
+sistemik denetim `statusNote`/`shipGatesNote`/DEFTER geçmişini okumadan ham `status` alanını runtime'la
+karşılaştırmış olabilir — yani denetimin kendisi C-101 sınıfı bir vekil-okuma. Tam kanıt zinciri: `C-315`.
+
+**Gerçekten açık bulunanlar:** CHO-P0-001'in formal evidence paketi (`docs/evidence/production-line/`)
+hiç yok — malzeme var, format yok. **Yeni** (2026-08-17, kapanmamış): `choreia-hatti` simülatöründe giriş
+köprüsü (tap/swipe/HOME) tamamen yanıtsız kaldı, RECIPE.md'nin 16 satırından yalnız 1'i ekrandan doğrulandı.
+
+**PREP dörtlüsü tamamlandı** (`docs/research/R27-uretim-hatti-prep-2026-08-18.md`): (a) 34 yüzeyin W1–W5+Hula
+envanteri (sahte/aşırı-iddia bulunamadı, 29 comingSoon disk-yokluğuyla tutarlı) · (b) Hula partner adayları
+(en güçlü: Hula Preservation Society — dijital-ortaklık presedenti zaten var; temas kurulmadı, kurucu kapısı)
+· (c) müzik-hakları gap analizi (R3 mevcut ve sağlam, territory+platform eksenleri sistematik değil, Uppbeat
+önerisi + rights-ledger şema taslağı) · (d) `run_device_matrix.sh` için `gates.sh`'in kendi exit-2/"ORTAM YOK"
+sözleşmesinin yeniden kullanımı önerisi (roadmap'in ham "eksik hücrede exit 1" tasarımı cihazsız oturumu
+kilitleyebilirdi).
+
+**Sıradaki:** Motion Orchestration'dan slot kararı bekleniyor; PREP kadansında (/loop 45-60dk) devam.
