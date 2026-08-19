@@ -26,3 +26,7 @@ __pycache__/
 # klonda taşınmaz). `tool/fetch_pose_model.sh` indirir/kopyalar ve SHA-256
 # doğrular; pin `lib/app/live/pose_model.dart`'ta yaşar.
 *.task
+
+# CHO-P0-002 — self-hosted google_fonts dosyaları. AYNI desen: pinli SHA-256
+# `tool/fetch_fonts.sh`'ta yaşar, ikili git'e girmez (lissom L-348 emsali).
+/assets/fonts/

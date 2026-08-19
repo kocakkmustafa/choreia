@@ -56,6 +56,13 @@ run "model provenance"    bash -c 'cd tools && python3 test_model_provenance.py'
 run "coordinate space"    bash -c 'cd tools && python3 test_coordinate_space.py'
 run "network dependency"  python3 tools/network_dependency_check.py
 
+# Sır sızıntısı taraması (CHO-P0-002). Aile emsali YOK — dört kardeş hattın
+# hiçbirinde gerçek bir secret-scan adımı yok (ölçüldü); bu kapı sıfırdan
+# yazıldı. `git ls-files` üzerinden çalışır: yalnız İZLENEN (commit'e girecek)
+# dosyaları tarar, `.gitignore`ın zaten dışladığı sınıfları (key.properties,
+# *.jks, *.ttf) ikinci kez taramaz — iki ayrı savunma katmanı.
+run "secret scan"         python3 tools/secret_scan.py
+
 # Gizlilik manifesti (C-266, A8). Kapı kısıtına uygun: A tablosunun KENDİ
 # kalemini doğruluyor. İki yön: ① manifest Xcode projesine 4/4 bağlı mı
 # (bağlı değilse depoda durur, PAKETE GİRMEZ) ② boş `NSPrivacyAccessedAPITypes`
@@ -104,6 +111,7 @@ run "identity_read self-test"     python3 tools/identity_read.py --self-test
 run "closure_authority self-test" python3 tools/closure_authority.py --self-test
 run "ledger_freshness self-test"  python3 tools/ledger_freshness_check.py --self-test
 run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
+run "secret_scan self-test"       python3 tools/secret_scan.py --self-test
 # C-276. Diğer öz-testlerden farklı bir şey ölçüyor: ötekiler bir ARACIN
 # doğruluğunu kanıtlıyor, bu bir KONTROLÜN BAĞLI OLDUĞUNU. Sebebi ölçülmüş —
 # `validate_content.py`nin yüzey-dili kontrolü aynı gece iki kez sessizce

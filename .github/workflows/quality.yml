@@ -1,0 +1,134 @@
+name: quality
+
+# CHO-P0-002. Aile emsali: gravita/lissom `checks.yml` — AYNI iskelet
+# (gates job + iki release-kod-yolu job'u), Choreia'nın kendi `tool/
+# gates.sh`ini TEK doğruluk kaynağı olarak kullanır (kapı listesi burada
+# ayrıca sayılmaz — yeni bir kapı script'e eklenip CI'a eklenmeyi
+# unutulabilirdi). Dosya adı roadmap'in kendi metninde (§6, CHO-P0-002
+# Files listesi) `quality.yml` olarak adlandırılmış; gravita/lissom'daki
+# `checks.yml` adı bu depoda BİLEREK korunmadı — roadmap dosya adını
+# isimlendirmişse o isim kullanılır.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  gates:
+    name: secret scan + dependency audit + analyze + app/engine tests + içerik kapıları
+    # `tool/gates.sh` TEK doğruluk kaynağı: secret scan, network dependency,
+    # flutter analyze, flutter test, engine test, content validation,
+    # privacy manifest, template assets, closure authority, ledger
+    # freshness ve 10 aracın öz-testi — hepsi ZATEN orada, tek koşum.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Poz modeli (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_pose_model.sh
+
+      - name: Yazı tipleri (pinli SHA-256 doğrulamalı, CHO-P0-002)
+        run: tool/fetch_fonts.sh
+
+      - name: motion-core erişimi (private repo, salt-okunur)
+        # pubspec.yaml motion_core/motion_camera'yı private bir git
+        # deposundan çekiyor (kocakkmustafa/motion-core, doğrulandı: `gh
+        # repo view --json isPrivate` → true, bu turda ölçüldü — gravita'nın
+        # G-… bulgusuyla AYNI repo, aynı sonuç). actions/checkout@v4'ün
+        # verdiği GITHUB_TOKEN yalnız BU depoya scope'lu, motion-core'u
+        # klonlayamaz (aile emsali, Lissom L-351). Secret YOKSA bu adım
+        # SESSİZCE atlanır — pub get aynı yerde kırmızı kalır, YENİ bir
+        # bozulma yok. Secret kurucu tarafından GitHub arayüzünden
+        # eklenince (salt-okunur deploy-key/PAT, `MOTION_CORE_RO_TOKEN`)
+        # bu adım devreye girer, ekstra kod değişikliği GEREKMEZ.
+        if: ${{ env.MOTION_CORE_RO_TOKEN != '' }}
+        env:
+          MOTION_CORE_RO_TOKEN: ${{ secrets.MOTION_CORE_RO_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
+
+      - run: flutter pub get
+
+      - name: Bağımlılık envanteri (dependency audit — bilgilendirici, kapı DEĞİL)
+        # Dart/Flutter ekosisteminde npm-audit dengi bir CVE veritabanı
+        # yok; roadmap'in "dependency audit" maddesi burada iki parçaya
+        # ayrılıyor: ① `network dependency` (gates.sh içinde, BLOKLAYICI —
+        # hangi bağımlılığın ağa çıkabildiğini isim+gerekçeyle kaydeder) ②
+        # bu adım (bilgilendirici — güncel/geride kalan sürümleri GÖRÜNÜR
+        # kılar, build'i durdurmaz; hangi sürümün "vulnerable" sayılacağına
+        # insan karar verir, otomatik kapı icat edilmedi).
+        run: flutter pub outdated || true
+
+      - name: tool/gates.sh (secret scan + analyze + 269 app + 36 engine test + 10 araç öz-testi)
+        run: bash tool/gates.sh
+
+  android-release-build:
+    name: Android release build — kod yolu kanıtı, İMZALI YAYIN DEĞİL
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Poz modeli (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_pose_model.sh
+
+      - name: Yazı tipleri (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_fonts.sh
+
+      - name: motion-core erişimi (private repo, salt-okunur)
+        # gates işindeki AYNI adım — gerekçe orada.
+        if: ${{ env.MOTION_CORE_RO_TOKEN != '' }}
+        env:
+          MOTION_CORE_RO_TOKEN: ${{ secrets.MOTION_CORE_RO_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
+
+      - run: flutter pub get
+
+      - name: Android release build — imzasız, KOD YOLU kanıtı
+        # Gerçek keystore kurucuda (~/.secrets/yula/), CI'da YOK.
+        # `-PallowDebugSigning` android/app/build.gradle.kts'in KENDİ kaçış
+        # kapısı (CHO-P0-002, gravita/lissom emsali — test/
+        # android_signing_test.dart bunu nöbetler). Bu adım release KOD
+        # YOLUNUN derlendiğini kanıtlar; Play'e yüklenebilir bir artefakt
+        # ÜRETMEZ (build.gradle.kts kendi uyarısını basar).
+        run: flutter build appbundle --release -PallowDebugSigning=true
+
+  ios-release-build:
+    name: iOS release build, no-codesign
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Poz modeli (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_pose_model.sh
+
+      - name: Yazı tipleri (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_fonts.sh
+
+      - name: motion-core erişimi (private repo, salt-okunur)
+        if: ${{ env.MOTION_CORE_RO_TOKEN != '' }}
+        env:
+          MOTION_CORE_RO_TOKEN: ${{ secrets.MOTION_CORE_RO_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
+
+      - run: flutter pub get
+
+      - name: iOS release build, imzasız
+        # `--no-codesign`: CI runner'ında imzalama sertifikası yok ve
+        # olmamalı (sertifika hesap-sahibi kalemidir). Bu adım release
+        # derleme yolunun GERÇEKTEN derlendiğini kanıtlar.
+        run: flutter build ios --release --no-codesign

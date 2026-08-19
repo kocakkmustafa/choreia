@@ -1074,3 +1074,48 @@ tap işi (`tools/beat_annotate.py`; paket `scratch/2026-08-19-motion-orch/MANUAL
 durumundan bağımsız), CHO-P0-003/W1 içerik-tamlığı işine ilgili.
 
 **Sıradaki:** CHO-P0-002 (offline/privacy/signing/CI baseline).
+
+---
+
+## Tur: CHO-P0-002 KABUL — 2026-08-19 (aynı oturum, devam)
+
+**Önce bir bulgu, sonra iş:** Android signing dosyaları (`build.gradle.kts`,
+`android_signing_test.dart`) uncommitted bulundu, `git add` bir `.git/index.lock`a
+çarptı — `ps aux` **farklı bir session-ID'li, canlı çalışan başka bir Claude Code
+oturumunun** (motion-core, aile-geneli beş-tüketici contract-matrix taraması
+yapıyordu) aynı anda aynı dosyaları commit ettiğini gösterdi (`a3eab87`). Kurucuya
+soruldu, "devam et" onayı geldi — ama gerçek yazar motion-core'du, DEFTER'e YANLIŞ
+atıf yazılmıştı, C-317 ile düzeltildi (kendi işim DEĞİLDİ diye kayıt düzeltmesi).
+
+**Bu turda kapanan (C-318, evidence: `docs/evidence/production-line/CHO-P0-002/`):**
+
+1. **Signing kaçış-kapısı.** motion-core'un bıraktığı jablab-J-215-birebir deseni
+   (anahtar yoksa hard-fail, kaçış yok) `flutter build appbundle --release`i
+   hiçbir koşulda ÇALIŞTIRAMAZDI — roadmap bunu istiyor. Gravita/lissom emsali
+   (`allowDebugSigning` opt-in bayrağı) Choreia'ya port edildi; test negatif-
+   regex'ten pozitif-varlık+sabotaj desenine yükseltildi (kendi sabotaj testim
+   BİR hata yakaladı, düzeltildi — kendi-kendini-doğrulama). GERÇEK gradle
+   koşumuyla (metinle değil) doğrulandı: bayraksız BEKLENEN banner'la durdu,
+   bayrakla BEKLENEN uyarıyla bitti.
+2. **Runtime font fetch KAPANDI.** `google_fonts`un üç ailesi (Instrument Serif,
+   Manrope, IBM Plex Mono) artık `assets/fonts/`da self-host (lissom L-348
+   deseni). Hangi ağırlıkların gerekli olduğu TAHMİN edilmedi — geçici bir ölçüm
+   testiyle (kullanılıp silindi) Flutter'ın Material3 varsayılan TextTheme'inin
+   HER rolünün `null` (=w400) olduğu ölçüldü, tek açık override grep'lendi.
+   Hash'ler kurulu google_fonts paketinin KENDİ kaynağından okundu. Kanıt:
+   272/272 test yeşil (eksik ağırlık istisnayla düşerdi) + gerçek simülatör
+   kurulumunda üç özel yazı tipinin doğru render edildiği GÖRÜLDÜ.
+3. **Secret scan — aile-geneli İLK.** Dört kardeş hat CI'sı tarandı, hiçbirinde
+   yoktu. `tools/secret_scan.py` sıfırdan yazıldı, gates.sh'e bağlandı.
+4. **`.github/workflows/quality.yml`** — gravita `checks.yml` iskeletinden,
+   Choreia'nın kendi `gates.sh`ini tek doğruluk kaynağı kullanarak.
+5. **Privacy/permission yüzeyleri DOĞRULANDI, DEĞİŞTİRİLMEDİ** — zaten doğruydu
+   (kamera-only, mikrofon kodu yok). **YENİ:** `docs/store/data-safety-matrix.md`,
+   ailede ilk kez.
+6. **İki gerçek release build:** Android AAB (75,7 MB, imzasız kod-yolu kanıtı) +
+   iOS Runner.app (46,0 MB, `--no-codesign`) — ikisi de hash'lendi, kanıt paketinde.
+
+**Eksik, adıyla:** CI workflow'un henüz GERÇEK bir GitHub Actions koşumu yok
+(push edilmeden koşamaz) — sıradaki tura açık.
+
+**Sıradaki:** CHO-P0-003 (Bounce model doğruluk kapısı).

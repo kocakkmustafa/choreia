@@ -1,0 +1,57 @@
+── flutter test
+00:06 +272: All tests passed!
+── flutter analyze
+No issues found! (ran in 2.3s)
+── engine (dart test)
+00:00 +36: All tests passed!
+── validate_content
+OK
+── metric vocabulary
+OK
+── model provenance
+OK
+── coordinate space
+  benzer mertebede, o yüzden hakem olarak değil referans olarak okunur.
+── network dependency
+✅ İddia korunuyor: yükleyici izi yok, bağımlılıklar (yaml+lock) kayıtlı, vakum değil.
+── secret scan
+✅ sır deseni yok — 277 izlenen dosya tarandı, 0 bulgu.
+── privacy manifest
+✅ gizlilik manifesti: var, geçerli, Xcode projesine 4/4 bağlı, ve beyan 5 Runner kaynağıyla uyuşuyor
+── template assets
+✅ şablon-varlık denetimi TEMİZ (kayıtlı istisnalar dışında) — 18/25 varlık stok Flutter görsellerinden GERÇEKTEN farklı (MD5 karşılaştırmalı)
+── identity read
+OK — hiçbir kabul edilmiş kaynağın transkripti atandığı dersi çürütmüyor. (Sessizlik/kanıt-yok BLOKLAMAZ ve kütükte sayılıdır.)
+── closure authority
+OK — kapanış iddiası olan her kayıt, kendi durum sütununda da kapalı, ve taşınan ayrışma yok.
+── ledger freshness
+OK — gedik iki yönde de 0: anılan her kaydın satırı var, taban çizgisi sonrası her kaydın commit'i var.
+── prepare_take self-test
+sabit bir sayı döndürmediğinin kanıtı.
+── probe_knee_dips self-test
+SELF-TEST OK
+── movement_isolator self-test
+The 'standing still' row is the one that matters: periodicity alone would rank it top, and requiring motion is what rejects it.
+── camera_angle_gate self-test
+The constant-angle cases are the ones that matter: self-calibration alone reads them as fine, and only the depth cross-check catches them.
+── build_reference self-test
+bu sınırın sessizce iddiaya dönüşmesini engelliyor.
+── beat_annotate self-test
+Workflow conclusion: 16+ taps at ordinary human precision pin the tempo well within a beat-alignment window; 4 taps do not and the fit says so rather than pretending.
+── identity_read self-test
+SELF-TEST OK (8 kontrol)
+── closure_authority self-test
+SELF-TEST OK (5 kontrol)
+── ledger_freshness self-test
+SELF-TEST OK (12 kontrol, 2'si pozitif kontrol)
+── artifact_keyset_gate self-test
+✓ self-test geçti (11 senaryo)
+── secret_scan self-test
+SELF-TEST OK (5 kontrol, 2'si negatif kontrol)
+── validate_content self-test
+SELF-TEST OK (6 kontrol, 3'ü pozitif/negatif kontrol)
+── template_assets self-test
+✅ şablon-varlık öz-testi GEÇTİ — hâlâ-stok/değişmiş/eksik/mutabakat-kaydı sınıflandırması sentetik veriyle doğrulandı
+
+✅ hepsi yeşil
+EXIT=0

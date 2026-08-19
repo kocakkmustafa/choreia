@@ -1,82 +1,86 @@
+/// ANDROID RELEASE İMZASI — sessiz debug-imzası kapatıldı (jablab J-215
+/// deseni), CHO-P0-002'de gravita/lissom emsaliyle `allowDebugSigning`
+/// bilerek-opt-in bayrağına genişletildi.
+///
+/// ## Neden bu dosya var, ve neden POZİTİF-VARLIK + SABOTAJ (metin-regex DEĞİL)
+///
+/// İlk sürüm (motion-core, `a3eab87`) tek bir negatif regex kullanıyordu:
+/// "signingConfig = signingConfigs.getByName(\"debug\")" satırı YOK mu. CHO-
+/// P0-002 CI'da/yerelde GERÇEK bir `flutter build appbundle --release`
+/// koşumu istiyor — ve CI'da gerçek keystore yok ve olmamalı. Yani artık
+/// BİLEREK bir debug-imza yolu VAR (`allowDebugSigning`); o satır artık
+/// dosyada duruyor ve bu doğru. Negatif regex bu geçişte anlamını kaybetti.
+///
+/// Panzehir gravita/lissom'un `release_signing_test.dart`ından: kaynağın
+/// KRİTİK PARÇALARININ (seçim mantığı + gürültülü durdurucu + opt-in bayrağı)
+/// hâlâ orada olduğunu pozitif olarak doğrula, VE bir sabotaj ikiziyle
+/// durdurucuyu KALDIRIP testin gerçekten kırmızı yandığını kanıtla — aksi
+/// hâlde "kapı var" testi durdurucu sessizce silinse bile yeşil kalabilirdi.
+///
+/// ⚠️ NE ÖLÇMÜYOR: Gradle'ın GERÇEKTEN durduğunu/uyardığını — o, gerçek bir
+/// `./gradlew`/`flutter build` koşumuyla ayrı doğrulanır (bu oturumda
+/// `docs/evidence/production-line/CHO-P0-002/` altında). Bu dosya yalnız
+/// KAYNAK METNİNİN kritik parçaları taşıdığını nöbetler.
+library;
+
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// ANDROID RELEASE İMZASI — sessiz debug-imzası kapatıldı (jablab J-215 deseni).
-///
-/// ## Neden bir kapı, neden Dart tarafında
-///
-/// Kusur bir Gradle satırıydı (`signingConfig = signingConfigs.getByName("debug")`)
-/// ve sınıfı bu ailede tanıdık: **sessiz-hiçlik.** `flutter build appbundle`
-/// başarılı görünür, dosya oluşur, **debug anahtarıyla imzalanmıştır** ve Play
-/// onu REDDEDER. Kusur ancak yüklemede görünür — yani en pahalı yerde.
-/// motion-core'un beş-tüketici consumer-matrix taramasında (2026-08-19)
-/// choreia, bu satırı hâlâ taşıyan TEK Motion app'iydi.
-///
-/// Gradle tarafındaki panzehir (release görev grafiğinde gürültülü durma)
-/// **doğru yerde** ama **kendi kapısı yok**: bir sonraki Flutter şablon
-/// güncellemesi ya da bir "hızlıca release alayım" düzeltmesi o satırı geri
-/// koyabilir ve **hiçbir test ötmez** — release yolu commit kapısında
-/// koşmuyor. Bu dosya o boşluğu kapatır: **kaynak metni** denetler.
-///
-/// ⚠️ NE ÖLÇMÜYOR: Gradle'ın gerçekten durduğunu. O davranış gerçek bir
-/// release koşumuyla doğrulanmalı (jablab J-215 emsali); burada denetlenen,
-/// o mekanizmanın **yerinde durduğu.** İkisi ayrı sorular ve ikisi de gerekli.
+const String _gradlePath = 'android/app/build.gradle.kts';
+
 void main() {
-  final File gradle = File('android/app/build.gradle.kts');
-
-  test('POZİTİF KONTROL — dosya okunuyor ve beklenen yapıyı taşıyor', () {
-    // Bir "yok" bulgusu, aracın o şeyi BULABİLDİĞİ kanıtlanmadan
-    // raporlanmaz. Dosya boş/yanlış yolda olsaydı aşağıdaki iki test
-    // vakum-doğru geçerdi.
-    expect(gradle.existsSync(), isTrue, reason: 'build.gradle.kts bulunamadı');
-    final String src = gradle.readAsStringSync();
-    expect(src, contains('buildTypes'),
-        reason: 'dosya okundu ama Gradle yapısı yok — yol ya da içerik bozuk, '
-            'aşağıdaki sonuçlar ANLAMSIZ olurdu');
-    expect(src, contains('release'), reason: 'release blok yok');
-  });
-
-  test('🔴 SESSİZ DEBUG İMZASI YOK — release, debug anahtarına düşmüyor', () {
-    final List<String> offenders = <String>[
-      for (final String line in gradle.readAsLinesSync())
-        // Yorumlar serbest: kuralı ANLATAN satır kuralı ihlal etmez (aynı
-        // ayrım jablab'ın emsal testinde de var).
-        if (!line.trimLeft().startsWith('//') &&
-            RegExp(r'signingConfig\s*=\s*signingConfigs\.getByName\(\s*"debug"\s*\)')
-                .hasMatch(line))
-          line.trim(),
+  test('imza seçim mantığı, opt-in bayrağı VE gürültülü durdurucu kaynakta',
+      () {
+    final String src = File(_gradlePath).readAsStringSync();
+    final Map<String, String> mustContain = <String, String>{
+      'gerçek keystore kontrolü': 'hasKeystore',
+      'bilerek debug-imza opt-in bayrağı': 'allowDebugSigning',
+      'sessiz debug düşüşü yok (else dalı null)': 'else -> null',
+      'ayrı durdurucu blok': 'gradle.taskGraph.whenReady',
+      'sessiz düşüşü durduran gürültülü hata': 'throw GradleException(',
+      'bayrakla geçildiğinde durdurmak yerine uyarma': 'logger.warn(',
+      'yalnız RELEASE görevlerine daraltma': 'contains("Release")',
+    };
+    final List<String> missing = <String>[
+      for (final MapEntry<String, String> e in mustContain.entries)
+        if (!src.contains(e.value)) '${e.key}: «${e.value}» bulunamadı',
     ];
-    expect(offenders, isEmpty,
-        reason: 'release build type DEBUG anahtarıyla imzalanıyor — üretilen '
-            'artefakt Play tarafından REDDEDİLİR ve bunu build ANINDA hiçbir '
-            'şey söylemez (sessiz-hiçlik). Panzehir: key.properties yoksa '
-            'release görevini GÜRÜLTÜLÜ durdur, debug\'a DÜŞME.');
+    expect(missing, isEmpty,
+        reason: 'RELEASE İMZASI GUARD\'I ZAYIFLADI:\n${missing.join("\n")}\n\n'
+            'Bu, release artefaktın debug anahtarıyla SESSİZCE üretilip '
+            'Play tarafından reddedilmesi riskini geri getirir.');
   });
 
-  test('🔒 GÜRÜLTÜLÜ DURMA MEKANİZMASI YERİNDE', () {
-    final String src = gradle.readAsStringSync();
-    // Üçü birden: koşul (anahtar yoksa) · tetik (release görev grafiği) ·
-    // sonuç (build durur). Biri düşerse kusur sessizleşir.
-    expect(src, contains('hasKeystore'),
-        reason: 'anahtar-var-mı koşulu kaybolmuş');
-    expect(src, contains('taskGraph.whenReady'),
-        reason: 'release görev grafiği kancası kaybolmuş — kapı hiç '
-            'ateşlenmez, yokluk yeniden SESSİZLEŞİR');
-    expect(src, contains('GradleException'),
-        reason: 'kapı artık build\'i DURDURMUYOR — uyarı basıp devam etmek, '
-            'reddedilecek artefaktı yine üretmek olurdu');
+  test('SABOTAJ — durdurucu tamamen kaldırılsa nöbet gerçekten ateşliyor mu',
+      () {
+    final String real = File(_gradlePath).readAsStringSync();
+    // `if (!hasKeystore) { gradle.taskGraph.whenReady { ... } }` bloğunun
+    // TAMAMINI (dosyanın sonuna kadar) düş — Gradle söz diziminde en son
+    // bildirim olduğu için bu geçerli bir sabotajdır.
+    final int idx = real.indexOf('if (!hasKeystore) {');
+    expect(idx, greaterThan(0),
+        reason: 'Sabotaj kurulamadı — gerçek dosyada durdurucu blok YOK, bu '
+            'ikiz hiçbir şey ölçmez.');
+    final String sabotaged = real.substring(0, idx);
+    expect(sabotaged.length, lessThan(real.length),
+        reason: 'Sabotaj uygulanamadıysa bu ikiz hiçbir şey ölçmez.');
+    expect(sabotaged.contains('throw GradleException('), isFalse,
+        reason: 'Saptayıcı sentetik eksiği göremiyorsa gerçeğini de '
+            'göremez.');
+    // `allowDebugSigning` val'ı `android {}` bloğundan ÖNCE bildirilir —
+    // truncate noktasının üstünde kalır, kasıtlı olarak. Sabotaj yalnız
+    // DURDURUCUYU (whenReady + throw + warn) düşürür, bayrağın seçim
+    // mantığındaki varlığını değil; ①'deki pozitif test bunu zaten ayrıca
+    // doğruluyor.
   });
 
   test('⛔ SIR DEPOYA GİREMEZ — key.properties ve keystore git-dışı', () {
-    // Kapının yan etkisi: kurucu bir keystore ürettiğinde onu yanlışlıkla
-    // commit etmek MÜMKÜN OLMAMALI.
     final String ignore = File('android/.gitignore').readAsStringSync();
     for (final String pat in <String>['key.properties', '*.keystore', '*.jks']) {
       expect(ignore, contains(pat),
           reason: '$pat .gitignore\'da değil — imza sırrı depoya sızabilir');
     }
-    // Ve bugün gerçekten yoklar (izlenen içerikte).
     expect(File('android/key.properties').existsSync(), isFalse,
         reason: 'key.properties çalışma ağacında VAR — içeriği sır, bu '
             'testin kendisi onu okumaz ama varlığı beklenmiyor');

@@ -55,7 +55,12 @@ ROOT = Path(__file__).resolve().parent.parent
 # ── ② bağımlılık kaydı ──────────────────────────────────────────────────
 NETWORK_DEPS_RECORDED = {
     "google_fonts": "yazı tipi indirir (GET); kullanıcı verisi TAŞIMAZ — "
-                     "gizlilik iddialarını yalanlamaz",
+                     "gizlilik iddialarını yalanlamaz. CHO-P0-002 (2026-08-19): "
+                     "runtime GET artık KAPALI (`main.dart` "
+                     "`GoogleFonts.config.allowRuntimeFetching = false`) — üç "
+                     "aile `assets/fonts/`da self-host (`tool/fetch_fonts.sh`). "
+                     "Paket bağımlılığı hâlâ burada (kayıt hâlâ doğru), ama "
+                     "artık çalışma zamanında hiç ağa çıkmıyor.",
     "http": "google_fonts'un TRANSİTİF bağımlılığı (pubspec.lock, "
             "pubspec.yaml'da doğrudan YOK) — Choreia kodu bunu doğrudan "
             "IMPORT ETMİYOR (①'in kod-izi taraması ayrıca doğrular); "

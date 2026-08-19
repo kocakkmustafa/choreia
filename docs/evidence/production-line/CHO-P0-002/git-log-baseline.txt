@@ -1,0 +1,6 @@
+c5edf98 C-317: kayıt düzeltmesi — Android signing gate motion-core'un, benim değil
+a3eab87 fix: add missing release-signing hard-fail gate (was signing debug-key silently)
+9a0169c C-316: CHO-P0-001 kabul — katalog dürüstlüğü formal evidence paketi
+a9a8349 C-315: üretim hattı bootstrap — baseline yeniden mühürlendi, bildirilen P0 ölçümle sorgulandı
+9b472de C-314: H-85 işlendi — description'a kapsam-beyanı eklendi (ad genişledi, ürün genişlemedi)
+c5edf986b8101e39428a70a59bf9b51f53020005

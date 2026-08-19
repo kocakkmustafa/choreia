@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app/shell/choreia_shell.dart';
 import 'app/theme.dart';
@@ -11,7 +12,17 @@ import 'app/theme.dart';
 /// something that does not work." The chain was verified in `b9e448e`, so the
 /// shell exists now and this file is back to what an entry point should be: a
 /// theme and a first screen.
-void main() => runApp(const ChoreiaApp());
+///
+/// CHO-P0-002: `GoogleFonts.config.allowRuntimeFetching` kapatır — üç aile
+/// artık `assets/fonts/` altında bundle (`pubspec.yaml`, `tool/
+/// fetch_fonts.sh`, lissom L-348/LIS-P0-002 ile aynı desen). Kapatılmadan
+/// önce ölçüldü: baseline'ın kendi §1'i "google_fonts runtime bağımlılığı"nı
+/// GERÇEK bir ağ davranışı olarak listeliyordu, icat edilmiş bir kusur
+/// değil.
+void main() {
+  GoogleFonts.config.allowRuntimeFetching = false;
+  runApp(const ChoreiaApp());
+}
 
 class ChoreiaApp extends StatelessWidget {
   const ChoreiaApp({super.key});

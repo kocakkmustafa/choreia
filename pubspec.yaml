@@ -56,12 +56,14 @@ dependencies:
   path_provider: ^2.1.0
 
   # Design pass (2026-08-06): the three faces the design brief names
-  # (Instrument Serif, Manrope, IBM Plex Mono) are not system fonts, and
-  # neither LifeOS nor Burun Farkı — the two other apps in this workspace
-  # already shipping this package — bundle them locally either. Same choice
-  # here rather than a new precedent: no Motion sibling had solved this yet
-  # (first giydirme turn), flagged in the report so the family can pick a
-  # single answer once, not five times.
+  # (Instrument Serif, Manrope, IBM Plex Mono) are not system fonts.
+  #
+  # CHO-P0-002 (2026-08-19) closed the gap this comment originally flagged:
+  # the family HAS since solved it — Lissom (L-348/LIS-P0-002) self-hosts the
+  # same way this app now does. The files live under `assets/fonts/` (see
+  # `flutter.assets` below and `tool/fetch_fonts.sh`), and `main.dart` sets
+  # `GoogleFonts.config.allowRuntimeFetching = false` so a missing/renamed
+  # file fails loudly at first use instead of silently phoning home.
   google_fonts: ^6.2.1
 
   # C-222 (koordinatör hükmü (A), 2026-08-12). NİYE VAR: kamera izni KALICI
@@ -111,3 +113,13 @@ flutter:
     - content/styles/salsa_shines/steps/
     - content/styles/hip_hop_foundations/
     - content/styles/hip_hop_foundations/steps/
+
+    # CHO-P0-002 — self-hosted google_fonts files (lissom L-348 desen).
+    # Plain `assets:` folder entry, NOT the `fonts:` section below: the
+    # package's own README ("Bundling fonts when releasing") scans the asset
+    # manifest and matches its OWN `{Family}-{Weight}.ttf` naming convention
+    # — filenames must not be renamed. `tool/fetch_fonts.sh` fetches+verifies
+    # (SHA-256 pinned, sourced from the exact hashes the installed
+    # `google_fonts` 6.3.3 package would fetch at runtime); files are NOT
+    # committed to git (same pattern as `assets/models/`).
+    - assets/fonts/

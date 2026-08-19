@@ -38,6 +38,19 @@ val keystoreProps = Properties().apply {
     if (hasKeystore) FileInputStream(keystorePropsFile).use { load(it) }
 }
 
+// CHO-P0-002 EKİ — bilerek debug-imzalı KOD YOLU kanıtı (gravita G-192 +
+// lissom emsali; jablab J-215'in kendisinde bu kaçış YOK).
+//
+// Yukarıdaki kapı doğru: anahtar yoksa release SESSİZCE üretilmemeli. Ama
+// roadmap'in kendisi CI'da ve yerel doğrulamada `flutter build appbundle
+// --release` koşumunu İSTİYOR — ve CI runner'ında gerçek keystore YOK ve
+// OLMAMALI (imza kimliği hesap-sahibinin sırrı). İki gerçek çelişmiyor:
+// "sessizce debug'a düşme" ile "isteyerek, adıyla, debug anahtarıyla derle"
+// ayrı şeyler. Bayrak yalnız `-PallowDebugSigning=true` ile AÇIKÇA
+// istendiğinde devreye girer; varsayılan davranış (bayraksız) DEĞİŞMEDİ.
+val allowDebugSigning: Boolean =
+    (project.findProperty("allowDebugSigning") as String?) == "true"
+
 android {
     namespace = "com.yulalab.choreia"
     compileSdk = flutter.compileSdkVersion
@@ -78,9 +91,14 @@ android {
 
     buildTypes {
         release {
-            // ⚠️ `null` BİLEREK: debug'a düşmüyoruz. Anahtar yoksa imza YOK,
-            // ve aşağıdaki kapı release görevini zaten başlatmıyor.
-            signingConfig = if (hasKeystore) signingConfigs.getByName("release") else null
+            // ⚠️ Üç yol, en güçlüden en zayıfa: gerçek anahtar → bilerek-
+            // debug (yalnız bayrakla) → `null` (aşağıdaki kapı durdurur).
+            // `null` hâlâ VARSAYILAN — bayrak yoksa davranış AYNI.
+            signingConfig = when {
+                hasKeystore -> signingConfigs.getByName("release")
+                allowDebugSigning -> signingConfigs.getByName("debug")
+                else -> null
+            }
         }
     }
 }
@@ -95,35 +113,47 @@ if (!hasKeystore) {
             task.name.contains("Release") &&
                 listOf("assemble", "bundle", "package", "install").any { task.name.startsWith(it) }
         }
-        if (releaseTasks.isNotEmpty()) {
-            throw GradleException(
-                """
-                |
-                |╔══════════════════════════════════════════════════════════════╗
-                |║  ANDROID RELEASE İMZASI YOK — build DURDURULDU (J-215 deseni) ║
-                |╚══════════════════════════════════════════════════════════════╝
-                |
-                |İstenen görev: ${releaseTasks.joinToString(", ") { it.name }}
-                |
-                |NEDEN DURDU: `android/key.properties` yok. Flutter şablonu bu
-                |durumda release'i DEBUG anahtarıyla imzalar; o artefakt derlenir,
-                |dosya oluşur ve Play tarafından REDDEDİLİR. Sessizce yanlış bir
-                |şey üretmektense burada, adıyla duruyoruz.
-                |
-                |NE GEREKİYOR (kurucu kalemi — imza kimliği bir SIRDIR):
-                |  1. Keystore kurucuda üretilir/saklanır: ~/.secrets/yula/
-                |     ⛔ Keystore ve parolalar bu depoya ASLA girmez.
-                |  2. `android/key.properties` (git-dışı, .gitignore'da):
-                |       storeFile=/Users/<sen>/.secrets/yula/choreia-release.jks
-                |       storePassword=...
-                |       keyAlias=...
-                |       keyPassword=...
-                |
-                |Debug etkilenmedi: `flutter run`, `flutter test` ve commit kapısı
-                |bu kapıya hiç çarpmaz.
-                """.trimMargin()
+        if (releaseTasks.isEmpty()) return@whenReady
+
+        if (allowDebugSigning) {
+            // Bilerek istendi — durdurmuyoruz, ama SESSİZ de değil.
+            logger.warn(
+                "⚠️  RELEASE DEBUG ANAHTARIYLA İMZALANIYOR (-PallowDebugSigning=true). " +
+                    "Bu artefakt Play'e YÜKLENEMEZ — yalnız kod-yolu/CI kanıtı içindir."
             )
+            return@whenReady
         }
+
+        throw GradleException(
+            """
+            |
+            |╔══════════════════════════════════════════════════════════════╗
+            |║  ANDROID RELEASE İMZASI YOK — build DURDURULDU (J-215 deseni) ║
+            |╚══════════════════════════════════════════════════════════════╝
+            |
+            |İstenen görev: ${releaseTasks.joinToString(", ") { it.name }}
+            |
+            |NEDEN DURDU: `android/key.properties` yok. Flutter şablonu bu
+            |durumda release'i DEBUG anahtarıyla imzalar; o artefakt derlenir,
+            |dosya oluşur ve Play tarafından REDDEDİLİR. Sessizce yanlış bir
+            |şey üretmektense burada, adıyla duruyoruz.
+            |
+            |NE GEREKİYOR (kurucu kalemi — imza kimliği bir SIRDIR):
+            |  1. Keystore kurucuda üretilir/saklanır: ~/.secrets/yula/
+            |     ⛔ Keystore ve parolalar bu depoya ASLA girmez.
+            |  2. `android/key.properties` (git-dışı, .gitignore'da):
+            |       storeFile=/Users/<sen>/.secrets/yula/choreia-release.jks
+            |       storePassword=...
+            |       keyAlias=...
+            |       keyPassword=...
+            |
+            |BİLEREK debug-imzalı, YALNIZ KOD-YOLU kanıtı (CI/yerel deneme):
+            |  ./gradlew :app:assembleRelease -PallowDebugSigning=true
+            |
+            |Debug etkilenmedi: `flutter run`, `flutter test` ve commit kapısı
+            |bu kapıya hiç çarpmaz.
+            """.trimMargin()
+        )
     }
 }
 
