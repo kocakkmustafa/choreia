@@ -1,0 +1,91 @@
+# CHO-P1-001 — Özgün shell ve premium ders player'ını tamamla
+
+**State:** PARTIAL — one well-scoped slice ACCEPTED (the 5-tab shell), the
+task's much larger remainder (the premium lesson-player flow, style-page
+enrichment, CHO-UX-001) is NOT attempted here and is documented as open,
+with reasons. **Date:** 2026-08-19. **Owner:** Choreia solo session.
+**Reviewer:** none assigned — R0/R1 (UI/navigation scaffold, no payment/
+security/migration surface). **Input SHA:** baseline `f3e56fc`, common pin
+unchanged (`f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d`).
+
+## Why this package looks the way it does
+
+CHO-P1-001 as written is one checklist covering at least three genuinely
+separate bodies of work: a 5-tab shell, a full premium lesson-player flow
+(preview/count/mirror/slow/loop/beat-live/weak-count-retry/review), and a
+5-participant human usability study (`CHO-UX-001`). Two Explore-agent
+surveys this session (see DEFTER C-321) measured that the player-flow work
+is not a checklist of small gaps — most of it needs a real interaction-
+design decision (mirror mode, slow motion and loop have no spec anywhere in
+this repo to build against), one item needs a **cross-repo** schema change
+this session cannot make alone (weak-count retry needs per-cycle data
+`SessionRecord`, pinned in `motion_core`, does not carry), one item is
+blocked on the same founder BPM-tap this session already flagged
+(beat-live), and one item (style-page "trend" display) turns out to
+contradict the *original* design brief, which explicitly ruled it out of V1
+scope. None of that is something to rush.
+
+What *was* safely buildable: the shell itself. This package is that slice.
+
+## What shipped
+
+- `lib/app/shell/choreia_shell.dart` — grown from 2 tabs (Styles, Progress)
+  to the roadmap's 5 (Today, Styles, Practice Lab, Progress, Profile, §5),
+  in that order. Initial selection stays on Styles (index 1) rather than
+  Today (index 0) — landing on an honestly-empty tab as the app's front door
+  would undercut the one tab with real value, the same undersell direction
+  `library_view.dart`'s own M-F-186 discipline already guards against.
+- Three new screens — `lib/app/today/today_view.dart`,
+  `lib/app/practice_lab/practice_lab_view.dart`,
+  `lib/app/shell/profile_view.dart` — sharing one honest-placeholder body
+  (`lib/app/shell/not_built_tab_body.dart`) that states plainly what each
+  tab will eventually hold and that none of it exists yet. This is the same
+  discipline `library_view.dart` already applies to the 31 not-yet-built
+  styles (M-F-186: no promise language, name what's true now), extended to
+  shell tabs for the first time.
+- `test/not_built_tabs_test.dart` (new, 3 tests) — asserts each placeholder
+  states its plan and that none of it uses promise language ("coming soon",
+  "yakında", "soon", "launching").
+- `test/reachability_test.dart` — extended, not just patched around. The
+  exhaustive candidate/reached/unreached partition check (this file's own
+  core mechanism) picked up the 3 new screens automatically from source; a
+  second, separately-verified exclusion class was added for "shell tab,
+  excluded from STRICT counting by design" (checked against the shell's own
+  source and against this file's own LOOSE-walk source, not just asserted).
+  The LOOSE walk now taps all 5 tabs; its destination count moved from 5 to
+  8 with the arithmetic re-derived, not just bumped.
+- `test/live_session_test.dart` **is unrelated to this task** — see C-319/
+  C-320, landed earlier the same session.
+
+## What did NOT ship, and why (see DEFTER C-321 for the full evidence)
+
+| Roadmap item | Status | Blocker |
+|---|---|---|
+| preview / count (taught, slow, counted demo) | Not built | No renderer anywhere for `DanceReference`'s per-phase angle data; needs a real interaction-design pass, not a gap-fill |
+| mirror | Not built | Zero mirror-toggle UI or spec anywhere in `docs/design/` |
+| slow / loop | Not built | Same — no spec, no code |
+| beat-live | Not built | Same founder BPM-tap gate already flagged this session (Salsa) |
+| weak-count retry | Not built | **Cross-repo.** `SessionRecord` (pinned `motion_core`) carries no per-cycle/per-finding data to retry against — a shared-package schema change, not something this session's own scope covers (family rule: common package changes need the common writer + 5-app contract matrix) |
+| style-page course/BPM/trend blocks | Not built | Course-kind has no content schema field yet (buildable); BPM has real data not yet wired to the reader-facing model (buildable, small); trend was explicitly ruled OUT of V1 scope by the original `UI-BRIEF.md` — the roadmap's ask may itself be stale |
+| `CHO-UX-001` (5-participant usability protocol) | Not run | **EXTERNAL_GATE** — needs real human participants, cannot be run by this session |
+
+## Verification
+
+```
+flutter analyze                    → 0 issues
+flutter test                       → 280/280 (277 baseline + 3 new)
+```
+
+Screenshots (`screenshots/`), all real simulator captures (`choreia-hatti`,
+fresh install, this session) — not code-reading:
+
+- `styles-with-5-tabs.png` — the nav bar in its new 5-tab form, Styles
+  selected, showing the same catalogue content CHO-P0-001's evidence
+  already verified is unchanged.
+- `today-not-built.png`, `practice-lab-not-built.png`,
+  `profile-not-built.png` — each honest placeholder, real device text
+  rendering (not code excerpt).
+
+Not produced: a `gates.sh` run pinned to this exact commit before the
+commit lands (done as part of the commit's own pre-commit hook, matching
+every other task this session).

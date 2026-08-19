@@ -1174,3 +1174,36 @@ shell bugün yalnız 2 sekme (STYLES/PROGRESS), roadmap'in 5 sekmesi (Bugün/Sti
 İlerleme/Profil) yazılmamış — büyük, saf-UI, skorlama mimarisinden bağımsız bir iş. Bu oturum bunu
 BAŞLATMADI (bugünkü tur zaten CHO-P0-001+002+C-319/320 taşıyordu) — sıradaki turun temiz başlangıç
 noktası budur.
+
+---
+
+## Tur: CHO-P1-001 — 5-sekme shell KABUL, player akışı BİLEREK ertelendi (2026-08-19, aynı oturum)
+
+**Kurucudan mimari yanıt gelmedi** (kickoff'un "yanıt gelmezse sıradaki göreve geç" talimatı, §1.6) —
+CHO-P1-001'e geçildi. İkinci bir Explore ajanı mevcut canlı-ders akışını, tasarım belgelerini ve
+stil-sayfası eksiklerini taradı (C-321): dokuz-adımlı roadmap akışının SEKİZİ eksik, ikisi TEK BAŞINA
+çözülemez (motion-core şema değişikliği + kurucu BPM kapısı), "Practice Lab" repo'da sıfır emsel
+taşıyor, "trend" ekranı orijinal `UI-BRIEF.md`'de V1 kapsamı dışı bırakılmıştı (roadmap'in kendisi
+bayat olabilir).
+
+**Bu turda kapanan (C-322, evidence `docs/evidence/production-line/CHO-P1-001/`):** yalnız GÜVENLE
+uygulanabilir parça — 5-sekme shell. `choreia_shell.dart` 2 sekmeden (Styles/Progress) roadmap'in 5'ine
+(Today/Styles/Practice Lab/Progress/Profile) büyüdü; üç yeni sekme (`TodayView`/`PracticeLabView`/
+`ProfileView`) `library_view.dart`'ın M-F-186 kuralıyla ("no promise language") dürüst-boş yer
+tutucular — ne gizli ne sahte-dolu. `reachability_test.dart`nın tüketici-tam KATI/GEVŞEK bölme
+denetimi YAMANMADI, GENİŞLETİLDİ: yeni bir `unreachableByDesign` sınıfı kendi kanıtını taşıyor (kabuk
+kaynağında gerçekten `IndexedStack` çocuğu mu, GEVŞEK yürüyüş gerçekten dokunuyor mu — ikisi de
+kaynaktan doğrulanıyor). İlk yazımda başlangıç sekmesini Today (index 0) bıraktım — 8 test kırmızı
+oldu (`find.byType` IndexedStack'in offstage çocuklarını görmüyor); düzeltme `_index=1` (Styles kalır
+varsayılan, Today dürüst-boş bir açılış ekranı olmasın diye BİLEREK) — testlerin kendi kendini
+doğrulama disiplininin tam örneği. Gerçek simülatör kanıtı: `choreia-hatti`de 5 sekmenin BEŞİ de
+dokunuldu, ekran görüntüleri evidence'ta. `flutter analyze` 0, `flutter test` 280/280.
+
+**Kapsam BİLEREK dar tutuldu:** premium player akışı (preview/mirror/slow/loop/beat-live/weak-count-
+retry), stil sayfası kurs/BPM/trend blokları, `CHO-UX-001` (5-katılımcılı kullanılabilirlik testi,
+EXTERNAL_GATE) — hiçbiri bu turda uygulanmadı. C-321'in gerekçeleri hâlâ geçerli: çoğu ya tasarım
+kararı ya motion-core kapsamı ya kurucu kapısı gerektiriyor.
+
+**Sıradaki (yeni bir oturumda, bu tur BAŞLATMADI):** mimari kararlar netleşince (bounce skorlayıcı
++ mirror/slow/loop tasarımı) premium player akışına TDD ile başla; ya da BPM-bağımsız, tek-başına
+buildable parçaları önce al (BPM style-page alanı, kurs-türü şema alanı).

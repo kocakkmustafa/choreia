@@ -8,8 +8,11 @@ import 'package:choreia/app/onboarding/first_run_flag.dart';
 import 'package:choreia/app/onboarding/first_run_view.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
 import 'package:choreia/app/live/live_environment.dart';
+import 'package:choreia/app/practice_lab/practice_lab_view.dart';
 import 'package:choreia/app/progress_view.dart';
 import 'package:choreia/app/shell/choreia_shell.dart';
+import 'package:choreia/app/shell/profile_view.dart';
+import 'package:choreia/app/today/today_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -292,6 +295,38 @@ void main() {
             'düğmeyle varıyor.',
       };
 
+      // İKİNCİ DIŞLAMA SINIFI (CHO-P1-001, 2026-08-19) — yukarıdakinden
+      // FARKLI bir sebep, o yüzden AYNI haritaya (ve "first_walk_test.dart'ta
+      // anılmalı" kanıtına) zorlanmadı: bunlar kamera/cihaz gerektirdiği için
+      // değil, kabuk SEKMESİ oldukları için (bu dosyanın kendi üst
+      // yorumu: "LOOSE… plus destinations you switch between without a
+      // push") KATI sayımda YAPISAL OLARAK görünmezler — GEVŞEK okumada
+      // (aşağıda, AYNI dosyada) görünürler. Kanıt aşağıda ayrıca: ① kabukta
+      // gerçekten birer `NavigationDestination` mı ② GEVŞEK yürüyüş
+      // gerçekten onlara dokunuyor mu.
+      const Set<String> unreachableByDesign = <String>{
+        'TodayView', 'PracticeLabView', 'ProfileView',
+      };
+      final String shellSrc = lib.entries
+          .firstWhere((MapEntry<String, String> e) =>
+              e.key.endsWith('shell/choreia_shell.dart'))
+          .value;
+      for (final String tab in unreachableByDesign) {
+        expect(shellSrc, contains('const $tab()'),
+            reason: 'gerekçe BAYAT: `$tab` artık kabuğun `IndexedStack`ında '
+                'yok — bu dışlama dayanaksız kaldı');
+      }
+      final File looseWalk = File('test/reachability_test.dart');
+      final String looseWalkSrc = looseWalk.readAsStringSync();
+      for (final String tab in <String>['todayTabKey', 'practiceLabTabKey',
+          'profileTabKey']) {
+        expect(looseWalkSrc, contains(tab),
+            reason: 'gerekçe BAYAT: `$tab`e GEVŞEK yürüyüşte hiç dokunulmuyor '
+                '— dışlamanın dayandığı yürüyüş yok');
+      }
+      final Set<String> allExcluded =
+          unreachableInWalk.keys.toSet().union(unreachableByDesign);
+
       // (c) SEBEP DE ÖLÇÜLÜR — sözleşme: *yanlış bir sebep, sebepsizlikten
       // daha kötüdür: denetimi DOĞRULANMIŞ gösterir.* (Ostinato'nun sebebi
       // ölçülünce yanlış çıktı.) Bu iki gerekçe artık HER KOŞUMDA kaynaktan
@@ -347,11 +382,11 @@ void main() {
               'yer almalı.');
 
       final Set<String> unreached = candidates.difference(reached);
-      expect(unreached, unreachableInWalk.keys.toSet(),
+      expect(unreached, allExcluded,
           reason: 'BÖLME BOZULDU. Varılamayan küme değişti: $unreached. '
               'Yeni bir ekran yürüyüşe girmediyse SEBEBİNİ yaz; girdiyse '
               'listeden çıkar. Eşitlik: aday = varılan ⊎ varılamayan.');
-      expect(reached.union(unreachableInWalk.keys.toSet()), candidates,
+      expect(reached.union(allExcluded), candidates,
           reason: 'aday kümesi ile toplam ayrıştı');
     });
 
@@ -362,13 +397,31 @@ void main() {
       await _settle(tester);
       await passIntro(tester);
 
-      // The shell's two destinations. Switched by `IndexedStack`, so the route
-      // never changes — invisible to the strict count, and yet a user plainly
-      // experiences "going to my progress".
+      // The shell's five destinations (CHO-P1-001, 2026-08-19 — was two).
+      // Switched by `IndexedStack`, so the route never changes — invisible
+      // to the strict count, and yet a user plainly experiences "going to
+      // my progress"/"going to Today", even though three of these five have
+      // nothing built behind them yet (DEFTER C-321) — a PLACE you can go to
+      // is still a place, whether or not it has real content.
       await tester.tap(find.byKey(ChoreiaShell.progressTabKey));
       await _settle(tester);
       expect(find.byType(ProgressView), findsOneWidget,
           reason: 'ilerleme sekmesi bir yere gitmiyor');
+
+      await tester.tap(find.byKey(ChoreiaShell.todayTabKey));
+      await _settle(tester);
+      expect(find.byType(TodayView), findsOneWidget,
+          reason: 'Bugün sekmesi bir yere gitmiyor');
+
+      await tester.tap(find.byKey(ChoreiaShell.practiceLabTabKey));
+      await _settle(tester);
+      expect(find.byType(PracticeLabView), findsOneWidget,
+          reason: 'Practice Lab sekmesi bir yere gitmiyor');
+
+      await tester.tap(find.byKey(ChoreiaShell.profileTabKey));
+      await _settle(tester);
+      expect(find.byType(ProfileView), findsOneWidget,
+          reason: 'Profil sekmesi bir yere gitmiyor');
 
       await tester.tap(find.byKey(ChoreiaShell.libraryTabKey));
       await _settle(tester);
@@ -390,10 +443,13 @@ void main() {
       await tester.tap(startButton);
       await _settle(tester);
 
-      // GEVŞEK = 5: tanıtım · kütüphane · ilerleme · stil sayfası · canlı ders.
-      // Üçü rota (spy), ikisi (tanıtım, ilerleme sekmesi) itilmeden geçilen
-      // yer — ve bir kullanıcı ikisini de "bir yere gittim" diye yaşıyor.
-      expect(spy.pushed.length + 3, 5,
+      // GEVŞEK = 8 (CHO-P1-001 öncesi 5'ti): tanıtım · kütüphane · ilerleme ·
+      // Bugün · Practice Lab · Profil · stil sayfası · canlı ders. İkisi rota
+      // (spy: stil sayfası + canlı ders), altısı itilmeden geçilen yer —
+      // üçünün (Bugün/Practice Lab/Profil) arkasında henüz gerçek bir ekran
+      // olmaması bu sayımı değiştirmez: GEVŞEK okuma PLACE sayar, İÇERİK
+      // değil.
+      expect(spy.pushed.length + 6, 8,
           reason: 'GEVŞEK sayı beklenenden farklı. Rotalar: ${spy.pushed}');
     });
 

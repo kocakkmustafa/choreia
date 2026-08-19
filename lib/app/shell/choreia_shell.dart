@@ -10,9 +10,12 @@ import '../live/live_environment.dart';
 import '../onboarding/first_run_flag.dart';
 import '../onboarding/first_run_view.dart';
 import '../library/library_view.dart';
+import '../practice_lab/practice_lab_view.dart';
 import '../progress_summary.dart';
 import '../progress_view.dart';
 import '../theme.dart';
+import '../today/today_view.dart';
+import 'profile_view.dart';
 
 /// How long the shell waits for the practice record before calling it
 /// unreachable.
@@ -32,20 +35,28 @@ const Duration historyReadTimeout = Duration(seconds: 10);
 /// could go nowhere. This widget is the prerequisite the design-ahead inventory
 /// named as blocking every other item.
 ///
-/// Why two destinations and not more
-/// ---------------------------------
-/// The design draws nine screens, but seven of them are things you reach BY
-/// GOING somewhere (a style, then a lesson, then the live path) — they are
-/// pushed, not switched between. Only two are places you return to: the
-/// catalogue and your own record. A tab per pushed screen would put a
-/// permanent tab bar under a live camera session, which is the one screen that
-/// should not offer a sideways exit mid-attempt.
+/// Why five destinations, and why three of them are named but not built
+/// -----------------------------------------------------------------
+/// Until CHO-P1-001 (2026-08-19) this shell had two tabs — Styles and
+/// Progress — because everything else in the app's screen graph is reached
+/// BY GOING somewhere (a style, then a lesson, then the live path), pushed
+/// rather than switched between, and a tab per pushed screen would put a
+/// permanent tab bar under a live camera session, the one screen that
+/// should not offer a sideways exit mid-attempt. The file used to call the
+/// tab count itself an open, coordinator-deferred IA question (the
+/// design-ahead doc explicitly declines to settle it — see DEFTER C-321 for
+/// the full paper trail across three design documents that each say
+/// something different).
 ///
-/// **OPEN — coordinator's call, deliberately made cheap to reverse.** The
-/// design-ahead doc §1 lists "tab bar vs. menu vs. only-from-lesson-end" as an
-/// undecided IA question. A tab bar is chosen here so the shell could exist at
-/// all; the choice lives entirely in [_destinations] and changing it touches
-/// nothing else.
+/// That question is now settled by the roadmap: five tabs — Today, Styles,
+/// Practice Lab, Progress, Profile (§5). What is NOT settled is what three
+/// of those five actually show: Today, Practice Lab and full Profile each
+/// name capabilities (a daily path, segment looping, calibration, export/
+/// delete…) that do not exist anywhere in this app yet. Rather than hide
+/// those three tabs until they are real, or fake content for them, they are
+/// named here and say so — the exact discipline `library_view.dart` already
+/// applies to unbuilt styles (M-F-186). See [TodayView], [PracticeLabView],
+/// [ProfileView] and `not_built_tab_body.dart`.
 class ChoreiaShell extends StatefulWidget {
   const ChoreiaShell({
     super.key,
@@ -73,8 +84,11 @@ class ChoreiaShell extends StatefulWidget {
   /// Defaults to the real marker file; see `FileFirstRunFlag`.
   final FirstRunFlag? flagOverride;
 
+  static const Key todayTabKey = Key('shell.tab.today');
   static const Key libraryTabKey = Key('shell.tab.library');
+  static const Key practiceLabTabKey = Key('shell.tab.practiceLab');
   static const Key progressTabKey = Key('shell.tab.progress');
+  static const Key profileTabKey = Key('shell.tab.profile');
   static const Key loadFailureKey = Key('shell.loadFailure');
   static const Key loadingKey = Key('shell.loading');
   static const Key historyLoadingKey = Key('shell.historyLoading');
@@ -84,7 +98,13 @@ class ChoreiaShell extends StatefulWidget {
 }
 
 class _ChoreiaShellState extends State<ChoreiaShell> {
-  int _index = 0;
+  // Tab ORDER follows the roadmap (Today first, §5) — but the INITIAL
+  // selection stays on Styles (index 1), the one tab with something real
+  // behind it today. Landing a new or returning user on an honestly-empty
+  // Today tab first would be the same "sahte dolu"-adjacent mistake in
+  // reverse: not a fake full screen, but a real empty one presented as the
+  // front door. `_progressIndex` below documents the full order.
+  int _index = 1;
   late Future<LibraryCatalog> _catalog = _load();
   late final FirstRunFlag _flag =
       widget.flagOverride ?? const FileFirstRunFlag();
@@ -310,11 +330,21 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         ),
       );
 
+  // Tab order matches the roadmap's own listing (§5): Today(0), Styles(1),
+  // Practice Lab(2), Progress(3), Profile(4). The `IndexedStack` children
+  // below and the `NavigationDestination`s in `_shell()` must stay in this
+  // SAME order — only the Progress index is also needed as a value (the
+  // arrival-refresh check), so only it gets a name; the rest is enforced by
+  // keeping both lists in this documented order.
+  static const int _progressIndex = 3;
+
   Widget _shell(LibraryCatalog library) => Scaffold(
         body: IndexedStack(
           index: _index,
           children: <Widget>[
+            const TodayView(),
             LibraryView(library: library, env: widget.env),
+            const PracticeLabView(),
             // READ FROM THE STORE (2026-08-13). This used to hand
             // `ProgressSummary.build` an empty history and
             // `HistoryIntegrity.notRecorded` by hand, because nothing in the
@@ -333,6 +363,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                 summary: _progress!,
                 catalog: library.allCourses,
               ),
+            const ProfileView(),
           ],
         ),
         bottomNavigationBar: NavigationBar(
@@ -343,7 +374,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             // finished a lesson since this summary was built, and a progress
             // screen that is one session stale is a progress screen that
             // denies the practice you just did.
-            if (i == 1) _refreshProgress(library);
+            if (i == _progressIndex) _refreshProgress(library);
           },
           backgroundColor: ChoreiaColors.oxblood.withValues(alpha: 0.55),
           indicatorColor: ChoreiaColors.rose.withValues(alpha: 0.16),
@@ -359,16 +390,34 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
           ),
           destinations: const <Widget>[
             NavigationDestination(
+              key: ChoreiaShell.todayTabKey,
+              icon: Icon(Icons.today_outlined),
+              selectedIcon: Icon(Icons.today_rounded),
+              label: ShellStrings.todayTab,
+            ),
+            NavigationDestination(
               key: ChoreiaShell.libraryTabKey,
               icon: Icon(Icons.grid_view_outlined),
               selectedIcon: Icon(Icons.grid_view_rounded),
               label: ShellStrings.libraryTab,
             ),
             NavigationDestination(
+              key: ChoreiaShell.practiceLabTabKey,
+              icon: Icon(Icons.fitness_center_outlined),
+              selectedIcon: Icon(Icons.fitness_center_rounded),
+              label: ShellStrings.practiceLabTab,
+            ),
+            NavigationDestination(
               key: ChoreiaShell.progressTabKey,
               icon: Icon(Icons.timeline_outlined),
               selectedIcon: Icon(Icons.timeline_rounded),
               label: ShellStrings.progressTab,
+            ),
+            NavigationDestination(
+              key: ChoreiaShell.profileTabKey,
+              icon: Icon(Icons.person_outline),
+              selectedIcon: Icon(Icons.person_rounded),
+              label: ShellStrings.profileTab,
             ),
           ],
         ),
@@ -379,8 +428,11 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
 abstract final class ShellStrings {
   ShellStrings._();
 
+  static const String todayTab = 'TODAY';
   static const String libraryTab = 'STYLES';
+  static const String practiceLabTab = 'PRACTICE LAB';
   static const String progressTab = 'PROGRESS';
+  static const String profileTab = 'PROFILE';
 
   /// The design's own instruction for its LOADING state: "no spinner tricks ·
   /// plain wait". Followed literally, as `LiveView` already does.
