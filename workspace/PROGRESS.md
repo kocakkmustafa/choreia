@@ -1164,3 +1164,13 @@ yaz → (c) ölçüm-harness'i kur → (d) ≥6-kaynak hasat işini AYRI, büyü
 **Sıradaki:** Mimari karar için kurucuya sorulacak (bounce skorlayıcı yaklaşımı) — yanıt gelene
 kadar/paralelde CHO-P1-001 (özgün shell/premium player) veya CHO-P0-004 (fiziksel cihaz, EXTERNAL_GATE
 kısmı hariç) değerlendirilebilir.
+
+**Yönlendirme ölçümü (bu tur sonu):** CHO-P0-004'ün kod-yazılabilir kısmı (kalibrasyon akışı) bile
+"tek düzeltme seç" feedback arbiter'ıyla iç içe — o da C-320'nin AYNI mimari kararına bağlı (bounce'un
+skorlayıcısı yoksa hangi düzeltmenin gösterileceğine karar verecek bir şey de yok). `lib/app/onboarding/`
+bugün yalnız `first_run_view.dart` taşıyor, kalibrasyon ekranı hiç yok — inşa edilebilir ama arbiter'sız
+yarım kalır. **CHO-P1-001 GERÇEKTEN bloksuz:** `lib/app/today/` ve `lib/app/practice_lab/` hiç yok,
+shell bugün yalnız 2 sekme (STYLES/PROGRESS), roadmap'in 5 sekmesi (Bugün/Stiller/Practice Lab/
+İlerleme/Profil) yazılmamış — büyük, saf-UI, skorlama mimarisinden bağımsız bir iş. Bu oturum bunu
+BAŞLATMADI (bugünkü tur zaten CHO-P0-001+002+C-319/320 taşıyordu) — sıradaki turun temiz başlangıç
+noktası budur.
