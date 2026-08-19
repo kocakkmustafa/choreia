@@ -233,16 +233,8 @@ final class LiveSession {
     );
   }
 
-  int _moment(String id) {
-    for (final Object? m
-        in (stepConfig['scoredMoments'] as List<Object?>? ?? const [])) {
-      if (m is Map && '${m['label']}' == id) {
-        final Object? bin = m['phaseBin'];
-        if (bin is int) return bin;
-      }
-    }
-    return id == 'a' ? 0 : reference.phaseBins ~/ 2;
-  }
+  int _moment(String id) =>
+      resolveScoredMomentBin(stepConfig, reference.phaseBins, id);
 
   /// Resample the observed window onto the reference's phase axis.
   ///
@@ -270,4 +262,62 @@ final class LiveSession {
     }
     return out;
   }
+}
+
+/// Resolves a scored-moment label (`'a'`/`'b'`) to its phase bin, by
+/// cross-referencing `scoredMoments[].phase` against `phases[].id` →
+/// `phases[].enter.phaseBin` — the SAME resolution `test/end_to_end_test.dart`
+/// and `test/fallback_liveness_test.dart` already do by hand when deriving
+/// their own `momentA`/`momentB` (their comment: "a copy of a threshold in a
+/// test is a second source of truth"). This file had silently grown its OWN,
+/// wrong copy.
+///
+/// Extracted as a free function (rather than a private method) so it is
+/// testable without constructing a full [LiveSession] — no `Stream<PoseFrame>`
+/// chain needed, see `test/live_session_test.dart`.
+///
+/// PREVIOUSLY this looked for `phaseBin` directly ON the `scoredMoments`
+/// entry — a key the content schema never puts there
+/// (`content/SCHEMA.md`: `scoredMoments[]` is `{id, phase, beat, label}`).
+/// The lookup ALWAYS missed, for every style, and fell straight to the
+/// arbitrary default below. Measured against real content this session:
+/// for `ss_shine_footwork` the correct bins are `settle_a`→1, `settle_b`→29
+/// (of 64); the old code silently returned 0 and 32 instead — close enough
+/// to look plausible, wrong enough to matter once this style's BPM gate
+/// opens and its live path is actually exercised by a user.
+///
+/// Still falls to the SAME arbitrary default when the named phase has no
+/// `phaseBin` — true today for `hip_hop_foundations`'s phases, which are
+/// live-FSM-style gates (`metric`/`op`/`valueDeg`, entered in real time as
+/// frames arrive) rather than fixed positions in an already-resampled
+/// replay cycle. There is no bin for this function to find there; that is
+/// a separate, larger, known gap (DEFTER C-319), not something this fix
+/// resolves.
+int resolveScoredMomentBin(
+  Map<String, dynamic> stepConfig,
+  int phaseBins,
+  String label,
+) {
+  String? phaseId;
+  for (final Object? m
+      in (stepConfig['scoredMoments'] as List<Object?>? ?? const [])) {
+    if (m is Map && '${m['label']}' == label) {
+      phaseId = m['phase'] as String?;
+      break;
+    }
+  }
+  if (phaseId != null) {
+    for (final Object? p
+        in (stepConfig['phases'] as List<Object?>? ?? const [])) {
+      if (p is Map && p['id'] == phaseId) {
+        final Object? enter = p['enter'];
+        if (enter is Map) {
+          final Object? bin = enter['phaseBin'];
+          if (bin is int) return bin;
+        }
+        break;
+      }
+    }
+  }
+  return label == 'a' ? 0 : phaseBins ~/ 2;
 }
