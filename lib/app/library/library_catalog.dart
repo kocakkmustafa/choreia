@@ -374,6 +374,7 @@ final class StyleProse {
     this.measured = const <String>[],
     this.notMeasured = const <String>[],
     this.reproductionBoundary,
+    this.tempo,
   });
 
   factory StyleProse.fromJson(Map<String, dynamic> json) {
@@ -387,7 +388,28 @@ final class StyleProse {
       measured: LibraryEntry._strings(honesty['measured']),
       notMeasured: LibraryEntry._strings(honesty['notMeasured']),
       reproductionBoundary: copyright['boundary'] as String?,
+      tempo: _tempoSentence(json['bpmRange'], json['bpmStatus'] as String?),
     );
+  }
+
+  /// `bpmRange`/`bpmStatus` are reader-relevant facts (CHO-P1-001, 2026-08-19)
+  /// — unlike `bpmCandidates` above, which is raw pre-resolution research
+  /// data. C-117's rule still applies: the raw `bpmStatus` string is written
+  /// for whoever resolves it next ("DISPUTED — must be resolved by
+  /// measurement before any lesson ships"), not for a dancer, so it is never
+  /// surfaced verbatim — only ITS PRESENCE (a dispute exists) is.
+  static String? _tempoSentence(Object? bpmRange, String? bpmStatus) {
+    if (bpmRange is List && bpmRange.length == 2) {
+      final Object? lo = bpmRange[0];
+      final Object? hi = bpmRange[1];
+      if (lo is num && hi is num) {
+        return 'Danced at roughly ${lo.toInt()}–${hi.toInt()} BPM.';
+      }
+    }
+    if (bpmStatus != null && bpmStatus.isNotEmpty) {
+      return "This style's tempo is not confirmed yet.";
+    }
+    return null;
   }
 
   /// What this style grades, each line traceable to a measurement.
@@ -405,8 +427,16 @@ final class StyleProse {
   /// how an attribution box becomes decoration.
   final String? reproductionBoundary;
 
+  /// One reader-ready sentence about the style's tempo — a resolved range, or
+  /// an honest "not confirmed yet" when `bpmStatus` names a dispute. `null`
+  /// when content says nothing about tempo at all.
+  final String? tempo;
+
   bool get isEmpty =>
-      measured.isEmpty && notMeasured.isEmpty && reproductionBoundary == null;
+      measured.isEmpty &&
+      notMeasured.isEmpty &&
+      reproductionBoundary == null &&
+      tempo == null;
 }
 
 /// One style, ready to render: declaration + derivation held apart.

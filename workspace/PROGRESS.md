@@ -1207,3 +1207,9 @@ kararı ya motion-core kapsamı ya kurucu kapısı gerektiriyor.
 **Sıradaki (yeni bir oturumda, bu tur BAŞLATMADI):** mimari kararlar netleşince (bounce skorlayıcı
 + mirror/slow/loop tasarımı) premium player akışına TDD ile başla; ya da BPM-bağımsız, tek-başına
 buildable parçaları önce al (BPM style-page alanı, kurs-türü şema alanı).
+
+**Aynı tur, küçük ek (C-323):** BPM alanı hemen alındı — `content/styles/*/style.json`daki
+`bpmRange`/`bpmStatus` `StyleProse.tempo`ya taşındı, stil sayfasına kendi "TEMPO" bölümü eklendi.
+Ham `bpmStatus` dizesi (C-117 kuralı) ekrana hiç çıkmıyor, yalnız okuyucu cümlesi. Gerçek cihazda
+salsa'nın disputed vakası doğrulandı, hip-hop'un çözülmüş vakası testle. `flutter test` 282/282.
+Kalan: kurs-türü şema alanı (Temeller/Kombolar/Rutinler) — henüz alınmadı, ayrı bir küçük iş olabilir.

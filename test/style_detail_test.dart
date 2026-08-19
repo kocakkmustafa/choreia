@@ -910,6 +910,33 @@ void main() {
       }
     });
   });
+
+  group('tempo (CHO-P1-001, 2026-08-19)', () {
+    testWidgets('a resolved bpmRange shows a plain range sentence',
+        (WidgetTester tester) async {
+      await show(tester, 'hip_hop_foundations');
+      await scrollTo(tester, find.byKey(StyleDetailView.tempoKey));
+      expect(find.textContaining('85–105 BPM'), findsOneWidget,
+          reason: "content/styles/hip_hop_foundations/style.json's own "
+              'bpmRange is [85, 105] — this must read from THAT, not a '
+              'hardcoded example');
+    });
+
+    testWidgets('a disputed bpmStatus shows an honest not-confirmed '
+        'sentence, never the raw internal string', (WidgetTester tester) async {
+      await show(tester, 'salsa_shines');
+      await scrollTo(tester, find.byKey(StyleDetailView.tempoKey));
+      expect(find.textContaining('not confirmed yet'), findsOneWidget);
+      // C-117's rule: the raw authoring string never reaches the surface.
+      // salsa_shines's real bpmStatus contains "DISPUTED" and "measurement"
+      // — neither may appear anywhere on this page.
+      expect(find.textContaining('DISPUTED'), findsNothing,
+          reason: 'the raw bpmStatus string leaked onto the surface — it is '
+              'written for whoever resolves the dispute next, not a dancer');
+      expect(find.textContaining('measurement'), findsNothing,
+          reason: 'same leak, other half of the raw string');
+    });
+  });
 }
 
 /// Asset paths declared under `flutter: assets:`.

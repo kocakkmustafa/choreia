@@ -89,3 +89,28 @@ fresh install, this session) — not code-reading:
 Not produced: a `gates.sh` run pinned to this exact commit before the
 commit lands (done as part of the commit's own pre-commit hook, matching
 every other task this session).
+
+## Addendum (same day) — the style-page BPM block, C-323
+
+One item from the "not shipped" table above turned out to be small and
+architecture-independent after all: `content/styles/*/style.json` already
+carries `bpmRange`/`bpmStatus`, just never read into `StyleProse`. Added:
+
+- `StyleProse.tempo` — a reader-ready sentence, derived once at parse time.
+  A resolved `bpmRange` becomes "Danced at roughly N–M BPM."; a `bpmStatus`
+  dispute becomes "This style's tempo is not confirmed yet." — the raw
+  authoring string (which names the dispute for whoever resolves it next,
+  not for a dancer) never reaches the surface, matching this app's existing
+  C-117 rule.
+- `StyleDetailView._tempoSection()` — its own section, its own guard clause,
+  kept apart from `_honestySection` (a claim about the style, not about what
+  the camera measures on a dancer).
+- Tests: `test/style_detail_test.dart` new group, one case per branch, plus
+  an explicit check that neither `"DISPUTED"` nor `"measurement"` (substrings
+  of the real raw `bpmStatus`) ever appear on screen.
+- Real-device verification: `screenshots/tempo-section-salsa-disputed.png`
+  — the harder of the two cases (leak risk), captured live on
+  `choreia-hatti`. The resolved-range case is covered by the passing test;
+  a second screenshot was judged redundant.
+
+`flutter analyze`: 0. `flutter test`: 282/282 (280 + 2 new).

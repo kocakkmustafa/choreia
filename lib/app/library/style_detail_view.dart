@@ -56,6 +56,7 @@ class StyleDetailView extends StatelessWidget {
 
   static const Key attributionKey = Key('style.attribution');
   static const Key attributionGapKey = Key('style.attributionGap');
+  static const Key tempoKey = Key('style.tempo');
   static const Key honestyKey = Key('style.honesty');
   static const Key lessonsKey = Key('style.lessons');
   static const Key noLessonsKey = Key('style.noLessons');
@@ -105,6 +106,10 @@ class StyleDetailView extends StatelessWidget {
                 const SizedBox(height: 20),
               ],
               _attributionSection(),
+              if (card.prose?.tempo != null) ...<Widget>[
+                const SizedBox(height: 14),
+                _tempoSection(card.prose!.tempo!),
+              ],
               if (card.entry.stepGlossary.isNotEmpty) ...<Widget>[
                 const SizedBox(height: 20),
                 _glossarySection(),
@@ -184,6 +189,31 @@ class StyleDetailView extends StatelessWidget {
         StyleBadge.scored => StyleStrings.scoredMeaning,
         _ => null,
       };
+
+  // ── Tempo ────────────────────────────────────────────────────────────
+  //
+  // CHO-P1-001 (2026-08-19). A fact about the STYLE, not a claim about what
+  // the camera measures on a dancer — kept apart from [_honestySection] for
+  // that reason, own guard clause, own key. `StyleProse.tempo` is already a
+  // complete reader sentence; this widget only lays it out.
+
+  Widget _tempoSection(String sentence) => GlassPanel(
+        key: tempoKey,
+        radius: 18,
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(StyleStrings.tempoTitle,
+                style: ChoreiaType.label(
+                    size: 10, color: ChoreiaColors.text(0.5))),
+            const SizedBox(height: 10),
+            Text(sentence,
+                style: ChoreiaType.body(
+                    size: 13.5, color: ChoreiaColors.text(0.82))),
+          ],
+        ),
+      );
 
   // ── Attribution ──────────────────────────────────────────────────────
 
@@ -590,6 +620,8 @@ abstract final class StyleStrings {
       'built for this style. These are examples, not a full list: plenty more '
       'would be out of reach too, and naming a few is not a promise about the '
       'rest.';
+
+  static const String tempoTitle = 'TEMPO';
 
   static const String honestyTitle = 'What this style can tell you';
 
