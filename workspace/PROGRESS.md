@@ -1213,3 +1213,24 @@ buildable parçaları önce al (BPM style-page alanı, kurs-türü şema alanı)
 Ham `bpmStatus` dizesi (C-117 kuralı) ekrana hiç çıkmıyor, yalnız okuyucu cümlesi. Gerçek cihazda
 salsa'nın disputed vakası doğrulandı, hip-hop'un çözülmüş vakası testle. `flutter test` 282/282.
 Kalan: kurs-türü şema alanı (Temeller/Kombolar/Rutinler) — henüz alınmadı, ayrı bir küçük iş olabilir.
+
+---
+
+## Tur: kurs-türü alanı değerlendirildi, ertelendi — C-324 (2026-08-19, aynı oturum)
+
+C-323'ün kendi kapanışında bıraktığı tek soru işaretini ("kurs-türü şema alanı — henüz alınmadı,
+ayrı bir küçük iş olabilir") bu turda dikkatle ölçtüm, varsaymadım. `content/styles/salsa_shines/
+style.json` + `hip_hop_foundations/style.json`'daki TÜM ders listesi (16 ders) çıkarıldı: hepsi
+`level 1` veya `level 2`, yani hepsi tek-adım/tek-kavram "Temel" içerik — sıfır "Kombo", sıfır
+"Rutin" örneği repo'da mevcut. Sonuç: alan eklense bile iki kova kalıcı olarak boş kalırdı; bu
+BPM'den (C-323, veri zaten vardı, saf kablolama) temelde farklı — burada ne şema alanı var ne de
+dolduracak içerik. Alan eklemek ya sahte-derinlik (iki hep-boş kova göstermek) ya da yeni bir
+taksonomi uydurmak anlamına gelir — ikisi de içerik/ürün kararı. **C-324** olarak deftere işlendi,
+uygulanmadı; C-321'in README karşılaştırma tablosundaki "(buildable)" notu bu bulguyla düzeltildi.
+
+Sonuç: bu turda GÜVENLE alınabilecek başka bağımsız parça kalmadı. İki mimari soru (bounce
+skorlayıcı; mirror/slow/loop/Practice Lab tasarımı) hâlâ kurucudan yanıt bekliyor — üçüncü olarak
+kurs-türü kapsam sorusu da (iki boş kova dürüstçe mi gösterilsin, yoksa yeni içerik mi üretilsin)
+aynı kurucu turunda birlikte sorulmak üzere not edildi. Bugünkü tur kapsamlıydı (CHO-P0-001,
+CHO-P0-002, C-319→C-324, 10 commit) — turu kısa bir kapanış notuyla bırakıyorum, uzun loop aralığı
+kuruyorum.

@@ -66,7 +66,9 @@ What *was* safely buildable: the shell itself. This package is that slice.
 | slow / loop | Not built | Same — no spec, no code |
 | beat-live | Not built | Same founder BPM-tap gate already flagged this session (Salsa) |
 | weak-count retry | Not built | **Cross-repo.** `SessionRecord` (pinned `motion_core`) carries no per-cycle/per-finding data to retry against — a shared-package schema change, not something this session's own scope covers (family rule: common package changes need the common writer + 5-app contract matrix) |
-| style-page course/BPM/trend blocks | Not built | Course-kind has no content schema field yet (buildable); BPM has real data not yet wired to the reader-facing model (buildable, small); trend was explicitly ruled OUT of V1 scope by the original `UI-BRIEF.md` — the roadmap's ask may itself be stale |
+| style-page BPM block | **Shipped, C-323 (see addendum below)** | Was buildable+small as predicted — data already existed, just unwired |
+| style-page course block (Foundations/Combos/Routines) | Not built | **Re-measured, C-324 — this row's original "(buildable)" was too optimistic.** Not just a missing field: today's real catalogue (16 lessons across both real styles) is 100% single-step "Foundations"-tier content — zero Combos, zero Routines exist anywhere. Adding the field now would either display two permanently-empty buckets or require inventing a lesson taxonomy with nothing to validate it against — a content/product decision, not a wiring task |
+| style-page trend block | Not built | Explicitly ruled OUT of V1 scope by the original `UI-BRIEF.md` (§3.4, §3.9b: timing is not measured, a trend chart would draw zeros) — the roadmap's ask may itself be stale, not a gap |
 | `CHO-UX-001` (5-participant usability protocol) | Not run | **EXTERNAL_GATE** — needs real human participants, cannot be run by this session |
 
 ## Verification
@@ -114,3 +116,26 @@ carries `bpmRange`/`bpmStatus`, just never read into `StyleProse`. Added:
   a second screenshot was judged redundant.
 
 `flutter analyze`: 0. `flutter test`: 282/282 (280 + 2 new).
+
+## Addendum (same day) — the style-page course block, C-324 (re-measured, not shipped)
+
+The other item this README's original table called "(buildable)" — course-kind
+(Foundations/Combos/Routines) — was re-measured before touching code, per the
+same-session instruction to evaluate it carefully rather than assume it is as
+small as BPM turned out to be. It is not.
+
+Read every lesson in both real styles (`content/styles/salsa_shines/style.json`,
+`content/styles/hip_hop_foundations/style.json` — 16 lessons total): all of
+them sit at `level` 1 or 2, and every one is single-step/single-concept
+"Foundations"-tier material. There is no Combo, no Routine, anywhere in the
+actual catalogue today. Unlike BPM — where `bpmRange`/`bpmStatus` already
+existed in the data and only the reader-facing wiring was missing — course-kind
+has neither a schema field *nor* any real content that would populate two of
+its three buckets. Adding the field now would mean either shipping two
+buckets that are permanently empty (a structural version of the overclaiming
+this app's own M-F-186 discipline exists to prevent) or inventing a lesson
+taxonomy with nothing in the real catalogue to check it against — a content/
+product decision, not a data-wiring task.
+
+Not built. Recorded as DEFTER C-324, not C-323's kind of small win. The
+comparison table above is corrected accordingly.
