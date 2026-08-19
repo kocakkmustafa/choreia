@@ -1234,3 +1234,25 @@ kurs-türü kapsam sorusu da (iki boş kova dürüstçe mi gösterilsin, yoksa y
 aynı kurucu turunda birlikte sorulmak üzere not edildi. Bugünkü tur kapsamlıydı (CHO-P0-001,
 CHO-P0-002, C-319→C-324, 10 commit) — turu kısa bir kapanış notuyla bırakıyorum, uzun loop aralığı
 kuruyorum.
+
+---
+
+## Tur: CHO-P1-004 hazırlık taraması, gerçek bir uyum-belgesi hatası bulundu — C-325 (2026-08-19, üçüncü tur)
+
+Kurucudan yanıt yok, başka oturum yeni commit bırakmamış — CHO-P1-004'ün (local-first progress/
+privacy/export) gerçekten başlatılmaya hazır olup olmadığını değerlendirmek için bir Explore ajanı
+gönderildi. Sonuç iki ayrı bulgu getirdi.
+
+**Birincisi (C-325, bu bölüm):** `docs/store/data-safety-matrix.md` — bu SABAH, CHO-P0-002
+sırasında bu oturumda yazılmıştı — "SessionStore yalnız okunuyor, hiç yazma yok" diyordu. YANLIŞ,
+yazıldığı anda bile: `live_lesson_page.dart`daki gerçek yazma yolu (C-268/A1) 2026-08-13 13:51'de
+açılmıştı, gizlilik manifestinin ölçümünden (C-266/A8, aynı gün 00:33) 13 saat sonra — bu dosya
+altı gün sonra eski ölçümü kopyalayıp yeniden doğrulamadan yazılmış. Uyum-belgesi sınıfı olduğu
+için (Play/Apple mağaza formlarına doğrudan girdi) düzeltme hemen uygulandı: App activity satırı
+düzeltildi, data-deletion iddiası çıkarıldı, Apple tarafı ayrı bir bayatlık uyarısıyla işaretlendi
+(Apple'ın kendi manifest dosyası DEĞİŞTİRİLMEDİ — yalnız yeniden-doğrulanmamış olduğu kayda geçti,
+Apple'ın on-device-veri muafiyeti Play'den farklı olabileceği için emin olmadan dosyaya dokunulmadı).
+
+**İkincisi, ayrı bir kayıt olarak takip ediyor (C-326):** CHO-P1-004'ün roadmap'teki "yedi Drift
+tablosu" planı, bu ajan taramasıyla ortaya çıkan GERÇEK JSONL `SessionStore` mimarisiyle (zaten
+canlı, zaten yazıyor) hiç uzlaştırılmamış — üçüncü bir mimari soru.

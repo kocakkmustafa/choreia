@@ -16,9 +16,15 @@ hesabı/backend'i/bulut sync'i YOK, tablo bu yüzden çok daha kısa).
   kullanıcı verisi taşımaz; CHO-P0-002 bu turda `google_fonts`un runtime GET'ini de KAPATTI).
 - Kamera karesi/landmark cihazda işlenir, **hiçbir yere yüklenmez** (Info.plist
   `NSCameraUsageDescription`, `content_claims_test` ile çivili).
-- Kalıcı yerel depolama (Drift/SQLite tabloları, roadmap §7) **HENÜZ YOK** — `SessionStore`
-  yalnız OKUNUYOR, `lib/` genelinde hiçbir yazma yok (`PrivacyInfo.xcprivacy`'nin kendi ölçümü,
-  bu turda tekrar doğrulandı: `lib/services/` boş, CHO-P1-004 kapsamı).
+- **DÜZELTME (C-325, 2026-08-19 aynı gün, ikinci tur): bu satır YANLIŞTI, yazıldığı anda bile.**
+  `SessionStore` (`motion_core` pinli paket, JSONL) **YAZIYOR** — `lib/app/live/live_lesson_page.dart`
+  (`_writeRecord()`), her ders tamamlanışında `lessonId`/`completedAt`/`workedSeconds`/
+  `unitsCompleted`/`plannedUnits`/`lessonClass` alanlarını `<app-support-dir>/sessions.jsonl`'a
+  ekliyor (append-only, atomik tmp+rename). Bu yazma yolu **C-268/A1 ile 2026-08-13'te** açıldı —
+  bu dosyanın ilk yazıldığı 2026-08-19'dan ALTI GÜN önce; ilk metin muhtemelen daha eski bir
+  ölçümden (C-266/A8, yazma yolu açılmadan önce) kopyalanmış, bu turda yeniden doğrulanmamıştı.
+  Kalıcı depolama BİÇİMİ hâlâ JSONL'dir (Drift/SQLite roadmap §7'nin "yedi tablo" planı DEĞİL —
+  bu ikisi hiç uzlaştırılmadı, bkz. DEFTER C-326); ama "hiç yazma yok" iddiası KESİN yanlıştı.
 - Mikrofon **HENÜZ İMPLEMENTE EDİLMEDİ** — `lib/` içinde mikrofon/ses-kayıt API'sine hiçbir
   referans yok (bu turda grep ile doğrulandı). `NSMicrophoneUsageDescription`/`RECORD_AUDIO`
   bu yüzden BİLEREK yazılmadı — CHO-P1-003 (audio clock/onset) açıldığında GERÇEK davranışla
@@ -31,12 +37,15 @@ hesabı/backend'i/bulut sync'i YOK, tablo bu yüzden çok daha kısa).
 | Personal info | HAYIR | — | — | — | Hesap yok |
 | Photos/Videos | HAYIR | — | — | — | Kamera karesi cihazda işlenir, kaydedilmez/yüklenmez |
 | Audio | HAYIR | — | — | — | Mikrofon henüz implemente edilmedi |
-| App activity | HAYIR | — | — | — | Analytics SDK yok, `outbox_events` (roadmap §7 telemetry) henüz yok |
+| App activity | **EVET (muhtemelen — aşağıya bak)** | HAYIR | — | Uygulama işlevi | **C-325 düzeltmesi:** hangi ders/ne zaman/ne kadar süre/kaç çevrim tamamlandığı `sessions.jsonl`'a cihazda kalıcı yazılıyor (yukarı bak). Aktarım/paylaşım YOK (`network_dependency_check.py` doğruluyor). Play'in "ephemeral, cihazda işlenip saklanmıyor" muafiyeti kalıcı dosyaya UYMAZ — bu okumaya göre "Collected: Evet, Shared: Hayır" olması beklenir. ⚠️ Gerçek Play form metniyle submit öncesi doğrulanmalı (store-policy-officer), burada hafızadan çıkarım yapıldı, canlı konsoldan teyit edilmedi. `outbox_events` (roadmap §7 telemetry) hâlâ yok, ayrı konu. |
 | App info & performance | HAYIR | — | — | — | Crash/diagnostics SDK'sı yok |
 | Device/other IDs | HAYIR | — | — | — | Reklam/tracking ID yok |
 | Health & fitness | HAYIR | — | — | — | Sağlık verisi toplanmaz (uygulama tıbbi/sağlık verisi işlemez) |
 
-**Data deletion bölümü:** "No data is collected" seçeneği geçerli — silinecek bir veri yok.
+**Data deletion bölümü:** **C-325 düzeltmesi — "No data is collected" ARTIK doğru olmayabilir**
+(App activity satırına bak). Muhtemel doğru cevap: veri hesapsız/cihazda-yalnız tutulduğu için
+"kullanıcı uygulamayı silerek kendi verisini siler" yolu — ama gerçek Play form seçenekleriyle
+submit öncesi teyit edilmeli, burada varsayılmadı.
 **Encryption in transit:** N/A (uygulama içi ağ trafiği yok; `google_fonts` build-time'a taşındı).
 
 ## 2. Apple Privacy Nutrition Label
@@ -47,10 +56,10 @@ hesabı/backend'i/bulut sync'i YOK, tablo bu yüzden çok daha kısa).
 | Health & Fitness | Not collected | `PrivacyInfo.xcprivacy` `NSPrivacyCollectedDataTypes: []` |
 | Diagnostics | Not collected | Crash/analytics SDK'sı yok |
 | Identifiers | Not collected | Reklam/tracking ID yok |
-| Usage Data | Not collected | — |
+| Usage Data | Not collected (⚠️ re-check, see note) | `PrivacyInfo.xcprivacy` `NSPrivacyCollectedDataTypes: []` — **ölçüldü 2026-08-13 00:33 (C-266/A8), session-write yolu (C-268) AYNI GÜN 13:51'de açıldı, manifest o zamandan beri yeniden doğrulanmadı** (git tarihiyle kanıtlı, C-325). Apple'ın "on-device, aktarılmayan, kimliğe bağlanmayan veri" muafiyeti Play'den farklı ve muhtemelen daha geniş — bu satırın YANLIŞ olduğu iddia edilmiyor, yalnız C-268'den beri hiç yeniden ölçülmediği kayda geçiyor |
 
 ATT (App Tracking Transparency): **GEREKMEZ** — `NSPrivacyTracking: false`,
-`NSPrivacyTrackingDomains: []` (ölçüldü, `PrivacyInfo.xcprivacy`, C-266/A8).
+`NSPrivacyTrackingDomains: []` (ölçüldü, `PrivacyInfo.xcprivacy`, C-266/A8 — aynı staleness notu geçerli).
 
 ## 3. İzin gerekçe cümleleri (mağaza formlarına)
 
@@ -66,7 +75,10 @@ izni YOK, gerçek davranışla birebir.
 
 - CHO-P1-003 (audio/onset) açılınca: mikrofon satırı `Audio: EVET` olur, `RECORD_AUDIO` +
   `NSMicrophoneUsageDescription` eklenir — ikisi BİRLİKTE, kod-önce-izin-sonra değil.
-- CHO-P1-004 (local-first progress) açılınca: yedi Drift tablosu gerçek yerel depolama başlatır
-  — Play/Apple formunda hâlâ "toplanıyor ama PAYLAŞILMIYOR, cihazda kalıyor" olması beklenir
-  (roadmap §7: hesap gerektirmez, export/delete kullanıcı elinde).
+- **C-325/C-326 düzeltmesi: yerel depolama CHO-P1-004'le "başlamıyor" — zaten BAŞLADI** (JSONL
+  `SessionStore`, C-268, 2026-08-13). CHO-P1-004 açılınca değişecek olan roadmap §7'nin "yedi Drift
+  tablosu" planı — ama bu plan bugün ŞİLİN JSONL mimarisiyle hiç uzlaştırılmadı (DEFTER C-326).
+  Form hâlâ "toplanıyor ama PAYLAŞILMIYOR, cihazda kalıyor" kalması beklenir (roadmap §7: hesap
+  gerektirmez, export/delete kullanıcı elinde) — mimari JSONL kalsa da Drift'e geçse de bu satır
+  muhtemelen değişmez, ama bu bir varsayım, ölçülmedi.
   `MOTION-GROWTH-001` açılmadan backend YOK, bu satır o kapı geçmeden değişmez.
