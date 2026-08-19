@@ -1118,4 +1118,49 @@ atıf yazılmıştı, C-317 ile düzeltildi (kendi işim DEĞİLDİ diye kayıt 
 **Eksik, adıyla:** CI workflow'un henüz GERÇEK bir GitHub Actions koşumu yok
 (push edilmeden koşamaz) — sıradaki tura açık.
 
-**Sıradaki:** CHO-P0-003 (Bounce model doğruluk kapısı).
+---
+
+## Tur: CHO-P0-003 ARAŞTIRMASI — gerçek kusur bulundu+düzeltildi, gerçek kapsam netleşti (2026-08-19, aynı oturum)
+
+**CHO-P0-003'e "Bounce model doğruluk kapısını geç" diye başlandı; bir Explore ajanı önce mevcut
+altyapıyı taradı (fixture/scoring/FSM/DTW ne var, ne yok).** Bulgu roadmap'in kendi çerçevesini
+düzeltti: **DTW ve FSM ikisi de bu kod tabanında KASITLI YOK** (`tools/build_reference.py` DTW'yi
+adıyla reddediyor; `DanceJudge` iki-moment snapshot karşılaştırıcı) — roadmap checklist'inin
+"uygula" dediği şey zaten var olmayan bir mimariye atıfta bulunuyordu.
+
+**Araştırma sırasında GERÇEK, önceden bilinmeyen bir kusur bulundu ve düzeltildi (C-319):**
+`LiveSession._moment()` — canlı uygulamanın skorlanan-an çözümleyicisi — hiçbir stil için
+içerikten gerçek phase-bin OKUMUYORDU; `scoredMoments[].phaseBin` diye var olmayan bir alanı
+arıyor, her seferinde kaçıp keyfi varsayılana (0, phaseBins/2) düşüyordu. Doğru çözüm
+(`phase`→`phases[].id`→`enter.phaseBin`) `test/end_to_end_test.dart`'ta ZATEN vardı ama o test
+`LiveSession`'ı hiç çağırmıyordu — canlı yol sıfır kapsamdaydı. Ölçülen fark: salsa'da gerçek
+bin'ler 1/29 (64 üzerinden), eski kod 0/32 döndürüyordu — henüz kullanıcıya ulaşmadı (BPM kapısı
+kapalı) ama kapı açılınca sessizce yanlış ölçerdi. Bounce'ta davranış BİLEREK korundu (bounce'un
+fazları canlı-FSM tipi, `phaseBin`i hiç yok — ayrı, daha büyük bir konu, aşağıda). Düzeltme:
+`resolveScoredMomentBin()` saf fonksiyona çıkarıldı, `test/live_session_test.dart` (5 test, biri
+sabotaj) yazıldı, TDD kırmızı/yeşil ile doğrulandı (stash ile eski koda karşı derleme hatası
+görüldü, geri alınca yeşile geçti). `flutter test` 277/277, `flutter analyze` 0, engine 36/36,
+salsa liveness scripti hâlâ OK, taze `gates.sh` yeşil.
+
+**CHO-P0-003'ün gerçek kapsamı (C-320, AÇIK — bu tur uygulanmadı, teşhis edildi):**
+
+1. `DanceJudge` yalnız salsa'nın 4 hata koduna sahip — bounce'un kendi 4 hatasının (NO_BOUNCE/
+   BOUNCE_INVERTED/TRUNK_COLLAPSE/ASYMMETRIC_BOUNCE) hiçbiri için kod yok, gereken metrikler hiç
+   hesaplanmıyor.
+2. **Yapısal uyuşmazlık:** salsa'nın fazları sabit-bin/replay-cycle, bounce'unki canlı-FSM/metrik-
+   eşik — mevcut TEK skorlayıcı yalnız birincisini biliyor. Bounce'u skorlamak "4 kod ekle" değil,
+   ya yeni bir canlı-FSM skorlayıcı ya bounce'un yeniden-tasarımı — mimari karar, tek taraflı
+   verilmedi.
+3. İçerik-kalitesi ayrı: bounce'un Tier B→A geçişi ≥6 bağımsız kaynak (bugün 4) + gürültü tabanını
+   aşan ölçülmüş anlaşmazlık istiyor — 2+ yeni gerçek video hasadı, RM/RR/salsa ölçeğinde ayrı iş.
+4. Confusion matrix/precision/recall/F1 üreten hiçbir araç yok; en yakın emsal
+   `ss_shine_footwork_liveness.py` (kablolama kanıtı, istatistik değil) ve `fallback_liveness_test.dart`
+   (doğru şekil, n=2 yetersiz).
+
+**Sıradaki oturumun gerçek sırası:** (a) mimari karar — kurucu/koordinatör girdisi gerektirir
+(roadmap §13: dans tekniği doğruluğu AI tek başına kabul edemez) → (b) skorlayıcı bileşenini TDD ile
+yaz → (c) ölçüm-harness'i kur → (d) ≥6-kaynak hasat işini AYRI, büyük bir tur olarak planla.
+
+**Sıradaki:** Mimari karar için kurucuya sorulacak (bounce skorlayıcı yaklaşımı) — yanıt gelene
+kadar/paralelde CHO-P1-001 (özgün shell/premium player) veya CHO-P0-004 (fiziksel cihaz, EXTERNAL_GATE
+kısmı hariç) değerlendirilebilir.
