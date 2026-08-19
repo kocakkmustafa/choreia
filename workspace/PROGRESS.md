@@ -1256,3 +1256,26 @@ Apple'ın on-device-veri muafiyeti Play'den farklı olabileceği için emin olma
 **İkincisi, ayrı bir kayıt olarak takip ediyor (C-326):** CHO-P1-004'ün roadmap'teki "yedi Drift
 tablosu" planı, bu ajan taramasıyla ortaya çıkan GERÇEK JSONL `SessionStore` mimarisiyle (zaten
 canlı, zaten yazıyor) hiç uzlaştırılmamış — üçüncü bir mimari soru.
+
+## Tur: CHO-P1-004 gerçek durumu — üçüncü mimari soru bulundu, C-326 (2026-08-19, üçüncü tur devamı)
+
+Explore ajanının bulduğu ikinci şey: CHO-P1-004 önceki turda "henüz başlanmadı" denerek yanlış
+tanıtılmıştı. Gerçekte `SessionStore` (motion_core pinli, JSONL) zaten canlı — yazma zinciri
+(`SessionTally` → `_writeRecord()` → `sessions.jsonl`, C-268/A1, 2026-08-13) ve okuma tarafı
+(Progress sekmesi → `ProgressSummary.from()`) üç haftadır orada, YENİ değil.
+
+Asıl bulgu: dış roadmap'in CHO-P1-004 için istediği "yedi Drift/SQLite tablosu" planı (adı geçen
+yedi tablo: dance_profiles, practice_sessions, segment_attempts, calibrations, content_progress,
+entitlement_cache, outbox_events) bu repodaki gerçek, çalışan JSONL mimarisiyle (`docs/design/
+SESSION-STORE-DELTA.md`, 2026-07-30, gerekçeli "3. taraf DB YOK" kararı) HİÇ uzlaştırılmamış —
+roadmap bu tasarım belgesini kaynak bile göstermiyor. İki mimari yaklaşım (JSONL'de devam / gerçek
+DB'ye geçiş) arasında bir seçim, üçüncü bir kurucu-seviyeli mimari soru olarak C-321/C-320'nin
+yanına eklendi. CHO-P1-004'ün geri kalan maddeleri de ölçüldü: mastered-count yok, weak-count
+history motion_core şema değişikliği ister (C-321 ③ ile aynı engel), 4-haftalık path yok,
+timing/shape/continuity trend bilerek yok (BPM kapısı, C-321 ile aynı kök neden) — hiçbiri bu
+turda uygulanmadı.
+
+Bu turda GÜVENLE alınabilecek bağımsız iş kalmadı. Üç mimari soru (bounce skorlayıcı; mirror/
+slow/loop/Practice Lab; JSONL-vs-Drift) aynı kurucu turunda birlikte sorulmak üzere not edildi.
+Bugünkü tur çok kapsamlıydı (12 commit: CHO-P0-001, CHO-P0-002, C-319→C-326) — kısa bir kapanış
+notuyla bırakıyorum, uzun loop aralığı kuruyorum.
