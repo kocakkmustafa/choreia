@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 r""""CİHAZDA KALIR / YÜKLENMEZ" İDDİA KAPISI — Ostinato O-080 aktarımı (A3, C-211).
 
+2026-09-24: Bu iddia kamera karesi/landmark ve seans geçmişi içindir;
+Motion hesabının e-posta, görünen ad ve kimlik ağı ayrıca açıktır ve
+`NETWORK_DEPS_RECORDED` ile privacy manifestinde beyan edilir.
+
     Doğru bir iddianın korunmaması, gelecekteki bir yalandır.
 
 Ölçüm (A3): `lib/app/onboarding/first_run_view.dart` "Video never leaves
@@ -68,6 +72,17 @@ NETWORK_DEPS_RECORDED = {
     "http_parser": "http paketinin AYRIŞTIRMA yardımcı kütüphanesi — ağa "
                    "kendisi ÇIKMAZ, yalnız http'nin zaten aldığı yanıtı "
                    "ayrıştırır",
+    "supabase": "Motion hesabının Auth ve uygulamaya özel üyelik için ortak "
+                "sunucuyla konuşan istemcisi; e-posta, görünen ad ve hesap "
+                "kimliği gizlilik manifestinde beyan edildi.",
+    "supabase_common": "Supabase istemcisinin ortak alt katmanı; Motion hesabı "
+                       "ağına aittir, kamera karesi veya seans kaydı taşımaz.",
+    "supabase_flutter": "Motion hesabının Flutter oturum/deep-link köprüsü; "
+                        "hesap verileri gizlilik manifestinde beyan edildi.",
+    "web_socket": "Supabase transitif ağ taşıyıcısı; doğrudan uygulama "
+                  "kullanımı yok, Motion hesap akışına bağlıdır.",
+    "web_socket_channel": "Supabase transitif soket kanalı; doğrudan "
+                          "uygulama kullanımı yok, hesap ağına bağlıdır.",
 }
 
 #: Lissom'un genişletilmiş sürümünden AYNEN — Ostinato'nun orijinali

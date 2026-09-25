@@ -1,0 +1,19 @@
+{
+  "$doc": "Türkçe mağaza metni taslağı. İngilizce kaynak: listing.json. Sağlayıcıya gönderilmedi; mağaza ve cihaz kabulü açık.",
+  "appStore": {
+    "name": "Choreia: Dans Pratiği",
+    "subtitle": "Dans stillerini keşfet",
+    "promotionalText": "Dans stillerini ve adım referanslarını incele. Etkileşimli kamera dersleri ve abonelikler bu sürümde açık değil.",
+    "keywords": "dans,hip hop,dans stilleri,adımlar,pratik,referans,hareket"
+  },
+  "playStore": {
+    "shortDescription": "Dans stillerini ve adım referanslarını incele; kamera dersleri açık değil."
+  },
+  "description": "Choreia, dans stilleri ve adım referans sayfalarından oluşan bir katalogdur. The Bounce dâhil hip-hop temellerini, diğer adım ve stillerin hazırlık durumunu inceleyebilirsin.\n\nBu ilk sürümde kataloğu hesap açmadan gezebilirsin. İstersen ortak Motion hesabı oluşturabilirsin. Etkileşimli kamera dersleri, canlı tekrar sayma ve abonelikler açık değildir.\n\nMotion hesabı e-posta adresini, hesap kimliğini ve eklersen görünen adını kullanır. Hesabını uygulamadan silme isteğinde bulunabilirsin. Choreia bir dans pratiği referansıdır; tıbbi tavsiye vermez.",
+  "cameraPermissionRationale": {
+    "ios": "Choreia, dans adımlarına ilişkin geri bildirim vermek için kamerayı kullanır. Video telefonundan çıkmaz; yalnızca eklem konumları okunur ve video kaydedilmez veya yüklenmez."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
+  "$releasePolicy20260925": "Founder deferred all paid camera sessions and subscription sales in the first release. Provider listings must use only the external fields above; older dollar-prefixed research notes describe deferred capabilities."
+}

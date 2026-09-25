@@ -12,7 +12,6 @@ import 'package:motion_core/motion_core.dart';
 // tam import ediyor (`camera_session.dart`).
 import 'package:permission_handler/permission_handler.dart';
 
-import '../history/session_store_access.dart';
 import '../shell/choreia_page_route.dart';
 import 'camera_pose_source.dart';
 import 'live_environment.dart';
@@ -112,7 +111,8 @@ class LiveLessonPage extends StatefulWidget {
   State<LiveLessonPage> createState() => _LiveLessonPageState();
 }
 
-class _LiveLessonPageState extends State<LiveLessonPage> {
+class _LiveLessonPageState extends State<LiveLessonPage>
+    with WidgetsBindingObserver {
   LiveState _state = const LiveIdle();
   List<GatedCheck> _gated = const <GatedCheck>[];
   int? _cycles;
@@ -133,90 +133,199 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
   /// the page measures, the tally rules.
   final Stopwatch _clock = Stopwatch()..start();
 
-  late final PoseSource _source =
-      widget.env.source?.call() ?? _CameraSource();
+  late final PoseSource _source = widget.env.source?.call() ?? _CameraSource();
+
+  // Keep this lesson's journal owner fixed even if sign-in changes while the
+  // camera is open. A new account must never inherit the guest attempt.
+  late final String? _recordOwnerUserId = widget.env.accountUserId?.value;
 
   AssetBundle get _bundle => widget.env.bundle ?? rootBundle;
 
   StreamSubscription<LiveState>? _run;
+  Timer? _noPoseTimer;
 
   /// Guards the one irreversible action on this screen. A second tap while the
   /// write is in flight would append the same practice twice.
   bool _finishing = false;
+  bool _foreground = true;
+  bool _starting = false;
+  bool _requestingPermission = false;
+  bool _sourceOpen = false;
+  int _lifecycleEpoch = 0;
+  Completer<void>? _resumeSignal;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _start();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _foreground = true;
+      _resumeSignal?.complete();
+      _resumeSignal = null;
+      if (mounted) setState(() {});
+      return;
+    }
+    if (!_foreground) return;
+    _foreground = false;
+    if (_requestingPermission && !_sourceOpen) return;
+    _lifecycleEpoch++;
+    _clock.stop();
+    _noPoseTimer?.cancel();
+    _noPoseTimer = null;
+    unawaited(_run?.cancel());
+    _run = null;
+    if (_sourceOpen) {
+      _sourceOpen = false;
+      unawaited(_source.stop());
+    }
+    if (mounted) setState(() => _state = const LiveInterrupted());
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _resumeSignal?.complete();
+    _resumeSignal = null;
+    _noPoseTimer?.cancel();
     _run?.cancel();
-    _source.stop();
+    if (_sourceOpen) {
+      _sourceOpen = false;
+      unawaited(_source.stop());
+    }
     super.dispose();
   }
 
   Future<void> _start() async {
-    final DanceReference reference = DanceReference.fromJson(jsonDecode(
-            await _bundle.loadString('content/references/${widget.stepId}.json'))
-        as Map<String, dynamic>);
-    final Map<String, dynamic> step =
-        jsonDecode(await _bundle.loadString(_stepPath(widget.stepId)))
-            as Map<String, dynamic>;
+    if (_starting || _sourceOpen || !_foreground || !mounted) return;
+    _starting = true;
+    final int epoch = _lifecycleEpoch;
+    _clock.start();
+    setState(() => _state = const LiveIdle());
+    try {
+      final DanceReference reference = DanceReference.fromJson(jsonDecode(
+              await _bundle
+                  .loadString('content/references/${widget.stepId}.json'))
+          as Map<String, dynamic>);
+      final Map<String, dynamic> step =
+          jsonDecode(await _bundle.loadString(_stepPath(widget.stepId)))
+              as Map<String, dynamic>;
 
-    final LiveSession session = LiveSession(
-      reference: reference,
-      stepConfig: step,
-      lessonClass: widget.lessonClass,
-      judge: DanceJudge(reference: reference),
-    );
-    if (!mounted) return;
-    setState(() => _gated = session.gatedChecks());
+      final LiveSession session = LiveSession(
+        reference: reference,
+        stepConfig: step,
+        lessonClass: widget.lessonClass,
+        judge: DanceJudge(reference: reference),
+      );
+      if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+      setState(() => _gated = session.gatedChecks());
 
-    // NO DEAD END (M-F-268): a refusal becomes a STATE, not an exception that
-    // leaves the screen empty with nothing to do.
-    final LiveState? refusal = await _source.begin();
-    if (!mounted) return;
-    if (refusal != null) {
-      // ASK, do not infer. Ostinato's rule, adapted unchanged: `isRestricted`
-      // counts as permanent too — a device under parental controls or an MDM
-      // policy never shows the dialog at all, and the old second-refusal
-      // heuristic could not see that case even in principle.
-      bool permanent = false;
-      if (refusal is LivePermissionDenied) {
-        final Future<bool> Function() probe =
-            widget.env.permanentlyDeniedProbe ?? askOsPermanentlyDenied;
+      // The native plugin never requests camera access. Only the real device
+      // source needs this OS dialog; replay sources remain device-free.
+      LiveState? refusal;
+      if (widget.env.source == null ||
+          widget.env.cameraPermissionRequest != null) {
+        _requestingPermission = true;
         try {
-          permanent = await probe();
+          final bool granted =
+              await (widget.env.cameraPermissionRequest?.call() ??
+                  _requestCameraPermission());
+          if (!granted) refusal = const LivePermissionDenied();
         } on Object {
-          // An unanswerable probe is not a permanent denial. Failing the
-          // other way would strand a user on a settings screen they never
-          // needed — the direction of this default is chosen, not accidental.
-          permanent = false;
+          refusal = const LivePermissionDenied();
+        } finally {
+          if (mounted && !_foreground) {
+            final Completer<void> resume = Completer<void>();
+            _resumeSignal = resume;
+            await resume.future;
+          }
+          _requestingPermission = false;
+        }
+        if (!mounted || !_foreground || epoch != _lifecycleEpoch) {
+          _clock.stop();
+          if (mounted) setState(() => _state = const LiveInterrupted());
+          return;
         }
       }
-      if (!mounted) return;
-      setState(() {
-        _permanentlyDenied = permanent;
-        _state = refusal;
-      });
-      _tally.observe(refusal, _clock.elapsed);
-      return;
-    }
 
-    await _run?.cancel();
-    _run = session.run(_source.frames()).listen((LiveState s) {
-      // The tally is fed BEFORE the mounted check: a state the session
-      // produced is a fact about the practice whether or not the widget is
-      // still on screen, and dropping the last few would shorten the record.
-      _tally.observe(s, _clock.elapsed);
-      if (!mounted) return;
-      setState(() {
-        _state = s;
-        if (s is LiveWatching && s.cyclesSeen > 0) _cycles = s.cyclesSeen;
-        if (s is LiveJudged || s is LiveMeasured) _cycles = _tally.cyclesRead;
+      // NO DEAD END (M-F-268): a refusal becomes a STATE, not an exception that
+      // leaves the screen empty with nothing to do.
+      refusal ??= await _source.begin();
+      if (!mounted || !_foreground || epoch != _lifecycleEpoch) {
+        if (refusal == null) unawaited(_source.stop());
+        return;
+      }
+      if (refusal != null) {
+        // ASK, do not infer. Ostinato's rule, adapted unchanged: `isRestricted`
+        // counts as permanent too — a device under parental controls or an MDM
+        // policy never shows the dialog at all, and the old second-refusal
+        // heuristic could not see that case even in principle.
+        bool permanent = false;
+        if (refusal is LivePermissionDenied) {
+          final Future<bool> Function() probe =
+              widget.env.permanentlyDeniedProbe ?? askOsPermanentlyDenied;
+          try {
+            permanent = await probe();
+          } on Object {
+            // An unanswerable probe is not a permanent denial. Failing the
+            // other way would strand a user on a settings screen they never
+            // needed — the direction of this default is chosen, not accidental.
+            permanent = false;
+          }
+        }
+        if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+        final LiveState rejected = refusal;
+        setState(() {
+          _permanentlyDenied = permanent;
+          _state = rejected;
+        });
+        _tally.observe(refusal, _clock.elapsed);
+        return;
+      }
+
+      _sourceOpen = true;
+
+      await _run?.cancel();
+      if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+      _armNoPoseTimer(epoch);
+      final Stream<PoseFrame> observedFrames = _source.frames().map(
+        (PoseFrame frame) {
+          _armNoPoseTimer(epoch);
+          return frame;
+        },
+      );
+      _run = session.run(observedFrames).listen((LiveState s) {
+        // A frame delivered after backgrounding is not part of this practice.
+        // Before disposal, however, an already delivered frame still belongs
+        // to the tally even if the widget can no longer render it.
+        if (!_foreground || epoch != _lifecycleEpoch) return;
+        _tally.observe(s, _clock.elapsed);
+        if (!mounted) return;
+        setState(() {
+          _state = s;
+          if (s is LiveWatching && s.cyclesSeen > 0) _cycles = s.cyclesSeen;
+          if (s is LiveJudged || s is LiveMeasured) _cycles = _tally.cyclesRead;
+        });
       });
+    } finally {
+      _starting = false;
+      if (mounted) setState(() {});
+    }
+  }
+
+  Future<bool> _requestCameraPermission() async =>
+      (await Permission.camera.request()).isGranted;
+
+  void _armNoPoseTimer(int epoch) {
+    _noPoseTimer?.cancel();
+    _noPoseTimer = Timer(const Duration(seconds: 5), () {
+      if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+      setState(() =>
+          _state = const LiveNoPerson(<QualityIssue>{QualityIssue.outOfFrame}));
     });
   }
 
@@ -250,7 +359,12 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
     // session produced, and it is fed before the mounted check for that reason.
     unawaited(_run?.cancel());
     _run = null;
-    unawaited(_source.stop());
+    _noPoseTimer?.cancel();
+    _noPoseTimer = null;
+    if (_sourceOpen) {
+      _sourceOpen = false;
+      unawaited(_source.stop());
+    }
     _clock.stop();
 
     final RecordOutcome outcome = await _writeRecord();
@@ -260,6 +374,7 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
       ChoreiaPageRoute<void>(
         settings: RouteSettings(name: 'result/${widget.lessonId}'),
         builder: (_) => SessionResultView(
+          lessonId: widget.lessonId,
           lessonName: widget.lessonName ?? widget.lessonId,
           outcome: outcome,
           gated: _gated,
@@ -278,8 +393,7 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
     if (!_tally.sawCamera) return const RecordNothingToStore();
     final SessionRecord record = _tally.toRecord(endedAt: DateTime.now());
     try {
-      final SessionStoreOpener open = widget.env.storeOpener ?? openAppSessionStore;
-      await (await open()).append(record);
+      await (await widget.env.openStoreFor(_recordOwnerUserId)).append(record);
       return RecordWritten(record);
     } on Object catch (e) {
       // NOT swallowed. The first-run flag may fail quietly because losing it
@@ -291,12 +405,13 @@ class _LiveLessonPageState extends State<LiveLessonPage> {
 
   @override
   Widget build(BuildContext context) => LiveView(
+        lessonId: widget.lessonId,
         state: _state,
         gated: _gated,
         notMeasuredNote: LiveSession.notMeasuredNote,
         cyclesRead: _cycles,
         permissionPermanentlyDenied: _permanentlyDenied,
-        onRetry: _start,
+        onRetry: _starting || !_foreground ? null : _start,
         // C-140 KAPANDI (koordinatör hükmü (A), C-222). Buraya `null`
         // geçiliyordu ve ekranın tek kontrolü DEVRE DIŞI bir düğmeydi —
         // M-F-268'in yasakladığı ölü-sonun kendisi. Artık gerçek bir çağrı.
@@ -353,9 +468,8 @@ class _CameraSource implements PoseSource {
 /// old "second refusal reads as permanent" heuristic could not see that case
 /// even in principle.
 ///
-/// Choreia asks `.status` rather than `request()` because the camera plugin
-/// has already done the asking by the time we get a refusal — re-requesting
-/// here would pop a second dialog for a question the OS just answered.
+/// Choreia asks `.status` here because `LiveLessonPage._start` already requested
+/// permission. A second request after refusal would repeat the OS prompt.
 ///
 /// **TOP-LEVEL, not a private method on the State, and that is the point.**
 /// While this lived inside `_LiveLessonPageState` the only way to exercise it

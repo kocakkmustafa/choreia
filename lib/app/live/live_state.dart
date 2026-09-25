@@ -31,6 +31,11 @@ final class LiveIdle extends LiveState {
   const LiveIdle();
 }
 
+/// The app left the foreground, so capture was released until the user retries.
+final class LiveInterrupted extends LiveState {
+  const LiveInterrupted();
+}
+
 /// The user has not granted camera permission (or revoked it).
 ///
 /// Its OWN state rather than a flavour of "unavailable": this is the one

@@ -1,12 +1,10 @@
-/// The three shell tabs added without a real screen behind them yet
-/// (CHO-P1-001, 2026-08-19: Today, Practice Lab, Profile — DEFTER C-321 has
-/// the full accounting of why each is genuinely unbuilt, not just unwired).
+/// Deferred Today and Practice Lab widgets, plus Profile's test-only
+/// no-account-adapter fallback. The first store shell does not mount the
+/// deferred widgets as destinations.
 ///
-/// `reachability_test.dart` already proves each tab is a real PLACE a user
-/// can tap to (the LOOSE walk). This file proves something different: that
-/// what's THERE once you arrive follows the same M-F-186 discipline
-/// `library_view_test.dart` already pins for unbuilt styles — named,
-/// explained, never silent and never dressed up as more than it is.
+/// If these widgets are reused later, their text must still describe only
+/// capabilities that exist. The route test separately guards the visible
+/// three-destination shell.
 library;
 
 import 'package:choreia/app/practice_lab/practice_lab_view.dart';
@@ -31,7 +29,7 @@ void main() {
         MaterialApp(home: Scaffold(body: child)),
       );
 
-  group('not-built tabs say so, and only that', () {
+  group('deferred widgets say exactly what is unavailable', () {
     testWidgets('Today names what it will show and that none of it exists',
         (WidgetTester tester) async {
       await pump(tester, const TodayView());
@@ -41,7 +39,8 @@ void main() {
               'silent or a fake-full screen');
       final String text = tester
           .widgetList<Text>(find.descendant(
-              of: find.byKey(TodayView.notBuiltKey), matching: find.byType(Text)))
+              of: find.byKey(TodayView.notBuiltKey),
+              matching: find.byType(Text)))
           .map((Text t) => t.data ?? '')
           .join(' ')
           .toLowerCase();
@@ -59,7 +58,8 @@ void main() {
       expect(find.textContaining('Nothing is built here yet'), findsOneWidget);
     });
 
-    testWidgets('Profile names what it will show and that most of it does '
+    testWidgets(
+        'Profile names what it will show and that most of it does '
         'not exist yet', (WidgetTester tester) async {
       await pump(tester, const ProfileView());
       expect(find.byKey(ProfileView.notBuiltKey), findsOneWidget);

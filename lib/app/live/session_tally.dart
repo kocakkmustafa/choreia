@@ -75,6 +75,7 @@ final class SessionTally {
         _stamp(elapsed);
       // Nothing arrived from the camera in these: no clock, no cycles.
       case LiveIdle():
+      case LiveInterrupted():
       case LivePermissionDenied():
       case LiveCameraUnavailable():
         break;
@@ -87,9 +88,8 @@ final class SessionTally {
   }
 
   /// Seconds the camera was delivering frames. Zero until it did.
-  int get workedSeconds => _firstFrameAt == null
-      ? 0
-      : (_lastFrameAt! - _firstFrameAt!).inSeconds;
+  int get workedSeconds =>
+      _firstFrameAt == null ? 0 : (_lastFrameAt! - _firstFrameAt!).inSeconds;
 
   /// Units the learner attempted that could not be judged.
   ///

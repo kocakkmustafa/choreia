@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "task_id": "CORE-ADOPT-001-CHOREIA-2026-09-01",
+  "captured_at_utc": "2026-09-01T18:05:07Z",
+  "state": "REVIEW_REQUIRED",
+  "writer_acceptance": false,
+  "review": {
+    "required_role": "independent_r2",
+    "status": "PENDING",
+    "commit_allowed": false
+  },
+  "writer": {
+    "worktree": "/Users/mustafakaankocak/motion-consumer-worktrees/2026-09-01-choreia-core-adopt-replacement-1",
+    "branch": "codex/choreia-core-adopt-replacement-1",
+    "upstream": null,
+    "required_start_head": "0253bdb351dba3a930c118128dba5eb9bfd68b32",
+    "current_head": "0253bdb351dba3a930c118128dba5eb9bfd68b32"
+  },
+  "pin_contract": {
+    "approved_sha": "07af0d0963dc14aede8046518a7902650a31ceaa",
+    "old_sha": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+    "red_state": {
+      "pubspec_motion_core_ref": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+      "pubspec_motion_camera_ref": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+      "lock_motion_core_resolved_ref": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+      "lock_motion_camera_resolved_ref": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d"
+    },
+    "candidate_state": {
+      "pubspec_motion_core_ref": "07af0d0963dc14aede8046518a7902650a31ceaa",
+      "pubspec_motion_camera_ref": "07af0d0963dc14aede8046518a7902650a31ceaa",
+      "lock_motion_core_ref": "07af0d0963dc14aede8046518a7902650a31ceaa",
+      "lock_motion_core_resolved_ref": "07af0d0963dc14aede8046518a7902650a31ceaa",
+      "lock_motion_camera_ref": "07af0d0963dc14aede8046518a7902650a31ceaa",
+      "lock_motion_camera_resolved_ref": "07af0d0963dc14aede8046518a7902650a31ceaa"
+    }
+  },
+  "executions": [
+    {
+      "command": "flutter test test/pin_equality_test.dart",
+      "phase": "red_invalid_attempt",
+      "exit_code": 1,
+      "accepted_as_evidence": false,
+      "result": "test compilation failed because the regex end anchor was not escaped"
+    },
+    {
+      "command": "flutter test test/pin_equality_test.dart",
+      "phase": "red",
+      "exit_code": 1,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "result": "the four old f13bdc93 pin values were reported against the approved SHA; the positive-twin test passed"
+    },
+    {
+      "command": "flutter pub get",
+      "phase": "dependency_resolution",
+      "exit_code": 0,
+      "result": "dependencies resolved; lock remained limited to the two Motion git entries"
+    },
+    {
+      "command": "dart format test/pin_equality_test.dart",
+      "phase": "format",
+      "exit_code": 0,
+      "result": "one allowed test file formatted"
+    },
+    {
+      "command": "flutter test test/pin_equality_test.dart",
+      "phase": "green",
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "flutter analyze",
+      "phase": "verification",
+      "exit_code": 1,
+      "errors": 177,
+      "warnings": 2,
+      "issues": 179,
+      "result": "nested packages/choreia_engine tests cannot resolve package:test; assets/models and assets/fonts are absent"
+    },
+    {
+      "command": "flutter test",
+      "phase": "verification",
+      "exit_code": 1,
+      "passed": 280,
+      "failed": 1,
+      "skipped": 1,
+      "result": "test/reachability_test.dart:612 requires the absent pose model under assets/models"
+    },
+    {
+      "command": "flutter test --reporter compact",
+      "phase": "evidence_repeat",
+      "exit_code": 1,
+      "passed": 280,
+      "failed": 1,
+      "skipped": 1,
+      "result": "confirmed the single failure is the absent pose model, not the Motion pin contract"
+    },
+    {
+      "command": "flutter build apk --release",
+      "phase": "android_release",
+      "exit_code": 1,
+      "result": "intentional release-signing gate stopped the build because android/key.properties is absent; no debug-signing bypass was used"
+    },
+    {
+      "command": "flutter build ios --release --no-codesign",
+      "phase": "ios_unsigned_release",
+      "exit_code": 0,
+      "result": "built build/ios/iphoneos/Runner.app, reported size 36.1MB"
+    }
+  ],
+  "negative_probes": {
+    "old_sha_occurrences_in_allowed_pin_files": 0,
+    "approved_sha_occurrences_in_pubspec_yaml": 2,
+    "approved_sha_occurrences_in_pubspec_lock": 4,
+    "root_descriptor_refs_equal": true,
+    "lock_refs_and_resolved_refs_equal": true,
+    "nested_package_diff_present": false,
+    "forbidden_tracked_diff_present": false,
+    "duplicate_writer_target_present_before_creation": false,
+    "unexpected_wip_present_before_writing": false
+  },
+  "scope": {
+    "allowed_paths": [
+      "pubspec.yaml",
+      "pubspec.lock",
+      "test/pin_equality_test.dart",
+      "docs/evidence/production-line/CORE-ADOPT-001-CHOREIA/core-adoption.json"
+    ],
+    "candidate_dirty_paths": [
+      "pubspec.yaml",
+      "pubspec.lock",
+      "test/pin_equality_test.dart",
+      "docs/evidence/production-line/CORE-ADOPT-001-CHOREIA/core-adoption.json"
+    ],
+    "forbidden_dirty_paths": []
+  },
+  "blockers": [
+    {
+      "gate": "flutter_analyze",
+      "classification": "FORBIDDEN_PATH_REPAIR_REQUIRED",
+      "detail": "packages/choreia_engine dependency bootstrap and absent asset directories are outside the allowed path set"
+    },
+    {
+      "gate": "full_flutter_test",
+      "classification": "FORBIDDEN_ASSET_FETCH_REQUIRED",
+      "detail": "the pose model is absent and the repository asks for tool/fetch_pose_model.sh, which would write assets/models"
+    },
+    {
+      "gate": "android_release",
+      "classification": "MANUAL_SIGNING_SECRET_REQUIRED",
+      "detail": "android/key.properties and founder-held keystore material are absent"
+    }
+  ],
+  "disposition": "R2 must review the exact diff and evidence. The writer does not accept the candidate and must not commit until explicit R2 acceptance."
+}

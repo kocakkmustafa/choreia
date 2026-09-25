@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+const String approvedMotionSha = 'f2ea161c7e974d57b114ba7773836c72be17a381';
+
 /// PIN EŞİTLİĞİ (J-071 / M-F-260) — `motion_core` ve `motion_camera` AYNI
-/// commit'ten gelmek ZORUNDA.
+/// ve onaylanmış commit'ten gelmek ZORUNDA.
 ///
 /// Neden bir test: ikisi aynı repoda ama AYRI tag'lerde yaşıyor
 /// (`motion_core-v0.11.0` → `2018469`, `motion_camera-v0.1.2` → `f13bdc9`).
@@ -18,8 +20,23 @@ import 'package:flutter_test/flutter_test.dart';
 /// ref'leri METİN olarak karşılaştırıyor. Test bu yüzden dizeleri
 /// karşılaştırıyor, commit kimliğini değil.
 void main() {
-  test('motion_core ve motion_camera AYNI ref/resolved-ref ile kilitli', () {
+  test('root descriptor ve lock dört noktada onaylı Motion SHA kullanır', () {
+    final String pubspec = File('pubspec.yaml').readAsStringSync();
     final String lock = File('pubspec.lock').readAsStringSync();
+
+    String descriptorRef(String pkg) {
+      final RegExp block = RegExp(
+        '^  $pkg:\n    git:\n(?:      .*\n)*?      ref: ([0-9a-f]{40})\$',
+        multiLine: true,
+      );
+      final RegExpMatch? match = block.firstMatch(pubspec);
+      expect(
+        match,
+        isNotNull,
+        reason: '$pkg root pubspec.yaml içinde tam SHA ref ile tanımlı değil',
+      );
+      return match!.group(1)!;
+    }
 
     ({String ref, String resolved, String version}) entry(String pkg) {
       final RegExp block = RegExp(
@@ -50,6 +67,21 @@ void main() {
 
     final core = entry('motion_core');
     final camera = entry('motion_camera');
+    final String coreDescriptorRef = descriptorRef('motion_core');
+    final String cameraDescriptorRef = descriptorRef('motion_camera');
+
+    final Map<String, String> pins = <String, String>{
+      'pubspec motion_core ref': coreDescriptorRef,
+      'pubspec motion_camera ref': cameraDescriptorRef,
+      'lock motion_core resolved-ref': core.resolved,
+      'lock motion_camera resolved-ref': camera.resolved,
+    };
+    expect(
+      pins.values,
+      everyElement(approvedMotionSha),
+      reason: 'CORE-ADOPT-001 dört pin noktasının tamamını onaylı '
+          '$approvedMotionSha SHA\'sına kilitler. Gerçek değerler: $pins',
+    );
 
     expect(camera.ref, core.ref,
         reason: 'PIN AYRIŞMASI: motion_camera ${camera.ref.substring(0, 12)} '
@@ -60,6 +92,10 @@ void main() {
         reason: 'ref\'ler aynı ama RESOLVED-REF farklı — biri taşınmış');
     expect(core.resolved, core.ref,
         reason: 'motion_core istenen ref\'e çözülmemiş');
+    expect(coreDescriptorRef, core.ref,
+        reason: 'motion_core root descriptor ile lock ref farklı');
+    expect(cameraDescriptorRef, camera.ref,
+        reason: 'motion_camera root descriptor ile lock ref farklı');
 
     // Sürümler de kayda geçsin: bir gün biri bump\'lanır ve pin aynı kalırsa
     // bu satır neyin adopte edildiğini söyleyen tek yer olur.

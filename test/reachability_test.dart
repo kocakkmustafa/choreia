@@ -189,9 +189,9 @@ void main() {
               for (final RegExpMatch m in re.allMatches(src)) m.group(group)!,
           };
 
-      final Set<String> byName = matches(
-          RegExp(r'^class ([A-Za-z_]+(?:View|Page)) extends Stat',
-              multiLine: true));
+      final Set<String> byName = matches(RegExp(
+          r'^class ([A-Za-z_]+(?:View|Page)) extends Stat',
+          multiLine: true));
       final Set<String> byStructure = <String>{
         ...matches(RegExp(r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
             r'([A-Z][A-Za-z_]*)\(')),
@@ -202,10 +202,10 @@ void main() {
         // BİÇİMLENDİRME alışkanlığı kadardı* — (a)'nın uyarısının boşluk
         // karakteri hâli, ve testin kendisi yakaladı.
         for (final String src in lib.values)
-          for (final RegExpMatch blok in RegExp(
-                  r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
-                  r'([\s\S]*?)\n\s*\],')
-              .allMatches(src))
+          for (final RegExpMatch blok
+              in RegExp(r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
+                      r'([\s\S]*?)\n\s*\],')
+                  .allMatches(src))
             ...RegExp(r'\b([A-Z][A-Za-z_]*)\(')
                 .allMatches(blok.group(1)!)
                 .map((RegExpMatch m) => m.group(1)!),
@@ -230,7 +230,10 @@ void main() {
       // Gerekçe (JabLab M-F-575): türetim `_XState` elemesiyle her
       // StatefulWidget ekranını yok etmişti ve YAKALAYAN ŞEY ELLE KÜMEYDİ.
       const Set<String> knownFloor = <String>{
-        'FirstRunView', 'LibraryView', 'ProgressView', 'StyleDetailView',
+        'FirstRunView',
+        'LibraryView',
+        'ProgressView',
+        'StyleDetailView',
         'LiveLessonPage',
       };
       expect(candidates.containsAll(knownFloor), isTrue,
@@ -241,7 +244,8 @@ void main() {
       final Set<String> reached = <String>{};
       void snapshot() {
         for (final String c in candidates) {
-          if (find.byWidgetPredicate((Widget w) => w.runtimeType.toString() == c)
+          if (find
+              .byWidgetPredicate((Widget w) => w.runtimeType.toString() == c)
               .evaluate()
               .isNotEmpty) {
             reached.add(c);
@@ -252,12 +256,12 @@ void main() {
       final _RouteSpy spy = _RouteSpy();
       await tester.pumpWidget(app(spy));
       await _settle(tester);
-      snapshot();                      // tanıtım
+      snapshot(); // tanıtım
       await passIntro(tester);
-      snapshot();                      // kütüphane
+      snapshot(); // kütüphane
       await tester.tap(find.byKey(ChoreiaShell.progressTabKey));
       await _settle(tester);
-      snapshot();                      // ilerleme
+      snapshot(); // ilerleme
       await tester.tap(find.byKey(ChoreiaShell.libraryTabKey));
       await _settle(tester);
       final Finder card =
@@ -266,7 +270,7 @@ void main() {
       await _settle(tester);
       await tester.tap(card);
       await _settle(tester);
-      snapshot();                      // stil sayfası
+      snapshot(); // stil sayfası
 
       // VARILAMAYANLAR — adıyla ve SEBEBİYLE. Boş bırakılamaz: sebebi
       // olmayan bir dışlama, denetimi tekrar tanıma çevirir.
@@ -295,37 +299,38 @@ void main() {
             'düğmeyle varıyor.',
       };
 
-      // İKİNCİ DIŞLAMA SINIFI (CHO-P1-001, 2026-08-19) — yukarıdakinden
-      // FARKLI bir sebep, o yüzden AYNI haritaya (ve "first_walk_test.dart'ta
-      // anılmalı" kanıtına) zorlanmadı: bunlar kamera/cihaz gerektirdiği için
-      // değil, kabuk SEKMESİ oldukları için (bu dosyanın kendi üst
-      // yorumu: "LOOSE… plus destinations you switch between without a
-      // push") KATI sayımda YAPISAL OLARAK görünmezler — GEVŞEK okumada
-      // (aşağıda, AYNI dosyada) görünürler. Kanıt aşağıda ayrıca: ① kabukta
-      // gerçekten birer `NavigationDestination` mı ② GEVŞEK yürüyüş
-      // gerçekten onlara dokunuyor mu.
+      // The profile is a shell destination, so the strict pushed-route walk
+      // does not count it. The loose walk below visits it.
       const Set<String> unreachableByDesign = <String>{
-        'TodayView', 'PracticeLabView', 'ProfileView',
+        'ProfileView',
       };
       final String shellSrc = lib.entries
           .firstWhere((MapEntry<String, String> e) =>
               e.key.endsWith('shell/choreia_shell.dart'))
           .value;
-      for (final String tab in unreachableByDesign) {
-        expect(shellSrc, contains('const $tab()'),
-            reason: 'gerekçe BAYAT: `$tab` artık kabuğun `IndexedStack`ında '
-                'yok — bu dışlama dayanaksız kaldı');
-      }
+      expect(
+          shellSrc,
+          contains(
+              'ProfileView(accountPageBuilder: widget.accountPageBuilder)'),
+          reason: 'Profil artık kabukta değilse rota sayımı bayatladı');
       final File looseWalk = File('test/reachability_test.dart');
       final String looseWalkSrc = looseWalk.readAsStringSync();
-      for (final String tab in <String>['todayTabKey', 'practiceLabTabKey',
-          'profileTabKey']) {
-        expect(looseWalkSrc, contains(tab),
-            reason: 'gerekçe BAYAT: `$tab`e GEVŞEK yürüyüşte hiç dokunulmuyor '
-                '— dışlamanın dayandığı yürüyüş yok');
+      expect(looseWalkSrc, contains('profileTabKey'),
+          reason: 'Profil gevşek yürüyüşte ziyaret edilmiyor');
+      // These classes remain in source for later feature work but are not
+      // mounted or advertised as empty destinations in the store shell.
+      const Set<String> deferredUnpublished = <String>{
+        'TodayView',
+        'PracticeLabView',
+      };
+      for (final String screen in deferredUnpublished) {
+        expect(shellSrc, isNot(contains('$screen(')),
+            reason: '$screen boşken kullanıcı gezinmesine geri sızdı');
       }
-      final Set<String> allExcluded =
-          unreachableInWalk.keys.toSet().union(unreachableByDesign);
+      final Set<String> allExcluded = unreachableInWalk.keys
+          .toSet()
+          .union(unreachableByDesign)
+          .union(deferredUnpublished);
 
       // (c) SEBEP DE ÖLÇÜLÜR — sözleşme: *yanlış bir sebep, sebepsizlikten
       // daha kötüdür: denetimi DOĞRULANMIŞ gösterir.* (Ostinato'nun sebebi
@@ -344,7 +349,8 @@ void main() {
           reason: 'gerekçe BAYAT: poz modeli artık yüklenmiyor olabilir');
       expect(livePage.contains('widget.env.source?.call() ?? _CameraSource()'),
           isTrue,
-          reason: 'gerekçe BAYAT: poz kaynağı artık kameraya düşmüyor olabilir');
+          reason:
+              'gerekçe BAYAT: poz kaynağı artık kameraya düşmüyor olabilir');
 
       // ② Ve gerekçenin İKİNCİ yarısı: "başka bir yerde yürünüyor" iddiası.
       //
@@ -375,7 +381,8 @@ void main() {
               'gövdesi değil — başka bir yerden de kuruluyor: $liveViewUsers');
       // Ve YAPI kanalı bunu bağımsız olarak doğruluyor: `LiveView` ADDA var,
       // YAPIDA yok — hiçbir montaj noktasında geçmiyor.
-      expect(byName.difference(byStructure), <String>{'LiveView'},
+      expect(byName.difference(byStructure),
+          <String>{'LiveView', 'TodayView', 'PracticeLabView'},
           reason: 'ad-yalnız ekran kümesi değişti: '
               '${byName.difference(byStructure)}. ADDA ekran görünüp YAPIDA '
               'monte edilmeyen her sınıf, varılamayan kovasında SEBEBİYLE '
@@ -397,26 +404,14 @@ void main() {
       await _settle(tester);
       await passIntro(tester);
 
-      // The shell's five destinations (CHO-P1-001, 2026-08-19 — was two).
-      // Switched by `IndexedStack`, so the route never changes — invisible
-      // to the strict count, and yet a user plainly experiences "going to
-      // my progress"/"going to Today", even though three of these five have
-      // nothing built behind them yet (DEFTER C-321) — a PLACE you can go to
-      // is still a place, whether or not it has real content.
+      // Only the three working destinations are in the store shell.
+      expect(find.byType(NavigationDestination), findsNWidgets(3));
+      expect(find.byType(TodayView), findsNothing);
+      expect(find.byType(PracticeLabView), findsNothing);
       await tester.tap(find.byKey(ChoreiaShell.progressTabKey));
       await _settle(tester);
       expect(find.byType(ProgressView), findsOneWidget,
           reason: 'ilerleme sekmesi bir yere gitmiyor');
-
-      await tester.tap(find.byKey(ChoreiaShell.todayTabKey));
-      await _settle(tester);
-      expect(find.byType(TodayView), findsOneWidget,
-          reason: 'Bugün sekmesi bir yere gitmiyor');
-
-      await tester.tap(find.byKey(ChoreiaShell.practiceLabTabKey));
-      await _settle(tester);
-      expect(find.byType(PracticeLabView), findsOneWidget,
-          reason: 'Practice Lab sekmesi bir yere gitmiyor');
 
       await tester.tap(find.byKey(ChoreiaShell.profileTabKey));
       await _settle(tester);
@@ -443,13 +438,9 @@ void main() {
       await tester.tap(startButton);
       await _settle(tester);
 
-      // GEVŞEK = 8 (CHO-P1-001 öncesi 5'ti): tanıtım · kütüphane · ilerleme ·
-      // Bugün · Practice Lab · Profil · stil sayfası · canlı ders. İkisi rota
-      // (spy: stil sayfası + canlı ders), altısı itilmeden geçilen yer —
-      // üçünün (Bugün/Practice Lab/Profil) arkasında henüz gerçek bir ekran
-      // olmaması bu sayımı değiştirmez: GEVŞEK okuma PLACE sayar, İÇERİK
-      // değil.
-      expect(spy.pushed.length + 6, 8,
+      // Intro, library, progress and profile are places without a push;
+      // style detail and live lesson are pushed routes.
+      expect(spy.pushed.length + 4, 6,
           reason: 'GEVŞEK sayı beklenenden farklı. Rotalar: ${spy.pushed}');
     });
 
@@ -490,7 +481,8 @@ void main() {
               'yüklemede gürültüsüzce patlar');
     });
 
-    test('ÜÇÜNCÜ KÜME: pakete giren ama HİÇBİR DERSİN yükleyemeyeceği '
+    test(
+        'ÜÇÜNCÜ KÜME: pakete giren ama HİÇBİR DERSİN yükleyemeyeceği '
         'referanslar — SAYILIR, yasaklanmaz', () {
       // C-143'ün kapısı iki yönü tutuyor: diskte olan bildirilmiş mi,
       // bildirilen diskte var mı. İkisi de **dosya** hakkında. Kimsenin
@@ -517,8 +509,7 @@ void main() {
           reason: 'hiçbir ders bir adım adlandırmıyor — türetim bozuk, '
               'ölçüm vakumda');
 
-      final Set<String> shippedUnloadable =
-          declared.difference(namedByALesson);
+      final Set<String> shippedUnloadable = declared.difference(namedByALesson);
       final int bytes = shippedUnloadable.fold<int>(
           0,
           (int a, String s) =>
@@ -542,16 +533,18 @@ void main() {
       // yazılmış bir DERS ama `step` alanı yok VE adım belgesi de yok, yani
       // eksik olan kablolama değil İÇERİK (A4'ün A′ sınıfı, hasat turu).
       // `hh_roger_rabbit` ise hiçbir derse ait değil — sözlükte bir ad.
-      expect(File('content/styles/hip_hop_foundations/steps/'
-              'hh_running_man.json')
-          .existsSync(),
+      expect(
+          File('content/styles/hip_hop_foundations/steps/'
+                  'hh_running_man.json')
+              .existsSync(),
           isFalse,
           reason: 'adım belgesi YAZILMIŞ — o hâlde eksik olan yalnız '
               '`step` kablolaması ve bu HATTIN kalemi (A4 sınıf B); '
               'gerekçe bayatladı');
     });
 
-    test('demoOpen rozeti CİHAZDA fazla-satıyor — kafesin kaynağı disk, '
+    test(
+        'demoOpen rozeti CİHAZDA fazla-satıyor — kafesin kaynağı disk, '
         'kullanıcınınki paket', () {
       // `demoOpen` means, in the registry's own words, "the user can OPEN a
       // lesson; none of them score". `validate_content` enforces that lattice
@@ -583,15 +576,14 @@ void main() {
       // it. Kept as a gate rather than deleted: the failure it caught cannot
       // be caught by `validate_content`, which reads the DISK, and this is
       // the only place the question is asked from the bundle's side.
-      expect(claimDemoOpen.toSet().difference(openableOnDevice.toSet()),
-          isEmpty,
+      expect(
+          claimDemoOpen.toSet().difference(openableOnDevice.toSet()), isEmpty,
           reason: 'demoOpen iddia eden ama CİHAZDA hiçbir ders açamayan stil '
               'var — rozet build\'in içermediği bir şeyi vaat ediyor. '
               'Kafes diski okur, kullanıcının elinde paket vardır (C-185)');
     });
 
-    test('açılan kapının artık ZEMİNİ VAR — ama koştuğu ölçülmedi (C-186)',
-        () {
+    test('açılan kapının artık ZEMİNİ VAR — ama koştuğu ölçülmedi (C-186)', () {
       // For six hours this gate asserted the opposite: the lesson was
       // reachable and could not run, because `LiveLessonPage` asked the
       // camera for `assets/pose_landmarker_full.task` — a file that was not
@@ -611,7 +603,8 @@ void main() {
       // claims, and this file has now measured two of them.
       expect(File(PoseModelPin.assetPath).existsSync(), isTrue,
           reason: 'model yerinde değil — `tool/fetch_pose_model.sh` koş');
-      expect(File('pubspec.yaml').readAsStringSync(), contains('assets/models/'),
+      expect(
+          File('pubspec.yaml').readAsStringSync(), contains('assets/models/'),
           reason: 'model beyan edilmemiş, yani cihaza girmez');
 
       final String live =

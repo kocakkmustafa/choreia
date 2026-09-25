@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:motion_core/motion_core.dart' show SessionRecord, SessionStore;
 
-import '../history/session_store_access.dart';
 import '../library/library_catalog.dart';
 import '../live/live_environment.dart';
 import '../onboarding/first_run_flag.dart';
 import '../onboarding/first_run_view.dart';
 import '../library/library_view.dart';
-import '../practice_lab/practice_lab_view.dart';
 import '../progress_summary.dart';
 import '../progress_view.dart';
 import '../theme.dart';
-import '../today/today_view.dart';
+import '../ui_language.dart';
 import 'profile_view.dart';
 
 /// How long the shell waits for the practice record before calling it
@@ -35,8 +33,8 @@ const Duration historyReadTimeout = Duration(seconds: 10);
 /// could go nowhere. This widget is the prerequisite the design-ahead inventory
 /// named as blocking every other item.
 ///
-/// Why five destinations, and why three of them are named but not built
-/// -----------------------------------------------------------------
+/// Visible destinations
+/// --------------------
 /// Until CHO-P1-001 (2026-08-19) this shell had two tabs — Styles and
 /// Progress — because everything else in the app's screen graph is reached
 /// BY GOING somewhere (a style, then a lesson, then the live path), pushed
@@ -48,21 +46,19 @@ const Duration historyReadTimeout = Duration(seconds: 10);
 /// the full paper trail across three design documents that each say
 /// something different).
 ///
-/// That question is now settled by the roadmap: five tabs — Today, Styles,
-/// Practice Lab, Progress, Profile (§5). What is NOT settled is what three
-/// of those five actually show: Today, Practice Lab and full Profile each
-/// name capabilities (a daily path, segment looping, calibration, export/
-/// delete…) that do not exist anywhere in this app yet. Rather than hide
-/// those three tabs until they are real, or fake content for them, they are
-/// named here and say so — the exact discipline `library_view.dart` already
-/// applies to unbuilt styles (M-F-186). See [TodayView], [PracticeLabView],
-/// [ProfileView] and `not_built_tab_body.dart`.
+/// The first store shell shows Styles, Progress and Profile. Today and
+/// Practice Lab still have standalone honest placeholder widgets in source,
+/// but they are not destinations until those features actually exist.
+/// Production Profile opens the shared Motion account; it never gates local
+/// practice or the catalogue.
 class ChoreiaShell extends StatefulWidget {
   const ChoreiaShell({
     super.key,
     this.bundleOverride,
     this.flagOverride,
     this.env = const LiveEnvironment(),
+    this.accountPageBuilder,
+    this.beforeLessonStart,
   });
 
   /// The device-only dependencies of the whole flow — content bundle, pose
@@ -75,6 +71,11 @@ class ChoreiaShell extends StatefulWidget {
   /// indistinguishable from a learner who has not practised.
   final LiveEnvironment env;
 
+  /// Route supplied by the shared account package after it is pinned.
+  /// Until then Profile keeps its honest unconnected state.
+  final WidgetBuilder? accountPageBuilder;
+  final Future<bool> Function(BuildContext)? beforeLessonStart;
+
   /// Lets a test drive the shell off repository files instead of the asset
   /// bundle — `rootBundle.loadString` deadlocks under `flutter test` in this
   /// setup (see `test/support/test_catalog.dart` for the measurement).
@@ -84,9 +85,7 @@ class ChoreiaShell extends StatefulWidget {
   /// Defaults to the real marker file; see `FileFirstRunFlag`.
   final FirstRunFlag? flagOverride;
 
-  static const Key todayTabKey = Key('shell.tab.today');
   static const Key libraryTabKey = Key('shell.tab.library');
-  static const Key practiceLabTabKey = Key('shell.tab.practiceLab');
   static const Key progressTabKey = Key('shell.tab.progress');
   static const Key profileTabKey = Key('shell.tab.profile');
   static const Key loadFailureKey = Key('shell.loadFailure');
@@ -98,13 +97,8 @@ class ChoreiaShell extends StatefulWidget {
 }
 
 class _ChoreiaShellState extends State<ChoreiaShell> {
-  // Tab ORDER follows the roadmap (Today first, §5) — but the INITIAL
-  // selection stays on Styles (index 1), the one tab with something real
-  // behind it today. Landing a new or returning user on an honestly-empty
-  // Today tab first would be the same "sahte dolu"-adjacent mistake in
-  // reverse: not a fake full screen, but a real empty one presented as the
-  // front door. `_progressIndex` below documents the full order.
-  int _index = 1;
+  // Styles is the first destination and the initial landing page.
+  int _index = 0;
   late Future<LibraryCatalog> _catalog = _load();
   late final FirstRunFlag _flag =
       widget.flagOverride ?? const FileFirstRunFlag();
@@ -128,6 +122,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   /// and a store slow to open would hold the entire app on its loading
   /// sentence.
   ProgressSummary? _progress;
+  int _historyGeneration = 0;
 
   /// Cancelled on dispose — see [_withinTimeout].
   Timer? _historyTimer;
@@ -135,6 +130,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   @override
   void initState() {
     super.initState();
+    widget.env.accountUserId?.addListener(_onAccountChanged);
     _flag.hasSeenIntro().then((bool seen) {
       if (mounted) setState(() => _introSeen = seen);
     });
@@ -146,6 +142,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   /// it — a session finished a second ago must not be missing from the screen
   /// that exists to show it.
   Future<void> _refreshProgress(LibraryCatalog library) async {
+    final int generation = _historyGeneration;
+    final String? accountUserId = widget.env.accountUserId?.value;
     ProgressSummary next;
     try {
       // ⏱ BOUNDED, and the bound is not defensive decoration.
@@ -165,8 +163,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
       // "we could not open your record" and "you have no record" are the two
       // readings this surface spends the most effort keeping apart.
       next = await _withinTimeout(() async {
-        final SessionStore store =
-            await (widget.env.storeOpener ?? openAppSessionStore)();
+        final SessionStore store = await widget.env.openStoreFor(accountUserId);
         return ProgressSummary.from(store: store, catalog: library.allCourses);
       });
     } on Object {
@@ -181,7 +178,27 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         integrity: HistoryIntegrity.unavailable,
       );
     }
-    if (mounted) setState(() => _progress = next);
+    if (mounted && generation == _historyGeneration) {
+      setState(() => _progress = next);
+    }
+  }
+
+  void _onAccountChanged() {
+    _historyGeneration++;
+    if (!mounted) return;
+    setState(() => _progress = null);
+    _catalog.then((LibraryCatalog library) {
+      if (mounted) _refreshProgress(library);
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant ChoreiaShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.env.accountUserId == widget.env.accountUserId) return;
+    oldWidget.env.accountUserId?.removeListener(_onAccountChanged);
+    widget.env.accountUserId?.addListener(_onAccountChanged);
+    _onAccountChanged();
   }
 
   /// [work], or a [TimeoutException] once [historyReadTimeout] has passed.
@@ -196,20 +213,28 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   /// The timer is also cancelled on SUCCESS, so a healthy read leaves nothing
   /// behind either.
   Future<ProgressSummary> _withinTimeout(
-      Future<ProgressSummary> Function() work) {
+    Future<ProgressSummary> Function() work,
+  ) {
     final Completer<ProgressSummary> out = Completer<ProgressSummary>();
     _historyTimer?.cancel();
     _historyTimer = Timer(historyReadTimeout, () {
       if (!out.isCompleted) {
-        out.completeError(TimeoutException(
-            'practice record did not answer', historyReadTimeout));
+        out.completeError(
+          TimeoutException(
+            'practice record did not answer',
+            historyReadTimeout,
+          ),
+        );
       }
     });
-    work().then((ProgressSummary v) {
-      if (!out.isCompleted) out.complete(v);
-    }, onError: (Object e, StackTrace st) {
-      if (!out.isCompleted) out.completeError(e, st);
-    });
+    work().then(
+      (ProgressSummary v) {
+        if (!out.isCompleted) out.complete(v);
+      },
+      onError: (Object e, StackTrace st) {
+        if (!out.isCompleted) out.completeError(e, st);
+      },
+    );
     return out.future.whenComplete(() {
       _historyTimer?.cancel();
       _historyTimer = null;
@@ -218,6 +243,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
 
   @override
   void dispose() {
+    widget.env.accountUserId?.removeListener(_onAccountChanged);
     _historyTimer?.cancel();
     super.dispose();
   }
@@ -265,7 +291,11 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
           child: SafeArea(
             child: Center(
               child: Text(
-                ShellStrings.loading,
+                UiLanguage.text(
+                  context,
+                  en: ShellStrings.loading,
+                  tr: 'Dans kataloğu açılıyor…',
+                ),
                 key: ChoreiaShell.loadingKey,
                 textAlign: TextAlign.center,
                 style:
@@ -285,7 +315,11 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            ShellStrings.historyLoading,
+            UiLanguage.text(
+              context,
+              en: ShellStrings.historyLoading,
+              tr: 'Pratik kaydın okunuyor…',
+            ),
             key: ChoreiaShell.historyLoadingKey,
             textAlign: TextAlign.center,
             style: ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.6)),
@@ -313,13 +347,29 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                         size: 52,
                       ),
                       const SizedBox(height: 16),
-                      Text(ShellStrings.loadFailed,
-                          style: ChoreiaType.body(
-                              size: 14, color: ChoreiaColors.text(0.85))),
+                      Text(
+                        UiLanguage.text(
+                          context,
+                          en: ShellStrings.loadFailed,
+                          tr: 'Dans kataloğu okunamadı. Pratik kayıtların kaybolmadı; '
+                              'uygulamanın içindeki stil listesi açılmıyor. Yeniden '
+                              'denemek işe yaramazsa uygulamayı tekrar yükle.',
+                        ),
+                        style: ChoreiaType.body(
+                          size: 14,
+                          color: ChoreiaColors.text(0.85),
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       FilledButton(
                         onPressed: _retry,
-                        child: const Text(ShellStrings.tryAgain),
+                        child: Text(
+                          UiLanguage.text(
+                            context,
+                            en: ShellStrings.tryAgain,
+                            tr: 'Tekrar dene',
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -330,21 +380,19 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         ),
       );
 
-  // Tab order matches the roadmap's own listing (§5): Today(0), Styles(1),
-  // Practice Lab(2), Progress(3), Profile(4). The `IndexedStack` children
-  // below and the `NavigationDestination`s in `_shell()` must stay in this
-  // SAME order — only the Progress index is also needed as a value (the
-  // arrival-refresh check), so only it gets a name; the rest is enforced by
-  // keeping both lists in this documented order.
-  static const int _progressIndex = 3;
+  // Keep the stack and navigation in the same order: Styles, Progress,
+  // Profile. The progress index also controls its arrival-time refresh.
+  static const int _progressIndex = 1;
 
   Widget _shell(LibraryCatalog library) => Scaffold(
         body: IndexedStack(
           index: _index,
           children: <Widget>[
-            const TodayView(),
-            LibraryView(library: library, env: widget.env),
-            const PracticeLabView(),
+            LibraryView(
+              library: library,
+              env: widget.env,
+              beforeLessonStart: widget.beforeLessonStart,
+            ),
             // READ FROM THE STORE (2026-08-13). This used to hand
             // `ProgressSummary.build` an empty history and
             // `HistoryIntegrity.notRecorded` by hand, because nothing in the
@@ -359,11 +407,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             if (_progress == null)
               _historyLoading()
             else
-              ProgressView(
-                summary: _progress!,
-                catalog: library.allCourses,
-              ),
-            const ProfileView(),
+              ProgressView(summary: _progress!, catalog: library.allCourses),
+            ProfileView(accountPageBuilder: widget.accountPageBuilder),
           ],
         ),
         bottomNavigationBar: NavigationBar(
@@ -388,36 +433,36 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                   : ChoreiaColors.text(0.5),
             ),
           ),
-          destinations: const <Widget>[
-            NavigationDestination(
-              key: ChoreiaShell.todayTabKey,
-              icon: Icon(Icons.today_outlined),
-              selectedIcon: Icon(Icons.today_rounded),
-              label: ShellStrings.todayTab,
-            ),
+          destinations: <Widget>[
             NavigationDestination(
               key: ChoreiaShell.libraryTabKey,
               icon: Icon(Icons.grid_view_outlined),
               selectedIcon: Icon(Icons.grid_view_rounded),
-              label: ShellStrings.libraryTab,
-            ),
-            NavigationDestination(
-              key: ChoreiaShell.practiceLabTabKey,
-              icon: Icon(Icons.fitness_center_outlined),
-              selectedIcon: Icon(Icons.fitness_center_rounded),
-              label: ShellStrings.practiceLabTab,
+              label: UiLanguage.text(
+                context,
+                en: ShellStrings.libraryTab,
+                tr: 'STİLLER',
+              ),
             ),
             NavigationDestination(
               key: ChoreiaShell.progressTabKey,
               icon: Icon(Icons.timeline_outlined),
               selectedIcon: Icon(Icons.timeline_rounded),
-              label: ShellStrings.progressTab,
+              label: UiLanguage.text(
+                context,
+                en: ShellStrings.progressTab,
+                tr: 'İLERLEME',
+              ),
             ),
             NavigationDestination(
               key: ChoreiaShell.profileTabKey,
               icon: Icon(Icons.person_outline),
               selectedIcon: Icon(Icons.person_rounded),
-              label: ShellStrings.profileTab,
+              label: UiLanguage.text(
+                context,
+                en: ShellStrings.profileTab,
+                tr: 'PROFİL',
+              ),
             ),
           ],
         ),
@@ -428,9 +473,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
 abstract final class ShellStrings {
   ShellStrings._();
 
-  static const String todayTab = 'TODAY';
   static const String libraryTab = 'STYLES';
-  static const String practiceLabTab = 'PRACTICE LAB';
   static const String progressTab = 'PROGRESS';
   static const String profileTab = 'PROFILE';
 

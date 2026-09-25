@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../library/library_catalog.dart';
 import '../theme.dart';
+import '../ui_language.dart';
 
 /// The first thing a user sees, once.
 ///
@@ -44,76 +45,141 @@ class FirstRunView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: ChoreiaBackdrop(
-          child: SafeArea(
-            // The way in is PINNED, the reading scrolls. Measured at 375x812:
-            // with the button inside the list it sat below the fold, so the
-            // only exit from the first screen a user ever sees was behind a
-            // scroll they had no reason to expect. A first-run screen whose
-            // exit must be discovered is a dead end with extra steps
-            // (M-F-268).
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(22, 40, 22, 20),
-                    children: <Widget>[
-                      Text(IntroStrings.title,
-                          style: ChoreiaType.display(
-                              size: 34, color: ChoreiaColors.text(0.92))),
-                      const SizedBox(height: 10),
-                      Text(IntroStrings.what,
-                          style: ChoreiaType.body(
-                              size: 15, color: ChoreiaColors.text(0.78))),
-                      const SizedBox(height: 26),
-                      _panel(
-                        key: cameraKey,
-                        icon: Icons.videocam_outlined,
-                        tone: ChoreiaColors.rose,
-                        title: IntroStrings.cameraTitle,
-                        body: IntroStrings.camera,
-                      ),
-                      const SizedBox(height: 14),
-                      _panel(
-                        icon: Icons.music_note_outlined,
-                        tone: ChoreiaColors.amber,
-                        title: IntroStrings.musicTitle,
-                        body: IntroStrings.music,
-                      ),
-                      const SizedBox(height: 14),
-                      _panel(
-                        icon: Icons.straighten_outlined,
-                        tone: ChoreiaColors.amber,
-                        title: IntroStrings.limitsTitle,
-                        body: IntroStrings.limits,
-                      ),
-                      const SizedBox(height: 14),
-                      _panel(
-                        key: stateKey,
-                        icon: Icons.inventory_2_outlined,
-                        tone: ChoreiaColors.roseDeep,
-                        title: IntroStrings.todayTitle,
-                        body: IntroStrings.today(tally),
-                      ),
-                    ],
+    body: ChoreiaBackdrop(
+      child: SafeArea(
+        // The way in is PINNED, the reading scrolls. Measured at 375x812:
+        // with the button inside the list it sat below the fold, so the
+        // only exit from the first screen a user ever sees was behind a
+        // scroll they had no reason to expect. A first-run screen whose
+        // exit must be discovered is a dead end with extra steps
+        // (M-F-268).
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(22, 40, 22, 20),
+                children: <Widget>[
+                  Text(
+                    IntroStrings.title,
+                    style: ChoreiaType.display(
+                      size: 34,
+                      color: ChoreiaColors.text(0.92),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(22, 4, 22, 20),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      key: continueKey,
-                      onPressed: onContinue,
-                      child: const Text(IntroStrings.continueLabel),
+                  const SizedBox(height: 10),
+                  Text(
+                    UiLanguage.text(
+                      context,
+                      en: IntroStrings.what,
+                      tr:
+                          'Choreia dans ederken adımların hakkında '
+                          'kameranın görebildiklerini söyler. Her şey '
+                          'telefonunda çalışır; kameranın değerlendiremediği '
+                          'konuları açıkça belirtir.',
+                    ),
+                    style: ChoreiaType.body(
+                      size: 15,
+                      color: ChoreiaColors.text(0.78),
+                    ),
+                  ),
+                  const SizedBox(height: 26),
+                  _panel(
+                    key: cameraKey,
+                    icon: Icons.videocam_outlined,
+                    tone: ChoreiaColors.rose,
+                    title: UiLanguage.text(
+                      context,
+                      en: IntroStrings.cameraTitle,
+                      tr: 'KAMERA',
+                    ),
+                    body: UiLanguage.text(
+                      context,
+                      en: IntroStrings.camera,
+                      tr:
+                          'Choreia adımların hakkında geri bildirim vermek '
+                          'için dansını kamerayla izler. Video telefondan '
+                          'çıkmaz; yalnız eklem konumları işlenir. Video '
+                          'kaydedilmez veya yüklenmez.',
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _panel(
+                    icon: Icons.music_note_outlined,
+                    tone: ChoreiaColors.amber,
+                    title: UiLanguage.text(
+                      context,
+                      en: IntroStrings.musicTitle,
+                      tr: 'KENDİ MÜZİĞİN',
+                    ),
+                    body: UiLanguage.text(
+                      context,
+                      en: IntroStrings.music,
+                      tr:
+                          'Choreia içinde müzik kütüphanesi yok. İstersen '
+                          'başka bir uygulamadan müzik açabilir veya '
+                          'müziksiz çalışabilirsin. Adımlar sayılır; '
+                          'müziğin ritmine göre puan verilmez.',
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _panel(
+                    icon: Icons.straighten_outlined,
+                    tone: ChoreiaColors.amber,
+                    title: UiLanguage.text(
+                      context,
+                      en: IntroStrings.limitsTitle,
+                      tr: 'NEYE PUAN VERMEZ',
+                    ),
+                    body: UiLanguage.text(
+                      context,
+                      en: IntroStrings.limits,
+                      tr:
+                          'Choreia vücudunun konumunu okur; ritme uyup '
+                          'uymadığını ölçmez. Burada ritim veya zamanlama '
+                          'puanı yoktur. His, tarz ve ifade sana aittir.',
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _panel(
+                    key: stateKey,
+                    icon: Icons.inventory_2_outlined,
+                    tone: ChoreiaColors.roseDeep,
+                    title: UiLanguage.text(
+                      context,
+                      en: IntroStrings.todayTitle,
+                      tr: 'BUGÜNKÜ DURUM',
+                    ),
+                    body: UiLanguage.text(
+                      context,
+                      en: IntroStrings.today(tally),
+                      tr: IntroStrings.todayTr(tally),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 4, 22, 20),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  key: continueKey,
+                  onPressed: onContinue,
+                  child: Text(
+                    UiLanguage.text(
+                      context,
+                      en: IntroStrings.continueLabel,
+                      tr: 'Kataloğu aç',
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 
   Widget _panel({
     Key? key,
@@ -121,30 +187,33 @@ class FirstRunView extends StatelessWidget {
     required Color tone,
     required String title,
     required String body,
-  }) =>
-      GlassPanel(
-        key: key,
-        tint: tone,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            StatusRing(icon: icon, tone: tone, breathing: false, size: 40),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(title, style: ChoreiaType.label(size: 9.5, color: tone)),
-                  const SizedBox(height: 6),
-                  Text(body,
-                      style: ChoreiaType.body(
-                          size: 13, color: ChoreiaColors.text(0.75))),
-                ],
+  }) => GlassPanel(
+    key: key,
+    tint: tone,
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        StatusRing(icon: icon, tone: tone, breathing: false, size: 40),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(title, style: ChoreiaType.label(size: 9.5, color: tone)),
+              const SizedBox(height: 6),
+              Text(
+                body,
+                style: ChoreiaType.body(
+                  size: 13,
+                  color: ChoreiaColors.text(0.75),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 }
 
 /// The intro's copy, in one place — same seam as `ShellStrings`.
@@ -225,6 +294,15 @@ abstract final class IntroStrings {
         'called, and what a camera can and cannot see of it — but no lesson '
         'yet, and we would rather show you an empty shelf than a fake one. '
         '$_storage';
+  }
+
+  static String todayTr(LibraryTally tally) {
+    final int openable = tally.scored + tally.openUngraded;
+    return 'Katalogdaki ${tally.total} stilden $openable tanesinde bugün '
+        'açabileceğin bir ders var. Diğerlerinin sayfasında durumu açıkça '
+        'yazıyor; olmayan dersler varmış gibi gösterilmiyor. '
+        'Tamamladığın çalışmalar ilerleme sekmesinde gösterilmek üzere '
+        'bu telefonda saklanır ve hiçbir yere gönderilmez.';
   }
 
   /// What happens to a finished session — and it used to say the OPPOSITE.

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:motion_core/motion_core.dart';
 
 import '../theme.dart';
+import '../ui_language.dart';
+import 'live_lesson_copy.dart';
 import 'live_state.dart';
 
 /// What happened to the record when the learner ended the session.
@@ -23,12 +25,11 @@ final class RecordWritten extends RecordOutcome {
   final SessionRecord record;
 }
 
-/// Nothing was written because there was nothing to write: the camera never
-/// delivered a frame, so no practice happened to record.
+/// Nothing was written because the camera delivered no assessable pose. The
+/// learner may have moved, but the app has no measurement to record.
 ///
-/// A DIFFERENT case from a session of zero cycles. "Never started" is not
-/// zero (M-F-268) — writing a 0-cycle, 0-second row would put a session in the
-/// learner's history that they did not have.
+/// A DIFFERENT case from a measured session of zero cycles. Writing a
+/// 0-cycle, 0-second row would put an unsupported measurement in history.
 final class RecordNothingToStore extends RecordOutcome {
   const RecordNothingToStore();
 }
@@ -61,6 +62,7 @@ class SessionResultView extends StatelessWidget {
     required this.outcome,
     required this.gated,
     required this.notMeasuredNote,
+    this.lessonId,
     required this.sawUnjudgeableFrames,
     this.onDone,
   });
@@ -73,6 +75,7 @@ class SessionResultView extends StatelessWidget {
   /// implies the rest was checked and passed.
   final List<GatedCheck> gated;
   final String notMeasuredNote;
+  final String? lessonId;
 
   /// Whether any frame arrived that could not be judged. NOT a count — see
   /// `SessionTally.unmeasuredUnits` for why a number here would be invented.
@@ -89,65 +92,76 @@ class SessionResultView extends StatelessWidget {
   static const Key partialKey = Key('result.partial');
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(title: const Text(ResultStrings.title)),
-        body: ChoreiaBackdrop(
-          child: SafeArea(
-            child: ListView(
-              key: bodyKey,
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-              children: <Widget>[
-                Text(lessonName, style: ChoreiaType.display(size: 24)),
-                const SizedBox(height: 16),
-                _outcomeCard(),
-                const SizedBox(height: 16),
-                _gatedSection(),
-                const SizedBox(height: 14),
-                Center(
-                  child: Text(
-                    notMeasuredNote,
-                    textAlign: TextAlign.center,
-                    style: ChoreiaType.label(
-                        size: 10.5, color: ChoreiaColors.text(0.4)),
-                  ),
+  Widget build(BuildContext context) {
+    final bool tr = UiLanguage.isTurkish(context);
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(title: Text(tr ? 'Seans' : ResultStrings.title)),
+      body: ChoreiaBackdrop(
+        child: SafeArea(
+          child: ListView(
+            key: bodyKey,
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            children: <Widget>[
+              Text(lessonName, style: ChoreiaType.display(size: 24)),
+              const SizedBox(height: 16),
+              _outcomeCard(tr),
+              const SizedBox(height: 16),
+              _gatedSection(tr),
+              const SizedBox(height: 14),
+              Center(
+                child: Text(
+                  LiveLessonCopy.identityLimit(lessonId, notMeasuredNote,
+                      turkish: tr),
+                  textAlign: TextAlign.center,
+                  style: ChoreiaType.label(
+                      size: 10.5, color: ChoreiaColors.text(0.4)),
                 ),
-                const SizedBox(height: 20),
-                FilledButton(
-                  key: doneKey,
-                  onPressed: onDone ?? () => Navigator.of(context).pop(),
-                  child: const Text(ResultStrings.done),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              FilledButton(
+                key: doneKey,
+                onPressed: onDone ?? () => Navigator.of(context).pop(),
+                child: Text(tr ? 'Derslere dön' : ResultStrings.done),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 
-  Widget _outcomeCard() => switch (outcome) {
-        RecordWritten(:final SessionRecord record) => _storedCard(record),
+  Widget _outcomeCard(bool tr) => switch (outcome) {
+        RecordWritten(:final SessionRecord record) => _storedCard(record, tr),
         RecordNothingToStore() => _AttentionPanel(
             key: notStoredKey,
             icon: Icons.videocam_off_outlined,
             tone: ChoreiaColors.amber,
-            body: ResultStrings.nothingToStore,
+            body: tr
+                ? 'Bu seans için kayıt oluşmadı: kameradan değerlendirilebilir hareket okunmadı. Bu sıfır tekrarlı bir seans değil; ölçüm olmadığı için geçmişinize eklenmedi.'
+                : ResultStrings.nothingToStore,
           ),
         RecordFailed(:final String detail) => _AttentionPanel(
             key: failedKey,
             icon: Icons.error_outline,
             tone: ChoreiaColors.roseDeep,
-            body: ResultStrings.storeFailed,
+            body: tr
+                ? 'Çalıştınız ama seansı kaydedemedik. Sorun bizim kayıt işlemimizde; önceki çalışmalarınız etkilenmedi.'
+                : ResultStrings.storeFailed,
             detail: detail,
           ),
       };
 
-  Widget _storedCard(SessionRecord record) => GlassPanel(
+  Widget _storedCard(SessionRecord record, bool tr) => GlassPanel(
         key: storedKey,
         radius: 22,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(ResultStrings.storedTitle,
+            Text(
+                tr
+                    ? 'Çalışma geçmişinize kaydedildi'
+                    : ResultStrings.storedTitle,
                 style: ChoreiaType.body(
                     size: 13,
                     weight: FontWeight.w600,
@@ -157,27 +171,39 @@ class SessionResultView extends StatelessWidget {
             // so "6 of 6" would report a target that was never set. Same rule
             // as `ProgressStrings.cycles`, applied at the moment the number is
             // first shown rather than only where it is summarised later.
-            Text(ResultStrings.cycles(record.unitsCompleted),
+            Text(
+                tr
+                    ? '${record.unitsCompleted} tam tekrar okundu'
+                    : ResultStrings.cycles(record.unitsCompleted),
                 style: ChoreiaType.label(
                     size: 12.5,
                     color: ChoreiaColors.text(0.72),
                     letterSpacingEm: 0)),
             const SizedBox(height: 4),
-            Text(ResultStrings.worked(record.workedSeconds),
+            Text(
+                tr
+                    ? _workedTr(record.workedSeconds)
+                    : ResultStrings.worked(record.workedSeconds),
                 style: ChoreiaType.label(
                     size: 12.5,
                     color: ChoreiaColors.text(0.72),
                     letterSpacingEm: 0)),
             const SizedBox(height: 12),
-            Text(ResultStrings.storedNote,
-                style: ChoreiaType.body(
-                    size: 12, color: ChoreiaColors.text(0.6))),
+            Text(
+                tr
+                    ? 'Bu seans bu telefona kaydedildi ve İlerleme bölümünde görünür. Hiçbir şey yüklenmedi ve video saklanmadı; yalnızca bu sayılar kaydedildi.'
+                    : ResultStrings.storedNote,
+                style:
+                    ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.6))),
             // The one thing the counts above cannot say. Shown only when it
             // happened, and worded as a limit of ours rather than a shortfall
             // of theirs.
             if (sawUnjudgeableFrames) ...<Widget>[
               const SizedBox(height: 10),
-              Text(ResultStrings.partial,
+              Text(
+                  tr
+                      ? 'Çalışmanızın bir kısmını okuyamadık; kadrajdan çıkmış veya ışık yetersiz kalmış olabilir. Bu tekrarlar yukarıdaki sayıya dahil değil ve kaç tane olduklarını söyleyemiyoruz.'
+                      : ResultStrings.partial,
                   key: partialKey,
                   style: ChoreiaType.body(
                       size: 12, color: ChoreiaColors.amberDeep)),
@@ -189,14 +215,14 @@ class SessionResultView extends StatelessWidget {
   /// The same always-on section the live screen carries, for the same reason:
   /// a check the app cannot make is exactly the thing a learner would
   /// otherwise assume passed.
-  Widget _gatedSection() => GlassPanel(
+  Widget _gatedSection(bool tr) => GlassPanel(
         key: gatedKey,
         tint: ChoreiaColors.amber,
         borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(ResultStrings.gatedTitle,
+            Text(tr ? 'Kontrol etmediklerimiz' : ResultStrings.gatedTitle,
                 style: ChoreiaType.label(
                     size: 9.5,
                     color: ChoreiaColors.amberDeep,
@@ -204,13 +230,22 @@ class SessionResultView extends StatelessWidget {
             for (final GatedCheck g in gated)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(g.why,
+                child: Text(
+                    LiveLessonCopy.gatedReason(lessonId, g.code, g.why,
+                        turkish: tr),
                     style: ChoreiaType.body(
                         size: 12, color: ChoreiaColors.text(0.7))),
               ),
           ],
         ),
       );
+
+  String _workedTr(int seconds) {
+    final int minutes = seconds ~/ 60;
+    return minutes < 1
+        ? 'Bir dakikadan az kamera süresi'
+        : '$minutes dakika kamera süresi';
+  }
 }
 
 /// Every user-facing string of the result surface, in one place — same seam as
@@ -249,9 +284,9 @@ abstract final class ResultStrings {
       'count above, and we cannot say how many there were.';
 
   static const String nothingToStore =
-      'Nothing was recorded for this session: the camera never started, so '
-      'there was no practice for us to keep. This is not a session of zero — '
-      'it simply did not happen, and your record says nothing about it.';
+      'Nothing was recorded for this session: no assessable movement was read '
+      'from the camera. This is not a session of zero repetitions; without a '
+      'measurement, it was not added to your history.';
 
   static const String storeFailed =
       'You practised, and we could not save it. The session happened; what '
@@ -292,8 +327,8 @@ class _AttentionPanel extends StatelessWidget {
             const SizedBox(height: 16),
             Text(body,
                 textAlign: TextAlign.center,
-                style:
-                    ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.85))),
+                style: ChoreiaType.body(
+                    size: 14, color: ChoreiaColors.text(0.85))),
             if (detail != null && detail!.isNotEmpty) ...<Widget>[
               const SizedBox(height: 8),
               Text(detail!,

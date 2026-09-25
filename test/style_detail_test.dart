@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:choreia/app/course_catalog.dart';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
+import 'package:choreia/app/live/live_lesson_page.dart';
 import 'package:choreia/app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -63,7 +64,8 @@ void main() {
   });
 
   Future<void> show(WidgetTester tester, String styleId,
-      {Set<String>? runnable}) async {
+      {Set<String>? runnable,
+      Future<bool> Function(BuildContext)? beforeStart}) async {
     tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
@@ -71,7 +73,8 @@ void main() {
       theme: ChoreiaTheme.dark,
       home: StyleDetailView(
           card: lib.cardFor(styleId)!,
-          runnableSteps: runnable ?? deviceRunnable),
+          runnableSteps: runnable ?? deviceRunnable,
+          beforeStart: beforeStart),
     ));
     await tester.pump();
   }
@@ -86,8 +89,31 @@ void main() {
     }
   }
 
+  testWidgets('a denied membership never opens a live dance lesson',
+      (WidgetTester tester) async {
+    var checks = 0;
+    await show(
+      tester,
+      'hip_hop_foundations',
+      runnable: const <String>{'hh_bounce'},
+      beforeStart: (_) async {
+        checks++;
+        return false;
+      },
+    );
+    final start = find.widgetWithText(FilledButton, 'Start');
+    await scrollTo(tester, start);
+    await tester.ensureVisible(start);
+    await tester.pump();
+    await tester.tap(start);
+    await tester.pump();
+    expect(checks, 1);
+    expect(find.byType(LiveLessonPage), findsNothing);
+  });
+
   group('attribution is content, and its absence is visible', () {
-    testWidgets('a style WITH attribution shows it', (WidgetTester tester) async {
+    testWidgets('a style WITH attribution shows it',
+        (WidgetTester tester) async {
       await show(tester, 'vogue');
       expect(find.byKey(StyleDetailView.attributionKey), findsOneWidget);
       expect(find.byKey(StyleDetailView.attributionGapKey), findsNothing);
@@ -172,8 +198,8 @@ void main() {
       await show(tester, 'salsa_shines');
       final StyleCard card = lib.cardFor('salsa_shines')!;
 
-      final LessonInfo scored =
-          card.lessons.firstWhere((LessonInfo l) => l.kind == LessonKind.scored);
+      final LessonInfo scored = card.lessons
+          .firstWhere((LessonInfo l) => l.kind == LessonKind.scored);
       final LessonInfo demo = card.lessons
           .firstWhere((LessonInfo l) => l.kind == LessonKind.demoOnly);
 
@@ -196,13 +222,15 @@ void main() {
               'refuses.');
     });
 
-    testWidgets('an ungraded lesson always states why', (WidgetTester tester) async {
+    testWidgets('an ungraded lesson always states why',
+        (WidgetTester tester) async {
       for (final String styleId in <String>[
         'salsa_shines',
         'hip_hop_foundations'
       ]) {
         await show(tester, styleId);
-        for (final LessonOffer o in lib.cardFor(styleId)!.offers(lib.runnableSteps)) {
+        for (final LessonOffer o
+            in lib.cardFor(styleId)!.offers(lib.runnableSteps)) {
           if (o.lesson.kind == LessonKind.scored) continue;
           expect(o.contentReason, isNotNull,
               reason: '${o.lesson.id} is ungraded with no stated reason — the '
@@ -228,8 +256,10 @@ void main() {
       // "the core loop is live".
       int startable = 0;
       for (final StyleCard c in lib.cards) {
-        startable +=
-            c.offers(deviceRunnable).where((LessonOffer o) => o.canStart).length;
+        startable += c
+            .offers(deviceRunnable)
+            .where((LessonOffer o) => o.canStart)
+            .length;
       }
       expect(startable, 1,
           reason: 'başlatılabilir ders sayısı değişti — referansının diskte '
@@ -238,7 +268,8 @@ void main() {
       // The release-gated style stays shut regardless: its bpm range is
       // DISPUTED, so no lesson in it may ship at all.
       await show(tester, 'salsa_shines');
-      expect(find.widgetWithText(FilledButton, StyleStrings.start), findsNothing,
+      expect(
+          find.widgetWithText(FilledButton, StyleStrings.start), findsNothing,
           reason: 'yayın kapısı kapalı bir stilde Start düğmesi, kapının '
               'kendisini anlamsız kılar');
     });
@@ -266,7 +297,8 @@ void main() {
           reason: 'the blocked reason names what is missing, in words');
     });
 
-    testWidgets('a step with no servable reference is blocked AS a reference '
+    testWidgets(
+        'a step with no servable reference is blocked AS a reference '
         'gap, not as something else', (WidgetTester tester) async {
       // NO LESSON IS IN THIS STATE ANY MORE. `hh_bounce` used to be the
       // subject and shipped on 2026-08-07; every reference on disk is now
@@ -279,9 +311,8 @@ void main() {
       // an EMPTY runnable set, which is exactly what a step whose reference
       // does not serve looks like to `LessonOffer`.
       final StyleCard hh = lib.cardFor('hip_hop_foundations')!;
-      final LessonOffer bounce = hh
-          .offers(const <String>{})
-          .firstWhere((LessonOffer o) => o.lesson.id == 'hh_l1_bounce');
+      final LessonOffer bounce = hh.offers(const <String>{}).firstWhere(
+          (LessonOffer o) => o.lesson.id == 'hh_l1_bounce');
 
       expect(bounce.lesson.stepId, 'hh_bounce');
       expect(bounce.block, LessonBlock.referenceMissing,
@@ -418,22 +449,22 @@ void main() {
       // `containsAll` would be the wrong direction — it is `subsetOf` that
       // says "no new unexplained omissions".
       const Set<String> explainedOmissions = <String>{
-            'hula',
-            'kpop_point',
-            'tiktok_format',
-            'latin_fusion_fitness',
-            'heels',
-            'bollywood',
-            'contemporary',
-            'irish_dance',
-            'cumbia_solo',
-            'bhangra',
-            'samba_no_pe',
-            'dancehall',
-            'shuffle',
-            'merengue_solo',
-            'twerk_reggaeton',
-            'kizomba_zouk_solo',
+        'hula',
+        'kpop_point',
+        'tiktok_format',
+        'latin_fusion_fitness',
+        'heels',
+        'bollywood',
+        'contemporary',
+        'irish_dance',
+        'cumbia_solo',
+        'bhangra',
+        'samba_no_pe',
+        'dancehall',
+        'shuffle',
+        'merengue_solo',
+        'twerk_reggaeton',
+        'kizomba_zouk_solo',
       };
 
       // THE FIFTH EXEMPTION STRUCTURE (C-165), and I wrote it myself an hour
@@ -491,14 +522,16 @@ void main() {
           // this rule is about PROSE, which is what a footnote demotion would
           // target.
           if (size >= 17) continue;
-          if (text.startsWith(StyleStrings.attributionMissing.substring(0, 20)) ||
+          if (text.startsWith(
+                  StyleStrings.attributionMissing.substring(0, 20)) ||
               (lib.cardFor(id)!.entry.originAttribution != null &&
                   text == lib.cardFor(id)!.entry.originAttribution)) {
             attribution = size;
             continue;
           }
           if (size > StyleDetailView.attributionSize) {
-            larger.add('"${text.substring(0, text.length.clamp(0, 30))}" @$size');
+            larger
+                .add('"${text.substring(0, text.length.clamp(0, 30))}" @$size');
           }
         }
 
@@ -619,20 +652,25 @@ void main() {
         final String id = c.entry.id;
         bool shown(Key k) => find.byKey(k).evaluate().isNotEmpty;
 
-        if (c.entry.originAttribution != null && !shown(StyleDetailView.attributionKey)) {
+        if (c.entry.originAttribution != null &&
+            !shown(StyleDetailView.attributionKey)) {
           unseen.add('$id/originAttribution');
         }
-        if (c.entry.description != null && !shown(StyleDetailView.descriptionKey)) {
+        if (c.entry.description != null &&
+            !shown(StyleDetailView.descriptionKey)) {
           unseen.add('$id/description');
         }
-        if (c.entry.stepGlossary.isNotEmpty && !shown(StyleDetailView.glossaryKey)) {
+        if (c.entry.stepGlossary.isNotEmpty &&
+            !shown(StyleDetailView.glossaryKey)) {
           unseen.add('$id/stepGlossary');
         }
-        if (c.entry.cameraLimits.isNotEmpty && !shown(StyleDetailView.cameraLimitsKey)) {
+        if (c.entry.cameraLimits.isNotEmpty &&
+            !shown(StyleDetailView.cameraLimitsKey)) {
           unseen.add('$id/cameraLimits');
         }
         if (c.entry.onHoldReason != null &&
-            find.textContaining(c.entry.onHoldReason!.substring(0, 25))
+            find
+                .textContaining(c.entry.onHoldReason!.substring(0, 25))
                 .evaluate()
                 .isEmpty) {
           unseen.add('$id/onHoldReason');
@@ -655,9 +693,9 @@ void main() {
     // durumdan FAZLASINI iddia etmemesini sağlıyor.
 
     test('kaynak durumu içerikte KAYITLI ve dürüst', () {
-      final Map<String, dynamic> doc = (jsonDecode(
-              File('content/library.json').readAsStringSync()) as Map)
-          .cast<String, dynamic>();
+      final Map<String, dynamic> doc =
+          (jsonDecode(File('content/library.json').readAsStringSync()) as Map)
+              .cast<String, dynamic>();
       final Object? prov = doc['originAttributionProvenance'];
       expect(prov, isNotNull,
           reason: '34 kültürel iddia kaynak kaydı olmadan duruyor ve bunu '
@@ -694,7 +732,12 @@ void main() {
           r'in consultation with|fact-checked',
           caseSensitive: false);
 
-      for (final String id in <String>['vogue', 'salsa_shines', 'hula', 'bhangra']) {
+      for (final String id in <String>[
+        'vogue',
+        'salsa_shines',
+        'hula',
+        'bhangra'
+      ]) {
         await show(tester, id);
         final String screen = tester
             .widgetList<Text>(find.byType(Text))
@@ -798,7 +841,8 @@ void main() {
     // yanında hiçbir şey yokken ONUN pratiği hakkında bir hüküm gibi okunur —
     // 'senin denemen sayılmıyor' — oysa doğru cümle BİZİM aletimiz hakkında.
 
-    testWidgets('HER stil, rozetinin ne demek olduğunu söyleyen bir cümle taşır',
+    testWidgets(
+        'HER stil, rozetinin ne demek olduğunu söyleyen bir cümle taşır',
         (WidgetTester tester) async {
       // Ölçülen kusur: açılabilir stil için _statusSentence() null dönüyordu,
       // yani uygulamada dansçının açabildiği TEK stil, öznesiz bir rozetle
@@ -869,8 +913,8 @@ void main() {
       await show(tester, 'hip_hop_foundations');
       final StyleCard card = lib.cardFor('hip_hop_foundations')!;
       final List<LessonOffer> offers = card.offers(deviceRunnable);
-      final Iterable<LessonOffer> demo = offers.where(
-          (LessonOffer o) => o.lesson.kind == LessonKind.demoOnly);
+      final Iterable<LessonOffer> demo =
+          offers.where((LessonOffer o) => o.lesson.kind == LessonKind.demoOnly);
 
       // POZİTİF KONTROL — iki popülasyon da VAR. Biri boşsa aşağıdaki
       // iddialardan biri hiç ölçülmez ve test kendi vakumunda yeşil görünür.
@@ -888,8 +932,8 @@ void main() {
         // bakan bir tarama, suçluyu göremez.
         await scrollTo(tester, card_);
         expect(card_, findsOneWidget);
-        final Finder open = find.descendant(
-            of: card_, matching: find.textContaining('OPEN'));
+        final Finder open =
+            find.descendant(of: card_, matching: find.textContaining('OPEN'));
         if (o.canStart) {
           expect(open, findsOneWidget,
               reason: '${o.lesson.id} BAŞLATILABİLİR ve rozeti bunu '
@@ -922,7 +966,8 @@ void main() {
               'hardcoded example');
     });
 
-    testWidgets('a disputed bpmStatus shows an honest not-confirmed '
+    testWidgets(
+        'a disputed bpmStatus shows an honest not-confirmed '
         'sentence, never the raw internal string', (WidgetTester tester) async {
       await show(tester, 'salsa_shines');
       await scrollTo(tester, find.byKey(StyleDetailView.tempoKey));
@@ -964,5 +1009,4 @@ Set<String> _declaredAssets() {
     }
   }
   return out;
-
 }

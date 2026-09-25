@@ -1,19 +1,21 @@
 # Data Safety (Play) + Privacy Nutrition Label (Apple) Matrisi — CHO-P0-002
 
-Gerçek koda göre (2026-08-19). Kaynaklar, tek tek: `ios/Runner/PrivacyInfo.xcprivacy`
+İlk ölçüm 2026-08-19, hesap güncellemesi 2026-09-25. Kaynaklar: `ios/Runner/PrivacyInfo.xcprivacy`
 (C-266/A8, ölçülerek dolduruldu) · `ios/Runner/Info.plist` · `android/app/src/main/AndroidManifest.xml`
 · `tools/network_dependency_check.py` (yükleyici-izi kapısı, 5 öz-test) · `tools/privacy_manifest_check.py`.
-Bu dosya YENİ bir ölçüm yapmıyor — üçünün KENDİ ölçümünü tek okunur tabloya taşıyor, LifeOS'un
-`docs/store/data-safety-matrix.md` biçimini örnek alarak (farklı bir uygulama sınıfı — Choreia'nın
-hesabı/backend'i/bulut sync'i YOK, tablo bu yüzden çok daha kısa).
+2026-09-25 kaynak durumu: ortak Motion hesabı Core path bağımlılığıyla eklendi;
+üretim şeması/işlevleri kuruldu, ancak gerçek kullanıcı uçtan uca kanıtı ve mağaza formu onayı henüz yok. Hesap ve satın alma için dört
+alanın ayrıntısı `account-data-safety-draft.md` dosyasında. Aşağıdaki 2026-08-19
+notları tarihsel ölçüm olarak tutulur; güncel hüküm yeni satırlardır.
 
 ## 0. Baseline — ne VAR, ne YOK (formu doldurmadan önce)
 
-- Hesap/giriş **YOK**. Bulut senkron/backend **YOK** (roadmap §7: standalone launch backend
-  gerektirmez; `MOTION-GROWTH-001` kapısı açılmadan optional backend hiç oluşmaz).
-- Analytics/reklam/crash-reporting SDK'sı **YOK** (`tools/network_dependency_check.py`
-  `NETWORK_DEPS_RECORDED`: yalnız `google_fonts`+transitive `http`/`http_parser`, üçü de
-  kullanıcı verisi taşımaz; CHO-P0-002 bu turda `google_fonts`un runtime GET'ini de KAPATTI).
+- Ortak Motion hesap/giriş arayüzü **VAR**; Core geçici yerel path bağımlılığı ve
+  `MOTION_SUPABASE_URL`/`MOTION_SUPABASE_PUBLISHABLE_KEY` yapılandırması gerekir.
+  Ders/seans geçmişi hâlâ yalnız cihazda; hesap servisine senkronize edilmez.
+- Analytics/reklam/crash-reporting SDK'sı **YOK**; Motion hesabı için Supabase
+  ağı **VAR**. `tools/network_dependency_check.py` hesap ağ bağımlılıklarını
+  kaydeder; fontların çalışma zamanı GET'i kapalıdır.
 - Kamera karesi/landmark cihazda işlenir, **hiçbir yere yüklenmez** (Info.plist
   `NSCameraUsageDescription`, `content_claims_test` ile çivili).
 - **DÜZELTME (C-325, 2026-08-19 aynı gün, ikinci tur): bu satır YANLIŞTI, yazıldığı anda bile.**
@@ -34,29 +36,31 @@ hesabı/backend'i/bulut sync'i YOK, tablo bu yüzden çok daha kısa).
 
 | Veri kategorisi | Toplanıyor? | Paylaşılıyor? | Opsiyonel? | Amaç | Not |
 |---|---|---|---|---|---|
-| Personal info | HAYIR | — | — | — | Hesap yok |
+| Personal info: e-posta, görünen ad, kullanıcı ID'si | EVET | HAYIR | Görünen ad isteğe bağlı | Hesap/uygulama işlevi | Ortak Motion Auth/profil/üyelik; sağlayıcı uçtan uca ve canlı form onayı bekliyor |
+| Financial info: satın alma geçmişi | EVET | HAYIR | Abonelik etkinleşince | Abonelik doğrulama/erişim | Ürün, mağaza, işlem referansı, durum ve süre Motion sunucusunda; ödeme kartı alınmaz |
 | Photos/Videos | HAYIR | — | — | — | Kamera karesi cihazda işlenir, kaydedilmez/yüklenmez |
 | Audio | HAYIR | — | — | — | Mikrofon henüz implemente edilmedi |
-| App activity | **EVET (muhtemelen — aşağıya bak)** | HAYIR | — | Uygulama işlevi | **C-325 düzeltmesi:** hangi ders/ne zaman/ne kadar süre/kaç çevrim tamamlandığı `sessions.jsonl`'a cihazda kalıcı yazılıyor (yukarı bak). Aktarım/paylaşım YOK (`network_dependency_check.py` doğruluyor). Play'in "ephemeral, cihazda işlenip saklanmıyor" muafiyeti kalıcı dosyaya UYMAZ — bu okumaya göre "Collected: Evet, Shared: Hayır" olması beklenir. ⚠️ Gerçek Play form metniyle submit öncesi doğrulanmalı (store-policy-officer), burada hafızadan çıkarım yapıldı, canlı konsoldan teyit edilmedi. `outbox_events` (roadmap §7 telemetry) hâlâ yok, ayrı konu. |
+| App activity | HAYIR (mevcut sürüm) | HAYIR | — | Cihaz içi ilerleme | JSONL dosyası kalıcıdır, ancak cihazdan aktarılmaz. Google Play'in [Data safety tanımı](https://support.google.com/googleplay/android-developer/answer/10787469) için “collected” cihaz dışına iletilen veridir; önceki “kalıcı dosya = collected” çıkarımı yanlıştı. Hesap ve satın alma alanları yukarıda ayrı beyan edilir. |
 | App info & performance | HAYIR | — | — | — | Crash/diagnostics SDK'sı yok |
 | Device/other IDs | HAYIR | — | — | — | Reklam/tracking ID yok |
 | Health & fitness | HAYIR | — | — | — | Sağlık verisi toplanmaz (uygulama tıbbi/sağlık verisi işlemez) |
 
-**Data deletion bölümü:** **C-325 düzeltmesi — "No data is collected" ARTIK doğru olmayabilir**
-(App activity satırına bak). Muhtemel doğru cevap: veri hesapsız/cihazda-yalnız tutulduğu için
-"kullanıcı uygulamayı silerek kendi verisini siler" yolu — ama gerçek Play form seçenekleriyle
-submit öncesi teyit edilmeli, burada varsayılmadı.
-**Encryption in transit:** N/A (uygulama içi ağ trafiği yok; `google_fonts` build-time'a taşındı).
+**Data deletion bölümü:** Ortak hesap silme arayüzü Core'da var; uzak silme
+başarılı olursa ilgili kullanıcıya ait yerel JSONL silinir. Gerçek sağlayıcı
+ve Play Console beyanı ayrıca doğrulanmalı (`account-data-safety-draft.md`).
+**Encryption in transit:** Motion hesap trafiğinin TLS/HTTPS yapılandırması
+release öncesi gerçek ortamda doğrulanmalı; fontlar paketlidir.
 
 ## 2. Apple Privacy Nutrition Label
 
 | Tip | Beyan | Kaynak |
 |---|---|---|
-| Contact Info | Not collected | Hesap yok |
-| Health & Fitness | Not collected | `PrivacyInfo.xcprivacy` `NSPrivacyCollectedDataTypes: []` |
+| Contact Info: email, optional name | Collected, linked, app functionality | Motion Auth/profil; `PrivacyInfo.xcprivacy` |
+| Health & Fitness | Not collected | Hesap manifestinde sağlık verisi türü yok; kamera/eklem noktaları cihazdan gönderilmiyor |
 | Diagnostics | Not collected | Crash/analytics SDK'sı yok |
-| Identifiers | Not collected | Reklam/tracking ID yok |
-| Usage Data | Not collected (⚠️ re-check, see note) | `PrivacyInfo.xcprivacy` `NSPrivacyCollectedDataTypes: []` — **ölçüldü 2026-08-13 00:33 (C-266/A8), session-write yolu (C-268) AYNI GÜN 13:51'de açıldı, manifest o zamandan beri yeniden doğrulanmadı** (git tarihiyle kanıtlı, C-325). Apple'ın "on-device, aktarılmayan, kimliğe bağlanmayan veri" muafiyeti Play'den farklı ve muhtemelen daha geniş — bu satırın YANLIŞ olduğu iddia edilmiyor, yalnız C-268'den beri hiç yeniden ölçülmediği kayda geçiyor |
+| Identifiers: account ID | Collected, linked, app functionality | Motion hesabı; reklam/tracking ID yok |
+| Purchases: purchase history | Collected, linked, app functionality | Mağaza ürünü, işlem referansı ve abonelik durumu/süresi; `PrivacyInfo.xcprivacy` |
+| Usage Data | Not collected | Seans JSONL dosyası cihazda kalır; güncel manifest hesap alanlarını beyan eder, usage türünü beyan etmez. Cihaz dışına çıkma davranışı release öncesi yeniden denetlenmeli. |
 
 ATT (App Tracking Transparency): **GEREKMEZ** — `NSPrivacyTracking: false`,
 `NSPrivacyTrackingDomains: []` (ölçüldü, `PrivacyInfo.xcprivacy`, C-266/A8 — aynı staleness notu geçerli).
@@ -78,7 +82,7 @@ izni YOK, gerçek davranışla birebir.
 - **C-325/C-326 düzeltmesi: yerel depolama CHO-P1-004'le "başlamıyor" — zaten BAŞLADI** (JSONL
   `SessionStore`, C-268, 2026-08-13). CHO-P1-004 açılınca değişecek olan roadmap §7'nin "yedi Drift
   tablosu" planı — ama bu plan bugün ŞİLİN JSONL mimarisiyle hiç uzlaştırılmadı (DEFTER C-326).
-  Form hâlâ "toplanıyor ama PAYLAŞILMIYOR, cihazda kalıyor" kalması beklenir (roadmap §7: hesap
-  gerektirmez, export/delete kullanıcı elinde) — mimari JSONL kalsa da Drift'e geçse de bu satır
-  muhtemelen değişmez, ama bu bir varsayım, ölçülmedi.
-  `MOTION-GROWTH-001` açılmadan backend YOK, bu satır o kapı geçmeden değişmez.
+  Formda yerel geçmiş, cihaz dışına aktarılmadığı sürece "collected" olarak beyan edilmez
+  (roadmap §7: hesap gerektirmez, export/delete kullanıcı elinde). Mimari JSONL kalsa da
+  Drift'e geçse de ağ davranışı yeniden ölçülmelidir.
+  2026-09-24'te hesap backend'i bağlandı; bu eski plan artık güncel değil.

@@ -77,12 +77,22 @@ void main() {
 
   test('⛔ SIR DEPOYA GİREMEZ — key.properties ve keystore git-dışı', () {
     final String ignore = File('android/.gitignore').readAsStringSync();
-    for (final String pat in <String>['key.properties', '*.keystore', '*.jks']) {
+    for (final String pat in <String>[
+      'key.properties',
+      '*.keystore',
+      '*.jks'
+    ]) {
       expect(ignore, contains(pat),
           reason: '$pat .gitignore\'da değil — imza sırrı depoya sızabilir');
     }
-    expect(File('android/key.properties').existsSync(), isFalse,
-        reason: 'key.properties çalışma ağacında VAR — içeriği sır, bu '
-            'testin kendisi onu okumaz ama varlığı beklenmiyor');
+    // Yerel release imzası dosyayı kullanabilir; Git'e eklenmesi yasaktır.
+    // Sırrın içeriğini okumadan izleme durumunu denetliyoruz.
+    final ProcessResult tracked = Process.runSync(
+      'git',
+      <String>['ls-files', '--error-unmatch', 'android/key.properties'],
+    );
+    expect(tracked.exitCode, isNot(0),
+        reason: 'key.properties Git tarafından izleniyor — imza sırrı '
+            'depoya girebilir');
   });
 }

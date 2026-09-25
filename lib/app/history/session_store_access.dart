@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:motion_core/motion_core.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../account_bridge.dart';
+
 /// Opens the app's session history.
 ///
 /// **This is the app's SECOND piece of persistence, and the first that stores
@@ -26,13 +28,16 @@ typedef SessionStoreOpener = Future<SessionStore> Function();
 ///
 /// Format is the core's (append-only JSONL, atomic tmp+rename). Nothing here
 /// re-implements storage; this function's whole job is answering WHERE.
-Future<SessionStore> openAppSessionStore() async {
-  final Directory dir = await getApplicationSupportDirectory();
-  return JsonlSessionStore(File('${dir.path}/$sessionsFileName'));
+Future<SessionStore> openAppSessionStore({
+  String? accountUserId,
+  Directory? supportDirectory,
+}) async {
+  final Directory dir = supportDirectory ?? await getApplicationSupportDirectory();
+  return JsonlSessionStore(sessionFileFor(dir, accountUserId));
 }
 
 /// Named rather than inlined so a test can assert the shipping path without
 /// re-deriving the string — two copies of a filename drift, and the drift is
 /// silent: the app writes one file and reads another, and the progress screen
 /// reports an empty history that is not empty.
-const String sessionsFileName = 'sessions.jsonl';
+const String sessionsFileName = guestSessionsFileName;

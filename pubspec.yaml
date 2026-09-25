@@ -9,6 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # Ortak hesap, çekirdek ve kamera aynı değişmez Git sürümünden çözülür.
+  motion_account:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_account
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
   # The engine is a SEPARATE package with no Flutter dependency (M-F-160,
   # JabLab's split mirrored): scoring logic must stay testable without a widget
@@ -24,20 +32,17 @@ dependencies:
   # The app depends on it DIRECTLY rather than re-exporting through
   # choreia_engine: the engine judges cycles and has no business knowing that
   # sessions are stored at all.
-  # PIN ÇİFTİ — İKİSİ DE TEK REF (`f13bdc9`), tag DEĞİL (J-071/M-F-260).
+  # PIN ÇİFTİ — İKİSİ DE ONAYLI TEK TAM REF, tag DEĞİL (J-071/M-F-260).
   #
-  # `motion_core-v0.11.0` tag'i `2018469`'da, `motion_camera-v0.1.2` tag'i
-  # `f13bdc9`'da duruyor. AYNI repodan iki paketi İKİ FARKLI commit'ten
-  # pinlemek pub'da çift-kaynak çatışması üretir, o yüzden ikisi de bu tek
-  # commit'ten geliyor: `f13bdc9`, `2018469`'un ARDILI (ölçüldü:
-  # `merge-base --is-ancestor`) ve orada motion_core 0.11.0 · motion_camera
-  # 0.1.2 sürümlerini taşıyor. Eşitlik `test/pin_equality_test.dart` ile
-  # ÇİVİLİ — iki ref ayrışırsa test düşer.
+  # AYNI repodan iki paketi İKİ FARKLI commit'ten pinlemek pub'da çift-kaynak
+  # çatışması üretir. CORE-ADOPT-001 bu yüzden ikisini de onaylanmış tek
+  # commit'e kilitler. Eşitlik ve kabul SHA'sı `test/pin_equality_test.dart`
+  # ile ÇİVİLİ — iki ref ayrışır veya eski ref'e dönerse test düşer.
   motion_core:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
   # Kamera köprüsü: motor `motion_core`'dan hiçbir şey import etmiyordu ve
   # pini C-121'de DÜŞÜRÜLMÜŞTÜ, isimli geri-giriş tetiğiyle: "ilk gerçek
@@ -47,7 +52,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_camera
-      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
   # Only to locate the app-private directory. The storage FORMAT is the core's
   # (append-only JSONL) — a 3rd-party DB is deliberately absent: session
@@ -80,7 +85,10 @@ dependencies:
   permission_handler: ^12.0.3
 
 dev_dependencies:
+  supabase_flutter: 2.17.2
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   lints: ^5.0.0
   crypto: ^3.0.0
