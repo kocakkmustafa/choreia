@@ -72,10 +72,10 @@ class FirstRunView extends StatelessWidget {
                       context,
                       en: IntroStrings.what,
                       tr:
-                          'Choreia dans ederken adımların hakkında '
-                          'kameranın görebildiklerini söyler. Her şey '
-                          'telefonunda çalışır; kameranın değerlendiremediği '
-                          'konuları açıkça belirtir.',
+                          'Choreia, sıralı dersler, çalışma görevleri ve öz '
+                          'denetimlerle Salsa On1 öğrenmeni sağlar. Kurs '
+                          'hesap veya kamera olmadan çalışır. İlerleme '
+                          'kaydın bu cihazda kalır.',
                     ),
                     style: ChoreiaType.body(
                       size: 15,
@@ -94,12 +94,11 @@ class FirstRunView extends StatelessWidget {
                     ),
                     body: UiLanguage.text(
                       context,
-                      en: IntroStrings.camera,
+                      en: IntroStrings.currentCamera,
                       tr:
-                          'Choreia adımların hakkında geri bildirim vermek '
-                          'için dansını kamerayla izler. Video telefondan '
-                          'çıkmaz; yalnız eklem konumları işlenir. Video '
-                          'kaydedilmez veya yüklenmez.',
+                          'Bu sürümde canlı kamera pratiği ve abonelik '
+                          'satışı kapalıdır. Salsa kursu video yakalamaz; '
+                          'kendi çalışma kaydını ve öz denetimlerini kullanır.',
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -117,8 +116,8 @@ class FirstRunView extends StatelessWidget {
                       tr:
                           'Choreia içinde müzik kütüphanesi yok. İstersen '
                           'başka bir uygulamadan müzik açabilir veya '
-                          'müziksiz çalışabilirsin. Adımlar sayılır; '
-                          'müziğin ritmine göre puan verilmez.',
+                          'müziksiz çalışabilirsin. Kurs adımları otomatik '
+                          'saymaz; müziğin ritmine göre puan verilmez.',
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -134,9 +133,9 @@ class FirstRunView extends StatelessWidget {
                       context,
                       en: IntroStrings.limits,
                       tr:
-                          'Choreia vücudunun konumunu okur; ritme uyup '
-                          'uymadığını ölçmez. Burada ritim veya zamanlama '
-                          'puanı yoktur. His, tarz ve ifade sana aittir.',
+                          'Kurs ilerlemesi kendi çalışma kaydındır. Otomatik '
+                          'hareket doğruluğu, ritim, zamanlama veya ustalık '
+                          'puanı verilmez. His, tarz ve ifade sana aittir.',
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -223,9 +222,14 @@ abstract final class IntroStrings {
   static const String title = 'Choreia';
 
   static const String what =
-      'Choreia watches you dance and tells you what it can see about your '
-      'steps. It runs on your phone, and it is honest about the parts a '
-      'camera cannot judge.';
+      'Learn Salsa On1 through progressive lessons, practice tasks and '
+      'self-checks. The course works without an account or camera. Your '
+      'practice record stays on this device.';
+
+  static const String currentCamera =
+      'Live camera practice and subscription sales are closed in this release. '
+      'The Salsa course does not capture video; it uses your own practice '
+      'record and self-checks.';
 
   static const String cameraTitle = 'THE CAMERA';
 
@@ -266,8 +270,8 @@ abstract final class IntroStrings {
   /// discover the silence and assume the app is broken.
   static const String music =
       'There is no music inside Choreia. Put on whatever you like — from any '
-      'app, or nothing at all — and dance to that. The steps are counted, not '
-      'timed to a track.';
+      'app, or nothing at all — and dance to that. The course does not count '
+      'steps automatically or score track timing.';
 
   static const String limitsTitle = 'WHAT IT DOES NOT JUDGE';
 
@@ -276,33 +280,27 @@ abstract final class IntroStrings {
   /// will read every silence as a bad grade. Stating the absence is the only
   /// way it stays an absence rather than an implied zero.
   static const String limits =
-      'Choreia reads where your body is, not whether you are on the beat. '
-      'There is no rhythm or timing score here, so nothing on screen is '
-      'marking your musicality. Feel, style and expression are yours — a '
-      'phone camera has no opinion about them.';
+      'Course progress is your own practice record. There is no rhythm or timing score, '
+      'automatic movement-correctness grade or mastery certification. Feel, '
+      'style and expression are yours.';
 
   static const String todayTitle = 'WHERE THIS IS TODAY';
 
   /// Counted from the real catalogue every time this screen is built.
   static String today(LibraryTally tally) {
     final int openable = tally.scored + tally.openUngraded;
-    final String lessons = openable == 1
-        ? 'One style has a lesson you can open today'
-        : '$openable styles have a lesson you can open today';
-    return '$lessons, out of ${tally.total} in the catalogue. The rest have '
-        'their own page — where the dance comes from, what its steps are '
-        'called, and what a camera can and cannot see of it — but no lesson '
-        'yet, and we would rather show you an empty shelf than a fake one. '
+    return 'Open the Salsa On1 learning path from the library. The legacy '
+        'dance catalogue has ${tally.total} style pages, including $openable '
+        'styles with lesson previews. Live camera practice is closed in this release. '
         '$_storage';
   }
 
   static String todayTr(LibraryTally tally) {
     final int openable = tally.scored + tally.openUngraded;
-    return 'Katalogdaki ${tally.total} stilden $openable tanesinde bugün '
-        'açabileceğin bir ders var. Diğerlerinin sayfasında durumu açıkça '
-        'yazıyor; olmayan dersler varmış gibi gösterilmiyor. '
-        'Tamamladığın çalışmalar ilerleme sekmesinde gösterilmek üzere '
-        'bu telefonda saklanır ve hiçbir yere gönderilmez.';
+    return 'Salsa On1 öğrenme yolunu kütüphaneden aç. Önceki dans kataloğunda '
+        '${tally.total} stil sayfası ve $openable stilin ders ön izlemesi var. '
+        'Bu sürümde canlı kamera pratiği kapalıdır. Kendi çalışma kaydın '
+        'bu cihazda saklanır; hesabına yüklenmez.';
   }
 
   /// What happens to a finished session — and it used to say the OPPOSITE.

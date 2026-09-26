@@ -13,3 +13,4 @@ library;
 
 export 'src/judge.dart';
 export 'src/reference.dart';
+export 'src/assessment_gate.dart';

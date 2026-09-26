@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import 'course/salsa_progress.dart';
+
 /// Must match `MotionApp.choreia.name` when the shared account package is pinned.
 const String motionAppId = 'choreia';
 
@@ -32,7 +34,7 @@ Future<Iterable<String>> localHistoryAccountIds(
   final Directory support =
       supportDirectory ?? await getApplicationSupportDirectory();
   if (!await support.exists()) return const <String>[];
-  final Set<String> ids = <String>{};
+  final Set<String> ids = await SalsaProgressStore.accountIds(support);
   await for (final FileSystemEntity entity
       in support.list(followLinks: false)) {
     if (entity is! File) continue;
@@ -65,6 +67,8 @@ Future<void> clearLocalHistoryFor(String accountUserId,
     {Directory? supportDirectory}) async {
   final Directory support =
       supportDirectory ?? await getApplicationSupportDirectory();
+  await SalsaProgressStore.clearAccount(accountUserId,
+      supportDirectory: support);
   final File file = sessionFileFor(support, accountUserId);
   await _deleteRegularFileIfPresent(file);
   await _deleteRegularFileIfPresent(File('${file.path}.tmp'));

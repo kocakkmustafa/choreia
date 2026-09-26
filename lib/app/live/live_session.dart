@@ -64,7 +64,10 @@ final class LiveSession {
   final PoseNormalizer _normalizer;
   final JointAngleExtractor _angles;
 
-  bool get isScored => lessonClass == 'scored';
+  late final DanceAssessmentGate assessmentGate =
+      DanceAssessmentGate.forReference(reference);
+
+  bool get isScored => lessonClass == 'scored' && assessmentGate.allowsScoring;
 
   /// Checks this lesson cannot make, derived FROM CONTENT.
   ///
@@ -76,6 +79,14 @@ final class LiveSession {
   /// does).
   List<GatedCheck> gatedChecks() {
     final List<GatedCheck> out = <GatedCheck>[];
+    if (lessonClass == 'scored' && !assessmentGate.allowsScoring) {
+      out.add(const GatedCheck(
+        code: 'ASSESSMENT_UNVALIDATED',
+        why: 'You can practise this movement, but its camera assessment has '
+            'not been validated. These observations do not confirm that '
+            'you performed the step correctly.',
+      ));
+    }
     for (final Object? e
         in (stepConfig['errors'] as List<Object?>? ?? const [])) {
       if (e is! Map) continue;
@@ -165,6 +176,9 @@ final class LiveSession {
     await for (final PoseFrame frame in frames) {
       final FrameQuality quality = _gate.evaluate(frame);
       if (!quality.judgeable) {
+        // A cycle must be continuously observed. Joining visible fragments
+        // across missing feet/occlusion would invent the unseen movement.
+        window.clear();
         // "We cannot see you" — never scored as zero.
         // `issue` is nullable and single: a frame is rejected for ONE named
         // reason, and the surface says which.
@@ -182,7 +196,7 @@ final class LiveSession {
       }
 
       final Cycle? cycle = _resample(window, estimate);
-      if (cycle == null) {
+      if (cycle == null || assessmentGate.cycleIssues(cycle).isNotEmpty) {
         yield LiveWatching(cyclesSeen: cyclesSeen);
         continue;
       }

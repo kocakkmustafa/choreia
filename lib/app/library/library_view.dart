@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../live/live_environment.dart';
+import '../course/salsa_course_page.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
 import '../ui_language.dart';
@@ -109,6 +110,11 @@ class _LibraryViewState extends State<LibraryView> {
               style: ChoreiaType.display(size: 33),
             ),
             const SizedBox(height: 18),
+            SalsaCourseEntry(env: widget.env),
+            const SizedBox(height: 24),
+            Text(_tr ? 'Kamera ile stil çalışmaları' : 'Camera style practice',
+                style: ChoreiaType.display(size: 25)),
+            const SizedBox(height: 12),
             _tallyPanel(tally),
             const SizedBox(height: 18),
             _chips(tally),

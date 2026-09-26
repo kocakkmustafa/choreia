@@ -42,8 +42,8 @@ class ProfileView extends StatelessWidget {
                   Text(
                     UiLanguage.text(
                       context,
-                      en: 'Browse dance styles without an account. Live The Bounce practice requires a Motion account and Choreia or Motion+ membership.',
-                      tr: 'Dans türlerine hesap açmadan göz atabilirsiniz. Canlı The Bounce pratiği için Motion hesabı ve Choreia veya Motion+ üyeliği gerekir.',
+                      en: 'Learn Salsa On1 without an account or camera. Course progress stays on this device and reflects your own practice record. A Motion account is optional. Live camera practice and subscription sales are closed in this release.',
+                      tr: 'Salsa On1 kursunu hesap veya kamera olmadan çalışabilirsiniz. Kurs ilerlemesi bu cihazda kalır ve kendi çalışma kaydınızı gösterir. Motion hesabı isteğe bağlıdır. Bu sürümde canlı kamera pratiği ve abonelik satışı kapalıdır.',
                     ),
                     style: ChoreiaType.body(size: 13.5),
                   ),

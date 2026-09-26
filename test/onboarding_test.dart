@@ -102,6 +102,23 @@ void main() {
   });
 
   group('söylediği şey DOĞRU', () {
+    for (final language in ['en', 'tr']) {
+      testWidgets('current course and closed camera intro in $language', (tester) async {
+        tester.platformDispatcher.localeTestValue = Locale(language);
+        addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+        await pump(tester, MemoryFirstRunFlag());
+        expect(find.textContaining(language == 'tr' ? 'Kurs hesap veya kamera olmadan çalışır' : 'The course works without an account or camera'), findsOneWidget);
+        final gate = find.textContaining(language == 'tr' ? 'canlı kamera pratiği ve abonelik satışı kapalıdır' : 'Live camera practice and subscription sales are closed');
+        for (var i = 0; i < 12 && gate.evaluate().isEmpty; i++) {
+          await tester.drag(find.byType(ListView), const Offset(0, -160));
+          await tester.pump(const Duration(milliseconds: 300));
+        }
+        expect(gate, findsOneWidget);
+        expect(find.textContaining('watches your dancing to give you feedback'), findsNothing);
+        expect(find.byKey(FirstRunView.continueKey), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
     test('kamera cümlesi iOS izin metniyle BİREBİR aynı', () {
       // Two copies of a privacy promise drift, and the one that drifts is the
       // one nobody re-reads. The OS shows its string at the moment of consent;

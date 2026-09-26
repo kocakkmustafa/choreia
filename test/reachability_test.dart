@@ -235,6 +235,8 @@ void main() {
         'ProgressView',
         'StyleDetailView',
         'LiveLessonPage',
+        'SalsaCoursePage',
+        'SalsaLessonPage',
       };
       expect(candidates.containsAll(knownFloor), isTrue,
           reason: 'türetim, bilinen tabanı KAPSAMIYOR — eksik: '
@@ -327,9 +329,23 @@ void main() {
         expect(shellSrc, isNot(contains('$screen(')),
             reason: '$screen boşken kullanıcı gezinmesine geri sızdı');
       }
+      // The new offline course has a separate real-file persistence walk. This
+      // legacy walk intentionally uses device storage/bundle defaults and does
+      // not open that teaching path. Keep its independent evidence discoverable.
+      const Map<String, String> separatelyWalked = {
+        'SalsaCoursePage': 'test/salsa_course_page_test.dart',
+        'SalsaLessonPage': 'test/salsa_course_page_test.dart',
+      };
+      for (final entry in separatelyWalked.entries) {
+        final source = File(entry.value).readAsStringSync();
+        expect(source, contains(entry.key));
+        expect(source, contains('salsa.open'));
+        expect(source, contains('salsa.saved'));
+      }
       final Set<String> allExcluded = unreachableInWalk.keys
           .toSet()
           .union(unreachableByDesign)
+          .union(separatelyWalked.keys.toSet())
           .union(deferredUnpublished);
 
       // (c) SEBEP DE ÖLÇÜLÜR — sözleşme: *yanlış bir sebep, sebepsizlikten

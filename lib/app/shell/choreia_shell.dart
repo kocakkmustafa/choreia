@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:motion_core/motion_core.dart' show SessionRecord, SessionStore;
 
 import '../library/library_catalog.dart';
+import '../course/salsa_course_page.dart';
 import '../live/live_environment.dart';
 import '../onboarding/first_run_flag.dart';
 import '../onboarding/first_run_view.dart';
@@ -384,6 +385,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   // Profile. The progress index also controls its arrival-time refresh.
   static const int _progressIndex = 1;
 
+  Widget get _salsaCourseEntry => SalsaCourseEntry(env: widget.env);
+
   Widget _shell(LibraryCatalog library) => Scaffold(
         body: IndexedStack(
           index: _index,
@@ -407,7 +410,10 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             if (_progress == null)
               _historyLoading()
             else
-              ProgressView(summary: _progress!, catalog: library.allCourses),
+              ProgressView(
+                  summary: _progress!,
+                  catalog: library.allCourses,
+                  courseEntry: _salsaCourseEntry),
             ProfileView(accountPageBuilder: widget.accountPageBuilder),
           ],
         ),

@@ -55,6 +55,7 @@ class ChoreiaApp extends StatelessWidget {
           clearLocalData: clearLocalHistoryFor,
         );
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Choreia',
       theme: ChoreiaTheme.dark,
       supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
