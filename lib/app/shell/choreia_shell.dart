@@ -135,7 +135,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
     _flag.hasSeenIntro().then((bool seen) {
       if (mounted) setState(() => _introSeen = seen);
     });
-    _catalog.then((LibraryCatalog library) => _refreshProgress(library));
+    _refreshProgressWhenCatalogReady(_catalog);
   }
 
   /// Re-read the history. Called once at launch and again whenever the learner
@@ -188,9 +188,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
     _historyGeneration++;
     if (!mounted) return;
     setState(() => _progress = null);
-    _catalog.then((LibraryCatalog library) {
-      if (mounted) _refreshProgress(library);
-    });
+    _refreshProgressWhenCatalogReady(_catalog);
   }
 
   @override
@@ -258,9 +256,24 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
       ? widget.bundleOverride!()
       : LibraryCatalog.load(rootBundle);
 
+  void _refreshProgressWhenCatalogReady(Future<LibraryCatalog> catalog) {
+    unawaited(catalog.then<void>(
+      (LibraryCatalog library) async {
+        if (mounted) await _refreshProgress(library);
+      },
+      // FutureBuilder displays the catalogue error. A separate, ignored
+      // progress-refresh listener must not turn that state into an unhandled
+      // asynchronous exception.
+      onError: (Object _, StackTrace __) {},
+    ));
+  }
+
   void _retry() {
-    setState(() => _catalog = _load());
-    _catalog.then((LibraryCatalog library) => _refreshProgress(library));
+    final next = _load();
+    setState(() {
+      _catalog = next;
+    });
+    _refreshProgressWhenCatalogReady(next);
   }
 
   @override
@@ -352,9 +365,11 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                         UiLanguage.text(
                           context,
                           en: ShellStrings.loadFailed,
-                          tr: 'Dans kataloğu okunamadı. Pratik kayıtların kaybolmadı; '
-                              'uygulamanın içindeki stil listesi açılmıyor. Yeniden '
-                              'denemek işe yaramazsa uygulamayı tekrar yükle.',
+                          tr: 'Dans kataloğu okunamadı. Pratik kaydın '
+                              'denetlenmedi veya değiştirilmedi. Tekrar dene; '
+                              'sorun sürerse uygulamayı güncelle veya desteğe '
+                              'ulaş. Uygulamayı silme; cihazdaki ilerleme '
+                              'kaybolabilir.',
                         ),
                         style: ChoreiaType.body(
                           size: 14,
@@ -491,14 +506,12 @@ abstract final class ShellStrings {
   /// record, and this screen's whole job is keeping those two apart.
   static const String historyLoading = 'Reading your practice record…';
 
-  /// Names what failed and what it means, without a technical detail. The
-  /// catalogue is a bundled asset, so this failing means the install is
-  /// damaged — which the user can act on, unlike a parse error string.
+  /// Names the failed bundled catalogue without claiming that local progress
+  /// was read. Updating preserves device data; deleting the app might not.
   static const String loadFailed =
-      'We could not read the style catalogue. Nothing is missing from your '
-      'practice — this is the list of styles itself failing to load, and it '
-      'ships inside the app, so reinstalling is the fix if trying again does '
-      'not work.';
+      'The style catalogue could not be read. Your practice record was not '
+      'checked or changed. Try again, then update the app or contact support. '
+      'Do not delete the app; device-saved progress may be lost.';
 
   static const String tryAgain = 'Try again';
 }

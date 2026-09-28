@@ -107,6 +107,7 @@ flutter:
     # Content is versioned JSON the engine interprets at runtime (plan §7):
     # a new style is a content pack, not a code change.
     - content/
+    - content/motion_content/manifest.json
     # References are listed FILE BY FILE, not as a directory, because that
     # directory also holds build-time bookkeeping that must not ship:
     # `decisions.json` is an INPUT to build_reference.py (its contents are

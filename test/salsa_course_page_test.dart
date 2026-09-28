@@ -358,6 +358,7 @@ void main() {
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.byKey(const Key('salsa.loadError')));
     expect(find.byKey(const Key('salsa.completedCount')), findsNothing);
+    expect(find.text('Retry'), findsOneWidget);
     expect(
         File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}')
             .readAsStringSync(),

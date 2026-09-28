@@ -1,5 +1,24 @@
 # Choreia — İlerleme Kaydı
 
+## 2026-09-28 — Salsa paketi ve katalog hata akışı
+
+Değişmeyen 48 derslik Salsa JSON'u (361.125 bayt; SHA
+`bceece2f4264963578e0414985a34c55a45103b286c2b87e12bece711e693a83`)
+tek varlıklı Motion Content manifestiyle ders ayrıştırılmadan önce
+doğrulanıyor. Manifest/kurs dosyası eksik veya hash farklıysa kurs ve
+tamamlanma sayıları gösterilmiyor; sonuç vermeyecek Retry yok. Geçici
+IO/zaman aşımı ve ilerleme okuma hatasında Retry korunuyor. Katalog hata
+metni yeniden kurmanın yerel ilerlemeyi silebileceği konusunda uyarıyor.
+
+Bağımsız kaynak incelemesinin eksik paket P2'si kapandı
+(`scratch/2026-09-28-choreia-runtime-integrity-peer/FIX-REPORT.md`). Yeni
+shell hata testi eski `setState` Future dönüşü çökmesini ve başarısız
+katalog Future'ının gözlemlenmemiş ikinci hata yolunu yakalayıp kapattı;
+hesap değişimi yolu da aynı korumalı okumayı kullanıyor. Salsa/katalog
+odak koşusu **30/30**, hesap değişimi takip koşusu **18/18** geçti;
+manifest `--check` ve hedefli analiz temiz. Gerçek eğitmen medyası,
+adım/zamanlama modeli, native cihaz ve kurucu fiziksel kabulü hâlâ açık.
+
 ## 2026-09-28 — Salsa On1 ilk kursu; içerik köprüsü dar PASS, ürün kabulü açık
 
 İlk Salsa On1 kursu **48 ders** ve canlı v8d kaynak paketinde. Sessiz

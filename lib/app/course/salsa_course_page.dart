@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:motion_content/motion_content.dart';
 
 import '../live/live_environment.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
 import '../ui_language.dart';
 import 'salsa_course.dart';
+import 'salsa_course_repository.dart';
 import 'salsa_progress.dart';
 import 'salsa_session_preparation.dart';
 
@@ -59,6 +60,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
   SalsaProgress? _progress;
   SalsaProgressStore? _store;
   bool _failed = false;
+  bool _integrityFailure = false;
   bool? _turkish;
   int _loadId = 0;
   bool get tr => _turkish ?? UiLanguage.isTurkish(context);
@@ -103,12 +105,12 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
       _progress = null;
       _store = null;
       _failed = false;
+      _integrityFailure = false;
     });
     try {
-      final text = await (widget.env.bundle ?? rootBundle)
-          .loadString('content/salsa_on1_course.json');
-      final course =
-          SalsaCourse.fromJson(jsonDecode(text) as Map<String, dynamic>);
+      final course = await SalsaCourseRepository.load(
+        widget.env.bundle ?? rootBundle,
+      );
       final store = await SalsaProgressStore.open(
           accountUserId: owner,
           supportDirectory: widget.env.historyDirectoryOverride);
@@ -123,6 +125,18 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
         _store = store;
         _progress = progress;
       });
+    } on ContentException catch (error) {
+      if (mounted && request == _loadId) {
+        setState(() {
+          _failed = true;
+          _integrityFailure = switch (error.error.code) {
+            ContentErrorCode.timeout ||
+            ContentErrorCode.io =>
+              false,
+            _ => true,
+          };
+        });
+      }
     } catch (_) {
       if (mounted && request == _loadId) setState(() => _failed = true);
     }
@@ -169,12 +183,16 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
           padding: const EdgeInsets.all(24),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text(
-                t('The course or progress could not be read. Existing records were not replaced. Retry to reopen them.',
-                    'Kurs veya ilerleme okunamadı. Mevcut kayıtların üzerine yazılmadı. Yeniden açmak için tekrar dene.'),
+                _integrityFailure
+                    ? t('The Salsa course in this app did not pass its content check. Your learning record was not changed. Update the app or contact support. Do not delete the app: progress saved on this device could be lost.',
+                        'Bu uygulamadaki Salsa kursu içerik denetiminden geçmedi. Öğrenme kaydın değiştirilmedi. Uygulamayı güncelle veya desteğe ulaş. Uygulamayı silme: bu cihazdaki ilerleme kaybolabilir.')
+                    : t('The course or progress could not be read. Existing records were not replaced. Retry to reopen them.',
+                        'Kurs veya ilerleme okunamadı. Mevcut kayıtların üzerine yazılmadı. Yeniden açmak için tekrar dene.'),
                 key: const Key('salsa.loadError'),
                 style: ChoreiaType.body()),
-            TextButton(
-                onPressed: _load, child: Text(t('Retry', 'Tekrar dene'))),
+            if (!_integrityFailure)
+              TextButton(
+                  onPressed: _load, child: Text(t('Retry', 'Tekrar dene'))),
           ])));
   Widget _overview(SalsaCourse course) {
     final progress = _progress!;
