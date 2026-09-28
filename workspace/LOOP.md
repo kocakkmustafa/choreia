@@ -1,5 +1,11 @@
 # Choreia — LOOP
 
+## 2026-09-28 tamamlanan yerel kaynak adımı
+
+Salsa kursundaki kayıtlı denemelerden dört takvim haftalık ilerleme tablosu
+eklendi; 21/21 odak testi, temiz hedefli analiz ve bağımsız kaynak incelemesi
+PASS. Bu kaynak geçişi gerçek medya, model, native cihaz veya CI kabulü değildir.
+
 ## 2026-09-28 güncel kuyruk
 1. PR #1'e taşınan 48 derslik Salsa On1 kaynağında Actions bütçe engeli kalkınca son başta yararlı CI al.
 2. 872 video varyantı için gerçek kodlama/bütün uygulama varlık boyutunu ölç; sessiz master, TR/EN altyazı ve harici müzik sınırını eğitmen/cihazda doğrula.

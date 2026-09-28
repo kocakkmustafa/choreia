@@ -1,5 +1,25 @@
 # Choreia — İlerleme Kaydı
 
+## 2026-09-28 — Salsa kursunda dört haftalık kayıtlı pratik görünümü
+
+48 derslik Salsa On1 ekranında mevcut hesap ve **güncel kurs sürümüne** ait
+`practised` eylemlerinden yerel Pazartesi başlangıçlı dört haftalık tablo
+üretildi. Her satır kayıtlı deneme ve denenen farklı ders sayısını gösterir;
+`viewed` ve öz beyanla tamamlanma ek pratik sayılmaz. Yalnız ritim/sözlü
+seçenek de kayda dahildir; ekran bunun fiziksel dans veya kamera becerisi
+kanıtı olmadığını açıkça söyler. Başka içerik sürümleri ve hesaplar bu
+sayılara katılmaz; bozuk/okunamayan kayıtta tablo açılmaz. Cihaz saati geri
+alınmışsa gelecek tarihli denemeler sessizce kaybolmaz, açıklama gösterilir.
+Görünüm tarihli bir anlık okumadır; uygulama yeniden öne geldiğinde yeniden
+hesaplanır.
+
+Saf hafta/yıl sınırı ve gelecek olay testi ile hesap değişimi, bozuk geçmiş,
+%200 dar ekran ve Pazartesi yeniden öne gelme widget testleri dahil **21/21**
+odak testi geçti. Dört dosyada hedefli `flutter analyze` temiz ve bağımsız
+salt-okunur kaynak incelemesi yeni P0/P1/P2 bulmadı. Bu yerel kaynak
+kanıtıdır; CI, native ve fiziksel kurs kabulü değildir. Diğer dört kursun
+durumu, onaylı medya0 ve nitelikli tam-kurs model0 değişmedi.
+
 ## 2026-09-28 — Salsa paketi ve katalog hata akışı
 
 Değişmeyen 48 derslik Salsa JSON'u (361.125 bayt; SHA

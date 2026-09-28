@@ -127,6 +127,29 @@ void main() {
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.text('1 / 48 self-reported complete'));
     expect(find.text('1 opened · 1 practised lessons'), findsOneWidget);
+    expect(find.byKey(const Key('salsa.weeklyPractice')), findsOneWidget);
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('salsa.weeklyPractice.week0')),
+            matching:
+                find.text('Saved attempts: 1 · Lessons with attempts: 1')),
+        findsOneWidget);
+    owner.value = bob;
+    await loaded(tester, find.text('0 / 48 self-reported complete'));
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('salsa.weeklyPractice.week0')),
+            matching:
+                find.text('Saved attempts: 0 · Lessons with attempts: 0')),
+        findsOneWidget);
+    owner.value = alice;
+    await loaded(tester, find.text('1 / 48 self-reported complete'));
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('salsa.weeklyPractice.week0')),
+            matching:
+                find.text('Saved attempts: 1 · Lessons with attempts: 1')),
+        findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -351,6 +374,62 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets(
+      'four course practice weeks wrap at 200 percent on a narrow phone',
+      (tester) async {
+    await pumpApp(tester, SalsaCoursePage(env: env), scale: 2);
+    await loaded(tester, find.byKey(const Key('salsa.continue')));
+    await tester.scrollUntilVisible(
+        find.byKey(const Key('salsa.weeklyPractice.week3')), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.byKey(const Key('salsa.weeklyPractice.week3')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('future-dated practice explains its mismatch with course totals',
+      (tester) async {
+    final course = SalsaCourse.fromJson(
+        jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+            as Map<String, dynamic>);
+    final store = (await tester.runAsync(() => SalsaProgressStore.open(
+        accountUserId: alice, supportDirectory: temp)))!;
+    await tester.runAsync(() => store.record(
+        course, course.lessons.first, SalsaEvidence.practised,
+        at: DateTime.now().add(const Duration(days: 1))));
+    await pumpApp(tester, SalsaCoursePage(env: env));
+    await loaded(tester, find.text('0 opened · 1 practised lessons'));
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('salsa.weeklyPractice.week0')),
+            matching:
+                find.text('Saved attempts: 0 · Lessons with attempts: 0')),
+        findsOneWidget);
+    expect(find.byKey(const Key('salsa.weeklyPractice.futureDateNote')),
+        findsOneWidget);
+    expect(
+        find.textContaining('Future-dated saved attempts: 1'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('resuming after Monday refreshes the dated weekly snapshot',
+      (tester) async {
+    var clock = DateTime(2026, 9, 27, 23, 59);
+    await pumpApp(
+        tester, SalsaCoursePage(env: env, nowForWeeklyPractice: () => clock));
+    await loaded(tester, find.byKey(const Key('salsa.continue')));
+    await tester.scrollUntilVisible(
+        find.byKey(const Key('salsa.weeklyPractice.week0')), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.textContaining('as of 27.09.2026'), findsOneWidget);
+    clock = DateTime(2026, 9, 28, 0, 1);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(find.textContaining('as of 28.09.2026'), findsOneWidget);
+    expect(find.text('28.09.2026 – 04.10.2026'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('unreadable progress shows a retry state without invented totals',
       (tester) async {
     File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}')
@@ -358,6 +437,7 @@ void main() {
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.byKey(const Key('salsa.loadError')));
     expect(find.byKey(const Key('salsa.completedCount')), findsNothing);
+    expect(find.byKey(const Key('salsa.weeklyPractice')), findsNothing);
     expect(find.text('Retry'), findsOneWidget);
     expect(
         File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}')

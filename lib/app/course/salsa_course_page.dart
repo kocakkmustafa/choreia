@@ -12,6 +12,7 @@ import 'salsa_course.dart';
 import 'salsa_course_repository.dart';
 import 'salsa_progress.dart';
 import 'salsa_session_preparation.dart';
+import 'salsa_weekly_activity.dart';
 
 /// The teaching route never requests a camera, microphone or music permission.
 class SalsaCourseEntry extends StatelessWidget {
@@ -46,8 +47,15 @@ class SalsaCourseEntry extends StatelessWidget {
 }
 
 class SalsaCoursePage extends StatefulWidget {
-  const SalsaCoursePage({this.env = const LiveEnvironment(), super.key});
+  const SalsaCoursePage({
+    this.env = const LiveEnvironment(),
+    this.nowForWeeklyPractice,
+    super.key,
+  });
   final LiveEnvironment env;
+
+  /// Allows a calendar-boundary test without changing the device clock.
+  final DateTime Function()? nowForWeeklyPractice;
   @override
   State<SalsaCoursePage> createState() => _SalsaCoursePageState();
 }
@@ -92,7 +100,12 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) _preparation.reset();
+    if (state == AppLifecycleState.resumed) {
+      // Recompute the dated weekly snapshot after a night in the background.
+      if (mounted) setState(() {});
+    } else {
+      _preparation.reset();
+    }
   }
 
   Future<void> _load() async {
@@ -130,9 +143,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
         setState(() {
           _failed = true;
           _integrityFailure = switch (error.error.code) {
-            ContentErrorCode.timeout ||
-            ContentErrorCode.io =>
-              false,
+            ContentErrorCode.timeout || ContentErrorCode.io => false,
             _ => true,
           };
         });
@@ -196,6 +207,8 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
           ])));
   Widget _overview(SalsaCourse course) {
     final progress = _progress!;
+    final weeklyPractice = salsaWeeklyActivity(progress, course,
+        now: widget.nowForWeeklyPractice?.call());
     final opened = progress.lessonIds(course, SalsaEvidence.viewed);
     final practised = progress.lessonIds(course, SalsaEvidence.practised);
     final completed =
@@ -250,6 +263,40 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                         child: Text(t(
                             'Continue: ${next.order}. ${next.title.en}',
                             'Devam: ${next.order}. ${next.title.tr}'))),
+                  ])),
+          const SizedBox(height: 16),
+          GlassPanel(
+              key: const Key('salsa.weeklyPractice'),
+              tint: ChoreiaColors.rose,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(t('Practice by week', 'Haftalık pratik'),
+                        style: ChoreiaType.display(size: 22)),
+                    const SizedBox(height: 6),
+                    Text(
+                        t(
+                            'Four calendar weeks as of ${_shortDate(weeklyPractice.asOf)}. '
+                                'Saved course actions include rhythm-only practice; '
+                                'they do not prove movement or camera skill.',
+                            '${_shortDate(weeklyPractice.asOf)} itibarıyla dört takvim haftası. '
+                                'Kayıtlı kurs denemelerine yalnız ritim çalışması da dahildir; '
+                                'bunlar hareket veya kamera becerisini kanıtlamaz.'),
+                        style: ChoreiaType.body()),
+                    const SizedBox(height: 12),
+                    for (var i = 0; i < weeklyPractice.weeks.length; i++)
+                      _weeklyPracticeRow(weeklyPractice.weeks[i], i),
+                    if (weeklyPractice.futureDatedAttempts > 0)
+                      Text(
+                          t(
+                              'Future-dated saved attempts: ${weeklyPractice.futureDatedAttempts}. '
+                                  'They remain in course history and the overall lesson count, '
+                                  'but are omitted from these weeks. Check the device clock.',
+                              'Gelecek tarihli kayıtlı deneme: ${weeklyPractice.futureDatedAttempts}. '
+                                  'Kurs geçmişinde ve genel ders sayısında durur; '
+                                  'bu haftalara eklenmez. Cihaz saatini kontrol et.'),
+                          key: const Key('salsa.weeklyPractice.futureDateNote'),
+                          style: ChoreiaType.body(size: 12)),
                   ])),
           const SizedBox(height: 16),
           Text(course.outcome.inLanguage(tr), style: ChoreiaType.body()),
@@ -329,6 +376,33 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
           _safetyPanel(course, tr),
         ]);
   }
+
+  Widget _weeklyPracticeRow(SalsaPracticeWeek week, int index) {
+    final end = DateTime(
+        week.startsOn.year, week.startsOn.month, week.startsOn.day + 6);
+    final dates = '${_shortDate(week.startsOn)} – ${_shortDate(end)}';
+    return Padding(
+      key: Key('salsa.weeklyPractice.week$index'),
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(dates, style: ChoreiaType.label(size: 11)),
+          const SizedBox(height: 3),
+          Text(
+              t(
+                  'Saved attempts: ${week.practiceAttempts} · '
+                      'Lessons with attempts: ${week.distinctLessons}',
+                  'Kayıtlı deneme: ${week.practiceAttempts} · '
+                      'Denenen ders: ${week.distinctLessons}'),
+              style: ChoreiaType.body(size: 13)),
+        ],
+      ),
+    );
+  }
+
+  String _shortDate(DateTime date) => '${date.day.toString().padLeft(2, '0')}.'
+      '${date.month.toString().padLeft(2, '0')}.${date.year}';
 }
 
 class SalsaLessonPage extends StatefulWidget {
