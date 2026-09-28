@@ -242,6 +242,38 @@
         "alternative": {
           "$ref": "#/$defs/text"
         },
+        "productionStoryboard": {
+          "type": "object",
+          "required": [
+            "masterAudio",
+            "trackSource",
+            "appProvidesOrRecordsMusic",
+            "autoSyncToTrack",
+            "soundObjectiveWithoutTrack",
+            "scenes"
+          ],
+          "properties": {
+            "masterAudio": {
+              "const": "silent"
+            },
+            "trackSource": {
+              "const": "optional_user_supplied_legally_accessed_separate_player"
+            },
+            "appProvidesOrRecordsMusic": {
+              "const": false
+            },
+            "autoSyncToTrack": {
+              "const": false
+            },
+            "soundObjectiveWithoutTrack": {
+              "const": "deferred"
+            },
+            "scenes": {
+              "$ref": "#/$defs/lines"
+            }
+          },
+          "additionalProperties": false
+        },
         "review": {
           "type": "string",
           "minLength": 1

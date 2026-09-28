@@ -38,11 +38,23 @@ void main() {
       (d) => (d['lessons'] as List)[8]['selfCheck']['tr'] = ['only one'],
       (d) => (d['lessons'] as List)[8]['sourceIds'] = ['unreviewed'],
       (d) => (d['lessons'] as List)[8]['moduleId'] = 'missing',
+      (d) => (d['lessons'] as List)[0]['teaching']['en'].removeLast(),
+      (d) => (d['lessons'] as List)[0]['selfCheck']['tr'].last = '',
+      (d) => (d['sources'] as List).last['url'] = 'http://example.com',
     ]) {
       final data = content();
       mutate(data);
       expect(() => SalsaCourse.fromJson(data), throwsFormatException);
     }
+  });
+  test('the original course IDs and progress version remain compatible', () {
+    final course = SalsaCourse.fromJson(content());
+    expect(course.id, 'salsa_on1_solo');
+    expect(course.version, 1);
+    expect(course.lessons.map((l) => l.id),
+        List.generate(48, (i) => 'so_${(i + 1).toString().padLeft(2, '0')}'));
+    expect(
+        course.modules.map((m) => m.id), List.generate(8, (i) => 'm${i + 1}'));
   });
   test('content flags cannot publish unreviewed media, music or scoring', () {
     for (final mutate in <void Function(Map<String, dynamic>)>[

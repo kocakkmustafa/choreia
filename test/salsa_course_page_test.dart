@@ -1,6 +1,7 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:choreia/app/course/salsa_course.dart';
 import 'package:choreia/app/course/salsa_course_page.dart';
 import 'package:choreia/app/course/salsa_progress.dart';
 import 'package:choreia/app/live/live_environment.dart';
@@ -100,8 +101,12 @@ void main() {
     await tapVisible(tester, const Key('salsa.option.rhythmOnly'));
     await tapVisible(tester, const Key('salsa.savePractice'));
     await loaded(tester, find.text('Practice saved · save another attempt'));
-    await tapVisible(tester, const Key('salsa.check.0'));
-    await tapVisible(tester, const Key('salsa.check.1'));
+    final course = SalsaCourse.fromJson(
+        jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+            as Map<String, dynamic>);
+    for (var i = 0; i < course.lessons.first.selfCheck.en.length; i++) {
+      await tapVisible(tester, Key('salsa.check.$i'));
+    }
     await tapVisible(tester, const Key('salsa.complete'));
     await loaded(tester, find.byKey(const Key('salsa.saved')));
     final raw = jsonDecode(
@@ -122,6 +127,183 @@ void main() {
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.text('1 / 48 self-reported complete'));
     expect(find.text('1 opened · 1 practised lessons'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final lessonId in <String>[
+    'so_11',
+    'so_20',
+    'so_22',
+    'so_32',
+    'so_44'
+  ]) {
+    for (final tr in <bool>[false, true]) {
+      testWidgets(
+          '$lessonId ${tr ? 'TR' : 'EN'} adapted self-check records only the chosen option',
+          (tester) async {
+        final course = SalsaCourse.fromJson(
+            jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+                as Map<String, dynamic>);
+        final lesson = course.lesson(lessonId);
+        final option = lessonId == 'so_22'
+            ? SalsaPracticeOption.adapted
+            : SalsaPracticeOption.rhythmOnly;
+        final checks = lesson.selfCheck.inLanguage(tr);
+        final checkText = checks.join(' ').toLowerCase();
+        final omittedSkillMarker = lessonId == 'so_32'
+            ? (tr ? 'test etmediğimi' : 'untested')
+            : (tr ? 'denenmedi' : 'untried');
+        expect(checkText, contains(omittedSkillMarker),
+            reason:
+                'The adapted route must not claim an untried physical skill.');
+        final store = (await tester.runAsync(() => SalsaProgressStore.open(
+            accountUserId: alice, supportDirectory: temp)))!;
+        await pumpApp(
+            tester,
+            SalsaLessonPage(
+                course: course,
+                lesson: lesson,
+                store: store,
+                env: env,
+                initialTurkish: tr));
+        await loaded(
+            tester, find.byKey(ValueKey('salsa.lessonBody.$lessonId')));
+        if (option != SalsaPracticeOption.rhythmOnly) {
+          await tapVisible(tester, const Key('salsa.preparation.acknowledge'));
+        }
+        await tapVisible(tester, Key('salsa.option.${option.name}'));
+        await tapVisible(tester, const Key('salsa.savePractice'));
+        await loaded(
+            tester,
+            find.text(tr
+                ? 'Pratik kaydedildi · yeni denemeyi kaydet'
+                : 'Practice saved · save another attempt'));
+        final complete = find.byKey(const Key('salsa.complete'));
+        if (complete.evaluate().isEmpty) {
+          await tester.scrollUntilVisible(complete, 300,
+              scrollable: find.byType(Scrollable).first);
+        } else {
+          await tester.ensureVisible(complete);
+        }
+        expect(tester.widget<FilledButton>(complete).onPressed, isNull);
+        for (var i = 0; i < checks.length; i++) {
+          await tapVisible(tester, Key('salsa.check.$i'));
+          final tile = tester
+              .widget<CheckboxListTile>(find.byKey(Key('salsa.check.$i')));
+          expect((tile.title! as Text).data, checks[i]);
+        }
+        await tapVisible(tester, const Key('salsa.complete'));
+        await loaded(tester, find.byKey(const Key('salsa.saved')));
+        final saved = (await tester.runAsync(store.read))!;
+        final records = saved
+            .forCourse(course)
+            .where((event) => event.lessonId == lessonId)
+            .toList();
+        expect(records.map((event) => event.kind), <SalsaEvidence>[
+          SalsaEvidence.viewed,
+          SalsaEvidence.practised,
+          SalsaEvidence.selfReportedComplete,
+        ]);
+        expect(records.last.option, option);
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+      });
+    }
+  }
+
+  for (final tr in [false, true]) {
+    testWidgets(
+        'enriched ${tr ? 'TR' : 'EN'} lesson saves through real back and reopen',
+        (tester) async {
+      final course = SalsaCourse.fromJson(
+          jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+              as Map<String, dynamic>);
+      final lesson = course.lessons.first;
+      await pumpApp(tester, SalsaCoursePage(env: env));
+      await loaded(tester, find.byKey(const Key('salsa.continue')));
+      if (tr) {
+        await tester.tap(find.text('Türkçe'));
+        await tester.pump();
+      }
+      await tapVisible(tester, const Key('salsa.continue'));
+      await loaded(tester, find.byType(SalsaLessonPage));
+      final error = find
+          .textContaining((tr ? lesson.teaching.tr : lesson.teaching.en).last);
+      await tester.scrollUntilVisible(error, 300,
+          scrollable: find.byType(Scrollable).last);
+      expect(error, findsOneWidget);
+      final practice = find.text(lesson.practice.inLanguage(tr));
+      await tester.scrollUntilVisible(practice, 300,
+          scrollable: find.byType(Scrollable).last);
+      expect(practice, findsOneWidget);
+      await tapVisible(tester, const Key('salsa.savePractice'));
+      await loaded(
+          tester,
+          find.text(tr
+              ? 'Pratik kaydedildi · yeni denemeyi kaydet'
+              : 'Practice saved · save another attempt'));
+      for (var i = 0; i < lesson.selfCheck.en.length; i++) {
+        await tapVisible(tester, Key('salsa.check.$i'));
+      }
+      await tapVisible(tester, const Key('salsa.complete'));
+      await loaded(tester, find.byKey(const Key('salsa.saved')));
+      await tester.tap(find.byType(BackButton));
+      await loaded(
+          tester,
+          find.text(tr
+              ? '1 / 48 öz beyanla tamamlandı'
+              : '1 / 48 self-reported complete'));
+      final file =
+          File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}');
+      final saved = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
+      expect(
+          (saved['events'] as List)
+              .where((dynamic event) =>
+                  event['lessonId'] == 'so_01' && event['kind'] == 'practised')
+              .length,
+          1);
+      expect(
+          (saved['events'] as List)
+              .where((dynamic event) =>
+                  event['lessonId'] == 'so_01' &&
+                  event['kind'] == 'selfReportedComplete')
+              .length,
+          1);
+      final row = find.byKey(const Key('salsa.lesson.so_01'));
+      await tester.scrollUntilVisible(row, 300,
+          scrollable: find.byType(Scrollable).last);
+      await tester.tap(row);
+      await loaded(tester, find.byType(SalsaLessonPage));
+      expect(find.text(lesson.title.inLanguage(tr)), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    });
+  }
+
+  testWidgets(
+      'pre-enrichment v1 completion remains readable without rewriting it',
+      (tester) async {
+    final file = File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}');
+    final old = jsonEncode({
+      'schemaVersion': 1,
+      'owner': alice,
+      'events': [
+        for (final kind in ['viewed', 'practised', 'selfReportedComplete'])
+          {
+            'courseId': 'salsa_on1_solo',
+            'version': 1,
+            'lessonId': 'so_01',
+            'kind': kind,
+            'option': 'standard',
+            'at': '2026-09-26T12:00:00Z'
+          }
+      ]
+    });
+    file.writeAsStringSync(old);
+    await pumpApp(tester, SalsaCoursePage(env: env));
+    await loaded(tester, find.text('1 / 48 self-reported complete'));
+    expect(find.text('1 opened · 1 practised lessons'), findsOneWidget);
+    expect(file.readAsStringSync(), old);
     expect(tester.takeException(), isNull);
   });
 

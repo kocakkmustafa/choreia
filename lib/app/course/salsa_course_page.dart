@@ -10,6 +10,7 @@ import '../theme.dart';
 import '../ui_language.dart';
 import 'salsa_course.dart';
 import 'salsa_progress.dart';
+import 'salsa_session_preparation.dart';
 
 /// The teaching route never requests a camera, microphone or music permission.
 class SalsaCourseEntry extends StatelessWidget {
@@ -50,7 +51,10 @@ class SalsaCoursePage extends StatefulWidget {
   State<SalsaCoursePage> createState() => _SalsaCoursePageState();
 }
 
-class _SalsaCoursePageState extends State<SalsaCoursePage> {
+class _SalsaCoursePageState extends State<SalsaCoursePage>
+    with WidgetsBindingObserver {
+  final _preparation = SalsaPreparationSession();
+  String? _sessionOwner;
   SalsaCourse? _course;
   SalsaProgress? _progress;
   SalsaProgressStore? _store;
@@ -62,6 +66,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     widget.env.accountUserId?.addListener(_load);
     _load();
   }
@@ -78,13 +83,21 @@ class _SalsaCoursePageState extends State<SalsaCoursePage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     widget.env.accountUserId?.removeListener(_load);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) _preparation.reset();
   }
 
   Future<void> _load() async {
     final request = ++_loadId;
     final owner = widget.env.accountUserId?.value;
+    if (_sessionOwner != owner) _preparation.reset();
+    _sessionOwner = owner;
     setState(() {
       _course = null;
       _progress = null;
@@ -124,6 +137,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage> {
             course: course,
             lesson: lesson,
             store: store,
+            preparationSession: _preparation,
             env: widget.env,
             initialTurkish: tr)));
     if (mounted) await _load();
@@ -306,12 +320,14 @@ class SalsaLessonPage extends StatefulWidget {
       required this.store,
       required this.env,
       required this.initialTurkish,
+      this.preparationSession,
       super.key});
   final SalsaCourse course;
   final SalsaLesson lesson;
   final SalsaProgressStore store;
   final LiveEnvironment env;
   final bool initialTurkish;
+  final SalsaPreparationSession? preparationSession;
   @override
   State<SalsaLessonPage> createState() => _SalsaLessonPageState();
 }
@@ -321,19 +337,29 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   late SalsaLesson _lesson;
   late bool tr;
   late List<bool> _checks;
+  late final SalsaPreparationSession _preparation;
   bool _busy = false, _practiceSaved = false, _completed = false;
   bool _accountChanged = false, _saveFailed = false;
+  int _sessionEpoch = 0;
   SalsaPracticeOption _option = SalsaPracticeOption.standard;
   Timer? _timer;
   int _count = 1;
   double _pace = 80;
   String t(String english, String turkish) => tr ? turkish : english;
+  bool get _needsPreparation =>
+      _lesson.requiresMovementPreparation &&
+      _option != SalsaPracticeOption.rhythmOnly &&
+      !_preparation.acknowledged;
+  bool get _physicalOption =>
+      _lesson.requiresMovementPreparation &&
+      _option != SalsaPracticeOption.rhythmOnly;
   bool get _ownerMatches =>
       SalsaProgressStore.ownerFor(widget.env.accountUserId?.value) ==
       widget.store.owner;
   @override
   void initState() {
     super.initState();
+    _preparation = widget.preparationSession ?? SalsaPreparationSession();
     _lesson = widget.lesson;
     tr = widget.initialTurkish;
     _checks = List.filled(_lesson.selfCheck.en.length, false);
@@ -352,12 +378,39 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) _pause();
+    if (state != AppLifecycleState.resumed) {
+      _revokePreparation();
+    }
   }
 
   void _onAccount() {
-    _pause();
+    _revokePreparation();
     if (mounted) setState(() => _accountChanged = true);
+  }
+
+  void _revokePreparation() {
+    _preparation.reset();
+    _timer?.cancel();
+    _timer = null;
+    _sessionEpoch++;
+    if (mounted) {
+      setState(() {
+        if (_physicalOption) {
+          _practiceSaved = false;
+          _checks = List.filled(_checks.length, false);
+        }
+      });
+    }
+  }
+
+  void _acknowledgePreparation() {
+    setState(() {
+      // A day change can expire a shared session without a lifecycle event.
+      _sessionEpoch++;
+      _practiceSaved = false;
+      _checks = List.filled(_checks.length, false);
+      _preparation.acknowledged = true;
+    });
   }
 
   void _pause() {
@@ -367,10 +420,14 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   }
 
   void _startCounter() {
-    if (_accountChanged) return;
+    if (_accountChanged || _needsPreparation) return;
     _count = 1;
     _timer =
         Timer.periodic(Duration(milliseconds: (60000 / _pace).round()), (_) {
+      if (_needsPreparation) {
+        _pause();
+        return;
+      }
       if (mounted) setState(() => _count = _count % 8 + 1);
     });
     setState(() {});
@@ -378,6 +435,8 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
 
   Future<void> _record(SalsaEvidence evidence) async {
     if (_busy || _accountChanged || !_ownerMatches) return;
+    if (evidence != SalsaEvidence.viewed && _needsPreparation) return;
+    final sessionEpoch = _sessionEpoch;
     setState(() {
       _busy = true;
       _saveFailed = false;
@@ -387,7 +446,11 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
           .record(widget.course, _lesson, evidence, option: _option);
       if (!mounted || _accountChanged || !_ownerMatches) return;
       setState(() {
-        if (evidence == SalsaEvidence.practised) _practiceSaved = true;
+        if (evidence == SalsaEvidence.practised &&
+            sessionEpoch == _sessionEpoch &&
+            (!_physicalOption || _preparation.acknowledged)) {
+          _practiceSaved = true;
+        }
         if (evidence == SalsaEvidence.selfReportedComplete) _completed = true;
       });
     } catch (_) {
@@ -442,6 +505,19 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                       ])),
                     Text(lesson.title.inLanguage(tr),
                         style: ChoreiaType.display(size: 34)),
+                    if (_needsPreparation) ...[
+                      const SizedBox(height: 16),
+                      SalsaSessionPreparation(
+                          turkish: tr,
+                          onPrepared: _busy || _accountChanged
+                              ? null
+                              : _acknowledgePreparation,
+                          onSpokenOnly: _busy || _accountChanged
+                              ? null
+                              : () =>
+                                  _chooseOption(SalsaPracticeOption.rhythmOnly),
+                          onStop: () => Navigator.of(context).pop()),
+                    ],
                     const SizedBox(height: 12),
                     Text(lesson.goal.inLanguage(tr),
                         style: ChoreiaType.body(size: 16)),
@@ -470,10 +546,31 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                             'Hareketi rahat sınırında tut. Ağrı, baş dönmesi veya kötü hissetmede dur.'),
                         style: ChoreiaType.body(color: ChoreiaColors.amber)),
                     const SizedBox(height: 10),
-                    Text(lesson.practice.inLanguage(tr),
-                        style: ChoreiaType.body(size: 15)),
-                    const SizedBox(height: 16),
-                    _counter(),
+                    if (_needsPreparation)
+                      Text(
+                          t('Prepare above before moving, or choose rhythm / spoken only below.',
+                              'Harekete geçmeden önce yukarıdaki hazırlığı yap veya aşağıdan yalnız ritim / sözlü seçeneğini seç.'),
+                          key: const Key('salsa.preparation.required'),
+                          style: ChoreiaType.body())
+                    else ...[
+                      if (_option == SalsaPracticeOption.rhythmOnly)
+                        Text(
+                            t('Read this lesson’s sequence and describe it in your own words. If useful, speak 1-2-3, 5-6-7 with the silent guide. Keep this attempt to reading and voice; leave footwork, weight transfer, turns and crossings untried. Record only this spoken option.',
+                                'Bu dersin sırasını oku ve kendi sözlerinle anlat. İstersen sessiz rehberle 1-2-3, 5-6-7 sayımını sesli söyle. Bu denemeyi okuma ve sesle sınırla; ayak çalışması, ağırlık aktarımı, dönüş ve çapraz adımlar denenmedi olarak kalsın. Yalnız bu sözlü seçeneği kaydet.'),
+                            key: const Key('salsa.spokenPractice'),
+                            style: ChoreiaType.body(size: 15))
+                      else
+                        Text(lesson.practice.inLanguage(tr),
+                            style: ChoreiaType.body(size: 15)),
+                      const SizedBox(height: 16),
+                      _counter(),
+                    ],
+                    if (_preparation.acknowledged)
+                      TextButton(
+                          key: const Key('salsa.preparation.restart'),
+                          onPressed: _revokePreparation,
+                          child: Text(t('After a break · prepare again',
+                              'Moladan sonra · yeniden hazırlan'))),
                     _sectionTitle(t('Choose your practice option',
                         'Pratik seçeneğini seç')),
                     Text(lesson.adaptation.inLanguage(tr),
@@ -487,17 +584,11 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                             selected: _option == option,
                             onSelected: _busy || _accountChanged
                                 ? null
-                                : (_) => setState(() {
-                                      _option = option;
-                                      _practiceSaved = false;
-                                      _completed = false;
-                                      _checks =
-                                          List.filled(_checks.length, false);
-                                    })),
+                                : (_) => _chooseOption(option)),
                     ]),
                     const SizedBox(height: 12),
                     FilledButton.tonal(
-                        onPressed: _busy || _accountChanged
+                        onPressed: _busy || _accountChanged || _needsPreparation
                             ? null
                             : () {
                                 _pause();
@@ -539,6 +630,7 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                     FilledButton(
                         onPressed: _busy ||
                                 _accountChanged ||
+                                _needsPreparation ||
                                 !_practiceSaved ||
                                 !_checks.every((checked) => checked)
                             ? null
@@ -592,6 +684,16 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                         ]),
                   ])))),
     );
+  }
+
+  void _chooseOption(SalsaPracticeOption option) {
+    _pause();
+    setState(() {
+      _option = option;
+      _practiceSaved = false;
+      _completed = false;
+      _checks = List.filled(_checks.length, false);
+    });
   }
 
   Widget _sectionTitle(String title) => Padding(

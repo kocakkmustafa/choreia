@@ -92,6 +92,11 @@ final class SalsaLesson {
   final CourseText title, goal, practice, repeat, adaptation;
   final CourseLines teaching, selfCheck;
   final List<String> sourceIds, prerequisites;
+
+  // These lessons use spoken/context or finger-count exercises only. Optional
+  // footwork in listening lessons still requires preparation before movement.
+  bool get requiresMovementPreparation =>
+      !const {'so_01', 'so_03', 'so_46'}.contains(id);
 }
 
 final class SalsaCourse {
