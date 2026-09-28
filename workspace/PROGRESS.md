@@ -1,5 +1,18 @@
 # Choreia — İlerleme Kaydı
 
+## 2026-09-28 — gizli ve çevrimdışı ders medyası aday kapısı
+
+Üretimde boş `LessonMediaCatalog` ve görünmez `LessonMediaSlot` kaynakta.
+Sentetik aday yalnız dondurulmuş v2 manifest, gerçek `so_01` kurs/ders
+SHA, sahne/varyant, MP4 byte/SHA/ölçülen süre ve TR/EN VTT byte/SHA/zaman
+bağları eşleşirse incelenir; yine de `visible=false`, `releaseEligible=false`
+ve `progressEffect=0`. Hesap veya yaşam döngüsü değişince slot kapanır.
+Katalog/slotun **8/8** odak Flutter testi ve üç dosyanın hedefli analizi
+temiz. Gerçek video, signed kabul kökü, görünür oynatıcı, bağımsız eğitmen
+onayı ve cihaz kabulü **0/açık**; `AssetBundle` symlink kökenini çalışma
+anında göstermez, paketleme v2/v3 kapısı denetler. Makbuz:
+`scratch/2026-09-28-motion-media-app-integration-plan/RESULT.md`.
+
 ## 2026-09-28 — Salsa kursunda dört haftalık kayıtlı pratik görünümü
 
 48 derslik Salsa On1 ekranında mevcut hesap ve **güncel kurs sürümüne** ait

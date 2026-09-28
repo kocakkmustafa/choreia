@@ -1,5 +1,14 @@
 # Choreia — LOOP
 
+## 2026-09-28 gizli medya adayı sonraki kapı
+
+Üretim boş katalog ve görünmez slot kaynağı 8/8 test ve temiz analizle
+hazır. Gerçek onaylı medya yoktur ve Salsa ders ekranına oynatıcı
+bağlanmadı. Sıradaki kapı: lisanslı/öğretmence incelenmiş MP4 + TR/EN
+altyazının v2/v3 teslim makbuzu, app paket bütçesi ve iOS/Android çevrimdışı
+oynatma kabulü. Medya izlemek ders/pratik/ustalık kaydı yazmamalı. CI bütçe
+engeli ve kişi-ayrık model verisi ayrıca açık.
+
 ## 2026-09-28 tamamlanan yerel kaynak adımı
 
 Salsa kursundaki kayıtlı denemelerden dört takvim haftalık ilerleme tablosu
