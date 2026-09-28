@@ -1,5 +1,24 @@
 # Choreia — İlerleme Kaydı
 
+## 2026-09-28 — Salsa On1 ilk kursu; içerik köprüsü dar PASS, ürün kabulü açık
+
+İlk Salsa On1 kursu **48 ders** ve canlı v8d kaynak paketinde. Sessiz
+gösterim/harici müzik sınırı ders brieflerinde açık; gerçek onaylı video ve
+tam-kurs adım/zamanlama modeli **0**. Sabit Motion Core `motion_content`
+okuyucusu güncel kurs JSON'unu SHA ile doğruladı; odak testi **4/4** ve
+bağımsız dar kaynak okuması PASS
+(`scratch/2026-09-28-choreia-motion-content-bridge/REPORT.md`). Bu testin
+manifesti sentetik; üretim açılış kapısı, oyuncu, altyazı ve cihaz kabulü
+yok. **872** video varyantı için 512 MiB toplam varlık sınırında gerçek
+kodlama boyutu henüz ölçülmedi.
+
+Güncel kurs ve içerik köprüsü `e5adbca` commitinde mevcut PR #1
+incelemesine taşındı. Mola, arka plana geçiş ve hesap değişiminden sonra
+eski pratik kanıtıyla ders tamamlamayı açan durum düzeltildi; hazırlık
+**18/18**, ders ekranı **17/17** odak testini geçti. GitHub Actions'ın üç işi
+bütçe engeliyle başlamadı; bu kaynaklar için yararlı CI, merge veya mağaza
+kabulü yok. Kanonik devam: `holding/plans/MOTION-MODEL-RESUME-2026-09-27.md`.
+
 ## 2026-07-25 — Venture AÇILDI (5. aile üyesi; kod YOK)
 - Kurucu 5. ürünü teyit etti (dans eğitmeni — planlardaki 'Solo Dance' atfının gerçek karşılığı); isim App Store taramasıyla **Choreia** (0/0 temiz) seçildi.
 - Kurulum: repo + bundle-id `com.yulalab.choreia` + ASC kaydı + site kartı + registry + Obsidian.
