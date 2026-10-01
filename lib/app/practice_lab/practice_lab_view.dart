@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../shell/not_built_tab_body.dart';
+import '../ui_language.dart';
 
 /// The "Practice Lab" tab (roadmap §5.3).
 ///
@@ -19,12 +20,17 @@ class PracticeLabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => notBuiltTabBody(
-        context,
-        key: notBuiltKey,
-        title: 'Practice Lab',
-        plannedContent:
-            'Free beat practice, segment looping, a tempo ladder, mirror '
-            'mode, and percussive onset tools — none of them exist in this '
-            'app yet, so none of them are here yet either.',
-      );
+    context,
+    key: notBuiltKey,
+    title: UiLanguage.text(context, en: 'Practice Lab', tr: 'Pratik Alanı'),
+    plannedContent: UiLanguage.text(
+      context,
+      en:
+          'Beat practice, segment looping, tempo controls, and mirror '
+          'mode are not available here.',
+      tr:
+          'Ritim pratiği, bölüm tekrarı, tempo denetimleri ve ayna '
+          'modu bu bölümde kullanılamıyor.',
+    ),
+  );
 }

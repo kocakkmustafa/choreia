@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:choreia:salsa-on1-course:schema:1",
+  "title": "Choreia Salsa On1 teaching course v1",
+  "description": "Local documentation identifier only; not a published endpoint. Runtime cross-reference, ordered prerequisite and translation-count checks live in SalsaCourse.fromJson.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "title",
+    "subtitle",
+    "selectionBasis",
+    "outcome",
+    "assessment",
+    "music",
+    "safety",
+    "safetySourceIds",
+    "sources",
+    "modules",
+    "lessons"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "const": "salsa_on1_solo"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "assessment": {
+      "const": "selfCheck"
+    },
+    "safetySourceIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "music": {
+      "type": "object",
+      "required": [
+        "provided",
+        "beatEvidence",
+        "copy"
+      ],
+      "properties": {
+        "provided": {
+          "const": false
+        },
+        "beatEvidence": {
+          "const": "unavailable"
+        },
+        "copy": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "order",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "title": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "lessons": {
+      "type": "array",
+      "minItems": 48,
+      "maxItems": 48,
+      "items": {
+        "$ref": "#/$defs/lesson"
+      }
+    },
+    "title": {
+      "$ref": "#/$defs/text"
+    },
+    "subtitle": {
+      "$ref": "#/$defs/text"
+    },
+    "selectionBasis": {
+      "$ref": "#/$defs/text"
+    },
+    "outcome": {
+      "$ref": "#/$defs/text"
+    },
+    "safety": {
+      "$ref": "#/$defs/text"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "text": {
+      "type": "object",
+      "required": [
+        "tr",
+        "en"
+      ],
+      "properties": {
+        "tr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "lines": {
+      "type": "object",
+      "required": [
+        "tr",
+        "en"
+      ],
+      "properties": {
+        "tr": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "en": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "url",
+        "use",
+        "note",
+        "reviewed"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "use": {
+          "const": "referenceOnly"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewed": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "media": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "format",
+        "teachingAim",
+        "sequence",
+        "camera",
+        "alternative",
+        "review",
+        "rights"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "const": "planned"
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "teachingAim": {
+          "$ref": "#/$defs/text"
+        },
+        "sequence": {
+          "$ref": "#/$defs/lines"
+        },
+        "camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alternative": {
+          "$ref": "#/$defs/text"
+        },
+        "productionStoryboard": {
+          "type": "object",
+          "required": [
+            "masterAudio",
+            "trackSource",
+            "appProvidesOrRecordsMusic",
+            "autoSyncToTrack",
+            "soundObjectiveWithoutTrack",
+            "scenes"
+          ],
+          "properties": {
+            "masterAudio": {
+              "const": "silent"
+            },
+            "trackSource": {
+              "const": "optional_user_supplied_legally_accessed_separate_player"
+            },
+            "appProvidesOrRecordsMusic": {
+              "const": false
+            },
+            "autoSyncToTrack": {
+              "const": false
+            },
+            "soundObjectiveWithoutTrack": {
+              "const": "deferred"
+            },
+            "scenes": {
+              "$ref": "#/$defs/lines"
+            }
+          },
+          "additionalProperties": false
+        },
+        "review": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "lesson": {
+      "type": "object",
+      "required": [
+        "id",
+        "moduleId",
+        "order",
+        "title",
+        "goal",
+        "teaching",
+        "practice",
+        "selfCheck",
+        "repeat",
+        "adaptation",
+        "sourceIds",
+        "prerequisites",
+        "assessment",
+        "minutes",
+        "minutesBasis",
+        "practiceKind",
+        "mediaBrief"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^so_[0-9]{2}$"
+        },
+        "moduleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 48
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minutesBasis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "practiceKind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assessment": {
+          "const": "selfCheck"
+        },
+        "sourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "mediaBrief": {
+          "$ref": "#/$defs/media"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "goal": {
+          "$ref": "#/$defs/text"
+        },
+        "practice": {
+          "$ref": "#/$defs/text"
+        },
+        "repeat": {
+          "$ref": "#/$defs/text"
+        },
+        "adaptation": {
+          "$ref": "#/$defs/text"
+        },
+        "teaching": {
+          "$ref": "#/$defs/lines"
+        },
+        "selfCheck": {
+          "$ref": "#/$defs/lines"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

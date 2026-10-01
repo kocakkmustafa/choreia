@@ -28,10 +28,9 @@ void main() {
     reference = DanceReference.fromJson(jsonDecode(
         File('content/references/ss_shine_footwork.json')
             .readAsStringSync()) as Map<String, dynamic>);
-    shineStep = jsonDecode(File(
-                'content/styles/salsa_shines/steps/ss_shine_footwork.json')
-            .readAsStringSync())
-        as Map<String, dynamic>;
+    shineStep = jsonDecode(
+        File('content/styles/salsa_shines/steps/ss_shine_footwork.json')
+            .readAsStringSync()) as Map<String, dynamic>;
     judge = DanceJudge(reference: reference);
   });
 
@@ -56,10 +55,8 @@ void main() {
     });
 
     test('POSITIVE TWIN — a check that is NOT blocked is NOT gated', () {
-      final Set<String> codes = session('scored')
-          .gatedChecks()
-          .map((GatedCheck g) => g.code)
-          .toSet();
+      final Set<String> codes =
+          session('scored').gatedChecks().map((GatedCheck g) => g.code).toSet();
       // WRONG_FOOT ships live (status: live, M-F-117). If it appeared here,
       // the gate would be reporting everything and the first test would pass
       // for the wrong reason.
@@ -126,10 +123,9 @@ void main() {
     test('the identity limit is carried onto the LIVE surface', () {
       // C-120's measured limit, in the dancer's language: nothing here checks
       // that you are dancing THIS step.
-      expect(LiveSession.notMeasuredNote.toLowerCase(),
-          contains('would not say'));
-      expect(LiveSession.notMeasuredNote.toLowerCase(),
-          contains('wrong step'));
+      expect(
+          LiveSession.notMeasuredNote.toLowerCase(), contains('would not say'));
+      expect(LiveSession.notMeasuredNote.toLowerCase(), contains('wrong step'));
     });
   });
 
@@ -143,8 +139,8 @@ void main() {
     // İki kusur da aynı şeyi yapıyor: ÖLÇÜLMEMİŞ bir şeyi HALLEDİLMİŞ gibi
     // geçiriyor. Biri olumlu bir cümleyle, diğeri SESSİZLİKLE.
 
-    DanceReference refFor(String step) => DanceReference.load(File(
-        '${_findRepoRoot().path}/content/references/$step.json'));
+    DanceReference refFor(String step) => DanceReference.load(
+        File('${_findRepoRoot().path}/content/references/$step.json'));
 
     Map<String, dynamic> stepFor(String style, String step) =>
         (jsonDecode(File('${_findRepoRoot().path}/content/styles/$style/steps/'
@@ -175,11 +171,13 @@ void main() {
               'yerde görmüyordu — "kontrol ettiklerimizden hiçbiri yanlış '
               'çıkmadı" cümlesi, hiç yapılmamış bir kontrolün üstünde durur');
 
-      final GatedCheck wf =
-          session.gatedChecks().firstWhere((GatedCheck g) => g.code == 'WRONG_FOOT');
+      final GatedCheck wf = session
+          .gatedChecks()
+          .firstWhere((GatedCheck g) => g.code == 'WRONG_FOOT');
       expect(wf.why, contains('coin flip'),
-          reason: 'gerekçe SEBEBİ söylemeli: eğitmenler hangi yöne dans '
-              'edildiğinde anlaşmıyor');
+          reason: 'gerekçe SEBEBİ söylemeli: ölçülmüş referans sağ/sol '
+              'ayrımını güvenilir yapamıyor');
+      expect(wf.why, contains('reference does not distinguish left and right'));
       expect(wf.why, isNot(contains('mirrorConfident')),
           reason: 'ham alan adı yüzeye sızmaz (C-117)');
     });
@@ -231,18 +229,18 @@ Stream<PoseFrame> _frames(List<PoseLandmark> Function(int i) make, int n) =>
 
 /// Nothing trackable: every landmark at zero visibility. The failure mode a
 /// real empty room produces, not a synthetic "absent" flag.
-List<PoseLandmark> Function(int) _blank() => (int i) => List<PoseLandmark>.generate(
-      33,
-      (int _) => const PoseLandmark.invisible(),
-    );
+List<PoseLandmark> Function(int) _blank() =>
+    (int i) => List<PoseLandmark>.generate(
+          33,
+          (int _) => const PoseLandmark.invisible(),
+        );
 
 /// A body oscillating with a ~1 s period — enough structure for the core's
 /// period estimator to find a cycle.
 List<PoseLandmark> Function(int) _dancer() => (int i) {
       final double t = i / 30.0;
       final double sway = 0.04 * math.sin(2 * math.pi * t);
-      PoseLandmark at(double x, double y) =>
-          PoseLandmark(x + sway, y, 0, 0.95);
+      PoseLandmark at(double x, double y) => PoseLandmark(x + sway, y, 0, 0.95);
       return <PoseLandmark>[
         for (int k = 0; k < 33; k++)
           switch (k) {
@@ -278,10 +276,10 @@ Directory _findRepoRoot() {
 
 /// Faz bin'leri İÇERİKTEN — sabit yazmak C-165'in ödediği hataydı.
 Map<String, int> _settleBins() {
-  final Map<String, dynamic> step = (jsonDecode(File(
-              '${_findRepoRoot().path}/content/styles/salsa_shines/steps/'
-              'ss_shine_footwork.json')
-          .readAsStringSync()) as Map)
+  final Map<String, dynamic> step = (jsonDecode(
+          File('${_findRepoRoot().path}/content/styles/salsa_shines/steps/'
+                  'ss_shine_footwork.json')
+              .readAsStringSync()) as Map)
       .cast<String, dynamic>();
   final Map<String, int> bins = <String, int>{
     for (final Object? p in (step['phases'] as List))
@@ -293,4 +291,3 @@ Map<String, int> _settleBins() {
   }
   return bins;
 }
-

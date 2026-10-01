@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../shell/not_built_tab_body.dart';
+import '../ui_language.dart';
 
 /// The "Bugün" (Today) tab (roadmap §5.1).
 ///
@@ -17,13 +18,17 @@ class TodayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => notBuiltTabBody(
-        context,
-        key: notBuiltKey,
-        title: 'Today',
-        plannedContent:
-            "A daily eight-count, the path you're on, a recovery "
-            'suggestion when one applies, and a rhythm goal — once this app '
-            'has a real path and a real daily target to show you, not '
-            'before.',
-      );
+    context,
+    key: notBuiltKey,
+    title: UiLanguage.text(context, en: 'Today', tr: 'Bugün'),
+    plannedContent: UiLanguage.text(
+      context,
+      en:
+          "A daily eight-count, your path, and practice suggestions "
+          'are not available here.',
+      tr:
+          'Günlük çalışma planı ve pratik önerileri bu bölümde '
+          'kullanılamıyor.',
+    ),
+  );
 }

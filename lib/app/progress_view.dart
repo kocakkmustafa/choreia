@@ -36,7 +36,7 @@ import 'theme.dart';
 /// silently decided, per the giydirme brief's own rule on structural
 /// conflicts.
 class ProgressView extends StatelessWidget {
-  const ProgressView({required this.summary, this.catalog, super.key});
+  const ProgressView({required this.summary, this.catalog, this.courseEntry, super.key});
 
   static const Key recordedSectionKey = Key('progress.recorded');
   static const Key evaluatedSectionKey = Key('progress.evaluated');
@@ -44,6 +44,9 @@ class ProgressView extends StatelessWidget {
   static const Key retroactiveNoteKey = Key('progress.retroactiveNote');
 
   final ProgressSummary summary;
+
+  /// Optional entry to the independently recorded teaching course.
+  final Widget? courseEntry;
 
   /// Only used to name WHY a lesson is ungraded on its own row. Optional: the
   /// row must still render honestly without it.
@@ -69,6 +72,11 @@ class ProgressView extends StatelessWidget {
             const SizedBox(height: 8),
             Text('Progress', style: ChoreiaType.display(size: 33)),
             const SizedBox(height: 18),
+
+            if (courseEntry != null) ...[
+              courseEntry!,
+              const SizedBox(height: 24),
+            ],
 
             // INTEGRITY FIRST, above the numbers it qualifies.
             //

@@ -65,9 +65,10 @@ final class LibraryCatalog {
       // copy — it is the catalogue half, not the page half. Re-reading a 12 KB
       // asset is cheaper than widening a tested type to carry fields it has no
       // opinion about.
-      prose[id] = StyleProse.fromJson((jsonDecode(
-              await bundle.loadString('content/styles/$id/style.json')) as Map)
-          .cast<String, dynamic>());
+      prose[id] = StyleProse.fromJson(
+          (jsonDecode(await bundle.loadString('content/styles/$id/style.json'))
+                  as Map)
+              .cast<String, dynamic>());
     }
 
     // WHICH LESSONS CAN ACTUALLY RUN — probed, never assumed.
@@ -200,7 +201,8 @@ final class LibraryCatalog {
           for (final CourseCatalog c in coursesByStyle.values) ...c.lessons,
         ],
         blockedGates: <BlockedGate>[
-          for (final CourseCatalog c in coursesByStyle.values) ...c.blockedGates,
+          for (final CourseCatalog c in coursesByStyle.values)
+            ...c.blockedGates,
         ],
         unreadableSteps: <String>{
           for (final CourseCatalog c in coursesByStyle.values)
@@ -332,7 +334,10 @@ final class LibraryEntry {
   final List<String> subDances;
 
   static List<String> _strings(Object? v) => v is List
-      ? <String>[for (final Object? e in v) if (e is String) e]
+      ? <String>[
+          for (final Object? e in v)
+            if (e is String) e
+        ]
       : const <String>[];
 
   static String? _en(Object? value) {
@@ -375,6 +380,7 @@ final class StyleProse {
     this.notMeasured = const <String>[],
     this.reproductionBoundary,
     this.tempo,
+    this.tempoTr,
   });
 
   factory StyleProse.fromJson(Map<String, dynamic> json) {
@@ -389,6 +395,11 @@ final class StyleProse {
       notMeasured: LibraryEntry._strings(honesty['notMeasured']),
       reproductionBoundary: copyright['boundary'] as String?,
       tempo: _tempoSentence(json['bpmRange'], json['bpmStatus'] as String?),
+      tempoTr: _tempoSentence(
+        json['bpmRange'],
+        json['bpmStatus'] as String?,
+        turkish: true,
+      ),
     );
   }
 
@@ -398,16 +409,24 @@ final class StyleProse {
   /// for whoever resolves it next ("DISPUTED — must be resolved by
   /// measurement before any lesson ships"), not for a dancer, so it is never
   /// surfaced verbatim — only ITS PRESENCE (a dispute exists) is.
-  static String? _tempoSentence(Object? bpmRange, String? bpmStatus) {
+  static String? _tempoSentence(
+    Object? bpmRange,
+    String? bpmStatus, {
+    bool turkish = false,
+  }) {
     if (bpmRange is List && bpmRange.length == 2) {
       final Object? lo = bpmRange[0];
       final Object? hi = bpmRange[1];
       if (lo is num && hi is num) {
-        return 'Danced at roughly ${lo.toInt()}–${hi.toInt()} BPM.';
+        return turkish
+            ? 'Bu stil yaklaşık ${lo.toInt()}–${hi.toInt()} BPM temposunda dans edilir.'
+            : 'Danced at roughly ${lo.toInt()}–${hi.toInt()} BPM.';
       }
     }
     if (bpmStatus != null && bpmStatus.isNotEmpty) {
-      return "This style's tempo is not confirmed yet.";
+      return turkish
+          ? 'Bu stilin temposu henüz doğrulanmadı.'
+          : "This style's tempo is not confirmed yet.";
     }
     return null;
   }
@@ -431,6 +450,9 @@ final class StyleProse {
   /// an honest "not confirmed yet" when `bpmStatus` names a dispute. `null`
   /// when content says nothing about tempo at all.
   final String? tempo;
+
+  /// Same derived BPM fact as [tempo], phrased for Turkish UI chrome.
+  final String? tempoTr;
 
   bool get isEmpty =>
       measured.isEmpty &&
@@ -480,7 +502,8 @@ final class StyleCard {
   /// Lessons this style declares, or empty when its document is not authored.
   List<LessonInfo> get lessons => courses?.lessons ?? const <LessonInfo>[];
 
-  int get scoredLessonCount => lessons.where((LessonInfo l) => l.isScored).length;
+  int get scoredLessonCount =>
+      lessons.where((LessonInfo l) => l.isScored).length;
 
   /// What this style's lessons actually offer, one entry per lesson.
   ///

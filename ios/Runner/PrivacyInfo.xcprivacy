@@ -11,18 +11,18 @@
 
 	  NSPrivacyTracking = false
 	    Ölçüm: `tools/network_dependency_check.py` exit 0 — "3 yüzey, 0 yükleyici
-	    izi, 3 kayıtlı bağımlılık (yaml+lock taranmış)". Bağımlılık kümesinde
+	    izi, 8 kayıtlı bağımlılık (yaml+lock taranmış)". Bağımlılık kümesinde
 	    hiçbir reklam/analitik SDK'sı yok.
 
 	  NSPrivacyTrackingDomains = []
 	    İzleme yoksa izleme alan adı da yoktur. (Apple: NSPrivacyTracking false
 	    iken bu dizi boş OLMAK ZORUNDA.)
 
-	  NSPrivacyCollectedDataTypes = []
-	    Ölçüm: uygulamada oturum kalıcılığı YOK — `SessionStore` yalnız OKUNUYOR,
-	    `lib/` genelinde hiçbir yazma yok, ve ilerleme ekranı bunu kendi
-	    sözleriyle söylüyor (`HistoryIntegrity.notRecorded`). Kameradan gelen
-	    kareler cihazda işlenir; hiçbir şey cihazdan ÇIKMAZ.
+	  NSPrivacyCollectedDataTypes = [email, name, user ID, diagnostics, coarse location, other data]
+	    2026-09-24: SessionStore ders geçmişini yerel JSONL dosyasına YAZIYOR.
+	    Bu kayıt ve kamera kareleri cihazdan gönderilmiyor. Motion hesabı e-posta,
+	    isteğe bağlı görünen ad ve hesap ID'sini ortak sunucuya gönderir.
+	    Hesap veri beyanı: docs/store/account-data-safety-draft.md.
 
 	  NSPrivacyAccessedAPITypes = []
 	    ⚠️ BU BOŞLUK BİR VARSAYIM DEĞİL, BİR ÖLÇÜMDÜR — ve kapısı var.
@@ -32,7 +32,9 @@
 	    ayrışırsa kırmızı yanar (ikinci yön). Çağıran bileşenler kendi
 	    manifestlerini TAŞIYOR ve bu pakette ölçüldü: Flutter motoru
 	    (FileTimestamp 0A2A.1/C617.1 + SystemBootTime 35F9.1) · motion_camera ·
-	    permission_handler_apple · path_provider_foundation.
+	    permission_handler_apple · path_provider_foundation. Yeni Motion hesap
+	    eklentilerinin birleşik Xcode privacy raporu release öncesi ayrıca
+	    doğrulanmalıdır.
 	    ⇒ Dart tarafındaki dosya erişimi (`FileFirstRunFlag`, `materialisePoseModel`)
 	    `stat`i MOTORUN ikilisinde çağırır, Runner'ın kendi ikilisinde değil.
 	-->
@@ -40,8 +42,45 @@
 	<false/>
 	<key>NSPrivacyTrackingDomains</key>
 	<array/>
+	<!-- 2026-09-27: Sağlayıcıda saklanan IP/user-agent güvenlik günlükleri,
+	     yaklaşık konum ve Auth parola hash’i de beyanlıdır. Eşleme ve kanıt:
+	     docs/store/account-data-safety-draft.md. -->
 	<key>NSPrivacyCollectedDataTypes</key>
-	<array/>
+	<array>
+		<dict><key>NSPrivacyCollectedDataType</key><string>NSPrivacyCollectedDataTypeEmailAddress</string><key>NSPrivacyCollectedDataTypeLinked</key><true/><key>NSPrivacyCollectedDataTypeTracking</key><false/><key>NSPrivacyCollectedDataTypePurposes</key><array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array></dict>
+		<dict><key>NSPrivacyCollectedDataType</key><string>NSPrivacyCollectedDataTypeName</string><key>NSPrivacyCollectedDataTypeLinked</key><true/><key>NSPrivacyCollectedDataTypeTracking</key><false/><key>NSPrivacyCollectedDataTypePurposes</key><array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array></dict>
+			<dict><key>NSPrivacyCollectedDataType</key><string>NSPrivacyCollectedDataTypeUserID</string><key>NSPrivacyCollectedDataTypeLinked</key><true/><key>NSPrivacyCollectedDataTypeTracking</key><false/><key>NSPrivacyCollectedDataTypePurposes</key><array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array></dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeOtherDiagnosticData</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeCoarseLocation</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeOtherDataTypes</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+		</dict>
+		</array>
 	<key>NSPrivacyAccessedAPITypes</key>
 	<array/>
 </dict>

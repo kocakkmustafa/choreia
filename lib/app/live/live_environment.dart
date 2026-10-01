@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart' show AssetBundle, VoidCallback;
+import 'package:motion_core/motion_core.dart' show SessionStore;
 
 import '../history/session_store_access.dart';
 import 'camera_pose_source.dart';
@@ -25,7 +29,10 @@ class LiveEnvironment {
     this.bundle,
     this.source,
     this.storeOpener,
+    this.accountUserId,
+    this.historyDirectoryOverride,
     this.permanentlyDeniedProbe,
+    this.cameraPermissionRequest,
     this.openSettings,
   });
 
@@ -46,6 +53,21 @@ class LiveEnvironment {
   /// Where a finished session is written. `null` = the app's real store.
   final SessionStoreOpener? storeOpener;
 
+  /// Host account adapter publishes the current Supabase user id here.
+  /// `null` means guest. No Core account dependency is needed until its pin
+  /// exists; the host later maps `authChanges` to this listenable.
+  final ValueListenable<String?>? accountUserId;
+
+  /// Local filesystem seam for scope tests; production uses app support.
+  final Directory? historyDirectoryOverride;
+
+  Future<SessionStore> openStoreFor(String? userId) =>
+      storeOpener?.call() ??
+      openAppSessionStore(
+        accountUserId: userId,
+        supportDirectory: historyDirectoryOverride,
+      );
+
   /// Asks the OS whether camera access is refused for good. `null` = the real
   /// query (`askOsPermanentlyDenied`).
   ///
@@ -56,6 +78,10 @@ class LiveEnvironment {
   /// a forwarder would come to relay three of four seams and silently drop the
   /// fourth.
   final Future<bool> Function()? permanentlyDeniedProbe;
+
+  /// Starts the OS camera permission request. Null uses permission_handler;
+  /// replay tests may inject the dialog's timing without opening a camera.
+  final Future<bool> Function()? cameraPermissionRequest;
 
   /// Opens the OS settings page. `null` = `permission_handler`'s
   /// `openAppSettings`, the same call Ostinato makes.

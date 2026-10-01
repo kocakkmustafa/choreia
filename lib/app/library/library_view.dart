@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../live/live_environment.dart';
+import '../course/salsa_course_page.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
+import '../ui_language.dart';
 import 'library_catalog.dart';
+import 'style_content_copy.dart';
 import 'style_detail_view.dart';
+import 'style_status_copy.dart';
 
 /// The catalogue screen — 34 styles, one of which can be opened.
 ///
@@ -35,6 +39,7 @@ class LibraryView extends StatefulWidget {
   const LibraryView({
     required this.library,
     this.env = const LiveEnvironment(),
+    this.beforeLessonStart,
     super.key,
   });
 
@@ -44,6 +49,7 @@ class LibraryView extends StatefulWidget {
   /// has no business knowing what a bundle or a store is — it carries the
   /// object rather than its three parts precisely so it cannot half-forward it.
   final LiveEnvironment env;
+  final Future<bool> Function(BuildContext)? beforeLessonStart;
 
   static const Key tallyKey = Key('library.tally');
   static const Key emptyFilterKey = Key('library.emptyFilter');
@@ -64,6 +70,8 @@ enum _Filter { all, openNow, notOpen }
 
 class _LibraryViewState extends State<LibraryView> {
   _Filter _filter = _Filter.all;
+
+  bool get _tr => UiLanguage.isTurkish(context);
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +97,24 @@ class _LibraryViewState extends State<LibraryView> {
           key: LibraryView.gridKey,
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: <Widget>[
-            Text('What you can learn',
-                style: ChoreiaType.label(
-                    size: 10, color: ChoreiaColors.text(0.42))),
+            Text(
+              _tr ? 'ÖĞRENEBİLECEKLERİN' : 'What you can learn',
+              style: ChoreiaType.label(
+                size: 10,
+                color: ChoreiaColors.text(0.42),
+              ),
+            ),
             const SizedBox(height: 8),
-            Text('Styles', style: ChoreiaType.display(size: 33)),
+            Text(
+              _tr ? 'Stiller' : 'Styles',
+              style: ChoreiaType.display(size: 33),
+            ),
             const SizedBox(height: 18),
+            SalsaCourseEntry(env: widget.env),
+            const SizedBox(height: 24),
+            Text(_tr ? 'Kamera ile stil çalışmaları' : 'Camera style practice',
+                style: ChoreiaType.display(size: 25)),
+            const SizedBox(height: 12),
             _tallyPanel(tally),
             const SizedBox(height: 18),
             _chips(tally),
@@ -135,13 +155,19 @@ class _LibraryViewState extends State<LibraryView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(LibraryStrings.scopeLine(t),
-                style: ChoreiaType.body(
-                    size: 13.5, color: ChoreiaColors.text(0.85))),
+            Text(
+              _tr ? LibraryStrings.scopeLineTr(t) : LibraryStrings.scopeLine(t),
+              style:
+                  ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.85)),
+            ),
             const SizedBox(height: 10),
-            Text(LibraryStrings.availabilityLine(t),
-                style: ChoreiaType.body(
-                    size: 12.5, color: ChoreiaColors.text(0.62))),
+            Text(
+              _tr
+                  ? LibraryStrings.availabilityLineTr(t)
+                  : LibraryStrings.availabilityLine(t),
+              style:
+                  ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.62)),
+            ),
           ],
         ),
       );
@@ -150,10 +176,17 @@ class _LibraryViewState extends State<LibraryView> {
         spacing: 8,
         runSpacing: 8,
         children: <Widget>[
-          _chip(_Filter.all, LibraryStrings.filterAll, t.total),
-          _chip(_Filter.openNow, LibraryStrings.filterOpenNow, t.openable),
-          _chip(_Filter.notOpen, LibraryStrings.filterNotOpen,
-              t.total - t.openable),
+          _chip(_Filter.all, _tr ? 'TÜMÜ' : LibraryStrings.filterAll, t.total),
+          _chip(
+            _Filter.openNow,
+            _tr ? 'AÇIK' : LibraryStrings.filterOpenNow,
+            t.openable,
+          ),
+          _chip(
+            _Filter.notOpen,
+            _tr ? 'KAPALI' : LibraryStrings.filterNotOpen,
+            t.total - t.openable,
+          ),
         ],
       );
 
@@ -166,25 +199,30 @@ class _LibraryViewState extends State<LibraryView> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
           color: on ? ChoreiaColors.rose.withValues(alpha: 0.14) : null,
-          border: Border.all(
-              color: ChoreiaColors.hairline(on ? 0.32 : 0.13)),
+          border: Border.all(color: ChoreiaColors.hairline(on ? 0.32 : 0.13)),
         ),
         // The count travels WITH the label. A chip that says "Open now" and
         // reveals "1" only after a tap invites the assumption that it is many.
-        child: Text('$label · $count',
-            style: ChoreiaType.label(
-                size: 9.5,
-                letterSpacingEm: 0.1,
-                color: on ? ChoreiaColors.rose : ChoreiaColors.text(0.55))),
+        child: Text(
+          '$label · $count',
+          style: ChoreiaType.label(
+            size: 9.5,
+            letterSpacingEm: 0.1,
+            color: on ? ChoreiaColors.rose : ChoreiaColors.text(0.55),
+          ),
+        ),
       ),
     );
   }
 
   Widget _emptyFilter() => GlassPanel(
         key: LibraryView.emptyFilterKey,
-        child: Text(LibraryStrings.emptyFilter,
-            style:
-                ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.65))),
+        child: Text(
+          _tr
+              ? 'Bu filtreye uyan stil yok. Hiçbir şey gizlenmedi.'
+              : LibraryStrings.emptyFilter,
+          style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.65)),
+        ),
       );
 
   // ── Sections ─────────────────────────────────────────────────────────
@@ -203,18 +241,29 @@ class _LibraryViewState extends State<LibraryView> {
           Row(
             children: <Widget>[
               Expanded(
-                child: Text(LibraryStrings.sectionTitle(badge),
-                    style: ChoreiaType.display(size: 19)),
+                child: Text(
+                  _tr
+                      ? LibraryStrings.sectionTitleTr(badge)
+                      : LibraryStrings.sectionTitle(badge),
+                  style: ChoreiaType.display(size: 19),
+                ),
               ),
-              Text('${cards.length}',
-                  style: ChoreiaType.label(
-                      size: 11, color: ChoreiaColors.text(0.4))),
+              Text(
+                '${cards.length}',
+                style: ChoreiaType.label(
+                  size: 11,
+                  color: ChoreiaColors.text(0.4),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 4),
-          Text(LibraryStrings.sectionNote(badge),
-              style: ChoreiaType.body(
-                  size: 12, color: ChoreiaColors.text(0.55))),
+          Text(
+            _tr
+                ? LibraryStrings.sectionNoteTr(badge)
+                : LibraryStrings.sectionNote(badge),
+            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+          ),
           const SizedBox(height: 12),
           for (final StyleCard c in cards)
             Padding(
@@ -237,29 +286,41 @@ class _LibraryViewState extends State<LibraryView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TitleWithPill(
-                title: Text(c.entry.displayName,
-                    style: ChoreiaType.display(size: 25)),
+                title: Text(
+                  StyleContentCopy.styleName(c.entry, turkish: _tr),
+                  style: ChoreiaType.display(size: 25),
+                ),
                 pill: StatusPill(
-                    label: LibraryStrings.badge(c.badge),
-                    tone: _tone(c.badge)),
+                  label: _tr
+                      ? LibraryStrings.badgeTr(c.badge)
+                      : LibraryStrings.badge(c.badge),
+                  tone: _tone(c.badge),
+                ),
               ),
               const SizedBox(height: 10),
               // The lesson count is CONTENT truth and belongs on an openable
               // card; on a gated one it would read as an inventory the user can
               // reach. Both are shown, worded to say which is which.
               Text(
-                  LibraryStrings.lessonLine(c,
-                      startable: c
-                          .offers(widget.library.runnableSteps)
-                          .where((LessonOffer o) => o.canStart)
-                          .length),
-                  style: ChoreiaType.label(
-                      size: 10, color: ChoreiaColors.text(0.48))),
+                (_tr ? LibraryStrings.lessonLineTr : LibraryStrings.lessonLine)(
+                  c,
+                  startable: c
+                      .offers(widget.library.runnableSteps)
+                      .where((LessonOffer o) => o.canStart)
+                      .length,
+                ),
+                style: ChoreiaType.label(
+                    size: 10, color: ChoreiaColors.text(0.48)),
+              ),
               if (_reason(c) != null) ...<Widget>[
                 const SizedBox(height: 12),
-                Text(_reason(c)!,
-                    style: ChoreiaType.body(
-                        size: 12.5, color: ChoreiaColors.text(0.72))),
+                Text(
+                  _reason(c)!,
+                  style: ChoreiaType.body(
+                    size: 12.5,
+                    color: ChoreiaColors.text(0.72),
+                  ),
+                ),
               ],
             ],
           ),
@@ -276,13 +337,18 @@ class _LibraryViewState extends State<LibraryView> {
             border: Border.all(color: ChoreiaColors.hairline(0.10)),
           ),
           child: TitleWithPill(
-            title: Text(c.entry.displayName,
-                style: ChoreiaType.body(
-                    size: 13.5, color: ChoreiaColors.text(0.8))),
+            title: Text(
+              StyleContentCopy.styleName(c.entry, turkish: _tr),
+              style:
+                  ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.8)),
+            ),
             pill: StatusPill(
-                label: LibraryStrings.badge(c.badge),
-                tone: _tone(c.badge),
-                filled: false),
+              label: _tr
+                  ? LibraryStrings.badgeTr(c.badge)
+                  : LibraryStrings.badge(c.badge),
+              tone: _tone(c.badge),
+              filled: false,
+            ),
           ),
         ),
       );
@@ -295,6 +361,7 @@ class _LibraryViewState extends State<LibraryView> {
               card: c,
               runnableSteps: widget.library.runnableSteps,
               env: widget.env,
+              beforeStart: widget.beforeLessonStart,
             ),
           ),
         ),
@@ -304,8 +371,7 @@ class _LibraryViewState extends State<LibraryView> {
   /// The user-facing reason a style is shut, taken from the DERIVATION rather
   /// than written here. One source of truth: `AvailabilityStrings` already
   /// owns this copy and is tested against leaking technical text.
-  String? _reason(StyleCard c) =>
-      c.entry.onHoldReason ?? c.view.userFacingReason;
+  String? _reason(StyleCard c) => StyleStatusCopy.reason(c, turkish: _tr);
 
   Color _tone(StyleBadge b) => badgeTone(b);
 }
@@ -354,6 +420,9 @@ abstract final class LibraryStrings {
   static String scopeLine(LibraryTally t) =>
       '${t.total} styles are in the catalogue.';
 
+  static String scopeLineTr(LibraryTally t) =>
+      'Katalogda ${t.total} dans stili var.';
+
   /// The sentence that stops scope from reading as availability.
   ///
   /// Built from the tally rather than written as a constant so it cannot go
@@ -362,12 +431,16 @@ abstract final class LibraryStrings {
     final String open = t.openable == 1
         ? 'One of them is open to practise right now'
         : '${t.openable} of them are open to practise right now';
-    final String scored = t.scored == 0
-        ? ', and none of the open ones is graded'
-        : '';
+    final String scored =
+        t.scored == 0 ? ', and none of the open ones is graded' : '';
     return '$open$scored. The rest are listed so you can see the whole plan, '
         'not because they are ready — each one says where it stands.';
   }
+
+  static String availabilityLineTr(LibraryTally t) =>
+      'Şu anda ${t.openable} stilin dersini açabilirsin.'
+      '${t.scored == 0 ? ' Açık derslerin hiçbirine puan verilmiyor.' : ''} '
+      'Diğer stiller kendi durumlarıyla listelenir.';
 
   static const String filterAll = 'ALL';
   static const String filterOpenNow = 'OPEN NOW';
@@ -385,12 +458,28 @@ abstract final class LibraryStrings {
         StyleBadge.onHold => 'ON HOLD',
       };
 
+  static String badgeTr(StyleBadge b) => switch (b) {
+        StyleBadge.scored => 'PUANLI',
+        StyleBadge.openUngraded => 'AÇIK · PUANSIZ',
+        StyleBadge.builtButGated => 'HAZIR · KAPALI',
+        StyleBadge.inPreparation => 'DERS YOK',
+        StyleBadge.onHold => 'DURAKLATILDI',
+      };
+
   static String sectionTitle(StyleBadge b) => switch (b) {
         StyleBadge.scored => 'Open and graded',
         StyleBadge.openUngraded => 'Open, not graded',
         StyleBadge.builtButGated => 'Built, not open',
         StyleBadge.inPreparation => 'In the catalogue, not built',
         StyleBadge.onHold => 'On hold',
+      };
+
+  static String sectionTitleTr(StyleBadge b) => switch (b) {
+        StyleBadge.scored => 'Açık ve puanlı',
+        StyleBadge.openUngraded => 'Açık, puansız',
+        StyleBadge.builtButGated => 'Hazır, açılmamış',
+        StyleBadge.inPreparation => 'Katalogda, ders yok',
+        StyleBadge.onHold => 'Duraklatıldı',
       };
 
   static String sectionNote(StyleBadge b) => switch (b) {
@@ -409,6 +498,28 @@ abstract final class LibraryStrings {
           'Deliberately parked. The reason is on the style page, and it is not '
               'a scheduling one.',
       };
+
+  static String sectionNoteTr(StyleBadge b) => switch (b) {
+        StyleBadge.scored =>
+          'Başlatabileceğin ve kamerayla kontrol edilen dersler.',
+        StyleBadge.openUngraded =>
+          'Başlatabileceğin dersler. Bu derslere sayısal puan verilmiyor.',
+        StyleBadge.builtButGated =>
+          'Dersler yazılmış, ancak açılış kontrolü tamamlanmadığı için kapalı.',
+        StyleBadge.inPreparation =>
+          'Stil adı katalogda var; arkasında açılabilir bir ders yok.',
+        StyleBadge.onHold => 'Bu stil duraklatıldı. Gerekçesi stil sayfasında.',
+      };
+
+  static String lessonLineTr(StyleCard c, {required int startable}) {
+    if (c.lessons.isEmpty) return 'DERS YOK';
+    final int total = c.lessons.length;
+    final int scored = c.scoredLessonCount;
+    if (!c.isOpenable) {
+      return '$total DERS YAZILDI · $scored PUANLI · HİÇBİRİ AÇIK DEĞİL';
+    }
+    return '$total DERS YAZILDI · $startable AÇIK · $scored PUANLI';
+  }
 
   /// What a card says about its lessons — worded so a style's inventory cannot
   /// read as something reachable.

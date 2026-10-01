@@ -64,7 +64,10 @@ final class LiveSession {
   final PoseNormalizer _normalizer;
   final JointAngleExtractor _angles;
 
-  bool get isScored => lessonClass == 'scored';
+  late final DanceAssessmentGate assessmentGate =
+      DanceAssessmentGate.forReference(reference);
+
+  bool get isScored => lessonClass == 'scored' && assessmentGate.allowsScoring;
 
   /// Checks this lesson cannot make, derived FROM CONTENT.
   ///
@@ -76,7 +79,16 @@ final class LiveSession {
   /// does).
   List<GatedCheck> gatedChecks() {
     final List<GatedCheck> out = <GatedCheck>[];
-    for (final Object? e in (stepConfig['errors'] as List<Object?>? ?? const [])) {
+    if (lessonClass == 'scored' && !assessmentGate.allowsScoring) {
+      out.add(const GatedCheck(
+        code: 'ASSESSMENT_UNVALIDATED',
+        why: 'You can practise this movement, but its camera assessment has '
+            'not been validated. These observations do not confirm that '
+            'you performed the step correctly.',
+      ));
+    }
+    for (final Object? e
+        in (stepConfig['errors'] as List<Object?>? ?? const [])) {
       if (e is! Map) continue;
       final Object? status = e['status'];
       final bool blocked = status is String && status.startsWith('blocked');
@@ -117,9 +129,9 @@ final class LiveSession {
         // `status: blocked` in config, because whether it can be judged
         // depends on the REFERENCE, not on the step.
         'WRONG_FOOT' => 'We are not checking which foot you start on. The '
-            'teachers we measured for this movement do not agree on which way '
-            'round it is danced, so telling you that you are on the wrong foot '
-            'would be a coin flip presented as a judgement.',
+            'measured reference does not distinguish left and right reliably '
+            'for this movement, so calling your starting foot wrong would be '
+            'a coin flip presented as a judgement.',
         // NOT a deferral. There is no beat grid for this style at all, so
         // this is a MISSING MEASUREMENT, not a late one — and the sentence has
         // to carry that class (M-F-287). "yet" sold a structural absence as a
@@ -145,7 +157,8 @@ final class LiveSession {
   static const String notMeasuredNote =
       'One thing we are not doing: checking that the move you are dancing is '
       'the one this lesson teaches. If you danced something else entirely, we '
-      'would not say "wrong step" — we would just fail to find anything wrong.';
+      'would not say "wrong step". A reading or a lack of findings here is not '
+      'proof that you practiced this step.';
 
   /// Drive the session from a source of pose frames.
   ///
@@ -163,6 +176,9 @@ final class LiveSession {
     await for (final PoseFrame frame in frames) {
       final FrameQuality quality = _gate.evaluate(frame);
       if (!quality.judgeable) {
+        // A cycle must be continuously observed. Joining visible fragments
+        // across missing feet/occlusion would invent the unseen movement.
+        window.clear();
         // "We cannot see you" — never scored as zero.
         // `issue` is nullable and single: a frame is rejected for ONE named
         // reason, and the surface says which.
@@ -180,7 +196,7 @@ final class LiveSession {
       }
 
       final Cycle? cycle = _resample(window, estimate);
-      if (cycle == null) {
+      if (cycle == null || assessmentGate.cycleIssues(cycle).isNotEmpty) {
         yield LiveWatching(cyclesSeen: cyclesSeen);
         continue;
       }

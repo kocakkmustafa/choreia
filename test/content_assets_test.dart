@@ -89,6 +89,18 @@ void main() {
             'disables this whole file');
   });
 
+  test('frozen v2l source assets are individually bundled', () {
+    final Set<String> declared = declaredAssets();
+    for (final String path in <String>[
+      'content/motion_content/choreia.source-slice.v1.json',
+      'content/motion_content/choreia.source-projection.v1.json',
+    ]) {
+      expect(File(path).existsSync(), isTrue);
+      expect(declared, contains(path),
+          reason: 'content/ is non-recursive; $path needs its own asset line');
+    }
+  });
+
   /// References that exist, are reachable from a lesson, and are deliberately
   /// NOT declared — each with the reason it is withheld.
   ///

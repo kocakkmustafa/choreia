@@ -1,5 +1,120 @@
 # Choreia — İlerleme Kaydı
 
+## 2026-10-01 — Salsa On1 kaynak paketi app pinine bağlandı
+
+48 ders, 436 sahne ve 872 varyantın kurs/dilim/projeksiyon SHA'ları
+uygulama Dart sabitleri ve paket testleriyle eşleşiyor. Medya kaynak
+kataloğu/manifesti preproduction kimlikte; gösterim yayın kapısı kapalı.
+İlk kaynak/medya odak testi **19/19**, ek dilim kontrolü **1/1**, hedefli
+analiz temiz. Bağımsız yeniden hesaplama ve ek SHA incelemesi dar PASS:
+`scratch/2026-10-01-choreia-gravita-app-pin-independent-peer/REPORT.md`
+ve `ADDENDUM-SLICE-PINS.md`. Native/sessiz oynatma fiziksel kabulü açık.
+
+
+## 2026-09-30 — sessiz gösterim oynatıcısı yerel kapısı
+
+Kapalı QA `_AssetLessonVideo` artık `video_player` başlatılmadan önce
+ses düzeyini 0'a tohumluyor, başlatma sonrasında native `setVolume(0)`
+yanıtını bekliyor. Hazır/oynat kapısı bu yanıttan önce açılmıyor; açık
+mute hatasında video kapanıp yazılı ders kalıyor. Mute, hata ve rota
+değişimi için yeni testler dahil **15/15 odak**, **423/423 tam Flutter**
+PASS, analiz temiz. Root makbuzu
+`scratch/2026-09-30-choreia-silent-playback-root/REPORT.md`.
+
+Bağımsız peer P1 bulmadı fakat pinli eklentinin `initialized` olayında
+beklenmeden başlattığı otomatik native volume/pause Future'ları için
+**bir P2 kanıt açığı** bıraktı. Uygulamanın işlem kilidi yalnız açık
+adaptör çağrılarını izler; fiziksel ses/rota ve platform sırası kabulü
+henüz yok. Sınır eki
+`scratch/2026-09-30-choreia-silent-playback-root-v2/ADDENDUM.md`.
+Gerçek `VideoPlayerController` ve kontrollü sahte platformla yapılan
+ayrı scratch tanısı **1/1 PASS**: otomatik ilk `pause`un açık mute ve
+kullanıcı `play` sonrasında uygulanması public API ile mümkündür;
+native'e gönderilen ses değerleri 0'dır. Bu gerçek cihaz hatası değildir,
+P2 açık kalır (`scratch/2026-09-30-choreia-video-player-platform-diagnostic/REPORT.md`).
+Üretim katalog boş, gerçek medya ve nitelikli model 0; commit/push yok.
+
+## 2026-09-29 — gizli medya yuvası 48 ders ekranına bağlandı
+
+`SalsaCoursePage` her ders başlığının altında üretimde boş
+`LessonMediaSlot.empty` kuruyor. Gerçek video, altyazı, oynatıcı veya medya
+okuması başlatılmıyor; görünür yükseklik sıfır ve kayıtlı ders görüntüleme
+olayı aynı kalıyor. Hesap/dil/yaşam döngüsü geçişleri dahil kurs sayfası ve
+katalog testleri **29/29 PASS**, üç değişen dosyada hedefli analiz temiz.
+Bu, yalnız yerel kaynak ve widget kabulüdür. Gerçek medya, imzalı kabul kökü,
+oynatma ve iOS/Android cihaz kabulü açık.
+
+## 2026-09-28 — gizli ve çevrimdışı ders medyası aday kapısı
+
+Üretimde boş `LessonMediaCatalog` ve görünmez `LessonMediaSlot` kaynakta.
+Sentetik aday yalnız dondurulmuş v2 manifest, gerçek `so_01` kurs/ders
+SHA, sahne/varyant, MP4 byte/SHA/ölçülen süre ve TR/EN VTT byte/SHA/zaman
+bağları eşleşirse incelenir; yine de `visible=false`, `releaseEligible=false`
+ve `progressEffect=0`. Hesap veya yaşam döngüsü değişince slot kapanır.
+Katalog/slotun **8/8** odak Flutter testi ve üç dosyanın hedefli analizi
+temiz. Gerçek video, signed kabul kökü, görünür oynatıcı, bağımsız eğitmen
+onayı ve cihaz kabulü **0/açık**; `AssetBundle` symlink kökenini çalışma
+anında göstermez, paketleme v2/v3 kapısı denetler. Makbuz:
+`scratch/2026-09-28-motion-media-app-integration-plan/RESULT.md`.
+
+## 2026-09-28 — Salsa kursunda dört haftalık kayıtlı pratik görünümü
+
+48 derslik Salsa On1 ekranında mevcut hesap ve **güncel kurs sürümüne** ait
+`practised` eylemlerinden yerel Pazartesi başlangıçlı dört haftalık tablo
+üretildi. Her satır kayıtlı deneme ve denenen farklı ders sayısını gösterir;
+`viewed` ve öz beyanla tamamlanma ek pratik sayılmaz. Yalnız ritim/sözlü
+seçenek de kayda dahildir; ekran bunun fiziksel dans veya kamera becerisi
+kanıtı olmadığını açıkça söyler. Başka içerik sürümleri ve hesaplar bu
+sayılara katılmaz; bozuk/okunamayan kayıtta tablo açılmaz. Cihaz saati geri
+alınmışsa gelecek tarihli denemeler sessizce kaybolmaz, açıklama gösterilir.
+Görünüm tarihli bir anlık okumadır; uygulama yeniden öne geldiğinde yeniden
+hesaplanır.
+
+Saf hafta/yıl sınırı ve gelecek olay testi ile hesap değişimi, bozuk geçmiş,
+%200 dar ekran ve Pazartesi yeniden öne gelme widget testleri dahil **21/21**
+odak testi geçti. Dört dosyada hedefli `flutter analyze` temiz ve bağımsız
+salt-okunur kaynak incelemesi yeni P0/P1/P2 bulmadı. Bu yerel kaynak
+kanıtıdır; CI, native ve fiziksel kurs kabulü değildir. Diğer dört kursun
+durumu, onaylı medya0 ve nitelikli tam-kurs model0 değişmedi.
+
+## 2026-09-28 — Salsa paketi ve katalog hata akışı
+
+Değişmeyen 48 derslik Salsa JSON'u (361.125 bayt; SHA
+`bceece2f4264963578e0414985a34c55a45103b286c2b87e12bece711e693a83`)
+tek varlıklı Motion Content manifestiyle ders ayrıştırılmadan önce
+doğrulanıyor. Manifest/kurs dosyası eksik veya hash farklıysa kurs ve
+tamamlanma sayıları gösterilmiyor; sonuç vermeyecek Retry yok. Geçici
+IO/zaman aşımı ve ilerleme okuma hatasında Retry korunuyor. Katalog hata
+metni yeniden kurmanın yerel ilerlemeyi silebileceği konusunda uyarıyor.
+
+Bağımsız kaynak incelemesinin eksik paket P2'si kapandı
+(`scratch/2026-09-28-choreia-runtime-integrity-peer/FIX-REPORT.md`). Yeni
+shell hata testi eski `setState` Future dönüşü çökmesini ve başarısız
+katalog Future'ının gözlemlenmemiş ikinci hata yolunu yakalayıp kapattı;
+hesap değişimi yolu da aynı korumalı okumayı kullanıyor. Salsa/katalog
+odak koşusu **30/30**, hesap değişimi takip koşusu **18/18** geçti;
+manifest `--check` ve hedefli analiz temiz. Gerçek eğitmen medyası,
+adım/zamanlama modeli, native cihaz ve kurucu fiziksel kabulü hâlâ açık.
+
+## 2026-09-28 — Salsa On1 ilk kursu; içerik köprüsü dar PASS, ürün kabulü açık
+
+İlk Salsa On1 kursu **48 ders** ve canlı v8d kaynak paketinde. Sessiz
+gösterim/harici müzik sınırı ders brieflerinde açık; gerçek onaylı video ve
+tam-kurs adım/zamanlama modeli **0**. Sabit Motion Core `motion_content`
+okuyucusu güncel kurs JSON'unu SHA ile doğruladı; odak testi **4/4** ve
+bağımsız dar kaynak okuması PASS
+(`scratch/2026-09-28-choreia-motion-content-bridge/REPORT.md`). Bu testin
+manifesti sentetik; üretim açılış kapısı, oyuncu, altyazı ve cihaz kabulü
+yok. **872** video varyantı için 512 MiB toplam varlık sınırında gerçek
+kodlama boyutu henüz ölçülmedi.
+
+Güncel kurs ve içerik köprüsü `e5adbca` commitinde mevcut PR #1
+incelemesine taşındı. Mola, arka plana geçiş ve hesap değişiminden sonra
+eski pratik kanıtıyla ders tamamlamayı açan durum düzeltildi; hazırlık
+**18/18**, ders ekranı **17/17** odak testini geçti. GitHub Actions'ın üç işi
+bütçe engeliyle başlamadı; bu kaynaklar için yararlı CI, merge veya mağaza
+kabulü yok. Kanonik devam: `holding/plans/MOTION-MODEL-RESUME-2026-09-27.md`.
+
 ## 2026-07-25 — Venture AÇILDI (5. aile üyesi; kod YOK)
 - Kurucu 5. ürünü teyit etti (dans eğitmeni — planlardaki 'Solo Dance' atfının gerçek karşılığı); isim App Store taramasıyla **Choreia** (0/0 temiz) seçildi.
 - Kurulum: repo + bundle-id `com.yulalab.choreia` + ASC kaydı + site kartı + registry + Obsidian.

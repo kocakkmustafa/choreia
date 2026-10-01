@@ -1,0 +1,30 @@
+{
+  "$doc": "Türkçe mağaza metni taslağı. İngilizce kaynak: listing.json. Sağlayıcıya gönderilmedi; mağaza ve cihaz kabulü açık.",
+  "appStore": {
+    "name": "Choreia: Dans Pratiği",
+    "subtitle": "Solo Salsa On1 yolculuğun",
+    "promotionalText": "Solo adımlar, ritim, dönüş, kombinasyon ve bağımsız rutinle Salsa On1 yolunu keşfet. Sessiz sayım ve öz denetimle kendi hızında çalış.",
+    "keywords": "dans,hip hop,dans stilleri,adımlar,pratik,referans,hareket"
+  },
+  "playStore": {
+    "shortDescription": "Solo Salsa On1: sıralı dersler, görsel sayım ve kendi ilerleme kaydın."
+  },
+  "description": "Choreia, 8 modülde 48 özgün Türkçe ve İngilizce solo Salsa On1 dersi sunar. Kendi rutinini kurmadan önce sayım, ağırlık aktarımı, temel adımlar, yön değişimi, dönüş ve kombinasyonları öğren. Sessiz görsel sayaç çalışmayı destekler. Bu solo öğrenme yolu eşli dansta yönlendirme veya takip yeterliği vermez.\n\nÖzgün metin derslerini oku, uygulama görevlerini takip et, kendi çalışmanı değerlendir ve cihazdaki ders kaydından devam et. Hesabın olmadan kataloğu gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır. Ders bitirme ustalık belgesi değildir. Bu içerik hazırlığı sürümünde gösterim videosu bulunmaz.\n\nÇalışmanı ve öz denetimini kendin kaydedersin. Kurs parçayı dinlemez, müzik temposunu doğrulamaz veya kamerayla adım puanı vermez. Kamera koçluğu ve abonelik satışı açık değildir.",
+  "cameraPermissionRationale": {
+    "ios": "Choreia, dans adımlarına ilişkin geri bildirim vermek için kamerayı kullanır. Video telefonundan çıkmaz; yalnızca eklem konumları okunur ve video kaydedilmez veya yüklenmez."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
+  "$releasePolicy20260925": "Founder deferred all paid camera sessions and subscription sales in the first release. Provider listings must use only the external fields above; older dollar-prefixed research notes describe deferred capabilities.",
+  "$coursePreparation20260926": {
+    "status": "local_content_preparation_not_provider_readback_or_release_acceptance",
+    "asset": "content/salsa_on1_course.json",
+    "sha256": "da99598f459e4d6f0bf2e58aa03274b44826e818ee6f1b4effaf8ebe5a121fd1",
+    "lessonCount": 48,
+    "moduleCount": 8,
+    "mediaIncluded": false,
+    "physicalDeviceAccepted": false
+  },
+  "$sourceOfFacts": "Current course: content/salsa_on1_course.json; its app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Readback of provider metadata is separate.",
+  "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded."
+}

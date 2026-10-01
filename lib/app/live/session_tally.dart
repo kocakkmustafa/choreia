@@ -37,6 +37,8 @@ final class SessionTally {
 
   int _cycles = 0;
   int _framesUnseen = 0;
+  bool _sawJudgment = false;
+  bool _sawMeasurementOnly = false;
   Duration? _firstFrameAt;
   Duration? _lastFrameAt;
 
@@ -70,11 +72,16 @@ final class SessionTally {
       case LiveWatching():
         _stamp(elapsed);
       case LiveJudged():
+        _sawJudgment = true;
+        _cycles++;
+        _stamp(elapsed);
       case LiveMeasured():
+        _sawMeasurementOnly = true;
         _cycles++;
         _stamp(elapsed);
       // Nothing arrived from the camera in these: no clock, no cycles.
       case LiveIdle():
+      case LiveInterrupted():
       case LivePermissionDenied():
       case LiveCameraUnavailable():
         break;
@@ -87,9 +94,8 @@ final class SessionTally {
   }
 
   /// Seconds the camera was delivering frames. Zero until it did.
-  int get workedSeconds => _firstFrameAt == null
-      ? 0
-      : (_lastFrameAt! - _firstFrameAt!).inSeconds;
+  int get workedSeconds =>
+      _firstFrameAt == null ? 0 : (_lastFrameAt! - _firstFrameAt!).inSeconds;
 
   /// Units the learner attempted that could not be judged.
   ///
@@ -112,7 +118,13 @@ final class SessionTally {
   /// the time between the last frame and the tap on Finish.
   SessionRecord toRecord({required DateTime endedAt}) => SessionRecord(
         lessonId: lessonId,
-        lessonClass: lessonClass,
+        // Content's requested class cannot turn an evidence-gated session
+        // into a scored record. Mixed observations remain ungraded too.
+        lessonClass: lessonClass == ChoreiaLessonClass.scored &&
+                _sawJudgment &&
+                !_sawMeasurementOnly
+            ? ChoreiaLessonClass.scored
+            : ChoreiaLessonClass.demoOnly,
         completedAt: endedAt,
         workedSeconds: workedSeconds,
         unitsCompleted: _cycles,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../ui_language.dart';
 
 /// Shared body for a shell tab that is named in the product's plan but has
 /// no real screen behind it yet.
@@ -20,34 +21,44 @@ Widget notBuiltTabBody(
   required Key key,
   required String title,
   required String plannedContent,
-}) =>
-    ChoreiaBackdrop(
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: GlassPanel(
-            key: key,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(title, style: ChoreiaType.display(size: 24)),
-                const SizedBox(height: 12),
-                Text(
-                  'Named here so you can see the whole plan. Nothing is '
-                  'built here yet.',
-                  style: ChoreiaType.body(
-                      size: 13.5, color: ChoreiaColors.text(0.78)),
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  plannedContent,
-                  style: ChoreiaType.body(
-                      size: 12.5, color: ChoreiaColors.text(0.55)),
-                ),
-              ],
+}) => ChoreiaBackdrop(
+  child: SafeArea(
+    child: SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: GlassPanel(
+        key: key,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(title, style: ChoreiaType.display(size: 24)),
+            const SizedBox(height: 12),
+            Text(
+              UiLanguage.text(
+                context,
+                en:
+                    'Named here so you can see the whole plan. Nothing is '
+                    'built here yet.',
+                tr:
+                    'Bu bölüm plandaki yerini gösterir. Burada '
+                    'kullanılabilir bir özellik yok.',
+              ),
+              style: ChoreiaType.body(
+                size: 13.5,
+                color: ChoreiaColors.text(0.78),
+              ),
             ),
-          ),
+            const SizedBox(height: 14),
+            Text(
+              plannedContent,
+              style: ChoreiaType.body(
+                size: 12.5,
+                color: ChoreiaColors.text(0.55),
+              ),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  ),
+);

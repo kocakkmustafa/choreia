@@ -47,8 +47,14 @@ run() {
   rm -f /tmp/choreia-gate.$$
 }
 
+# The pure-Dart engine has its own package_config. Root `flutter pub get`
+# does not resolve the engine's `test` dependency in a fresh CI checkout.
+run "engine dependencies" bash -c 'cd packages/choreia_engine && dart pub get'
 run "flutter test"        flutter test
 run "flutter analyze"     flutter analyze
+run "Salsa asset manifest" dart run tool/build_salsa_integrity_manifest.dart --check
+run "v2l app source projection" python3 tool/check_v2l_source_projection.py --check
+run "v2l source negative controls" python3 tool/test_v2l_source_projection.py
 run "engine (dart test)"  bash -c 'cd packages/choreia_engine && dart test'
 run "validate_content"    python3 tools/validate_content.py
 run "metric vocabulary"   python3 tools/validate_metric_vocabulary.py

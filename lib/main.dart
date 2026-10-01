@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_account/motion_account.dart';
 
+import 'app/account_bridge.dart';
+import 'app/live/live_environment.dart';
 import 'app/shell/choreia_shell.dart';
 import 'app/theme.dart';
 
@@ -19,18 +23,116 @@ import 'app/theme.dart';
 /// önce ölçüldü: baseline'ın kendi §1'i "google_fonts runtime bağımlılığı"nı
 /// GERÇEK bir ağ davranışı olarak listeliyordu, icat edilmiş bir kusur
 /// değil.
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
-  runApp(const ChoreiaApp());
+  await launchChoreia();
 }
 
-class ChoreiaApp extends StatelessWidget {
-  const ChoreiaApp({super.key});
+/// A broken account build must show a bounded failure instead of opening an
+/// unauthenticated guest shell or ending before the first Flutter frame.
+Future<void> launchChoreia({
+  String url = const String.fromEnvironment('MOTION_SUPABASE_URL'),
+  String publishableKey =
+      const String.fromEnvironment('MOTION_SUPABASE_PUBLISHABLE_KEY'),
+}) async {
+  try {
+    final MotionAccountRuntime runtime = await MotionAccountRuntime.initialize(
+      url: url,
+      publishableKey: publishableKey,
+      app: MotionApp.choreia,
+      emailRedirectTo: 'com.yulalab.choreia://auth/callback',
+      onDeletedAccount: clearLocalHistoryFor,
+      localAccountIds: localHistoryAccountIds,
+    );
+    runApp(MotionIdentityGate(
+      runtime: runtime,
+      child: ChoreiaApp(accountRuntime: runtime),
+    ));
+  } on Object {
+    runApp(const ChoreiaAccountStartupFailure());
+  }
+}
+
+class ChoreiaAccountStartupFailure extends StatelessWidget {
+  const ChoreiaAccountStartupFailure({super.key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Choreia',
         theme: ChoreiaTheme.dark,
-        home: const ChoreiaShell(),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: const ChoreiaAccountFailureView(),
       );
+}
+
+/// Only reached when the configured account service cannot start.
+class ChoreiaAccountFailureView extends StatelessWidget {
+  const ChoreiaAccountFailureView({super.key});
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Choreia hesap hizmeti bu sürümde başlatılamadı. '
+                      'Uygulamayı yeniden açmayı dene; sorun sürerse '
+                      'güncel sürümü yükle.'
+                  : 'Choreia account service could not start in this '
+                      'build. Try reopening the app; if the problem '
+                      'continues, install an updated version.',
+              key: const Key('choreia.accountStartupFailure'),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+}
+
+class ChoreiaApp extends StatelessWidget {
+  const ChoreiaApp({super.key, this.accountRuntime});
+
+  final MotionAccountRuntime? accountRuntime;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget accountPage(BuildContext _) => MotionAccountPage(
+          account: accountRuntime!.account,
+          onRetryIdentity: accountRuntime!.refreshIdentity,
+          initialPasswordRecovery: accountRuntime!.isPasswordRecovery,
+          clearLocalData: clearLocalHistoryFor,
+        );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Choreia',
+      theme: ChoreiaTheme.dark,
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: ChoreiaShell(
+        env: accountRuntime == null
+            ? const LiveEnvironment()
+            : LiveEnvironment(accountUserId: accountRuntime!.userId),
+        accountPageBuilder: accountRuntime == null ? null : accountPage,
+        beforeLessonStart: accountRuntime == null
+            ? null
+            : (lessonContext) => requireMotionPaidAccess(
+                  lessonContext,
+                  account: accountRuntime!.account,
+                  accountPageBuilder: accountPage,
+                ),
+      ),
+    );
+  }
 }

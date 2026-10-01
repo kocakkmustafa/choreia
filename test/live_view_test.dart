@@ -48,6 +48,7 @@ void main() {
       (WidgetTester tester) async {
     final List<LiveState> all = <LiveState>[
       const LiveIdle(),
+      const LiveInterrupted(),
       const LivePermissionDenied(),
       const LiveCameraUnavailable(CameraFailure.modelLoadFailed, 'detail'),
       const LiveNoPerson(<QualityIssue>{QualityIssue.outOfFrame}),
@@ -65,9 +66,8 @@ void main() {
           gated: gated,
           notMeasuredNote: note),
     ];
-    // Seven states — the same seven `LiveState` declares. If an eighth is
-    // added, `LiveView`'s switch stops compiling before this test even runs.
-    expect(all, hasLength(7));
+    // Keep this fixture in sync with the live-state switch.
+    expect(all, hasLength(8));
 
     for (final LiveState s in all) {
       await show(tester, s);
@@ -102,6 +102,18 @@ void main() {
           const LiveCameraUnavailable(CameraFailure.modelLoadFailed, null));
       expect(find.byKey(LiveView.actionKey), findsOneWidget);
       expect(find.text(LiveStrings.tryAgain), findsOneWidget);
+    });
+
+    testWidgets('camera driver details stay off the learner screen',
+        (WidgetTester tester) async {
+      const String driverDetail = 'bind failed: device id and internal filter';
+      await show(
+          tester,
+          const LiveCameraUnavailable(
+              CameraFailure.noSuchCamera, driverDetail));
+      expect(find.text(driverDetail), findsNothing);
+      expect(find.text(LiveStrings.cameraProblem(CameraFailure.noSuchCamera)),
+          findsOneWidget);
     });
 
     testWidgets('PERMISSION has two flavours, and they differ',
@@ -228,8 +240,8 @@ void main() {
 
     testWidgets('two fired findings render ONE correction, not two',
         (WidgetTester tester) async {
-      await showJudged(tester,
-          <ErrorFinding>[fired('STEP_TOO_LARGE'), fired('WRONG_FOOT')]);
+      await showJudged(
+          tester, <ErrorFinding>[fired('STEP_TOO_LARGE'), fired('WRONG_FOOT')]);
 
       // The card used to render a row per finding. It must now show the one
       // the derived order names.
@@ -241,8 +253,8 @@ void main() {
 
     testWidgets('the other finding is COUNTED, never silently dropped',
         (WidgetTester tester) async {
-      await showJudged(tester,
-          <ErrorFinding>[fired('STEP_TOO_LARGE'), fired('WRONG_FOOT')]);
+      await showJudged(
+          tester, <ErrorFinding>[fired('STEP_TOO_LARGE'), fired('WRONG_FOOT')]);
       expect(find.byKey(LiveView.alsoSawKey), findsOneWidget,
           reason: 'showing one correction is the rule; implying it was the '
               'only thing we saw is a stronger claim than the rule makes');

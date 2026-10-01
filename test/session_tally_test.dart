@@ -38,8 +38,8 @@ void main() {
       final SessionTally t = tally();
       t.observe(const LiveIdle(), s(0));
       t.observe(const LivePermissionDenied(), s(3));
-      t.observe(const LiveCameraUnavailable(CameraFailure.noSuchCamera, null),
-          s(4));
+      t.observe(
+          const LiveCameraUnavailable(CameraFailure.noSuchCamera, null), s(4));
 
       // "Never started" is not zero (M-F-268). The page reads this to decide
       // whether to write at all; a `true` here would put a 0-cycle session in
@@ -49,7 +49,8 @@ void main() {
       expect(t.cyclesRead, 0);
     });
 
-    test('the clock runs across frames we could NOT judge, not only the ones '
+    test(
+        'the clock runs across frames we could NOT judge, not only the ones '
         'we could', () {
       // The direction is chosen, and the other one is the "you did less" lie:
       // a learner dancing in poor light produces `LiveNoPerson` for minutes,
@@ -57,8 +58,8 @@ void main() {
       // practice for a session that really happened.
       final SessionTally t = tally();
       t.observe(const LiveIdle(), s(0)); // before the camera: not counted
-      t.observe(const LiveNoPerson(<QualityIssue>{QualityIssue.outOfFrame}),
-          s(10));
+      t.observe(
+          const LiveNoPerson(<QualityIssue>{QualityIssue.outOfFrame}), s(10));
       t.observe(const LiveWatching(cyclesSeen: 0), s(40));
       t.observe(judged(), s(70));
 
@@ -84,7 +85,8 @@ void main() {
   });
 
   group('what the record may say', () {
-    test('unmeasured units are 0 AS A DECLARATION — this pipeline cannot '
+    test(
+        'unmeasured units are 0 AS A DECLARATION — this pipeline cannot '
         'produce another number', () {
       // A cycle only exists after the confidence gate accepts its frames, so
       // work lost to light or framing never becomes a countable unit. The fact
@@ -106,7 +108,8 @@ void main() {
       expect(t.toRecord(endedAt: DateTime.utc(2026, 8, 13)).unmeasuredUnits, 0);
     });
 
-    test('NO DECLARED TARGET reaches the record, and `isComplete` is the '
+    test(
+        'NO DECLARED TARGET reaches the record, and `isComplete` is the '
         'consequence we accept', () {
       final SessionTally t = tally();
       t.observe(const LiveWatching(cyclesSeen: 0), s(0));
@@ -131,7 +134,8 @@ void main() {
               'progress_test\'te çivili');
     });
 
-    test('POZİTİF KONTROL — bir ders hedef İLAN EDERSE o sayı kayda geçer, '
+    test(
+        'POZİTİF KONTROL — bir ders hedef İLAN EDERSE o sayı kayda geçer, '
         've `isComplete` anlam kazanır', () {
       // NİYE VAR: üstteki test tek başına YOKLUĞU ölçmüyor. `plannedUnits == 0`
       // beklentisi, `toRecord` içinde `plannedUnits: 0` yazan bir HARDCODE'a
@@ -170,13 +174,40 @@ void main() {
       // and a class computed after the fact silently reinterprets history.
       final SessionTally scored = tally(lessonClass: ChoreiaLessonClass.scored);
       scored.observe(judged(), s(0));
-      expect(scored.toRecord(endedAt: DateTime.utc(2026)).isScoredClass, isTrue);
+      expect(
+          scored.toRecord(endedAt: DateTime.utc(2026)).isScoredClass, isTrue);
 
       final SessionTally demo = tally();
       demo.observe(judged(), s(0));
       expect(demo.toRecord(endedAt: DateTime.utc(2026)).isScoredClass, isFalse);
       expect(demo.toRecord(endedAt: DateTime.utc(2026)).lessonClass,
           ChoreiaLessonClass.demoOnly);
+    });
+
+    test('a scored request withheld by evidence is recorded as ungraded', () {
+      final SessionTally gated = tally(lessonClass: ChoreiaLessonClass.scored);
+      gated.observe(
+          const LiveMeasured(
+            measurements: <String, double>{'kneeDeltaDeg': 3},
+            gated: <GatedCheck>[],
+            notMeasuredNote: 'Assessment unavailable',
+          ),
+          s(0));
+      expect(
+          gated.toRecord(endedAt: DateTime.utc(2026)).isScoredClass, isFalse);
+      // A later judged fragment must not reinterpret the ungraded portion.
+      gated.observe(judged(), s(1));
+      expect(
+          gated.toRecord(endedAt: DateTime.utc(2026)).isScoredClass, isFalse);
+      expect(gated.cyclesRead, 2);
+    });
+
+    test('a scored request with only visible tracking has no judgment', () {
+      final SessionTally tracking =
+          tally(lessonClass: ChoreiaLessonClass.scored);
+      tracking.observe(const LiveWatching(cyclesSeen: 0), s(0));
+      expect(tracking.toRecord(endedAt: DateTime.utc(2026)).isScoredClass,
+          isFalse);
     });
   });
 }
