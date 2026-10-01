@@ -56,6 +56,36 @@ void main() {
     expect(
         course.modules.map((m) => m.id), List.generate(8, (i) => 'm${i + 1}'));
   });
+  test('narrow teacher citations stay on five exact lessons', () {
+    final course = SalsaCourse.fromJson(content());
+    final added = <String>{
+      'addicted2salsa_arm_layering',
+      'ellmann_front_cross',
+      'eld_jazz_box_b',
+      'ellmann_pause_hold',
+    };
+    final bindings = <String, Set<String>>{
+      for (final lesson in course.lessons)
+        if (lesson.sourceIds.toSet().intersection(added).isNotEmpty)
+          lesson.id: lesson.sourceIds.toSet().intersection(added),
+    };
+    expect(bindings, <String, Set<String>>{
+      'so_15': <String>{'addicted2salsa_arm_layering'},
+      'so_25': <String>{'ellmann_front_cross'},
+      'so_26': <String>{'ellmann_front_cross'},
+      'so_28': <String>{'eld_jazz_box_b'},
+      'so_34': <String>{'ellmann_pause_hold'},
+    });
+    for (final source in course.sources.where((s) => added.contains(s.id))) {
+      expect(source.supports!.en, isNotEmpty);
+      expect(source.supports!.tr, isNotEmpty);
+      expect(source.doesNotSupport!.en, isNotEmpty);
+      expect(source.doesNotSupport!.tr, isNotEmpty);
+    }
+    final broken = content();
+    ((broken['sources'] as List).last as Map).remove('doesNotSupport');
+    expect(() => SalsaCourse.fromJson(broken), throwsFormatException);
+  });
   test('content flags cannot publish unreviewed media, music or scoring', () {
     for (final mutate in <void Function(Map<String, dynamic>)>[
       (d) => d['assessment'] = 'cameraScored',

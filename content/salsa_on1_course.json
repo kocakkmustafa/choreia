@@ -140,6 +140,70 @@
       "use": "referenceOnly",
       "note": "Original teaching progression reference; numerical practice choices are editorial, not scientifically optimal doses.",
       "reviewed": "2026-09-27"
+    },
+    {
+      "id": "addicted2salsa_arm_layering",
+      "title": "Salsa styling tips for ladies — Addicted2Salsa",
+      "url": "https://www.addicted2salsa.com/dance/salsa-styling-tips-for-ladies/",
+      "use": "referenceOnly",
+      "note": "Original teacher text, styling mistakes and practice sequence; teaching attribution only, no media or model-training rights.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "Layering small optional arm styling over familiar footwork, reducing styling when timing is lost.",
+        "tr": "Tanıdık ayak çalışmasına küçük ve isteğe bağlı kol stilini eklemeyi, ritim kaybolursa kol hareketini azaltmayı."
+      },
+      "doesNotSupport": {
+        "en": "A fixed opposite-arm rule, exact solo On1 foot contacts, camera error threshold or the full lesson sequence.",
+        "tr": "Sabit karşı kol kuralını, solo On1 ayak temaslarını, kamera hata eşiğini veya dersin bütün dizisini."
+      }
+    },
+    {
+      "id": "ellmann_front_cross",
+      "title": "Front Cross Step — Mathias Ellmann",
+      "url": "https://www.mathiasellmann.de/en/salsa/movement-lexicon/front-cross-step.html",
+      "use": "referenceOnly",
+      "note": "One original teacher document shared by so_25 and so_26; no second independent source; teaching attribution only.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "A compact front cross and the distinction between an unweighted touch and a weighted step; a lateral opening can follow.",
+        "tr": "Küçük öne çaprazı, ağırlık verilmeyen dokunuş ile ağırlıklı adım ayrımını ve ardından yana açılabilen hareketi."
+      },
+      "doesNotSupport": {
+        "en": "Either lesson's exact On1 count, complete side-then-cross phrase, knee safety or camera judgment of weight transfer.",
+        "tr": "İki dersin kesin On1 sayımını, bütün yana-çapraz dizisini, diz güvenliğini veya kameradan ağırlık aktarımı hükmünü."
+      }
+    },
+    {
+      "id": "eld_jazz_box_b",
+      "title": "Line Dance Terminology, Jazz box B — Everything Line Dance Association",
+      "url": "https://eld-association.com/wp-content/uploads/2023/09/TERMINOLOGY-All.pdf",
+      "use": "referenceOnly",
+      "note": "Printed page 3 / PDF P2, Jazz box B. Only so_28 teaching[0] four-step direction words; line-dance terminology, not a Salsa On1 transition. No media or model-training rights.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "In so_28 teaching[0], right across left, left back, right side and left forward as a four-count direction path.",
+        "tr": "so_28 teaching[0] içindeki sağın sol önüne çapraz, solun geri, sağın yana ve solun ileri gittiği dört sayımlı yön yolunu."
+      },
+      "doesNotSupport": {
+        "en": "Salsa On1 count placement, stopping and resetting onto the right foot, a fresh eight, return to basic, space or safety limits, or camera judgment.",
+        "tr": "Salsa On1 sayım yerleşimini, sağ ayağa durup yeniden destek kurmayı, yeni sekizliği, temele dönüşü, alan veya güvenlik sınırlarını ya da kamera hükmünü."
+      }
+    },
+    {
+      "id": "ellmann_pause_hold",
+      "title": "Pause / Hold — Mathias Ellmann",
+      "url": "https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html",
+      "use": "referenceOnly",
+      "note": "Movement Lexicon, 03 Technical execution / What matters in Pause / Hold. Only so_34 teaching[1] no-step count and breath continuity; no media or model-training rights.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "In so_34 teaching[1], intentionally reducing steps while continuing the count and natural breathing.",
+        "tr": "so_34 teaching[1] içinde adımı bilinçli azaltırken sayımı ve doğal nefesi sürdürmeyi."
+      },
+      "doesNotSupport": {
+        "en": "The lesson's whole quiet eight, chosen hand or finger accent, restart sequence, actual musical-break detection, or camera event judgment.",
+        "tr": "Dersin bütün sakin sekizliğini, seçilen el veya parmak vurgusunu, yeniden başlama dizisini, gerçek müzik duraklaması algısını veya kamera olay hükmünü."
+      }
     }
   ],
   "modules": [
@@ -1664,7 +1728,8 @@
         "dance_dojo_beginner",
         "dance_dojo_curriculum",
         "salsaventura_teaching",
-        "motor_spacing_primary"
+        "motor_spacing_primary",
+        "addicted2salsa_arm_layering"
       ],
       "prerequisites": [
         "so_14"
@@ -2662,7 +2727,8 @@
         "dance_dojo_curriculum",
         "salsaventura_teaching",
         "motor_spacing_primary",
-        "library_salsa_shines"
+        "library_salsa_shines",
+        "ellmann_front_cross"
       ],
       "prerequisites": [
         "so_24"
@@ -2762,7 +2828,8 @@
         "dance_dojo_curriculum",
         "salsaventura_teaching",
         "motor_spacing_primary",
-        "library_salsa_shines"
+        "library_salsa_shines",
+        "ellmann_front_cross"
       ],
       "prerequisites": [
         "so_25"
@@ -2967,7 +3034,8 @@
         "dance_dojo_curriculum",
         "salsaventura_teaching",
         "motor_spacing_primary",
-        "library_salsa_shines"
+        "library_salsa_shines",
+        "eld_jazz_box_b"
       ],
       "prerequisites": [
         "so_27"
@@ -3565,7 +3633,8 @@
         "dance_dojo_beginner",
         "dance_dojo_curriculum",
         "salsaventura_teaching",
-        "motor_spacing_primary"
+        "motor_spacing_primary",
+        "ellmann_pause_hold"
       ],
       "prerequisites": [
         "so_33"

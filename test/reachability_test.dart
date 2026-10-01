@@ -195,6 +195,9 @@ void main() {
       final Set<String> byStructure = <String>{
         ...matches(RegExp(r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
             r'([A-Z][A-Za-z_]*)\(')),
+        // MaterialApp.home also mounts a real destination without a builder.
+        ...matches(
+            RegExp(r'home:\s*(?:const\s+)?([A-Z][A-Za-z_]*(?:View|Page))\(')),
         // ⚠️ Kabuk sekmeleri BLOKTAN okunuyor, satır girintisinden DEĞİL.
         // İlk yazımım `^\s{10,}X\(\s*$` deseniydi ve `ProgressView`i
         // görüp `LibraryView`i KAÇIRDI — çünkü birinin argümanları alt
@@ -305,6 +308,9 @@ void main() {
       // does not count it. The loose walk below visits it.
       const Set<String> unreachableByDesign = <String>{
         'ProfileView',
+        // Only the separate failed-account startup route can mount this view.
+        // The normal configured shell walk cannot and must not simulate it.
+        'ChoreiaAccountFailureView',
       };
       final String shellSrc = lib.entries
           .firstWhere((MapEntry<String, String> e) =>

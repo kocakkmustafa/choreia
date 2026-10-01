@@ -26,16 +26,24 @@ final class SalsaSource {
       : id = _text(data['id']),
         title = _text(data['title']),
         url = _text(data['url']),
-        note = _text(data['note']) {
+        note = _text(data['note']),
+        supports = data['supports'] == null
+            ? null
+            : CourseText.parse(data['supports']),
+        doesNotSupport = data['doesNotSupport'] == null
+            ? null
+            : CourseText.parse(data['doesNotSupport']) {
     final uri = Uri.tryParse(url);
     if (uri == null ||
         uri.scheme != 'https' ||
         uri.host.isEmpty ||
-        data['use'] != 'referenceOnly') {
+        data['use'] != 'referenceOnly' ||
+        (supports == null) != (doesNotSupport == null)) {
       throw const FormatException('Sources must be HTTPS references only.');
     }
   }
   final String id, title, url, note;
+  final CourseText? supports, doesNotSupport;
 }
 
 final class SalsaModule {

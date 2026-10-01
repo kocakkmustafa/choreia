@@ -1,10 +1,23 @@
 # Choreia — LOOP
 
+## 2026-09-30 sessiz oynatıcı sonraki kapı
+
+Yerel sessizleştirme kodu, 15/15 odak ve 423/423 tam Flutter testi ile
+analizden geçti. Bağımsız peer, `video_player` başlatma içi beklenmeyen
+native çağrıların sırası/hata yakalanması için P2 kanıt açığını açık tuttu.
+Gerçek controller + kontrollü platform tanısı 1/1 geçti ve ilk pause'un
+play'den sonra uygulanabileceğini gösterdi; ek app-level await tam
+bariyer kurmuyor. Medya açılmadan önce per-player başlangıç Future
+sahipliği veya pinli paket düzeltmesini değerlendir; medya geldiğinde
+ses izi olmayan MP4 ve iOS/Android
+hoparlör/kulaklık/rota kabulünü yap. Üretim katalog hâlâ boş. Model,
+uzman etiket ve kaynak hakları ayrı açık kapı.
+
 ## 2026-09-28 gizli medya adayı sonraki kapı
 
-Üretim boş katalog ve görünmez slot kaynağı 8/8 test ve temiz analizle
-hazır. Gerçek onaylı medya yoktur ve Salsa ders ekranına oynatıcı
-bağlanmadı. Sıradaki kapı: lisanslı/öğretmence incelenmiş MP4 + TR/EN
+Üretim boş katalog ve görünmez slot Salsa ders ekranına bağlandı;
+sayfa+katalog 29/29 odak testi ve temiz hedefli analiz geçti. Gerçek onaylı
+medya ve oynatıcı yoktur. Sıradaki kapı: hak/öğretmen incelemesinden geçmiş MP4 + TR/EN
 altyazının v2/v3 teslim makbuzu, app paket bütçesi ve iOS/Android çevrimdışı
 oynatma kabulü. Medya izlemek ders/pratik/ustalık kaydı yazmamalı. CI bütçe
 engeli ve kişi-ayrık model verisi ayrıca açık.

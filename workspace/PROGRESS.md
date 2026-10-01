@@ -1,5 +1,49 @@
 # Choreia — İlerleme Kaydı
 
+## 2026-10-01 — Salsa On1 kaynak paketi app pinine bağlandı
+
+48 ders, 436 sahne ve 872 varyantın kurs/dilim/projeksiyon SHA'ları
+uygulama Dart sabitleri ve paket testleriyle eşleşiyor. Medya kaynak
+kataloğu/manifesti preproduction kimlikte; gösterim yayın kapısı kapalı.
+İlk kaynak/medya odak testi **19/19**, ek dilim kontrolü **1/1**, hedefli
+analiz temiz. Bağımsız yeniden hesaplama ve ek SHA incelemesi dar PASS:
+`scratch/2026-10-01-choreia-gravita-app-pin-independent-peer/REPORT.md`
+ve `ADDENDUM-SLICE-PINS.md`. Native/sessiz oynatma fiziksel kabulü açık.
+
+
+## 2026-09-30 — sessiz gösterim oynatıcısı yerel kapısı
+
+Kapalı QA `_AssetLessonVideo` artık `video_player` başlatılmadan önce
+ses düzeyini 0'a tohumluyor, başlatma sonrasında native `setVolume(0)`
+yanıtını bekliyor. Hazır/oynat kapısı bu yanıttan önce açılmıyor; açık
+mute hatasında video kapanıp yazılı ders kalıyor. Mute, hata ve rota
+değişimi için yeni testler dahil **15/15 odak**, **423/423 tam Flutter**
+PASS, analiz temiz. Root makbuzu
+`scratch/2026-09-30-choreia-silent-playback-root/REPORT.md`.
+
+Bağımsız peer P1 bulmadı fakat pinli eklentinin `initialized` olayında
+beklenmeden başlattığı otomatik native volume/pause Future'ları için
+**bir P2 kanıt açığı** bıraktı. Uygulamanın işlem kilidi yalnız açık
+adaptör çağrılarını izler; fiziksel ses/rota ve platform sırası kabulü
+henüz yok. Sınır eki
+`scratch/2026-09-30-choreia-silent-playback-root-v2/ADDENDUM.md`.
+Gerçek `VideoPlayerController` ve kontrollü sahte platformla yapılan
+ayrı scratch tanısı **1/1 PASS**: otomatik ilk `pause`un açık mute ve
+kullanıcı `play` sonrasında uygulanması public API ile mümkündür;
+native'e gönderilen ses değerleri 0'dır. Bu gerçek cihaz hatası değildir,
+P2 açık kalır (`scratch/2026-09-30-choreia-video-player-platform-diagnostic/REPORT.md`).
+Üretim katalog boş, gerçek medya ve nitelikli model 0; commit/push yok.
+
+## 2026-09-29 — gizli medya yuvası 48 ders ekranına bağlandı
+
+`SalsaCoursePage` her ders başlığının altında üretimde boş
+`LessonMediaSlot.empty` kuruyor. Gerçek video, altyazı, oynatıcı veya medya
+okuması başlatılmıyor; görünür yükseklik sıfır ve kayıtlı ders görüntüleme
+olayı aynı kalıyor. Hesap/dil/yaşam döngüsü geçişleri dahil kurs sayfası ve
+katalog testleri **29/29 PASS**, üç değişen dosyada hedefli analiz temiz.
+Bu, yalnız yerel kaynak ve widget kabulüdür. Gerçek medya, imzalı kabul kökü,
+oynatma ve iOS/Android cihaz kabulü açık.
+
 ## 2026-09-28 — gizli ve çevrimdışı ders medyası aday kapısı
 
 Üretimde boş `LessonMediaCatalog` ve görünmez `LessonMediaSlot` kaynakta.

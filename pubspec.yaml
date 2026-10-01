@@ -79,6 +79,11 @@ dependencies:
   # file fails loudly at first use instead of silently phoning home.
   google_fonts: ^6.2.1
 
+  # Bundled, user-started lesson demonstration playback. The shipping catalog
+  # remains empty until a signed media acceptance root and device review exist.
+  video_player:
+    path: third_party/video_player
+
   # C-222 (koordinatör hükmü (A), 2026-08-12). NİYE VAR: kamera izni KALICI
   # olarak reddedildiğinde ekranın tek kontrolü "Open settings" etiketli ÖLÜ
   # bir düğmeydi (C-140) — bağımlılık kümesinde OS ayarlarını açabilen hiçbir
@@ -100,6 +105,7 @@ dev_dependencies:
     sdk: flutter
   lints: ^5.0.0
   crypto: ^3.0.0
+  video_player_platform_interface: 6.9.0
 
 flutter:
   uses-material-design: true
@@ -108,6 +114,11 @@ flutter:
     # a new style is a content pack, not a code change.
     - content/
     - content/motion_content/manifest.json
+    # Code-pinned, closed QA source membership; the production media slot is empty.
+    - content/motion_content/choreia_source_pins_v2k.json
+    # App-owned v2l source identity only; no media is enabled by these assets.
+    - content/motion_content/choreia.source-slice.v1.json
+    - content/motion_content/choreia.source-projection.v1.json
     # References are listed FILE BY FILE, not as a directory, because that
     # directory also holds build-time bookkeeping that must not ship:
     # `decisions.json` is an INPUT to build_reference.py (its contents are

@@ -26,19 +26,75 @@ import 'app/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
-  final MotionAccountRuntime runtime = await MotionAccountRuntime.initialize(
-    url: const String.fromEnvironment('MOTION_SUPABASE_URL'),
-    publishableKey:
-        const String.fromEnvironment('MOTION_SUPABASE_PUBLISHABLE_KEY'),
-    app: MotionApp.choreia,
-    emailRedirectTo: 'com.yulalab.choreia://auth/callback',
-    onDeletedAccount: clearLocalHistoryFor,
-    localAccountIds: localHistoryAccountIds,
-  );
-  runApp(MotionIdentityGate(
-    runtime: runtime,
-    child: ChoreiaApp(accountRuntime: runtime),
-  ));
+  await launchChoreia();
+}
+
+/// A broken account build must show a bounded failure instead of opening an
+/// unauthenticated guest shell or ending before the first Flutter frame.
+Future<void> launchChoreia({
+  String url = const String.fromEnvironment('MOTION_SUPABASE_URL'),
+  String publishableKey =
+      const String.fromEnvironment('MOTION_SUPABASE_PUBLISHABLE_KEY'),
+}) async {
+  try {
+    final MotionAccountRuntime runtime = await MotionAccountRuntime.initialize(
+      url: url,
+      publishableKey: publishableKey,
+      app: MotionApp.choreia,
+      emailRedirectTo: 'com.yulalab.choreia://auth/callback',
+      onDeletedAccount: clearLocalHistoryFor,
+      localAccountIds: localHistoryAccountIds,
+    );
+    runApp(MotionIdentityGate(
+      runtime: runtime,
+      child: ChoreiaApp(accountRuntime: runtime),
+    ));
+  } on Object {
+    runApp(const ChoreiaAccountStartupFailure());
+  }
+}
+
+class ChoreiaAccountStartupFailure extends StatelessWidget {
+  const ChoreiaAccountStartupFailure({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Choreia',
+        theme: ChoreiaTheme.dark,
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: const ChoreiaAccountFailureView(),
+      );
+}
+
+/// Only reached when the configured account service cannot start.
+class ChoreiaAccountFailureView extends StatelessWidget {
+  const ChoreiaAccountFailureView({super.key});
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Choreia hesap hizmeti bu sürümde başlatılamadı. '
+                      'Uygulamayı yeniden açmayı dene; sorun sürerse '
+                      'güncel sürümü yükle.'
+                  : 'Choreia account service could not start in this '
+                      'build. Try reopening the app; if the problem '
+                      'continues, install an updated version.',
+              key: const Key('choreia.accountStartupFailure'),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
 }
 
 class ChoreiaApp extends StatelessWidget {

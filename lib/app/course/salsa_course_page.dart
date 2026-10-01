@@ -8,6 +8,7 @@ import '../live/live_environment.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
 import '../ui_language.dart';
+import 'media/lesson_media_slot.dart';
 import 'salsa_course.dart';
 import 'salsa_course_repository.dart';
 import 'salsa_progress.dart';
@@ -597,6 +598,13 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                       ])),
                     Text(lesson.title.inLanguage(tr),
                         style: ChoreiaType.display(size: 34)),
+                    LessonMediaSlot.empty(
+                      key: ValueKey('salsa.mediaSlot.${lesson.id}'),
+                      bundle: widget.env.bundle ?? rootBundle,
+                      lessonId: lesson.id,
+                      locale: tr ? 'tr' : 'en',
+                      accountUserId: widget.env.accountUserId,
+                    ),
                     if (_needsPreparation) ...[
                       const SizedBox(height: 16),
                       SalsaSessionPreparation(
@@ -766,6 +774,19 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                           style: ChoreiaType.body()),
                                       SelectableText(source.url,
                                           style: ChoreiaType.body()),
+                                      if (source.supports case final support?)
+                                        Text(
+                                            '${t('Supports only:', 'Yalnız destekler:')} ${support.inLanguage(tr)}',
+                                            key: Key(
+                                                'salsa.sourceScope.${source.id}'),
+                                            style: ChoreiaType.body()),
+                                      if (source.doesNotSupport
+                                          case final limit?)
+                                        Text(
+                                            '${t('Does not establish:', 'Kanıtlamaz:')} ${limit.inLanguage(tr)}',
+                                            key: Key(
+                                                'salsa.sourceLimit.${source.id}'),
+                                            style: ChoreiaType.body()),
                                       TextButton.icon(
                                           icon: const Icon(Icons.copy_outlined),
                                           onPressed: () => Clipboard.setData(

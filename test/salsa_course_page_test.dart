@@ -3,13 +3,30 @@ import 'dart:io';
 
 import 'package:choreia/app/course/salsa_course.dart';
 import 'package:choreia/app/course/salsa_course_page.dart';
+import 'package:choreia/app/course/media/lesson_media_slot.dart';
 import 'package:choreia/app/course/salsa_progress.dart';
 import 'package:choreia/app/live/live_environment.dart';
 import 'package:choreia/app/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show ByteData;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_catalog.dart';
+
+final class _RejectMediaBundle extends DeviceBundle {
+  _RejectMediaBundle() : super(declaredReferences());
+
+  int mediaRequests = 0;
+
+  @override
+  Future<ByteData> load(String key) {
+    if (key.startsWith('content/media/')) {
+      mediaRequests++;
+      throw FlutterError('The empty production catalog must not read media.');
+    }
+    return super.load(key);
+  }
+}
 
 void main() {
   const alice = '11111111-1111-4111-8111-111111111111';
@@ -86,6 +103,66 @@ void main() {
     await tester.tap(finder);
     await tester.pump();
   }
+
+  testWidgets('empty media slot leaves the Salsa lesson and viewed bytes alone',
+      (tester) async {
+    tester.binding.platformDispatcher.localesTestValue = const [Locale('en')];
+    addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
+    final bundle = _RejectMediaBundle();
+    env = LiveEnvironment(
+      bundle: bundle,
+      historyDirectoryOverride: temp,
+      accountUserId: owner,
+      source: () => throw StateError('Media must not start the camera.'),
+    );
+    await pumpApp(tester, SalsaCoursePage(env: env));
+    await loaded(tester, find.byKey(const Key('salsa.continue')));
+    expect(find.text('0 / 48 self-reported complete'), findsOneWidget);
+    await tapVisible(tester, const Key('salsa.continue'));
+    await loaded(tester, find.byKey(const ValueKey('salsa.lessonBody.so_01')));
+    expect(find.text('Meet Salsa'), findsOneWidget);
+    expect(find.text('1 / 48'), findsOneWidget);
+
+    final slotFinder = find.byKey(const ValueKey('salsa.mediaSlot.so_01'));
+    expect(slotFinder, findsOneWidget);
+    final slot = tester.widget<LessonMediaSlot>(slotFinder);
+    expect(slot.catalog.isEmpty, isTrue);
+    expect(slot.sceneId, isNull);
+    expect(slot.variantStem, isNull);
+    expect(slot.locale, 'en');
+    expect(tester.getSize(slotFinder).height, 0);
+
+    // Opening a written lesson already records one viewed event. The media
+    // seam must add no second viewed, practice, completion, or mastery record.
+    final file = File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}');
+    for (var i = 0; i < 60 && !file.existsSync(); i++) {
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 5)));
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(file.existsSync(), isTrue);
+    final before = file.readAsBytesSync();
+    final saved = jsonDecode(utf8.decode(before)) as Map<String, dynamic>;
+    final events = saved['events'] as List;
+    expect(events, hasLength(1));
+    expect(events.single['kind'], SalsaEvidence.viewed.name);
+    expect(bundle.mediaRequests, 0);
+
+    await tester.tap(find.text('Türkçe'));
+    await tester.pump();
+    expect(find.text('Salsa ile tanış'), findsOneWidget);
+    expect(tester.widget<LessonMediaSlot>(slotFinder).locale, 'tr');
+    expect(tester.getSize(slotFinder).height, 0);
+    owner.value = bob;
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(file.readAsBytesSync(), before);
+    expect(bundle.mediaRequests, 0);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+  });
 
   testWidgets(
       'entry to saved self-check survives reopening with an adapted record',

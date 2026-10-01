@@ -9,9 +9,9 @@ import 'package:motion_content/motion_content.dart';
 const String _manifestPath = 'content/motion_content/manifest.json';
 const String _coursePath = 'content/salsa_on1_course.json';
 // Current reviewed working-tree asset; an authored change requires a repin.
-const int _courseByteLength = 361125;
+const int _courseByteLength = 365523;
 const String _courseSha256 =
-    'bceece2f4264963578e0414985a34c55a45103b286c2b87e12bece711e693a83';
+    'b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7';
 
 final class _ManifestOverlayBundle extends CachingAssetBundle {
   _ManifestOverlayBundle(this.manifestBytes);
@@ -120,6 +120,22 @@ void main() {
   test('wrong pinned hash blocks course before exposure', () async {
     final _ManifestOverlayBundle bundle = _ManifestOverlayBundle(
       _manifestBytes(assetSha256: List<String>.filled(64, '0').join()),
+    );
+    final ContentLoadResult result = await _loader(bundle).load();
+
+    expect(result, isA<ContentBlocked>());
+    expect(
+      (result as ContentBlocked).error.code,
+      ContentErrorCode.hashMismatch,
+    );
+  });
+
+  test('previous course SHA cannot expose the new course bytes', () async {
+    final _ManifestOverlayBundle bundle = _ManifestOverlayBundle(
+      _manifestBytes(
+        assetSha256:
+            'd81c48841905ece680c58467032c6f6126f335eecbbfe77c6e812e3ad9ef1598',
+      ),
     );
     final ContentLoadResult result = await _loader(bundle).load();
 

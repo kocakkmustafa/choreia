@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "researchDigests": {
+    "v8": "ea9ceaae3c29ce25a2d84444255db35172cdc1910864a39285e7b95f7b4c07d2",
+    "v10": "85227a37d47c2bab330c86c1ed847f479dd4ffbdd461e70b4c8952086ea0d52b",
+    "v10bRepair": "771fa3175a3b1ded850261010c4c3a10b08fee98b0148762081e415567f5889a",
+    "v10bIndependentPeer": "fc47f1d6cff73fece24f322e5e5f009f5f1f05a73779dfdf5e13a94a0bc4798a"
+  },
+  "sourceResearch": {
+    "addicted2salsa_arm_layering": ["v8"],
+    "ellmann_front_cross": ["v8"],
+    "eld_jazz_box_b": ["v10bRepair", "v10bIndependentPeer"],
+    "ellmann_pause_hold": ["v10", "v10bRepair", "v10bIndependentPeer"]
+  },
+  "parentCourseSha256": "bceece2f4264963578e0414985a34c55a45103b286c2b87e12bece711e693a83",
+  "scope": "Five exact lesson teaching attributions; no whole-lesson, timing, camera, model or personal safety validation.",
+  "generatedMediaCount": 0,
+  "acceptedExpertLabelCount": 0,
+  "qualifiedModelCount": 0,
+  "sources": [
+    {
+      "id": "addicted2salsa_arm_layering",
+      "title": "Salsa styling tips for ladies — Addicted2Salsa",
+      "url": "https://www.addicted2salsa.com/dance/salsa-styling-tips-for-ladies/",
+      "use": "referenceOnly",
+      "note": "Original teacher text, styling mistakes and practice sequence; teaching attribution only, no media or model-training rights.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "Layering small optional arm styling over familiar footwork, reducing styling when timing is lost.",
+        "tr": "Tanıdık ayak çalışmasına küçük ve isteğe bağlı kol stilini eklemeyi, ritim kaybolursa kol hareketini azaltmayı."
+      },
+      "doesNotSupport": {
+        "en": "A fixed opposite-arm rule, exact solo On1 foot contacts, camera error threshold or the full lesson sequence.",
+        "tr": "Sabit karşı kol kuralını, solo On1 ayak temaslarını, kamera hata eşiğini veya dersin bütün dizisini."
+      }
+    },
+    {
+      "id": "ellmann_front_cross",
+      "title": "Front Cross Step — Mathias Ellmann",
+      "url": "https://www.mathiasellmann.de/en/salsa/movement-lexicon/front-cross-step.html",
+      "use": "referenceOnly",
+      "note": "One original teacher document shared by so_25 and so_26; no second independent source; teaching attribution only.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "A compact front cross and the distinction between an unweighted touch and a weighted step; a lateral opening can follow.",
+        "tr": "Küçük öne çaprazı, ağırlık verilmeyen dokunuş ile ağırlıklı adım ayrımını ve ardından yana açılabilen hareketi."
+      },
+      "doesNotSupport": {
+        "en": "Either lesson's exact On1 count, complete side-then-cross phrase, knee safety or camera judgment of weight transfer.",
+        "tr": "İki dersin kesin On1 sayımını, bütün yana-çapraz dizisini, diz güvenliğini veya kameradan ağırlık aktarımı hükmünü."
+      }
+    },
+    {
+      "id": "eld_jazz_box_b",
+      "title": "Line Dance Terminology, Jazz box B — Everything Line Dance Association",
+      "url": "https://eld-association.com/wp-content/uploads/2023/09/TERMINOLOGY-All.pdf",
+      "use": "referenceOnly",
+      "note": "Printed page 3 / PDF P2, Jazz box B. Only so_28 teaching[0] four-step direction words; line-dance terminology, not a Salsa On1 transition. No media or model-training rights.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "In so_28 teaching[0], right across left, left back, right side and left forward as a four-count direction path.",
+        "tr": "so_28 teaching[0] içindeki sağın sol önüne çapraz, solun geri, sağın yana ve solun ileri gittiği dört sayımlı yön yolunu."
+      },
+      "doesNotSupport": {
+        "en": "Salsa On1 count placement, stopping and resetting onto the right foot, a fresh eight, return to basic, space or safety limits, or camera judgment.",
+        "tr": "Salsa On1 sayım yerleşimini, sağ ayağa durup yeniden destek kurmayı, yeni sekizliği, temele dönüşü, alan veya güvenlik sınırlarını ya da kamera hükmünü."
+      }
+    },
+    {
+      "id": "ellmann_pause_hold",
+      "title": "Pause / Hold — Mathias Ellmann",
+      "url": "https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html",
+      "use": "referenceOnly",
+      "note": "Movement Lexicon, 03 Technical execution / What matters in Pause / Hold. Only so_34 teaching[1] no-step count and breath continuity; no media or model-training rights.",
+      "reviewed": "2026-09-30",
+      "supports": {
+        "en": "In so_34 teaching[1], intentionally reducing steps while continuing the count and natural breathing.",
+        "tr": "so_34 teaching[1] içinde adımı bilinçli azaltırken sayımı ve doğal nefesi sürdürmeyi."
+      },
+      "doesNotSupport": {
+        "en": "The lesson's whole quiet eight, chosen hand or finger accent, restart sequence, actual musical-break detection, or camera event judgment.",
+        "tr": "Dersin bütün sakin sekizliğini, seçilen el veya parmak vurgusunu, yeniden başlama dizisini, gerçek müzik duraklaması algısını veya kamera olay hükmünü."
+      }
+    }
+  ],
+  "bindings": {
+    "so_15": ["addicted2salsa_arm_layering"],
+    "so_25": ["ellmann_front_cross"],
+    "so_26": ["ellmann_front_cross"],
+    "so_28": ["eld_jazz_box_b"],
+    "so_34": ["ellmann_pause_hold"]
+  },
+  "excludedLessonIds": ["so_02", "so_09", "so_16", "so_17"]
+}
