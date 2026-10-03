@@ -42,7 +42,8 @@ run() {
   else
     fail=1
     echo "   🔴 KIRMIZI"
-    tail -25 /tmp/choreia-gate.$$
+    # Preserve failing testcase details; the final summary can hide the error.
+    cat /tmp/choreia-gate.$$
   fi
   rm -f /tmp/choreia-gate.$$
 }

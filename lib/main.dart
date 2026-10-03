@@ -1,9 +1,14 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart' show ValueListenable, visibleForTesting;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_account/motion_account.dart';
 
 import 'app/account_bridge.dart';
+import 'app/account_recovery_host.dart';
+import 'app/history/account_store_lifetime.dart';
 import 'app/live/live_environment.dart';
 import 'app/shell/choreia_shell.dart';
 import 'app/theme.dart';
@@ -37,17 +42,20 @@ Future<void> launchChoreia({
       const String.fromEnvironment('MOTION_SUPABASE_PUBLISHABLE_KEY'),
 }) async {
   try {
+    final hostController = ChoreiaAccountHostController();
     final MotionAccountRuntime runtime = await MotionAccountRuntime.initialize(
       url: url,
       publishableKey: publishableKey,
       app: MotionApp.choreia,
       emailRedirectTo: 'com.yulalab.choreia://auth/callback',
-      onDeletedAccount: clearLocalHistoryFor,
+      onDeletedAccount: (id) => clearLocalHistoryFor(id,
+          onNamespaceFenced: hostController.namespaceFenced),
       localAccountIds: localHistoryAccountIds,
     );
     runApp(MotionIdentityGate(
       runtime: runtime,
-      child: ChoreiaApp(accountRuntime: runtime),
+      child: ChoreiaApp(accountRuntime: runtime,
+          accountHostController: hostController),
     ));
   } on Object {
     runApp(const ChoreiaAccountStartupFailure());
@@ -97,42 +105,134 @@ class ChoreiaAccountFailureView extends StatelessWidget {
       );
 }
 
-class ChoreiaApp extends StatelessWidget {
-  const ChoreiaApp({super.key, this.accountRuntime});
+class ChoreiaApp extends StatefulWidget {
+  const ChoreiaApp({super.key, this.accountRuntime, this.accountHostController,
+      this.shellBuilder});
 
   final MotionAccountRuntime? accountRuntime;
+  final ChoreiaAccountHostController? accountHostController;
+  @visibleForTesting
+  final Widget Function(LiveEnvironment environment,
+      WidgetBuilder? accountPageBuilder)? shellBuilder;
+
+  @override
+  State<ChoreiaApp> createState() => _ChoreiaAppState();
+}
+
+class _ChoreiaAppState extends State<ChoreiaApp> {
+  MotionAccountRuntime? get accountRuntime => widget.accountRuntime;
+  Stream<ChoreiaAuthSessionEvent>? _authSessionChanges;
+  late ChoreiaAccountHostController _hostController;
+
+  void _bindRuntimeEvents() {
+    // Public Auth stream is retirement-only; canonical phase remains the
+    // authority for verified or genuinely signed-out guest admission.
+    _authSessionChanges = accountRuntime?.account.authChanges.map((state) =>
+        ChoreiaAuthSessionEvent(state.event.name, state.session));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _hostController = widget.accountHostController ?? ChoreiaAccountHostController();
+    _bindRuntimeEvents();
+  }
+
+  @override
+  void didUpdateWidget(covariant ChoreiaApp oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.accountHostController != widget.accountHostController) {
+      _hostController = widget.accountHostController ?? ChoreiaAccountHostController();
+    }
+    if (oldWidget.accountRuntime != accountRuntime) _bindRuntimeEvents();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget accountPage(BuildContext _) => MotionAccountPage(
-          account: accountRuntime!.account,
-          onRetryIdentity: accountRuntime!.refreshIdentity,
-          initialPasswordRecovery: accountRuntime!.isPasswordRecovery,
-          clearLocalData: clearLocalHistoryFor,
+    Widget accountPage(BuildContext _) {
+      final runtime = accountRuntime!;
+      // Capture the route ticket only for before-RPC initiation. Once Core
+      // verifies a server UUID echo, page and permanent callbacks both erase
+      // that UUID's entire data namespace across all its storage epochs.
+      final userId = runtime.userId.value;
+      final ticket =
+          userId == null ? null : appStoreOwners.currentTicket(userId);
+      return MotionAccountPage(
+        account: OwnerBoundMotionAccountClient(runtime.account,
+            expectedOwner: ticket),
+        onRetryIdentity: runtime.refreshIdentity,
+        initialPasswordRecovery: runtime.passwordRecovery.value,
+        clearLocalData: (id) => clearLocalHistoryFor(id,
+            onNamespaceFenced: _hostController.namespaceFenced),
+      );
+    }
+
+    Widget shell(ValueListenable<int>? ownerEpoch) {
+      final env = accountRuntime == null
+          ? const LiveEnvironment()
+          : LiveEnvironment(
+              accountUserId: accountRuntime!.userId,
+              passwordRecovery: accountRuntime!.passwordRecovery,
+              ownerEpoch: ownerEpoch,
+            );
+      final WidgetBuilder? accountBuilder =
+          accountRuntime == null ? null : accountPage;
+      return widget.shellBuilder?.call(env, accountBuilder) ?? ChoreiaShell(
+          env: env,
+          accountPageBuilder: accountBuilder,
+          beforeLessonStart: accountRuntime == null
+              ? null
+              : (lessonContext) => requireMotionPaidAccess(
+                    lessonContext,
+                    account: accountRuntime!.account,
+                    accountPageBuilder: accountPage,
+                  ),
         );
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Choreia',
-      theme: ChoreiaTheme.dark,
-      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: ChoreiaShell(
-        env: accountRuntime == null
-            ? const LiveEnvironment()
-            : LiveEnvironment(accountUserId: accountRuntime!.userId),
-        accountPageBuilder: accountRuntime == null ? null : accountPage,
-        beforeLessonStart: accountRuntime == null
-            ? null
-            : (lessonContext) => requireMotionPaidAccess(
-                  lessonContext,
-                  account: accountRuntime!.account,
-                  accountPageBuilder: accountPage,
-                ),
-      ),
-    );
+    }
+
+    Widget app(BuildContext context, Key? navigationKey, bool recovery,
+            ValueListenable<int>? ownerEpoch) {
+      return MaterialApp(
+          key: navigationKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Choreia',
+          theme: ChoreiaTheme.dark,
+          supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: recovery ||
+                  (accountRuntime != null && _hostController.requiresAccountRoute)
+              ? accountPage(context)
+              : shell(ownerEpoch),
+        );
+    }
+    final runtime = accountRuntime;
+    return runtime == null
+        ? app(context, null, false, null)
+        : ChoreiaAccountHost(
+            accountUserId: runtime.userId,
+            passwordRecovery: runtime.passwordRecovery,
+            controller: _hostController,
+            authSessionChanges: _authSessionChanges,
+            initialSessionIdentity:
+                runtime.account.supabase.auth.currentSession,
+            currentSessionIdentity: () => runtime.account.supabase.auth.currentSession,
+            identityChanges: runtime.phase,
+            verificationChanges: runtime.identityVerification,
+            canAdmitOwner: () =>
+                (runtime.phase.value == MotionIdentityPhase.verified &&
+                    runtime.isCurrentSessionVerified &&
+                    runtime.userId.value != null &&
+                    runtime.account.currentUser?.id == runtime.userId.value) ||
+                (!runtime.isDisposed &&
+                    runtime.phase.value == MotionIdentityPhase.signedOut &&
+                    runtime.account.supabase.auth.currentSession == null &&
+                    runtime.userId.value == null &&
+                    runtime.account.currentUser == null),
+            builder: app,
+          );
   }
 }

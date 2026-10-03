@@ -124,6 +124,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   /// sentence.
   ProgressSummary? _progress;
   int _historyGeneration = 0;
+  bool _historyRetired = false;
 
   /// Cancelled on dispose — see [_withinTimeout].
   Timer? _historyTimer;
@@ -132,6 +133,9 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   void initState() {
     super.initState();
     widget.env.accountUserId?.addListener(_onAccountChanged);
+    widget.env.passwordRecovery?.addListener(_onRecoveryChanged);
+    widget.env.ownerEpoch?.addListener(_onOwnerEpochChanged);
+    _historyRetired = widget.env.passwordRecovery?.value ?? false;
     _flag.hasSeenIntro().then((bool seen) {
       if (mounted) setState(() => _introSeen = seen);
     });
@@ -143,6 +147,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   /// it — a session finished a second ago must not be missing from the screen
   /// that exists to show it.
   Future<void> _refreshProgress(LibraryCatalog library) async {
+    if (_historyRetired) return;
     final int generation = _historyGeneration;
     final String? accountUserId = widget.env.accountUserId?.value;
     ProgressSummary next;
@@ -191,13 +196,38 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
     _refreshProgressWhenCatalogReady(_catalog);
   }
 
+  void _onRecoveryChanged() {
+    if (widget.env.passwordRecovery?.value != true || _historyRetired) return;
+    _onOwnerEpochChanged();
+  }
+
+  void _onOwnerEpochChanged() {
+    if (_historyRetired) return;
+    _historyRetired = true;
+    _historyGeneration++;
+    _historyTimer?.cancel();
+    _historyTimer = null;
+    if (mounted) setState(() => _progress = null);
+  }
+
   @override
   void didUpdateWidget(covariant ChoreiaShell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.env.accountUserId == widget.env.accountUserId) return;
-    oldWidget.env.accountUserId?.removeListener(_onAccountChanged);
-    widget.env.accountUserId?.addListener(_onAccountChanged);
-    _onAccountChanged();
+    if (oldWidget.env.passwordRecovery != widget.env.passwordRecovery) {
+      oldWidget.env.passwordRecovery?.removeListener(_onRecoveryChanged);
+      widget.env.passwordRecovery?.addListener(_onRecoveryChanged);
+      _onRecoveryChanged();
+    }
+    if (oldWidget.env.ownerEpoch != widget.env.ownerEpoch) {
+      oldWidget.env.ownerEpoch?.removeListener(_onOwnerEpochChanged);
+      widget.env.ownerEpoch?.addListener(_onOwnerEpochChanged);
+      _onOwnerEpochChanged();
+    }
+    if (oldWidget.env.accountUserId != widget.env.accountUserId) {
+      oldWidget.env.accountUserId?.removeListener(_onAccountChanged);
+      widget.env.accountUserId?.addListener(_onAccountChanged);
+      _onAccountChanged();
+    }
   }
 
   /// [work], or a [TimeoutException] once [historyReadTimeout] has passed.
@@ -216,7 +246,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   ) {
     final Completer<ProgressSummary> out = Completer<ProgressSummary>();
     _historyTimer?.cancel();
-    _historyTimer = Timer(historyReadTimeout, () {
+    final Timer timer = Timer(historyReadTimeout, () {
       if (!out.isCompleted) {
         out.completeError(
           TimeoutException(
@@ -226,6 +256,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         );
       }
     });
+    _historyTimer = timer;
     work().then(
       (ProgressSummary v) {
         if (!out.isCompleted) out.complete(v);
@@ -235,14 +266,17 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
       },
     );
     return out.future.whenComplete(() {
-      _historyTimer?.cancel();
-      _historyTimer = null;
+      // Late work owns only its deadline, never a newer account's timer.
+      timer.cancel();
+      if (identical(_historyTimer, timer)) _historyTimer = null;
     });
   }
 
   @override
   void dispose() {
     widget.env.accountUserId?.removeListener(_onAccountChanged);
+    widget.env.passwordRecovery?.removeListener(_onRecoveryChanged);
+    widget.env.ownerEpoch?.removeListener(_onOwnerEpochChanged);
     _historyTimer?.cancel();
     super.dispose();
   }

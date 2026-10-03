@@ -12,6 +12,7 @@ import 'package:video_player_platform_interface/video_player_platform_interface.
 final class _StartupPlatform extends VideoPlayerPlatform {
   final StreamController<VideoEvent> events = StreamController<VideoEvent>();
   final List<String> calls = <String>[];
+  final List<int> eventPlayerIds = <int>[];
   final Completer<void> volumeStarted = Completer<void>();
   final Completer<void> loopStarted = Completer<void>();
   final Completer<void> pauseStarted = Completer<void>();
@@ -24,13 +25,20 @@ final class _StartupPlatform extends VideoPlayerPlatform {
   Future<void> init() async {}
 
   @override
-  Future<int?> createWithOptions(VideoCreationOptions options) async => 1;
+  Future<int?> createWithOptions(VideoCreationOptions options) async {
+    if (failingOperation == 'create') throw StateError('create failed');
+    if (failingOperation == 'null-create') return null;
+    return 1;
+  }
 
   @override
-  Future<void> setMixWithOthers(bool mixWithOthers) async {}
+  Future<void> setMixWithOthers(bool mixWithOthers) async {
+    if (failingOperation == 'mix') throw StateError('mix failed');
+  }
 
   @override
   Stream<VideoEvent> videoEventsFor(int playerId) {
+    eventPlayerIds.add(playerId);
     scheduleMicrotask(() {
       events.add(VideoEvent(
         eventType: VideoEventType.initialized,
@@ -92,6 +100,21 @@ Future<void> _turn() => Future<void>.delayed(Duration.zero);
 
 VideoPlayerController _controller() =>
     VideoPlayerController.asset('content/media/no-real-file.mp4');
+
+final class _FailedCreationController extends VideoPlayerController {
+  _FailedCreationController()
+      : super.asset(
+          'content/media/no-real-file.mp4',
+          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        );
+
+  int lifecyclePauseCalls = 0;
+
+  @override
+  Future<void> pause() async {
+    lifecyclePauseCalls++;
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -265,5 +288,80 @@ void main() {
       if (!platform.pauseGate!.isCompleted) platform.pauseGate!.complete();
       await video.close();
     }
+  });
+
+  for (final operation in <String>['mix', 'create']) {
+    test('dispose settles after $operation fails before player creation',
+        () async {
+      final platform = _StartupPlatform()..failingOperation = operation;
+      final original = VideoPlayerPlatform.instance;
+      VideoPlayerPlatform.instance = platform;
+      addTearDown(() => VideoPlayerPlatform.instance = original);
+      // These failures precede videoEventsFor, so own the otherwise unlistened
+      // single-subscription stream; closing it without a listener would hang.
+      final unusedEvents = platform.events.stream.listen((_) {});
+      addTearDown(() async {
+        await platform.events.close();
+        await unusedEvents.cancel();
+      });
+      final controller = _FailedCreationController();
+
+      await expectLater(
+        controller.initialize(),
+        throwsA(isA<StateError>()
+            .having((error) => error.message, 'message', '$operation failed')),
+      );
+      expect(controller.playerId, VideoPlayerController.kUninitializedPlayerId);
+      // A failed creation has no native player to retire. Its creation barrier
+      // must still settle so disposal can release the lifecycle observer.
+      await expectLater(
+        controller.dispose().timeout(const Duration(seconds: 1)),
+        completes,
+      );
+      expect(platform.calls, isNot(contains('dispose')));
+      expect(platform.calls, isNot(contains('play-start')));
+      WidgetsBinding.instance
+          .handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      WidgetsBinding.instance
+          .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await _turn();
+      expect(controller.lifecyclePauseCalls, 0);
+    });
+  }
+
+  test('null native player ID rejects initialization and releases its observer',
+      () async {
+    final platform = _StartupPlatform()..failingOperation = 'null-create';
+    final original = VideoPlayerPlatform.instance;
+    VideoPlayerPlatform.instance = platform;
+    addTearDown(() => VideoPlayerPlatform.instance = original);
+    final controller = _FailedCreationController();
+    addTearDown(() async {
+      await controller.dispose().timeout(const Duration(seconds: 1));
+      // The green path never listens for events; the red path does. Both must
+      // close the fixture stream without trying to listen to it twice.
+      final unusedEvents = platform.eventPlayerIds.isEmpty
+          ? platform.events.stream.listen((_) {})
+          : null;
+      await platform.events.close();
+      await unusedEvents?.cancel();
+    });
+
+    await controller.setVolume(0);
+    await expectLater(
+      controller.initialize().timeout(const Duration(seconds: 1)),
+      throwsA(isA<StateError>().having((error) => error.message, 'message',
+          'VideoPlayerPlatform did not create a player')),
+    );
+    expect(platform.eventPlayerIds, isEmpty);
+    expect(controller.playerId, VideoPlayerController.kUninitializedPlayerId);
+    await controller.dispose().timeout(const Duration(seconds: 1));
+    expect(platform.calls, isNot(contains('dispose')));
+    WidgetsBinding.instance
+        .handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    WidgetsBinding.instance
+        .handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await _turn();
+    expect(controller.lifecyclePauseCalls, 0);
   });
 }

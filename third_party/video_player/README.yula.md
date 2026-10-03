@@ -8,5 +8,12 @@ Only its controller startup Future ownership and disposal ordering differ.
 The published `LICENSE` is included. Native platform implementation packages
 retain the versions selected by the app lockfile.
 
+Initialization owns the volume, looping, and pause acknowledgments in that
+order. Disposal waits for those startup writes. The creation completion barrier
+also settles when mixing or creation fails, while `initialize()` preserves the
+original error. A null or uninitialized native player ID is rejected before
+event subscription. Disposal skips the uninitialized player ID and removes its
+lifecycle observer.
+
 The local pin is limited to Choreia. Keep its regression test in
 `test/video_player_startup_future_test.dart` when updating this package.

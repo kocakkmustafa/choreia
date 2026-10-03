@@ -4,22 +4,28 @@ import 'dart:io';
 import 'package:choreia/app/account_bridge.dart';
 import 'package:choreia/app/course/salsa_course.dart';
 import 'package:choreia/app/course/salsa_progress.dart';
+import 'package:choreia/app/history/account_store_lifetime.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:motion_core/motion_core.dart' show SessionStoreRetiredException;
+
+import 'support/salsa_criterion_fixture.dart';
 
 void main() {
   const alice = '11111111-1111-4111-8111-111111111111';
   const bob = '22222222-2222-4222-8222-222222222222';
   late Directory temp;
   late SalsaCourse course;
+  late AppStoreOwnerRegistry owners;
   setUp(() {
     temp = Directory.systemTemp.createTempSync('choreia-course-');
+    owners = AppStoreOwnerRegistry();
     course = SalsaCourse.fromJson(
         jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
             as Map<String, dynamic>);
   });
   tearDown(() => temp.deleteSync(recursive: true));
-  Future<SalsaProgressStore> open([String? id]) =>
-      SalsaProgressStore.open(accountUserId: id, supportDirectory: temp);
+  Future<SalsaProgressStore> open([String? id]) => SalsaProgressStore.open(
+      accountUserId: id, supportDirectory: temp, owners: owners);
 
   test('reopening preserves evidence type, repeated attempts and adaptation',
       () async {
@@ -74,10 +80,7 @@ void main() {
     expect((await b.read()).events, isEmpty);
     expect((await guest.read()).events.single.lessonId, 'so_01');
     expect((await a.read()).events.single.lessonId, 'so_02');
-    final newer =
-        jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
-            as Map<String, dynamic>;
-    newer['version'] = 2;
+    final newer = criterionCourseJson();
     final nextVersion = SalsaCourse.fromJson(newer);
     expect((await a.read()).forCourse(nextVersion), isEmpty);
     expect((await a.read()).events, hasLength(1));
@@ -91,11 +94,13 @@ void main() {
     }
     expect(await localHistoryAccountIds(supportDirectory: temp), [alice, bob]);
     final queued = a.record(course, course.lessons[1], SalsaEvidence.practised);
-    await clearLocalHistoryFor(alice, supportDirectory: temp);
-    await queued;
+    final rejected =
+        expectLater(queued, throwsA(isA<SessionStoreRetiredException>()));
+    await clearLocalHistoryFor(alice, supportDirectory: temp, owners: owners);
+    await rejected;
     await expectLater(
         a.record(course, course.lessons[2], SalsaEvidence.practised),
-        throwsStateError);
+        throwsA(isA<SessionStoreRetiredException>()));
     expect(await a.file.exists(), isFalse);
     expect((await (await open(alice)).read()).events, isEmpty);
     expect((await b.read()).events, hasLength(1));
@@ -133,14 +138,14 @@ void main() {
     final target = File('${temp.path}/keep')..writeAsStringSync('keep');
     final link = Link(store.file.path)..createSync(target.path);
     await expectLater(store.read(), throwsA(isA<FileSystemException>()));
-    await clearLocalHistoryFor(alice, supportDirectory: temp);
+    await clearLocalHistoryFor(alice, supportDirectory: temp, owners: owners);
     expect(await link.exists(), isTrue);
     expect(await target.readAsString(), 'keep');
     expect(await localHistoryAccountIds(supportDirectory: temp), isEmpty);
     final b = await open(bob);
     await File('${b.file.path}.tmp').writeAsString('interrupted write');
     expect(await localHistoryAccountIds(supportDirectory: temp), [bob]);
-    await clearLocalHistoryFor(bob, supportDirectory: temp);
+    await clearLocalHistoryFor(bob, supportDirectory: temp, owners: owners);
     expect(await File('${b.file.path}.tmp').exists(), isFalse);
   });
 }

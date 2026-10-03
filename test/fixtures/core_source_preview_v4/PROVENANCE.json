@@ -1,0 +1,10 @@
+{
+  "scope": "Historical unpublished V4 identity, not current Core Git acceptance",
+  "approved_manifest_sha256": "1408182ae6ee4c274a20d7af77aee174e1c47d2e38829580212bdd077a52a416",
+  "approved_archive_sha256": "ff314571318d7e6026455b310c45ef10ccc3df3ae828434505f5043e8dcb02b5",
+  "old_source_files": 329,
+  "old_delta_files": 14,
+  "old_delta_sha256": "9f7cbd4465bd0db482e0dc5417c2ef9bfdbd32f54c12b9608477bb8c0a41971c",
+  "old_source_manifest_sha256": "45118535009c9f95689c10ddf8418608255fe1a27eec6f9cc29026e3eb6f2cb6",
+  "source": "Preserved core-adoption-v4 and core-adoption-candidate evidence; copied byte-for-byte without altering historical files"
+}

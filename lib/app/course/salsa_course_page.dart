@@ -8,6 +8,7 @@ import '../live/live_environment.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
 import '../ui_language.dart';
+import 'media/choreia_source_projection_adapter.dart';
 import 'media/lesson_media_slot.dart';
 import 'salsa_course.dart';
 import 'salsa_course_repository.dart';
@@ -17,11 +18,17 @@ import 'salsa_weekly_activity.dart';
 
 /// The teaching route never requests a camera, microphone or music permission.
 class SalsaCourseEntry extends StatelessWidget {
-  const SalsaCourseEntry({this.env = const LiveEnvironment(), super.key});
+  const SalsaCourseEntry({
+    this.env = const LiveEnvironment(),
+    this.onSourceProjectionReadback,
+    super.key,
+  });
   final LiveEnvironment env;
+  final ChoreiaSourceProjectionObserver? onSourceProjectionReadback;
   @override
   Widget build(BuildContext context) {
     final tr = UiLanguage.isTurkish(context);
+    final entryEpoch = env.ownerEpoch?.value;
     return GlassPanel(
       radius: 18,
       tint: ChoreiaColors.amber,
@@ -37,9 +44,18 @@ class SalsaCourseEntry extends StatelessWidget {
         FilledButton.tonalIcon(
           key: const Key('salsa.open'),
           icon: const Icon(Icons.menu_book_outlined),
-          onPressed: () => Navigator.of(context).push(ChoreiaPageRoute<void>(
-              settings: const RouteSettings(name: 'course/salsa-on1'),
-              builder: (_) => SalsaCoursePage(env: env))),
+          onPressed: () {
+            if (!context.mounted ||
+                env.passwordRecovery?.value == true ||
+                entryEpoch != env.ownerEpoch?.value) {
+              return;
+            }
+            Navigator.of(context).push(ChoreiaPageRoute<void>(
+                settings: const RouteSettings(name: 'course/salsa-on1'),
+                builder: (_) => SalsaCoursePage(
+                    env: env,
+                    onSourceProjectionReadback: onSourceProjectionReadback)));
+          },
           label: Text(tr ? 'Kurs ve ilerlemem' : 'Course & my progress'),
         ),
       ]),
@@ -51,9 +67,11 @@ class SalsaCoursePage extends StatefulWidget {
   const SalsaCoursePage({
     this.env = const LiveEnvironment(),
     this.nowForWeeklyPractice,
+    this.onSourceProjectionReadback,
     super.key,
   });
   final LiveEnvironment env;
+  final ChoreiaSourceProjectionObserver? onSourceProjectionReadback;
 
   /// Allows a calendar-boundary test without changing the device clock.
   final DateTime Function()? nowForWeeklyPractice;
@@ -72,6 +90,15 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
   bool _integrityFailure = false;
   bool? _turkish;
   int _loadId = 0;
+  bool _recoveryRetired = false;
+  bool _ownerEpochRetired = false;
+  bool _foreground = true;
+  bool get _admitted =>
+      mounted &&
+      !_recoveryRetired &&
+      !_ownerEpochRetired &&
+      widget.env.passwordRecovery?.value != true &&
+      _foreground;
   bool get tr => _turkish ?? UiLanguage.isTurkish(context);
   String t(String english, String turkish) => tr ? turkish : english;
   @override
@@ -79,6 +106,11 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     widget.env.accountUserId?.addListener(_load);
+    widget.env.passwordRecovery?.addListener(_onRecovery);
+    widget.env.ownerEpoch?.addListener(_onOwnerEpoch);
+    _recoveryRetired = widget.env.passwordRecovery?.value == true;
+    _foreground = WidgetsBinding.instance.lifecycleState == null ||
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     _load();
   }
 
@@ -87,31 +119,87 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.env != widget.env) {
       oldWidget.env.accountUserId?.removeListener(_load);
+      oldWidget.env.passwordRecovery?.removeListener(_onRecovery);
+      oldWidget.env.ownerEpoch?.removeListener(_onOwnerEpoch);
       widget.env.accountUserId?.addListener(_load);
+      widget.env.passwordRecovery?.addListener(_onRecovery);
+      widget.env.ownerEpoch?.addListener(_onOwnerEpoch);
+      if (oldWidget.env.ownerEpoch != widget.env.ownerEpoch) _onOwnerEpoch();
+      if (widget.env.passwordRecovery?.value == true) _onRecovery();
       _load();
     }
   }
 
   @override
   void dispose() {
+    _loadId++;
     WidgetsBinding.instance.removeObserver(this);
     widget.env.accountUserId?.removeListener(_load);
+    widget.env.passwordRecovery?.removeListener(_onRecovery);
+    widget.env.ownerEpoch?.removeListener(_onOwnerEpoch);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // Recompute the dated weekly snapshot after a night in the background.
-      if (mounted) setState(() {});
+    _foreground = state == AppLifecycleState.resumed;
+    if (_foreground) {
+      if (mounted && !_recoveryRetired && !_ownerEpochRetired) {
+        if (_course == null) {
+          _load();
+        } else {
+          // Recompute the dated snapshot without reopening a loaded journal.
+          setState(() {});
+        }
+      }
     } else {
+      _loadId++;
       _preparation.reset();
+    }
+  }
+
+  void _onRecovery() {
+    if (widget.env.passwordRecovery?.value != true) return;
+    _recoveryRetired = true;
+    _loadId++;
+    _preparation.reset();
+    if (mounted) {
+      setState(() {
+        _course = null;
+        _progress = null;
+        _store = null;
+      });
+    }
+  }
+
+  void _onOwnerEpoch() {
+    _ownerEpochRetired = true;
+    _loadId++;
+    _preparation.reset();
+    if (mounted) {
+      setState(() {
+        _course = null;
+        _progress = null;
+        _store = null;
+      });
     }
   }
 
   Future<void> _load() async {
     final request = ++_loadId;
-    final owner = widget.env.accountUserId?.value;
+    if (!_admitted) return;
+    final env = widget.env;
+    final bundle = env.bundle ?? rootBundle;
+    final owner = env.accountUserId?.value;
+    final ownerEpoch = env.ownerEpoch?.value;
+    bool current() =>
+        mounted &&
+        _admitted &&
+        request == _loadId &&
+        identical(env, widget.env) &&
+        identical(bundle, widget.env.bundle ?? rootBundle) &&
+        owner == widget.env.accountUserId?.value &&
+        ownerEpoch == widget.env.ownerEpoch?.value;
     if (_sessionOwner != owner) _preparation.reset();
     _sessionOwner = owner;
     setState(() {
@@ -123,24 +211,23 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
     });
     try {
       final course = await SalsaCourseRepository.load(
-        widget.env.bundle ?? rootBundle,
+        bundle,
       );
+      if (!current()) return;
       final store = await SalsaProgressStore.open(
           accountUserId: owner,
-          supportDirectory: widget.env.historyDirectoryOverride);
+          supportDirectory: env.historyDirectoryOverride,
+          owners: env.storeOwners);
+      if (!current()) return;
       final progress = await store.read();
-      if (!mounted ||
-          request != _loadId ||
-          owner != widget.env.accountUserId?.value) {
-        return;
-      }
+      if (!current()) return;
       setState(() {
         _course = course;
         _store = store;
         _progress = progress;
       });
     } on ContentException catch (error) {
-      if (mounted && request == _loadId) {
+      if (current()) {
         setState(() {
           _failed = true;
           _integrityFailure = switch (error.error.code) {
@@ -150,11 +237,12 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
         });
       }
     } catch (_) {
-      if (mounted && request == _loadId) setState(() => _failed = true);
+      if (current()) setState(() => _failed = true);
     }
   }
 
   Future<void> _open(SalsaLesson lesson) async {
+    if (!_admitted || _course == null || _store == null) return;
     final course = _course!;
     final store = _store!;
     await Navigator.of(context).push(ChoreiaPageRoute<void>(
@@ -165,6 +253,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
             store: store,
             preparationSession: _preparation,
             env: widget.env,
+            onSourceProjectionReadback: widget.onSourceProjectionReadback,
             initialTurkish: tr)));
     if (mounted) await _load();
   }
@@ -182,11 +271,22 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
           child: Material(
               type: MaterialType.transparency,
               child: SafeArea(
-                  child: _failed
-                      ? _failure()
-                      : course == null
-                          ? const Center(child: CircularProgressIndicator())
-                          : _overview(course)))),
+                  child: _recoveryRetired || _ownerEpochRetired
+                      ? Center(
+                          child: Text(
+                              _recoveryRetired
+                                  ? t('Return to Account to finish password recovery.',
+                                      'Parola kurtarmayı tamamlamak için Hesap’a dön.')
+                                  : t('Your account session changed. Return to Account.',
+                                      'Hesap oturumun değişti. Hesap’a dön.'),
+                              key: Key(_recoveryRetired
+                                  ? 'salsa.recoveryRetired'
+                                  : 'salsa.ownerEpochRetired')))
+                      : _failed
+                          ? _failure()
+                          : course == null
+                              ? const Center(child: CircularProgressIndicator())
+                              : _overview(course)))),
     );
   }
 
@@ -414,6 +514,7 @@ class SalsaLessonPage extends StatefulWidget {
       required this.env,
       required this.initialTurkish,
       this.preparationSession,
+      this.onSourceProjectionReadback,
       super.key});
   final SalsaCourse course;
   final SalsaLesson lesson;
@@ -421,6 +522,7 @@ class SalsaLessonPage extends StatefulWidget {
   final LiveEnvironment env;
   final bool initialTurkish;
   final SalsaPreparationSession? preparationSession;
+  final ChoreiaSourceProjectionObserver? onSourceProjectionReadback;
   @override
   State<SalsaLessonPage> createState() => _SalsaLessonPageState();
 }
@@ -434,6 +536,20 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   bool _busy = false, _practiceSaved = false, _completed = false;
   bool _accountChanged = false, _saveFailed = false;
   int _sessionEpoch = 0;
+  int _sourceEpoch = 0;
+  bool _foreground = true;
+  bool _recoveryRetired = false;
+  ChoreiaSourceProjectionResult _sourceReadback =
+      const ChoreiaSourceUnavailableNoMedia();
+
+  @visibleForTesting
+  ChoreiaSourceProjectionResult get sourceProjectionReadback => _sourceReadback;
+
+  bool get _admitted =>
+      mounted &&
+      !_accountChanged &&
+      !_recoveryRetired &&
+      widget.env.passwordRecovery?.value != true;
   SalsaPracticeOption _option = SalsaPracticeOption.standard;
   Timer? _timer;
   int _count = 1;
@@ -446,39 +562,156 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   bool get _physicalOption =>
       _lesson.requiresMovementPreparation &&
       _option != SalsaPracticeOption.rhythmOnly;
-  bool get _ownerMatches =>
-      SalsaProgressStore.ownerFor(widget.env.accountUserId?.value) ==
-      widget.store.owner;
+  bool get _ownerMatches {
+    try {
+      return SalsaProgressStore.ownerFor(widget.env.accountUserId?.value) ==
+          widget.store.owner;
+    } catch (_) {
+      return false;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _preparation = widget.preparationSession ?? SalsaPreparationSession();
     _lesson = widget.lesson;
     tr = widget.initialTurkish;
-    _checks = List.filled(_lesson.selfCheck.en.length, false);
+    _resetChecks();
     WidgetsBinding.instance.addObserver(this);
     widget.env.accountUserId?.addListener(_onAccount);
+    widget.env.passwordRecovery?.addListener(_onRecovery);
+    widget.env.ownerEpoch?.addListener(_onOwnerEpoch);
+    _recoveryRetired = widget.env.passwordRecovery?.value == true;
+    _accountChanged = _recoveryRetired;
+    _foreground = WidgetsBinding.instance.lifecycleState == null ||
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+    unawaited(_readSourceProjection());
     _record(SalsaEvidence.viewed);
   }
 
   @override
+  void didUpdateWidget(covariant SalsaLessonPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final envChanged = oldWidget.env != widget.env;
+    if (envChanged) {
+      oldWidget.env.accountUserId?.removeListener(_onAccount);
+      oldWidget.env.passwordRecovery?.removeListener(_onRecovery);
+      oldWidget.env.ownerEpoch?.removeListener(_onOwnerEpoch);
+      widget.env.accountUserId?.addListener(_onAccount);
+      widget.env.passwordRecovery?.addListener(_onRecovery);
+      widget.env.ownerEpoch?.addListener(_onOwnerEpoch);
+      if (oldWidget.env.ownerEpoch != widget.env.ownerEpoch) _onOwnerEpoch();
+      if (oldWidget.env.accountUserId != widget.env.accountUserId ||
+          !_ownerMatches) {
+        _onAccount();
+      }
+      if (widget.env.passwordRecovery?.value == true) _onRecovery();
+    }
+    if (oldWidget.lesson != widget.lesson ||
+        oldWidget.course != widget.course ||
+        oldWidget.store != widget.store) {
+      _revokePreparation();
+      _lesson = widget.lesson;
+      _practiceSaved = false;
+      _completed = false;
+      _resetChecks();
+      if (!_ownerMatches) _onAccount();
+    }
+    if (envChanged ||
+        oldWidget.lesson != widget.lesson ||
+        oldWidget.course != widget.course ||
+        oldWidget.store != widget.store ||
+        oldWidget.onSourceProjectionReadback !=
+            widget.onSourceProjectionReadback) {
+      _retireSource();
+      unawaited(_readSourceProjection());
+    }
+  }
+
+  void _retireSource() {
+    _sourceEpoch++;
+    _sourceReadback = const ChoreiaSourceUnavailableNoMedia();
+  }
+
+  Future<void> _readSourceProjection() async {
+    final epoch = ++_sourceEpoch;
+    if (!_admitted || !_ownerMatches || !_foreground) return;
+    final env = widget.env;
+    final bundle = env.bundle ?? rootBundle;
+    final owner = env.accountUserId?.value;
+    final recovery = env.passwordRecovery;
+    final ownerEpochNotifier = env.ownerEpoch;
+    final ownerEpoch = ownerEpochNotifier?.value;
+    final course = widget.course;
+    final lessonId = _lesson.id;
+    final observer = widget.onSourceProjectionReadback;
+    bool current() =>
+        mounted &&
+        _admitted &&
+        _ownerMatches &&
+        _foreground &&
+        epoch == _sourceEpoch &&
+        identical(env, widget.env) &&
+        identical(bundle, widget.env.bundle ?? rootBundle) &&
+        identical(recovery, widget.env.passwordRecovery) &&
+        identical(ownerEpochNotifier, widget.env.ownerEpoch) &&
+        ownerEpoch == widget.env.ownerEpoch?.value &&
+        owner == widget.env.accountUserId?.value &&
+        identical(course, widget.course) &&
+        lessonId == _lesson.id &&
+        identical(observer, widget.onSourceProjectionReadback);
+    try {
+      final result = await ChoreiaSourceProjectionAdapter.load(
+          bundle: bundle, isCurrent: current);
+      if (!current()) return;
+      _sourceReadback = result;
+      if (observer != null) await observer(result);
+    } catch (_) {
+      // Both synchronous and asynchronous observer errors remain NO_MEDIA.
+      // Never invoke the failed observer again to report its own error.
+      if (current()) _sourceReadback = const ChoreiaSourceUnavailableNoMedia();
+    }
+  }
+
+  @override
   void dispose() {
+    _retireSource();
     _timer?.cancel();
     widget.env.accountUserId?.removeListener(_onAccount);
+    widget.env.passwordRecovery?.removeListener(_onRecovery);
+    widget.env.ownerEpoch?.removeListener(_onOwnerEpoch);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) {
+    final foreground = state == AppLifecycleState.resumed;
+    if (foreground == _foreground) return;
+    _foreground = foreground;
+    _retireSource();
+    if (!_foreground) {
       _revokePreparation();
+    } else {
+      unawaited(_readSourceProjection());
     }
   }
 
   void _onAccount() {
+    _accountChanged = true;
+    _retireSource();
     _revokePreparation();
-    if (mounted) setState(() => _accountChanged = true);
+  }
+
+  void _onOwnerEpoch() => _onAccount();
+
+  void _onRecovery() {
+    if (widget.env.passwordRecovery?.value != true) return;
+    _recoveryRetired = true;
+    _accountChanged = true;
+    _retireSource();
+    _revokePreparation();
   }
 
   void _revokePreparation() {
@@ -497,6 +730,7 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   }
 
   void _acknowledgePreparation() {
+    if (!_admitted || !_foreground) return;
     setState(() {
       // A day change can expire a shared session without a lifecycle event.
       _sessionEpoch++;
@@ -513,11 +747,11 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   }
 
   void _startCounter() {
-    if (_accountChanged || _needsPreparation) return;
+    if (!_admitted || !_foreground || _needsPreparation) return;
     _count = 1;
     _timer =
         Timer.periodic(Duration(milliseconds: (60000 / _pace).round()), (_) {
-      if (_needsPreparation) {
+      if (!_admitted || !_foreground || _needsPreparation) {
         _pause();
         return;
       }
@@ -527,8 +761,14 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   }
 
   Future<void> _record(SalsaEvidence evidence) async {
-    if (_busy || _accountChanged || !_ownerMatches) return;
+    if (_busy || !_admitted || !_foreground || !_ownerMatches) return;
     if (evidence != SalsaEvidence.viewed && _needsPreparation) return;
+    if (evidence == SalsaEvidence.selfReportedComplete &&
+        (!_lesson.selfChecksFor(_option).completionAllowed ||
+            _checks.isEmpty ||
+            !_checks.every((checked) => checked))) {
+      return;
+    }
     final sessionEpoch = _sessionEpoch;
     setState(() {
       _busy = true;
@@ -537,39 +777,50 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
     try {
       await widget.store
           .record(widget.course, _lesson, evidence, option: _option);
-      if (!mounted || _accountChanged || !_ownerMatches) return;
+      if (!mounted || !_admitted || !_ownerMatches) return;
       setState(() {
         if (evidence == SalsaEvidence.practised &&
             sessionEpoch == _sessionEpoch &&
             (!_physicalOption || _preparation.acknowledged)) {
           _practiceSaved = true;
         }
-        if (evidence == SalsaEvidence.selfReportedComplete) _completed = true;
+        if (evidence == SalsaEvidence.selfReportedComplete &&
+            sessionEpoch == _sessionEpoch &&
+            (!_physicalOption || _preparation.acknowledged)) {
+          _completed = true;
+        }
       });
     } catch (_) {
-      if (mounted) setState(() => _saveFailed = true);
+      if (mounted && _admitted && _ownerMatches) {
+        setState(() => _saveFailed = true);
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
   void _next() {
+    if (!_admitted || !_foreground) return;
+    _retireSource();
     _pause();
     setState(() {
       _lesson = widget.course.lessons[_lesson.order];
-      _checks = List.filled(_lesson.selfCheck.en.length, false);
       _practiceSaved = false;
       _completed = false;
       _saveFailed = false;
       _option = SalsaPracticeOption.standard;
+      _resetChecks();
       _count = 1;
     });
+    unawaited(_readSourceProjection());
     _record(SalsaEvidence.viewed);
   }
 
   @override
   Widget build(BuildContext context) {
     final lesson = _lesson;
+    final selection = lesson.selfChecksFor(_option);
+    final statements = lesson.selfCheck.inLanguage(tr);
     return Scaffold(
       appBar: AppBar(title: Text('${lesson.order} / 48'), actions: [
         TextButton(
@@ -588,8 +839,11 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                       GlassPanel(
                           child: Column(children: [
                         Text(
-                            t('The account changed. Return to the course to use the current account’s progress.',
-                                'Hesap değişti. Geçerli hesabın ilerlemesi için kursa geri dön.'),
+                            _recoveryRetired
+                                ? t('Return to Account to finish password recovery.',
+                                    'Parola kurtarmayı tamamlamak için Hesap’a dön.')
+                                : t('The account changed. Return to the course to use the current account’s progress.',
+                                    'Hesap değişti. Geçerli hesabın ilerlemesi için kursa geri dön.'),
                             key: const Key('salsa.accountChanged'),
                             style: ChoreiaType.body()),
                         TextButton(
@@ -604,6 +858,8 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                       lessonId: lesson.id,
                       locale: tr ? 'tr' : 'en',
                       accountUserId: widget.env.accountUserId,
+                      passwordRecovery: widget.env.passwordRecovery,
+                      ownerEpoch: widget.env.ownerEpoch,
                     ),
                     if (_needsPreparation) ...[
                       const SizedBox(height: 16),
@@ -702,12 +958,20 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                 'Alıştırmayı denedim · pratiği kaydet'))),
                     _sectionTitle(t('Review your own practice',
                         'Kendi pratiğini değerlendir')),
-                    Text(
-                        t('Tick each statement only if it matches your chosen practice option. These are your observations.',
-                            'Her ifadeyi yalnız seçtiğin pratik seçeneğinde sana uyuyorsa işaretle. Bunlar senin gözlemlerin.'),
-                        style: ChoreiaType.body()),
-                    for (final (index, statement)
-                        in lesson.selfCheck.inLanguage(tr).indexed)
+                    if (!selection.completionAllowed)
+                      Text(
+                          t('This spoken option saves practice only. Physical self-checks remain untried and do not count as completion.',
+                              'Bu sözlü seçenek yalnız pratiği kaydeder. Fiziksel öz değerlendirmeler denenmedi olarak kalır; tamamlanma sayılmaz.'),
+                          key: const Key('salsa.practiceOnly'),
+                          style: ChoreiaType.body()),
+                    if (selection.completionAllowed)
+                      Text(
+                          t('Tick each statement only if it matches your chosen practice option. These are your observations.',
+                              'Her ifadeyi yalnız seçtiğin pratik seçeneğinde sana uyuyorsa işaretle. Bunlar senin gözlemlerin.'),
+                          style: ChoreiaType.body()),
+                    for (final (index, statement) in selection.indices
+                        .map((index) => statements[index])
+                        .indexed)
                       CheckboxListTile(
                           key: Key('salsa.check.$index'),
                           contentPadding: EdgeInsets.zero,
@@ -732,6 +996,8 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                 _accountChanged ||
                                 _needsPreparation ||
                                 !_practiceSaved ||
+                                !selection.completionAllowed ||
+                                _checks.isEmpty ||
                                 !_checks.every((checked) => checked)
                             ? null
                             : () {
@@ -800,14 +1066,19 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
   }
 
   void _chooseOption(SalsaPracticeOption option) {
+    if (!_admitted || !_foreground) return;
     _pause();
     setState(() {
       _option = option;
+      _sessionEpoch++;
       _practiceSaved = false;
       _completed = false;
-      _checks = List.filled(_checks.length, false);
+      _resetChecks();
     });
   }
+
+  void _resetChecks() => _checks =
+      List.filled(_lesson.selfChecksFor(_option).indices.length, false);
 
   Widget _sectionTitle(String title) => Padding(
       padding: const EdgeInsets.only(top: 24, bottom: 12),

@@ -1,0 +1,155 @@
+name: choreia
+description: Choreia — Learn to Dance. Camera-based dance coaching, on device.
+publish_to: none
+version: 1.0.0+2
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  motion_media: any
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # Ortak hesap, çekirdek ve kamera aynı değişmez Git sürümünden çözülür.
+  motion_account:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_account
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
+
+  # The engine is a SEPARATE package with no Flutter dependency (M-F-160,
+  # JabLab's split mirrored): scoring logic must stay testable without a widget
+  # tree, and the shell must not be able to reach into it sideways.
+  choreia_engine:
+    path: packages/choreia_engine
+
+  # SessionStore now comes from the core, not from a local port (M-F-193
+  # three-consumers rule): Choreia was the SECOND consumer, Lissom the third,
+  # so the shape was promoted and the local copy deleted. Two-pin regime
+  # (M-F-154): Dart consumers pin a TAG.
+  #
+  # The app depends on it DIRECTLY rather than re-exporting through
+  # choreia_engine: the engine judges cycles and has no business knowing that
+  # sessions are stored at all.
+  # PIN ÇİFTİ — İKİSİ DE ONAYLI TEK TAM REF, tag DEĞİL (J-071/M-F-260).
+  #
+  # AYNI repodan iki paketi İKİ FARKLI commit'ten pinlemek pub'da çift-kaynak
+  # çatışması üretir. CORE-ADOPT-001 bu yüzden ikisini de onaylanmış tek
+  # commit'e kilitler. Eşitlik ve kabul SHA'sı `test/pin_equality_test.dart`
+  # ile ÇİVİLİ — iki ref ayrışır veya eski ref'e dönerse test düşer.
+  motion_core:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_core
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
+
+  # Bundled content reader/validator contract at the same immutable Core pin.
+  # A production manifest and startup wiring are separate acceptance gates.
+  motion_content:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_content
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
+
+  # Kamera köprüsü: motor `motion_core`'dan hiçbir şey import etmiyordu ve
+  # pini C-121'de DÜŞÜRÜLMÜŞTÜ, isimli geri-giriş tetiğiyle: "ilk gerçek
+  # import günü". BUGÜN O GÜN — canlı yol PoseFrame/JointAngles/segmentasyon
+  # kullanıyor.
+  motion_camera:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_camera
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
+
+  # Only to locate the app-private directory. The storage FORMAT is the core's
+  # (append-only JSONL) — a 3rd-party DB is deliberately absent: session
+  # history is an event stream with no query load, and that need is met when it
+  # is MEASURED, not anticipated (J-064).
+  path_provider: ^2.1.0
+
+  # Design pass (2026-08-06): the three faces the design brief names
+  # (Instrument Serif, Manrope, IBM Plex Mono) are not system fonts.
+  #
+  # CHO-P0-002 (2026-08-19) closed the gap this comment originally flagged:
+  # the family HAS since solved it — Lissom (L-348/LIS-P0-002) self-hosts the
+  # same way this app now does. The files live under `assets/fonts/` (see
+  # `flutter.assets` below and `tool/fetch_fonts.sh`), and `main.dart` sets
+  # `GoogleFonts.config.allowRuntimeFetching = false` so a missing/renamed
+  # file fails loudly at first use instead of silently phoning home.
+  google_fonts: ^6.2.1
+
+  # Bundled, user-started lesson demonstration playback. The shipping catalog
+  # remains empty until a signed media acceptance root and device review exist.
+  video_player:
+    path: third_party/video_player
+
+  # C-222 (koordinatör hükmü (A), 2026-08-12). NİYE VAR: kamera izni KALICI
+  # olarak reddedildiğinde ekranın tek kontrolü "Open settings" etiketli ÖLÜ
+  # bir düğmeydi (C-140) — bağımlılık kümesinde OS ayarlarını açabilen hiçbir
+  # şey yoktu. Artık var.
+  #
+  # ⛔ İCAT DEĞİL, ADAPTASYON — ve referans ÖLÇÜLDÜ, varsayılmadı:
+  # ailenin 5 hattından 4'ü bu paketi zaten taşıyor (Gravita/Ostinato/JabLab
+  # ^12.0.3, Lissom ^11.3.1), yani yeni bir gizlilik yüzeyi AÇILMIYOR —
+  # Choreia aykırı olan taraftı. Sürüm dörtlünün çoğunluğuyla hizalandı.
+  # `openAppSettings`i GERÇEKTEN çağıran tek hat **Ostinato**tur (JabLab
+  # değil — onun `openSettings`i uygulama-içi ayar sayfasıdır, ölçüldü).
+  permission_handler: ^12.0.3
+
+dev_dependencies:
+  http: 1.6.0
+  supabase_flutter: 2.17.2
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  lints: ^5.0.0
+  crypto: ^3.0.0
+  video_player_platform_interface: 6.9.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    # Content is versioned JSON the engine interprets at runtime (plan §7):
+    # a new style is a content pack, not a code change.
+    - content/
+    - content/motion_content/manifest.json
+    # Code-pinned, closed QA source membership; the production media slot is empty.
+    - content/motion_content/choreia_source_pins_v2k.json
+    # App-owned v2l source identity only; no media is enabled by these assets.
+    - content/motion_content/choreia.source-slice.v1.json
+    - content/motion_content/choreia.source-projection.v1.json
+    # References are listed FILE BY FILE, not as a directory, because that
+    # directory also holds build-time bookkeeping that must not ship:
+    # `decisions.json` is an INPUT to build_reference.py (its contents are
+    # already injected into the artifacts below) and `.keyset-baseline.json` is
+    # the field-loss gate's baseline. A directory entry would bundle both into
+    # the app for no runtime reader. Adding a reference means adding a line
+    # here — and a forgotten line fails loudly at load, which is the failure
+    # direction to prefer.
+    # Poz modeli. Dosya GIT'TE DEĞİL — aile kuralı `.task` ikililerini
+    # izlemiyor (9,4 MB her klonda taşınmaz); `tool/fetch_pose_model.sh`
+    # indirir/kopyalar ve SHA-256'sını doğrular. Dizin olarak beyan ediliyor
+    # çünkü dosyanın kendisi checkout'ta YOK ve dosya-adı beyanı boş bir
+    # ağaçta build'i kırardı.
+    - assets/models/
+    - content/references/hh_bounce.json
+    - content/references/hh_roger_rabbit.json
+    - content/references/hh_running_man.json
+    - content/references/ss_shine_footwork.json
+    - content/styles/salsa_shines/
+    - content/styles/salsa_shines/steps/
+    - content/styles/hip_hop_foundations/
+    - content/styles/hip_hop_foundations/steps/
+
+    # CHO-P0-002 — self-hosted google_fonts files (lissom L-348 desen).
+    # Plain `assets:` folder entry, NOT the `fonts:` section below: the
+    # package's own README ("Bundling fonts when releasing") scans the asset
+    # manifest and matches its OWN `{Family}-{Weight}.ttf` naming convention
+    # — filenames must not be renamed. `tool/fetch_fonts.sh` fetches+verifies
+    # (SHA-256 pinned, sourced from the exact hashes the installed
+    # `google_fonts` 6.3.3 package would fetch at runtime); files are NOT
+    # committed to git (same pattern as `assets/models/`).
+    - assets/fonts/

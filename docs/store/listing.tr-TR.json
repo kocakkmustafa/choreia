@@ -26,5 +26,18 @@
     "physicalDeviceAccepted": false
   },
   "$sourceOfFacts": "Current course: content/salsa_on1_course.json; its app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Readback of provider metadata is separate.",
-  "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded."
+  "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded.",
+  "$courseSourceReadback20261002": {
+    "status": "local_source_readback_not_provider_or_release_acceptance",
+    "asset": "content/salsa_on1_course.json",
+    "sha256": "b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7",
+    "bytes": 365523,
+    "lessonCount": 48,
+    "moduleCount": 8,
+    "sceneCount": 436,
+    "variantCount": 872,
+    "mediaIncluded": false,
+    "physicalDeviceAccepted": false,
+    "historicalBlock": "$coursePreparation20260926 is historical; current source bytes are recorded here"
+  }
 }

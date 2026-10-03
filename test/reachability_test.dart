@@ -367,9 +367,15 @@ void main() {
           reason: 'gerekçe BAYAT: `LiveLessonPage` artık `rootBundle`a '
               'düşmüyor olabilir — o hâlde bu yürüyüşte çizilmeme sebebi '
               'değişti');
-      expect(livePage.contains('materialisePoseModel()'), isTrue,
+      final cameraSource = lib.entries
+          .firstWhere((e) => e.key.endsWith('camera_pose_source.dart'))
+          .value;
+      expect(cameraSource.contains('modelPathOpener ?? materialisePoseModel'),
+          isTrue,
           reason: 'gerekçe BAYAT: poz modeli artık yüklenmiyor olabilir');
-      expect(livePage.contains('widget.env.source?.call() ?? _CameraSource()'),
+      expect(
+          livePage.contains(
+              'widget.env.source?.call() ?? DeviceCameraPoseSource()'),
           isTrue,
           reason:
               'gerekçe BAYAT: poz kaynağı artık kameraya düşmüyor olabilir');
@@ -631,7 +637,10 @@ void main() {
 
       final String live =
           File('lib/app/live/live_lesson_page.dart').readAsStringSync();
-      expect(live, contains('materialisePoseModel()'),
+      expect(live, contains('DeviceCameraPoseSource()'));
+      final cameraSource =
+          File('lib/app/live/camera_pose_source.dart').readAsStringSync();
+      expect(cameraSource, contains('modelPathOpener ?? materialisePoseModel'),
           reason: 'canlı sayfa modeli GERÇEK bir dosya yoluna çevirmeden '
               'kameraya veriyor — eklenti asset anahtarını açamaz');
       expect(live, isNot(contains("'assets/pose_landmarker")),

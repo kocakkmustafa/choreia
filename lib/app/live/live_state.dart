@@ -31,9 +31,12 @@ final class LiveIdle extends LiveState {
   const LiveIdle();
 }
 
-/// The app left the foreground, so capture was released until the user retries.
+/// Capture was released after leaving the foreground or changing its owner.
 final class LiveInterrupted extends LiveState {
-  const LiveInterrupted();
+  const LiveInterrupted({this.accountChanged = false});
+
+  /// An account change permanently retires this route's capture lease.
+  final bool accountChanged;
 }
 
 /// The user has not granted camera permission (or revoked it).
