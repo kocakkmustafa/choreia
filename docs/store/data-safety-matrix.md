@@ -4,19 +4,30 @@
 (C-266/A8, ölçülerek dolduruldu) · `ios/Runner/Info.plist` · `android/app/src/main/AndroidManifest.xml`
 · `tools/network_dependency_check.py` (yükleyici-izi kapısı, 5 öz-test) · `tools/privacy_manifest_check.py`.
 2026-09-25 kaynak durumu: ortak Motion hesabı Core path bağımlılığıyla eklendi;
-üretim şeması/işlevleri kuruldu, ancak gerçek kullanıcı uçtan uca kanıtı ve mağaza formu onayı henüz yok. Hesap ve satın alma için dört
-alanın ayrıntısı `account-data-safety-draft.md` dosyasında. Aşağıdaki 2026-08-19
+üretim şeması/işlevleri kuruldu, ancak gerçek kullanıcı uçtan uca kanıtı ve mağaza formu onayı henüz yok. Hesap ve sağlayıcı alanlarının
+ayrıntısı `account-data-safety-draft.md` dosyasında. Aşağıdaki 2026-08-19
 notları tarihsel ölçüm olarak tutulur; güncel hüküm yeni satırlardır.
 
 **2026-09-26 kaynak uzlaştırması:** Satışın ertelendiği ilk sürüm için
 aşağıdaki güncel tablolar düzeltilmiştir. Çözümlenen `motion_account`
 paketinde `motionPaidFeaturesAvailable=false`; üyelik/satış girişleri ve
-paid-session yolu kapalıdır. Güncel Apple manifestinde yalnız e-posta,
-isteğe bağlı ad ve hesap ID'si collected türü vardır; purchase-history
-türü yoktur. 2026-09-25 sağlayıcı/SMTP bilgisi bu tur yeniden ölçülmedi.
+paid-session yolu kapalıdır. O tarihteki üç hesap türü açıklaması,
+2026-09-27 sağlayıcı günlükleri uzlaştırmasıyla genişletildi;
+purchase-history türü yoktur. 2026-09-25 sağlayıcı/SMTP bilgisi bu tur yeniden ölçülmedi.
 Kaynak kontrolü final SDK/network, fiziksel cihaz veya konsol kabulü değildir.
 Önceki satın alma beyanı sonraki satış planını mevcut durum gibi gösteriyordu;
 tarihsel metnin anlamı §4'te korunur, güncel form adayı aşağıdadır.
+
+**2026-10-02 kaynak uzlaştırması:** `PrivacyInfo.xcprivacy` yeniden okundu:
+e-posta, isteğe bağlı ad, kullanıcı ID'si, Other Diagnostic Data,
+Coarse Location ve Other Data Types olmak üzere altı tür var; hepsi
+hesaba bağlı, uygulama işlevi için ve tracking=false. Son üç türün
+2026-09-26 tarihli ortak sağlayıcı makbuzu ve sınıflandırma gerekçesi
+`account-data-safety-draft.md` içindedir. Reklam/analytics SDK'sı olmaması
+sunucudaki IP/user-agent güvenlik günlüklerini yok saydırmaz. Aşağıdaki
+Play eşlemeleri form adayıdır; güncel sağlayıcı saklama/SDK trafiği ve
+konsol readback'iyle finalleştirilir. Bu kaynak onarımı yeni canlı veri
+ölçümü veya mağaza formu değişikliği değildir.
 
 ## 0. Baseline — ne VAR, ne YOK (formu doldurmadan önce)
 
@@ -58,8 +69,10 @@ tarihsel metnin anlamı §4'te korunur, güncel form adayı aşağıdadır.
 | Photos/Videos | HAYIR | — | — | — | Kamera karesi cihazda işlenir, kaydedilmez/yüklenmez |
 | Audio | HAYIR | — | — | — | Choreia ilk kursu mikrofon kullanmaz; native mikrofon izni yoktur |
 | App activity | HAYIR (mevcut sürüm) | HAYIR | — | Cihaz içi ilerleme | Kurs JSON'u ve seans JSONL'i kalıcıdır, ancak cihazdan aktarılmaz. Google Play'in [Data safety tanımı](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en) için yalnız cihazda kalan işleme collection değildir; önceki “kalıcı dosya = collected” çıkarımı yanlıştı. Hesap verisi ve kapalı satış durumu yukarıda ayrı beyan edilir. |
-| App info & performance | HAYIR | — | — | — | Crash/diagnostics SDK'sı yok |
-| Device/other IDs | HAYIR | — | — | — | Reklam/tracking ID yok |
+| App info & performance: Diagnostics | EVET (beyan adayı) | Servis sağlayıcı istisnası doğrulanacak | Hesap yolu için gerekli | App functionality / security | Sunucuda saklanan IP/user-agent/platform güvenlik günlükleri var; crash/analytics SDK'sı yok. Play formundaki exact alt tür ve sharing istisnası final sağlayıcı kapsamıyla doğrulanır |
+| Location: Approximate location | EVET (beyan adayı) | Servis sağlayıcı istisnası doğrulanacak | Hesap yolu için gerekli | App functionality / security | Ortak edge günlüklerinde IP tabanlı ülke/bölge/şehir; GPS/konum izni yok |
+| Personal info: Other info | EVET (eşleme adayı) | Servis sağlayıcı istisnası doğrulanacak | Parolalı hesap için gerekli | Account management / security | Parola doğrulama/hash ve silme makbuzunun kimlik bağı; Play kategorisi ayrıca doğrulanmalı, Apple Other Data Types satırından otomatik türetilmez |
+| Device/other IDs | Final IP/SDK eşlemesi açık | — | — | — | Reklam/tracking ID yok; sunucu IP/user-agent bilgisinin bu alt türe girip girmediği final form tanımıyla doğrulanır. Ayrı provider günlükleri yukarıda beyan adayına dahildir |
 | Health & fitness | HAYIR | — | — | — | Sağlık verisi toplanmaz (uygulama tıbbi/sağlık verisi işlemez) |
 
 **Data deletion bölümü:** Ortak hesap silme arayüzü Core'da var; uzak silme
@@ -75,10 +88,12 @@ release öncesi gerçek ortamda doğrulanmalı; fontlar paketlidir.
 |---|---|---|
 | Contact Info: email, optional name | Collected, linked, app functionality | Motion Auth/profil; `PrivacyInfo.xcprivacy` |
 | Health & Fitness | Not collected | Hesap manifestinde sağlık verisi türü yok; kamera/eklem noktaları cihazdan gönderilmiyor |
-| Diagnostics | Not collected | Crash/analytics SDK'sı yok |
+| Diagnostics: Other Diagnostic Data | Collected, linked, app functionality | Provider IP/user-agent/platform güvenlik günlükleri; crash/analytics SDK'sı yok |
+| Location: Coarse Location | Collected, linked, app functionality | Provider edge günlüklerinde IP tabanlı yaklaşık konum; GPS izni/kesin konum yok |
+| Other Data Types | Collected, linked, app functionality | Parola doğrulama/hash ve hesap silme makbuzu kimlik bağı; Apple parola eşlemesi proje çıkarımı olarak `account-data-safety-draft.md` içinde açıklanır |
 | Identifiers: account ID | Collected, linked, app functionality | Motion hesabı; reklam/tracking ID yok |
 | Purchases: purchase history | Not collected (mevcut ilk sürüm) | Satış/işlem doğrulaması kapalı; güncel `PrivacyInfo.xcprivacy` purchase-history türü içermez. Satış açılırsa yeniden değerlendirilir |
-| Usage Data | Not collected | Kurs JSON'u ve seans JSONL'i cihazda kalır; güncel manifest yalnız hesap alanlarını beyan eder. Cihaz dışına çıkma ve SDK davranışı final paketle ayrıca denetlenir |
+| Usage Data | Not collected (yerel kurs/seans yolu) | Kurs JSON'u ve seans JSONL'i cihazda kalır; sunucudaki hesap/güvenlik günlükleri yukarıdaki ayrı türlerde değerlendirilir. Final paket/SDK davranışı ayrıca denetlenir |
 
 [Apple App Privacy](https://developer.apple.com/app-store/app-privacy-details/)
 yalnız cihazda işlenip dışarı gönderilmeyen veriyi collected saymaz.

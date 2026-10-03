@@ -1,22 +1,25 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Runs once before every test file in this directory tree.
-///
-/// `google_fonts` tries to FETCH its three families at runtime, and under
-/// `flutter_test` that request is served by a stub that answers 400 — so a
-/// screen styled with `ChoreiaType` prints a font-loading error on every pump
-/// and, on a machine where the override behaves differently, can fail outright.
-/// This is a family-wide trap, recorded in the shared core: the fix is to tell
-/// the package it may not go to the network, once, here.
-///
-/// The honest limit: this makes tests render with a FALLBACK face, not the
-/// design's Instrument Serif / Manrope / IBM Plex Mono. Layout assertions in
-/// this suite therefore measure the app's own spacing and wrapping rules, and
-/// do NOT prove the shipped typefaces fit — the overflow tests are pinned to a
-/// real phone width so they stay a meaningful floor rather than a proof.
+/// Exercise the shipped font bytes even under content-only asset fixtures.
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
+  TestWidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+  for (final entry in <String, List<String>>{
+    'Manrope': ['Manrope-Regular.ttf', 'Manrope-SemiBold.ttf'],
+    'Instrument Serif': ['InstrumentSerif-Regular.ttf'],
+    'IBM Plex Mono': ['IBMPlexMono-Medium.ttf'],
+  }.entries) {
+    final loader = FontLoader(entry.key);
+    for (final file in entry.value) {
+      final bytes = File('assets/fonts/$file').readAsBytesSync();
+      loader.addFont(Future.value(ByteData.sublistView(Uint8List.fromList(bytes))));
+    }
+    await loader.load();
+  }
   await testMain();
 }

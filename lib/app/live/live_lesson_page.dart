@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:motion_camera/motion_camera.dart' show CameraFailure;
 import 'package:motion_core/motion_core.dart';
+import 'package:motion_camera/motion_camera.dart'
+    show CameraException, CameraFailure;
 // Tam paket, `show` listesi DEĞİL — ölçüldü: `isPermanentlyDenied`/
 // `isRestricted`/`status` bu pakette UZANTI (extension) üyeleri, ve bir
 // `show` listesi uzantıları gizler. Ostinato da API'yi kullandığı dosyada
@@ -13,12 +14,12 @@ import 'package:motion_core/motion_core.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../shell/choreia_page_route.dart';
+import '../history/account_store_lifetime.dart';
 import 'camera_pose_source.dart';
 import 'live_environment.dart';
 import 'live_session.dart';
 import 'live_state.dart';
 import 'live_view.dart';
-import 'pose_model.dart';
 import 'session_result_view.dart';
 import 'session_tally.dart';
 
@@ -133,11 +134,28 @@ class _LiveLessonPageState extends State<LiveLessonPage>
   /// the page measures, the tally rules.
   final Stopwatch _clock = Stopwatch()..start();
 
-  late final PoseSource _source = widget.env.source?.call() ?? _CameraSource();
+  late final PoseSource _source;
+  AppStoreOwnerTicket? _resourceOwner;
+
+  Future<void> _closeOwnedResource() {
+    _revokeOwner();
+    return _retireSource();
+  }
 
   // Keep this lesson's journal owner fixed even if sign-in changes while the
   // camera is open. A new account must never inherit the guest attempt.
-  late final String? _recordOwnerUserId = widget.env.accountUserId?.value;
+  late final String? _recordOwnerUserId;
+  bool _ownerRevoked = false;
+  bool get _ownerMatches =>
+      widget.env.accountUserId?.value == _recordOwnerUserId;
+  bool _captureAllowed(int epoch) =>
+      mounted &&
+      _foreground &&
+      !_ownerRevoked &&
+      !_cameraCloseFailed &&
+      !_finishing &&
+      _ownerMatches &&
+      epoch == _lifecycleEpoch;
 
   AssetBundle get _bundle => widget.env.bundle ?? rootBundle;
 
@@ -151,18 +169,118 @@ class _LiveLessonPageState extends State<LiveLessonPage>
   bool _starting = false;
   bool _requestingPermission = false;
   bool _sourceOpen = false;
+  bool _sourceLeaseActive = false;
+  bool _cameraCloseFailed = false;
+  Future<void>? _sourceRetirement;
   int _lifecycleEpoch = 0;
   Completer<void>? _resumeSignal;
 
   @override
   void initState() {
     super.initState();
+    _recordOwnerUserId = widget.env.accountUserId?.value;
+    _source = widget.env.source?.call() ?? DeviceCameraPoseSource();
+    _resourceOwner = (widget.env.storeOwners ?? appStoreOwners)
+        .capture(_recordOwnerUserId);
+    _resourceOwner!.registerResource(_closeOwnedResource);
     WidgetsBinding.instance.addObserver(this);
+    widget.env.accountUserId?.addListener(_revokeOwner);
+    widget.env.passwordRecovery?.addListener(_onRecoveryChanged);
+    widget.env.ownerEpoch?.addListener(_revokeOwner);
+    _onRecoveryChanged();
     _start();
   }
 
   @override
+  void didUpdateWidget(covariant LiveLessonPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.env == widget.env) return;
+    if (oldWidget.env.accountUserId != widget.env.accountUserId) {
+      oldWidget.env.accountUserId?.removeListener(_revokeOwner);
+      widget.env.accountUserId?.addListener(_revokeOwner);
+    }
+    if (oldWidget.env.passwordRecovery != widget.env.passwordRecovery) {
+      oldWidget.env.passwordRecovery?.removeListener(_onRecoveryChanged);
+      widget.env.passwordRecovery?.addListener(_onRecoveryChanged);
+      _onRecoveryChanged();
+    }
+    if (oldWidget.env.ownerEpoch != widget.env.ownerEpoch) {
+      oldWidget.env.ownerEpoch?.removeListener(_revokeOwner);
+      widget.env.ownerEpoch?.addListener(_revokeOwner);
+      _revokeOwner();
+    }
+    // This source and journal owner were acquired for the original route.
+    // Replacing its dependencies cannot silently rebind a running attempt.
+    if (oldWidget.env.accountUserId != widget.env.accountUserId ||
+        oldWidget.env.bundle != widget.env.bundle ||
+        oldWidget.env.source != widget.env.source ||
+        oldWidget.env.storeOpener != widget.env.storeOpener ||
+        oldWidget.env.storeOwners != widget.env.storeOwners ||
+        oldWidget.env.historyDirectoryOverride !=
+            widget.env.historyDirectoryOverride ||
+        oldWidget.env.cameraPermissionRequest !=
+            widget.env.cameraPermissionRequest ||
+        oldWidget.env.permanentlyDeniedProbe !=
+            widget.env.permanentlyDeniedProbe ||
+        oldWidget.env.openSettings != widget.env.openSettings) {
+      _revokeOwner();
+    }
+  }
+
+  void _onRecoveryChanged() {
+    if (widget.env.passwordRecovery?.value == true) _revokeOwner();
+  }
+
+  void _revokeOwner() {
+    if (_ownerRevoked) return;
+    _ownerRevoked = true;
+    _lifecycleEpoch++;
+    _clock.stop();
+    _noPoseTimer?.cancel();
+    _noPoseTimer = null;
+    _resumeSignal?.complete();
+    _resumeSignal = null;
+    unawaited(_run?.cancel());
+    _run = null;
+    _retireSource();
+    if (mounted) {
+      setState(() => _state = const LiveInterrupted(accountChanged: true));
+    }
+  }
+
+  Future<void> _retireSource() {
+    _sourceOpen = false;
+    if (!_sourceLeaseActive) return _sourceRetirement ?? Future<void>.value();
+    _sourceLeaseActive = false;
+    // stop also cancels acquisition; waiting for begin to settle can strand
+    // an opening camera after the route has lost its owner or foreground.
+    final retirement = Future<void>.sync(_source.stop);
+    _sourceRetirement = retirement;
+    // Observe errors for background/owner/dispose callers too. Finish awaits
+    // this same per-attempt Future, and must not write before confirmed close.
+    unawaited(
+        retirement.then<void>((_) {}, onError: (Object error, StackTrace _) {
+      _cameraCloseFailed = true;
+      _lifecycleEpoch++;
+      _clock.stop();
+      _noPoseTimer?.cancel();
+      _noPoseTimer = null;
+      if (mounted && !_ownerRevoked) {
+        final failure = error is CameraException
+            ? error.failure
+            : CameraFailure.closeUncertain;
+        setState(() {
+          _finishing = false;
+          _state = LiveCameraUnavailable(failure, null);
+        });
+      }
+    }));
+    return retirement;
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_ownerRevoked) return;
     if (state == AppLifecycleState.resumed) {
       _foreground = true;
       _resumeSignal?.complete();
@@ -179,29 +297,30 @@ class _LiveLessonPageState extends State<LiveLessonPage>
     _noPoseTimer = null;
     unawaited(_run?.cancel());
     _run = null;
-    if (_sourceOpen) {
-      _sourceOpen = false;
-      unawaited(_source.stop());
-    }
+    _retireSource();
     if (mounted) setState(() => _state = const LiveInterrupted());
   }
 
   @override
   void dispose() {
+    widget.env.accountUserId?.removeListener(_revokeOwner);
+    widget.env.passwordRecovery?.removeListener(_onRecoveryChanged);
+    widget.env.ownerEpoch?.removeListener(_revokeOwner);
+    _lifecycleEpoch++;
     WidgetsBinding.instance.removeObserver(this);
     _resumeSignal?.complete();
     _resumeSignal = null;
     _noPoseTimer?.cancel();
     _run?.cancel();
-    if (_sourceOpen) {
-      _sourceOpen = false;
-      unawaited(_source.stop());
-    }
+    final retirement = _retireSource();
+    unawaited(retirement.then<void>((_) {
+      _resourceOwner?.unregisterResource(_closeOwnedResource);
+    }, onError: (Object _, StackTrace __) {}));
     super.dispose();
   }
 
   Future<void> _start() async {
-    if (_starting || _sourceOpen || !_foreground || !mounted) return;
+    if (_starting || _sourceOpen || !_captureAllowed(_lifecycleEpoch)) return;
     _starting = true;
     final int epoch = _lifecycleEpoch;
     _clock.start();
@@ -221,7 +340,7 @@ class _LiveLessonPageState extends State<LiveLessonPage>
         lessonClass: widget.lessonClass,
         judge: DanceJudge(reference: reference),
       );
-      if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+      if (!_captureAllowed(epoch)) return;
       setState(() => _gated = session.gatedChecks());
 
       // The native plugin never requests camera access. Only the real device
@@ -238,28 +357,35 @@ class _LiveLessonPageState extends State<LiveLessonPage>
         } on Object {
           refusal = const LivePermissionDenied();
         } finally {
-          if (mounted && !_foreground) {
+          if (mounted && !_ownerRevoked && !_foreground) {
             final Completer<void> resume = Completer<void>();
             _resumeSignal = resume;
             await resume.future;
           }
           _requestingPermission = false;
         }
-        if (!mounted || !_foreground || epoch != _lifecycleEpoch) {
+        if (!_captureAllowed(epoch)) {
           _clock.stop();
-          if (mounted) setState(() => _state = const LiveInterrupted());
+          if (mounted && !_ownerRevoked) {
+            setState(() => _state = const LiveInterrupted());
+          }
           return;
         }
       }
 
       // NO DEAD END (M-F-268): a refusal becomes a STATE, not an exception that
       // leaves the screen empty with nothing to do.
-      refusal ??= await _source.begin();
-      if (!mounted || !_foreground || epoch != _lifecycleEpoch) {
-        if (refusal == null) unawaited(_source.stop());
+      if (refusal == null) {
+        _sourceLeaseActive = true;
+        _sourceRetirement = null;
+        refusal = await _source.begin();
+      }
+      if (!_captureAllowed(epoch)) {
+        _retireSource();
         return;
       }
       if (refusal != null) {
+        _retireSource();
         // ASK, do not infer. Ostinato's rule, adapted unchanged: `isRestricted`
         // counts as permanent too — a device under parental controls or an MDM
         // policy never shows the dialog at all, and the old second-refusal
@@ -277,9 +403,14 @@ class _LiveLessonPageState extends State<LiveLessonPage>
             permanent = false;
           }
         }
-        if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+        if (!_captureAllowed(epoch)) return;
         final LiveState rejected = refusal;
         setState(() {
+          if (rejected is LiveCameraUnavailable &&
+              (rejected.failure == CameraFailure.closeUncertain ||
+                  rejected.failure == CameraFailure.ownedProtocolUnavailable)) {
+            _cameraCloseFailed = true;
+          }
           _permanentlyDenied = permanent;
           _state = rejected;
         });
@@ -290,7 +421,7 @@ class _LiveLessonPageState extends State<LiveLessonPage>
       _sourceOpen = true;
 
       await _run?.cancel();
-      if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+      if (!_captureAllowed(epoch)) return;
       _armNoPoseTimer(epoch);
       final Stream<PoseFrame> observedFrames = _source.frames().map(
         (PoseFrame frame) {
@@ -300,9 +431,8 @@ class _LiveLessonPageState extends State<LiveLessonPage>
       );
       _run = session.run(observedFrames).listen((LiveState s) {
         // A frame delivered after backgrounding is not part of this practice.
-        // Before disposal, however, an already delivered frame still belongs
-        // to the tally even if the widget can no longer render it.
-        if (!_foreground || epoch != _lifecycleEpoch) return;
+        // Owner and route lifetime also bound which frames may reach tally.
+        if (!_captureAllowed(epoch)) return;
         _tally.observe(s, _clock.elapsed);
         if (!mounted) return;
         setState(() {
@@ -321,9 +451,10 @@ class _LiveLessonPageState extends State<LiveLessonPage>
       (await Permission.camera.request()).isGranted;
 
   void _armNoPoseTimer(int epoch) {
+    if (!_captureAllowed(epoch)) return;
     _noPoseTimer?.cancel();
     _noPoseTimer = Timer(const Duration(seconds: 5), () {
-      if (!mounted || !_foreground || epoch != _lifecycleEpoch) return;
+      if (!_captureAllowed(epoch)) return;
       setState(() =>
           _state = const LiveNoPerson(<QualityIssue>{QualityIssue.outOfFrame}));
     });
@@ -342,33 +473,34 @@ class _LiveLessonPageState extends State<LiveLessonPage>
   /// tally as it stands, and only THEN does the screen change. A result
   /// surface drawn before the write would have to guess its own outcome.
   Future<void> _finish() async {
-    if (_finishing) return;
+    if (_finishing || _ownerRevoked || _cameraCloseFailed || !_ownerMatches) {
+      return;
+    }
     setState(() => _finishing = true);
+    _lifecycleEpoch++;
 
-    // NOT AWAITED, and the difference is measurable rather than stylistic.
-    //
-    // `CameraPoseSource.stop()` is deliberately non-`async` so it publishes
-    // its shutdown latch SYNCHRONOUSLY — the next lesson's `start()` waits on
-    // that latch, so nothing here needs to. Awaiting the frame subscription is
-    // worse than unnecessary: the stream lives in the caller's async zone, and
-    // a `cancel()` awaited from a zone that is not advancing that one never
-    // returns. Measured: the walk hung at exactly this line, after the tap and
-    // before the write, and looked like a missing result screen.
-    //
-    // Nothing is lost by not waiting — the tally already holds every state the
-    // session produced, and it is fed before the mounted check for that reason.
+    // Retire capture synchronously. Subscription cancellation is not awaited;
+    // the owned camera close acknowledgement is awaited before persistence.
     unawaited(_run?.cancel());
     _run = null;
     _noPoseTimer?.cancel();
     _noPoseTimer = null;
-    if (_sourceOpen) {
-      _sourceOpen = false;
-      unawaited(_source.stop());
-    }
+    final retirement = _retireSource();
     _clock.stop();
 
+    try {
+      await retirement;
+    } on Object {
+      // _retireSource observes and renders the typed terminal refusal. An
+      // uncertain close cannot become a saved attempt or a result route.
+      return;
+    }
+    if (!mounted || _ownerRevoked || _cameraCloseFailed || !_ownerMatches) {
+      return;
+    }
+
     final RecordOutcome outcome = await _writeRecord();
-    if (!mounted) return;
+    if (!mounted || _ownerRevoked || !_ownerMatches) return;
 
     Navigator.of(context).pushReplacement(
       ChoreiaPageRoute<void>(
@@ -390,10 +522,16 @@ class _LiveLessonPageState extends State<LiveLessonPage>
   /// 0-cycle row would put something in the learner's history that did not
   /// happen.
   Future<RecordOutcome> _writeRecord() async {
-    if (!_tally.sawCamera) return const RecordNothingToStore();
+    if (!_tally.sawCamera || _ownerRevoked || !_ownerMatches) {
+      return const RecordNothingToStore();
+    }
     final SessionRecord record = _tally.toRecord(endedAt: DateTime.now());
     try {
-      await (await widget.env.openStoreFor(_recordOwnerUserId)).append(record);
+      final store = await widget.env.openStoreFor(_recordOwnerUserId);
+      if (!mounted || _ownerRevoked || !_ownerMatches) {
+        return const RecordNothingToStore();
+      }
+      await store.append(record);
       return RecordWritten(record);
     } on Object catch (e) {
       // NOT swallowed. The first-run flag may fail quietly because losing it
@@ -411,53 +549,17 @@ class _LiveLessonPageState extends State<LiveLessonPage>
         notMeasuredNote: LiveSession.notMeasuredNote,
         cyclesRead: _cycles,
         permissionPermanentlyDenied: _permanentlyDenied,
-        onRetry: _starting || !_foreground ? null : _start,
+        onRetry: _ownerRevoked || _cameraCloseFailed
+            ? () => Navigator.of(context).maybePop()
+            : _starting || !_foreground || _finishing
+                ? null
+                : _start,
         // C-140 KAPANDI (koordinatör hükmü (A), C-222). Buraya `null`
         // geçiliyordu ve ekranın tek kontrolü DEVRE DIŞI bir düğmeydi —
         // M-F-268'in yasakladığı ölü-sonun kendisi. Artık gerçek bir çağrı.
         onOpenSettings: widget.env.openSettings ?? openAppSettings,
-        onFinish: _finishing ? null : _finish,
+        onFinish: _finishing || _cameraCloseFailed ? null : _finish,
       );
-}
-
-/// The shipping source: the device camera, plus the pose model it needs.
-///
-/// **Materialising the model belongs HERE, not in the page.** The plugin opens
-/// a filesystem path, not an asset key (see `pose_model.dart` for why that
-/// distinction was invisible until it was measured) — and a replay source has
-/// no model to place. Keeping the step inside the camera implementation is
-/// what makes [PoseSource] substitutable at all.
-class _CameraSource implements PoseSource {
-  final CameraPoseSource _camera = CameraPoseSource();
-
-  @override
-  Future<LiveState?> begin() async {
-    try {
-      return await _camera.start(
-        modelPath: await materialisePoseModel(),
-        modelId: PoseModelPin.modelId,
-      );
-    } on Object catch (e) {
-      // NO DEAD END (M-F-268), same shape as `_writeRecord`'s catch below.
-      //
-      // F1 audit (H-20/21): before this, `materialisePoseModel` was the one
-      // persistent store in the app with ZERO exception handling anywhere in
-      // its call chain — a model the app could not place on disk (full
-      // storage, a sandbox/permission fault) threw straight out of
-      // `initState`'s fire-and-forget `_start()`, uncaught. The camera
-      // plugin's OWN model-load failure already has a state and a sentence
-      // (`CameraFailure.modelLoadFailed`, `LiveStrings.cameraProblem`) —
-      // this reuses both for the file-materialisation failure, which had
-      // neither.
-      return LiveCameraUnavailable(CameraFailure.modelLoadFailed, '$e');
-    }
-  }
-
-  @override
-  Stream<PoseFrame> frames() => _camera.frames();
-
-  @override
-  Future<void> stop() => _camera.stop();
 }
 
 /// Asks the OS whether camera access is refused for good.

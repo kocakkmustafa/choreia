@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../theme.dart';
+import '../../history/account_store_lifetime.dart';
 
 const Duration _nativeRetireDeadline = Duration(seconds: 2);
 bool _nativePlaybackUnconfirmed = false;
@@ -152,6 +153,8 @@ class LessonMediaPlayback extends StatefulWidget {
     required this.bundle,
     required this.locale,
     required this.videoFactory,
+    this.admissionOpen,
+    this.ownerTicket,
     super.key,
   });
 
@@ -159,12 +162,15 @@ class LessonMediaPlayback extends StatefulWidget {
   final AssetBundle bundle;
   final String locale;
   final LessonVideoFactory videoFactory;
+  final ValueListenable<bool>? admissionOpen;
+  final AppStoreOwnerTicket? ownerTicket;
 
   @override
   State<LessonMediaPlayback> createState() => _LessonMediaPlaybackState();
 }
 
 class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
+  AppStoreOwnerTicket? _resourceOwner;
   int _epoch = 0;
   LessonVideoHandle? _video;
   Completer<void>? _slotOwner;
@@ -173,16 +179,27 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
   bool _ready = false;
   bool _failed = false;
   bool _commandPending = false;
+  bool _retired = false;
+  bool get _admitted => !_retired && widget.admissionOpen?.value != false;
 
   @override
   void initState() {
     super.initState();
+    _resourceOwner = widget.ownerTicket;
+    _resourceOwner?.registerResource(_closeOwnedPlayback);
+    widget.admissionOpen?.addListener(_onAdmission);
+    if (widget.admissionOpen?.value == false) _onAdmission();
     _prepare();
   }
 
   @override
   void didUpdateWidget(covariant LessonMediaPlayback oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.admissionOpen != widget.admissionOpen) {
+      oldWidget.admissionOpen?.removeListener(_onAdmission);
+      widget.admissionOpen?.addListener(_onAdmission);
+      _retire();
+    }
     if (oldWidget.fixture != widget.fixture ||
         oldWidget.bundle != widget.bundle ||
         oldWidget.locale != widget.locale ||
@@ -195,8 +212,27 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
     }
   }
 
+  void _onAdmission() {
+    if (widget.admissionOpen?.value != false) return;
+    _retire();
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _closeOwnedPlayback() async {
+    _retire();
+    await _closing;
+    if (_nativePlaybackUnconfirmed) throw StateError('video-close-uncertain');
+  }
+
+  void _retire() {
+    _retired = true;
+    _epoch++;
+    _ready = false;
+    _drop();
+  }
+
   void _onFrame() {
-    if (!mounted) return;
+    if (!mounted || !_admitted) return;
     if (_video?.frame.value.hasError == true) {
       _drop();
       setState(() => _failed = true);
@@ -268,9 +304,10 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
 
   Future<void> _prepare() async {
     final epoch = ++_epoch;
+    if (!_admitted) return;
     try {
       await _closing;
-      if (!mounted || epoch != _epoch) return;
+      if (!mounted || !_admitted || epoch != _epoch) return;
       final captionPath = widget.fixture.captionAssetPaths[widget.locale];
       if (captionPath == null || captionPath.isEmpty) {
         throw const FormatException('Missing caption locale');
@@ -283,12 +320,12 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
       if (WebVTTCaptionFile(captionText).captions.isEmpty) {
         throw const FormatException('Empty caption track');
       }
-      if (!mounted || epoch != _epoch) return;
+      if (!mounted || !_admitted || epoch != _epoch) return;
       final owner = await _takeNativeSlot();
       if (owner == null) {
         throw StateError('Previous native playback is unconfirmed');
       }
-      if (!mounted || epoch != _epoch) {
+      if (!mounted || !_admitted || epoch != _epoch) {
         _releaseNativeSlot(owner);
         return;
       }
@@ -301,20 +338,20 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
       video.frame.addListener(_onFrame);
       final initializing = _invokeNative(video.initialize);
       await initializing;
-      if (!mounted || epoch != _epoch || _video != video) return;
+      if (!mounted || !_admitted || epoch != _epoch || _video != video) return;
       if (video.frame.value.hasError || !video.frame.value.initialized) {
         throw StateError('Video did not initialize');
       }
       // A demonstration must not become playable until the native player has
       // acknowledged zero volume, even if an imported master has an audio track.
       await _invokeNative(video.silence);
-      if (!mounted || epoch != _epoch || _video != video) return;
+      if (!mounted || !_admitted || epoch != _epoch || _video != video) return;
       if (video.frame.value.hasError) {
         throw StateError('Video could not be silenced');
       }
       setState(() => _ready = true);
     } catch (_) {
-      if (!mounted || epoch != _epoch) return;
+      if (!mounted || !_admitted || epoch != _epoch) return;
       _drop();
       setState(() => _failed = true);
     }
@@ -322,7 +359,9 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
 
   Future<void> _toggle() async {
     final video = _video;
-    if (video == null || !_ready || _failed || _commandPending) return;
+    if (!_admitted || video == null || !_ready || _failed || _commandPending) {
+      return;
+    }
     setState(() => _commandPending = true);
     try {
       final operation = _invokeNative(
@@ -330,26 +369,33 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
       );
       await operation;
     } catch (_) {
-      if (!mounted || _video != video) return;
+      if (!mounted || !_admitted || _video != video) return;
       _drop();
       setState(() => _failed = true);
       return;
     }
-    if (mounted && _video == video) {
+    if (mounted && _admitted && _video == video) {
       setState(() => _commandPending = false);
     }
   }
 
   @override
   void dispose() {
+    widget.admissionOpen?.removeListener(_onAdmission);
     _epoch++;
     _drop();
+    unawaited(_closing.then<void>((_) {
+      if (!_nativePlaybackUnconfirmed) {
+        _resourceOwner?.unregisterResource(_closeOwnedPlayback);
+      }
+    }));
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final tr = widget.locale == 'tr';
+    if (!_admitted) return const SizedBox.shrink();
     if (_failed) {
       return GlassPanel(
         child: Text(

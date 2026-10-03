@@ -33,8 +33,8 @@ import 'support/test_catalog.dart';
 void main() {
   group('kaydedilen bir şey yokken kayıt VARSAYILMAZ (C-191)', () {
     test('notRecorded metni "already recorded" ÖNVARSAYIMINI taşımaz', () {
-      final String note = ProgressSummary.retroactiveCreditNote(
-          HistoryFidelity.notRecorded);
+      final String note =
+          ProgressSummary.retroactiveCreditNote(HistoryFidelity.notRecorded);
       expect(note.toLowerCase(), isNot(contains('already recorded')));
       expect(note.toLowerCase(), contains('saves nothing'),
           reason: 'yokluk YERİNE geçen bir cümle değil, yokluğu SÖYLEYEN bir '
@@ -58,7 +58,8 @@ void main() {
       }
     });
 
-    testWidgets('EKRANDA: hiçbir şey kaydedilmiyorken "already recorded" '
+    testWidgets(
+        'EKRANDA: hiçbir şey kaydedilmiyorken "already recorded" '
         'yazmıyor', (WidgetTester tester) async {
       // Asserted at the SURFACE, not only at the string. The defect was not
       // that the sentence existed — it was that this state rendered it.
@@ -93,7 +94,9 @@ void main() {
           .listSync(recursive: true)
           .whereType<File>()
           .where((File f) => f.path.endsWith('.dart'))
-          .map((File f) => 'CameraPoseSource()'.allMatches(f.readAsStringSync()).length)
+          .map((File f) => RegExp(r'\bCameraPoseSource\(\)')
+              .allMatches(f.readAsStringSync())
+              .length)
           .fold(0, (int a, int b) => a + b);
 
       expect(surfaces, 1,

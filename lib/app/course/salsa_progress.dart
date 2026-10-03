@@ -4,11 +4,13 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import '../history/account_store_lifetime.dart';
 import 'salsa_course.dart';
+import 'salsa_self_check_policy.dart';
+
+export 'salsa_self_check_policy.dart' show SalsaPracticeOption;
 
 enum SalsaEvidence { viewed, practised, selfReportedComplete }
-
-enum SalsaPracticeOption { standard, adapted, rhythmOnly }
 
 /// Every record describes a user action. There is no sensor-evidence variant.
 final class SalsaProgressEvent {
@@ -75,34 +77,34 @@ final class SalsaProgress {
           .toSet();
 }
 
-/// Same-process writes and deletion share a lock per absolute owner path.
-/// Stores opened before deletion become stale, preventing resurrection by an
-/// outstanding lesson callback. A fresh store may be opened after local reset.
+/// Same-process writes share a lock per absolute owner path. The host ticket
+/// closes admission synchronously and drains queued and dispatched operations
+/// before deletion; an opener retains its ticket across directory resolution.
 final class SalsaProgressStore {
-  SalsaProgressStore._(this.file, this.owner, this._generation);
+  SalsaProgressStore._(this.file, this.owner, this._ownerTicket);
   final File file;
   final String owner;
-  final int _generation;
+  final AppStoreOwnerTicket _ownerTicket;
   static final Map<String, Future<void>> _tails = {};
-  static final Map<String, int> _generations = {};
   static final RegExp accountIdPattern = RegExp(
       r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
-  static String ownerFor(String? id) {
-    if (id == null) return 'guest';
-    if (!accountIdPattern.hasMatch(id)) {
-      throw ArgumentError('Expected account UUID.');
-    }
-    return id.toLowerCase();
-  }
+  static String ownerFor(String? id) => appStoreOwnerFor(id);
 
   static String fileNameFor(String? id) =>
       'course-choreia-${ownerFor(id)}.json';
   static Future<SalsaProgressStore> open(
-      {String? accountUserId, Directory? supportDirectory}) async {
-    final support = supportDirectory ?? await getApplicationSupportDirectory();
+      {String? accountUserId,
+      Directory? supportDirectory,
+      Future<Directory> Function()? directoryResolver,
+      File Function(File file)? fileFactory,
+      AppStoreOwnerRegistry? owners}) async {
+    final ticket = (owners ?? appStoreOwners).capture(accountUserId);
+    final support = supportDirectory ??
+        await (directoryResolver ?? getApplicationSupportDirectory)();
+    ticket.checkActive();
     final file = File('${support.absolute.path}/${fileNameFor(accountUserId)}');
     return SalsaProgressStore._(
-        file, ownerFor(accountUserId), _generations[file.path] ?? 0);
+        fileFactory?.call(file) ?? file, ownerFor(accountUserId), ticket);
   }
 
   static Future<T> _locked<T>(String path, Future<T> Function() action) {
@@ -122,23 +124,24 @@ final class SalsaProgressStore {
     return completer.future;
   }
 
-  void _checkGeneration() {
-    if ((_generations[file.path] ?? 0) != _generation) {
-      throw StateError('Progress store was cleared. Reopen it before writing.');
-    }
+  void _checkOwner() {
+    _ownerTicket.checkActive();
   }
 
-  Future<SalsaProgress> read() => _locked(file.path, () async {
-        _checkGeneration();
-        return _read();
-      });
+  Future<SalsaProgress> read() =>
+      _ownerTicket.run(() => _locked(file.path, () async {
+            _checkOwner();
+            return _read();
+          }));
   Future<SalsaProgress> _read() async {
     final type = await FileSystemEntity.type(file.path, followLinks: false);
+    _checkOwner();
     if (type == FileSystemEntityType.notFound) return SalsaProgress([]);
     if (type != FileSystemEntityType.file) {
       throw const FileSystemException('Course progress is not a regular file.');
     }
     final data = jsonDecode(await file.readAsString());
+    _checkOwner();
     if (data is! Map<String, dynamic> ||
         data['schemaVersion'] != 1 ||
         data['owner'] != owner ||
@@ -155,69 +158,98 @@ final class SalsaProgressStore {
           SalsaCourse course, SalsaLesson lesson, SalsaEvidence kind,
           {SalsaPracticeOption option = SalsaPracticeOption.standard,
           DateTime? at}) =>
-      _locked(file.path, () async {
-        _checkGeneration();
-        if (!course.lessons.any((l) => identical(l, lesson))) {
-          throw ArgumentError('Lesson does not belong to this course.');
-        }
-        final current = await _read();
-        // Repeated views are a state; repeated practice/completion are actual events.
-        if (kind == SalsaEvidence.viewed &&
-            current
-                .forCourse(course)
-                .any((e) => e.lessonId == lesson.id && e.kind == kind)) {
-          return current;
-        }
-        if (kind == SalsaEvidence.selfReportedComplete &&
-            !current.forCourse(course).any((e) =>
-                e.lessonId == lesson.id &&
-                e.kind == SalsaEvidence.practised &&
-                e.option == option)) {
-          throw StateError(
-              'Report a practice attempt with this option before completion.');
-        }
-        final updated = SalsaProgress([
-          ...current.events,
-          SalsaProgressEvent(
-              courseId: course.id,
-              version: course.version,
-              lessonId: lesson.id,
-              kind: kind,
-              option: option,
-              at: at ?? DateTime.now())
-        ]);
-        await file.parent.create(recursive: true);
-        final temporary = File('${file.path}.tmp');
-        final tempType =
-            await FileSystemEntity.type(temporary.path, followLinks: false);
-        if (tempType != FileSystemEntityType.notFound &&
-            tempType != FileSystemEntityType.file) {
-          throw const FileSystemException(
-              'Temporary progress path is not a regular file.');
-        }
-        await temporary.writeAsString(
-            jsonEncode({
-              'schemaVersion': 1,
-              'owner': owner,
-              'events': updated.events.map((e) => e.toJson()).toList()
-            }),
-            flush: true);
-        await temporary.rename(file.path);
-        return updated;
-      });
+      _ownerTicket.run(() => _locked(file.path, () async {
+            _checkOwner();
+            if (!course.lessons.any((l) => identical(l, lesson))) {
+              throw ArgumentError('Lesson does not belong to this course.');
+            }
+            if (kind == SalsaEvidence.selfReportedComplete &&
+                !lesson.selfChecksFor(option).completionAllowed) {
+              throw StateError(
+                  'This option records practice without completion.');
+            }
+            final current = await _read();
+            _checkOwner();
+            // Repeated views are a state; repeated practice/completion are actual events.
+            if (kind == SalsaEvidence.viewed &&
+                current
+                    .forCourse(course)
+                    .any((e) => e.lessonId == lesson.id && e.kind == kind)) {
+              return current;
+            }
+            if (kind == SalsaEvidence.selfReportedComplete &&
+                !current.forCourse(course).any((e) =>
+                    e.lessonId == lesson.id &&
+                    e.kind == SalsaEvidence.practised &&
+                    e.option == option)) {
+              throw StateError(
+                  'Report a practice attempt with this option before completion.');
+            }
+            final updated = SalsaProgress([
+              ...current.events,
+              SalsaProgressEvent(
+                  courseId: course.id,
+                  version: course.version,
+                  lessonId: lesson.id,
+                  kind: kind,
+                  option: option,
+                  at: at ?? DateTime.now())
+            ]);
+            await file.parent.create(recursive: true);
+            _checkOwner();
+            final temporary = File('${file.path}.tmp');
+            final tempType =
+                await FileSystemEntity.type(temporary.path, followLinks: false);
+            _checkOwner();
+            if (tempType != FileSystemEntityType.notFound &&
+                tempType != FileSystemEntityType.file) {
+              throw const FileSystemException(
+                  'Temporary progress path is not a regular file.');
+            }
+            var temporaryStarted = false;
+            try {
+              temporaryStarted = true;
+              await temporary.writeAsString(
+                  jsonEncode({
+                    'schemaVersion': 1,
+                    'owner': owner,
+                    'events': updated.events.map((e) => e.toJson()).toList()
+                  }),
+                  flush: true);
+              _checkOwner();
+              await temporary.rename(file.path);
+              _checkOwner();
+              return updated;
+            } finally {
+              if (temporaryStarted &&
+                  await FileSystemEntity.type(temporary.path,
+                          followLinks: false) ==
+                      FileSystemEntityType.file) {
+                await temporary.delete();
+              }
+            }
+          }));
   static Future<void> clearAccount(String accountUserId,
-      {Directory? supportDirectory}) async {
-    final store = await open(
-        accountUserId: accountUserId, supportDirectory: supportDirectory);
-    return _locked(store.file.path, () async {
-      _generations[store.file.path] = (_generations[store.file.path] ?? 0) + 1;
-      for (final path in [store.file.path, '${store.file.path}.tmp']) {
-        if (await FileSystemEntity.type(path, followLinks: false) ==
-            FileSystemEntityType.file) {
-          await File(path).delete();
+      {Directory? supportDirectory,
+      Future<Directory> Function()? directoryResolver,
+      AppStoreOwnerRegistry? owners}) {
+    try {
+      ownerFor(accountUserId);
+      return (owners ?? appStoreOwners).erase(accountUserId, () async {
+        final support = supportDirectory ??
+            await (directoryResolver ?? getApplicationSupportDirectory)();
+        final file =
+            File('${support.absolute.path}/${fileNameFor(accountUserId)}');
+        for (final path in [file.path, '${file.path}.tmp']) {
+          if (await FileSystemEntity.type(path, followLinks: false) ==
+              FileSystemEntityType.file) {
+            await File(path).delete();
+          }
         }
-      }
-    });
+      });
+    } catch (error, stack) {
+      return Future<void>.error(error, stack);
+    }
   }
 
   static Future<Set<String>> accountIds(Directory support) async {

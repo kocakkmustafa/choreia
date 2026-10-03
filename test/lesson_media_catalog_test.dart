@@ -506,6 +506,81 @@ void main() {
     }
   });
 
+  for (final revocation in <String>[
+    'empty catalog',
+    'null scene',
+    'null variant'
+  ]) {
+    testWidgets('pending inspection is revoked by $revocation on the same slot',
+        (tester) async {
+      final fixture = _Fixture();
+      final catalog = fixture.catalog();
+      final bundle = fixture.bundle();
+      final inspected = <InspectedLessonMedia?>[];
+      final probeStarted = Completer<void>();
+      final resumeProbe = Completer<int?>();
+      addTearDown(() {
+        if (!resumeProbe.isCompleted) resumeProbe.complete(1000);
+      });
+      Future<int?> probe(Uint8List _) {
+        if (!probeStarted.isCompleted) probeStarted.complete();
+        return resumeProbe.future;
+      }
+
+      Widget slot({required bool revoked}) => MaterialApp(
+            home: Align(
+                child: LessonMediaSlot(
+              key: const Key('same.inspection.slot'),
+              catalog: revoked && revocation == 'empty catalog'
+                  ? const LessonMediaCatalog.empty()
+                  : catalog,
+              bundle: bundle,
+              lessonId: _pin.lessonId,
+              sceneId:
+                  revoked && revocation == 'null scene' ? null : _pin.sceneId,
+              variantStem: revoked && revocation == 'null variant'
+                  ? null
+                  : _pin.variantStem,
+              locale: 'tr',
+              durationProbe: probe,
+              onInspectionChanged: inspected.add,
+            )),
+          );
+
+      await tester.pumpWidget(slot(revoked: false));
+      await tester.runAsync(
+          () => probeStarted.future.timeout(const Duration(seconds: 5)));
+      expect(inspected.whereType<InspectedLessonMedia>(), isEmpty);
+      final originalState =
+          tester.state(find.byKey(const Key('same.inspection.slot')));
+
+      await tester.pumpWidget(slot(revoked: true));
+      expect(tester.state(find.byKey(const Key('same.inspection.slot'))),
+          same(originalState));
+      resumeProbe.complete(1000);
+      await tester.pump();
+      await tester.pump();
+
+      // Witness that the old inspection really finished its remaining byte
+      // checks; absence of a callback must come from revocation, not a hang.
+      expect(
+          bundle.mediaReads,
+          containsAll(<String>[
+            '${fixture.prefix}.mp4',
+            '${fixture.prefix}.tr.vtt',
+            '${fixture.prefix}.en.vtt',
+          ]));
+      expect(inspected, isNotEmpty);
+      expect(inspected.last, isNull);
+      expect(inspected.whereType<InspectedLessonMedia>(), isEmpty);
+      expect(
+          tester.getSize(find.byKey(const Key('same.inspection.slot'))).height,
+          0);
+      expect(find.textContaining('Watch the preparation'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('slot remains absent and closes after account/lifecycle change',
       (tester) async {
     final fixture = _Fixture();

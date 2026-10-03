@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart' show AssetBundle, VoidCallback;
 import 'package:motion_core/motion_core.dart' show SessionStore;
 
 import '../history/session_store_access.dart';
+import '../history/account_store_lifetime.dart';
 import 'camera_pose_source.dart';
 
 /// Everything a live lesson needs that differs between a real device and a
@@ -30,6 +31,9 @@ class LiveEnvironment {
     this.source,
     this.storeOpener,
     this.accountUserId,
+    this.passwordRecovery,
+    this.ownerEpoch,
+    this.storeOwners,
     this.historyDirectoryOverride,
     this.permanentlyDeniedProbe,
     this.cameraPermissionRequest,
@@ -53,10 +57,20 @@ class LiveEnvironment {
   /// Where a finished session is written. `null` = the app's real store.
   final SessionStoreOpener? storeOpener;
 
-  /// Host account adapter publishes the current Supabase user id here.
-  /// `null` means guest. No Core account dependency is needed until its pin
-  /// exists; the host later maps `authChanges` to this listenable.
+  /// The host supplies the canonical runtime's verified user id. A null id
+  /// admits guest data only when the canonical phase is genuinely signed out.
   final ValueListenable<String?>? accountUserId;
+
+  /// Directly supplied from MotionAccountRuntime.passwordRecovery. A same-UUID
+  /// callback must retire a running route even when userId does not notify.
+  final ValueListenable<bool>? passwordRecovery;
+
+  /// Host retirement epoch also covers a replacement Auth session whose UUID
+  /// is unchanged. It never establishes identity or mirrors recovery state.
+  final ValueListenable<int>? ownerEpoch;
+
+  /// Tests can own an isolated store lifetime; production shares the host's.
+  final AppStoreOwnerRegistry? storeOwners;
 
   /// Local filesystem seam for scope tests; production uses app support.
   final Directory? historyDirectoryOverride;
@@ -66,6 +80,7 @@ class LiveEnvironment {
       openAppSessionStore(
         accountUserId: userId,
         supportDirectory: historyDirectoryOverride,
+        owners: storeOwners,
       );
 
   /// Asks the OS whether camera access is refused for good. `null` = the real

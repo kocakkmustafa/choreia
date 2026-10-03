@@ -193,7 +193,7 @@ void main() {
 
   testWidgets('account change revokes playback through later resume',
       (tester) async {
-    final owner = ValueNotifier<String?>('alice');
+    final owner = ValueNotifier<String?>('11111111-1111-4111-8111-111111111111');
     addTearDown(owner.dispose);
     final videos = <_FakeVideo>[];
     await tester.pumpWidget(MaterialApp(
@@ -211,7 +211,7 @@ void main() {
       ),
     ));
     await tester.pumpAndSettle();
-    owner.value = 'bob';
+    owner.value = '22222222-2222-4222-8222-222222222222';
     await tester.pumpAndSettle();
     expect(videos.single.closeCalls, 1);
     expect(find.byKey(const Key('fake.lessonVideo')), findsNothing);

@@ -1,3 +1,5 @@
+import 'salsa_self_check_policy.dart';
+
 /// Versioned, offline teaching content. No camera or score contract lives here.
 final class CourseText {
   const CourseText(this.tr, this.en);
@@ -81,6 +83,10 @@ final class SalsaLesson {
         teaching.tr.length != teaching.en.length) {
       throw FormatException('Incomplete or unsupported lesson: $id');
     }
+    selfCheckPolicy = data.containsKey('selfCheckByPractice')
+        ? SalsaSelfCheckPolicy.parse(
+            data['selfCheckByPractice'], selfCheck.en.length)
+        : null;
     final brief = _map(data['mediaBrief']);
     if (brief['status'] != 'planned') {
       throw const FormatException(
@@ -100,6 +106,11 @@ final class SalsaLesson {
   final CourseText title, goal, practice, repeat, adaptation;
   final CourseLines teaching, selfCheck;
   final List<String> sourceIds, prerequisites;
+  late final SalsaSelfCheckPolicy? selfCheckPolicy;
+
+  SalsaSelfCheckSelection selfChecksFor(SalsaPracticeOption option) =>
+      selfCheckPolicy?.forOption(option) ??
+      SalsaSelfCheckSelection.legacy(selfCheck.en.length);
 
   // These lessons use spoken/context or finger-count exercises only. Optional
   // footwork in listening lessons still requires preparation before movement.
@@ -161,6 +172,43 @@ final class SalsaCourse {
     for (var index = 0; index < modules.length; index++) {
       if (modules[index].order != index + 1) {
         throw const FormatException('Invalid module order.');
+      }
+    }
+    if (version == 1) {
+      if (lessons.any((lesson) => lesson.selfCheckPolicy != null)) {
+        throw const FormatException(
+            'Criterion changes need a new course version.');
+      }
+    } else {
+      if (version != 2 || data['unmappedSelfChecks'] != 'legacyV1') {
+        throw const FormatException('Unsupported criterion revision scope.');
+      }
+      if (lessons.any((current) =>
+          current.selfCheckPolicy != null &&
+          !salsaCriterionRevisionLessons.contains(current.id))) {
+        throw const FormatException(
+            'Criterion policy exceeds this revision scope.');
+      }
+      for (final id in salsaCriterionRevisionLessons) {
+        final current = lesson(id);
+        if (current.selfCheckPolicy == null ||
+            current
+                .selfChecksFor(SalsaPracticeOption.rhythmOnly)
+                .completionAllowed) {
+          throw FormatException('Missing practice-only criterion policy: $id');
+        }
+        for (final option in [
+          SalsaPracticeOption.standard,
+          SalsaPracticeOption.adapted
+        ]) {
+          final selection = current.selfChecksFor(option);
+          if (!selection.completionAllowed ||
+              selection.indices.length != current.selfCheck.en.length ||
+              selection.indices.indexed.any((entry) => entry.$1 != entry.$2)) {
+            throw FormatException(
+                'Physical criteria must retain source order: $id');
+          }
+        }
       }
     }
   }

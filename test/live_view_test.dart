@@ -95,6 +95,28 @@ void main() {
     }
   });
 
+  for (final locale in ['en', 'tr']) {
+    for (final failure in [
+      CameraFailure.ownedProtocolUnavailable,
+      CameraFailure.closeUncertain
+    ]) {
+      testWidgets('$failure gives a bounded terminal action in $locale',
+          (tester) async {
+        tester.platformDispatcher.localeTestValue = Locale(locale);
+        addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+        await show(
+            tester, LiveCameraUnavailable(failure, 'private driver detail'));
+        expect(find.text(locale == 'tr' ? 'Derse dön' : 'Back to lesson'),
+            findsOneWidget);
+        expect(find.text(locale == 'tr' ? 'Tekrar dene' : 'Try again'),
+            findsNothing);
+        expect(find.textContaining('private driver detail'), findsNothing);
+        expect(find.byKey(LiveView.notMeasuredKey), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
   group('M-F-268 patterns', () {
     testWidgets('NO DEAD END — a camera failure still offers an action',
         (WidgetTester tester) async {

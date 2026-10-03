@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Choreia's visual language — design panel v1, 2026-08-05
 /// (`docs/design/DESIGN-PANEL-PROMPT.md`; `claude.ai/design` project
@@ -93,7 +92,8 @@ abstract final class ChoreiaType {
 
   static TextStyle display(
           {double size = 34, Color? color, double height = 1.06}) =>
-      GoogleFonts.instrumentSerif(
+      TextStyle(
+        fontFamily: 'Instrument Serif',
         fontSize: size,
         height: height,
         color: color ?? ChoreiaColors.bright,
@@ -105,7 +105,8 @@ abstract final class ChoreiaType {
           Color? color,
           FontWeight weight = FontWeight.w400,
           double height = 1.55}) =>
-      GoogleFonts.manrope(
+      TextStyle(
+        fontFamily: 'Manrope',
         fontSize: size,
         height: height,
         fontWeight: weight,
@@ -118,7 +119,8 @@ abstract final class ChoreiaType {
   /// every size the way it does in the source spec.
   static TextStyle label(
           {double size = 10, Color? color, double letterSpacingEm = 0.16}) =>
-      GoogleFonts.ibmPlexMono(
+      TextStyle(
+        fontFamily: 'IBM Plex Mono',
         fontSize: size,
         fontWeight: FontWeight.w500,
         letterSpacing: letterSpacingEm * size,
@@ -500,7 +502,8 @@ abstract final class ChoreiaTheme {
 
   static ThemeData get dark {
     final TextTheme base =
-        GoogleFonts.manropeTextTheme(ThemeData.dark().textTheme).apply(
+        ThemeData.dark().textTheme.apply(
+      fontFamily: 'Manrope',
       bodyColor: ChoreiaColors.text(0.86),
       displayColor: ChoreiaColors.bright,
     );

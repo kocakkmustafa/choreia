@@ -1,0 +1,29 @@
+name: choreia_engine
+description: >-
+  Choreia's dance-scoring engine. Pure Dart, no Flutter: the UI shell consumes
+  this, never the other way round (JabLab's engine/app split, mirrored per
+  M-F-160).
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  # motion_core pini DÜŞÜRÜLDÜ (M-F-207). Bu paket çekirdekten hiçbir şey
+  # import etmiyordu — beyan edilmiş ama tüketilmemiş bir bağımlılıktı, yani
+  # "tüketicisiz alan süse dönüşür" kuralının pubspec düzeyi.
+  #
+  # Ve bedelsiz değildi, ÖLÇÜLDÜ: pub bir git bağımlılığı için tek çözüm
+  # zorluyor, dolayısıyla bu kullanılmayan pin app'i kilit adımına soktu ve
+  # SessionStore v0.9.0 adopsiyonunu bloke etti.
+  #
+  # İSİMLİ GERİ-GİRİŞ TETİĞİ: ilk gerçek import günü — büyük olasılıkla
+  # kamera köprüsü / PoseFrame tüketimi — pin TAG'le geri gelir. O gün gelene
+  # kadar burada bir satır olmaması, olmasından dürüsttür.
+  #
+  # App'in kendi pini KALIR: o SessionStore'u gerçekten çekirdekten tüketiyor.
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^5.0.0

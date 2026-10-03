@@ -4,6 +4,7 @@ import 'package:motion_core/motion_core.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../account_bridge.dart';
+import 'account_store_lifetime.dart';
 
 /// Opens the app's session history.
 ///
@@ -31,9 +32,17 @@ typedef SessionStoreOpener = Future<SessionStore> Function();
 Future<SessionStore> openAppSessionStore({
   String? accountUserId,
   Directory? supportDirectory,
+  Future<Directory> Function()? directoryResolver,
+  File Function(File file)? fileFactory,
+  AppStoreOwnerRegistry? owners,
 }) async {
-  final Directory dir = supportDirectory ?? await getApplicationSupportDirectory();
-  return JsonlSessionStore(sessionFileFor(dir, accountUserId));
+  final ticket = (owners ?? appStoreOwners).capture(accountUserId);
+  final Directory dir = supportDirectory ??
+      await (directoryResolver ?? getApplicationSupportDirectory)();
+  ticket.checkActive();
+  final file = sessionFileFor(dir, accountUserId);
+  return JsonlSessionStore(fileFactory?.call(file) ?? file,
+      writeLease: ticket.journalLease);
 }
 
 /// Named rather than inlined so a test can assert the shipping path without

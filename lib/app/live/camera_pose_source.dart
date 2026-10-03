@@ -4,6 +4,7 @@ import 'package:motion_camera/motion_camera.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'live_state.dart';
+import 'pose_model.dart';
 
 /// Everything the live page needs from a source of poses.
 ///
@@ -28,7 +29,47 @@ abstract interface class PoseSource {
 
   Stream<PoseFrame> frames();
 
+  /// Retire both active capture and any pending [begin] acquisition.
   Future<void> stop();
+}
+
+/// Materialises the bundled model before entering the native camera bridge.
+final class DeviceCameraPoseSource implements PoseSource {
+  DeviceCameraPoseSource({
+    CameraPoseSource? camera,
+    Future<String> Function()? modelPathOpener,
+  })  : _camera = camera ?? CameraPoseSource(),
+        _modelPathOpener = modelPathOpener ?? materialisePoseModel;
+
+  final CameraPoseSource _camera;
+  final Future<String> Function() _modelPathOpener;
+  int _generation = 0;
+
+  @override
+  Future<LiveState?> begin() async {
+    final generation = ++_generation;
+    final captureLease = _camera.prepareForStart();
+    try {
+      final path = await _modelPathOpener();
+      if (generation != _generation) return const LiveInterrupted();
+      return await _camera.start(
+          modelPath: path,
+          modelId: PoseModelPin.modelId,
+          captureLease: captureLease);
+    } on Object catch (error) {
+      if (generation != _generation) return const LiveInterrupted();
+      return LiveCameraUnavailable(CameraFailure.modelLoadFailed, '$error');
+    }
+  }
+
+  @override
+  Stream<PoseFrame> frames() => _camera.frames();
+
+  @override
+  Future<void> stop() {
+    _generation++;
+    return _camera.stop();
+  }
 }
 
 /// Opens the camera and turns its envelopes into `PoseFrame`s.
@@ -45,113 +86,134 @@ abstract interface class PoseSource {
 /// through pub's solver, and the pin was dropped for exactly that.
 final class CameraPoseSource {
   CameraPoseSource({MotionCameraController? controller})
-      : _controller = controller ?? MotionCameraController();
+      : _controller = controller ?? MotionCameraController() {
+    // Allocate before the page can request permission or materialize a model.
+    _lease = _controller.createCaptureLease();
+  }
 
   final MotionCameraController _controller;
-
-  /// A shutdown that has been ASKED FOR but has not finished.
-  ///
-  /// **Static because the camera is.** Each `LiveLessonPage` builds its own
-  /// `CameraPoseSource`, but there is one camera on the device, and closing it
-  /// is a platform-channel round trip. `State.dispose` is synchronous and
-  /// cannot await anything, so leaving one lesson fires `stop()` and returns
-  /// immediately — and opening the next lesson calls `start()` on a camera the
-  /// system is still tearing down. The plugin answers `already-running`, and
-  /// the second lesson of the session fails for a reason the first one caused.
-  ///
-  /// Measured on the N-TH-TIME axis: invisible at N=1 by construction, because
-  /// nothing has been stopped yet. Every check this app had asked "does the
-  /// screen work?", and the answer was yes — the first time.
+  late CameraCaptureLease _lease;
+  CameraCaptureLease? _closingLease;
+  Future<void>? _closing;
   static Future<void>? _shutdown;
-
+  // A new wrapper/controller must not bypass uncertain native closure.
+  static CameraException? _closureFailure;
+  int _generation = 0;
   CameraSessionInfo? _session;
   CameraSessionInfo? get session => _session;
 
-  /// Start the camera, or return the typed refusal.
-  ///
-  /// Returns a [LiveState] rather than throwing: every failure the plugin
-  /// names is a state this app already has to render, and converting an
-  /// exception into a screen at the call site is how one of them ends up
-  /// silently swallowed. `null` means "started, no refusal".
+  /// Capture this ticket before awaiting the model. An old ticket is never
+  /// rebound to a replacement lease when its delayed result arrives.
+  CameraCaptureLease prepareForStart() {
+    if (_lease.isRetired) {
+      _lease = _controller.createCaptureLease();
+      _session = null;
+    }
+    return _lease;
+  }
+
   Future<LiveState?> start({
     required String modelPath,
     required String modelId,
     CameraLens lens = CameraLens.front,
+    CameraCaptureLease? captureLease,
   }) async {
-    // Let any in-flight shutdown finish first. Not a retry and not a delay:
-    // the wait is exactly as long as the previous lesson's teardown, and zero
-    // when there was no previous lesson.
-    final Future<void>? pending = _shutdown;
-    if (pending != null) await pending;
-
+    final generation = ++_generation;
+    final lease = captureLease ?? prepareForStart();
+    bool active() =>
+        generation == _generation &&
+        identical(lease, _lease) &&
+        !lease.isRetired;
+    while (true) {
+      final pending = _shutdown;
+      if (pending == null) break;
+      await pending;
+      if (!active()) return const LiveInterrupted();
+      if (identical(_shutdown, pending)) break;
+    }
+    if (!active()) return const LiveInterrupted();
+    final closureFailure = _closureFailure;
+    if (closureFailure != null) {
+      return LiveCameraUnavailable(
+          closureFailure.failure, closureFailure.detail);
+    }
     try {
-      _session = await _controller.start(
+      final session = await lease.start(
         modelPath: modelPath,
         modelId: modelId,
         lens: lens,
       );
+      if (!active()) return const LiveInterrupted();
+      _session = session;
       return null;
-    } on CameraException catch (e) {
-      // Permission gets its OWN state: it is the single failure the user can
-      // fix, and it routes to a different screen than "this device cannot".
-      if (e.failure == CameraFailure.permissionDenied) {
+    } on CameraException catch (error) {
+      // A rejected lease can close only itself; it never issues legacy stop.
+      _publishClosure(lease);
+      if (generation != _generation) return const LiveInterrupted();
+      if (error.failure == CameraFailure.permissionDenied) {
         return const LivePermissionDenied();
       }
-      return LiveCameraUnavailable(e.failure, e.detail);
+      return LiveCameraUnavailable(error.failure, error.detail);
+    } on Object {
+      // Core retires on every start failure, including unknown platform errors.
+      // Publish that exact closure before another wrapper can acquire a camera.
+      _publishClosure(lease);
+      rethrow;
     }
   }
 
-  /// Deliberately NOT `async`.
-  ///
-  /// An `async` body would only register `_shutdown` after its first `await`,
-  /// which is one microtask too late for the caller that matters: `dispose()`
-  /// cannot await, so the next `start()` may already be running by then. This
-  /// shape publishes the pending shutdown SYNCHRONOUSLY, at call time.
+  /// Retirement is synchronous. The returned Future still exposes failure;
+  /// the global barrier observes it immediately to avoid an unhandled error.
   Future<void> stop() {
-    final Future<void> run = _stopOnce();
-    _shutdown = run;
-    return run.whenComplete(() {
-      // Only clear the latch if it is still ours — a third lesson may have
-      // started its own teardown in the meantime.
-      if (identical(_shutdown, run)) _shutdown = null;
-    });
+    _generation++;
+    final lease = _lease;
+    lease.retire();
+    return _publishClosure(lease);
   }
 
-  Future<void> _stopOnce() async {
+  Future<void> _publishClosure(CameraCaptureLease lease) {
+    if (identical(_closingLease, lease)) return _closing!;
+    _closingLease = lease;
+    final previous = _shutdown;
+    final run = _closeLease(lease);
+    _closing = run;
+    final observed =
+        run.then<void>((_) {}, onError: (Object _, StackTrace __) {});
+    final barrier = Future.wait<void>([
+      if (previous != null) previous,
+      observed,
+    ]).then((_) {});
+    _shutdown = barrier;
+    unawaited(barrier.then((_) {
+      if (identical(_shutdown, barrier)) _shutdown = null;
+    }));
+    return run;
+  }
+
+  Future<void> _closeLease(CameraCaptureLease lease) async {
     try {
-      await _controller.stop();
-    } on CameraException {
-      // Already stopped is not a failure worth surfacing: the caller asked
-      // for "not running" and that is the state it is in.
+      await lease.close();
+    } on CameraException catch (error) {
+      _closureFailure = error;
+      rethrow;
+    } on Object {
+      _closureFailure = const CameraException(CameraFailure.closeUncertain,
+          'Capture closure could not be verified.');
+      throw _closureFailure!;
     } finally {
-      _session = null;
+      if (identical(lease, _lease)) _session = null;
     }
   }
 
-  /// Envelopes → `PoseFrame`, the only shape the rest of the app knows.
-  ///
-  /// The clock domain is CARRIED, not assumed. `ClockDomain.unknown` means
-  /// the platform would not guarantee a shared timebase (an Android vendor
-  /// picking its own zero); such a stream is still internally consistent, so
-  /// shape and phase work — but fusing it with an audio/beat clock without a
-  /// measured offset is the bug class the core explicitly warns about. It is
-  /// the SECOND independent reason timing verdicts stay gated here, alongside
-  /// the content's own `beatsStatus: PENDING`.
-  /// Only the UPRIGHT pass is consumed today. The envelope can carry several
-  /// orientation passes; picking one here rather than averaging is deliberate
-  /// — a blended pose is a pose nobody struck. Frames with no upright pass
-  /// are DROPPED rather than substituted, so `LiveNoPerson` comes from the
-  /// confidence gate seeing nothing, not from a filled-in guess.
-  Stream<PoseFrame> frames() => _controller
+  /// Only the owned local frame bus is consumed. A late app subscription
+  /// cancellation cannot clear a successor's native EventChannel handler.
+  Stream<PoseFrame> frames() => _lease
       .frames()
-      .map((CameraFrameEnvelope e) => e.pass(BodyOrientation.upright))
-      .where((PoseFrame? f) => f != null)
+      .where((envelope) => envelope.ran(BodyOrientation.upright))
+      .map((envelope) => envelope.pass(BodyOrientation.upright))
+      .where((PoseFrame? frame) => frame != null)
       .cast<PoseFrame>();
 
-  /// Whether this session's clock may be fused with a beat grid.
-  ///
-  /// False both when unknown AND when there is no session — "we have not
-  /// looked" must not read as "yes".
   bool get clockFusableWithAudio =>
       _session != null && _session!.clockDomain == ClockDomain.monotonic;
 }

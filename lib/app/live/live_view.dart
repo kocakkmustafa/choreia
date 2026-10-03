@@ -102,6 +102,12 @@ abstract final class LiveStrings {
         CameraFailure.sessionInterrupted =>
           'The camera session ended before it was ready. Open the lesson '
               'again and retry.',
+        CameraFailure.ownedProtocolUnavailable =>
+          'This build cannot safely control the camera session. Return to the '
+              'lesson and install an updated version of the app.',
+        CameraFailure.closeUncertain =>
+          'Camera closure could not be confirmed. This attempt was not saved. '
+              'Return to the lesson and reopen the app before using the camera.',
         CameraFailure.permissionDenied =>
           // Never reached: permission has its own state. Handled so the
           // switch stays exhaustive rather than defaulting.
@@ -136,6 +142,10 @@ String _cameraProblemTr(CameraFailure failure) => switch (failure) {
         'Kamera bu ekranda henüz hazır değil. Derse dönüp yeniden deneyin.',
       CameraFailure.sessionInterrupted =>
         'Kamera seansı hazır olmadan kesildi. Dersi yeniden açıp deneyin.',
+      CameraFailure.ownedProtocolUnavailable =>
+        'Bu sürüm kamera seansını güvenle yönetemiyor. Derse dönüp uygulamanın güncel sürümünü yükleyin.',
+      CameraFailure.closeUncertain =>
+        'Kameranın kapandığı doğrulanamadı. Bu deneme kaydedilmedi. Derse dönüp kamerayı kullanmadan önce uygulamayı yeniden açın.',
       CameraFailure.permissionDenied => 'Kamera erişimi kapalı.',
     };
 
@@ -313,7 +323,9 @@ class LiveView extends StatelessWidget {
   /// breaks the build rather than silently rendering nothing.
   List<Widget> _forState(bool tr) => switch (state) {
         LiveIdle() => <Widget>[_idleCard(tr)],
-        LiveInterrupted() => <Widget>[_interruptedCard(tr)],
+        LiveInterrupted(:final accountChanged) => <Widget>[
+            _interruptedCard(tr, accountChanged: accountChanged)
+          ],
         LivePermissionDenied() => <Widget>[_permissionCard(tr)],
         LiveCameraUnavailable(:final CameraFailure failure) => <Widget>[
             _cameraProblemCard(failure, tr)
@@ -352,16 +364,23 @@ class LiveView extends StatelessWidget {
         ),
       );
 
-  Widget _interruptedCard(bool tr) => _AttentionCard(
+  Widget _interruptedCard(bool tr, {bool accountChanged = false}) =>
+      _AttentionCard(
         icon: Icons.pause_circle_outline,
         tone: ChoreiaColors.amber,
-        body: tr
-            ? 'Uygulamadan ayrılınca çalışma duraklatıldı. Devam etmek için kamerayı yeniden başlatın.'
-            : LiveStrings.interrupted,
+        body: accountChanged
+            ? (tr
+                ? 'Hesap değişti. Bu deneme durduruldu. Yeni bir deneme için derse dön.'
+                : 'The account changed. This attempt was stopped. Return to the lesson for a new attempt.')
+            : tr
+                ? 'Uygulamadan ayrılınca çalışma duraklatıldı. Devam etmek için kamerayı yeniden başlatın.'
+                : LiveStrings.interrupted,
         action: FilledButton(
           key: actionKey,
           onPressed: onRetry,
-          child: Text(tr ? 'Yeniden başlat' : 'Restart camera'),
+          child: Text(accountChanged
+              ? (tr ? 'Derse dön' : 'Back to lesson')
+              : (tr ? 'Yeniden başlat' : 'Restart camera')),
         ),
       );
 
@@ -411,7 +430,12 @@ class LiveView extends StatelessWidget {
         action: FilledButton(
           key: actionKey,
           onPressed: onRetry,
-          child: Text(tr ? 'Tekrar dene' : LiveStrings.tryAgain),
+          child: Text(
+            failure == CameraFailure.closeUncertain ||
+                    failure == CameraFailure.ownedProtocolUnavailable
+                ? (tr ? 'Derse dön' : 'Back to lesson')
+                : (tr ? 'Tekrar dene' : LiveStrings.tryAgain),
+          ),
         ),
       );
 
