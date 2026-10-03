@@ -6,13 +6,18 @@ import 'package:choreia/app/course/salsa_progress.dart';
 import 'package:choreia/app/course/salsa_self_check_policy.dart';
 import 'package:choreia/app/course/salsa_weekly_activity.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:crypto/crypto.dart';
 
 import 'support/salsa_criterion_fixture.dart';
 
 void main() {
   test('staged course bytes decode to the reviewed version-two fixture', () {
-    final staged = jsonDecode(
-        File('/Users/mustafakaankocak/Developer/YULAlab-AI/scratch/2026-10-01-release-week-dispatch/lanes/choreia/core-adoption-v4/course-version2-candidate.json').readAsStringSync());
+    final bytes = File(
+      'test/fixtures/salsa_criterion_v2/course-version2-candidate.json',
+    ).readAsBytesSync();
+    expect(sha256.convert(bytes).toString(),
+        '028ad5809999fc8d289364d5a5c5e90560e48ed984d249ad636b166edd4bad4a');
+    final staged = jsonDecode(utf8.decode(bytes));
     expect(staged, criterionCourseJson());
     final parsed = SalsaCourse.fromJson(staged as Map<String, dynamic>);
     expect(parsed.version, 2);
