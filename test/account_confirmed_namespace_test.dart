@@ -134,7 +134,7 @@ final class _AccountFixture {
     currentId = id;
     nextToken = 'local-fixture-token-2';
     await client.auth.signInWithPassword(
-        email: 'local-fixture@example.invalid', password: 'local-fixture-only');
+        email: 'local-fixture@example.invalid', password: 'fake');
     await runtime.refreshIdentity();
   }
 

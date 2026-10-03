@@ -44,9 +44,9 @@ class _PreviewFixture {
         .copySync('${root.path}/approved-source.tar.gz');
     Directory('${root.path}/app/packages/choreia_engine')
         .createSync(recursive: true);
-    File('${candidate.path}/app/pubspec.yaml')
+    File('${candidate.path}/app/pubspec.fixture')
         .copySync('${root.path}/app/pubspec.yaml');
-    File('${candidate.path}/app/packages/choreia_engine/pubspec.yaml')
+    File('${candidate.path}/app/packages/choreia_engine/pubspec.fixture')
         .copySync('${root.path}/app/packages/choreia_engine/pubspec.yaml');
     final List<Map<String, String>> motionPackages = <Map<String, String>>[];
     for (final FileSystemEntity package in Directory(

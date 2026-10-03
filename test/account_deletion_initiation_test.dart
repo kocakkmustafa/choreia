@@ -113,7 +113,7 @@ final class _HeldAccount extends MotionAccountClient {
     _nextToken = token;
     if (event == AuthChangeEvent.signedIn) {
       await supabase.auth.signInWithPassword(
-          email: 'local-dialog@example.invalid', password: 'local-fixture-only');
+          email: 'local-dialog@example.invalid', password: 'fake');
     } else if (event == AuthChangeEvent.tokenRefreshed) {
       await supabase.auth.refreshSession();
     } else {
