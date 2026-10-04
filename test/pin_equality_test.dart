@@ -7,7 +7,7 @@ import 'support/core_source_preview_guard.dart';
 import 'current_core_adoption_test.dart'
     show hasLocalMotionOverrides, verifyCurrentMotionGraph;
 
-const String approvedMotionSha = '0fed3a05466946bf2710750f4feca8dbd75be123';
+const String approvedMotionSha = 'edeec10a161c76bfa086b1d165d53e46ec88c3d7';
 
 /// PIN EŞİTLİĞİ (J-071 / M-F-260) — `motion_core` ve `motion_camera` AYNI
 /// ve onaylanmış commit'ten gelmek ZORUNDA.
