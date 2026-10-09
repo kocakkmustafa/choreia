@@ -16,7 +16,7 @@ void main() {
       'test/fixtures/salsa_criterion_v2/course-version2-candidate.json',
     ).readAsBytesSync();
     expect(sha256.convert(bytes).toString(),
-        '028ad5809999fc8d289364d5a5c5e90560e48ed984d249ad636b166edd4bad4a');
+        '3ec9ca3cf12bacaed6e4454ad769b9c1c3a3300643d50e7de2252601e782d52c');
     final staged = jsonDecode(utf8.decode(bytes));
     expect(staged, criterionCourseJson());
     final parsed = SalsaCourse.fromJson(staged as Map<String, dynamic>);

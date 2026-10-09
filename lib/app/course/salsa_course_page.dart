@@ -10,11 +10,13 @@ import '../theme.dart';
 import '../ui_language.dart';
 import 'media/choreia_source_projection_adapter.dart';
 import 'media/lesson_media_slot.dart';
+import 'practice_music_notice.dart';
 import 'salsa_course.dart';
 import 'salsa_course_repository.dart';
 import 'salsa_progress.dart';
 import 'salsa_session_preparation.dart';
 import 'salsa_weekly_activity.dart';
+import 'support_hold_demo.dart';
 
 /// The teaching route never requests a camera, microphone or music permission.
 class SalsaCourseEntry extends StatelessWidget {
@@ -407,6 +409,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                   'Dersleri istediğin zaman yeniden açabilirsin. Önkoşullar önerilen sırayı gösterir. Tamamlanma, kullandığın seçenekle kaydedilir.'),
               style: ChoreiaType.body()),
           const SizedBox(height: 18),
+          PracticeMusicNotice(turkish: tr),
           for (final module in course.modules) ...[
             Text(
                 '${module.order.toString().padLeft(2, '0')} · ${module.title.inLanguage(tr)}',
@@ -816,6 +819,15 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
     _record(SalsaEvidence.viewed);
   }
 
+  void _openSupportHoldDemo() {
+    if (!_admitted || !_ownerMatches || !_foreground || _lesson.id != 'so_04') {
+      return;
+    }
+    Navigator.of(context).push(ChoreiaPageRoute<void>(
+        settings: const RouteSettings(name: 'course/salsa-on1/support-hold'),
+        builder: (_) => SupportHoldDemo(turkish: tr)));
+  }
+
   @override
   Widget build(BuildContext context) {
     final lesson = _lesson;
@@ -896,6 +908,19 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                           padding: const EdgeInsets.only(bottom: 14),
                           child: Text('${index + 1}. $instruction',
                               style: ChoreiaType.body(size: 15))),
+                    if (lesson.id == 'so_04') ...[
+                      Text(
+                          t('A silent symbolic example for reading and description. It is not a physical demonstration, measured music beat or completion task.',
+                              'Okuma ve anlatım için sessiz sembolik örnek. Fiziksel gösterim, ölçülmüş müzik vuruşu veya tamamlama görevi değildir.'),
+                          style: ChoreiaType.body(size: 14)),
+                      TextButton(
+                          key: const Key('salsa.supportHoldDemo'),
+                          onPressed: _admitted && _ownerMatches
+                              ? _openSupportHoldDemo
+                              : null,
+                          child: Text(t('Inspect the support and hold diagram',
+                              'Destek ve durak şemasını incele'))),
+                    ],
                     _sectionTitle(t('Try it', 'Uygula')),
                     Text(
                         t('Keep movement comfortable. Stop for pain, dizziness or feeling unwell.',
@@ -1091,6 +1116,7 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
         const SizedBox(height: 8),
         Text(widget.course.musicCopy.inLanguage(tr), style: ChoreiaType.body()),
         const SizedBox(height: 14),
+        PracticeMusicNotice(turkish: tr),
         Wrap(spacing: 6, runSpacing: 8, children: [
           for (var number = 1; number <= 8; number++)
             Container(

@@ -10,25 +10,33 @@ duplicated here, so the two cannot drift apart and neither can a neighbouring
 session's checkout change this script's verdict. motion_core is READ-ONLY for
 this repo (family decision M-F-03): its maintenance belongs to the coordinator
 session, and Choreia reports needs as M-C-* records instead of editing it.
-Bumping CORE_PIN is a deliberate act: semver + DEFTER entry.
+Bumping CORE_PIN and its object identities is a deliberate act: semver + DEFTER entry.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 CONTENT = REPO / "content" / "styles"
-CORE_REPO = REPO.parents[1] / "motion-core" / "lib"
+# CI supplies an explicit non-secret path to the historical Core Git source.
+# A missing explicitly configured source is a failure, never an environment skip.
+CORE_REPO_VALUE = os.environ.get("CHOREIA_CONTENT_CORE_REPO")
+CORE_REPO = (Path(CORE_REPO_VALUE) if CORE_REPO_VALUE is not None
+             else REPO.parents[1] / "motion-core" / "lib")
 
 # Content is validated against a PINNED core version, never against whatever
 # branch happens to be checked out next door. motion-core is a shared repo with
 # several sessions working in it; reading its working tree would mean this
 # script's verdict silently changed with someone else's checkout.
 CORE_PIN = "motion_core-v0.5.0"
+# Verified historical Git objects, independent of the mutable tag name/origin.
+CORE_COMMIT = "9c83b3f382c2b20826918990d0be9fdc1012e1e6"
+CORE_JOINTS_BLOB = "7ca4995a00fc69391bf57c4017cc95c68297203f"
 CORE_JOINTS_PATH = "packages/motion_core/lib/src/geometry/joint_angles.dart"
 
 SUPPORTED_SCHEMA = 1
@@ -51,14 +59,36 @@ def core_joint_ids() -> set[str]:
     """
     import subprocess
 
+    if CORE_REPO_VALUE is not None and not CORE_REPO_VALUE.strip():
+        raise SystemExit("CHOREIA_CONTENT_CORE_REPO is empty; content was NOT validated")
     if not (CORE_REPO / ".git").exists():
+        if CORE_REPO_VALUE is not None:
+            raise SystemExit(
+                f"configured historical Core Git source unavailable: {CORE_REPO}; "
+                "content was NOT validated")
         print(f"ORTAM YOK: motion-core kardeş repo olarak checkout "
              f"edilmemiş ({CORE_REPO}) — bu kapı burada koşamadı, içerik "
              "ÖLÇÜLMEDİ")
         raise SystemExit(2)
 
+    for label, revision, expected in [
+        ("commit", f"{CORE_PIN}^{{commit}}", CORE_COMMIT),
+        ("joint blob", f"{CORE_PIN}:{CORE_JOINTS_PATH}", CORE_JOINTS_BLOB),
+    ]:
+        identity = subprocess.run(
+            ["git", "--no-replace-objects", "-C", str(CORE_REPO),
+             "rev-parse", "--verify", revision],
+            capture_output=True, text=True,
+        )
+        if identity.returncode != 0:
+            raise SystemExit(f"historical Core {label} unavailable for {CORE_PIN}")
+        if identity.stdout.strip() != expected:
+            raise SystemExit(f"historical Core {label} mismatch for {CORE_PIN}")
+
+    # Read the verified immutable blob, not the tag again. Ignore replacement refs.
     r = subprocess.run(
-        ["git", "-C", str(CORE_REPO), "show", f"{CORE_PIN}:{CORE_JOINTS_PATH}"],
+        ["git", "--no-replace-objects", "-C", str(CORE_REPO),
+         "show", CORE_JOINTS_BLOB],
         capture_output=True, text=True,
     )
     if r.returncode != 0:

@@ -1,0 +1,531 @@
+{
+  "schemaVersion": 1,
+  "id": "line_dance_beginner_written",
+  "version": 2,
+  "title": {
+    "en": "Line Dance: beginner written course",
+    "tr": "Line Dance: başlangıç yazılı kursu"
+  },
+  "reviewNotice": {
+    "en": "Local written teaching candidate. No verified physical success, camera grade or mastery. Demonstrations, bilingual learner testing and qualified physical review remain open. Reading and self-observation record no completion. Paid, model and media gates are closed.",
+    "tr": "Yerel yazılı öğretim adayı. Doğrulanmış fiziksel başarı, kamera puanı veya ustalık yok. Gösterimler, iki dilde öğrenci denemesi ve yetkin fiziksel inceleme açık. Okumak ve öz gözlem tamamlanma kaydetmez. Ücretli, model ve medya kapıları kapalı."
+  },
+  "boundaries": {
+    "en": "Clear a small route in all directions, with room to stop; keep away from obstacles and other people. Choose small comfortable steps on a non-slippery floor with suitable shoes. Gradually warm up with easy walking and small planned movements; eight counts alone are not a warm-up. Gradually slow down afterwards. Stop for pain, dizziness or unusual breathlessness. No jumps, spinning, forced pivots, large kicks or deep bends. Crossing is optional: omit it if uncertain or uncomfortable. Never force a balance hold or twist a planted knee. Rest between attempts; suggested repetitions are ceilings. Use only music/metronome you already lawfully access; none is supplied. With no external sound leave timing unchecked. Seated, spoken and no-cross substitutions have different outcomes. No medical suitability claim.",
+    "tr": "Durmak için boşluk bırakarak tüm yönlerde küçük bir yol aç; engellerden ve başkalarından uzak kal. Kaymayan zeminde uygun ayakkabıyla küçük rahat adım seç. Kolay yürüyüş ve planlanan küçük hareketlerle kademeli ısın; yalnız sekiz sayı ısınma değildir. Sonra kademeli yavaşla. Ağrı, baş dönmesi veya olağandışı nefes darlığında dur. Sıçrama, hızla dönme, zorlanmış pivot, büyük tekme veya derin bükülme yok. Çaprazlama isteğe bağlıdır: belirsiz veya rahatsızsa çıkar. Tek ayakta beklemeyi veya yere basan dizde burulmayı zorlama. Denemeler arasında dinlen; tekrar önerileri üst sınırdır. Yalnız zaten yasal erişimin olan müzik/metronomu kullan; ses sağlanmaz. Dış ses yoksa zamanı kontrol edilmemiş bırak. Oturarak, sözlü ve çaprazlamadan yerine geçen çalışmalar farklı sonuç taşır. Tıbbi uygunluk iddiası yok."
+  },
+  "startCompetency": {
+    "en": "No named dance experience needed. Choose comfortable standing, seated or verbal study. You can use your own R/L limb names and pause without rushing.",
+    "tr": "Adlandırılmış dans deneyimi gerekmez. Rahat ayakta, oturarak veya sözlü çalışma seç. Kendi sağ/sol uzuv adlarını kullanabilir, acele etmeden durabilirsin."
+  },
+  "endCompetency": {
+    "en": "Beginner target: read unfamiliar count/foot/direction/weight instructions, maintain pulse, step-touch/travel/selected vine, preserve support across repetition, reinterpret your own left/right at a new facing, recognise a quarter-turn versus half-turn and one/two/four-wall structure, build from one facing to four in the original 32-count study, recover and compare one correction at unchanged conditions. Original 24-count preparation remains. Actual turning contacts/control and physical teaching acceptance require observed demonstration/review and remain unchecked; this is not a completed physical beginner curriculum.",
+    "tr": "Başlangıç hedefi: yeni sayı/ayak/yön/ağırlık talimatını oku, vuruşu koru, step-touch/yol/seçilen vine çalış, tekrarda desteği koru, yeni bakışta kendi sağ/solunu yeniden yorumla, çeyrek/yarım dönüşü ve bir/iki/dört yönlü yapıyı tanı, özgün 32 sayımlı çalışmada bir bakıştan dörde ilerle, geri dön ve bir düzeltmeyi değişmeyen koşullarda karşılaştır. Özgün 24 sayımlı hazırlık kalır. Gerçek dönüş teması/kontrolü ve fiziksel öğretim kabulü gözlenen gösterim/inceleme ister ve kontrol edilmemiş kalır; bu tamamlanmış fiziksel başlangıç müfredatı değildir."
+  },
+  "provenance": {
+    "en": "Primary instruction checked 2026-10-04: Robert Royston / Howcast touch steps (https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/) and vine actions (https://howcast.com/videos/497836-how-to-do-a-vine-action-line-dancing/). Touch carries no weight; source distinguishes step-touch rhythm and describes side/behind/front vine ingredients. Our four-count side–behind–side–touch ending, small walking drills, diagrams and 24-count arrangement are original authored choices, not a copied step sheet. Ausdance general gradual preparation: https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance . No source endorses this course. Links are references, not media licences; Howcast reserves all rights. Line dancing is a social form with multiple traditions; no single style/history or universal technique is asserted. Added primary pattern/step-sheet instruction: https://howcast.com/videos/497845-what-is-basic-pattern-structure-line-dancing/ and https://howcast.com/videos/497843-how-to-use-step-sheets-line-dancing/ . These support count/wall/restart structure and eight-count walking orientation changes, not exact foot contacts or validation of our original 32-count plan.",
+    "tr": "Birincil öğretim 2026-10-04 kontrol edildi: Robert Royston / Howcast touch steps (https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/) ve vine actions (https://howcast.com/videos/497836-how-to-do-a-vine-action-line-dancing/). Dokunuş ağırlık almaz; kaynak step-touch zamanını ayırır, yana/arkaya/öne vine öğelerini anlatır. Dört sayımlı yana–arkaya–yana–dokun bitişimiz, küçük yürüyüş çalışmaları, çizimler ve 24 sayımlı düzen özgün tercihlerdir; kopya adım şeması değildir. Ausdance genel kademeli hazırlık: https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance . Hiçbir kaynak bu kursu onaylamaz. Bağlantılar başvurudur, medya lisansı değil; Howcast tüm hakları saklı tutar. Line dance çeşitli gelenekleri olan sosyal biçimdir; tek stil/tarih veya evrensel teknik iddiası yok. Ek birincil yapı/adım şeması öğretimi: https://howcast.com/videos/497845-what-is-basic-pattern-structure-line-dancing/ ve https://howcast.com/videos/497843-how-to-use-step-sheets-line-dancing/ . Bunlar sayı/yön/yeniden başlama yapısını ve sekiz sayılık yürüyerek bakış değişimini destekler; tam ayak temaslarını veya özgün 32 sayımlı planımızın doğrulamasını değil."
+  },
+  "acceptance": {
+    "scoring": false,
+    "progressWrites": false,
+    "paidAccess": false,
+    "mediaRightsAccepted": false,
+    "modelVerified": false,
+    "physicalInstructionAccepted": false,
+    "completeCurriculumAccepted": false
+  },
+  "units": [
+    {
+      "id": "ld_01",
+      "prerequisiteIds": [],
+      "diagram": {
+        "en": "FRONT ↑\nLEFT ← YOU → RIGHT\nBACK ↓",
+        "tr": "ÖN ↑\nSOL ← SEN → SAĞ\nARKA ↓"
+      },
+      "title": {
+        "en": "Space, direction and pulse",
+        "tr": "Alan, yön ve vuruş"
+      },
+      "prerequisite": {
+        "en": "Comfortable study mode and clear space.",
+        "tr": "Rahat çalışma biçimi ve boş alan."
+      },
+      "outcome": {
+        "en": "Name your R/L and external count; stop and re-enter.",
+        "tr": "Kendi sağ/solunu ve dış sayıyı adlandır; dur ve yeniden gir."
+      },
+      "instruction": {
+        "en": "Use dancer-relative directions: front is where you face, right is your own right. The top-down diagram faces toward its FRONT arrow; it is not a mirror video. Listen to eight external pulses, then say 1–8 once per pulse; choosing a count 1 is not finding a musical phrase.",
+        "tr": "Dansçıya göre yön kullan: ön baktığın yer, sağ kendi sağındır. Üstten çizim ÖN oku yönüne bakar; ayna video değildir. Sekiz dış vuruş dinle, sonra her vuruşta bir kez 1–8 söyle; 1 seçmek müzikal cümleyi bulmak değildir."
+      },
+      "practice": {
+        "en": "Point out front/right/left without stepping. Tap sixteen pulses; pause eight while listening and re-enter on a chosen pulse. Rest; one retry at most.",
+        "tr": "Adım atmadan ön/sağ/solu göster. On altı vuruşa dokun; dinleyerek sekiz dur, seçilen vuruşta geri gir. Dinlen; en çok bir tekrar."
+      },
+      "mistakes": {
+        "en": "Screen-right mistaken for your right: say your limb name. Two taps per pulse: return to listening. Do not speed up after losing count.",
+        "tr": "Ekran sağını kendi sağın sanmak: uzuv adını söyle. Vuruşa iki dokunuş: dinlemeye dön. Sayı kaybolunca hızlanma."
+      },
+      "adaptation": {
+        "en": "Seated hand taps test pulse recognition, not standing feet. Without external sound practise order only.",
+        "tr": "Oturarak el dokunuşu vuruş tanımayı sınar, ayakta ayakları değil. Dış ses yoksa yalnız sırayı çalış."
+      },
+      "check": {
+        "en": "Sixteen single taps; distinguish your left/right; deliberate pause and pulse re-entry. Mark each observed/uncertain/unattempted.",
+        "tr": "On altı tek dokunuş; kendi sağ/solunu ayır; bilerek dur ve vuruşa dön. Her birini öz gözlem/belirsiz/denenmedi işaretle."
+      },
+      "sourceIds": [
+        "authored",
+        "ausdance"
+      ]
+    },
+    {
+      "id": "ld_02",
+      "prerequisiteIds": [
+        "ld_01"
+      ],
+      "diagram": {
+        "en": "1 R → [W:R]   2 L close [T; W:R]\n3 L ← [W:L]   4 R close [T; W:L]",
+        "tr": "1 Sağ → [A:Sağ]   2 Sol yakın [D; A:Sağ]\n3 Sol ← [A:Sol]   4 Sağ yakın [D; A:Sol]"
+      },
+      "title": {
+        "en": "Step versus touch",
+        "tr": "Adım ve dokunuş"
+      },
+      "prerequisite": {
+        "en": "Pulse and own R/L.",
+        "tr": "Vuruş ve kendi sağ/solun."
+      },
+      "outcome": {
+        "en": "Transfer weight on a step, leave support unchanged on a touch.",
+        "tr": "Adımda ağırlık aktar, dokunuşta desteği değiştirme."
+      },
+      "instruction": {
+        "en": "1: step R a little right, weight R. 2: bring L near R, touch with no weight, support stays R. 3: step L a little left, weight L. 4: touch R near L with no weight, support stays L. Repeat 5–8. Feet keep comfortable space; no forced lift or held balance.",
+        "tr": "1: sağla biraz sağa adım, ağırlık sağda. 2: solu sağa yaklaştırıp ağırlıksız dokun, destek sağda kalır. 3: solla biraz sola adım, ağırlık solda. 4: sağı sola yaklaştırıp ağırlıksız dokun, destek solda kalır. 5–8 tekrarla. Ayaklar rahat boşlukta; zorla kaldırma veya beklenen denge yok."
+      },
+      "practice": {
+        "en": "Say step/touch for four counts without arms. Try eight to an external pulse, rest; one eight starting L by reversing all limb directions.",
+        "tr": "Kolları dinlendirerek dört sayı adım/dokunuş söyle. Dış vuruşta sekiz dene, dinlen; tüm uzuv yönlerini ters çevirerek solla bir sekizli başla."
+      },
+      "mistakes": {
+        "en": "Closing foot takes weight by accident: compare touch with an actual step before retry. Large side reach: shrink the step. If uncertain, keep both feet ready and restart.",
+        "tr": "Kapanan ayağın yanlışlıkla ağırlık alması: tekrardan önce dokunuşla gerçek adımı karşılaştır. Büyük yana uzanma: adımı küçült. Belirsizse iki ayağı hazır tutup yeniden başla."
+      },
+      "adaptation": {
+        "en": "Smaller steps; no arms. Seated hand labels rehearse order only.",
+        "tr": "Küçük adımlar; kollar eklenmez. Oturarak el etiketleri yalnız sırayı çalışır."
+      },
+      "check": {
+        "en": "Explain support on 2 and 4; attempt an eight each starting side with distinct step/touch. Uncertain weight is not a pass.",
+        "tr": "2 ve 4’te desteği açıkla; her başlangıç tarafında adım/dokunuş ayrı bir sekizli dene. Belirsiz ağırlık başarı sayılmaz."
+      },
+      "sourceIds": [
+        "touch",
+        "authored"
+      ]
+    },
+    {
+      "id": "ld_03",
+      "prerequisiteIds": [
+        "ld_02"
+      ],
+      "diagram": {
+        "en": "1 R ↑ W   2 L ↑ W   3 R ↑ W   4 L T [support R]\n5 L ↓ W   6 R ↓ W   7 L ↓ W   8 R T [support L]",
+        "tr": "1 Sağ ↑ A   2 Sol ↑ A   3 Sağ ↑ A   4 Sol D [destek sağ]\n5 Sol ↓ A   6 Sağ ↓ A   7 Sol ↓ A   8 Sağ D [destek sol]"
+      },
+      "title": {
+        "en": "Small forward and backward travel",
+        "tr": "Küçük öne ve arkaya yol"
+      },
+      "prerequisite": {
+        "en": "Step/touch and pulse.",
+        "tr": "Adım/dokunuş ve vuruş."
+      },
+      "outcome": {
+        "en": "Take three small alternating steps and touch; return without leaning backward.",
+        "tr": "Üç küçük dönüşümlü adım ve dokunuş yap; geriye eğilmeden dön."
+      },
+      "instruction": {
+        "en": "1–3: walk R,L,R forward, one weight-bearing step per count. 4: touch L near R, weight remains R. 5–7: walk L,R,L backward in small steps, one weight change each. 8: touch R near L, weight remains L. Start with a short enough path to see/know that the space behind is clear. Do not assume you return to the exact starting point.",
+        "tr": "1–3: sağ, sol, sağ öne yürü; her sayıda bir ağırlıklı adım. 4: solu sağa yakın dokundur, ağırlık sağda kalır. 5–7: küçük adımlarla sol, sağ, sol arkaya yürü; her birinde ağırlık değişir. 8: sağı sola yakın dokundur, ağırlık solda kalır. Arkadaki alanın boş olduğunu görebildiğin/bildiğin kısa yol seç. Tam başlangıç noktasına döndüğünü varsayma."
+      },
+      "practice": {
+        "en": "Read the eight without moving; try the forward four, rest, then backward four. Join once to slow pulse. Check your space again before one repeat.",
+        "tr": "Hareket etmeden sekizi oku; öndeki dördü dene, dinlen, sonra arkadaki dördü. Yavaş vuruşla bir kez bağla. Bir tekrardan önce alanı yeniden kontrol et."
+      },
+      "mistakes": {
+        "en": "Weight on touch 4 leaves L unavailable for back 5: pause and recheck support. Leaning back instead of stepping: shorten travel or stay in place. Never blindly retreat toward an obstacle.",
+        "tr": "4 dokunuşunda ağırlık almak 5 gerisi için solu hazır bırakmaz: dur ve desteği kontrol et. Adım yerine geriye eğilmek: yolu kısalt veya yerinde kal. Engele doğru körlemesine geri gitme."
+      },
+      "adaptation": {
+        "en": "Replace travel with alternating in-place steps, preserving count/support. This cannot satisfy spatial travel/return. Spoken/seated modes test order.",
+        "tr": "Sayımı/desteği koruyarak yol yerine yerinde dönüşümlü adım kullan. Bu, alanda gitme/dönmeyi karşılamaz. Sözlü/oturarak biçimler sırayı sınar."
+      },
+      "check": {
+        "en": "Identify support on 4/8 and next free foot; eight small steps/touches without collision or unplanned extra weight change. Mark travel separately from timing.",
+        "tr": "4/8 desteğini ve sonraki boş ayağı belirle; çarpışma veya plansız ek ağırlık değişmeden sekiz küçük adım/dokunuş. Yolculuğu zamandan ayrı işaretle."
+      },
+      "sourceIds": [
+        "authored"
+      ]
+    },
+    {
+      "id": "ld_04",
+      "prerequisiteIds": [
+        "ld_03"
+      ],
+      "diagram": {
+        "en": "1 R → W   2 L behind R W   3 R → W   4 L T\n5 L ← W   6 R behind L W   7 L ← W   8 R T",
+        "tr": "1 Sağ → A   2 Sol sağın arkasına A   3 Sağ → A   4 Sol D\n5 Sol ← A   6 Sağ solun arkasına A   7 Sol ← A   8 Sağ D"
+      },
+      "title": {
+        "en": "Selected grapevine or no-cross substitute",
+        "tr": "Seçilen grapevine veya çaprazlamayan seçenek"
+      },
+      "prerequisite": {
+        "en": "Small side steps, support and clear space.",
+        "tr": "Küçük yan adım, destek ve boş alan."
+      },
+      "outcome": {
+        "en": "Read side/behind/side/touch both ways, distinguish crossing from substitution.",
+        "tr": "İki yönde yana/arkaya/yana/dokun oku; çaprazlamayı yerine geçenden ayır."
+      },
+      "instruction": {
+        "en": "Chosen study: 1 R side with weight; 2 L takes a small step behind R with weight; 3 R side with weight; 4 L touches near R without weight. 5 L side with weight; 6 R small step behind L with weight; 7 L side with weight; 8 R touches without weight. “Behind” is relative to your facing, not a front cross. Do not hook feet, force narrow crossings or turn a planted knee. If unclear, do not cross; use side/together/side/touch instead, with weight on together. This substituted pattern is not grapevine evidence.",
+        "tr": "Seçilen çalışma: 1 sağ yana ağırlıkla; 2 sol sağın arkasına küçük ağırlıklı adım; 3 sağ yana ağırlıkla; 4 sol sağa yakın ağırlıksız dokunuş. 5 sol yana ağırlıkla; 6 sağ solun arkasına küçük ağırlıklı adım; 7 sol yana ağırlıkla; 8 sağ ağırlıksız dokunuş. “Arkası” bakış yönüne göredir, önden çapraz değil. Ayakları kancalama, dar çaprazı veya yere basan dizde dönmeyi zorlama. Belirsizse çaprazlama; yana/yanına/yana/dokun kullan, yanına adımında ağırlık al. Bu yerine geçen dizi grapevine kanıtı değildir."
+      },
+      "practice": {
+        "en": "First trace the foot order with hands. Practise the no-cross version for one eight. Only if comfortable/clear, try one right four slowly, rest, then one left four; join one eight at a comfortable pulse. No repetitions to push through uncertainty.",
+        "tr": "Önce ayak sırasını ellerle izle. Çaprazlamayan sürümü bir sekizli çalış. Yalnız rahat/net ise sağdaki dördü yavaş dene, dinlen, sonra soldaki dördü; rahat vuruşta bir sekizli bağla. Belirsizliği zorlayarak aşmak için tekrar yok."
+      },
+      "mistakes": {
+        "en": "Crossing in front versus behind: return to the labelled map; do not guess from a mirror. Touch on 2 versus weight-bearing behind step: isolate weight. Feet catching or discomfort: stop crossing and substitute, not a larger cross.",
+        "tr": "Önden ve arkadan çaprazı ayır: etiketli haritaya dön; aynadan tahmin etme. 2’de dokunuş ve ağırlıklı arka adımı ayır: ağırlığı ayrı çalış. Ayakların takılması veya rahatsızlık: çaprazı durdurup yerine geçen hareketi kullan, daha büyük çapraz değil."
+      },
+      "adaptation": {
+        "en": "No-cross side/together/side/touch preserves count and support but not crossing competency. Seated tracing is recognition, never standing evidence.",
+        "tr": "Çaprazlamayan yana/yanına/yana/dokun sayı ve desteği korur, çaprazlama yetkinliğini değil. Oturarak izleme tanımadır; ayakta kanıt değildir."
+      },
+      "check": {
+        "en": "Name direction, support and next free foot on both sides. If physically attempted, distinguish behind steps from touches; record crossing as uncertain/unattempted if substituted. No claim of universal vine technique.",
+        "tr": "İki tarafta yönü, desteği ve sonraki boş ayağı adlandır. Fiziksel denendi ise arka adımı dokunuştan ayır; yerine geçtiyse çaprazlamayı belirsiz/denenmedi kaydet. Evrensel vine tekniği iddiası yok."
+      },
+      "sourceIds": [
+        "vine",
+        "touch",
+        "authored"
+      ]
+    },
+    {
+      "id": "ld_05",
+      "prerequisiteIds": [
+        "ld_04"
+      ],
+      "diagram": {
+        "en": "count | moving foot | direction | W or T | support\nSame facing: FRONT ↑ at start AND end",
+        "tr": "sayı | hareket eden ayak | yön | A veya D | destek\nAynı bakış: başta VE sonda ÖN ↑"
+      },
+      "title": {
+        "en": "Read a step sheet and a wall",
+        "tr": "Adım şeması ve yön oku"
+      },
+      "prerequisite": {
+        "en": "Directions, counts and support for stages 2–4.",
+        "tr": "2–4. aşamalar için yön, sayı ve destek."
+      },
+      "outcome": {
+        "en": "Explain count/foot/direction/action and one-wall versus turning patterns.",
+        "tr": "Sayı/ayak/yön/eylemi ve tek yön ile dönen diziyi açıkla."
+      },
+      "instruction": {
+        "en": "Our notation has count, moving foot, direction and action: W means a weight-bearing step, T means touch with no weight. “Support” means the foot carrying weight after that action. A wall means a facing direction in the dance, not an actual nearby wall. One-wall study ends facing the same direction. A quarter turn means a new facing 90 degrees away; this course recognises that instruction but does not teach a pivot or grade physical turns. Published step sheets belong to their authors; this course uses its own study.",
+        "tr": "İşaretlerimiz sayı, hareket eden ayak, yön ve eylem içerir: A ağırlıklı adım, D ağırlıksız dokunuş demektir. “Destek” eylemden sonra ağırlığı taşıyan ayaktır. Duvar danstaki bakış yönüdür, yakındaki gerçek duvar değil. Tek yön çalışması aynı yöne bakarak biter. Çeyrek dönüş 90 derece başka bakış demektir; bu kurs o talimatı tanır, pivot öğretmez veya fiziksel dönmeyi puanlamaz. Yayımlanmış adım şemaları yazarlarınındır; bu kurs kendi çalışmasını kullanır."
+      },
+      "practice": {
+        "en": "Read one row from each diagram, name support and next available foot. Draw front/right/back/left facings on paper without turning. Explain why a touch is not a step and why changing facing changes what “forward” means.",
+        "tr": "Her çizimden bir satır oku, desteği ve sonraki hazır ayağı adlandır. Dönmeden kâğıtta ön/sağ/arka/sol bakışları çiz. Dokunuşun niye adım olmadığını, bakış değişince “ön”ün niye değiştiğini açıkla."
+      },
+      "mistakes": {
+        "en": "Confusing a count with repeated whole patterns: eight means eight beats. Treating a wall as a travel target: stay clear of real walls. Do not silently turn in our one-wall task.",
+        "tr": "Sayıyı bütün dizinin tekrarı sanmak: sekiz, sekiz vuruştur. Duvarı gidilecek yer saymak: gerçek duvarlardan uzak kal. Tek yön görevimizde habersiz dönme."
+      },
+      "adaptation": {
+        "en": "Paper/voice study fully supports notation recognition but cannot establish physical turning or stepping.",
+        "tr": "Kâğıt/sözlü çalışma işaret tanımayı destekler; fiziksel dönme veya adımı kanıtlamaz."
+      },
+      "check": {
+        "en": "Correctly interpret an unfamiliar row made from these ingredients; identify W/T, facing and next foot without copying a commercial dance.",
+        "tr": "Bu öğelerden oluşturulmuş yeni satırı doğru yorumla; ticari dansı kopyalamadan A/D, bakış ve sonraki ayağı belirle."
+      },
+      "sourceIds": [
+        "sheets",
+        "authored"
+      ],
+      "exercise": {
+        "en": "New row, no action/support labels: start facing the original front, weight on L, R free. On 1 place R a little to your right and transfer weight; on 2 bring L near R and touch without weight; on 3 take L a little forward with weight; on 4 touch R near L without weight. Before opening the answer, write the action (W/T), support foot after every count and next available foot after 4. What would change if you faced wall 9 rather than wall 12?",
+        "tr": "Yeni satır, eylem/destek etiketleri yok: ilk öne bakarak, ağırlık solda ve sağ boşta başla. 1’de sağı biraz kendi sağına koyup ağırlığı aktar; 2’de solu sağa yaklaştırıp ağırlıksız dokun; 3’te solla biraz öne ağırlıklı adım at; 4’te sağı sola yakın ağırlıksız dokundur. Cevabı açmadan her sayıda eylemi (A/D), son destek ayağını ve 4’ten sonra hazır ayağı yaz. 12 yönü yerine 9 yönüne baksaydın ne değişirdi?"
+      },
+      "answer": {
+        "en": "1 W, support R; 2 T, support R; 3 W, support L; 4 T, support L; next available R. Facing wall 9: your right points toward wall 12, forward toward wall 9; the limb names and support ledger stay unchanged. If touch 2 takes weight, count 3 no longer has the intended available L; return to the row, not a new sequence.",
+        "tr": "1 A, destek sağ; 2 D, destek sağ; 3 A, destek sol; 4 D, destek sol; sonraki hazır sağ. 9 yönüne bakarken kendi sağın 12’ye, önün 9’a gider; uzuv adları ve destek sırası değişmez. 2 dokunuşunda ağırlık alırsan 3 için amaçlanan sol hazır kalmaz; yeni diziye değil aynı satıra dön."
+      }
+    },
+    {
+      "id": "ld_06",
+      "prerequisiteIds": [
+        "ld_05"
+      ],
+      "diagram": {
+        "en": "PAUSE → listen 1–8 → ready support L → R begins\nA cue ≠ proven phrase boundary",
+        "tr": "DUR → 1–8 dinle → destek sol hazır → sağ başlar\nİpucu ≠ kanıtlı cümle sınırı"
+      },
+      "title": {
+        "en": "Enter, lose count and recover",
+        "tr": "Gir, sayıyı kaybet ve yeniden bul"
+      },
+      "prerequisite": {
+        "en": "Notation and comfortable small pattern.",
+        "tr": "İşaretler ve rahat küçük dizi."
+      },
+      "outcome": {
+        "en": "Choose pulse entry honestly and recover without hurried extra steps.",
+        "tr": "Vuruş girişini dürüst seç, hızlı ek adım olmadan dön."
+      },
+      "instruction": {
+        "en": "For a metronome choose the next pulse as practice 1. With music name an audible recurring cue, but a repeated drum hit is not automatically a phrase start. A phrase is a coherent musical section; a drum can repeat unchanged across its boundary. Record “cue entry observed; phrase start uncertain” when no section boundary is clear. Pause safely, listen through an eight and restart the SAME pattern with its correct first free foot.",
+        "tr": "Metronomda sonraki vuruşu çalışma 1’i seç. Müzikle duyulur tekrarlanan ipucunu adlandır, fakat tekrar eden davul otomatik cümle başlangıcı değildir. Cümle, müzikte birlikte anlam taşıyan bölümdür; davul sınırında değişmeden tekrarlanabilir. Bölüm sınırı net değilse “ipucuna giriş gözlendi; cümle başlangıcı belirsiz” yaz. Güvenle dur, bir sekizli dinle ve AYNI diziyi doğru ilk boş ayakla yeniden başlat."
+      },
+      "practice": {
+        "en": "Try stage 2 once, pause intentionally without rushing, listen eight pulses, then reset comfortable support and begin R-side on a chosen 1. Rest; one comparison with the same source.",
+        "tr": "2. aşamayı bir kez dene, bilerek acele etmeden dur, sekiz vuruş dinle, sonra rahat desteği hazırlayıp seçilen 1’de sağ yana başla. Dinlen; aynı kaynakla bir karşılaştırma."
+      },
+      "mistakes": {
+        "en": "Extra quick steps to catch time: stop and listen instead. Resuming on an unavailable foot: reset support before re-entry. Two successful cue entries still cannot prove phrase identification.",
+        "tr": "Zamana yetişmek için hızlı ek adımlar: dur ve dinle. Hazır olmayan ayakla sürdürmek: girişten önce desteği hazırla. İki başarılı ipucu girişi yine cümleyi belirlemeyi kanıtlamaz."
+      },
+      "adaptation": {
+        "en": "Seated tapping can test pulse recovery, not standing support reset. With no music phrase criteria remain unattempted.",
+        "tr": "Oturarak dokunma vuruşa dönüşü sınar, ayakta destek hazırlığını değil. Müzik yoksa cümle ölçütleri denenmedi kalır."
+      },
+      "check": {
+        "en": "Name the cue/source, recovery count and support reset; record cue and phrase results separately. If unsure revisit stage 1 or 2.",
+        "tr": "İpucunu/kaynağı, geri giriş sayısını ve destek hazırlığını adlandır; ipucu ve cümle sonuçlarını ayrı kaydet. Belirsizse 1 veya 2’ye dön."
+      },
+      "sourceIds": [
+        "authored"
+      ]
+    },
+    {
+      "id": "ld_07",
+      "prerequisiteIds": [
+        "ld_06"
+      ],
+      "diagram": {
+        "en": "A: 1–8 step-touch → support L\nB: 9–16 walk/return → support L\nC: 17–24 vine/substitute → support L\nRepeat A: R free; same FRONT ↑",
+        "tr": "A: 1–8 step-touch → destek sol\nB: 9–16 git/dön → destek sol\nC: 17–24 vine/seçenek → destek sol\nA tekrar: sağ boş; aynı ÖN ↑"
+      },
+      "title": {
+        "en": "Original 24-count preparation and reassessment",
+        "tr": "Özgün 24 sayımlı hazırlık ve yeniden değerlendirme"
+      },
+      "prerequisite": {
+        "en": "Prior recognition and mode-specific practice; crossing can remain unattempted.",
+        "tr": "Önceki tanıma ve biçime özel çalışma; çaprazlama denenmedi kalabilir."
+      },
+      "outcome": {
+        "en": "Repeat a support-compatible original one-wall study; identify a specific error and compare one correction.",
+        "tr": "Desteği uygun özgün tek yön çalışmasını tekrarla; belirli hatayı bul ve bir düzeltmeyi karşılaştır."
+      },
+      "instruction": {
+        "en": "Our original plan: A eight counts of stage-2 step-touch starting R; B eight counts of stage-3 forward/back walk; C eight counts of stage-4 selected vine OR its labelled no-cross substitute. All end supported on L with R free for the next A. Stay facing the original front. This is 24 beats, not 24 whole repeats. No supplied song or copied routine.",
+        "tr": "Özgün planımız: A sağla başlayan 2. aşama step-touch sekiz sayısı; B 3. aşama öne/arkaya yürüyüş sekiz sayısı; C 4. aşama seçilen vine VEYA etiketlenmiş çaprazlamayan seçenek sekiz sayısı. Hepsi solda destekle ve sonraki A için sağ boşta biter. İlk öne bakmayı sürdür. Bu 24 vuruştur; bütün dizinin 24 tekrarı değil. Sağlanan şarkı veya kopya rutin yok."
+      },
+      "practice": {
+        "en": "First attempt: record sound source, comfortable pulse, space, mode and substitution; do blocks A/B/C once then repeat once if comfortable. Pause/recover when needed. Rest. Name one observable error at a block/count: wrong side, touch took weight, lost beat or unsafe travel. Return to that SAME four/eight-count drill, choose one correction (smaller steps, say support aloud, feet only), then second attempt at the same source/tempo, mode and plan. A changed plan requires a fresh first attempt. If no error observed, record that and test consistency; do not invent an error. If uncertain, leave diagnosis/correction unchecked and return to the earlier drill.",
+        "tr": "İlk deneme: ses kaynağını, rahat vuruşu, alanı, biçimi ve yerine geçeni kaydet; A/B/C bloklarını bir kez yap, rahatsa bir kez tekrarla. Gerektiğinde dur/geri dön. Dinlen. Blok/sayıda bir gözlenebilir hata adlandır: yanlış taraf, dokunuşta ağırlık, vuruşu kaybetme veya güvensiz yol. AYNI dört/sekiz sayımlı çalışmaya dön, bir düzeltme seç (küçük adım, desteği söyleme, yalnız ayaklar), sonra aynı kaynak/hız, biçim ve planda ikinci deneme. Plan değişirse taze ilk deneme gerekir. Hata gözlenmediyse bunu yaz ve tutarlılığı sına; hata uydurma. Belirsizse hatayı belirleme/düzeltmeyi kontrol edilmemiş bırak, önceki çalışmaya dön."
+      },
+      "mistakes": {
+        "en": "“Bad” is not a specific error: identify action/support/count. Different tempo or new sequence makes first/second incomparable. A substitution cannot pass crossing. Do not add improvised steps to conceal timing loss.",
+        "tr": "“Kötü” belirli hata değildir: eylem/destek/sayı belirle. Farklı hız veya yeni dizi ilk ve ikinci denemeyi karşılaştırılamaz yapar. Yerine geçen hareket çaprazlamayı geçemez. Zaman kaybını gizlemek için doğaçlama adım ekleme."
+      },
+      "adaptation": {
+        "en": "In-place travel substitutes and no-cross C keep meaningful count/support study; mark travel/crossing unattempted. Seated/voice modes test reading/listening/order only.",
+        "tr": "Yerinde yol seçeneği ve çaprazlamayan C anlamlı sayı/destek çalışmasını korur; yol/çaprazı denenmedi işaretle. Oturarak/sözlü biçimler yalnız okuma/dinleme/sırayı sınar."
+      },
+      "check": {
+        "en": "Record separately: pulse, W/T, both sides, safe travel, selected crossing or substitution, same facing, repeat-ready support, deliberate recovery, error block/beat location and type, one correction and unchanged-condition comparison. Observed/uncertain/unattempted and mode for EACH. No observed error means consistency only; no physical or camera completion award. This stage is one-wall preparation; stages 8–9 address facing changes. Sequence blocks A/B/C are different from first/second attempts.",
+        "tr": "Ayrı kaydet: vuruş, A/D, iki taraf, güvenli yol, seçilen çapraz veya yerine geçen, aynı bakış, tekrara hazır destek, bilerek geri dönüş, hatanın blok/vuruş yeri ve türü, bir düzeltme ve değişmeyen koşullu karşılaştırma. HER biri için öz gözlem/belirsiz/denenmedi ve biçim. Hata gözlenmemesi yalnız tutarlılıktır; fiziksel veya kamera tamamlanma ödülü yok. Bu aşama tek yön hazırlığıdır; 8–9. aşamalar bakış değişimini ele alır. Dizi blokları A/B/C, ilk/ikinci denemeden farklıdır."
+      },
+      "sourceIds": [
+        "authored"
+      ]
+    },
+    {
+      "id": "ld_08",
+      "prerequisiteIds": [
+        "ld_07"
+      ],
+      "sourceIds": [
+        "pattern",
+        "authored"
+      ],
+      "title": {
+        "en": "Walls, own-limb directions and walking turn study",
+        "tr": "Yönler, kendi uzuv yönleri ve yürüyerek dönüş çalışması"
+      },
+      "prerequisite": {
+        "en": "24-count order/support clear; prepared space; read the source/physical boundary first.",
+        "tr": "24 sayı sıra/destek net; hazırlanmış alan; önce kaynak/fiziksel sınırı oku."
+      },
+      "outcome": {
+        "en": "Read new-facing directions and an eight-step quarter-left transition; distinguish planning from observed turning.",
+        "tr": "Yeni bakış yönlerini ve sekiz adımlı çeyrek-sola geçişi oku; planlamayı gözlenen dönüşten ayır."
+      },
+      "instruction": {
+        "en": "Label floor facings 12 (original front), 9 (original left), 6 (back), 3 (original right); these clock labels are NOT music counts. A quarter-left changes 12→9, a half-left 12→6. Your own right changes with your facing. Source pattern instruction allocates eight counts to a quarter-turn; our authored scaffold uses eight small alternating walking steps R,L,R,L,R,L,R,L in a comfortable gradual arc left, ending at the next facing with L support and R available. No fixed per-step angle, foot strike, radius or simultaneous-contact timing is claimed. Do not swivel on a planted foot; use ordinary steps, avoid forced collection/crossing. The actual turn/contact transition has not been observed or validated for this course: if not clear/comfortable, do NOT attempt it from text. Use cards/verbal planning and leave physical turning unchecked until a reviewed demonstration and qualified review are available.",
+        "tr": "Zemin bakışlarını 12 (ilk ön), 9 (ilk sol), 6 (arka), 3 (ilk sağ) diye etiketle; bu saat etiketleri müzik sayısı DEĞİLDİR. Çeyrek-sola 12→9, yarım-sola 12→6 değiştirir. Kendi sağın bakışınla değişir. Kaynak yapı öğretimi çeyrek dönüşe sekiz sayı ayırır; özgün çalışmamız rahat kademeli sol yayda sekiz küçük dönüşümlü yürüyüş adımı sağ,sol,sağ,sol,sağ,sol,sağ,sol kullanır; yeni bakışta sol destek ve sağ hazır biter. Her adım için sabit açı, basış, yarıçap veya eşzamanlı temas anı iddia edilmez. Yere basan ayağı burarak dönme; normal adımları kullan, zorla kapanma/çaprazlamadan kaçın. Gerçek dönüş/temas geçişi bu kurs için gözlenmiş veya doğrulanmış değildir: net/rahat değilse metinden DENEME. Kart/sözlü plan kullan ve incelenmiş gösterim ile yetkin inceleme gelene kadar fiziksel dönmeyi kontrol edilmemiş bırak."
+      },
+      "practice": {
+        "en": "First rotate a paper facing card from 12 to 9 and name own front/right/left/back. Then rehearse eight foot labels with support changes without turning. Only after the actual-turn boundary is resolved, a comfortable isolated quarter-left walking study may be attempted once slowly without music, rest, then once to a pulse. Stop for uncertainty; never force an eight-count deadline.",
+        "tr": "Önce kâğıt bakış kartını 12’den 9’a çevirip kendi ön/sağ/sol/arkanı adlandır. Sonra dönmeden destek değişimleriyle sekiz ayak etiketini prova et. Yalnız gerçek dönüş sınırı çözüldükten sonra rahat ayrı çeyrek-sola yürüyüş çalışması yavaşça müziksiz bir kez, dinlenip vuruşla bir kez denenebilir. Belirsizlikte dur; sekiz sayılık son anı zorlama."
+      },
+      "mistakes": {
+        "en": "Treating screen-right as own right at wall 9: map it to floor 12. Spinning to meet the count: pause instead. Confusing clock 9 with beat 9: call facing and beat separately. Ending on the wrong support foot: return to isolated alternating labels; do not fake a touch into a step.",
+        "tr": "9 yönünde ekran sağını kendi sağın sanmak: onu zemin 12’ye eşleştir. Sayıya yetişmek için hızla dönmek: dur. Saat 9’u vuruş 9 sanmak: bakışı ve vuruşu ayrı söyle. Yanlış destekle bitirmek: ayrı dönüşümlü etiketlere dön; dokunuşu adım gibi gösterme."
+      },
+      "adaptation": {
+        "en": "Paper rotation and seated/straight in-place foot-label study support orientation/count learning, not physical turning. No-turn mode keeps the old 24-count study and leaves the four-wall physical endpoint open.",
+        "tr": "Kâğıt çevirme ve oturarak/düz yerinde ayak etiketi çalışması yön/sayı öğrenimini destekler, fiziksel dönmeyi değil. Dönmeyen biçim eski 24 sayımlı çalışmayı korur ve dört yön fiziksel hedefini açık bırakır."
+      },
+      "check": {
+        "en": "Identify front/right for all four facings; distinguish quarter/half changes; explain eight-step support ledger. Mark actual foot-placement/contact/control during turning unattempted until reviewed observation; no camera or diagram can certify it.",
+        "tr": "Dört bakış için ön/sağı belirle; çeyrek/yarım değişimi ayır; sekiz adım destek sırasını açıkla. Dönüşte gerçek ayak yerleşimi/temas/kontrolü incelenmiş gözleme kadar denenmedi işaretle; kamera veya çizim bunu onaylayamaz."
+      },
+      "diagram": {
+        "en": "Floor: 12 ↑, 9 ←, 6 ↓, 3 →\nFacing 12: own R→3; facing 9: own R→12\nQuarter LEFT: 12 → 9 → 6 → 3 → 12\nTransition steps 1–8: R L R L R L R L; support L",
+        "tr": "Zemin: 12 ↑, 9 ←, 6 ↓, 3 →\nBakış 12: kendi sağın→3; bakış 9: kendi sağın→12\nÇeyrek SOL: 12 → 9 → 6 → 3 → 12\nGeçiş adımları 1–8: sağ sol sağ sol sağ sol sağ sol; destek sol"
+      }
+    },
+    {
+      "id": "ld_09",
+      "prerequisiteIds": [
+        "ld_08"
+      ],
+      "sourceIds": [
+        "pattern",
+        "sheets",
+        "authored"
+      ],
+      "title": {
+        "en": "Multi-direction beginner plan and final reassessment",
+        "tr": "Çok yönlü başlangıç planı ve son yeniden değerlendirme"
+      },
+      "prerequisite": {
+        "en": "Original 24 counts and stage-8 facing/support reading; actual turn eligibility is separate.",
+        "tr": "Özgün 24 sayı ve 8. aşama bakış/destek okuması; gerçek dönüş uygunluğu ayrı."
+      },
+      "outcome": {
+        "en": "Connect the original study to a source-grounded four-wall restart plan, recover, locate an error and reassess honestly.",
+        "tr": "Özgün çalışmayı kaynak destekli dört yön yeniden başlama planına bağla, geri dön, hatanın yerini bul ve dürüstçe yeniden değerlendir."
+      },
+      "instruction": {
+        "en": "Original extended plan: blocks A/B/C are the unchanged 24 counts; block D is the authored eight-step quarter-left study, giving 32 counts per facing. At the next facing restart block A with R available; directions now follow that new facing. Four cycles traverse 12→9→6→3→12. This is our original extension, not Royston’s demonstration routine. First practise the plan using facing cards and foot labels; the physical D and dynamic transition are withheld pending reviewed demonstration/physical validation. A completed paper plan cannot close the full physical beginner goal.",
+        "tr": "Özgün geniş plan: A/B/C blokları değişmeyen 24 sayıdır; D bloğu özgün sekiz adımlı çeyrek-sola çalışmadır, her bakışta 32 sayı eder. Sonraki bakışta sağ hazırken A bloğunu yeniden başlat; yönler artık o bakışı izler. Dört tur 12→9→6→3→12 dolaşır. Bu bizim özgün uzantımızdır, Royston’un gösterim rutini değil. Önce planı bakış kartı ve ayak etiketleriyle çalış; fiziksel D ve hareketli geçiş, incelenmiş gösterim/fiziksel doğrulamaya kadar kapalıdır. Tamamlanan kâğıt planı tam fiziksel başlangıç hedefini kapatamaz."
+      },
+      "practice": {
+        "en": "Progression: (1) one 24-count facing, (2) the isolated D plan, (3) A/B/C/D with two facing cards 12 then 9, (4) four cards in order only when directions/support are clear. Rest between trials; no requirement to do 128 physical beats. First attempt: record source, tempo, mode, block plan, available space and turn eligibility. Locate an error by block AND beat and type (wrong own side, weight on touch, facing error, timing, unsafe travel); return to that same block/drill, change ONE cue and make a second attempt at identical conditions. A changed plan needs a fresh first attempt. No observed error means consistency study; uncertain data leave correction/reassessment unchecked. If time is lost, stop safely, listen, reset L support and restart block A at the intended facing rather than rush through a turn.",
+        "tr": "İlerleme: (1) tek bakışta 24 sayı, (2) ayrı D planı, (3) önce 12 sonra 9 iki bakış kartıyla A/B/C/D, (4) yalnız yön/destek netken sırayla dört kart. Denemeler arasında dinlen; 128 fiziksel vuruş yapma zorunluluğu yok. İlk deneme: kaynak, hız, biçim, blok planı, boş alan ve dönüş uygunluğunu kaydet. Hatayı blok VE vuruş yeri ile türüne göre belirle (yanlış kendi tarafın, dokunuşta ağırlık, bakış hatası, zaman, güvensiz yol); aynı blok/çalışmaya dön, TEK ipucunu değiştir, aynı koşullarda ikinci deneme yap. Plan değişirse taze ilk deneme gerekir. Hata gözlenmediyse tutarlılık çalışmasıdır; belirsiz veri düzeltme/yeniden değerlendirmeyi kontrol edilmemiş bırakır. Zaman kaybolursa güvenle dur, dinle, sol desteği hazırla ve dönüşte acele etmek yerine amaçlanan bakışta A bloğundan yeniden başla."
+      },
+      "mistakes": {
+        "en": "Correct legs in wrong room directions: compare the new-facing map, not a front-view screenshot. Skipping D or adding an extra step changes support/plan: mark that change and start fresh. A first/second attempt is not a sequence block A/B.",
+        "tr": "Yanlış oda yönünde doğru bacaklar: önden ekran görüntüsüne değil yeni bakış haritasına bak. D’yi atlamak veya ek adım destek/planı değiştirir: değişimi işaretle ve taze başla. İlk/ikinci deneme, dizi bloğu A/B değildir."
+      },
+      "adaptation": {
+        "en": "No-cross C keeps its existing label. No-turn/seated/card modes can demonstrate reading/restart logic and pulse only; they cannot satisfy multi-wall movement or the actual turn/contact component.",
+        "tr": "Çaprazlamayan C mevcut etiketini korur. Dönmeyen/oturarak/kart biçimleri yalnız okuma/yeniden başlama mantığını ve vuruşu gösterebilir; çok yönlü hareketi veya gerçek dönüş/temas bileşenini karşılayamaz."
+      },
+      "check": {
+        "en": "Separate results: unfamiliar-row reading, pulse, step/touch, both-sided travel/vine or substitution, new-facing own-limb mapping, D support/count plan, four-wall restart order, deliberate recovery, error block/beat location and type, one correction and same-condition second attempt. Record observed/uncertain/unattempted and mode for EACH. Physical D contacts, stability and movement-to-new-wall transition stay unaccepted until demonstration review; therefore the complete physical beginner curriculum remains open.",
+        "tr": "Ayrı sonuçlar: yeni satır okuma, vuruş, adım/dokunuş, iki taraflı yol/vine veya yerine geçen, yeni bakışta kendi uzuv yönleri, D destek/sayı planı, dört yön yeniden başlama sırası, bilerek geri dönüş, hatanın blok/vuruş yeri ve türü, bir düzeltme ve aynı koşullu ikinci deneme. HER biri için öz gözlem/belirsiz/denenmedi ve biçim kaydet. Fiziksel D teması, dengesi ve yeni yöne hareketli geçiş, gösterim incelemesine kadar kabul edilmez; bu yüzden tam fiziksel başlangıç müfredatı açık kalır."
+      },
+      "diagram": {
+        "en": "A 1–8 + B 9–16 + C 17–24 + D 25–32\nD: R L R L R L R L → L support, R available\nFacing-card cycle: 12 → 9 → 6 → 3 → 12",
+        "tr": "A 1–8 + B 9–16 + C 17–24 + D 25–32\nD: sağ sol sağ sol sağ sol sağ sol → sol destek, sağ hazır\nBakış kartı turu: 12 → 9 → 6 → 3 → 12"
+      }
+    }
+  ],
+  "diagramNotice": {
+    "en": "Original symbolic top-down/count maps. W=weight-bearing step; T=no-weight touch; R/L=your own feet. Arrows show direction, not distance, timing/contact animation or proof of safe technique. Read the adjacent instructions; static drawings cannot validate movement.",
+    "tr": "Özgün simgesel üstten/sayı haritaları. A=ağırlıklı adım; D=ağırlıksız dokunuş; sağ/sol=kendi ayakların. Oklar yönü gösterir; mesafe, zaman/temas animasyonu veya güvenli teknik kanıtı değildir. Yanındaki anlatımı oku; sabit çizim hareketi doğrulayamaz."
+  },
+  "finalTaskContract": {
+    "beats": 24,
+    "blocks": [
+      "step_touch",
+      "walk_return",
+      "vine_or_labelled_substitute"
+    ],
+    "evidence": "self_observation_only",
+    "crossingSubstituteIsPhysicalCrossing": false,
+    "seatedIsPhysical": false,
+    "planChangeRequiresFreshA": true,
+    "extendedBeatsPerWall": 32,
+    "facingOrder": [
+      "12",
+      "9",
+      "6",
+      "3",
+      "12"
+    ],
+    "actualTurnEligible": false,
+    "completePhysicalEndpoint": false
+  },
+  "sources": [
+    {
+      "id": "touch",
+      "author": "Robert Royston / Howcast",
+      "url": "https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/",
+      "checked": "2026-10-04",
+      "scope": "Generic step/touch weight distinction and step-touch rhythm. No copied routine.",
+      "rights": "All rights reserved; reference only, media not supplied"
+    },
+    {
+      "id": "vine",
+      "author": "Robert Royston / Howcast",
+      "url": "https://howcast.com/videos/497836-how-to-do-a-vine-action-line-dancing/",
+      "checked": "2026-10-04",
+      "scope": "Side/behind/front vine ingredients; our touch ending and small-range drills are authored.",
+      "rights": "All rights reserved; reference only, media not supplied"
+    },
+    {
+      "id": "ausdance",
+      "author": "Ausdance National",
+      "url": "https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance",
+      "checked": "2026-10-04",
+      "scope": "General gradual preparation and reduction, not validation of our technique or adaptations.",
+      "rights": "Reference only"
+    },
+    {
+      "id": "authored",
+      "scope": "Original written count/direction/support teaching, no-cross alternatives, recognition, recovery, symbolic drawings, 24-count study and reassessment. Qualified physical/bilingual review not asserted."
+    },
+    {
+      "id": "pattern",
+      "author": "Robert Royston / Howcast",
+      "url": "https://howcast.com/videos/497845-what-is-basic-pattern-structure-line-dancing/",
+      "checked": "2026-10-04",
+      "scope": "One/two/four-wall pattern and restart structure, allocating eight counts to walking orientation changes. Not our choreography or exact quarter-turn contact validation.",
+      "rights": "Reference only; all rights reserved"
+    },
+    {
+      "id": "sheets",
+      "author": "Robert Royston / Howcast",
+      "url": "https://howcast.com/videos/497843-how-to-use-step-sheets-line-dancing/",
+      "checked": "2026-10-04",
+      "scope": "Step-sheet header/count/wall/foot-direction reading only; no named dance copied.",
+      "rights": "Reference only; all rights reserved"
+    }
+  ]
+}

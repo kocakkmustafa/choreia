@@ -7,12 +7,23 @@
     "v10bIndependentPeer": "fc47f1d6cff73fece24f322e5e5f009f5f1f05a73779dfdf5e13a94a0bc4798a"
   },
   "sourceResearch": {
-    "addicted2salsa_arm_layering": ["v8"],
-    "ellmann_front_cross": ["v8"],
-    "eld_jazz_box_b": ["v10bRepair", "v10bIndependentPeer"],
-    "ellmann_pause_hold": ["v10", "v10bRepair", "v10bIndependentPeer"]
+    "addicted2salsa_arm_layering": [
+      "v8"
+    ],
+    "ellmann_front_cross": [
+      "v8"
+    ],
+    "eld_jazz_box_b": [
+      "v10bRepair",
+      "v10bIndependentPeer"
+    ],
+    "ellmann_pause_hold": [
+      "v10",
+      "v10bRepair",
+      "v10bIndependentPeer"
+    ]
   },
-  "parentCourseSha256": "bceece2f4264963578e0414985a34c55a45103b286c2b87e12bece711e693a83",
+  "parentCourseSha256": "d2fbc8f2b3072a1f66b1537b9a395ac3c5625c28d085c7ade838c98fb05d00c8",
   "scope": "Five exact lesson teaching attributions; no whole-lesson, timing, camera, model or personal safety validation.",
   "generatedMediaCount": 0,
   "acceptedExpertLabelCount": 0,
@@ -84,11 +95,26 @@
     }
   ],
   "bindings": {
-    "so_15": ["addicted2salsa_arm_layering"],
-    "so_25": ["ellmann_front_cross"],
-    "so_26": ["ellmann_front_cross"],
-    "so_28": ["eld_jazz_box_b"],
-    "so_34": ["ellmann_pause_hold"]
+    "so_15": [
+      "addicted2salsa_arm_layering"
+    ],
+    "so_25": [
+      "ellmann_front_cross"
+    ],
+    "so_26": [
+      "ellmann_front_cross"
+    ],
+    "so_28": [
+      "eld_jazz_box_b"
+    ],
+    "so_34": [
+      "ellmann_pause_hold"
+    ]
   },
-  "excludedLessonIds": ["so_02", "so_09", "so_16", "so_17"]
+  "excludedLessonIds": [
+    "so_02",
+    "so_09",
+    "so_16",
+    "so_17"
+  ]
 }

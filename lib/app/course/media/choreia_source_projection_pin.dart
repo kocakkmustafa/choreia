@@ -1,4 +1,4 @@
-/// App-owned v2l source identity. Matching these bytes does not authorize
+/// App-owned authored revision using the v2l wire format. Matching these bytes does not authorize
 /// release media or a learner-skill verdict.
 abstract final class ChoreiaSourceProjectionPin {
   static const appId = 'choreia';
@@ -9,16 +9,16 @@ abstract final class ChoreiaSourceProjectionPin {
       'content/motion_content/choreia.source-projection.v1.json';
 
   static const courseSha256 =
-      'b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7';
+      'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc';
   static const sliceSha256 =
-      '7218bdf4f109844ee4c79367e3ae105c0530ac388a1732574c0d7d26b0c9d7a3';
+      '7c62bacdfee106acc06dba4a950ecf6b23f5a0d0ea976f56ec309ea15bc077fb';
   static const projectionSha256 =
-      'b9c731a1801ae46a27bdfdc97cbc96eeeb0f2dc291e01e81ea64d86c29765a15';
+      'af0e7bb0a865914722774e7b806e2236e963dcdd2cda1ddf3e6664eac556a69c';
   static const sourceCatalogSha256 =
-      '791bfea8e1479307794bcf8799cf703a7a840bcd3058c1a0d7fdf065d32d8594';
+      'a6072c7e16edf43c812b508a8904ae0bf4cd0ce70842b0affc51e7514f751982';
   // Preproduction source manifest, not an independently approved release root.
   static const sourceManifestSha256 =
-      'd887683c9a9b9bdb8d4ab7c51cdc5a5b4b4de6a918079e4cfd9cf543e9751e60';
+      'c98bde343ed0529d0717ca70b56cae529e0fbededecdbaf4ef6934230c324b64';
 
   static const lessonCount = 48;
   static const sceneCount = 436;

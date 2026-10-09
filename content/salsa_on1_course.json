@@ -794,20 +794,20 @@
           "Önce bir sekizi hareket etmeden say; sol ayağın 1’de hazır olduğunu kontrol et.",
           "İki sekiz yerinde adım, iki sekiz ileri/geri temel yap.",
           "Durup sayımını, ayak sırasını ve rahatlığını kendi gözleminle değerlendir.",
-          "İkinci denemede yalnız bir noktayı seç: küçük adım veya kesintisiz sayım. Hız eklemek gerekmez.",
-          "Sayım, yön ve kol hareketini aynı anda düzeltmeye çalışma. İlk denemede yalnız ayak sırasını izle; ikinci denemede yalnız yerinde ve ileri-geri geçişini seç."
+          "İki denemede aynı tek odağı seç: küçük adım veya sürekli sayım veya belirli bir geçiş. İlk denemede tek bir noktayı adlandır, yalnız bir düzeltme seç; ikinci denemede aynı noktayı aynı kısa dizide kontrol et. Daha fazla hız gerekmez.",
+          "Sayım, yön ve kolları birden düzeltme. İki denemede aynı geçişi veya aynı ayak sırası noktasını karşılaştır; başka odak yeni ayrı çalışmadır."
         ],
         "en": [
           "First count one eight without moving and check that your left foot is ready for 1.",
           "Do two eights in place and two eights of forward/back basic.",
           "Stop and review your count, foot order and comfort from your own observation.",
-          "For a second attempt choose just one focus: small steps or continuous counting. You do not need more speed.",
-          "Do not correct counting, direction and arms all at once. In the first attempt focus only on foot order; in the second choose the transition between in-place and forward-back steps."
+          "Choose the same single focus in both attempts: small steps, continuous count or one specific transition. Name one location after the first attempt and choose one correction; check that same location in the same short sequence on the second attempt. More speed is not needed.",
+          "Do not correct count, direction and arms together. Compare the same transition or foot-order location in both attempts; a different focus starts a separate study."
         ]
       },
       "practice": {
-        "tr": "İki kısa deneme yap. Arada neyin kolay/neye tekrar gerektiğini söyle. Hazır hissediyorsan bir sonraki modüle geç.\n\nKısa odak çalışması: İki sekizli yerinde, iki sekizli ileri-geri temel yap. Durup tek bir geliştirme noktası seç; istersen dört sekizliyi bir kez daha dene. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: İki bölümün sırasını yerinde-ileri geri yerine ileri geri-yerinde seçip rahat sayımı sürdür.",
-        "en": "Make two short attempts. Between them, name what felt easy and what needs repetition. Continue when you feel ready.\n\nShort focused practice: Use two eights in place and two forward-back eights. Stop, choose one improvement, and optionally repeat the four-eights phrase once. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the two sections from in-place/forward-back to forward-back/in-place while keeping comfortable counts."
+        "tr": "İki kısa deneme yap. Arada neyin kolay/neye tekrar gerektiğini söyle. Hazır hissediyorsan bir sonraki modüle geç.\n\nKısa odak çalışması: İki sekizli yerinde, iki sekizli ileri-geri temel yap. Durup tek bir geliştirme noktası seç; istersen dört sekizliyi bir kez daha dene. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: İki bölümün sırasını yerinde-ileri geri yerine ileri geri-yerinde seçip rahat sayımı sürdür.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için iki yerinde ve iki öne/arkaya sekizli seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Make two short attempts. Between them, name what felt easy and what needs repetition. Continue when you feel ready.\n\nShort focused practice: Use two eights in place and two forward-back eights. Stop, choose one improvement, and optionally repeat the four-eights phrase once. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the two sections from in-place/forward-back to forward-back/in-place while keeping comfortable counts.\n\nIndependent retest — separate from optional variation: For A choose two in-place and two forward/back eights; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -856,15 +856,15 @@
             "Önce bir sekizi hareket etmeden say; sol ayağın 1’de hazır olduğunu kontrol et.",
             "İki sekiz yerinde adım, iki sekiz ileri/geri temel yap.",
             "Durup sayımını, ayak sırasını ve rahatlığını kendi gözleminle değerlendir.",
-            "İkinci denemede yalnız bir noktayı seç: küçük adım veya kesintisiz sayım. Hız eklemek gerekmez.",
-            "Sayım, yön ve kol hareketini aynı anda düzeltmeye çalışma. İlk denemede yalnız ayak sırasını izle; ikinci denemede yalnız yerinde ve ileri-geri geçişini seç."
+            "İki denemede aynı tek odağı seç: küçük adım veya sürekli sayım veya belirli bir geçiş. İlk denemede tek bir noktayı adlandır, yalnız bir düzeltme seç; ikinci denemede aynı noktayı aynı kısa dizide kontrol et. Daha fazla hız gerekmez.",
+            "Sayım, yön ve kolları birden düzeltme. İki denemede aynı geçişi veya aynı ayak sırası noktasını karşılaştır; başka odak yeni ayrı çalışmadır."
           ],
           "en": [
             "First count one eight without moving and check that your left foot is ready for 1.",
             "Do two eights in place and two eights of forward/back basic.",
             "Stop and review your count, foot order and comfort from your own observation.",
-            "For a second attempt choose just one focus: small steps or continuous counting. You do not need more speed.",
-            "Do not correct counting, direction and arms all at once. In the first attempt focus only on foot order; in the second choose the transition between in-place and forward-back steps."
+            "Choose the same single focus in both attempts: small steps, continuous count or one specific transition. Name one location after the first attempt and choose one correction; check that same location in the same short sequence on the second attempt. More speed is not needed.",
+            "Do not correct count, direction and arms together. Compare the same transition or foot-order location in both attempts; a different focus starts a separate study."
           ]
         },
         "camera": "Full body and both feet in frame; front and rear demonstrations separately labeled; anatomical left/right labels; close foot view supplemental only. Context/rhythm/social lessons may use text and hand-count diagrams.",
@@ -1401,8 +1401,8 @@
         ]
       },
       "practice": {
-        "tr": "Diziyi iki kez çalış; arada dinlen. İkinci denemede yalnız seçtiğin geçişe odaklan.\n\nKısa odak çalışması: Dört temel dizisini önce iki sekizli parçalara ayır. Bir tam 32 sayım denemesi sonunda yalnız en zor geçişi bir kez daha çalış. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Bilinen dört bölümü yeniden sırala; her bölümü değiştirmek yerine yalnız bir geçişi değiştir.",
-        "en": "Try the sequence twice with a rest between attempts. Focus on only the chosen transition in the second attempt.\n\nShort focused practice: Split the four-basic sequence into two-eight sections. After one full 32-count attempt, revisit only the hardest transition once. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Reorder the four familiar sections, changing only one transition rather than every section."
+        "tr": "Diziyi iki kez çalış; arada dinlen. İkinci denemede yalnız seçtiğin geçişe odaklan.\n\nKısa odak çalışması: Dört temel dizisini önce iki sekizli parçalara ayır. Bir tam 32 sayım denemesi sonunda yalnız en zor geçişi bir kez daha çalış. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Bilinen dört bölümü yeniden sırala; her bölümü değiştirmek yerine yalnız bir geçişi değiştir.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için mevcut dört temel sekizli seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Try the sequence twice with a rest between attempts. Focus on only the chosen transition in the second attempt.\n\nShort focused practice: Split the four-basic sequence into two-eight sections. After one full 32-count attempt, revisit only the hardest transition once. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Reorder the four familiar sections, changing only one transition rather than every section.\n\nIndependent retest — separate from optional variation: For A choose the existing four-basic-eights sequence; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -1985,22 +1985,22 @@
       "teaching": {
         "tr": [
           "İleri/geri ve yana temelden oluşan dört sekizlik kendi sıranı seç.",
-          "Bir denemede ayak sırasına, ikinci denemede rahatlığa odaklan.",
+          "İki denemede aynı tek odağı seç: belirli ayak sırası noktası veya rahatlık sınırı. İlk denemede adlandırdığın aynı noktayı tek düzeltmeden sonra aynı sırada yeniden kontrol et; ikinci denemede odağı değiştirme.",
           "Kendi kontrolünde hazırsa kısa bir bölümü ekrana bakmadan yap; alanını görmeye devam et.",
           "Sonunda bir güçlü nokta ve bir tekrar hedefi yaz veya sesli söyle.",
           "Her geçişe kol, hız ve yön değişikliği eklemek hatırlamayı zorlaştırır. Önce yalnız seçtiğin iki temeli bağla; sonra tek bir rahat ifade seçeneği ekle."
         ],
         "en": [
           "Choose your own four-eight order using forward/back and side basics.",
-          "Focus on foot order in one attempt and comfort in the next.",
+          "Choose the same single focus in both attempts: one foot-order location or comfort boundary. Recheck the location named after the first attempt in the same order after one correction; do not switch the focus on the second attempt.",
           "If ready, try a short section without watching the screen while staying aware of the space.",
           "Finish by writing or saying one strength and one repetition target.",
           "Adding arms, speed and direction changes to every transition makes recall harder. Connect only two chosen basics first, then add one comfortable expression option."
         ]
       },
       "practice": {
-        "tr": "İki deneme ve aralarında dinlenme yap. Tamamlandı işareti kendi değerlendirmendir; kamera kararı değildir.\n\nKısa odak çalışması: İleri-geri ile yan temel için birer sekizli, ardından aynı iki sekizliyi seçtiğin sırada yap. Durup sırayı yardımsız anlat. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı iki temelin sırasını değiştir, yeni figür eklemeden hatırla.",
-        "en": "Make two attempts with a rest between them. Marking complete records your self-review, not a camera verdict.\n\nShort focused practice: Use one forward-back eight and one side-basic eight, then repeat the two in your chosen order. Stop and describe the order without help. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the same two basics and recall them without adding a new figure."
+        "tr": "İki deneme ve aralarında dinlenme yap. Tamamlandı işareti kendi değerlendirmendir; kamera kararı değildir.\n\nKısa odak çalışması: İleri-geri ile yan temel için birer sekizli, ardından aynı iki sekizliyi seçtiğin sırada yap. Durup sırayı yardımsız anlat. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı iki temelin sırasını değiştir, yeni figür eklemeden hatırla.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için seçtiğin aynı dört-sekiz sırası seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Make two attempts with a rest between them. Marking complete records your self-review, not a camera verdict.\n\nShort focused practice: Use one forward-back eight and one side-basic eight, then repeat the two in your chosen order. Stop and describe the order without help. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the same two basics and recall them without adding a new figure.\n\nIndependent retest — separate from optional variation: For A choose the same chosen four-eight order; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -2048,14 +2048,14 @@
         "sequence": {
           "tr": [
             "İleri/geri ve yana temelden oluşan dört sekizlik kendi sıranı seç.",
-            "Bir denemede ayak sırasına, ikinci denemede rahatlığa odaklan.",
+            "İki denemede aynı tek odağı seç: belirli ayak sırası noktası veya rahatlık sınırı. İlk denemede adlandırdığın aynı noktayı tek düzeltmeden sonra aynı sırada yeniden kontrol et; ikinci denemede odağı değiştirme.",
             "Kendi kontrolünde hazırsa kısa bir bölümü ekrana bakmadan yap; alanını görmeye devam et.",
             "Sonunda bir güçlü nokta ve bir tekrar hedefi yaz veya sesli söyle.",
             "Her geçişe kol, hız ve yön değişikliği eklemek hatırlamayı zorlaştırır. Önce yalnız seçtiğin iki temeli bağla; sonra tek bir rahat ifade seçeneği ekle."
           ],
           "en": [
             "Choose your own four-eight order using forward/back and side basics.",
-            "Focus on foot order in one attempt and comfort in the next.",
+            "Choose the same single focus in both attempts: one foot-order location or comfort boundary. Recheck the location named after the first attempt in the same order after one correction; do not switch the focus on the second attempt.",
             "If ready, try a short section without watching the screen while staying aware of the space.",
             "Finish by writing or saying one strength and one repetition target.",
             "Adding arms, speed and direction changes to every transition makes recall harder. Connect only two chosen basics first, then add one comfortable expression option."
@@ -2084,14 +2084,14 @@
       },
       "teaching": {
         "tr": [
-          "Önce alanında dönebileceğin rahat bir yön seç; hızlı spin hedefleme.",
+          "Bu ilk çalışma küçük bir SAĞ yön değişimidir. Önce açık alanı ve rahat sol-sağ-sol / sağ-sol-sağ sırasını kontrol et; sıra belirsizse dönmeden yerinde say. Sol yönü ayrıca 22. derste çalış; hızlı spin hedefleme.",
           "Yerinde sol-sağ-sol sırasında ayaklarını adımlayarak az miktarda sağa yönelt.",
           "4’te durup dengen ve yönünü kontrol et; kalan sayımlarda yerinde devam et.",
           "Yere yapışık ayak üzerinde dizini zorla çevirmek yerine ayakları sırayla yeniden yerleştir.",
           "Yön değiştirirken ayak yerde sabitken dizi çevirmeye çalışma. Dönüşü küçük adımlara dağıt; çeyrekten daha az dönmek de geçerli bir seçenektir."
         ],
         "en": [
-          "Choose a comfortable turning direction in your clear space; do not aim for a fast spin.",
+          "This first study is a small RIGHT direction change. First check clear space and a comfortable left-right-left / right-left-right order; if the order is unclear, count in place without turning. Study the left direction separately in lesson 22; do not aim for a fast spin.",
           "During left-right-left in place, redirect the feet a little to the right through the steps.",
           "Pause on 4 to check comfort and direction, then continue in place for the second half.",
           "Reposition feet through steps instead of twisting a knee over a foot fixed to the floor.",
@@ -2099,8 +2099,8 @@
         ]
       },
       "practice": {
-        "tr": "Sayaçsız üç küçük yön değiştirme dene; ardından istersen birini sekiz sayımla bağla.\n\nKısa odak çalışması: Yerinde L-R-L dizisini küçük sağ yön değişimiyle bir kez dene; dur ve ileri bak. İkinci denemede dönüş miktarını azaltıp karşılaştır. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı küçük yön değişimini yeni ama boş bir bakış yönüne doğru seç.",
-        "en": "Try three small direction changes without the counter, then optionally connect one to an eight-count.\n\nShort focused practice: Try one L-R-L sequence with a small right direction change, stop and look ahead. Reduce the turn amount in a second attempt and compare. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Choose the same small direction change toward a different clear direction."
+        "tr": "Sayaç olmadan bir küçük sağ yön değişimi dene; dur, yönünü ve rahatlığını kontrol et. İstersen aynı küçük sağ seçeneği bir sekiz sayımla bağla. Dinlen; belirsizlikte dönmeden yerinde çalış.\n\nKısa odak: Bir sol-sağ-sol dizisinde küçük sağ yön değişimi yap; 4’ü say, sonra sağ-sol-sağ ile yeni yönde yerinde kal ve 8’i say. İkinci ayrı denemede yalnız dönüş miktarını azaltabilirsin; bunu aynı koşuldaki yeniden sınama diye sayma.\n\nSol yönü keşfetmek istersen önce 22. dersin küçük sol çalışmasını oku; sağ tarifinden keyfi bir yön veya ayak yolu çıkarma.",
+        "en": "Without the counter, try one small right direction change, stop and check orientation and comfort. Optionally connect the same small right choice to one eight-count. Rest; if uncertain, study in place without turning.\n\nShort focus: Use one left-right-left sequence for a small right direction change, count 4, then right-left-right in place facing the new direction and count 8. In a separate second attempt you may reduce only the rotation; this is not a same-condition retest.\n\nIf you want to explore the left direction, read lesson 22 first; do not infer an arbitrary direction or foot path from the right-side instruction."
       },
       "selfCheck": {
         "tr": [
@@ -2147,14 +2147,14 @@
         },
         "sequence": {
           "tr": [
-            "Önce alanında dönebileceğin rahat bir yön seç; hızlı spin hedefleme.",
+            "Bu ilk çalışma küçük bir SAĞ yön değişimidir. Önce açık alanı ve rahat sol-sağ-sol / sağ-sol-sağ sırasını kontrol et; sıra belirsizse dönmeden yerinde say. Sol yönü ayrıca 22. derste çalış; hızlı spin hedefleme.",
             "Yerinde sol-sağ-sol sırasında ayaklarını adımlayarak az miktarda sağa yönelt.",
             "4’te durup dengen ve yönünü kontrol et; kalan sayımlarda yerinde devam et.",
             "Yere yapışık ayak üzerinde dizini zorla çevirmek yerine ayakları sırayla yeniden yerleştir.",
             "Yön değiştirirken ayak yerde sabitken dizi çevirmeye çalışma. Dönüşü küçük adımlara dağıt; çeyrekten daha az dönmek de geçerli bir seçenektir."
           ],
           "en": [
-            "Choose a comfortable turning direction in your clear space; do not aim for a fast spin.",
+            "This first study is a small RIGHT direction change. First check clear space and a comfortable left-right-left / right-left-right order; if the order is unclear, count in place without turning. Study the left direction separately in lesson 22; do not aim for a fast spin.",
             "During left-right-left in place, redirect the feet a little to the right through the steps.",
             "Pause on 4 to check comfort and direction, then continue in place for the second half.",
             "Reposition feet through steps instead of twisting a knee over a foot fixed to the floor.",
@@ -2385,14 +2385,14 @@
       "teaching": {
         "tr": [
           "Önce sola doğru küçük bir çeyrek yön değişimi dene.",
-          "Sol-sağ-sol, ardından sağ-sol-sağ adımlarıyla sola küçük miktarlarda ilerle.",
+          "Sol yön değişiminde 1 sol, 2 sağ, 3 sol; 4’ü say. 5 sağ, 6 sol, 7 sağ ile aynı küçük sol yönü sürdür; 8’i say. 4 ve 8’de yeni destek değiştiren adım ekleme. İlk sekizde yalnız rahat küçük miktarı seç; devam gerekiyorsa yeni sekizde aynı ana sayımları kullan, tam tur için acele etme.",
           "Sağa dönüşteki rahatlık sol tarafta aynı olmak zorunda değildir; mesafeyi küçült.",
           "Her ayağı yeni yöne rahatça yerleştir; sabit ayakta zorlanmış burgu yapma.",
           "Soldaki rahat dönüş miktarı sağdakiyle aynı olmak zorunda değildir. Sağdaki ölçüyü kopyalamak yerine küçük sol adımları sırayla kur."
         ],
         "en": [
           "First try a small quarter direction change to the left.",
-          "Use left-right-left followed by right-left-right to travel around in small amounts.",
+          "For the left direction change: left on 1, right on 2, left on 3; count 4. Continue the same small left direction with right on 5, left on 6, right on 7; count 8. Add no support-changing step on 4 or 8. Choose only a comfortable small amount in the first eight; if continuing, use the same primary counts in a fresh eight rather than rushing for a full turn.",
           "The left side need not feel like the right; reduce the amount as needed.",
           "Place each foot comfortably toward the new direction without forcing a twist over a fixed foot.",
           "The comfortable left-turn amount need not match the right. Build small left steps in order instead of copying the size used on the right."
@@ -2448,14 +2448,14 @@
         "sequence": {
           "tr": [
             "Önce sola doğru küçük bir çeyrek yön değişimi dene.",
-            "Sol-sağ-sol, ardından sağ-sol-sağ adımlarıyla sola küçük miktarlarda ilerle.",
+            "Sol yön değişiminde 1 sol, 2 sağ, 3 sol; 4’ü say. 5 sağ, 6 sol, 7 sağ ile aynı küçük sol yönü sürdür; 8’i say. 4 ve 8’de yeni destek değiştiren adım ekleme. İlk sekizde yalnız rahat küçük miktarı seç; devam gerekiyorsa yeni sekizde aynı ana sayımları kullan, tam tur için acele etme.",
             "Sağa dönüşteki rahatlık sol tarafta aynı olmak zorunda değildir; mesafeyi küçült.",
             "Her ayağı yeni yöne rahatça yerleştir; sabit ayakta zorlanmış burgu yapma.",
             "Soldaki rahat dönüş miktarı sağdakiyle aynı olmak zorunda değildir. Sağdaki ölçüyü kopyalamak yerine küçük sol adımları sırayla kur."
           ],
           "en": [
             "First try a small quarter direction change to the left.",
-            "Use left-right-left followed by right-left-right to travel around in small amounts.",
+            "For the left direction change: left on 1, right on 2, left on 3; count 4. Continue the same small left direction with right on 5, left on 6, right on 7; count 8. Add no support-changing step on 4 or 8. Choose only a comfortable small amount in the first eight; if continuing, use the same primary counts in a fresh eight rather than rushing for a full turn.",
             "The left side need not feel like the right; reduce the amount as needed.",
             "Place each foot comfortably toward the new direction without forcing a twist over a fixed foot.",
             "The comfortable left-turn amount need not match the right. Build small left steps in order instead of copying the size used on the right."
@@ -2598,8 +2598,8 @@
         ]
       },
       "practice": {
-        "tr": "Dört sekizi bir kez dene; dinlen. İkinci deneme tamamen isteğe bağlıdır.\n\nKısa odak çalışması: Yerinde-sağa küçük dönüş-yerinde-sola küçük dönüş için dört sekizli yap. Kısa aradan sonra sırayı sözle hatırlayıp bir deneme daha seç. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Sağ ve sol dönüşlü bölümlerin sırasını değiştir; yerinde ara bölümleri koru.",
-        "en": "Try the four eights once and rest. A second attempt is optional.\n\nShort focused practice: Use four eights: in place, small right turn, in place, small left turn. After a short break, recall the order aloud and choose whether to try again. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the right- and left-turn sections while retaining the in-place sections between them."
+        "tr": "Dört sekizi bir kez dene; dinlen. İkinci deneme tamamen isteğe bağlıdır.\n\nKısa odak çalışması: Yerinde-sağa küçük dönüş-yerinde-sola küçük dönüş için dört sekizli yap. Kısa aradan sonra sırayı sözle hatırlayıp bir deneme daha seç. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Sağ ve sol dönüşlü bölümlerin sırasını değiştir; yerinde ara bölümleri koru.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için aynı küçük sağ/sol miktarlı dört-sekiz planı seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Try the four eights once and rest. A second attempt is optional.\n\nShort focused practice: Use four eights: in place, small right turn, in place, small left turn. After a short break, recall the order aloud and choose whether to try again. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the right- and left-turn sections while retaining the in-place sections between them.\n\nIndependent retest — separate from optional variation: For A choose the four-eight plan with the same small right/left amounts; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -2683,23 +2683,23 @@
       },
       "teaching": {
         "tr": [
-          "Sağ ayağın rahat destekliyken solu hafifçe sağ ön çapraza dokundur.",
+          "Önce 13. dersteki dokunuş/adım farkını adlandır: dokunuş desteği değiştirmez. Sağda rahat destek ve sol dokunuşa hazırken solu hafifçe sağ ön çapraza dokundur; sıkı çaprazı zorlama. Destek veya yol belirsizse mevcut el/çaprazlamayan seçeneği kullan.",
           "Solu geri al ve yerinde sol-sağ-sol dizisini çalış; önce sayaç kullanma.",
-          "Diğer tarafta aynı hareketi sağla dene.",
+          "Solu geri çek; sol-sağ-sol yerinde adımları desteği sırayla değiştirir ve solda destek, sağ dokunuşa hazır bitirir. Sonra sağla küçük karşı dokunuşu dene ve geri çek. Sağ-sol-sağ yerinde adımları sağda destek, sol hazır bitirir. Bu iki taraf arasındaki hazırlık adımlarını ayrı ve yavaş yap; dokunuşların kendisi destek aktarımı değildir.",
           "Dokunuşu adım sanıp sıradaki ayağı değiştirmemeye dikkat et; gerekirse ayrı duraklar kullan.",
           "Öne çapraz dokunuşta ayağa tam destek geçirmek bu alıştırmayı değiştirir. Rahat dokunup geri çek; ana adımı atmadan önce sıradaki ayağı söyle."
         ],
         "en": [
-          "With comfortable support on the right, lightly touch the left toward the front-right diagonal.",
+          "First name the touch/step distinction from lesson 13: a touch does not change support. With comfortable right support and the left free to touch, lightly touch the left toward the front-right diagonal without forcing a tight cross. If support or path is unclear, use the existing hand/no-cross option.",
           "Withdraw the left and practise left-right-left in place, initially without the counter.",
-          "Try the corresponding touch with the right on the other side.",
+          "Withdraw the left; left-right-left steps in place change support in turn and finish with left support, right free to touch. Then try the corresponding small right touch and withdraw it. Right-left-right steps in place finish with right support, left available. Study these preparation steps between sides separately and slowly; the touches themselves do not transfer support.",
           "Do not confuse the touch with a support-changing step; use separate pauses if needed.",
           "Transferring full support onto the front crossover touch changes this drill. Touch comfortably and withdraw, then name the next foot before the primary step."
         ]
       },
       "practice": {
-        "tr": "Her tarafta iki küçük dokunuş dene, sonra bir sekiz yerinde temel yap.\n\nKısa odak çalışması: İki sol hafif dokunuşu ayrı duraklarla, ardından iki sağ dokunuşu dene; sonra bir sekizli yerinde temelle bitir. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı hafif dokunuşu daha küçük çapraz yolda dene; destek değiştirmeme seçimini koru.",
-        "en": "Try two small touches on each side, then one eight of in-place basic.\n\nShort focused practice: Try two separate left light touches with pauses, then two on the right; finish with one in-place basic eight. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Try the same light touch along a smaller diagonal path while preserving the choice not to change support."
+        "tr": "Sağda rahat destekle iki küçük sol dokunuş yap; her seferinde solu geri çek, desteği sağda tut. Dur. Ayrı sol-sağ-sol yerinde adımlarla solda destek, sağ dokunuşa hazır kur. Sonra iki küçük sağ dokunuş yap ve geri çek; desteği solda tut. Dur. Ayrı sağ-sol-sağ yerinde adımlarla sağda destek, sol hazır kur. Bu hazırlık/reset adımları henüz sayılan On1 dizisinin dışında; aralarda dinlen.\n\nBir yeni sekiz say; sonra 1 sol, 2 sağ, 3 sol, 4 say; 5 sağ, 6 sol, 7 sağ, 8 say ile tek yerinde temel dene. Destek belirsizse ayak denemesini yapma, sırayı sözlü açıkla.\n\nAyrı isteğe bağlı değişken çalışması: Aynı dokunuş yolunu küçült; bunu dokunuşun ağırlık değiştirmesine çevirme.",
+        "en": "With comfortable right support, make two small left touches, withdrawing the left each time and keeping support on the right. Stop. Use separate left-right-left steps in place to finish with left support and the right free to touch. Make two small right touches and withdraw, keeping support on the left. Stop. Use separate right-left-right steps in place to finish with right support and the left available. These preparation/reset steps are outside the counted On1 phrase; rest between parts.\n\nCount a fresh eight, then try one in-place basic: left on 1, right on 2, left on 3, count 4; right on 5, left on 6, right on 7, count 8. If support is unclear, describe the order instead of trying the foot option.\n\nSeparate optional variation: Shorten the touch path without turning the touch into a support-changing step."
       },
       "selfCheck": {
         "tr": [
@@ -2747,16 +2747,16 @@
         },
         "sequence": {
           "tr": [
-            "Sağ ayağın rahat destekliyken solu hafifçe sağ ön çapraza dokundur.",
+            "Önce 13. dersteki dokunuş/adım farkını adlandır: dokunuş desteği değiştirmez. Sağda rahat destek ve sol dokunuşa hazırken solu hafifçe sağ ön çapraza dokundur; sıkı çaprazı zorlama. Destek veya yol belirsizse mevcut el/çaprazlamayan seçeneği kullan.",
             "Solu geri al ve yerinde sol-sağ-sol dizisini çalış; önce sayaç kullanma.",
-            "Diğer tarafta aynı hareketi sağla dene.",
+            "Solu geri çek; sol-sağ-sol yerinde adımları desteği sırayla değiştirir ve solda destek, sağ dokunuşa hazır bitirir. Sonra sağla küçük karşı dokunuşu dene ve geri çek. Sağ-sol-sağ yerinde adımları sağda destek, sol hazır bitirir. Bu iki taraf arasındaki hazırlık adımlarını ayrı ve yavaş yap; dokunuşların kendisi destek aktarımı değildir.",
             "Dokunuşu adım sanıp sıradaki ayağı değiştirmemeye dikkat et; gerekirse ayrı duraklar kullan.",
             "Öne çapraz dokunuşta ayağa tam destek geçirmek bu alıştırmayı değiştirir. Rahat dokunup geri çek; ana adımı atmadan önce sıradaki ayağı söyle."
           ],
           "en": [
-            "With comfortable support on the right, lightly touch the left toward the front-right diagonal.",
+            "First name the touch/step distinction from lesson 13: a touch does not change support. With comfortable right support and the left free to touch, lightly touch the left toward the front-right diagonal without forcing a tight cross. If support or path is unclear, use the existing hand/no-cross option.",
             "Withdraw the left and practise left-right-left in place, initially without the counter.",
-            "Try the corresponding touch with the right on the other side.",
+            "Withdraw the left; left-right-left steps in place change support in turn and finish with left support, right free to touch. Then try the corresponding small right touch and withdraw it. Right-left-right steps in place finish with right support, left available. Study these preparation steps between sides separately and slowly; the touches themselves do not transfer support.",
             "Do not confuse the touch with a support-changing step; use separate pauses if needed.",
             "Transferring full support onto the front crossover touch changes this drill. Touch comfortably and withdraw, then name the next foot before the primary step."
           ]
@@ -2784,14 +2784,14 @@
       },
       "teaching": {
         "tr": [
-          "1’de sol yana, 2’de sağ yerinde; 3’te sol ayağı sağın biraz önüne rahatça koy.",
+          "Önce 13/25. derslerdeki dokunuş ile destek değiştiren adım farkını açıkla; belirsizse çaprazlamadan yan temel/sözlü seçeneği kullan. Seçilen adımlı yolda 1 sol yana, 2 sağ yerinde, 3 sol sağın biraz önüne basıp destek alır.",
           "4’ü say. 5’te sağ yana, 6’da sol yerinde; 7’de sağ ayağı solun biraz önüne koy.",
           "Çaprazlar küçük ve gevşek olsun; ayaklar birbirine dolanıyorsa yerinde bitir.",
           "Her çapraz bir adım olduğundan sonraki yarıya diğer ayakla başla.",
           "Bu çapraz basışı önceki dokunuşla karıştırma. Çapraz ayağa rahat basınca sonraki ayak değişir; yolu küçültüp ayak sırasını yüksek sesle söyle."
         ],
         "en": [
-          "On 1 step left to the side, right in place on 2, then place left slightly in front of right on 3.",
+          "First explain the touch versus support-changing step distinction from lessons 13/25; if unclear, use the no-cross side-basic or spoken option. In the chosen stepping path: left side on 1, right in place on 2, then left slightly in front of right on 3, taking support.",
           "Count 4. Step right to the side on 5, left in place on 6, then right slightly in front of left on 7.",
           "Keep crosses small and open; finish in place if the feet feel tangled.",
           "Each cross is a step, so begin the next half with the other foot.",
@@ -2848,14 +2848,14 @@
         },
         "sequence": {
           "tr": [
-            "1’de sol yana, 2’de sağ yerinde; 3’te sol ayağı sağın biraz önüne rahatça koy.",
+            "Önce 13/25. derslerdeki dokunuş ile destek değiştiren adım farkını açıkla; belirsizse çaprazlamadan yan temel/sözlü seçeneği kullan. Seçilen adımlı yolda 1 sol yana, 2 sağ yerinde, 3 sol sağın biraz önüne basıp destek alır.",
             "4’ü say. 5’te sağ yana, 6’da sol yerinde; 7’de sağ ayağı solun biraz önüne koy.",
             "Çaprazlar küçük ve gevşek olsun; ayaklar birbirine dolanıyorsa yerinde bitir.",
             "Her çapraz bir adım olduğundan sonraki yarıya diğer ayakla başla.",
             "Bu çapraz basışı önceki dokunuşla karıştırma. Çapraz ayağa rahat basınca sonraki ayak değişir; yolu küçültüp ayak sırasını yüksek sesle söyle."
           ],
           "en": [
-            "On 1 step left to the side, right in place on 2, then place left slightly in front of right on 3.",
+            "First explain the touch versus support-changing step distinction from lessons 13/25; if unclear, use the no-cross side-basic or spoken option. In the chosen stepping path: left side on 1, right in place on 2, then left slightly in front of right on 3, taking support.",
             "Count 4. Step right to the side on 5, left in place on 6, then right slightly in front of left on 7.",
             "Keep crosses small and open; finish in place if the feet feel tangled.",
             "Each cross is a step, so begin the next half with the other foot.",
@@ -2885,7 +2885,7 @@
       },
       "teaching": {
         "tr": [
-          "Bu başlangıç uyarlamasında 1’de sol ayağı sağın biraz önüne küçük çapraz basıp ağırlığı devral; 2’de sağ ayağı küçük yana basıp ağırlığı devral; 3’te solu yeniden hafif çapraz basıp ağırlığı devral.",
+          "Önce 26. dersteki küçük destek değiştiren çapraz adımı ve sonraki serbest ayağı adlandır; belirsizse mevcut yerinde adım/sözlü uyarlamayı seç. Bu giriş sürümünde 1 sol küçük ön çapraz adım ve destek aktarımı; 2 sağ küçük yana adım ve destek aktarımı; 3 sol küçük ön çapraz adım ve destek aktarımı.",
           "5’te sağ ayağı solun biraz önüne küçük çapraz basıp ağırlığı devral; 6’da sol ayağı küçük yana basıp ağırlığı devral; 7’de sağı yeniden hafif çapraz basıp ağırlığı devral. 4 ve 8’de yeni adım atma.",
           "Ayak parmaklarını zorla döndürme; her adımı rahatça yeniden yerleştir. 3 ve 7’deki çaprazlar dokunuş değil, sonraki ayağı serbest bırakan küçük adımlardır.",
           "Farklı öğretmenler ritim ve ayak ayrıntılarını farklı kurabilir. Burada küçük çapraz-yan yolunu ve her adımda rahat ağırlık aktarımını öğreniyoruz.",
@@ -2893,7 +2893,7 @@
           "Ayrı dokunuş uyarlaması: 3 veya 7’de çapraza yalnız dokunursan ağırlık o ayağa geçmez. Yarım motifi orada bitirip dur; destek ayağını ve sıradaki serbest ayağı yeniden kurduktan sonra temele başla. Bunu kesintisiz altı ağırlık değişimli motif olarak sayma."
         ],
         "en": [
-          "In this introductory variation, step left slightly across in front on 1 and transfer weight; step right a little to the side on 2 and transfer weight; then take a small left crossing step on 3 and transfer weight.",
+          "First name the small support-changing cross and next available foot from lesson 26; if unclear, choose the existing in-place/spoken adaptation. In this introductory variation: a small left front cross taking support on 1, a small right side step taking support on 2, and a small left crossing step taking support on 3.",
           "Step right slightly across in front on 5 and transfer weight; step left a little to the side on 6 and transfer weight; then take a small right crossing step on 7 and transfer weight. Take no new step on 4 or 8.",
           "Do not force the toes to twist; reposition each step comfortably. The crosses on 3 and 7 are small weight-changing steps, not touches, so the other foot is available next.",
           "Teachers use different rhythms and foot details. Here the focus is a small cross-side path with comfortable weight transfer on each step.",
@@ -2951,7 +2951,7 @@
         },
         "sequence": {
           "tr": [
-            "Bu başlangıç uyarlamasında 1’de sol ayağı sağın biraz önüne küçük çapraz basıp ağırlığı devral; 2’de sağ ayağı küçük yana basıp ağırlığı devral; 3’te solu yeniden hafif çapraz basıp ağırlığı devral.",
+            "Önce 26. dersteki küçük destek değiştiren çapraz adımı ve sonraki serbest ayağı adlandır; belirsizse mevcut yerinde adım/sözlü uyarlamayı seç. Bu giriş sürümünde 1 sol küçük ön çapraz adım ve destek aktarımı; 2 sağ küçük yana adım ve destek aktarımı; 3 sol küçük ön çapraz adım ve destek aktarımı.",
             "5’te sağ ayağı solun biraz önüne küçük çapraz basıp ağırlığı devral; 6’da sol ayağı küçük yana basıp ağırlığı devral; 7’de sağı yeniden hafif çapraz basıp ağırlığı devral. 4 ve 8’de yeni adım atma.",
             "Ayak parmaklarını zorla döndürme; her adımı rahatça yeniden yerleştir. 3 ve 7’deki çaprazlar dokunuş değil, sonraki ayağı serbest bırakan küçük adımlardır.",
             "Farklı öğretmenler ritim ve ayak ayrıntılarını farklı kurabilir. Burada küçük çapraz-yan yolunu ve her adımda rahat ağırlık aktarımını öğreniyoruz.",
@@ -2959,7 +2959,7 @@
             "Ayrı dokunuş uyarlaması: 3 veya 7’de çapraza yalnız dokunursan ağırlık o ayağa geçmez. Yarım motifi orada bitirip dur; destek ayağını ve sıradaki serbest ayağı yeniden kurduktan sonra temele başla. Bunu kesintisiz altı ağırlık değişimli motif olarak sayma."
           ],
           "en": [
-            "In this introductory variation, step left slightly across in front on 1 and transfer weight; step right a little to the side on 2 and transfer weight; then take a small left crossing step on 3 and transfer weight.",
+            "First name the small support-changing cross and next available foot from lesson 26; if unclear, choose the existing in-place/spoken adaptation. In this introductory variation: a small left front cross taking support on 1, a small right side step taking support on 2, and a small left crossing step taking support on 3.",
             "Step right slightly across in front on 5 and transfer weight; step left a little to the side on 6 and transfer weight; then take a small right crossing step on 7 and transfer weight. Take no new step on 4 or 8.",
             "Do not force the toes to twist; reposition each step comfortably. The crosses on 3 and 7 are small weight-changing steps, not touches, so the other foot is available next.",
             "Teachers use different rhythms and foot details. Here the focus is a small cross-side path with comfortable weight transfer on each step.",
@@ -2990,14 +2990,14 @@
       },
       "teaching": {
         "tr": [
-          "Önce yavaş, eşit dört sayım kullan: sağ ayağı solun hafif önüne, solu küçük geri, sağı yana, solu rahatça öne yerleştir.",
+          "Önce 13. dersteki adım/dokunuş farkını ve her adım sonrası serbest ayağı adlandır; çapraz/arka yol belirsizse mevcut yerinde yön adlandırma seçeneğini kullan. Dört yavaş eşit sayıda sağ küçük ön çapraz adım, sol küçük arka adım, sağ yana adım ve sol rahat öne adım yap; bunlar destek değiştiren dört ayrı adımdır.",
           "Bu dört adımlık yol bir keşif çalışmasıdır; 1-2-3 / 5-6-7 temel ritmiyle aynı değildir.",
           "Bir kareyi zorla çizmek yerine rahat küçük bir yol izle; geride alan olduğundan emin ol.",
           "Kursun temel ritmine dönmek için dur; sol ayak hazır olacak şekilde sağda rahat desteği yeniden kur. Bir sekizi say, sonra solla temele yeniden başla.",
           "Dört eşit adımlı jazz square yolunu altı adımlı On1 temele zorla yerleştirme. Ayrı yol denemesi olarak bitir, dur ve yeni sekiz sayımla temele başla."
         ],
         "en": [
-          "First use four slow even counts: right slightly across the front, left a little back, right to the side, and left comfortably forward.",
+          "First name the step/touch distinction from lesson 13 and the available foot after each step; if the cross/back path is unclear, use the existing in-place direction option. On four slow even counts, step right slightly across the front, left a little back, right to the side, and left comfortably forward; these are four separate support-changing steps.",
           "This four-step path is an exploration, not the same rhythm as the 1-2-3 / 5-6-7 basic.",
           "Use a comfortable small path rather than forcing a square, and check the space behind.",
           "To return to the course’s basic rhythm, stop and reset comfortable support onto the right so the left foot is available. Count one eight, then restart the basic with the left.",
@@ -3054,14 +3054,14 @@
         },
         "sequence": {
           "tr": [
-            "Önce yavaş, eşit dört sayım kullan: sağ ayağı solun hafif önüne, solu küçük geri, sağı yana, solu rahatça öne yerleştir.",
+            "Önce 13. dersteki adım/dokunuş farkını ve her adım sonrası serbest ayağı adlandır; çapraz/arka yol belirsizse mevcut yerinde yön adlandırma seçeneğini kullan. Dört yavaş eşit sayıda sağ küçük ön çapraz adım, sol küçük arka adım, sağ yana adım ve sol rahat öne adım yap; bunlar destek değiştiren dört ayrı adımdır.",
             "Bu dört adımlık yol bir keşif çalışmasıdır; 1-2-3 / 5-6-7 temel ritmiyle aynı değildir.",
             "Bir kareyi zorla çizmek yerine rahat küçük bir yol izle; geride alan olduğundan emin ol.",
             "Kursun temel ritmine dönmek için dur; sol ayak hazır olacak şekilde sağda rahat desteği yeniden kur. Bir sekizi say, sonra solla temele yeniden başla.",
             "Dört eşit adımlı jazz square yolunu altı adımlı On1 temele zorla yerleştirme. Ayrı yol denemesi olarak bitir, dur ve yeni sekiz sayımla temele başla."
           ],
           "en": [
-            "First use four slow even counts: right slightly across the front, left a little back, right to the side, and left comfortably forward.",
+            "First name the step/touch distinction from lesson 13 and the available foot after each step; if the cross/back path is unclear, use the existing in-place direction option. On four slow even counts, step right slightly across the front, left a little back, right to the side, and left comfortably forward; these are four separate support-changing steps.",
             "This four-step path is an exploration, not the same rhythm as the 1-2-3 / 5-6-7 basic.",
             "Use a comfortable small path rather than forcing a square, and check the space behind.",
             "To return to the course’s basic rhythm, stop and reset comfortable support onto the right so the left foot is available. Count one eight, then restart the basic with the left.",
@@ -3206,8 +3206,8 @@
         ]
       },
       "practice": {
-        "tr": "Önce temel→A, sonra temel→B geçişini çalış. Dinlendikten sonra dört sekizi birleştir.\n\nKısa odak çalışması: Temel-yan çapraz-temel-Suzy Q dizisini önce ikişer sekizli iki parçaya ayır, sonra dört sekizli birleştir; en zor geçişi yalnız bir kez yeniden dene. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: İki shine'ın sırasını değiştir ama aradaki temel bölümünü koru.",
-        "en": "Practise basic→A and basic→B first, then combine the four eights after resting.\n\nShort focused practice: Split basic-side cross-basic-Suzy Q into two two-eight sections, then connect all four eights; revisit only the hardest transition once. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the two shines while retaining the basic section between them."
+        "tr": "Önce temel→A, sonra temel→B geçişini çalış. Dinlendikten sonra dört sekizi birleştir.\n\nKısa odak çalışması: Temel-yan çapraz-temel-Suzy Q dizisini önce ikişer sekizli iki parçaya ayır, sonra dört sekizli birleştir; en zor geçişi yalnız bir kez yeniden dene. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: İki shine'ın sırasını değiştir ama aradaki temel bölümünü koru.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için aynı basic–A–basic–B dört-sekiz planı seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Practise basic→A and basic→B first, then combine the four eights after resting.\n\nShort focused practice: Split basic-side cross-basic-Suzy Q into two two-eight sections, then connect all four eights; revisit only the hardest transition once. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Swap the two shines while retaining the basic section between them.\n\nIndependent retest — separate from optional variation: For A choose the same basic–A–basic–B four-eight plan; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -3391,23 +3391,23 @@
       },
       "teaching": {
         "tr": [
-          "Bu özgün dört sayımlık çalışma örnek ritimdir; evrensel Salsa adımı veya hız sınavı değildir. Solda rahat destekle, sağ ayak dokunmaya hazır başla; denge için hafif yer teması kullanılabilir.",
-          "Yavaşça 1-ve-2-ve-3-ve-4-ve say: sağla 1’de dokun, 1’den sonraki ve’de yeniden dokun, 2’de küçük destek değiştiren sağ adım at. Kalan aralıkları başka ana adım eklemeden say.",
-          "Sonraki dört sayımda sağda rahat destekle kal: solla 1 ve onun ve’sinde dokun, 2’de sol adım at, sonra 4-ve’ye kadar say. Denge rahatsızsa el dokunuşları kullan.",
+          "Bu özgün iki dört-sayı hücresi örnek ritimdir; evrensel Salsa adımı veya hız sınavı değildir. Önce 13. dersteki dokunuş/adım ve 31. dersteki sayı/ve farkını açıkla. Solda rahat destekle, sağ dokunuşa hazır başla; rahatlık için hafif yer teması mümkündür, tek ayağı zorla havada tutma. Belirsizlikte el dokunuşu seç.",
+          "Sürekli sekizli eşleme: 1: sağ dokunuş; 1-ve: sağ dokunuş; 2: sağ adım. Sağ adım destek alır; 2-ve, 3, 3-ve, 4 ve 4-ve’yi yeni aktarım olmadan say. İlk dört-sayı hücresi burada biter.",
+          "İkinci hücrenin yerel 1’i sürekli sayacın 5’i, yerel 1-ve’si 5-ve’si, yerel 2’si 6’sıdır: 5: sol dokunuş; 5-ve: sol dokunuş; 6: sol adım. Sol adım destek alır; 6-ve, 7, 7-ve, 8 ve 8-ve’yi yeni aktarım olmadan say. İki hücreyi bağlarken sayacı ikinci yarıda 1 diye yeniden adlandırma; solda destekle bitersin.",
           "Çiftten sonra dur; yeni 1’de temel adım için sol hazır olacak şekilde sağda rahat destekle yeniden kur. Diziyi denemeden dokun-dokun-adım söyle; hız hedef değildir.",
           "Özgün dokunuş hücresinden temel adıma geçerken hazır ayağı varsayma. Hücreyi bitir, destek durumunu kendin kontrol et ve sol ayağı yeni 1'e hazırla."
         ],
         "en": [
-          "This original four-count drill is an example rhythm, not a universal Salsa step or a pace test. Start with comfortable support on the left and the right foot free to touch; light floor contact is available for balance.",
-          "Speak 1-and-2-and-3-and-4-and slowly: touch right on 1, touch right again on the and after 1, then take a small support-changing right step on 2. Count the remaining slots without another primary step.",
-          "For the next four-count cell, keep comfortable support on the right: touch left on 1 and its and, step left on 2, then count through 4-and. Use hand taps instead if balancing is uncomfortable.",
+          "These original two four-count cells are an example rhythm, not a universal Salsa step or pace test. First explain touch/step from lesson 13 and count/and from lesson 31. Start with comfortable left support and the right available to touch; light floor contact for comfort is possible, without forcing a one-leg hold. Choose hand taps if uncertain.",
+          "Continuous eight-count map: 1: right touch; 1-and: right touch; 2: right step. The right step takes support; count 2-and, 3, 3-and, 4 and 4-and without another transfer. This ends the first four-count cell.",
+          "The second cell’s local 1 is continuous count 5, its local 1-and is 5-and, and local 2 is 6: 5: left touch; 5-and: left touch; 6: left step. The left step takes support; count 6-and, 7, 7-and, 8 and 8-and without another transfer. When joining the cells, do not relabel the counter’s second half as 1; you finish with left support.",
           "After the pair, stop and reset with comfortable support on the right so the left is ready for basic on a new 1. Speak touch-touch-step before trying the sequence; speed is not a target.",
           "Do not assume the ready foot when leaving the original touch cell for the basic. Finish the cell, check your own support and prepare the left foot for a fresh 1."
         ]
       },
       "practice": {
-        "tr": "En fazla üç çift dört sayım dene: sağ dokun-dokun-adım, ardından sol dokun-dokun-adım. Bir olağan sekiz yerinde temelden önce dur ve sol ayağı hazırla.\n\nKısa odak çalışması: Sağ hücreyi ayrı dene: 1’de dokun, 1’den sonraki ve’de yeniden dokun, 2’de sağ adım at ve 4-ve’ye kadar say. Yeni dört sayım hücresinde aynı dokun-dokun-adım sırasını solla bir kez dene. Durup yeniden yerleş; sonra bir sekizli yerinde temel yap. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Hücreyi ayak hareketi yerine önce yalnız sözle hatırla; temel öncesi yeniden yerleşmeyi anlat.",
-        "en": "Try up to three pairs of four-count cells: right touch-touch-step, then left touch-touch-step. Stop and prepare the left foot before one ordinary eight of in-place basic.\n\nShort focused practice: Try one separate right cell: touch on 1, touch again on the and after 1, then step right on 2 and keep counting through 4-and. Repeat the same touch-touch-step order once with the left in a new four-count cell. Stop and reset, then perform one in-place basic eight. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Recall the cell in words first without foot movement and explain the reset before the basic."
+        "tr": "İlk hücreyi ayrı yavaş söyle: 1 sağ dokunuş, 1-ve sağ dokunuş, 2 sağ adım; 4-ve’ye kadar say. İkinciyi ayrı öğren; çifti sürekli sekizliye bağlarken 5 sol dokunuş, 5-ve sol dokunuş, 6 sol adım, sonra 8-ve’ye kadar say kullan. İstersen tek bir çift dene; üç çift üst sınırdır, zorunlu değil. Belirsizlikte aynı sayıları ellerle açıkla.\n\nÇift solda destekle biter. Dur; sayılan hücrenin dışında rahat bir sağ yerinde adımla sağda destek ve sol hazır kur, iki ayak için rahat teması koru. Yeni bir sekiz saydıktan sonra 1 sol, 2 sağ, 3 sol, 4 say; 5 sağ, 6 sol, 7 sağ, 8 say ile tek yerinde temel başlat. Reset yeni hücre veya gizli 4/8 adımı değildir; destek belirsizse ayak kısmını deneme.\n\nAyrı hatırlama çalışması: Önce ayaksız olarak yerel 1→sürekli 5 eşlemesini ve temelden önceki dur/reseti kendi sözlerinle açıkla.",
+        "en": "Learn the first cell slowly by itself: right touch on 1 and 1-and, right step on 2, then count through 4-and. Learn the second separately; when joining the pair into a continuous eight use left touch on 5 and 5-and, left step on 6, then count through 8-and. You may try one pair; three pairs are a ceiling, not a requirement. If uncertain, describe the same counts with your hands.\n\nThe pair ends with left support. Stop; outside the counted cell use a comfortable right step in place to establish right support and the left available, retaining comfortable floor contact for both feet. After counting a fresh eight, start one in-place basic: left on 1, right on 2, left on 3, count 4; right on 5, left on 6, right on 7, count 8. This reset is neither a new cell nor a hidden 4/8 step; do not try the foot part if support is unclear.\n\nSeparate recall study: Without foot movement, explain local 1→continuous 5 and the stop/reset before the basic in your own words."
       },
       "selfCheck": {
         "tr": [
@@ -3454,16 +3454,16 @@
         },
         "sequence": {
           "tr": [
-            "Bu özgün dört sayımlık çalışma örnek ritimdir; evrensel Salsa adımı veya hız sınavı değildir. Solda rahat destekle, sağ ayak dokunmaya hazır başla; denge için hafif yer teması kullanılabilir.",
-            "Yavaşça 1-ve-2-ve-3-ve-4-ve say: sağla 1’de dokun, 1’den sonraki ve’de yeniden dokun, 2’de küçük destek değiştiren sağ adım at. Kalan aralıkları başka ana adım eklemeden say.",
-            "Sonraki dört sayımda sağda rahat destekle kal: solla 1 ve onun ve’sinde dokun, 2’de sol adım at, sonra 4-ve’ye kadar say. Denge rahatsızsa el dokunuşları kullan.",
+            "Bu özgün iki dört-sayı hücresi örnek ritimdir; evrensel Salsa adımı veya hız sınavı değildir. Önce 13. dersteki dokunuş/adım ve 31. dersteki sayı/ve farkını açıkla. Solda rahat destekle, sağ dokunuşa hazır başla; rahatlık için hafif yer teması mümkündür, tek ayağı zorla havada tutma. Belirsizlikte el dokunuşu seç.",
+            "Sürekli sekizli eşleme: 1: sağ dokunuş; 1-ve: sağ dokunuş; 2: sağ adım. Sağ adım destek alır; 2-ve, 3, 3-ve, 4 ve 4-ve’yi yeni aktarım olmadan say. İlk dört-sayı hücresi burada biter.",
+            "İkinci hücrenin yerel 1’i sürekli sayacın 5’i, yerel 1-ve’si 5-ve’si, yerel 2’si 6’sıdır: 5: sol dokunuş; 5-ve: sol dokunuş; 6: sol adım. Sol adım destek alır; 6-ve, 7, 7-ve, 8 ve 8-ve’yi yeni aktarım olmadan say. İki hücreyi bağlarken sayacı ikinci yarıda 1 diye yeniden adlandırma; solda destekle bitersin.",
             "Çiftten sonra dur; yeni 1’de temel adım için sol hazır olacak şekilde sağda rahat destekle yeniden kur. Diziyi denemeden dokun-dokun-adım söyle; hız hedef değildir.",
             "Özgün dokunuş hücresinden temel adıma geçerken hazır ayağı varsayma. Hücreyi bitir, destek durumunu kendin kontrol et ve sol ayağı yeni 1'e hazırla."
           ],
           "en": [
-            "This original four-count drill is an example rhythm, not a universal Salsa step or a pace test. Start with comfortable support on the left and the right foot free to touch; light floor contact is available for balance.",
-            "Speak 1-and-2-and-3-and-4-and slowly: touch right on 1, touch right again on the and after 1, then take a small support-changing right step on 2. Count the remaining slots without another primary step.",
-            "For the next four-count cell, keep comfortable support on the right: touch left on 1 and its and, step left on 2, then count through 4-and. Use hand taps instead if balancing is uncomfortable.",
+            "These original two four-count cells are an example rhythm, not a universal Salsa step or pace test. First explain touch/step from lesson 13 and count/and from lesson 31. Start with comfortable left support and the right available to touch; light floor contact for comfort is possible, without forcing a one-leg hold. Choose hand taps if uncertain.",
+            "Continuous eight-count map: 1: right touch; 1-and: right touch; 2: right step. The right step takes support; count 2-and, 3, 3-and, 4 and 4-and without another transfer. This ends the first four-count cell.",
+            "The second cell’s local 1 is continuous count 5, its local 1-and is 5-and, and local 2 is 6: 5: left touch; 5-and: left touch; 6: left step. The left step takes support; count 6-and, 7, 7-and, 8 and 8-and without another transfer. When joining the cells, do not relabel the counter’s second half as 1; you finish with left support.",
             "After the pair, stop and reset with comfortable support on the right so the left is ready for basic on a new 1. Speak touch-touch-step before trying the sequence; speed is not a target.",
             "Do not assume the ready foot when leaving the original touch cell for the basic. Finish the cell, check your own support and prepare the left foot for a fresh 1."
           ]
@@ -3494,20 +3494,20 @@
           "1-ve-2-ve-3-ve-4-ve say; bu özgün alıştırmada 1, 2-ve ve 4’ü parmakla vurgula.",
           "Bu, temel adımın zorunlu yerine geçen bir kalıp değildir; ayrı bir ritim keşfidir.",
           "Ana sayımı düzenli sürdür; vurguların arası eşit olmak zorunda değildir.",
-          "Ayakları eklemek isteğe bağlıdır. Önce ritmi rahatça söyleyebil.",
+          "Bu derste vurguya eşlenen yeni bir ayak dizisi tarif edilmiyor; çalışmayı el veya sesle yap. 1, 2-ve ve 4 vurgularını destek değiştiren adımlar sanma. Sonra ayakta temel seçersen, ritim hücresini bitirip dur ve 35. dersteki açık reset/yeni sekiz başlangıcını kullan.",
           "El ritmini değiştirirken temel ayaklarını aynı karmaşık vurguya uydurmak zorunda değilsin. Ritmi önce oturarak veya durarak ellerle ayrı dene."
         ],
         "en": [
           "Count 1-and-2-and-3-and-4-and; in this original exercise, tap accents on 1, the and after 2, and 4.",
           "This is a separate rhythm exploration rather than a mandatory replacement for the basic.",
           "Keep the main count even while the gaps between accents differ.",
-          "Adding feet is optional. First become comfortable speaking the rhythm.",
+          "No new accent-matching foot sequence is specified in this lesson; use hands or voice for this study. Do not interpret accents on 1, 2-and and 4 as support-changing steps. If you later choose standing basic, finish the rhythm cell, stop and use lesson 35’s explicit reset/fresh-eight entry.",
           "You need not force the feet to match the hand rhythm's complex accents. Explore the rhythm separately with the hands while seated or still first."
         ]
       },
       "practice": {
-        "tr": "Dört sayımlık ritmi dört kez ellerle çalış, sonra 1-2-3 / 5-6-7 temel sayımına geri dön.\n\nKısa odak çalışması: 1, 2 sonrası ve, 4 vurgusunu iki kısa el ritmi hücresinde dene; durup ana sekiz sayımı söyle. Ayak eklemek bu bölümde zorunlu değildir. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı el ritmini parmak işareti yerine yumuşak masa dokunuşuyla seç; ayak ekleme zorunluluğu yoktur.",
-        "en": "Try the four-count hand rhythm four times, then return to the basic 1-2-3 / 5-6-7 count.\n\nShort focused practice: Try accents on 1, the and after 2, and 4 in two short hand-rhythm cells, then stop and speak the primary eight. Footsteps are optional here. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Choose soft tabletop taps rather than finger cues for the same hand rhythm; adding feet remains optional."
+        "tr": "1, 2-ve ve 4 vurgularını iki kısa dört-sayı el/ses hücresinde dene; ana sayıyı yavaş ve eşit tut. Dur, bir normal ana sekiz sayımı söyle. Burada ayaklarla yeni senkoplu dizi istenmez; temele dönmek istersen 35. dersin ayrı başlangıcını kullan.\n\nTek düzeltme: 2-ve vurgusu 2’ye kaydıysa yalnız 2-ve aralığını sesle ayır, sonra aynı iki hücreyi aynı yavaş sayıyla el/ses olarak yeniden dene. Yerini belirleyemiyorsan belirsiz bırak; doğru müzik ritmi kanıtı verme.\n\nAyrı değişken çalışması: Aynı el ritmini parmak yerine yumuşak masa dokunuşuyla açıkla; bunu ayak tekniği sayma.",
+        "en": "Try accents on 1, 2-and and 4 in two short four-count hand/voice cells, keeping the main count slow and even. Stop and speak one ordinary primary eight-count. No new syncopated foot sequence is requested here; if returning to basic, use the separate entry in lesson 35.\n\nOne correction: If the 2-and accent moved onto 2, isolate that spoken interval, then retry the same two cells with the same slow hand/voice count. If you cannot locate it, leave uncertainty; do not claim verified musical rhythm.\n\nSeparate variation: Describe the same hand rhythm with soft tabletop taps instead of fingers; this is not foot technique."
       },
       "selfCheck": {
         "tr": [
@@ -3556,14 +3556,14 @@
             "1-ve-2-ve-3-ve-4-ve say; bu özgün alıştırmada 1, 2-ve ve 4’ü parmakla vurgula.",
             "Bu, temel adımın zorunlu yerine geçen bir kalıp değildir; ayrı bir ritim keşfidir.",
             "Ana sayımı düzenli sürdür; vurguların arası eşit olmak zorunda değildir.",
-            "Ayakları eklemek isteğe bağlıdır. Önce ritmi rahatça söyleyebil.",
+            "Bu derste vurguya eşlenen yeni bir ayak dizisi tarif edilmiyor; çalışmayı el veya sesle yap. 1, 2-ve ve 4 vurgularını destek değiştiren adımlar sanma. Sonra ayakta temel seçersen, ritim hücresini bitirip dur ve 35. dersteki açık reset/yeni sekiz başlangıcını kullan.",
             "El ritmini değiştirirken temel ayaklarını aynı karmaşık vurguya uydurmak zorunda değilsin. Ritmi önce oturarak veya durarak ellerle ayrı dene."
           ],
           "en": [
             "Count 1-and-2-and-3-and-4-and; in this original exercise, tap accents on 1, the and after 2, and 4.",
             "This is a separate rhythm exploration rather than a mandatory replacement for the basic.",
             "Keep the main count even while the gaps between accents differ.",
-            "Adding feet is optional. First become comfortable speaking the rhythm.",
+            "No new accent-matching foot sequence is specified in this lesson; use hands or voice for this study. Do not interpret accents on 1, 2-and and 4 as support-changing steps. If you later choose standing basic, finish the rhythm cell, stop and use lesson 35’s explicit reset/fresh-eight entry.",
             "You need not force the feet to match the hand rhythm's complex accents. Explore the rhythm separately with the hands while seated or still first."
           ]
         },
@@ -3590,23 +3590,23 @@
       },
       "teaching": {
         "tr": [
-          "Bir sekiz temel adımı çalış; sonra bir sekiz yerinde rahatça say.",
+          "Dört sekizli ana plan: bir temel sekizli → bir sessiz sayma sekizlisi → bir küçük el vurgusu sekizlisi → bir temel sekizli. İlk temel 7’de sağ destek, sol hazır bitirir; 8’i say. Sonraki iki sekizlide ayakları dinlendir, rahat yer temasını koru; yeni destek değiştiren adım ekleme. Destek belirsizse durup temel dışındaki rahat reseti kullan.",
           "Hareketi azaltırken 1’den 8’e sayımı sürdür; nefesini tutma.",
-          "Sonraki sekizde yalnız seçtiğin bir sayımda küçük el vurgusu ekle.",
+          "El-vurgu sekizlisinde seçtiğin TEK sayıda küçük bir el işareti yap; ayak desteğini bunun için değiştirme. 8’i saydıktan sonra sol hazırsa yeni 1’de sol-sağ-sol / 5’te sağ-sol-sağ temel başlat. Sol hazır değilse dur; sağda rahat destek, sol hazır resetini sayılan dizinin dışında kur ve yeni sekiz say.",
           "Müzikteki gerçek duraklama veya aksanı uygulama algılamaz; burada kendi seçtiğin sayımı deniyoruz.",
           "Vurgu beklemeyi uzun süre nefes tutmak veya bütün bedeni kilitlemek sanma. Rahat saymaya devam et; küçük bir el vurgusu seç ve sonra temele dön."
         ],
         "en": [
-          "Try one eight of basic, then one eight counting comfortably in place.",
+          "Main four-eight plan: one basic eight → one quiet-count eight → one small hand-accent eight → one basic eight. The first basic ends on 7 with right support and the left available; count 8. Rest the feet in the next two eights with comfortable floor contact, adding no support-changing step. If support is unclear, stop and use a comfortable reset outside the basic phrase.",
           "Keep counting 1 through 8 while reducing movement, without holding your breath.",
-          "In the next eight add a small hand accent on one chosen count.",
+          "On the hand-accent eight, make one small hand cue on ONE chosen count without changing foot support for it. After counting 8, if the left is available, start left-right-left on the fresh 1 and right-left-right on 5. If the left is not ready, stop; establish comfortable right support/left available outside the phrase, then count a fresh eight.",
           "The app does not detect a musical break or accent; here you are choosing a count yourself.",
           "Waiting for an accent does not mean holding the breath or locking the body. Keep counting comfortably, choose one small hand accent and return to the basic."
         ]
       },
       "practice": {
-        "tr": "Temel → sessiz sayım → küçük vurgu → temel şeklinde dört sekiz çalış.\n\nKısa odak çalışması: Bir sekizli temel, bir sekizli sakin sayım ve küçük vurgu, bir sekizli temel yap. Durup geçişte fazladan ana adım ekleyip eklemediğini düşün. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Vurguyu kol yerine küçük parmak hareketiyle seç ve aynı bekleme sayımını koru.",
-        "en": "Use four eights: basic → quiet counting → small accent → basic.\n\nShort focused practice: Use one basic eight, one quiet-count eight with a small accent, and one basic eight. Reflect on whether you added an extra primary step at the transition. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Choose a small finger movement instead of an arm accent while keeping the waiting count."
+        "tr": "Ana planı dört sekiz olarak seç: temel → ayaklar dinlenirken sessiz sayma → aynı ayak desteğiyle tek küçük el vurgusu → temel. Elin vurguladığı sayı, ayağın adım attığı sayı olmak zorunda değildir.\n\nDaha kısa AYRI seçenek üç sekizdir: temel → sessiz sayma içinde tek el vurgusu → temel. Hangi planı seçtiğini adlandır; bunları aynı denemenin iki anlatımı sayma. Her iki planda dinlenen ayak desteğini ve yeniden 1’de hazır solu kontrol et; belirsizlikte dur/reseti dizi dışında yap.\n\nBir sınırda ekstra adım olduysa yalnız son 7–8 ve sonraki 1’i sözlü açıkla; aynı plan, aynı seçilen vurgu sayısı ve aynı sayım kaynağıyla kısa sınırı yeniden dene. Koşulları değiştirirsen yeni ayrı deneme olarak adlandır. Parmak/oturarak seçenek fiziksel destek kontrolü değildir.",
+        "en": "Choose the main four-eight plan: basic → quiet counting while feet rest → one small hand accent with the same foot support → basic. The hand-accent count need not be a stepping count.\n\nA SHORTER SEPARATE option uses three eights: basic → quiet counting including one hand accent → basic. Name the selected plan; these are not two descriptions of one identical trial. In either plan check resting foot support and the left ready on the fresh 1; if uncertain, stop/reset outside the phrase.\n\nIf a boundary gained an extra step, describe only the last 7–8 and next 1, then retry that short boundary using the same plan, chosen accent count and count source. A changed condition is a new separate attempt. Finger/seated work does not test physical support."
       },
       "selfCheck": {
         "tr": [
@@ -3653,16 +3653,16 @@
         },
         "sequence": {
           "tr": [
-            "Bir sekiz temel adımı çalış; sonra bir sekiz yerinde rahatça say.",
+            "Dört sekizli ana plan: bir temel sekizli → bir sessiz sayma sekizlisi → bir küçük el vurgusu sekizlisi → bir temel sekizli. İlk temel 7’de sağ destek, sol hazır bitirir; 8’i say. Sonraki iki sekizlide ayakları dinlendir, rahat yer temasını koru; yeni destek değiştiren adım ekleme. Destek belirsizse durup temel dışındaki rahat reseti kullan.",
             "Hareketi azaltırken 1’den 8’e sayımı sürdür; nefesini tutma.",
-            "Sonraki sekizde yalnız seçtiğin bir sayımda küçük el vurgusu ekle.",
+            "El-vurgu sekizlisinde seçtiğin TEK sayıda küçük bir el işareti yap; ayak desteğini bunun için değiştirme. 8’i saydıktan sonra sol hazırsa yeni 1’de sol-sağ-sol / 5’te sağ-sol-sağ temel başlat. Sol hazır değilse dur; sağda rahat destek, sol hazır resetini sayılan dizinin dışında kur ve yeni sekiz say.",
             "Müzikteki gerçek duraklama veya aksanı uygulama algılamaz; burada kendi seçtiğin sayımı deniyoruz.",
             "Vurgu beklemeyi uzun süre nefes tutmak veya bütün bedeni kilitlemek sanma. Rahat saymaya devam et; küçük bir el vurgusu seç ve sonra temele dön."
           ],
           "en": [
-            "Try one eight of basic, then one eight counting comfortably in place.",
+            "Main four-eight plan: one basic eight → one quiet-count eight → one small hand-accent eight → one basic eight. The first basic ends on 7 with right support and the left available; count 8. Rest the feet in the next two eights with comfortable floor contact, adding no support-changing step. If support is unclear, stop and use a comfortable reset outside the basic phrase.",
             "Keep counting 1 through 8 while reducing movement, without holding your breath.",
-            "In the next eight add a small hand accent on one chosen count.",
+            "On the hand-accent eight, make one small hand cue on ONE chosen count without changing foot support for it. After counting 8, if the left is available, start left-right-left on the fresh 1 and right-left-right on 5. If the left is not ready, stop; establish comfortable right support/left available outside the phrase, then count a fresh eight.",
             "The app does not detect a musical break or accent; here you are choosing a count yourself.",
             "Waiting for an accent does not mean holding the breath or locking the body. Keep counting comfortably, choose one small hand accent and return to the basic."
           ]
@@ -3690,16 +3690,16 @@
       },
       "teaching": {
         "tr": [
-          "Bir sekiz ellerle ritim keşfi yaparken ayaklarını dinlendir.",
+          "Ayakta temele dönüş seçersen önce dur: sağda rahat destek, sol ilk adıma hazır kur; iki ayağın rahat yer teması mümkün, zorlanmış tek ayak beklemesi yok. Solda destekle başladıysan rahat sağ yerinde adımla reseti ritim denemesinin DIŞINDA yap. Bu açıklık yoksa ayaksız el/söz seçeneği kullan. Sonra ayaklar dinlenirken bir sekiz ellerle ritim keşfi yap.",
           "8’de bir sonraki 1 için sol ayağın hazır olmasını planla.",
-          "Yeni 1’de yerinde sol-sağ-sol / sağ-sol-sağ ile temel ritme başla.",
+          "El sekizlisinin 8’ini saydıktan sonra yeni 1 sol, 2 sağ, 3 sol, 4 say; 5 sağ, 6 sol, 7 sağ, 8 say ile yerinde temel başlat. El ritminin son vurgusunu rastgele destek adımına çevirme; hazır solu kullan.",
           "Hazırlık yetişmiyorsa bir sekiz daha say; aceleyle yanlış ayak arama.",
           "El ritmi bitince son vurgunun üzerine rastgele ayakla atlama. Bir yeni sekizli için hazırlan; gerekirse ekstra bir sekizliyi yalnız say."
         ],
         "en": [
-          "Rest the feet while exploring one eight of rhythm with your hands.",
+          "If choosing a standing return to basic, first stop: establish comfortable right support with the left available for the first step; comfortable floor contact by both feet is possible, without a forced one-leg hold. If initially supported on the left, use a comfortable right step in place to reset OUTSIDE the rhythm attempt. If this is unclear, use the hand/spoken option without footwork. Then rest the feet while studying one eight of hand rhythm.",
           "On 8, plan to have the left foot ready for the next 1.",
-          "Begin the basic in place on the new 1: left-right-left / right-left-right.",
+          "After counting the hand eight’s 8, start in-place basic: left on the fresh 1, right on 2, left on 3, count 4; right on 5, left on 6, right on 7, count 8. Do not turn the hand rhythm’s last accent into an arbitrary support step; use the prepared left.",
           "If you need more preparation, count another eight instead of rushing for a foot.",
           "Do not jump onto an arbitrary foot as the hand rhythm ends. Prepare a fresh eight and count an extra eight without stepping if needed."
         ]
@@ -3752,16 +3752,16 @@
         },
         "sequence": {
           "tr": [
-            "Bir sekiz ellerle ritim keşfi yaparken ayaklarını dinlendir.",
+            "Ayakta temele dönüş seçersen önce dur: sağda rahat destek, sol ilk adıma hazır kur; iki ayağın rahat yer teması mümkün, zorlanmış tek ayak beklemesi yok. Solda destekle başladıysan rahat sağ yerinde adımla reseti ritim denemesinin DIŞINDA yap. Bu açıklık yoksa ayaksız el/söz seçeneği kullan. Sonra ayaklar dinlenirken bir sekiz ellerle ritim keşfi yap.",
             "8’de bir sonraki 1 için sol ayağın hazır olmasını planla.",
-            "Yeni 1’de yerinde sol-sağ-sol / sağ-sol-sağ ile temel ritme başla.",
+            "El sekizlisinin 8’ini saydıktan sonra yeni 1 sol, 2 sağ, 3 sol, 4 say; 5 sağ, 6 sol, 7 sağ, 8 say ile yerinde temel başlat. El ritminin son vurgusunu rastgele destek adımına çevirme; hazır solu kullan.",
             "Hazırlık yetişmiyorsa bir sekiz daha say; aceleyle yanlış ayak arama.",
             "El ritmi bitince son vurgunun üzerine rastgele ayakla atlama. Bir yeni sekizli için hazırlan; gerekirse ekstra bir sekizliyi yalnız say."
           ],
           "en": [
-            "Rest the feet while exploring one eight of rhythm with your hands.",
+            "If choosing a standing return to basic, first stop: establish comfortable right support with the left available for the first step; comfortable floor contact by both feet is possible, without a forced one-leg hold. If initially supported on the left, use a comfortable right step in place to reset OUTSIDE the rhythm attempt. If this is unclear, use the hand/spoken option without footwork. Then rest the feet while studying one eight of hand rhythm.",
             "On 8, plan to have the left foot ready for the next 1.",
-            "Begin the basic in place on the new 1: left-right-left / right-left-right.",
+            "After counting the hand eight’s 8, start in-place basic: left on the fresh 1, right on 2, left on 3, count 4; right on 5, left on 6, right on 7, count 8. Do not turn the hand rhythm’s last accent into an arbitrary support step; use the prepared left.",
             "If you need more preparation, count another eight instead of rushing for a foot.",
             "Do not jump onto an arbitrary foot as the hand rhythm ends. Prepare a fresh eight and count an extra eight without stepping if needed."
           ]
@@ -3804,8 +3804,8 @@
         ]
       },
       "practice": {
-        "tr": "Kısa bir bölüm dinle, say, sonra sessiz ortamda aynı temel diziyi dene. Eşlik bulamıyorsan sayacı kullan.\n\nKısa odak çalışması: Haklarını bildiğin bir eşliği seçersen önce kısa bölümünü yalnız dinle, sonra iki sekizli küçük temel dene. Sayım belirsizse müziği bırakıp konuşarak bir sekizli yap. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Haklarını bildiğin başka bir kısa eşlikte yalnız dinleme tahminini dene; tempo bulamazsan sessiz seçeneğe dön.",
-        "en": "Listen and count through a short section, then try the same basic in silence. Use the counter if no accompaniment is available.\n\nShort focused practice: With an accompaniment whose use rights you know, listen to a short section first, then try two small basic eights. If the count is uncertain, leave the music and speak one eight. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: With another short accompaniment whose rights you know, try listening only; return to silence if the pulse is unclear."
+        "tr": "Kısa bir bölüm dinle, say, sonra sessiz ortamda aynı temel diziyi dene. Eşlik bulamıyorsan sayacı kullan.\n\nKısa odak çalışması: Haklarını bildiğin bir eşliği seçersen önce kısa bölümünü yalnız dinle, sonra iki sekizli küçük temel dene. Sayım belirsizse müziği bırakıp konuşarak bir sekizli yap. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Haklarını bildiğin başka bir kısa eşlikte yalnız dinleme tahminini dene; tempo bulamazsan sessiz seçeneğe dön.\n\nAynı dinleme koşulunda bağımsız tekrar: Yasal eriştiğin AYNI kısa bölüm ve aynı sesi/başlangıç işaretini seç. A’da duyduğunu veya belirsizliği kendi sözlerinle adlandır; tek dikkat cue’sunu belirleyip dinlen. B’de aynı bölümü aynı duyulabilirlikte yeniden dinle, metne bakmadan AYNI işareti/sesi bulup açıklamayı yeniden söyle; neyin sürdüğünü/değiştiğini veya hâlâ belirsiz olduğunu karşılaştır. Başka parça/katman seçmek yeni A’dır. Kayıt yoksa aynı sözlü sayı çalışmasını yapabilirsin ama pulse, müzikte 1 veya cümle başlangıcını sınanmış sayma. Uygulama doğru sesi ya da 1’i onaylamaz; hareket eklemek bu dinleme kıyasının parçası değildir.",
+        "en": "Listen and count through a short section, then try the same basic in silence. Use the counter if no accompaniment is available.\n\nShort focused practice: With an accompaniment whose use rights you know, listen to a short section first, then try two small basic eights. If the count is uncertain, leave the music and speak one eight. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: With another short accompaniment whose rights you know, try listening only; return to silence if the pulse is unclear.\n\nIndependent repeat under the same listening condition: Choose the SAME lawfully accessed short excerpt and the same sound/entry cue. In A describe what you hear or its uncertainty in your own words; choose one attention cue and rest. In B listen again to the same excerpt at the same audibility, find/describe that SAME cue/sound without reading and compare what remained, changed or is still uncertain. Another track/layer begins a new A. Without a recording you may repeat the same spoken-count study, but leave pulse, musical 1 and phrase entry untested. The app does not confirm the correct sound or 1; adding movement is not part of this listening comparison."
       },
       "selfCheck": {
         "tr": [
@@ -3926,8 +3926,8 @@
         ]
       },
       "practice": {
-        "tr": "Bir tekrar ve bir değişim fark etmeyi dene. Sonra bu gözlemi hareket etmeden anlat.\n\nKısa odak çalışması: Kısa bir müzik bölümünü iki kez dinle ve olası başlangıç için tek işaret söyle. Sonra bir sekizli temel yap; müzik yoksa bu dinleme çalışmasını sonraya bırak. Bölümler arasında istediğin kadar ara ver; okumayı veya dinlemeyi kısa parçalar halinde seçebilirsin.\n\nRahat olduğunda tek değişken denemesi: Aynı müzikte farklı bir kısa bölümün başlangıcını dinle; bunu yeni bölümde doğrulanmış sayım diye sunma.",
-        "en": "Try noticing one repetition and one change, then describe the observation without moving.\n\nShort focused practice: Listen to a short section twice and name one possible starting cue. Then try one basic eight; defer the listening task when no music is available. Take as much time between sections as you need; choose short reading or listening parts.\n\nWhen comfortable, try changing just one variable: Listen for the beginning of a different short section of the same music without claiming verified timing."
+        "tr": "Bir tekrar ve bir değişim fark etmeyi dene. Sonra bu gözlemi hareket etmeden anlat.\n\nKısa odak çalışması: Kısa bir müzik bölümünü iki kez dinle ve olası başlangıç için tek işaret söyle. Sonra bir sekizli temel yap; müzik yoksa bu dinleme çalışmasını sonraya bırak. Bölümler arasında istediğin kadar ara ver; okumayı veya dinlemeyi kısa parçalar halinde seçebilirsin.\n\nRahat olduğunda tek değişken denemesi: Aynı müzikte farklı bir kısa bölümün başlangıcını dinle; bunu yeni bölümde doğrulanmış sayım diye sunma.\n\nAynı dinleme koşulunda bağımsız tekrar: Yasal eriştiğin AYNI kısa bölüm ve aynı sesi/başlangıç işaretini seç. A’da duyduğunu veya belirsizliği kendi sözlerinle adlandır; tek dikkat cue’sunu belirleyip dinlen. B’de aynı bölümü aynı duyulabilirlikte yeniden dinle, metne bakmadan AYNI işareti/sesi bulup açıklamayı yeniden söyle; neyin sürdüğünü/değiştiğini veya hâlâ belirsiz olduğunu karşılaştır. Başka parça/katman seçmek yeni A’dır. Kayıt yoksa aynı sözlü sayı çalışmasını yapabilirsin ama pulse, müzikte 1 veya cümle başlangıcını sınanmış sayma. Uygulama doğru sesi ya da 1’i onaylamaz; hareket eklemek bu dinleme kıyasının parçası değildir.",
+        "en": "Try noticing one repetition and one change, then describe the observation without moving.\n\nShort focused practice: Listen to a short section twice and name one possible starting cue. Then try one basic eight; defer the listening task when no music is available. Take as much time between sections as you need; choose short reading or listening parts.\n\nWhen comfortable, try changing just one variable: Listen for the beginning of a different short section of the same music without claiming verified timing.\n\nIndependent repeat under the same listening condition: Choose the SAME lawfully accessed short excerpt and the same sound/entry cue. In A describe what you hear or its uncertainty in your own words; choose one attention cue and rest. In B listen again to the same excerpt at the same audibility, find/describe that SAME cue/sound without reading and compare what remained, changed or is still uncertain. Another track/layer begins a new A. Without a recording you may repeat the same spoken-count study, but leave pulse, musical 1 and phrase entry untested. The app does not confirm the correct sound or 1; adding movement is not part of this listening comparison."
       },
       "selfCheck": {
         "tr": [
@@ -4047,8 +4047,8 @@
         ]
       },
       "practice": {
-        "tr": "İki dinlemede iki farklı katman seç. İstersen ardından bir sekiz temel yap ve hangi katmanı duyduğunu söyle.\n\nKısa odak çalışması: Bir kısa bölümde yalnız bir ses katmanını dinle; ikinci dinleyişte başka katmanı seç. Ayak eklemeden iki duyumun farkını anlat. Bölümler arasında istediğin kadar ara ver; okumayı veya dinlemeyi kısa parçalar halinde seçebilirsin.\n\nRahat olduğunda tek değişken denemesi: Çalgı ismi yerine kısa-uzun veya ince-kalın ses farkıyla ikinci bölümünü anlat.",
-        "en": "Choose two different layers in two listens. Optionally follow with one eight of basic and name the layer you noticed.\n\nShort focused practice: Listen to one sound layer in a short section, then choose another layer on a second listen. Describe their difference without adding footwork. Take as much time between sections as you need; choose short reading or listening parts.\n\nWhen comfortable, try changing just one variable: Describe the next section using short-long or high-low contrasts instead of instrument names."
+        "tr": "İki dinlemede iki farklı katman seç. İstersen ardından bir sekiz temel yap ve hangi katmanı duyduğunu söyle.\n\nKısa odak çalışması: Bir kısa bölümde yalnız bir ses katmanını dinle; ikinci dinleyişte başka katmanı seç. Ayak eklemeden iki duyumun farkını anlat. Bölümler arasında istediğin kadar ara ver; okumayı veya dinlemeyi kısa parçalar halinde seçebilirsin.\n\nRahat olduğunda tek değişken denemesi: Çalgı ismi yerine kısa-uzun veya ince-kalın ses farkıyla ikinci bölümünü anlat.\n\nAynı dinleme koşulunda bağımsız tekrar: Yasal eriştiğin AYNI kısa bölüm ve aynı sesi/başlangıç işaretini seç. A’da duyduğunu veya belirsizliği kendi sözlerinle adlandır; tek dikkat cue’sunu belirleyip dinlen. B’de aynı bölümü aynı duyulabilirlikte yeniden dinle, metne bakmadan AYNI işareti/sesi bulup açıklamayı yeniden söyle; neyin sürdüğünü/değiştiğini veya hâlâ belirsiz olduğunu karşılaştır. Başka parça/katman seçmek yeni A’dır. Kayıt yoksa aynı sözlü sayı çalışmasını yapabilirsin ama pulse, müzikte 1 veya cümle başlangıcını sınanmış sayma. Uygulama doğru sesi ya da 1’i onaylamaz; hareket eklemek bu dinleme kıyasının parçası değildir.",
+        "en": "Choose two different layers in two listens. Optionally follow with one eight of basic and name the layer you noticed.\n\nShort focused practice: Listen to one sound layer in a short section, then choose another layer on a second listen. Describe their difference without adding footwork. Take as much time between sections as you need; choose short reading or listening parts.\n\nWhen comfortable, try changing just one variable: Describe the next section using short-long or high-low contrasts instead of instrument names.\n\nIndependent repeat under the same listening condition: Choose the SAME lawfully accessed short excerpt and the same sound/entry cue. In A describe what you hear or its uncertainty in your own words; choose one attention cue and rest. In B listen again to the same excerpt at the same audibility, find/describe that SAME cue/sound without reading and compare what remained, changed or is still uncertain. Another track/layer begins a new A. Without a recording you may repeat the same spoken-count study, but leave pulse, musical 1 and phrase entry untested. The app does not confirm the correct sound or 1; adding movement is not part of this listening comparison."
       },
       "selfCheck": {
         "tr": [
@@ -4368,8 +4368,8 @@
         ]
       },
       "practice": {
-        "tr": "Kendi dört sekizini iki kez dene. İkinci denemede tek bir geçişi iyileştirmeyi seç.\n\nKısa odak çalışması: Açılış-gelişme-değişim-bitiş için dört bilinen sekizli seç. İki parça halinde çalış, kısa aradan sonra seçtiğin sırayı hatırlayıp birleştir. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Dört bölümden yalnız bitişi değiştir; yeni sırayı kısa ara sonrası hatırla.",
-        "en": "Try your four eights twice. Choose one transition to refine in the second attempt.\n\nShort focused practice: Choose four familiar eights for opening-development-change-finish. Rehearse as two sections, then recall and connect your order after a short break. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Change only the ending among the four sections and recall the new order after a short break."
+        "tr": "Kendi dört sekizini iki kez dene. İkinci denemede tek bir geçişi iyileştirmeyi seç.\n\nKısa odak çalışması: Açılış-gelişme-değişim-bitiş için dört bilinen sekizli seç. İki parça halinde çalış, kısa aradan sonra seçtiğin sırayı hatırlayıp birleştir. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Dört bölümden yalnız bitişi değiştir; yeni sırayı kısa ara sonrası hatırla.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için kendi yazdığın aynı 32 sayım seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Try your four eights twice. Choose one transition to refine in the second attempt.\n\nShort focused practice: Choose four familiar eights for opening-development-change-finish. Rehearse as two sections, then recall and connect your order after a short break. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Change only the ending among the four sections and recall the new order after a short break.\n\nIndependent retest — separate from optional variation: For A choose the same learner-authored 32 counts; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -4468,8 +4468,8 @@
         ]
       },
       "practice": {
-        "tr": "Dört sekizlik bir serbest deneme yap. İstersen dinlendikten sonra farklı bir başlangıçla tekrar et.\n\nKısa odak çalışması: Dört sekizlide temel, bir shine, temel ve seçtiğin bitişi dene. Sonrasında gerçekte kullandığın sırayı anlat; seçtiğin plana bağlı kalmak zorunda değilsin. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Sonraki denemede iki bildiğin seçenekle sınır koy ve karar vermek için temel kullan.",
-        "en": "Try a four-eight freestyle. After resting, optionally repeat with a different opening.\n\nShort focused practice: Over four eights, try basic, one shine, basic and your chosen ending. Afterwards describe the order you actually used; you need not follow the plan exactly. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Limit the next attempt to two familiar options and use the basic for thinking time."
+        "tr": "Dört sekizlik bir serbest deneme yap. İstersen dinlendikten sonra farklı bir başlangıçla tekrar et.\n\nKısa odak çalışması: Dört sekizlide temel, bir shine, temel ve seçtiğin bitişi dene. Sonrasında gerçekte kullandığın sırayı anlat; seçtiğin plana bağlı kalmak zorunda değilsin. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Sonraki denemede iki bildiğin seçenekle sınır koy ve karar vermek için temel kullan.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için ilk denemede gerçekten seçtiğin temel–motif–temel kısa sırası seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Try a four-eight freestyle. After resting, optionally repeat with a different opening.\n\nShort focused practice: Over four eights, try basic, one shine, basic and your chosen ending. Afterwards describe the order you actually used; you need not follow the plan exactly. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Limit the next attempt to two familiar options and use the basic for thinking time.\n\nIndependent retest — separate from optional variation: For A choose the short basic–motif–basic order actually chosen in the first attempt; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -4567,8 +4567,8 @@
         ]
       },
       "practice": {
-        "tr": "Altı sekizlik akış kur: temel, yön, temel, shine, temel, bitiş. Yalnız bir deneme yeterli; tekrar isteğe bağlı.\n\nKısa odak çalışması: Mevcut altı sekizliyi önce üç ikili bölümde prova et. Bir tam denemede yalnız aileler arasındaki geçişleri izle; bir geçişi seçip ayrı tekrar et. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Altı bölümün yalnız shine seçimini değiştir; temel ara bölümlerini koru.",
-        "en": "Build six eights: basic, direction, basic, shine, basic, finish. One attempt is enough; repeating is optional.\n\nShort focused practice: Rehearse the existing six eights as three pairs first. During one full attempt focus only on family transitions, then choose one transition for separate practice. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Change only the shine choice in the six sections and keep the basic sections between them."
+        "tr": "Altı sekizlik akış kur: temel, yön, temel, shine, temel, bitiş. Yalnız bir deneme yeterli; tekrar isteğe bağlı.\n\nKısa odak çalışması: Mevcut altı sekizliyi önce üç ikili bölümde prova et. Bir tam denemede yalnız aileler arasındaki geçişleri izle; bir geçişi seçip ayrı tekrar et. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Altı bölümün yalnız shine seçimini değiştir; temel ara bölümlerini koru.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için aynı altı-sekiz planında seçtiğin iki komşu bölüm seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Build six eights: basic, direction, basic, shine, basic, finish. One attempt is enough; repeating is optional.\n\nShort focused practice: Rehearse the existing six eights as three pairs first. During one full attempt focus only on family transitions, then choose one transition for separate practice. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Change only the shine choice in the six sections and keep the basic sections between them.\n\nIndependent retest — separate from optional variation: For A choose the same two adjacent sections chosen from the six-eight plan; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -4967,8 +4967,8 @@
         ]
       },
       "practice": {
-        "tr": "İki dakikalık pencerenin içinde seçtiğin kısa bölümleri uygula. Süreyi dışarıdan takip edebilir veya daha kısa tutabilirsin.\n\nKısa odak çalışması: Temel-dönüş-shine-temel için kısa bir taslak yaz veya söyle. Bir bölümünü prova et, dinlen ve istersen seçtiğin süre tavanıyla birleştir; erken bitirmek geçerlidir. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı taslağın süresini küçült ve bir bölümü çıkar; planın kısa hâlini kendi kendine hatırla.",
-        "en": "Use short chosen sections within a two-minute window. Track time separately if desired, or shorten the window.\n\nShort focused practice: Write or speak a short basic-turn-shine-basic outline. Rehearse one section, rest and optionally connect it within your chosen time ceiling; ending early is valid. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Shorten the same outline and remove one section, then recall the shorter plan yourself."
+        "tr": "İki dakikalık pencerenin içinde seçtiğin kısa bölümleri uygula. Süreyi dışarıdan takip edebilir veya daha kısa tutabilirsin.\n\nKısa odak çalışması: Temel-dönüş-shine-temel için kısa bir taslak yaz veya söyle. Bir bölümünü prova et, dinlen ve istersen seçtiğin süre tavanıyla birleştir; erken bitirmek geçerlidir. Bölümler arasında dinlen; süreyi rahatlığına göre uzat.\n\nRahat olduğunda tek değişken denemesi: Aynı taslağın süresini küçült ve bir bölümü çıkar; planın kısa hâlini kendi kendine hatırla.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için kendi kısa planından seçtiğin aynı iki komşu bölüm; iki dakika zorunlu değil seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Use short chosen sections within a two-minute window. Track time separately if desired, or shorten the window.\n\nShort focused practice: Write or speak a short basic-turn-shine-basic outline. Rehearse one section, rest and optionally connect it within your chosen time ceiling; ending early is valid. Rest between sections; take longer if you need it.\n\nWhen comfortable, try changing just one variable: Shorten the same outline and remove one section, then recall the shorter plan yourself.\n\nIndependent retest — separate from optional variation: For A choose the same two adjacent sections of your short outline; two minutes are not required; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [
@@ -5071,8 +5071,8 @@
         ]
       },
       "practice": {
-        "tr": "Kendi seçtiğin son diziyi dene. Sonraki çalışacağın dersin adını ve nedenini söyle; istediğin dersi tekrar açabilirsin.\n\nKısa odak çalışması: Temel, küçük dönüş, shine, sayım ve toparlanma için birer örnek seç. Bir güçlü nokta ile bir tekrar hedefini yaz veya söyle; sonraki kısa pratiğe yalnız o hedefi taşı. Bölümler arasında istediğin kadar ara ver; okumayı veya dinlemeyi kısa parçalar halinde seçebilirsin.\n\nRahat olduğunda tek değişken denemesi: Sonraki hafta için yalnız bir zayıf geçişi yeniden seç ve önceki güçlü noktanın sürdüğünü özdeğerlendir.",
-        "en": "Try your chosen final sequence, then name the lesson you will revisit and why. You can reopen any lesson.\n\nShort focused practice: Choose one example each for basic, small turn, shine, counting and recovery. Name one strength and one review target, and carry only that target into the next short practice. Take as much time between sections as you need; choose short reading or listening parts.\n\nWhen comfortable, try changing just one variable: Choose just one difficult transition to revisit next week and self-reflect on whether an earlier strength remains."
+        "tr": "Kendi seçtiğin son diziyi dene. Sonraki çalışacağın dersin adını ve nedenini söyle; istediğin dersi tekrar açabilirsin.\n\nKısa odak çalışması: Temel, küçük dönüş, shine, sayım ve toparlanma için birer örnek seç. Bir güçlü nokta ile bir tekrar hedefini yaz veya söyle; sonraki kısa pratiğe yalnız o hedefi taşı. Bölümler arasında istediğin kadar ara ver; okumayı veya dinlemeyi kısa parçalar halinde seçebilirsin.\n\nRahat olduğunda tek değişken denemesi: Sonraki hafta için yalnız bir zayıf geçişi yeniden seç ve önceki güçlü noktanın sürdüğünü özdeğerlendir.\n\nBağımsız yeniden deneme — isteğe bağlı varyasyondan ayrı: A için devam planında seçtiğin aynı kısa geçiş seç; metne sürekli bakmadan sırayı anlat veya yalnız rahat seçeneği dene. Sonra TEK sayı/geçişte neyi fark ettiğini veya belirsizliği söyle/yaz. Metni yalnız o noktayı çözmek için aç, bir cue seç ve iki/dört-sayı sınırını ayrı çalış; dinlen. B’de aynı sıra, sayım kaynağı/tempo, yön/dönüş miktarı, kol seçimi ve uyarlamayla metne bakmadan aynı kısa planı yeniden anlat/dene. Aynı noktada fark sürdü mü, değişti mi, belirsiz mi diye karşılaştır. Yeni hareket veya daha hızlı tempo ekleme; koşul değişirse yeni A başlat. Sözlü/oturarak çalışma fiziksel geçişi sınamaz; bu öz gözlem, ustalık veya müzik uyumu kanıtı değildir.",
+        "en": "Try your chosen final sequence, then name the lesson you will revisit and why. You can reopen any lesson.\n\nShort focused practice: Choose one example each for basic, small turn, shine, counting and recovery. Name one strength and one review target, and carry only that target into the next short practice. Take as much time between sections as you need; choose short reading or listening parts.\n\nWhen comfortable, try changing just one variable: Choose just one difficult transition to revisit next week and self-reflect on whether an earlier strength remains.\n\nIndependent retest — separate from optional variation: For A choose the same short transition selected for your continuation plan; describe the order without continuously reading or try only your comfortable option. Then say/write ONE count/transition difference or uncertainty. Reopen the text only to resolve that location, choose one cue and study its two/four-count boundary separately; rest. For B, use the same order, count source/pace, direction/turn amount, arm choice and adaptation to describe/try the same short plan without reading. Compare whether the difference at that same location remained, changed or is uncertain. Add no new movement or faster pace; changed conditions begin a new A. Spoken/seated study does not test the physical transition; this is self-observation, not mastery or musical-alignment evidence."
       },
       "selfCheck": {
         "tr": [

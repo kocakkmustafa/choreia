@@ -1,0 +1,820 @@
+{
+  "id": "original_short_form_beginner_written",
+  "version": 1,
+  "catalogStyleId": "tiktok_format",
+  "status": "written_integration_candidate",
+  "title": {
+    "en": "Original Short-Form Dance: phrase-reading and creation foundations",
+    "tr": "Özgün Kısa Dans: hareket cümlesini okuma ve kurma temelleri"
+  },
+  "sources": [
+    {
+      "id": "choreography_education",
+      "url": "https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography",
+      "publisher": "AQA, GCSE Dance specification",
+      "supports": "Educational categories: gesture/stillness/weight transfer, motif development, repetition/contrast, transitions and choreographic intention; silence/spoken word as possible settings",
+      "limit": "Vocabulary/categories only. No AQA set phrase, prescribed examination choreography, marking grid, duration, certification or endorsement adopted.",
+      "checkedAt": "2026-10-04",
+      "access": "Public primary educational/instructor text read; videos not observed",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "rehearsal_education",
+      "url": "https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance",
+      "publisher": "AQA, GCSE Dance specification",
+      "supports": "Planning rehearsal, systematic repetition, mental rehearsal and response to feedback as distinct learning processes",
+      "limit": "No set performance material, exam tempo, qualification outcomes or validated physical teaching of our phrase.",
+      "checkedAt": "2026-10-04",
+      "access": "Public primary educational/instructor text read; videos not observed",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "touch_primary",
+      "url": "https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/",
+      "publisher": "Robert Royston / Howcast",
+      "supports": "Common touch ingredient has no weight; distinction from a weighted step",
+      "limit": "No copied named routine, Monterey turn, media or licence; general ingredient adapted into our own compositional exercises, not a Line Dance course.",
+      "checkedAt": "2026-10-04",
+      "access": "Public primary educational/instructor text read; videos not observed",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "hold_primary",
+      "url": "https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html",
+      "publisher": "Mathias Ellmann, Salsa Movement Lexicon",
+      "supports": "Deliberate hold adds no regular transfer and preserves available next foot",
+      "limit": "Generic support reasoning only; not salsa rhythm, an endorsement or compulsory body freeze.",
+      "checkedAt": "2026-10-04",
+      "access": "Public primary educational/instructor text read; videos not observed",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "safe_dance_primary",
+      "url": "https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance",
+      "publisher": "Ausdance National",
+      "supports": "Gradual preparation and ordinary gradual reduction, within general safe-dance context",
+      "limit": "No timer proves readiness; no individual health clearance, temperature target or guaranteed injury/soreness benefit.",
+      "checkedAt": "2026-10-04",
+      "access": "Public primary educational/instructor text read; videos not observed",
+      "mediaCopied": false,
+      "endorsement": false
+    }
+  ],
+  "acceptance": {
+    "writtenProposalIndependentlyAccepted": false,
+    "appIntegrated": false,
+    "softwareQualified": false,
+    "physicalTeachingAccepted": false,
+    "completeCurriculumAccepted": false,
+    "scoring": false,
+    "progressWrites": false,
+    "paidAccess": false,
+    "mediaRightsAccepted": false,
+    "modelVerified": false
+  },
+  "scope": {
+    "en": "Understand, construct, slowly rehearse and, when comfortable and physically reviewed, perform a small original movement phrase. Seven stages build reading, compositional choice, support-aware transitions and correction, not platform marketing. This is a bounded beginner written proposal, not a complete course in Hip-Hop or Line Dance, a copied trend, a ready-to-publish choreography pack or demonstrated physical teaching.",
+    "tr": "Küçük özgün hareket cümlesini anla, kur, yavaş çalış ve rahatlık/fiziksel inceleme sağlandığında uygula. Yedi aşama platform pazarlaması değil; okuma, koreografik seçim, destek bilinçli geçiş ve düzeltme geliştirir. Sınırlı başlangıç yazılı önerisidir; tam Hip-Hop/Line Dance kursu, kopyalanmış trend, yayına hazır koreografi paketi veya gösterilmiş fiziksel öğretim değildir."
+  },
+  "startCompetency": {
+    "en": "No social account, camera, upload, dance background or purchased music needed. Standing study requires comfortable ordinary small steps, own left/right and a prepared space. If standing support is uncertain, choose paper/spoken work; it cannot clear physical prerequisites. Do not add arm timing until the selected foot rows and next free foot are clear.",
+    "tr": "Sosyal hesap, kamera, yükleme, dans geçmişi veya satın alınmış müzik gerekmez. Ayakta çalışma rahat sıradan küçük adım, kendi sol/sağını bilme ve hazırlanmış alan gerektirir. Ayakta destek belirsizse kâğıt/sözlü çalış; fiziksel ön koşulu karşılamaz. Seçilen ayak satırları ve sonraki boş ayak açık olmadan kol zamanını ekleme."
+  },
+  "endCompetency": {
+    "en": "Written exit: decode an unfamiliar phrase row, explain support before/after an eight-count boundary, distinguish literal repetition from one documented gesture variation and a contrasting rhythm, then author an original sixteen-row phrase with a four-count motif, intentional development, clear start/end and a specific correction plan. Selected standing exit, only if comfortable and demonstrated/reviewed: read the authored phrase, practise chunks slowly, perform one recorded attempt without hidden transition steps, rest, revisit one error location/type, and compare a second same-condition attempt. Paper success, counts or remembered sensations do not establish physical mastery, authentic style, camera appearance or music/edit alignment.",
+    "tr": "Yazılı çıkış: bilinmeyen cümle satırını çöz, sekiz sayı sınırında önce/sonra desteği açıkla, birebir tekrarı belgeli tek jest varyasyonu ve karşıt ritimden ayır; dört sayılı motif, bilinçli geliştirme, açık başlangıç/son ve belirli düzeltme planıyla özgün on altı satırlı cümle kur. Seçilmiş ayakta çıkış ancak rahatlık ve gösterim/inceleme varsa: kurulan cümleyi oku, parçaları yavaş çalış, gizli geçiş adımı olmadan bir kayıtlı deneme yap, dinlen, bir hata yer/türüne dön, aynı koşullu ikinci denemeyi karşılaştır. Kâğıt başarısı, sayı veya hatırlanan his fiziksel ustalığı, özgün stili, kamera görünümünü ya da müzik/kurgu hizasını kanıtlamaz."
+  },
+  "catalogBoundary": {
+    "en": "Actual catalog tiktok_format / Short-Form Dance remains comingSoon, amber, eight-count/pose. Its eight-count block and arm-shape vocabulary inform a small format, but catalog Hit and Body roll are not silently passed by our gentle holds or ordinary gestures. No platform affiliation, virality, audience growth or upload goal. Existing Hip-Hop, Line Dance and Salsa curricula are not reproduced; shared basic step/touch reasoning serves composition rather than groove, rotating walls or a full style syllabus.",
+    "tr": "Gerçek katalog tiktok_format / Short-Form Dance comingSoon, amber, sekiz sayı/pose olarak kalır. Sekiz sayı bloğu ve kol biçimi sözlüğü küçük biçime bilgi sağlar; katalog Hit ve Body roll, nazik durak/ sıradan jestlerle gizlice karşılanmaz. Platform bağlantısı, viral olma, izleyici artışı veya yükleme hedefi yok. Hip-Hop, Line Dance ve Salsa kursları çoğaltılmaz; ortak adım/dokunuş düşüncesi groove, dönen duvarlar veya tam stil müfredatı yerine cümle kurmaya hizmet eder."
+  },
+  "boundaries": {
+    "en": "Clear obstacles/loose rugs, check secure comfortable footwear and enough room for your chosen small ordinary steps. Begin with familiar easy movement and gradually prepare before new rows; neither a count target nor sweat certifies readiness. Use FRONT facing, no crossing/turn, jump, deep bend, floorwork or forced spine/pelvis. Keep optional hand gestures small, within an easy low range, without snapping joints. H keeps counting and comfortable support, not locked knees or breath-holding. Rest/recheck after interruption. Pain, dizziness or instability means stop; gradual reduction applies only to ordinary comfortable activity.",
+    "tr": "Engelleri/gevşek kilimleri kaldır, sağlam rahat ayakkabı ve seçtiğin küçük sıradan adımlara alanı kontrol et. Bildik kolay hareketle başlayıp yeni satırlardan önce kademeli hazırlan; sayı hedefi veya ter hazır oluşu onaylamaz. ÖN bakış; çapraz/dönüş, zıplama, derin büküş, yer çalışması veya zorlanmış omurga/pelvis yok. İsteğe bağlı el jestleri küçük, kolay alçak aralıkta olsun; eklemleri sertçe kilitleme. H, saymayı ve rahat desteği korur; diz kilidi veya nefes tutma değil. Kesintiden sonra dinlen/kontrol et. Ağrı, baş dönmesi veya dengesizlikte dur; kademeli azaltma yalnız olağan rahat çalışma içindir."
+  },
+  "soundAndObservation": {
+    "en": "Use spoken counts or silence; no music/beat grid is supplied. Eight numbers organize the score, not proof of a song’s phrase start. Optional separately accessed lawful music changes the practice condition; align only if you genuinely hear the pulse, otherwise leave music alignment unverified. Camera capture/upload is neither requested nor necessary. Write observations from the row plan and your recollection, with uncertainty when timing/support cannot be established. No sensor measures style, a full-body hit, facial performance, editing, framing or whether it looks good on screen.",
+    "tr": "Sözlü sayı veya sessizlik kullan; müzik/vuruş ızgarası verilmez. Sekiz sayı notasyonu düzenler; şarkı cümlesinin başlangıcını kanıtlamaz. Ayrı yasal erişimli isteğe bağlı müzik çalışma koşulunu değiştirir; yalnız gerçekten vuruşu duyuyorsan hizala, yoksa müzik hizasını doğrulanmamış bırak. Kamera çekimi/yükleme istenmez ve gerekmez. Satır planı ve hatırladığından gözlem yaz; zaman/destek belirlenemiyorsa belirsizliği belirt. Sensör stil, tüm beden hit, yüz performansı, kurgu, kadraj veya ekranda iyi görünümü ölçmez."
+  },
+  "notation": {
+    "copy": {
+      "en": "L/R mean YOUR left/right, never a screen-mirrored limb. All example tables face FRONT, start support R with L available, and end R with L available. W means a small weighted ordinary step to the named direction; T means a light touch without loading; H means no new regular transfer, not freezing the body. Support is AFTER the row action; the free foot may still lightly touch the floor—no single-leg balance test. Near means comfortable starting-stance distance, not force feet together. Gesture labels are optional planning cues, not validated joint/contact instruction.",
+      "tr": "L/R SENİN sol/sağındır, ekrandaki aynalanmış uzuv değil. Tüm örnek tablolar ÖN bakar; sağ destek/sol hazır başlar, sağ destek/sol hazır biter. W adı verilen yöne küçük ağırlıklı sıradan adım; T ağırlıksız hafif dokunuş; H yeni düzenli aktarım yok demektir, bedeni dondurmak değil. Destek satır eyleminden SONRA gösterilir; boş ayak yere hafifçe dokunabilir—tek ayak denge testi yok. Yakın, ayakları zorla birleştirmek değil rahat başlangıç duruşu mesafesidir. Jest etiketleri isteğe bağlı plan ipuçlarıdır, doğrulanmış eklem/temas öğretimi değil."
+    },
+    "directions": {
+      "left": {
+        "en": "own left ←",
+        "tr": "kendi solun ←"
+      },
+      "right": {
+        "en": "own right →",
+        "tr": "kendi sağın →"
+      },
+      "front": {
+        "en": "own front ↑",
+        "tr": "kendi önün ↑"
+      },
+      "near": {
+        "en": "near comfortable starting stance",
+        "tr": "rahat başlangıç duruşuna yakın"
+      },
+      "in_place": {
+        "en": "in place",
+        "tr": "yerinde"
+      }
+    }
+  },
+  "gestureLegend": {
+    "rest": {
+      "en": "Arms rest comfortably",
+      "tr": "Kollar rahat dinlenir"
+    },
+    "right_reach_low": {
+      "en": "Optional small right-forearm forward reach in an easy low range on this count; return on next count",
+      "tr": "Bu sayıda kolay alçak aralıkta isteğe bağlı küçük sağ önkol öne uzat; sonraki sayıda geri al"
+    },
+    "right_reach_start_low": {
+      "en": "Optional small right-forearm reach starts; do not rush to the end",
+      "tr": "İsteğe bağlı küçük sağ önkol uzatması başlar; sonuna acele etme"
+    },
+    "right_reach_arrive_low": {
+      "en": "Same optional reach arrives over the second count without added foot transfer",
+      "tr": "Aynı isteğe bağlı uzatma ikinci sayıda tamamlanır; ayak aktarımı ekleme"
+    },
+    "return_low": {
+      "en": "Gently return that forearm to comfortable rest",
+      "tr": "Önkolu nazikçe rahat dinlenmeye geri al"
+    }
+  },
+  "patterns": [
+    {
+      "id": "A",
+      "title": {
+        "en": "Original opening motif and ending",
+        "tr": "Özgün açılış motifi ve son"
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "left",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "right_reach_low"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 3,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 4,
+          "foot": "R",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 5,
+          "foot": "L",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 6,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 7,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 8,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L",
+      "original": true,
+      "physicalTeachingAccepted": false,
+      "originality": {
+        "en": "Original count/support planning example; not an observed physical demonstration.",
+        "tr": "Özgün sayı/destek plan örneği; gözlenmiş fiziksel gösterim değil."
+      }
+    },
+    {
+      "id": "A-var",
+      "title": {
+        "en": "Same feet, sustained optional gesture",
+        "tr": "Aynı ayaklar, sürdürülen isteğe bağlı jest"
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "left",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "right_reach_start_low"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "right_reach_arrive_low"
+        },
+        {
+          "count": 3,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "return_low"
+        },
+        {
+          "count": 4,
+          "foot": "R",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 5,
+          "foot": "L",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 6,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 7,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 8,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L",
+      "original": true,
+      "physicalTeachingAccepted": false,
+      "originality": {
+        "en": "Original count/support planning example; not an observed physical demonstration.",
+        "tr": "Özgün sayı/destek plan örneği; gözlenmiş fiziksel gösterim değil."
+      }
+    },
+    {
+      "id": "B",
+      "title": {
+        "en": "Original contrasting pause and travel",
+        "tr": "Özgün karşıt durak ve yol"
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 2,
+          "foot": "L",
+          "action": "W",
+          "direction": "front",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 3,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 4,
+          "foot": "L",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 5,
+          "foot": "R",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 6,
+          "foot": "R",
+          "action": "W",
+          "direction": "right",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "right_reach_low"
+        },
+        {
+          "count": 7,
+          "foot": "L",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        },
+        {
+          "count": 8,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front",
+          "optionalGesture": "rest"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L",
+      "original": true,
+      "physicalTeachingAccepted": false,
+      "originality": {
+        "en": "Original count/support planning example; not an observed physical demonstration.",
+        "tr": "Özgün sayı/destek plan örneği; gözlenmiş fiziksel gösterim değil."
+      }
+    }
+  ],
+  "units": [
+    {
+      "id": "sf_01",
+      "prerequisiteIds": [],
+      "sourceIds": [
+        "choreography_education",
+        "safe_dance_primary"
+      ],
+      "patternIds": [],
+      "title": {
+        "en": "Choose an intention and boundary",
+        "tr": "Niyetini ve sınırını seç"
+      },
+      "prerequisite": {
+        "en": "Read boundaries; choose standing or paper honestly.",
+        "tr": "Sınırları oku; ayakta veya kâğıdı dürüst seç."
+      },
+      "outcome": {
+        "en": "Plan a small phrase with one intention and a safe practice condition.",
+        "tr": "Tek niyet ve güvenli çalışma koşuluyla küçük cümle planla."
+      },
+      "instruction": {
+        "en": "Choose a plain intention such as open, wait, answer. It guides a small gesture, an intentional pause and a response; it is not a claim about audience reaction. Fix FRONT and your own left/right. Prepare with familiar easy movement if standing, then choose spoken count or silence. No camera, account or music licence purchase is part of this task.",
+        "tr": "Aç, bekle, yanıtla gibi sade niyet seç. Küçük jesti, bilinçli durağı ve yanıtı yönlendirir; izleyici tepkisi iddiası değildir. ÖNü ve kendi sol/sağını belirle. Ayaktaysan bildik kolay hareketle hazırlan, sonra sözlü sayı veya sessizlik seç. Kamera, hesap veya müzik lisansı satın alma görev değildir."
+      },
+      "practice": {
+        "en": "Say eight even numbers without moving; mark where you intend the opening and ending. Write your space, mode, rest and stop choices. A four-count sketch is enough before expanding.",
+        "tr": "Hareketsiz sekiz eşit sayı söyle; açılış/sonu istediğin yeri işaretle. Alan, biçim, dinlenme ve durma seçimini yaz. Genişletmeden önce dört sayılık taslak yeter."
+      },
+      "mistakes": {
+        "en": "A dramatic idea does not require a larger or riskier movement. Change the artistic choice before adding unfamiliar physical technique. An unsafe surface means setup/paper work, not more effort.",
+        "tr": "Dramatik fikir büyük veya riskli hareket istemez. Bildik olmayan fiziksel tekniği eklemeden sanatsal seçimi değiştir. Güvensiz zeminde daha fazla çaba değil, düzen/kâğıt çalış."
+      },
+      "adaptation": {
+        "en": "Use seated spoken counts and a paper intention; no standing readiness inferred.",
+        "tr": "Oturarak sözlü sayı ve kâğıt niyet kullan; ayakta hazır oluş çıkarılmaz."
+      },
+      "check": {
+        "en": "Name intention, own FRONT, conditions and immediate-stop choice without a platform outcome.",
+        "tr": "Platform sonucu olmadan niyet, kendi ÖNü, koşul ve hemen durma seçimini söyle."
+      }
+    },
+    {
+      "id": "sf_02",
+      "prerequisiteIds": [
+        "sf_01"
+      ],
+      "sourceIds": [
+        "touch_primary",
+        "hold_primary"
+      ],
+      "patternIds": [
+        "A"
+      ],
+      "title": {
+        "en": "Decode an unfamiliar count/support row",
+        "tr": "Bilinmeyen sayı/destek satırını çöz"
+      },
+      "prerequisite": {
+        "en": "Stage 1 plan clear; own left/right distinguishable.",
+        "tr": "Aşama 1 planı açık; kendi sol/sağın ayrı."
+      },
+      "outcome": {
+        "en": "Read W/T/H and identify support and next free foot before movement.",
+        "tr": "Hareketten önce W/T/Hyi oku, destek ve sonraki boş ayağı bul."
+      },
+      "instruction": {
+        "en": "Read A1–4 on paper. On W the named available foot receives weight with a small ordinary step. T does not load the touching foot. H keeps the known support without an extra regular step; do not force stillness through locked joints. Say support after each count, then name which foot can take the next weighted step. If uncertain, stop and keep it verbal.",
+        "tr": "Kâğıtta A1–4ü oku. Wde adı verilen hazır ayak küçük sıradan adımla ağırlık alır. T dokunan ayağı yüklemez. H bilinen desteği ek düzenli adım olmadan korur; eklem kilidiyle hareketsizlik zorlama. Her sayı sonrası desteği söyle, sonraki ağırlıklı adımı alabilecek ayağı bul. Belirsizse dur, sözlü kal."
+      },
+      "practice": {
+        "en": "Trace A1–4 once without moving; if clear and comfortable, try feet-only four counts then rest. Now solve the NEW row below without reading its answer. This tests transfer understanding, not memory of A.",
+        "tr": "A1–4ü bir kez hareketsiz izle; açık ve rahatsa yalnız ayak dört sayıyı dene, dinlen. Sonra aşağıdaki YENİ satırı cevabı okumadan çöz. A ezberini değil aktarım anlayışını sınar."
+      },
+      "mistakes": {
+        "en": "If A2 accidentally loads R, A4’s planned R is no longer the free foot. Record A2/extra transfer and return to A1–2. Do not add a hidden L step to conceal the changed score.",
+        "tr": "A2 yanlışlıkla sağı yüklerse A4teki planlı sağ boş ayak değildir. A2/ek aktarım yaz, A1–2ye dön. Değişen notasyonu gizlemek için gizli sol adım ekleme."
+      },
+      "adaptation": {
+        "en": "Use L/R cards; no foot lift or single-leg balance demonstration required for paper study.",
+        "tr": "L/R kartları kullan; kâğıt çalışma ayak kaldırma veya tek ayak dengesi gösterimi istemez."
+      },
+      "check": {
+        "en": "Give each action, support after count and next available foot; explain why touch and hold are different even if support stays the same.",
+        "tr": "Her eylemi, sayı sonrası desteği ve sonraki hazır ayağı söyle; destek aynı kalsa bile dokunuş ve durağın farkını açıkla."
+      },
+      "exercise": {
+        "en": "Start support R, L free, FRONT. 1: L takes a small weighted forward step. 2: no new step. 3: R touches near without weight. 4: R takes a small weighted step to your right. Write W/T/H, support after each row and next available foot. Does 3 add a transfer?",
+        "tr": "Sağ destek/sol boş, ÖN başla. 1: sol küçük ağırlıklı ön adım. 2: yeni adım yok. 3: sağ ağırlıksız yakına dokunur. 4: sağ kendi sağına küçük ağırlıklı adım. W/T/H, her satır sonrası destek ve sonraki hazır ayağı yaz. 3 aktarım ekler mi?"
+      },
+      "answer": {
+        "en": "Actions W/H/T/W; support L/L/L/R; next L. Count 3 adds no transfer. If it takes weight, R is not free for 4; revisit 2–3 without inventing a new step.",
+        "tr": "Eylemler W/H/T/W; destek sol/sol/sol/sağ; sonraki sol. 3 aktarım eklemez. Ağırlık alırsa 4 için sağ boş değildir; yeni adım uydurmadan 2–3e dön."
+      }
+    },
+    {
+      "id": "sf_03",
+      "prerequisiteIds": [
+        "sf_02"
+      ],
+      "sourceIds": [
+        "choreography_education",
+        "touch_primary"
+      ],
+      "patternIds": [
+        "A"
+      ],
+      "title": {
+        "en": "Build one original motif slowly",
+        "tr": "Tek özgün motifi yavaş kur"
+      },
+      "prerequisite": {
+        "en": "A1–4 support clear; ordinary small side/near steps comfortable for standing.",
+        "tr": "A1–4 desteği açık; ayakta küçük sıradan yan/yakın adımlar rahat."
+      },
+      "outcome": {
+        "en": "Recognize a four-count motif and give it a clear intentional start and release.",
+        "tr": "Dört sayılı motifi tanı; bilinçli açık başlangıç ve bırakış ver."
+      },
+      "instruction": {
+        "en": "A1–4: L side with weight; R touch near; hold on L; R near with weight. This original short cell is our opening motif, not a borrowed named trend. Keep feet small. First arms rest. Only if feet remain clear, let the right forearm make a small easy low forward reach on 1 and return on 2. No shoulder snap, required angle or synchronized whole-body hit is taught.",
+        "tr": "A1–4: sol yana ağırlıklı; sağ yakına dokunur; solda durak; sağ yakına ağırlıklı. Bu özgün kısa hücre açılış motifimizdir, isimli trend alıntısı değil. Ayaklar küçük. Önce kollar dinlenir. Yalnız ayaklar açık kalırsa sağ önkol 1de küçük kolay alçak öne uzansın, 2de dönsün. Omuz sertliği, zorunlu açı veya eşzamanlı tüm beden hit öğretilmez."
+      },
+      "practice": {
+        "en": "Read, say feet/support, then try A1–2, rest, A3–4, rest, A1–4. Add at most that single optional gesture after a clear feet-only attempt. Describe which count begins the idea and which releases it.",
+        "tr": "Oku, ayak/destek söyle, sonra A1–2yi dene, dinlen; A3–4, dinlen; A1–4. Açık yalnız-ayak denemesi sonrası en fazla tek isteğe bağlı jest ekle. Fikrin hangi sayıda başlayıp bırakıldığını betimle."
+      },
+      "mistakes": {
+        "en": "A gesture that makes the touch take weight changes the foot motif. Remove the gesture, revisit A1–2 and compare support rather than hand size. H3 is a counted pause, not a breath hold.",
+        "tr": "Dokunuşu ağırlıklandıran jest ayak motifini değiştirir. Jesti çıkar, A1–2ye dön; el büyüklüğü yerine destek karşılaştır. H3 sayılı duraktır, nefes tutma değil."
+      },
+      "adaptation": {
+        "en": "Smaller side step or in-place weighted step may replace A1 if labelled A/no-travel; paper/spoken motif is compositional work only. Arms resting is a valid choice.",
+        "tr": "Daha küçük yan adım veya yerinde ağırlıklı adım A1in yerine A/yolsuz etiketiyle geçebilir; kâğıt/sözlü motif yalnız cümle kurma çalışmasıdır. Dinlenen kol geçerli seçim."
+      },
+      "check": {
+        "en": "A4 ends R-supported/L-ready. Name the motif’s four actions and one intentional choice; no camera appearance claim.",
+        "tr": "A4 sağ destek/sol hazır biter. Motifin dört eylemini ve tek bilinçli seçimi söyle; kamera görünümü iddiası yok."
+      }
+    },
+    {
+      "id": "sf_04",
+      "prerequisiteIds": [
+        "sf_03"
+      ],
+      "sourceIds": [
+        "choreography_education",
+        "hold_primary"
+      ],
+      "patternIds": [
+        "A",
+        "A-var",
+        "B"
+      ],
+      "title": {
+        "en": "Repeat, vary and contrast deliberately",
+        "tr": "Bilinçli tekrarla, çeşitle, karşıtlık kur"
+      },
+      "prerequisite": {
+        "en": "A motif and support clear; gesture optional.",
+        "tr": "A motifi ve destek açık; jest isteğe bağlı."
+      },
+      "outcome": {
+        "en": "Distinguish a repeated motif, one controlled variation and a contrasting rhythm.",
+        "tr": "Tekrarlanan motif, tek kontrollü varyasyon ve karşıt ritmi ayır."
+      },
+      "instruction": {
+        "en": "Study A8 and A-var8: foot/count/support rows are identical. In A-var the optional right reach starts on 1, arrives over 2 and returns on 3; foot transfer still happens on 1, with touch on 2 and hold on 3. This is intentional sustained gesture timing, not an accidentally late step. If arms are omitted, choose a smaller labelled A1 distance as the variation; it changes space, not weight order. B contrasts by holding first, then using its weighted forward/recover/near rows and later right travel. No turn.",
+        "tr": "A8 ve A-var8i çalış: ayak/sayı/destek aynı. A-varda isteğe bağlı sağ uzatma 1de başlar, 2de tamamlanır, 3te döner; ayak aktarımı hâlâ 1de, dokunuş 2de, durak 3tedir. Bilinçli sürdürülen jest zamanıdır; yanlış gecikmiş adım değil. Kol çıkarılmışsa varyasyon olarak A1de daha küçük etiketli mesafe seç; alan değişir, ağırlık sırası değil. B önce durakla, sonra ağırlıklı ön/geri al/yakın satır ve sonraki sağ yol ile karşıtlık kurar. Dönüş yok."
+      },
+      "practice": {
+        "en": "On paper compare A→A (literal repeat), A→A-var (one gesture variation) and A→B (rhythm/space contrast), each sixteen counts. Practise B in four-count chunks feet-only only if its small forward/recovery step is comfortable. Try only one selected version; rest before changing conditions.",
+        "tr": "Kâğıtta A→A (birebir tekrar), A→A-var (tek jest varyasyonu), A→B (ritim/alan karşıtlığı) karşılaştır; her biri on altı sayı. Küçük ön/geri al adımı rahatsa Byi yalnız ayak dört sayılık parçalarla çalış. Yalnız tek seçilmiş biçimi dene; koşul değiştirmeden dinlen."
+      },
+      "mistakes": {
+        "en": "B1 is H on R; adding a step changes B2’s planned L. Mark B1/extra transfer and rehearse A8→B1→B2. A-var2 hand arrival does not authorize changing its touch to weight.",
+        "tr": "B1 sağda H; adım eklemek B2de planlı solu değiştirir. B1/ek aktarım yaz, A8→B1→B2yi çalış. A-var2 el varışı dokunuşu ağırlığa çevirmeye izin vermez."
+      },
+      "adaptation": {
+        "en": "Use smaller movement or only notation/gesture planning; it can show compositional distinction without clearing standing coordination. Do not add larger gestures to make contrast visible.",
+        "tr": "Daha küçük hareket veya yalnız işaret/jest planı kullan; ayakta koordinasyonu karşılamadan kompozisyon ayrımını gösterebilir. Karşıtlık görülsün diye jest büyütme."
+      },
+      "check": {
+        "en": "Point to the exact changed row/detail and what stayed constant. Say why a planned slow gesture differs from losing the count.",
+        "tr": "Değişen tam satır/ayrıntıyı ve sabit kalanı göster. Planlı yavaş jestin sayı kaybetmeden farkını söyle."
+      }
+    },
+    {
+      "id": "sf_05",
+      "prerequisiteIds": [
+        "sf_04"
+      ],
+      "sourceIds": [
+        "rehearsal_education",
+        "hold_primary",
+        "safe_dance_primary"
+      ],
+      "patternIds": [
+        "A",
+        "B"
+      ],
+      "title": {
+        "en": "Join and recover a short phrase",
+        "tr": "Kısa cümleyi bağla ve toparlan"
+      },
+      "prerequisite": {
+        "en": "Selected A/B rows clear separately; facing remains FRONT.",
+        "tr": "Seçilen A/B satırları ayrı açık; bakış ÖN."
+      },
+      "outcome": {
+        "en": "Connect blocks without hidden transfer and recover without pretending the phrase stayed intact.",
+        "tr": "Gizli aktarım olmadan blok bağla; cümle bozulmamış gibi yapmadan toparlan."
+      },
+      "instruction": {
+        "en": "A8 ends R/L-ready. B1 holds R and B2 uses L: no collection step is needed. B8 ends R/L-ready, so A1 can use L directly. Write your chosen A/B boundary, start cue and final counted hold/step. A phrase may stop rather than loop; its final row is not permission to force a pose. After a normal comfortable attempt, reduce to familiar easy movement then stop; symptoms mean immediate stop.",
+        "tr": "A8 sağ/sol hazır biter. B1 sağda durak, B2 sol kullanır: toplama adımı gerekmez. B8 sağ/sol hazır biter, A1 solu doğrudan kullanır. Seçtiğin A/B sınırını, başlangıç ipucunu ve son sayılı durak/adımı yaz. Cümle döngü yerine bitebilir; son satır zorlanmış poz izni değil. Olağan rahat denemeden sonra bildik kolay harekete azaltıp dur; belirtide hemen dur."
+      },
+      "practice": {
+        "en": "Mentally rehearse A7–8→B1–2. Only then join A8/B8 slowly if comfortable. If count is lost, pause, identify support without guessing, return to easy neutral stance, reset R/L-ready outside the phrase, then restart the intended block at 1. Record that recovery rather than skipping to an imagined matching count.",
+        "tr": "A7–8→B1–2yi zihinde çalış. Sonra yalnız rahatsa A8/B8i yavaş bağla. Sayı kaybolursa durakla, desteği tahminsiz belirle, kolay nötr duruşa dön, cümle dışında sağ/sol hazır sıfırla, istenen bloğu 1den başlat. Uydurulmuş aynı sayıya atlamak yerine toparlanmayı kaydet."
+      },
+      "mistakes": {
+        "en": "Extra boundary step: mark boundary/transfer and isolate those two rows. Missing ending: mark last count/rushed finish and keep it counted. Do not conceal errors with freestyle, a faster count or an edit.",
+        "tr": "Ek sınır adımı: sınır/aktarım yaz, iki satırı ayır. Eksik bitiş: son sayı/acele son yaz, sayılı tut. Hataları serbest hareket, hızlı sayım veya kurgu ile gizleme."
+      },
+      "adaptation": {
+        "en": "Practise the boundary as a paper support ledger, with longer rests between standing chunks if chosen; label disconnected chunks as chunks, not an unbroken performance.",
+        "tr": "Sınırı kâğıt destek tablosuyla çalış; seçilirse ayakta parçalar arasında uzun dinlen. Ayrı parçaları kesintisiz performans değil parça diye etiketle."
+      },
+      "check": {
+        "en": "Explain support/free-foot at both boundaries and one valid deliberate restart. A recovered attempt is recorded as recovered, not error-free.",
+        "tr": "İki sınırda destek/boş ayağı ve geçerli tek bilinçli yeniden başlangıcı açıkla. Toparlanan deneme toparlandı diye yazılır; hatasız değil."
+      }
+    },
+    {
+      "id": "sf_06",
+      "prerequisiteIds": [
+        "sf_05"
+      ],
+      "sourceIds": [
+        "choreography_education",
+        "touch_primary",
+        "hold_primary"
+      ],
+      "patternIds": [],
+      "title": {
+        "en": "Create and independently read your own score",
+        "tr": "Kendi notasyonunu kur ve bağımsız oku"
+      },
+      "prerequisite": {
+        "en": "Reading and transitions clear; choose only the already-understood movement vocabulary.",
+        "tr": "Okuma/geçiş açık; yalnız anlaşılmış hareket sözlüğünü seç."
+      },
+      "outcome": {
+        "en": "Author a sixteen-row score and verify its intention, motif development and physical prerequisites.",
+        "tr": "On altı satırlı notasyon yaz; niyetini, motif geliştirmesini ve fiziksel ön koşulunu doğrula."
+      },
+      "instruction": {
+        "en": "Create your own four-count motif X using W/T/H and small own-direction steps or ordinary optional low gestures; write foot, action, direction, support after and gesture for each row. End X on R/L-ready if you intend to repeat it unchanged. Write X again in counts 5–8 with ONE explained variation (gesture timing or size), then author a contrasting second eight-count block and a clear ending. Start/end R/L-ready, FRONT, no forced motion. Do not merely rename A/B or import a trend. If any weighted foot is already supporting or a pause sneaks in a transfer, revise on paper before moving.",
+        "tr": "W/T/H ve küçük kendi-yön adımları ya da sıradan isteğe bağlı alçak jestle kendi dört sayılı X motifini kur; her satıra ayak, eylem, yön, sonrası destek ve jest yaz. Aynen tekrar edeceksen Xi sağ/sol hazır bitir. 5–8de Xi TEK açıklanan varyasyonla (jest zamanı/boyut) yeniden yaz; sonra karşıt ikinci sekiz sayı ve açık son kur. Sağ/sol hazır başla/bitir, ÖN, zorlanmış hareket yok. A/Byi yalnız yeniden adlandırma veya trend alma. Ağırlıklı ayak zaten destekteyse ya da durak gizli aktarım ekliyorsa hareketten önce kâğıtta düzelt."
+      },
+      "practice": {
+        "en": "Give the reader your sixteen-row score without performance cues, or cover your planning notes and read it afresh after a break. Decode each support/free-foot, locate repetition/variation/contrast, then compare with your separately written answer ledger. Demonstrate independence by explaining one choice not present in the worked A→B example, not by memorizing its title.",
+        "tr": "Okuyucuya performans ipuçsuz on altı satırı ver veya plan notlarını kapatıp aradan sonra yeniden oku. Her destek/boş ayağı çöz, tekrar/varyasyon/karşıtlığı bul, ayrı yazdığın cevap tablosuyla karşılaştır. Bağımsızlığı A→B başlığını ezberleyerek değil, çalışılmış örnekte olmayan tek seçimi açıklayarak göster."
+      },
+      "mistakes": {
+        "en": "Copying a famous phrase with one changed arm is not established original authorship. Remove borrowed sequence and build from the simple common ingredients. A new gesture that needs unknown joint mechanics is not a correction: omit it or leave physical teaching open pending demonstration.",
+        "tr": "Ünlü cümlede tek kol değiştirmek özgün yazarlığı kanıtlamaz. Alınan diziyi çıkar, basit ortak öğelerden kur. Bilinmeyen eklem mekaniği isteyen yeni jest düzeltme değildir: çıkar veya gösterim bekleyerek fiziksel öğretimi açık bırak."
+      },
+      "adaptation": {
+        "en": "Paper/spoken creation fully serves written composition criteria; standing transfer/gesture skills remain unattempted. Choose arms resting and one smaller step as your variation if coordination is not clear.",
+        "tr": "Kâğıt/sözlü yaratım yazılı cümle kurma ölçütünü karşılar; ayakta aktarım/jest becerileri denenmemiş kalır. Koordinasyon açık değilse varyasyon olarak dinlenen kol ve tek küçük adım seç."
+      },
+      "check": {
+        "en": "Sixteen rows, independent motif/variation/contrast, explicit start/end/transition support, originality note and separate decoded answer. Unknown contact, style or sound alignment remains visibly unverified.",
+        "tr": "On altı satır, bağımsız motif/varyasyon/karşıtlık, açık başlangıç/son/geçiş desteği, özgünlük notu ve ayrı çözülmüş cevap. Bilinmeyen temas, stil veya ses hizası görünür doğrulanmamış kalır."
+      }
+    },
+    {
+      "id": "sf_07",
+      "prerequisiteIds": [
+        "sf_06"
+      ],
+      "sourceIds": [
+        "rehearsal_education",
+        "safe_dance_primary"
+      ],
+      "patternIds": [],
+      "title": {
+        "en": "Rehearse, observe and revise your own phrase",
+        "tr": "Kendi cümleni çalış, gözle ve düzelt"
+      },
+      "prerequisite": {
+        "en": "Authored score and independent written decode clear; standing trials only for comfortable, reviewed selected actions.",
+        "tr": "Kurulan notasyon ve bağımsız yazılı çözüm açık; ayakta deneme yalnız rahat, incelenmiş seçilmiş eylemler için."
+      },
+      "outcome": {
+        "en": "Carry an original phrase through slow practice and compare one specific correction without camera feedback.",
+        "tr": "Özgün cümleyi yavaş çalış; kamera geri bildirimsiz tek belirli düzeltmeyi karşılaştır."
+      },
+      "instruction": {
+        "en": "First read your own score, name the intention, condition and key transition. Rehearse four-count chunks slowly with rests, feet-only before optional arms. Join eight, then sixteen only when earlier support/action is clear. Keep your written score beside you; reading is allowed. A recording is a written attempt note, not a required video. No accuracy percentage, perfect performance or full-body synchrony is inferred.",
+        "tr": "Önce kendi notasyonunu oku, niyet/koşul/kilit geçişi söyle. Dört sayılı parçaları dinlenmeli yavaş çalış; isteğe bağlı koldan önce yalnız ayak. Önceki destek/eylem açık olunca sekiz, sonra on altı bağla. Yazılı notasyon yanında kalsın; okumak serbest. Kayıt yazılı deneme notudur, zorunlu video değil. Doğruluk yüzdesi, kusursuz performans veya tüm beden eşzamanlılığı çıkarılmaz."
+      },
+      "practice": {
+        "en": "First recorded attempt: perform the chosen sixteen-count score once if comfortable, note any pause/recovery, then rest. Record ONE difference by phrase/count and type (extra transfer, loaded touch, missing hold, wrong direction, gesture arrived on wrong planned count, boundary/ending loss or uncertain observation). Revisit the exact two/four-count chunk and ONE cue; rest. Second recorded attempt: same score, mode, count source/tempo, optional gesture and adaptations; compare the same location/type. Changing conditions begins a new first attempt. Optional extra repetitions are separately named unscored practice, not the comparison. No error means consistency; uncertainty stays unchecked.",
+        "tr": "İlk kayıtlı deneme: rahatsa seçilen on altı sayıyı bir kez yap, ara/toparlanmayı not et, dinlen. Cümle/sayı ve türle TEK fark kaydet (ek aktarım, yüklenen dokunuş, eksik durak, yanlış yön, jestin yanlış planlı sayıda varması, sınır/son kaybı veya belirsiz gözlem). Tam iki/dört sayılı parçaya ve TEK ipucuna dön; dinlen. İkinci kayıtlı deneme: aynı notasyon, biçim, sayım kaynağı/hız, isteğe bağlı jest ve uyarlama; aynı yer/türü karşılaştır. Koşul değişirse yeni ilk deneme. İsteğe bağlı ek tekrar ayrı adlı puansız pratiktir; karşılaştırma değil. Hata yoksa tutarlılık; belirsizlik kontrol edilmemiş kalır."
+      },
+      "mistakes": {
+        "en": "Example: your count 3 hold got an extra transfer → revisit 2–4, name support on 3, compare 3 in the same second attempt. A hand planned to arrive on 2 but arriving on 1 → remove feet first, rehearse that low gesture’s two counts, then restore only if support stays clear. Never diagnose pain/alignment from your memory or require a sharp stop to look polished.",
+        "tr": "Örnek: 3 durağına ek aktarım → 2–4e dön, 3 desteğini söyle, aynı ikinci denemede 3ü karşılaştır. 2de varacak el 1de vardı → önce ayakları çıkar, alçak jestin iki sayısını çalış, sonra yalnız destek açık kalırsa geri ekle. Hatıradan ağrı/hiza tanısı yapma, düzgün görünmek için sert duruş isteme."
+      },
+      "adaptation": {
+        "en": "A paper-only final can meet written creation/decode/revision criteria only. A shorter standing chunk is useful practice but leaves sixteen-count physical exit open. Omitted arms, travel or contrast are explicitly labeled, not hidden as completion.",
+        "tr": "Yalnız kâğıt final yazılı kurma/çözme/düzeltme ölçütünü karşılar. Kısa ayakta parça faydalıdır ama on altı sayılık fiziksel çıkışı açık bırakır. Çıkarılmış kol/yol/karşıtlık açık etiketlidir, tamamlanma diye gizlenmez."
+      },
+      "check": {
+        "en": "For EACH mark observed/uncertain/unattempted and mode: intention/motif, independent score reading, repeat/variation/contrast, W/T/H, support at boundaries, optional gesture timing, ending, recovery and same-condition correction. Keep physical teaching, authentic style, rights, software and camera/music/edit appearance separate.",
+        "tr": "HER biri için gözlendi/belirsiz/denenmedi ve biçim yaz: niyet/motif, bağımsız notasyon okuma, tekrar/varyasyon/karşıtlık, W/T/H, sınır desteği, isteğe bağlı jest zamanı, son, toparlanma ve aynı koşullu düzeltme. Fiziksel öğretim, özgün stil, haklar, yazılım ve kamera/müzik/kurgu görünümü ayrı."
+      }
+    }
+  ],
+  "finalTaskContract": {
+    "beats": 16,
+    "learnerAuthored": true,
+    "merelyRenamingWorkedExampleEligible": false,
+    "motifCounts": 4,
+    "requiresOneExplainedVariation": true,
+    "requiresContrastingSecondBlock": true,
+    "startSupport": "R",
+    "startFree": "L",
+    "endSupport": "R",
+    "nextFree": "L",
+    "facing": "front",
+    "evidence": "self_observation_only",
+    "cameraRequired": false,
+    "uploadRequired": false,
+    "accountRequired": false,
+    "conditionChangeStartsNewFirst": true,
+    "physicalTeachingAccepted": false,
+    "completeCurriculumAccepted": false
+  },
+  "openTeachingComponents": [
+    {
+      "id": "body_roll",
+      "catalogTerm": "Body roll",
+      "status": "demonstration_and_qualified_physical_review_required",
+      "copy": {
+        "en": "Chest/ribs/pelvis sequencing and safe spinal range/contact have not been observed or validated. No body-roll instruction or completion is claimed; ordinary low gesture is not a substitute proof.",
+        "tr": "Göğüs/kaburga/pelvis sırası ve güvenli omurga aralığı/teması gözlenmedi/doğrulanmadı. Body-roll öğretimi/tamamlanması iddia edilmez; sıradan alçak jest yerine geçen kanıt değildir."
+      }
+    },
+    {
+      "id": "sharp_hit",
+      "catalogTerm": "Hit",
+      "status": "demonstration_and_qualified_physical_review_required",
+      "copy": {
+        "en": "Joint loading and a controlled simultaneous full-body stop cannot be validated from count text. Our H is a gentle no-transfer count, not an authenticated sharp Hit, popping contraction or impact technique.",
+        "tr": "Eklem yükü ve kontrollü eşzamanlı tüm beden duruşu sayı metninden doğrulanamaz. H nazik aktarım olmayan sayıdır; doğrulanmış sert Hit, popping kasılması veya darbe tekniği değil."
+      }
+    },
+    {
+      "id": "arm_run_coordination",
+      "catalogTerm": "Arm run",
+      "status": "full_catalog_skill_not_accepted",
+      "copy": {
+        "en": "One optional ordinary low forearm cue teaches a simple planning choice only. Consecutive full arm shapes, exact joint ranges and stable coordination need observed demonstration/review; no catalog Arm run mastery is inferred.",
+        "tr": "Tek isteğe bağlı sıradan alçak önkol ipucu yalnız basit plan seçimi öğretir. Ardışık tam kol biçimleri, tam eklem aralığı ve kararlı koordinasyon gözlenmiş gösterim/inceleme ister; katalog Arm run ustalığı çıkarılmaz."
+      }
+    },
+    {
+      "id": "media_and_cultural_context",
+      "status": "rights_and_context_open",
+      "copy": {
+        "en": "Only original authored example rows and learner choices are proposed. No trend, song, platform footage, creator routine or named heritage step is licensed/imported. Sharing or later style-specific additions require separate rights/context review; general ingredients do not transfer ownership of a community’s style.",
+        "tr": "Yalnız özgün yazılmış örnek satır ve öğrenenin seçimleri önerilir. Trend, şarkı, platform görüntüsü, yaratıcı rutini veya isimli kültür adımı lisanslanmadı/aktarılmadı. Paylaşım veya sonraki stile özgü ekleme ayrı hak/bağlam incelemesi ister; genel öğeler topluluk stilinin sahipliğini aktarmaz."
+      }
+    }
+  ],
+  "schemaVersion": 1,
+  "reviewNotice": {
+    "en": "Written integration candidate. Independent proposal review accepted the bounded composition sequence; software, physical teaching, demonstrations, rights and full curriculum acceptance remain open. No progress or scoring is recorded.",
+    "tr": "Yazılı entegrasyon adayı. Bağımsız öneri incelemesi sınırlı kompozisyon sırasını kabul etti; yazılım, fiziksel öğretim, gösterimler, haklar ve tam müfredat kabulü açık. İlerleme veya puan kaydedilmez."
+  },
+  "diagramNotice": {
+    "en": "L/R mean YOUR left/right, never a screen-mirrored limb. All example tables face FRONT, start support R with L available, and end R with L available. W means a small weighted ordinary step to the named direction; T means a light touch without loading; H means no new regular transfer, not freezing the body. Support is AFTER the row action; the free foot may still lightly touch the floor—no single-leg balance test. Near means comfortable starting-stance distance, not force feet together. Gesture labels are optional planning cues, not validated joint/contact instruction.",
+    "tr": "L/R SENİN sol/sağındır, ekrandaki aynalanmış uzuv değil. Tüm örnek tablolar ÖN bakar; sağ destek/sol hazır başlar, sağ destek/sol hazır biter. W adı verilen yöne küçük ağırlıklı sıradan adım; T ağırlıksız hafif dokunuş; H yeni düzenli aktarım yok demektir, bedeni dondurmak değil. Destek satır eyleminden SONRA gösterilir; boş ayak yere hafifçe dokunabilir—tek ayak denge testi yok. Yakın, ayakları zorla birleştirmek değil rahat başlangıç duruşu mesafesidir. Jest etiketleri isteğe bağlı plan ipuçlarıdır, doğrulanmış eklem/temas öğretimi değil."
+  },
+  "provenance": {
+    "en": "AQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography\nEducational categories: gesture/stillness/weight transfer, motif development, repetition/contrast, transitions and choreographic intention; silence/spoken word as possible settings\nVocabulary/categories only. No AQA set phrase, prescribed examination choreography, marking grid, duration, certification or endorsement adopted.\n\nAQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance\nPlanning rehearsal, systematic repetition, mental rehearsal and response to feedback as distinct learning processes\nNo set performance material, exam tempo, qualification outcomes or validated physical teaching of our phrase.\n\nRobert Royston / Howcast — https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/\nCommon touch ingredient has no weight; distinction from a weighted step\nNo copied named routine, Monterey turn, media or licence; general ingredient adapted into our own compositional exercises, not a Line Dance course.\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\nDeliberate hold adds no regular transfer and preserves available next foot\nGeneric support reasoning only; not salsa rhythm, an endorsement or compulsory body freeze.\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\nGradual preparation and ordinary gradual reduction, within general safe-dance context\nNo timer proves readiness; no individual health clearance, temperature target or guaranteed injury/soreness benefit.",
+    "tr": "AQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography\nEğitsel kategoriler: jest, hareketsizlik, ağırlık aktarımı; motif geliştirme, tekrar ve karşıtlık, geçişler ve koreografik niyet; olası ortamlar olarak sessizlik ve sözlü anlatım.\nYalnızca terimler ve kategoriler kullanılır. AQA’nın belirlenmiş hareket cümlesi, sınav koreografisi, puanlama çizelgesi, süresi, sertifikası veya desteği benimsenmez.\n\nAQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance\nÇalışmayı planlama, sistemli tekrar, zihinsel prova ve geri bildirime yanıt verme ayrı öğrenme süreçleridir.\nBelirlenmiş performans malzemesi, sınav temposu, yeterlilik sonucu veya bu cümlenin doğrulanmış fiziksel öğretimi kullanılmaz.\n\nRobert Royston / Howcast — https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/\nSıradan dokunuş ağırlık almaz; ağırlıklı adımdan ayrılır.\nAdlandırılmış rutin, Monterey dönüşü veya medya kopyalanmaz; lisans alındığı iddia edilmez. Genel öğe özgün kompozisyon alıştırmalarına uyarlanır; bu bir Line Dance kursu değildir.\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\nBilinçli durak yeni düzenli ağırlık aktarımı eklemez ve sıradaki hazır ayağı korur.\nYalnızca genel destek mantığı kullanılır; Salsa ritmi, kaynak desteği veya zorunlu beden dondurma anlamına gelmez.\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\nGenel güvenli dans bağlamında aşamalı hazırlık ve sıradan hareketle aşamalı yavaşlama.\nBir süreölçer hazır oluşu kanıtlamaz; bireysel sağlık onayı, sıcaklık hedefi veya garantili yaralanma/ağrı önleme yararı iddia edilmez."
+  }
+}

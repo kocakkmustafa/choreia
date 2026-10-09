@@ -11,26 +11,26 @@ import 'package:motion_content/motion_content.dart';
 
 import 'support/test_catalog.dart';
 
-// Exact so_01 orientation/master row from the peer-checked v2k ops catalog.
+// Exact authored revision so_01 row; synthetic QA bytes, no release acceptance.
 const _pin = LessonMediaSourcePin(
   assetId: 'choreia.so_01.v6.demo',
   lessonId: 'so_01',
   sceneId: 'choreia:so_01:orientation',
   variantStem:
-      'choreia/so-01--becaa07c/orientation--645453e973c9403268dd65bc740e21e304bb1036f52b00ac7006bb10262ee9f3--master-16x9',
+      'choreia/so-01--becaa07c/orientation--1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7--master-16x9',
   courseSourceSha256:
-      'b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7',
+      'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc',
   lessonCanonicalSha256:
       '05b4bc7664a0143fd0f75bd4d98ef2934ab9ae9eeb381224d7bbb8f73ffe7a2b',
   productionSpecSha256:
-      '645453e973c9403268dd65bc740e21e304bb1036f52b00ac7006bb10262ee9f3',
+      '1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
   sourceCueSha256:
       '15cc3828f0b88eedff915b7a2277befa358942030e1e3436a97ffe06367a7f18',
   idempotencyKey:
-      'motion-media-v1:645453e973c9403268dd65bc740e21e304bb1036f52b00ac7006bb10262ee9f3',
+      'motion-media-v1:1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
   productionState: 'PREPRODUCTION_UNGENERATED',
   sourcePinSha256:
-      '6e5af428a718c6aa135f9049114a7d0b96b5ca73ea2762fcf999bfaf86d7f6fc',
+      '67cfed6b6266f23a7204887f59f2686a38b67678b63d6e8e277786e9d9061a9d',
 );
 const _zeroSha =
     '0000000000000000000000000000000000000000000000000000000000000000';
@@ -189,7 +189,7 @@ void main() {
     expect(bundle.pinReads, isEmpty);
   });
 
-  test('exact v2k source row, video bytes, two VTT hashes and locale inspect',
+  test('exact authored source row, video bytes, two VTT hashes and locale inspect',
       () async {
     final fixture = _Fixture();
     for (final locale in ['tr', 'en']) {
@@ -256,6 +256,11 @@ void main() {
       fixture.candidate(sceneId: 'choreia:so_01:other'),
       fixture.candidate(stem: '${_pin.variantStem}-other'),
       fixture.candidate(courseSha: _zeroSha),
+      // The actual frozen predecessor is stale for this authored revision.
+      fixture.candidate(courseSha: 'b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7'),
+      fixture.candidate(manifestSha: 'd887683c9a9b9bdb8d4ab7c51cdc5a5b4b4de6a918079e4cfd9cf543e9751e60'),
+      fixture.candidate(specSha: '645453e973c9403268dd65bc740e21e304bb1036f52b00ac7006bb10262ee9f3'),
+      fixture.candidate(sourcePinSha: '6e5af428a718c6aa135f9049114a7d0b96b5ca73ea2762fcf999bfaf86d7f6fc'),
       fixture.candidate(
           courseSha:
               'd81c48841905ece680c58467032c6f6126f335eecbbfe77c6e812e3ad9ef1598'),
