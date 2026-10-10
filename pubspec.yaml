@@ -16,7 +16,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_account
-      ref: edeec10a161c76bfa086b1d165d53e46ec88c3d7
+      ref: ef60e346934d7e5d45c87deb81583b263575b208
 
   # The engine is a SEPARATE package with no Flutter dependency (M-F-160,
   # JabLab's split mirrored): scoring logic must stay testable without a widget
@@ -42,7 +42,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: edeec10a161c76bfa086b1d165d53e46ec88c3d7
+      ref: ef60e346934d7e5d45c87deb81583b263575b208
 
   # Bundled content reader/validator contract at the same immutable Core pin.
   # A production manifest and startup wiring are separate acceptance gates.
@@ -50,7 +50,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_content
-      ref: edeec10a161c76bfa086b1d165d53e46ec88c3d7
+      ref: ef60e346934d7e5d45c87deb81583b263575b208
 
   # Kamera köprüsü: motor `motion_core`'dan hiçbir şey import etmiyordu ve
   # pini C-121'de DÜŞÜRÜLMÜŞTÜ, isimli geri-giriş tetiğiyle: "ilk gerçek
@@ -60,7 +60,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_camera
-      ref: edeec10a161c76bfa086b1d165d53e46ec88c3d7
+      ref: ef60e346934d7e5d45c87deb81583b263575b208
 
   # Only to locate the app-private directory. The storage FORMAT is the core's
   # (append-only JSONL) — a 3rd-party DB is deliberately absent: session
@@ -101,7 +101,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_media
-      ref: edeec10a161c76bfa086b1d165d53e46ec88c3d7
+      ref: ef60e346934d7e5d45c87deb81583b263575b208
 
 dev_dependencies:
   http: 1.6.0
