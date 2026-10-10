@@ -49,6 +49,7 @@ class StyleDetailView extends StatelessWidget {
     this.runnableSteps = const <String>{},
     this.env = const LiveEnvironment(),
     this.beforeStart,
+    this.cameraSessionsAvailable = false,
     super.key,
   });
 
@@ -57,6 +58,7 @@ class StyleDetailView extends StatelessWidget {
 
   final LiveEnvironment env;
   final Future<bool> Function(BuildContext)? beforeStart;
+  final bool cameraSessionsAvailable;
 
   final StyleCard card;
 
@@ -75,6 +77,9 @@ class StyleDetailView extends StatelessWidget {
   static const Key descriptionKey = Key('style.description');
   static const Key glossaryKey = Key('style.glossary');
 
+  static Key lessonStartKey(String id) => Key('style.start.$id');
+  static Key sessionUnavailableKey(String id) => Key('style.sessionUnavailable.$id');
+
   static Key lessonKey(String id) => Key('style.lesson.$id');
   static Key permanenceKey(String id) => Key('style.permanent.$id');
 
@@ -86,7 +91,8 @@ class StyleDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<LessonOffer> offers = card.offers(runnableSteps);
-    final StyleDetailCopy copy = StyleDetailCopy(UiLanguage.isTurkish(context));
+    final StyleDetailCopy copy = StyleDetailCopy(UiLanguage.isTurkish(context),
+        cameraSessionsAvailable: cameraSessionsAvailable);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -627,8 +633,12 @@ class StyleDetailView extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 14),
-          if (o.canStart)
+          if (o.canStart && cameraSessionsAvailable) ...<Widget>[
+            Text(copy.permissionNotice(l.kind),
+                style: ChoreiaType.body(size: 12)),
+            const SizedBox(height: 10),
             FilledButton(
+              key: lessonStartKey(l.id),
               onPressed: () async {
                 final permitted = await beforeStart?.call(context) ?? true;
                 if (!context.mounted || !permitted) return;
@@ -651,20 +661,21 @@ class StyleDetailView extends StatelessWidget {
                 );
               },
               child: Text(copy.start),
-            )
-          else
+            ),
+          ] else
             // NOT a disabled button. A greyed-out "Start" says the door might
             // open if you tried harder; a sentence says what is actually
             // missing and whose job it is. M-F-268's rule is that a dead end
             // must not be dressed as an action.
             Container(
+              key: o.canStart ? sessionUnavailableKey(l.id) : null,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: ChoreiaColors.hairline(0.12)),
               ),
               child: Text(
-                copy.blocked(o.block!),
+                o.canStart ? copy.sessionUnavailable : copy.blocked(o.block!),
                 style: ChoreiaType.body(
                   size: 12,
                   color: ChoreiaColors.text(0.6),
@@ -802,8 +813,9 @@ abstract final class StyleStrings {
 
   /// Subject: US and our instrument — never the dancer's effort.
   static const String openUngradedMeaning =
-      'Written explanations and recorded reference notes are available to '
-      'read. Camera practice and scoring are unavailable in this version. '
+      'Written explanations and recorded camera-session references are available '
+      'to read. Camera practice and scoring are unavailable in this release. '
+      'The reference is not a playable preview. '
       'Use the written courses for self-guided practice.';
 
   /// Written now so the branch exists before a style ever becomes scored; the
@@ -811,6 +823,17 @@ abstract final class StyleStrings {
   static const String scoredMeaning =
       'These notes describe recorded movement references. This version does '
       'not assess or score your movement; camera practice is unavailable.';
+
+  static const String liveUngradedMeaning =
+      'Live camera practice requires permission on your device and an access '
+      'check. These demo-only lessons do not produce a score.';
+  static const String liveScoredMeaning =
+      'Recorded references explain this camera lesson. Camera use requires '
+      'device permission and an access check; read each lesson\'s limits.';
+  static const String sessionUnavailable =
+      'Camera practice is unavailable in this release. The movement reference '
+      'is bundled, but it is not a playable preview. Use the written courses '
+      'for self-guided practice.';
 
   static const String glossaryTitle = 'Steps you will hear named';
 
@@ -865,7 +888,7 @@ abstract final class StyleStrings {
   /// Names the difference between "not scored" and "never scored".
   static const String permanentTitle = 'THIS ONE WILL NOT CHANGE';
 
-  static const String start = 'Start';
+  static const String start = 'Start camera practice';
 
   /// The lesson's badge — and [canStart] is in the signature because the badge
   /// was making a claim the card then withdrew.
@@ -887,11 +910,15 @@ abstract final class StyleStrings {
   /// renders the block reason, and inventing badge vocabulary is the
   /// catalogue's business (and a design call). Removing a false assertion is
   /// not.
-  static String kind(LessonKind k, {required bool canStart}) => switch (k) {
-    LessonKind.scored => 'REFERENCE',
+  static String kind(LessonKind k,
+      {required bool canStart, bool cameraSessionsAvailable = false}) => switch (k) {
+    LessonKind.scored => canStart && cameraSessionsAvailable
+        ? 'CAMERA PRACTICE' : 'REFERENCE',
     // `OPEN` is a promise about what a tap does. Only make it when a tap
     // does something.
-    LessonKind.demoOnly => canStart ? 'PREVIEW · NO SCORING' : 'NO SCORING',
+    LessonKind.demoOnly => canStart
+        ? (cameraSessionsAvailable ? 'LIVE PRACTICE · NO SCORING' : 'REFERENCE · SESSION CLOSED')
+        : 'NO SCORING',
     LessonKind.locked => 'LOCKED',
   };
 
@@ -918,7 +945,9 @@ abstract final class StyleStrings {
 /// [StyleContentCopy] where a reviewed translation matches its exact source;
 /// attribution uses the same review rule for the one open Hip-Hop style.
 final class StyleDetailCopy {
-  const StyleDetailCopy(this.turkish);
+  const StyleDetailCopy(this.turkish, {this.cameraSessionsAvailable = false});
+
+  final bool cameraSessionsAvailable;
 
   final bool turkish;
 
@@ -944,13 +973,20 @@ final class StyleDetailCopy {
   String needs(List<String> items) =>
       _pick(StyleStrings.needs(items), 'Gerekenler: ${items.join(', ')}');
 
-  String get openUngradedMeaning => _pick(
+  String get openUngradedMeaning => cameraSessionsAvailable
+      ? _pick(StyleStrings.liveUngradedMeaning,
+          'Canlı kamera pratiği cihaz izni ve erişim kontrolü gerektirir. Bu puansız dersler sayısal puan üretmez.')
+      : _pick(
     StyleStrings.openUngradedMeaning,
-    'Yazılı açıklamaları ve kayıtlı referans notlarını okuyabilirsin. '
-    'Bu sürümde kamera çalışması ve puanlama kapalı. Öz denetimli '
+    'Yazılı açıklamaları ve kayıtlı kamera seansı referanslarını okuyabilirsin. '
+    'Bu sürümde kamera çalışması ve puanlama kapalı. Referans oynatılabilir '
+    'bir önizleme değildir. Öz denetimli '
     'çalışma için yazılı kursları kullan.',
   );
-  String get scoredMeaning => _pick(
+  String get scoredMeaning => cameraSessionsAvailable
+      ? _pick(StyleStrings.liveScoredMeaning,
+          'Kayıtlı referanslar bu kamera dersini açıklar. Kamera kullanımı cihaz izni ve erişim kontrolü gerektirir; her dersin sınırlarını oku.')
+      : _pick(
     StyleStrings.scoredMeaning,
     'Bu notlar kayıtlı hareket referanslarını açıklar. Bu sürüm hareketini '
     'değerlendirmez veya puanlamaz; kamera çalışması kapalı.',
@@ -981,7 +1017,10 @@ final class StyleDetailCopy {
   String get tempoTitle => _pick(StyleStrings.tempoTitle, 'TEMPO');
   String get honestyTitle =>
       _pick(StyleStrings.honestyTitle, 'Bu stil hakkında ne söyleyebiliriz?');
-  String get honestyNote => _pick(
+  String get honestyNote => cameraSessionsAvailable
+      ? _pick('These lists describe recorded reference research and some of its limits. They are not live assessments of you. Camera practice requires device permission; demo-only lessons are not scored.',
+          'Bu listeler kayıtlı referans araştırmasını ve bazı sınırlarını açıklar. Senin canlı değerlendirmen değildir. Kamera pratiği cihaz izni gerektirir; puansız derslere puan verilmez.')
+      : _pick(
     StyleStrings.honestyNote,
     'Bu listeler kayıtlı referans araştırmasını ve bazı sınırlarını açıklar. '
     'Senin canlı değerlendirmen değildir. Bu sürümde kamera çalışması ve '
@@ -993,12 +1032,26 @@ final class StyleDetailCopy {
       _pick(StyleStrings.notMeasuredTitle, 'BAZI REFERANS SINIRLARI');
   String get permanentTitle =>
       _pick(StyleStrings.permanentTitle, 'BU DERS PUANLANMAYACAK');
-  String get start => _pick(StyleStrings.start, 'Başlat');
+  String get start => _pick(StyleStrings.start, 'Kamera pratiğini başlat');
+  String get sessionUnavailable => _pick(StyleStrings.sessionUnavailable,
+      'Bu sürümde kamera pratiği kullanılamıyor. Hareket referansı pakette var, '
+      'ancak oynatılabilir bir önizleme değildir. Öz denetimli çalışma için yazılı kursları kullan.');
+  String permissionNotice(LessonKind kind) => _pick(
+      kind == LessonKind.demoOnly
+          ? 'This session requests camera permission on your device. It does not produce a score.'
+          : 'This session requests camera permission before using the camera.',
+      kind == LessonKind.demoOnly
+          ? 'Bu seans cihazında kamera izni ister. Sayısal puan üretmez.'
+          : 'Bu seans kamerayı kullanmadan önce cihaz izni ister.');
 
   String kind(LessonKind kind, {required bool canStart}) =>
-      _pick(StyleStrings.kind(kind, canStart: canStart), switch (kind) {
-        LessonKind.scored => 'REFERANS',
-        LessonKind.demoOnly => canStart ? 'ÖNİZLEME · PUAN YOK' : 'PUAN YOK',
+      _pick(StyleStrings.kind(kind, canStart: canStart,
+          cameraSessionsAvailable: cameraSessionsAvailable), switch (kind) {
+        LessonKind.scored => canStart && cameraSessionsAvailable
+            ? 'KAMERA PRATİĞİ' : 'REFERANS',
+        LessonKind.demoOnly => canStart
+            ? (cameraSessionsAvailable ? 'CANLI PRATİK · PUAN YOK' : 'REFERANS · SEANS KAPALI')
+            : 'PUAN YOK',
         LessonKind.locked => 'KİLİTLİ',
       });
 

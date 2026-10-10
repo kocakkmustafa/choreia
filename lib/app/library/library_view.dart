@@ -40,6 +40,7 @@ class LibraryView extends StatefulWidget {
     required this.library,
     this.env = const LiveEnvironment(),
     this.beforeLessonStart,
+    this.cameraSessionsAvailable = false,
     super.key,
   });
 
@@ -50,6 +51,7 @@ class LibraryView extends StatefulWidget {
   /// object rather than its three parts precisely so it cannot half-forward it.
   final LiveEnvironment env;
   final Future<bool> Function(BuildContext)? beforeLessonStart;
+  final bool cameraSessionsAvailable;
 
   static const Key tallyKey = Key('library.tally');
   static const Key emptyFilterKey = Key('library.emptyFilter');
@@ -112,7 +114,7 @@ class _LibraryViewState extends State<LibraryView> {
             const SizedBox(height: 18),
             SalsaCourseEntry(env: widget.env),
             const SizedBox(height: 24),
-            Text(_tr ? 'Stil referansı önizlemeleri' : 'Style reference previews',
+            Text(_tr ? 'Kamera seansı referans notları' : 'Camera-session reference notes',
                 style: ChoreiaType.display(size: 25)),
             const SizedBox(height: 12),
             _tallyPanel(tally),
@@ -163,8 +165,10 @@ class _LibraryViewState extends State<LibraryView> {
             const SizedBox(height: 10),
             Text(
               _tr
-                  ? LibraryStrings.availabilityLineTr(t)
-                  : LibraryStrings.availabilityLine(t),
+                  ? LibraryStrings.availabilityLineTr(t,
+                      cameraSessionsAvailable: widget.cameraSessionsAvailable)
+                  : LibraryStrings.availabilityLine(t,
+                      cameraSessionsAvailable: widget.cameraSessionsAvailable),
               style:
                   ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.62)),
             ),
@@ -179,12 +183,12 @@ class _LibraryViewState extends State<LibraryView> {
           _chip(_Filter.all, _tr ? 'TÜMÜ' : LibraryStrings.filterAll, t.total),
           _chip(
             _Filter.openNow,
-            _tr ? 'ÖNİZLEME' : LibraryStrings.filterOpenNow,
+            _tr ? 'REFERANSLAR' : LibraryStrings.filterOpenNow,
             t.openable,
           ),
           _chip(
             _Filter.notOpen,
-            _tr ? 'ÖNİZLEME YOK' : LibraryStrings.filterNotOpen,
+            _tr ? 'REFERANS EKSİKLERİ' : LibraryStrings.filterNotOpen,
             t.total - t.openable,
           ),
         ],
@@ -260,8 +264,10 @@ class _LibraryViewState extends State<LibraryView> {
           const SizedBox(height: 4),
           Text(
             _tr
-                ? LibraryStrings.sectionNoteTr(badge)
-                : LibraryStrings.sectionNote(badge),
+                ? LibraryStrings.sectionNoteTr(badge,
+                      cameraSessionsAvailable: widget.cameraSessionsAvailable)
+                : LibraryStrings.sectionNote(badge,
+                      cameraSessionsAvailable: widget.cameraSessionsAvailable),
             style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
           ),
           const SizedBox(height: 12),
@@ -304,6 +310,7 @@ class _LibraryViewState extends State<LibraryView> {
               Text(
                 (_tr ? LibraryStrings.lessonLineTr : LibraryStrings.lessonLine)(
                   c,
+                  cameraSessionsAvailable: widget.cameraSessionsAvailable,
                   startable: c
                       .offers(widget.library.runnableSteps)
                       .where((LessonOffer o) => o.canStart)
@@ -362,6 +369,7 @@ class _LibraryViewState extends State<LibraryView> {
               runnableSteps: widget.library.runnableSteps,
               env: widget.env,
               beforeStart: widget.beforeLessonStart,
+              cameraSessionsAvailable: widget.cameraSessionsAvailable,
             ),
           ),
         ),
@@ -423,20 +431,31 @@ abstract final class LibraryStrings {
   static String scopeLineTr(LibraryTally t) =>
       'Katalogda ${t.total} dans stili var.';
 
-  // Catalogue readiness describes reference material, not the release camera gate.
-  static String availabilityLine(LibraryTally t) =>
-      '${t.openable} style reference previews. Camera practice and scoring are '
-      'unavailable in this version. Use the written courses above for guided '
-      'lessons. Other catalogue entries show their current status.';
+  // Content readiness never implies an accessible camera session.
+  static String sessionNotice(bool available, {bool turkish = false}) =>
+      turkish
+          ? (available
+              ? 'Kamera seansları cihaz izni ve erişim kontrolü gerektirir. Puansız canlı pratik seanslarına puan verilmez.'
+              : 'Bu sürümde kamera çalışması ve puanlama kapalı. Referanslar oynatılabilir bir önizleme değildir.')
+          : (available
+              ? 'Camera sessions require device permission and access checks. Demo-only live practice is not scored.'
+              : 'Camera practice and scoring are unavailable in this release. References are not a playable preview.');
 
-  static String availabilityLineTr(LibraryTally t) =>
-      '${t.openable} stil referansı önizlemesi. Bu sürümde kamera çalışması ve '
-      'puanlama kapalı. Rehberli dersler için yukarıdaki yazılı kursları kullan. '
-      'Diğer katalog girdileri mevcut durumlarıyla gösterilir.';
+  static String availabilityLine(LibraryTally t,
+          {bool cameraSessionsAvailable = false}) =>
+      '${t.openable} ${t.openable == 1 ? 'style has' : 'styles have'} camera-session reference notes. '
+      '${sessionNotice(cameraSessionsAvailable)} Use the written courses above '
+      'for guided lessons. Other catalogue entries show their current status.';
+
+  static String availabilityLineTr(LibraryTally t,
+          {bool cameraSessionsAvailable = false}) =>
+      '${t.openable} stilde kamera seansı referans notları var. '
+      '${sessionNotice(cameraSessionsAvailable, turkish: true)} Rehberli dersler '
+      'için yukarıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.';
 
   static const String filterAll = 'ALL';
-  static const String filterOpenNow = 'PREVIEW';
-  static const String filterNotOpen = 'NO PREVIEW';
+  static const String filterOpenNow = 'REFERENCES';
+  static const String filterNotOpen = 'REFERENCE GAPS';
 
   static const String emptyFilter =
       'Nothing matches that filter. Nothing has been hidden — there is simply '
@@ -444,7 +463,7 @@ abstract final class LibraryStrings {
 
   static String badge(StyleBadge b) => switch (b) {
         StyleBadge.scored => 'REFERENCE',
-        StyleBadge.openUngraded => 'PREVIEW · NO SCORING',
+        StyleBadge.openUngraded => 'CAMERA REFERENCES',
         StyleBadge.builtButGated => 'CAMERA UNAVAILABLE',
         StyleBadge.inPreparation => 'NOT BUILT',
         StyleBadge.onHold => 'ON HOLD',
@@ -452,7 +471,7 @@ abstract final class LibraryStrings {
 
   static String badgeTr(StyleBadge b) => switch (b) {
         StyleBadge.scored => 'REFERANS',
-        StyleBadge.openUngraded => 'ÖNİZLEME · PUAN YOK',
+        StyleBadge.openUngraded => 'KAMERA REFERANSLARI',
         StyleBadge.builtButGated => 'KAMERA KAPALI',
         StyleBadge.inPreparation => 'DERS YOK',
         StyleBadge.onHold => 'DURAKLATILDI',
@@ -460,7 +479,7 @@ abstract final class LibraryStrings {
 
   static String sectionTitle(StyleBadge b) => switch (b) {
         StyleBadge.scored => 'Posture references',
-        StyleBadge.openUngraded => 'Reference previews',
+        StyleBadge.openUngraded => 'Camera-session references',
         StyleBadge.builtButGated => 'Camera practice unavailable',
         StyleBadge.inPreparation => 'In the catalogue, not built',
         StyleBadge.onHold => 'On hold',
@@ -468,21 +487,18 @@ abstract final class LibraryStrings {
 
   static String sectionTitleTr(StyleBadge b) => switch (b) {
         StyleBadge.scored => 'Duruş referansları',
-        StyleBadge.openUngraded => 'Referans önizlemeleri',
+        StyleBadge.openUngraded => 'Kamera seansı referansları',
         StyleBadge.builtButGated => 'Kamera çalışması kapalı',
         StyleBadge.inPreparation => 'Katalogda, ders yok',
         StyleBadge.onHold => 'Duraklatıldı',
       };
 
-  static String sectionNote(StyleBadge b) => switch (b) {
-        StyleBadge.scored =>
-          'Recorded posture references; camera assessment and scoring are unavailable.',
-        StyleBadge.openUngraded =>
-          'Read the written explanations and reference notes. Camera practice '
-              'and scoring are unavailable in this version.',
+  static String sectionNote(StyleBadge b,
+          {bool cameraSessionsAvailable = false}) => switch (b) {
+        StyleBadge.scored || StyleBadge.openUngraded =>
+          'Read the written explanations and recorded references. ${sessionNotice(cameraSessionsAvailable)}',
         StyleBadge.builtButGated =>
-          'Reference notes are written. Camera practice and scoring remain '
-              'unavailable in this version.',
+          'Reference notes are written; this style still has incomplete content checks. ${sessionNotice(cameraSessionsAvailable)}',
         StyleBadge.inPreparation =>
           'Named here so you can see the whole plan. Nothing is built for '
               'these — there is no lesson behind the name.',
@@ -491,22 +507,24 @@ abstract final class LibraryStrings {
               'a scheduling one.',
       };
 
-  static String sectionNoteTr(StyleBadge b) => switch (b) {
-        StyleBadge.scored =>
-          'Kayıtlı duruş referansları; kamera değerlendirmesi ve puanlama kapalı.',
-        StyleBadge.openUngraded =>
-          'Yazılı açıklamaları ve referans notlarını oku. Bu sürümde kamera çalışması ve puanlama kapalı.',
+  static String sectionNoteTr(StyleBadge b,
+          {bool cameraSessionsAvailable = false}) => switch (b) {
+        StyleBadge.scored || StyleBadge.openUngraded =>
+          'Yazılı açıklamaları ve kayıtlı referansları oku. ${sessionNotice(cameraSessionsAvailable, turkish: true)}',
         StyleBadge.builtButGated =>
-          'Referans notları yazılmış. Bu sürümde kamera çalışması ve puanlama kapalı.',
+          'Referans notları yazılmış; bu stilin içerik kontrolleri tamamlanmamış. ${sessionNotice(cameraSessionsAvailable, turkish: true)}',
         StyleBadge.inPreparation =>
           'Stil adı katalogda var; arkasında açılabilir bir ders yok.',
         StyleBadge.onHold => 'Bu stil duraklatıldı. Gerekçesi stil sayfasında.',
       };
 
-  static String lessonLineTr(StyleCard c, {required int startable}) {
+  static String lessonLineTr(StyleCard c,
+      {required int startable, bool cameraSessionsAvailable = false}) {
     if (c.lessons.isEmpty) return 'DERS YOK';
     final int total = c.lessons.length;
-    return '$total DERS YAZILDI · KAMERA KAPALI · PUAN YOK';
+    return cameraSessionsAvailable
+        ? '$total DERS YAZILDI · $startable KAMERA REFERANSI HAZIR'
+        : '$total DERS YAZILDI · KAMERA KAPALI · PUAN YOK';
   }
 
   /// What a card says about its lessons — worded so a style's inventory cannot
@@ -528,9 +546,12 @@ abstract final class LibraryStrings {
   /// which references the bundle actually serves, and a count computed from
   /// content alone would claim lessons the device cannot open — the exact
   /// distinction `LibraryCatalog.runnableSteps` exists to make.
-  static String lessonLine(StyleCard c, {required int startable}) {
+  static String lessonLine(StyleCard c,
+      {required int startable, bool cameraSessionsAvailable = false}) {
     if (c.lessons.isEmpty) return 'NO LESSONS BUILT';
     final int total = c.lessons.length;
-    return '$total LESSONS WRITTEN · CAMERA OFF · NO SCORING';
+    return cameraSessionsAvailable
+        ? '$total LESSONS WRITTEN · $startable CAMERA REFERENCES READY'
+        : '$total LESSONS WRITTEN · CAMERA OFF · NO SCORING';
   }
 }

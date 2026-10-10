@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../library/library_catalog.dart';
+import '../library/library_view.dart';
 import '../theme.dart';
 import '../ui_language.dart';
 
@@ -34,10 +35,12 @@ class FirstRunView extends StatelessWidget {
     super.key,
     required this.tally,
     required this.onContinue,
+    this.cameraSessionsAvailable = false,
   });
 
   final LibraryTally tally;
   final VoidCallback onContinue;
+  final bool cameraSessionsAvailable;
 
   static const Key continueKey = Key('intro.continue');
   static const Key cameraKey = Key('intro.camera');
@@ -92,14 +95,8 @@ class FirstRunView extends StatelessWidget {
                       en: IntroStrings.cameraTitle,
                       tr: 'KAMERA',
                     ),
-                    body: UiLanguage.text(
-                      context,
-                      en: IntroStrings.currentCamera,
-                      tr:
-                          'Bu sürümde canlı kamera pratiği ve abonelik '
-                          'satışı kapalıdır. Salsa kursu video yakalamaz; '
-                          'kendi çalışma kaydını ve öz denetimlerini kullanır.',
-                    ),
+                    body: IntroStrings.cameraStatus(cameraSessionsAvailable,
+                        turkish: UiLanguage.isTurkish(context)),
                   ),
                   const SizedBox(height: 14),
                   _panel(
@@ -150,8 +147,8 @@ class FirstRunView extends StatelessWidget {
                     ),
                     body: UiLanguage.text(
                       context,
-                      en: IntroStrings.today(tally),
-                      tr: IntroStrings.todayTr(tally),
+                      en: IntroStrings.today(tally, cameraSessionsAvailable: cameraSessionsAvailable),
+                      tr: IntroStrings.todayTr(tally, cameraSessionsAvailable: cameraSessionsAvailable),
                     ),
                   ),
                 ],
@@ -231,6 +228,20 @@ abstract final class IntroStrings {
       'The Salsa course does not capture video; it uses your own practice '
       'record and self-checks.';
 
+  static String cameraStatus(bool available, {bool turkish = false}) {
+    if (!available) {
+      return turkish
+          ? 'Bu sürümde canlı kamera pratiği ve abonelik satışı kapalıdır. '
+              'Salsa kursu video yakalamaz; kendi çalışma kaydını ve öz denetimlerini kullanır.'
+          : currentCamera;
+    }
+    return turkish
+        ? '${LibraryStrings.sessionNotice(true, turkish: true)} Abonelik satışı kapalı kalır. '
+            'Salsa kursu video yakalamaz; kendi çalışma kaydını ve öz denetimlerini kullanır.'
+        : '${LibraryStrings.sessionNotice(true)} Subscription sales remain closed. '
+            'The Salsa course does not capture video; it uses your own practice record and self-checks.';
+  }
+
   static const String cameraTitle = 'THE CAMERA';
 
   /// **Byte-for-byte the iOS permission string.**
@@ -287,19 +298,22 @@ abstract final class IntroStrings {
   static const String todayTitle = 'WHERE THIS IS TODAY';
 
   /// Counted from the real catalogue every time this screen is built.
-  static String today(LibraryTally tally) {
+  static String today(LibraryTally tally,
+      {bool cameraSessionsAvailable = false}) {
     final int openable = tally.scored + tally.openUngraded;
     return 'Open the Salsa On1 learning path from the library. The legacy '
         'dance catalogue has ${tally.total} style pages, including $openable '
-        'styles with lesson previews. Live camera practice is closed in this release. '
+        'styles with camera-session reference notes. '
+        '${LibraryStrings.sessionNotice(cameraSessionsAvailable)} '
         '$_storage';
   }
 
-  static String todayTr(LibraryTally tally) {
+  static String todayTr(LibraryTally tally,
+      {bool cameraSessionsAvailable = false}) {
     final int openable = tally.scored + tally.openUngraded;
     return 'Salsa On1 öğrenme yolunu kütüphaneden aç. Önceki dans kataloğunda '
-        '${tally.total} stil sayfası ve $openable stilin ders ön izlemesi var. '
-        'Bu sürümde canlı kamera pratiği kapalıdır. Kendi çalışma kaydın '
+        '${tally.total} stil sayfası ve $openable stilde kamera seansı referans notları var. '
+        '${LibraryStrings.sessionNotice(cameraSessionsAvailable, turkish: true)} Kendi çalışma kaydın '
         'bu cihazda saklanır; hesabına yüklenmez.';
   }
 

@@ -85,7 +85,7 @@ void main() {
               'user; ${seen.length} of ${lib.entries.length} arrived');
     });
 
-    testWidgets('the panel distinguishes reference previews from disabled camera practice',
+    testWidgets('the panel distinguishes reference notes from unavailable camera sessions',
         (WidgetTester tester) async {
       await pumpAt(tester, LibraryView(library: lib));
 
@@ -98,9 +98,10 @@ void main() {
           .join(' ');
 
       expect(text, contains('34 styles'));
-      expect(text, contains('1 style reference previews'));
+      expect(text, contains('1 style has camera-session reference notes'));
       expect(text, contains('Camera practice and scoring are unavailable'));
       expect(text, contains('written courses'));
+      expect(text, contains('not a playable preview'));
       expect(text, isNot(contains('open to practise')));
     });
 

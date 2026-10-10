@@ -94,6 +94,8 @@ void main() {
       MaterialApp(
         navigatorObservers: <NavigatorObserver>[spy],
         home: ChoreiaShell(
+          // Isolated future-capability route probe, not production release access.
+          cameraSessionsAvailable: true,
           bundleOverride: () async => library,
           flagOverride: MemoryFirstRunFlag(),
           env: LiveEnvironment(
@@ -122,7 +124,7 @@ void main() {
     await _settle(tester);
     expect(find.byType(StyleDetailView), findsOneWidget);
 
-    final Finder start = find.widgetWithText(FilledButton, 'Start');
+    final Finder start = find.widgetWithText(FilledButton, StyleStrings.start);
     await _scrollTo(tester, start);
     // Found is not reachable: a lazy `ListView` builds children inside its
     // cacheExtent, BELOW the viewport, so `find` sees a button the user
