@@ -802,16 +802,15 @@ abstract final class StyleStrings {
 
   /// Subject: US and our instrument — never the dancer's effort.
   static const String openUngradedMeaning =
-      'Open to practise. We do not put a number on these lessons, and that is '
-      'a fact about what we can measure — not about how you danced. Each '
-      'lesson says which measurement is missing.';
+      'Written explanations and recorded reference notes are available to '
+      'read. Camera practice and scoring are unavailable in this version. '
+      'Use the written courses for self-guided practice.';
 
   /// Written now so the branch exists before a style ever becomes scored; the
   /// subject rule has to hold on the good news too.
   static const String scoredMeaning =
-      'Open to practise, and we check part of it. What we check and what we '
-      'leave alone are both listed below — a lesson that is not scored is a '
-      'gap in our measuring, not in your dancing.';
+      'These notes describe recorded movement references. This version does '
+      'not assess or score your movement; camera practice is unavailable.';
 
   static const String glossaryTitle = 'Steps you will hear named';
 
@@ -856,13 +855,12 @@ abstract final class StyleStrings {
   /// same register, side by side, read as a closed partition — which quietly
   /// UNDER-states the limits, the one direction this app must never err in.
   static const String honestyNote =
-      'The first list is complete — nothing outside it is scored. The second '
-      'is not, and cannot be: it names the limits worth naming, not every '
-      'thing we do not check. Both come from measurements rather than from '
-      'what we would prefer to claim.';
+      'These lists describe recorded reference research and some of its limits. '
+      'They are not live assessments of you. Camera practice and scoring '
+      'are unavailable in this version.';
 
-  static const String measuredTitle = 'WE CHECK THIS — ALL OF IT';
-  static const String notMeasuredTitle = 'WE DO NOT CHECK THIS — AMONG OTHERS';
+  static const String measuredTitle = 'RECORDED REFERENCE RESEARCH';
+  static const String notMeasuredTitle = 'SOME REFERENCE LIMITS';
 
   /// Names the difference between "not scored" and "never scored".
   static const String permanentTitle = 'THIS ONE WILL NOT CHANGE';
@@ -890,10 +888,10 @@ abstract final class StyleStrings {
   /// catalogue's business (and a design call). Removing a false assertion is
   /// not.
   static String kind(LessonKind k, {required bool canStart}) => switch (k) {
-    LessonKind.scored => 'GRADED',
+    LessonKind.scored => 'REFERENCE',
     // `OPEN` is a promise about what a tap does. Only make it when a tap
     // does something.
-    LessonKind.demoOnly => canStart ? 'OPEN · NOT GRADED' : 'NOT GRADED',
+    LessonKind.demoOnly => canStart ? 'PREVIEW · NO SCORING' : 'NO SCORING',
     LessonKind.locked => 'LOCKED',
   };
 
@@ -948,16 +946,14 @@ final class StyleDetailCopy {
 
   String get openUngradedMeaning => _pick(
     StyleStrings.openUngradedMeaning,
-    'Pratiğe açık. Bu derslere sayısal puan vermiyoruz. Bu, nasıl dans '
-    'ettiğin hakkında bir yargı değil; ölçebildiklerimizin sınırı. '
-    'Eksik ölçüm her dersin açıklamasında belirtilir.',
+    'Yazılı açıklamaları ve kayıtlı referans notlarını okuyabilirsin. '
+    'Bu sürümde kamera çalışması ve puanlama kapalı. Öz denetimli '
+    'çalışma için yazılı kursları kullan.',
   );
   String get scoredMeaning => _pick(
     StyleStrings.scoredMeaning,
-    'Pratiğe açık; yalnız belirli bölümlerini ölçüp puanlıyoruz. '
-    'Ölçtüklerimiz ve ölçmediklerimiz aşağıda ayrı ayrı yazılı. '
-    'Bir derse puan vermememiz dansınla ilgili bir yargı değil, '
-    'ölçümümüzün sınırıdır.',
+    'Bu notlar kayıtlı hareket referanslarını açıklar. Bu sürüm hareketini '
+    'değerlendirmez veya puanlamaz; kamera çalışması kapalı.',
   );
 
   String get glossaryTitle =>
@@ -987,22 +983,22 @@ final class StyleDetailCopy {
       _pick(StyleStrings.honestyTitle, 'Bu stil hakkında ne söyleyebiliriz?');
   String get honestyNote => _pick(
     StyleStrings.honestyNote,
-    'İlk liste tamdır: onun dışındaki hiçbir şey puanlanmaz. İkinci '
-    'liste yalnız önemli sınırların örneklerini içerir; '
-    'ölçmediklerimizin tamamı değildir.',
+    'Bu listeler kayıtlı referans araştırmasını ve bazı sınırlarını açıklar. '
+    'Senin canlı değerlendirmen değildir. Bu sürümde kamera çalışması ve '
+    'puanlama kapalı.',
   );
   String get measuredTitle =>
-      _pick(StyleStrings.measuredTitle, 'PUANLADIĞIMIZ HER ŞEY');
+      _pick(StyleStrings.measuredTitle, 'KAYITLI REFERANS ARAŞTIRMASI');
   String get notMeasuredTitle =>
-      _pick(StyleStrings.notMeasuredTitle, 'PUANLAMADIKLARIMIZDAN BAZILARI');
+      _pick(StyleStrings.notMeasuredTitle, 'BAZI REFERANS SINIRLARI');
   String get permanentTitle =>
       _pick(StyleStrings.permanentTitle, 'BU DERS PUANLANMAYACAK');
   String get start => _pick(StyleStrings.start, 'Başlat');
 
   String kind(LessonKind kind, {required bool canStart}) =>
       _pick(StyleStrings.kind(kind, canStart: canStart), switch (kind) {
-        LessonKind.scored => 'PUANLI',
-        LessonKind.demoOnly => canStart ? 'AÇIK · PUANSIZ' : 'PUANSIZ',
+        LessonKind.scored => 'REFERANS',
+        LessonKind.demoOnly => canStart ? 'ÖNİZLEME · PUAN YOK' : 'PUAN YOK',
         LessonKind.locked => 'KİLİTLİ',
       });
 

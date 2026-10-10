@@ -85,7 +85,7 @@ void main() {
               'user; ${seen.length} of ${lib.entries.length} arrived');
     });
 
-    testWidgets('the panel says one style is open and none of it is graded',
+    testWidgets('the panel distinguishes reference previews from disabled camera practice',
         (WidgetTester tester) async {
       await pumpAt(tester, LibraryView(library: lib));
 
@@ -98,11 +98,10 @@ void main() {
           .join(' ');
 
       expect(text, contains('34 styles'));
-      expect(text, contains('One of them is open to practise'));
-      expect(text, contains('none of the open ones is graded'),
-          reason: "the mockup's panel claims '1 scored'. The one scored style "
-              'is release-gated, so saying so here would promise a door that '
-              'does not open.');
+      expect(text, contains('1 style reference previews'));
+      expect(text, contains('Camera practice and scoring are unavailable'));
+      expect(text, contains('written courses'));
+      expect(text, isNot(contains('open to practise')));
     });
 
     testWidgets('no promise language anywhere on the screen (M-F-186)',
@@ -165,7 +164,7 @@ void main() {
         (WidgetTester tester) async {
       await pumpAt(tester, LibraryView(library: lib));
 
-      await tester.tap(find.textContaining(LibraryStrings.filterOpenNow));
+      await tester.tap(find.text('${LibraryStrings.filterOpenNow} · ${LibraryTally.from(lib.cards).openable}'));
       await tester.pump();
 
       expect(find.byKey(LibraryView.tileKey('hip_hop_foundations')),
@@ -245,9 +244,9 @@ void main() {
     expect(line, contains('WRITTEN'),
         reason: 'sayı bir ENVANTER; "6 LESSONS" çıplak hâliyle yapılabilir '
             'altı ders vaat ediyor');
-    expect(line, contains('$startable OPEN'),
-        reason: 'şu an ne yapılabileceğini söyleyen sayı satırda yok: $line');
-    expect(line, isNot(contains('${open.lessons.length} OPEN')),
-        reason: 'envanter sayısı açılabilir sayısı yerine geçmiş: $line');
+    expect(line, contains('CAMERA OFF'));
+    expect(line, contains('NO SCORING'));
+    expect(line, isNot(contains('OPEN')));
+    expect(line, isNot(contains('GRADED')));
   });
 }

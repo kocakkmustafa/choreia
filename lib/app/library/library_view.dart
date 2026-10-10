@@ -112,7 +112,7 @@ class _LibraryViewState extends State<LibraryView> {
             const SizedBox(height: 18),
             SalsaCourseEntry(env: widget.env),
             const SizedBox(height: 24),
-            Text(_tr ? 'Kamera ile stil çalışmaları' : 'Camera style practice',
+            Text(_tr ? 'Stil referansı önizlemeleri' : 'Style reference previews',
                 style: ChoreiaType.display(size: 25)),
             const SizedBox(height: 12),
             _tallyPanel(tally),
@@ -179,12 +179,12 @@ class _LibraryViewState extends State<LibraryView> {
           _chip(_Filter.all, _tr ? 'TÜMÜ' : LibraryStrings.filterAll, t.total),
           _chip(
             _Filter.openNow,
-            _tr ? 'AÇIK' : LibraryStrings.filterOpenNow,
+            _tr ? 'ÖNİZLEME' : LibraryStrings.filterOpenNow,
             t.openable,
           ),
           _chip(
             _Filter.notOpen,
-            _tr ? 'KAPALI' : LibraryStrings.filterNotOpen,
+            _tr ? 'ÖNİZLEME YOK' : LibraryStrings.filterNotOpen,
             t.total - t.openable,
           ),
         ],
@@ -423,74 +423,66 @@ abstract final class LibraryStrings {
   static String scopeLineTr(LibraryTally t) =>
       'Katalogda ${t.total} dans stili var.';
 
-  /// The sentence that stops scope from reading as availability.
-  ///
-  /// Built from the tally rather than written as a constant so it cannot go
-  /// stale: when the BPM gate opens, this line changes on its own.
-  static String availabilityLine(LibraryTally t) {
-    final String open = t.openable == 1
-        ? 'One of them is open to practise right now'
-        : '${t.openable} of them are open to practise right now';
-    final String scored =
-        t.scored == 0 ? ', and none of the open ones is graded' : '';
-    return '$open$scored. The rest are listed so you can see the whole plan, '
-        'not because they are ready — each one says where it stands.';
-  }
+  // Catalogue readiness describes reference material, not the release camera gate.
+  static String availabilityLine(LibraryTally t) =>
+      '${t.openable} style reference previews. Camera practice and scoring are '
+      'unavailable in this version. Use the written courses above for guided '
+      'lessons. Other catalogue entries show their current status.';
 
   static String availabilityLineTr(LibraryTally t) =>
-      'Şu anda ${t.openable} stilin dersini açabilirsin.'
-      '${t.scored == 0 ? ' Açık derslerin hiçbirine puan verilmiyor.' : ''} '
-      'Diğer stiller kendi durumlarıyla listelenir.';
+      '${t.openable} stil referansı önizlemesi. Bu sürümde kamera çalışması ve '
+      'puanlama kapalı. Rehberli dersler için yukarıdaki yazılı kursları kullan. '
+      'Diğer katalog girdileri mevcut durumlarıyla gösterilir.';
 
   static const String filterAll = 'ALL';
-  static const String filterOpenNow = 'OPEN NOW';
-  static const String filterNotOpen = 'NOT OPEN';
+  static const String filterOpenNow = 'PREVIEW';
+  static const String filterNotOpen = 'NO PREVIEW';
 
   static const String emptyFilter =
       'Nothing matches that filter. Nothing has been hidden — there is simply '
       'nothing in this group.';
 
   static String badge(StyleBadge b) => switch (b) {
-        StyleBadge.scored => 'SCORED',
-        StyleBadge.openUngraded => 'OPEN · NOT SCORED',
-        StyleBadge.builtButGated => 'BUILT · NOT OPEN',
+        StyleBadge.scored => 'REFERENCE',
+        StyleBadge.openUngraded => 'PREVIEW · NO SCORING',
+        StyleBadge.builtButGated => 'CAMERA UNAVAILABLE',
         StyleBadge.inPreparation => 'NOT BUILT',
         StyleBadge.onHold => 'ON HOLD',
       };
 
   static String badgeTr(StyleBadge b) => switch (b) {
-        StyleBadge.scored => 'PUANLI',
-        StyleBadge.openUngraded => 'AÇIK · PUANSIZ',
-        StyleBadge.builtButGated => 'HAZIR · KAPALI',
+        StyleBadge.scored => 'REFERANS',
+        StyleBadge.openUngraded => 'ÖNİZLEME · PUAN YOK',
+        StyleBadge.builtButGated => 'KAMERA KAPALI',
         StyleBadge.inPreparation => 'DERS YOK',
         StyleBadge.onHold => 'DURAKLATILDI',
       };
 
   static String sectionTitle(StyleBadge b) => switch (b) {
-        StyleBadge.scored => 'Open and graded',
-        StyleBadge.openUngraded => 'Open, not graded',
-        StyleBadge.builtButGated => 'Built, not open',
+        StyleBadge.scored => 'Posture references',
+        StyleBadge.openUngraded => 'Reference previews',
+        StyleBadge.builtButGated => 'Camera practice unavailable',
         StyleBadge.inPreparation => 'In the catalogue, not built',
         StyleBadge.onHold => 'On hold',
       };
 
   static String sectionTitleTr(StyleBadge b) => switch (b) {
-        StyleBadge.scored => 'Açık ve puanlı',
-        StyleBadge.openUngraded => 'Açık, puansız',
-        StyleBadge.builtButGated => 'Hazır, açılmamış',
+        StyleBadge.scored => 'Duruş referansları',
+        StyleBadge.openUngraded => 'Referans önizlemeleri',
+        StyleBadge.builtButGated => 'Kamera çalışması kapalı',
         StyleBadge.inPreparation => 'Katalogda, ders yok',
         StyleBadge.onHold => 'Duraklatıldı',
       };
 
   static String sectionNote(StyleBadge b) => switch (b) {
         StyleBadge.scored =>
-          'Lessons you can start, with a camera check behind them.',
+          'Recorded posture references; camera assessment and scoring are unavailable.',
         StyleBadge.openUngraded =>
-          'Lessons you can start. We teach these and we do not put a number '
-              'on them — each lesson says why.',
+          'Read the written explanations and reference notes. Camera practice '
+              'and scoring are unavailable in this version.',
         StyleBadge.builtButGated =>
-          'The lessons exist and are finished. Something we check before '
-              'opening a style has not cleared, so they stay shut.',
+          'Reference notes are written. Camera practice and scoring remain '
+              'unavailable in this version.',
         StyleBadge.inPreparation =>
           'Named here so you can see the whole plan. Nothing is built for '
               'these — there is no lesson behind the name.',
@@ -501,11 +493,11 @@ abstract final class LibraryStrings {
 
   static String sectionNoteTr(StyleBadge b) => switch (b) {
         StyleBadge.scored =>
-          'Başlatabileceğin ve kamerayla kontrol edilen dersler.',
+          'Kayıtlı duruş referansları; kamera değerlendirmesi ve puanlama kapalı.',
         StyleBadge.openUngraded =>
-          'Başlatabileceğin dersler. Bu derslere sayısal puan verilmiyor.',
+          'Yazılı açıklamaları ve referans notlarını oku. Bu sürümde kamera çalışması ve puanlama kapalı.',
         StyleBadge.builtButGated =>
-          'Dersler yazılmış, ancak açılış kontrolü tamamlanmadığı için kapalı.',
+          'Referans notları yazılmış. Bu sürümde kamera çalışması ve puanlama kapalı.',
         StyleBadge.inPreparation =>
           'Stil adı katalogda var; arkasında açılabilir bir ders yok.',
         StyleBadge.onHold => 'Bu stil duraklatıldı. Gerekçesi stil sayfasında.',
@@ -514,11 +506,7 @@ abstract final class LibraryStrings {
   static String lessonLineTr(StyleCard c, {required int startable}) {
     if (c.lessons.isEmpty) return 'DERS YOK';
     final int total = c.lessons.length;
-    final int scored = c.scoredLessonCount;
-    if (!c.isOpenable) {
-      return '$total DERS YAZILDI · $scored PUANLI · HİÇBİRİ AÇIK DEĞİL';
-    }
-    return '$total DERS YAZILDI · $startable AÇIK · $scored PUANLI';
+    return '$total DERS YAZILDI · KAMERA KAPALI · PUAN YOK';
   }
 
   /// What a card says about its lessons — worded so a style's inventory cannot
@@ -543,15 +531,6 @@ abstract final class LibraryStrings {
   static String lessonLine(StyleCard c, {required int startable}) {
     if (c.lessons.isEmpty) return 'NO LESSONS BUILT';
     final int total = c.lessons.length;
-    final int scored = c.scoredLessonCount;
-    final String lessons = '$total ${total == 1 ? 'lesson' : 'lessons'}';
-    final String graded = scored == 0 ? 'none graded' : '$scored graded';
-    if (!c.isOpenable) {
-      return '$lessons written · $graded · none open'.toUpperCase();
-    }
-    // `written` on this branch too: the number is an inventory, and the count
-    // that answers "what can I do right now" is the one beside it.
-    final String open = startable == 0 ? 'none open' : '$startable open';
-    return '$lessons written · $graded · $open'.toUpperCase();
+    return '$total LESSONS WRITTEN · CAMERA OFF · NO SCORING';
   }
 }

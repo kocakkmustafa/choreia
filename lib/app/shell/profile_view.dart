@@ -23,6 +23,14 @@ class ProfileView extends StatelessWidget {
 
   static const Key notBuiltKey = Key('shell.profile.notBuilt');
   static const Key accountEntryKey = Key('shell.profile.accountEntry');
+  static const Key licensesEntryKey = Key('shell.profile.licensesEntry');
+
+  Widget _licensesButton(BuildContext context) => TextButton(
+        key: licensesEntryKey,
+        onPressed: () =>
+            showLicensePage(context: context, applicationName: 'Choreia'),
+        child: Text(UiLanguage.text(context, en: 'Licenses', tr: 'Lisanslar')),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +64,7 @@ class ProfileView extends StatelessWidget {
                     child: Text(
                         UiLanguage.text(context, en: 'Account', tr: 'Hesap')),
                   ),
+                  _licensesButton(context),
                 ],
               ),
             ),
@@ -63,19 +72,25 @@ class ProfileView extends StatelessWidget {
         ),
       );
     }
-    return notBuiltTabBody(
-      context,
-      key: notBuiltKey,
-      title: UiLanguage.text(context, en: 'Profile', tr: 'Profil'),
-      plannedContent: UiLanguage.text(
-        context,
-        en: 'Account creation and membership access are not connected. '
-            'Camera permissions, practice data controls, and legal links '
-            'are also not available on this screen.',
-        tr: 'Hesap oluşturma ve üyelik erişimi bağlı değil. Kamera '
-            'izinleri, pratik verisi denetimleri ve yasal bağlantılar da '
-            'bu ekranda kullanılamıyor.',
-      ),
+    return Column(
+      children: <Widget>[
+        Expanded(
+            child: notBuiltTabBody(
+          context,
+          key: notBuiltKey,
+          title: UiLanguage.text(context, en: 'Profile', tr: 'Profil'),
+          plannedContent: UiLanguage.text(
+            context,
+            en: 'Account creation and membership access are not connected. '
+                'Camera permissions and practice data controls '
+                'are also not available on this screen.',
+            tr: 'Hesap oluşturma ve üyelik erişimi bağlı değil. Kamera '
+                'izinleri ve pratik verisi denetimleri de '
+                'bu ekranda kullanılamıyor.',
+          ),
+        )),
+        SafeArea(top: false, child: _licensesButton(context)),
+      ],
     );
   }
 }
