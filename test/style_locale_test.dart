@@ -92,6 +92,8 @@ void main() {
     expect(find.text('HAZIR · KAPALI'), findsOneWidget);
     expect(
         find.textContaining('müzik vuruşu henüz doğrulanmadı'), findsOneWidget);
+    await bringIntoView(
+        tester, find.text('Bu stilin temposu henüz doğrulanmadı.'));
     expect(find.text('Bu stilin temposu henüz doğrulanmadı.'), findsOneWidget);
     expect(find.text('Başlat'), findsNothing);
     expect(find.textContaining('DISPUTED'), findsNothing);

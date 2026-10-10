@@ -14,6 +14,7 @@ import 'package:choreia/app/shell/choreia_shell.dart';
 import 'package:choreia/app/shell/profile_view.dart';
 import 'package:choreia/app/today/today_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/round_trip_store.dart';
@@ -62,27 +63,30 @@ void main() {
   /// A FRESH INSTALL by default — which is the only walk that matches what a
   /// new user experiences. Passing `seen: true` measures the returning user.
   Widget app(NavigatorObserver spy, {bool introSeen = false}) => MaterialApp(
-        navigatorObservers: <NavigatorObserver>[spy],
-        home: ChoreiaShell(
-          bundleOverride: () async => library,
-          flagOverride: MemoryFirstRunFlag(seen: introSeen),
-          // An EMPTY store, injected for the same reason the bundle and the
-          // flag are: this file measures where a user can GO, and the real
-          // opener is a platform channel that neither answers nor throws under
-          // `flutter test`. Left out, the progress tab renders its "reading
-          // your record" wait and the loose count silently loses a
-          // destination — which is exactly what this gate caught when the
-          // store was first wired in.
-          env: LiveEnvironment(storeOpener: () async => RoundTripStore()),
-        ),
-      );
+    navigatorObservers: <NavigatorObserver>[spy],
+    home: ChoreiaShell(
+      bundleOverride: () async => library,
+      flagOverride: MemoryFirstRunFlag(seen: introSeen),
+      // An EMPTY store, injected for the same reason the bundle and the
+      // flag are: this file measures where a user can GO, and the real
+      // opener is a platform channel that neither answers nor throws under
+      // `flutter test`. Left out, the progress tab renders its "reading
+      // your record" wait and the loose count silently loses a
+      // destination — which is exactly what this gate caught when the
+      // store was first wired in.
+      env: LiveEnvironment(storeOpener: () async => RoundTripStore()),
+    ),
+  );
 
   /// Dismisses the first-run screen the way a user does: by pressing the
   /// button on it. Never by setting the flag behind the UI — a walk that
   /// skips a screen cannot report on whether that screen has an exit.
   Future<void> passIntro(WidgetTester tester) async {
-    expect(find.byType(FirstRunView), findsOneWidget,
-        reason: 'taze kurulumda tanıtım ekranı görünmüyor');
+    expect(
+      find.byType(FirstRunView),
+      findsOneWidget,
+      reason: 'taze kurulumda tanıtım ekranı görünmüyor',
+    );
     await tester.tap(find.byKey(FirstRunView.continueKey));
     await _settle(tester);
   }
@@ -101,8 +105,11 @@ void main() {
 
       // 1 — the shell itself. `MaterialApp.home` is a route the user is
       // standing on, so it counts; it is the floor, not a destination.
-      expect(find.byType(LibraryView), findsOneWidget,
-          reason: 'açılış ekranı kütüphane olmalı');
+      expect(
+        find.byType(LibraryView),
+        findsOneWidget,
+        reason: 'açılış ekranı kütüphane olmalı',
+      );
 
       // What a DEVICE could start. Derived from content filtered through the
       // shipping manifest, because a lesson whose reference is on disk but
@@ -112,9 +119,13 @@ void main() {
           for (final LessonOffer o in c.offers(library.runnableSteps))
             if (o.canStart) '${c.entry.id}/${o.lesson.id}',
       ];
-      expect(startable, <String>['hip_hop_foundations/hh_l1_bounce'],
-          reason: 'başlatılabilir ders kümesi değişti: $startable — KATI sayı '
-              'buna bağlı, testi güncellemeden ÖNCE koordinatöre söyle');
+      expect(
+        startable,
+        <String>['hip_hop_foundations/hh_l1_bounce'],
+        reason:
+            'başlatılabilir ders kümesi değişti: $startable — KATI sayı '
+            'buna bağlı, testi güncellemeden ÖNCE koordinatöre söyle',
+      );
       final String styleId = startable.single.split('/').first;
 
       // 2 — the style page. Driven by tapping a card that is actually
@@ -125,8 +136,11 @@ void main() {
       await _settle(tester);
       await tester.tap(card);
       await _settle(tester);
-      expect(find.byType(StyleDetailView), findsOneWidget,
-          reason: 'stil kartı bir yere gitmiyor');
+      expect(
+        find.byType(StyleDetailView),
+        findsOneWidget,
+        reason: 'stil kartı bir yere gitmiyor',
+      );
 
       // 3 — the live lesson. Reached by pressing the button, never by
       // pushing the route directly. Until 2026-08-07 12:0x this walk ended
@@ -135,9 +149,13 @@ void main() {
       // open it and no button was painted. One manifest line, one ruling.
       final Finder startButton = find.widgetWithText(FilledButton, 'Start');
       await _scrollTo(tester, startButton);
-      expect(startButton, findsOneWidget,
-          reason: 'başlatılabilir ders var ama Start düğmesi yok — türetim '
-              'ile yüzey ayrışmış');
+      expect(
+        startButton,
+        findsOneWidget,
+        reason:
+            'başlatılabilir ders var ama Start düğmesi yok — türetim '
+            'ile yüzey ayrışmış',
+      );
       // Found is not reachable. A lazy `ListView` builds children inside its
       // cacheExtent — BELOW the viewport — so `find` sees a button the user
       // cannot touch and `tap` lands on empty space. The widget-scale form of
@@ -148,16 +166,24 @@ void main() {
       await _settle(tester);
 
       // KATI = shell + style page + live lesson.
-      expect(spy.pushed, hasLength(2),
-          reason: 'KATI sayı beklenenden farklı. Ölçülen rotalar: '
-              '${spy.pushed}. Bu sayı hattın FAZ SIRASINI belirliyor — '
-              'değiştiyse testi güncellemeden ÖNCE koordinatöre söyle.');
-      expect(spy.pushed.last, 'live/hh_l1_bounce',
-          reason: 'Start basıldı ama canlı ders rotasına gidilmedi');
+      expect(
+        spy.pushed,
+        hasLength(2),
+        reason:
+            'KATI sayı beklenenden farklı. Ölçülen rotalar: '
+            '${spy.pushed}. Bu sayı hattın FAZ SIRASINI belirliyor — '
+            'değiştiyse testi güncellemeden ÖNCE koordinatöre söyle.',
+      );
+      expect(
+        spy.pushed.last,
+        'live/hh_l1_bounce',
+        reason: 'Start basıldı ama canlı ders rotasına gidilmedi',
+      );
     });
 
-    testWidgets('YÜRÜYÜŞ EKSİK YÜRÜNMEDİ — aday = varılan ⊎ varılamayan',
-        (WidgetTester tester) async {
+    testWidgets('YÜRÜYÜŞ EKSİK YÜRÜNMEDİ — aday = varılan ⊎ varılamayan', (
+      WidgetTester tester,
+    ) async {
       // ⚠️ SÖZLEŞME (d) — ve Lissom'un kendi maddesini KÖR yazmasından alınan
       // ders: **bir bölme denetimi, iki tarafı AYNI KAYNAKTAN okuyorsa
       // denetim değil TANIMDIR.** Aday kümesi bu yüzden yürüyüşten DEĞİL,
@@ -179,25 +205,34 @@ void main() {
       // ikisini hayalet ilan ederdim. Bu ağacın yapısal imzası MONTAJ NOKTASI:
       // rota oluşturucusu · kabuk sekmesi · ilk-koşu kaplaması.
       final Map<String, String> lib = <String, String>{
-        for (final FileSystemEntity e
-            in Directory('lib').listSync(recursive: true))
+        for (final FileSystemEntity e in Directory(
+          'lib',
+        ).listSync(recursive: true))
           if (e is File && e.path.endsWith('.dart'))
             e.path: e.readAsStringSync(),
       };
       Set<String> matches(RegExp re, [int group = 1]) => <String>{
-            for (final String src in lib.values)
-              for (final RegExpMatch m in re.allMatches(src)) m.group(group)!,
-          };
+        for (final String src in lib.values)
+          for (final RegExpMatch m in re.allMatches(src)) m.group(group)!,
+      };
 
-      final Set<String> byName = matches(RegExp(
-          r'^class ([A-Za-z_]+(?:View|Page)) extends Stat',
-          multiLine: true));
+      final Set<String> byName = matches(
+        RegExp(
+          r'^class ([A-Za-z_]+(?:View|Page|Demo)) extends Stat',
+          multiLine: true,
+        ),
+      );
       final Set<String> byStructure = <String>{
-        ...matches(RegExp(r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
-            r'([A-Z][A-Za-z_]*)\(')),
+        ...matches(
+          RegExp(
+            r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
+            r'([A-Z][A-Za-z_]*)\(',
+          ),
+        ),
         // MaterialApp.home also mounts a real destination without a builder.
         ...matches(
-            RegExp(r'home:\s*(?:const\s+)?([A-Z][A-Za-z_]*(?:View|Page))\(')),
+          RegExp(r'home:\s*(?:const\s+)?([A-Z][A-Za-z_]*(?:View|Page))\('),
+        ),
         // ⚠️ Kabuk sekmeleri BLOKTAN okunuyor, satır girintisinden DEĞİL.
         // İlk yazımım `^\s{10,}X\(\s*$` deseniydi ve `ProgressView`i
         // görüp `LibraryView`i KAÇIRDI — çünkü birinin argümanları alt
@@ -205,24 +240,35 @@ void main() {
         // BİÇİMLENDİRME alışkanlığı kadardı* — (a)'nın uyarısının boşluk
         // karakteri hâli, ve testin kendisi yakaladı.
         for (final String src in lib.values)
-          for (final RegExpMatch blok
-              in RegExp(r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
-                      r'([\s\S]*?)\n\s*\],')
-                  .allMatches(src))
+          for (final RegExpMatch blok in RegExp(
+            r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
+            r'([\s\S]*?)\n\s*\],',
+          ).allMatches(src))
             ...RegExp(r'\b([A-Z][A-Za-z_]*)\(')
                 .allMatches(blok.group(1)!)
                 .map((RegExpMatch m) => m.group(1)!),
-        ...matches(RegExp(r'_introSeen == false[\s\S]{0,200}?return\s+'
-            r'([A-Z][A-Za-z_]*)\(')),
+        ...matches(
+          RegExp(
+            r'_introSeen == false[\s\S]{0,200}?return\s+'
+            r'([A-Z][A-Za-z_]*)\(',
+          ),
+        ),
       };
       final Set<String> candidates = byName.union(byStructure);
 
-      expect(candidates.length, greaterThan(3),
-          reason: 'kaynak taraması aday bulamadı — denetim vakumda');
-      expect(byStructure.difference(byName), isEmpty,
-          reason: 'YAPIDA monte edilen bir ekranı AD deseni kaçırıyor — '
-              'desenin kapsamı adlandırma alışkanlığının altında kaldı '
-              '(Gravita M-F-575 sınıfı)');
+      expect(
+        candidates.length,
+        greaterThan(3),
+        reason: 'kaynak taraması aday bulamadı — denetim vakumda',
+      );
+      expect(
+        byStructure.difference(byName),
+        isEmpty,
+        reason:
+            'YAPIDA monte edilen bir ekranı AD deseni kaçırıyor — '
+            'desenin kapsamı adlandırma alışkanlığının altında kaldı '
+            '(Gravita M-F-575 sınıfı)',
+      );
 
       // (e) ELLE KÜME — kaynak DEĞİL, türetimin POZİTİF KONTROLÜ.
       //
@@ -240,11 +286,16 @@ void main() {
         'LiveLessonPage',
         'SalsaCoursePage',
         'SalsaLessonPage',
+        'SupportHoldDemo',
       };
-      expect(candidates.containsAll(knownFloor), isTrue,
-          reason: 'türetim, bilinen tabanı KAPSAMIYOR — eksik: '
-              '${knownFloor.difference(candidates)}. Elle küme kaynak değil '
-              'kontroldür: türetim onu yutuyorsa türetim bozuktur.');
+      expect(
+        candidates.containsAll(knownFloor),
+        isTrue,
+        reason:
+            'türetim, bilinen tabanı KAPSAMIYOR — eksik: '
+            '${knownFloor.difference(candidates)}. Elle küme kaynak değil '
+            'kontroldür: türetim onu yutuyorsa türetim bozuktur.',
+      );
 
       final Set<String> reached = <String>{};
       void snapshot() {
@@ -269,13 +320,122 @@ void main() {
       snapshot(); // ilerleme
       await tester.tap(find.byKey(ChoreiaShell.libraryTabKey));
       await _settle(tester);
-      final Finder card =
-          find.byKey(LibraryView.tileKey('hip_hop_foundations'));
+      final Finder card = find.byKey(
+        LibraryView.tileKey('hip_hop_foundations'),
+      );
       await tester.ensureVisible(card);
       await _settle(tester);
       await tester.tap(card);
       await _settle(tester);
       snapshot(); // stil sayfası
+      // Exercise both written modes from visible style controls with the
+      // real bundle. This reader is a reached page, not an excluded candidate.
+      for (final path in <String, String>{
+        'style.hipHopWrittenPath': 'content/hip_hop_foundations_course.json',
+        'style.hipHopSkillCourse':
+            'content/hip_hop_foundations_skill_course.json',
+      }.entries) {
+        final link = find.byKey(Key(path.key));
+        await _scrollTo(tester, link);
+        await tester.ensureVisible(link);
+        await _settle(tester);
+        await tester.tap(link);
+        await _settle(tester);
+        final source = await tester.runAsync(
+          () => rootBundle.loadString(path.value),
+        );
+        expect(source, isNotEmpty);
+        await _settle(tester);
+        expect(
+          find.text(
+            path.key == 'style.hipHopSkillCourse'
+                ? 'Hip-Hop Foundations: beginner course candidate'
+                : 'Hip-Hop Foundations: written introduction',
+          ),
+          findsOneWidget,
+        );
+        snapshot();
+        Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+        await _settle(tester);
+      }
+
+      // The written Line Dance course is reachable through its own style;
+      // legacy physical status stays unchanged.
+      Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+      await _settle(tester);
+      final lineCard = find.byKey(LibraryView.tileKey('line_dance'));
+      await _scrollTo(tester, lineCard);
+      await tester.ensureVisible(lineCard);
+      await _settle(tester);
+      await tester.tap(lineCard);
+      await _settle(tester);
+      final lineLink = find.byKey(const Key('style.lineDanceWrittenCourse'));
+      await _scrollTo(tester, lineLink);
+      await tester.ensureVisible(lineLink);
+      await _settle(tester);
+      await tester.tap(lineLink);
+      await _settle(tester);
+      await tester.runAsync(
+        () => rootBundle.loadString('content/line_dance_beginner_course.json'),
+      );
+      await _settle(tester);
+      expect(find.text('Line Dance: beginner written course'), findsOneWidget);
+      snapshot();
+
+      // Actual Latin Fusion written route; no physical catalogue promotion.
+      Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+      await _settle(tester);
+      Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+      await _settle(tester);
+      final latinCard = find.byKey(LibraryView.tileKey('latin_fusion_fitness'));
+      await _scrollTo(tester, latinCard);
+      await tester.ensureVisible(latinCard);
+      await _settle(tester);
+      await tester.tap(latinCard);
+      await _settle(tester);
+      final latinLink = find.byKey(const Key('style.latinFusionWrittenCourse'));
+      await _scrollTo(tester, latinLink);
+      await tester.ensureVisible(latinLink);
+      await _settle(tester);
+      // Real asset preflight outside fake-clock widget frames.
+      await tester.runAsync(() => rootBundle.loadString('content/latin_fusion_beginner_course.json'));
+      await tester.tap(latinLink);
+      await _settle(tester);
+      await tester.runAsync(
+        () =>
+            rootBundle.loadString('content/latin_fusion_beginner_course.json'),
+      );
+      await _settle(tester);
+      expect(
+        find.text('Latin Fusion: low-impact written foundations'),
+        findsOneWidget,
+      );
+      snapshot();
+
+      // Original short-form written reader reached from its actual style tile.
+      Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+      await _settle(tester);
+      Navigator.of(tester.element(find.byType(Scaffold).last)).pop();
+      await _settle(tester);
+      final shortCard = find.byKey(LibraryView.tileKey('tiktok_format'));
+      await _scrollTo(tester, shortCard);
+      await tester.ensureVisible(shortCard);
+      await _settle(tester);
+      await tester.tap(shortCard);
+      await _settle(tester);
+      final shortLink = find.byKey(const Key('style.shortFormWrittenCourse'));
+      await _scrollTo(tester, shortLink);
+      await tester.ensureVisible(shortLink);
+      await _settle(tester);
+      // Real asset preflight outside fake-clock widget frames.
+      await tester.runAsync(() => rootBundle.loadString('content/original_short_form_beginner_course.json'));
+      await tester.tap(shortLink);
+      await _settle(tester);
+      await tester.runAsync(() => rootBundle.loadString(
+        'content/original_short_form_beginner_course.json'));
+      await _settle(tester);
+      expect(find.text('Original Short-Form Dance: phrase-reading and creation foundations'), findsOneWidget);
+      snapshot();
 
       // VARILAMAYANLAR — adıyla ve SEBEBİYLE. Boş bırakılamaz: sebebi
       // olmayan bir dışlama, denetimi tekrar tanıma çevirir.
@@ -289,16 +449,19 @@ void main() {
         //
         // *Bir dışlamanın gerekçesi, dışlananın kendisi kadar denetlenir* —
         // ve bu satır, gerekçenin kendisinin bayatlayabildiğinin kanıtı.
-        'LiveLessonPage': 'bu yürüyüş kabuğu CİHAZ varsayılanlarıyla kuruyor '
+        'LiveLessonPage':
+            'bu yürüyüş kabuğu CİHAZ varsayılanlarıyla kuruyor '
             '(gerçek kamera + `rootBundle` + gerçek depo), o yüzden ekran '
             'burada çizilmiyor. ARTIK YÜRÜNEBİLİR: `LiveEnvironment` enjekte '
             'edilerek baştan sona yürünüyor — `first_walk_test.dart`. KATI '
             'sayımda ROTASI ölçülüyor (`spy.pushed`), EKRANI orada.',
-        'LiveView': 'yalnız `LiveLessonPage`in gövdesi olarak çizilir; o '
+        'LiveView':
+            'yalnız `LiveLessonPage`in gövdesi olarak çizilir; o '
             'açılamadığı için bu da açılamıyor. AYRI testi var '
             '(`live_view_test.dart`, 7 hâlin hepsi) ve `first_walk_test` '
             'içinde gerçek oturumda çiziliyor.',
-        'SessionResultView': 'bir oturumu BİTİRMEDEN varılamaz, ve oturum bu '
+        'SessionResultView':
+            'bir oturumu BİTİRMEDEN varılamaz, ve oturum bu '
             'yürüyüşte hiç başlamıyor (yukarıdaki sebep). Tek girişi '
             '`LiveLessonPage._finish`; `first_walk_test.dart` oraya '
             'düğmeyle varıyor.',
@@ -313,18 +476,23 @@ void main() {
         'ChoreiaAccountFailureView',
       };
       final String shellSrc = lib.entries
-          .firstWhere((MapEntry<String, String> e) =>
-              e.key.endsWith('shell/choreia_shell.dart'))
+          .firstWhere(
+            (MapEntry<String, String> e) =>
+                e.key.endsWith('shell/choreia_shell.dart'),
+          )
           .value;
       expect(
-          shellSrc,
-          contains(
-              'ProfileView(accountPageBuilder: widget.accountPageBuilder)'),
-          reason: 'Profil artık kabukta değilse rota sayımı bayatladı');
+        shellSrc,
+        contains('ProfileView(accountPageBuilder: widget.accountPageBuilder)'),
+        reason: 'Profil artık kabukta değilse rota sayımı bayatladı',
+      );
       final File looseWalk = File('test/reachability_test.dart');
       final String looseWalkSrc = looseWalk.readAsStringSync();
-      expect(looseWalkSrc, contains('profileTabKey'),
-          reason: 'Profil gevşek yürüyüşte ziyaret edilmiyor');
+      expect(
+        looseWalkSrc,
+        contains('profileTabKey'),
+        reason: 'Profil gevşek yürüyüşte ziyaret edilmiyor',
+      );
       // These classes remain in source for later feature work but are not
       // mounted or advertised as empty destinations in the store shell.
       const Set<String> deferredUnpublished = <String>{
@@ -332,8 +500,11 @@ void main() {
         'PracticeLabView',
       };
       for (final String screen in deferredUnpublished) {
-        expect(shellSrc, isNot(contains('$screen(')),
-            reason: '$screen boşken kullanıcı gezinmesine geri sızdı');
+        expect(
+          shellSrc,
+          isNot(contains('$screen(')),
+          reason: '$screen boşken kullanıcı gezinmesine geri sızdı',
+        );
       }
       // The new offline course has a separate real-file persistence walk. This
       // legacy walk intentionally uses device storage/bundle defaults and does
@@ -348,37 +519,61 @@ void main() {
         expect(source, contains('salsa.open'));
         expect(source, contains('salsa.saved'));
       }
+      // This legacy walk does not enter the Salsa lesson branch. The real
+      // application root walk separately verifies the so_04 demo route.
+      final demoWalk = File('test/support_hold_demo_root_test.dart').readAsStringSync();
+      expect(demoWalk, contains('find.byType(SupportHoldDemo)'));
+      expect(demoWalk, contains("'course/salsa-on1/support-hold'"));
+      expect(demoWalk, contains("const Key('salsa.open')"));
+      // The worksheet has its own production-root interruption walk; this
+      // legacy traversal never opens the style's worksheet action.
+      final worksheetWalk = File('test/practice_comparison_root_test.dart').readAsStringSync();
+      expect(worksheetWalk, contains('production root worksheet'));
+      expect(worksheetWalk, contains('find.byType(PracticeComparisonPage)'));
+      const separatelyWalkedPractice = <String>{
+        'SupportHoldDemo', 'PracticeComparisonPage',
+      };
       final Set<String> allExcluded = unreachableInWalk.keys
           .toSet()
           .union(unreachableByDesign)
           .union(separatelyWalked.keys.toSet())
-          .union(deferredUnpublished);
+          .union(deferredUnpublished)
+          .union(separatelyWalkedPractice);
 
       // (c) SEBEP DE ÖLÇÜLÜR — sözleşme: *yanlış bir sebep, sebepsizlikten
       // daha kötüdür: denetimi DOĞRULANMIŞ gösterir.* (Ostinato'nun sebebi
       // ölçülünce yanlış çıktı.) Bu iki gerekçe artık HER KOŞUMDA kaynaktan
       // yeniden türetiliyor; iddia olarak durmuyorlar.
       final String livePage = lib.entries
-          .firstWhere((MapEntry<String, String> e) =>
-              e.key.endsWith('live_lesson_page.dart'))
+          .firstWhere(
+            (MapEntry<String, String> e) =>
+                e.key.endsWith('live_lesson_page.dart'),
+          )
           .value;
       // ① Sayfa hâlâ CİHAZ varsayılanına düşüyor mu — gerekçenin ilk yarısı.
-      expect(livePage.contains('widget.env.bundle ?? rootBundle'), isTrue,
-          reason: 'gerekçe BAYAT: `LiveLessonPage` artık `rootBundle`a '
-              'düşmüyor olabilir — o hâlde bu yürüyüşte çizilmeme sebebi '
-              'değişti');
+      expect(
+        livePage.contains('widget.env.bundle ?? rootBundle'),
+        isTrue,
+        reason:
+            'gerekçe BAYAT: `LiveLessonPage` artık `rootBundle`a '
+            'düşmüyor olabilir — o hâlde bu yürüyüşte çizilmeme sebebi '
+            'değişti',
+      );
       final cameraSource = lib.entries
           .firstWhere((e) => e.key.endsWith('camera_pose_source.dart'))
           .value;
-      expect(cameraSource.contains('modelPathOpener ?? materialisePoseModel'),
-          isTrue,
-          reason: 'gerekçe BAYAT: poz modeli artık yüklenmiyor olabilir');
       expect(
-          livePage.contains(
-              'widget.env.source?.call() ?? DeviceCameraPoseSource()'),
-          isTrue,
-          reason:
-              'gerekçe BAYAT: poz kaynağı artık kameraya düşmüyor olabilir');
+        cameraSource.contains('modelPathOpener ?? materialisePoseModel'),
+        isTrue,
+        reason: 'gerekçe BAYAT: poz modeli artık yüklenmiyor olabilir',
+      );
+      expect(
+        livePage.contains(
+          'widget.env.source?.call() ?? DeviceCameraPoseSource()',
+        ),
+        isTrue,
+        reason: 'gerekçe BAYAT: poz kaynağı artık kameraya düşmüyor olabilir',
+      );
 
       // ② Ve gerekçenin İKİNCİ yarısı: "başka bir yerde yürünüyor" iddiası.
       //
@@ -387,46 +582,74 @@ void main() {
       // *"hiçbir yerde yürünmüyor"*a döner — ve gerekçe hâlâ ikna edici
       // görünür. Dışlamanın dayandığı yürüyüşün VARLIĞI da ölçülür.
       final File walk = File('test/first_walk_test.dart');
-      expect(walk.existsSync(), isTrue,
-          reason: 'gerekçe BAYAT: dışlamanın dayandığı yürüyüş dosyası YOK');
+      expect(
+        walk.existsSync(),
+        isTrue,
+        reason: 'gerekçe BAYAT: dışlamanın dayandığı yürüyüş dosyası YOK',
+      );
       final String walkSrc = walk.readAsStringSync();
       for (final String screen in unreachableInWalk.keys) {
-        expect(walkSrc, contains(screen),
-            reason: 'gerekçe BAYAT: `$screen` burada dışlanıyor ve '
-                '`first_walk_test.dart` ona hiç değinmiyor — dışlama '
-                'dayanaksız kaldı');
+        expect(
+          walkSrc,
+          contains(screen),
+          reason:
+              'gerekçe BAYAT: `$screen` burada dışlanıyor ve '
+              '`first_walk_test.dart` ona hiç değinmiyor — dışlama '
+              'dayanaksız kaldı',
+        );
       }
-      expect(walkSrc, contains('LiveEnvironment('),
-          reason: 'gerekçe BAYAT: o yürüyüş artık ortamı enjekte etmiyor, '
-              'yani buradaki "cihaz varsayılanı" ayrımı anlamsızlaştı');
+      expect(
+        walkSrc,
+        contains('LiveEnvironment('),
+        reason:
+            'gerekçe BAYAT: o yürüyüş artık ortamı enjekte etmiyor, '
+            'yani buradaki "cihaz varsayılanı" ayrımı anlamsızlaştı',
+      );
       final Iterable<String> liveViewUsers = lib.entries
-          .where((MapEntry<String, String> e) =>
-              RegExp(r'\bLiveView\(').hasMatch(e.value) &&
-              !e.key.endsWith('live_view.dart'))
+          .where(
+            (MapEntry<String, String> e) =>
+                RegExp(r'\bLiveView\(').hasMatch(e.value) &&
+                !e.key.endsWith('live_view.dart'),
+          )
           .map((MapEntry<String, String> e) => e.key.split('/').last);
-      expect(liveViewUsers, <String>['live_lesson_page.dart'],
-          reason: 'gerekçe BAYAT: `LiveView` artık yalnız `LiveLessonPage`in '
-              'gövdesi değil — başka bir yerden de kuruluyor: $liveViewUsers');
+      expect(
+        liveViewUsers,
+        <String>['live_lesson_page.dart'],
+        reason:
+            'gerekçe BAYAT: `LiveView` artık yalnız `LiveLessonPage`in '
+            'gövdesi değil — başka bir yerden de kuruluyor: $liveViewUsers',
+      );
       // Ve YAPI kanalı bunu bağımsız olarak doğruluyor: `LiveView` ADDA var,
       // YAPIDA yok — hiçbir montaj noktasında geçmiyor.
-      expect(byName.difference(byStructure),
-          <String>{'LiveView', 'TodayView', 'PracticeLabView'},
-          reason: 'ad-yalnız ekran kümesi değişti: '
-              '${byName.difference(byStructure)}. ADDA ekran görünüp YAPIDA '
-              'monte edilmeyen her sınıf, varılamayan kovasında SEBEBİYLE '
-              'yer almalı.');
+      expect(
+        byName.difference(byStructure),
+        <String>{'LiveView', 'TodayView', 'PracticeLabView'},
+        reason:
+            'ad-yalnız ekran kümesi değişti: '
+            '${byName.difference(byStructure)}. ADDA ekran görünüp YAPIDA '
+            'monte edilmeyen her sınıf, varılamayan kovasında SEBEBİYLE '
+            'yer almalı.',
+      );
 
       final Set<String> unreached = candidates.difference(reached);
-      expect(unreached, allExcluded,
-          reason: 'BÖLME BOZULDU. Varılamayan küme değişti: $unreached. '
-              'Yeni bir ekran yürüyüşe girmediyse SEBEBİNİ yaz; girdiyse '
-              'listeden çıkar. Eşitlik: aday = varılan ⊎ varılamayan.');
-      expect(reached.union(allExcluded), candidates,
-          reason: 'aday kümesi ile toplam ayrıştı');
+      expect(
+        unreached,
+        allExcluded,
+        reason:
+            'BÖLME BOZULDU. Varılamayan küme değişti: $unreached. '
+            'Yeni bir ekran yürüyüşe girmediyse SEBEBİNİ yaz; girdiyse '
+            'listeden çıkar. Eşitlik: aday = varılan ⊎ varılamayan.',
+      );
+      expect(
+        reached.union(allExcluded),
+        candidates,
+        reason: 'aday kümesi ile toplam ayrıştı',
+      );
     });
 
-    testWidgets('GEVŞEK okuma: rota + itilmeden geçilen yerler',
-        (WidgetTester tester) async {
+    testWidgets('GEVŞEK okuma: rota + itilmeden geçilen yerler', (
+      WidgetTester tester,
+    ) async {
       final _RouteSpy spy = _RouteSpy();
       await tester.pumpWidget(app(spy));
       await _settle(tester);
@@ -438,21 +661,31 @@ void main() {
       expect(find.byType(PracticeLabView), findsNothing);
       await tester.tap(find.byKey(ChoreiaShell.progressTabKey));
       await _settle(tester);
-      expect(find.byType(ProgressView), findsOneWidget,
-          reason: 'ilerleme sekmesi bir yere gitmiyor');
+      expect(
+        find.byType(ProgressView),
+        findsOneWidget,
+        reason: 'ilerleme sekmesi bir yere gitmiyor',
+      );
 
       await tester.tap(find.byKey(ChoreiaShell.profileTabKey));
       await _settle(tester);
-      expect(find.byType(ProfileView), findsOneWidget,
-          reason: 'Profil sekmesi bir yere gitmiyor');
+      expect(
+        find.byType(ProfileView),
+        findsOneWidget,
+        reason: 'Profil sekmesi bir yere gitmiyor',
+      );
 
       await tester.tap(find.byKey(ChoreiaShell.libraryTabKey));
       await _settle(tester);
-      expect(find.byType(LibraryView), findsOneWidget,
-          reason: 'kütüphane sekmesine geri dönülemiyor');
+      expect(
+        find.byType(LibraryView),
+        findsOneWidget,
+        reason: 'kütüphane sekmesine geri dönülemiyor',
+      );
 
-      final Finder card =
-          find.byKey(LibraryView.tileKey('hip_hop_foundations'));
+      final Finder card = find.byKey(
+        LibraryView.tileKey('hip_hop_foundations'),
+      );
       await tester.ensureVisible(card);
       await _settle(tester);
       await tester.tap(card);
@@ -468,8 +701,11 @@ void main() {
 
       // Intro, library, progress and profile are places without a push;
       // style detail and live lesson are pushed routes.
-      expect(spy.pushed.length + 4, 6,
-          reason: 'GEVŞEK sayı beklenenden farklı. Rotalar: ${spy.pushed}');
+      expect(
+        spy.pushed.length + 4,
+        6,
+        reason: 'GEVŞEK sayı beklenenden farklı. Rotalar: ${spy.pushed}',
+      );
     });
 
     test('diskte olan ≠ uygulamada olan — C-143 isimle çivili', () {
@@ -501,16 +737,23 @@ void main() {
       // beklenen soruyu görünmez yapar. Bunu `closure_authority` kapısı
       // yakaladı: bu yorumun iddiası bir DEFTER kaydına sızmıştı ve kapı
       // *"kaydın kendi sütunu AÇIK diyor"* diye kırmızı verdi (C-272 ③).
-      expect(onDisk.difference(declared), isEmpty,
-          reason: 'diskte olup uygulamaya girmeyen referans var — kullanıcı '
-              'onu açamaz ve rozet onu vaat ediyor olabilir (C-185)');
-      expect(declared.difference(onDisk), isEmpty,
-          reason: 'pubspec diskte olmayan bir referansı bildiriyor — '
-              'yüklemede gürültüsüzce patlar');
+      expect(
+        onDisk.difference(declared),
+        isEmpty,
+        reason:
+            'diskte olup uygulamaya girmeyen referans var — kullanıcı '
+            'onu açamaz ve rozet onu vaat ediyor olabilir (C-185)',
+      );
+      expect(
+        declared.difference(onDisk),
+        isEmpty,
+        reason:
+            'pubspec diskte olmayan bir referansı bildiriyor — '
+            'yüklemede gürültüsüzce patlar',
+      );
     });
 
-    test(
-        'ÜÇÜNCÜ KÜME: pakete giren ama HİÇBİR DERSİN yükleyemeyeceği '
+    test('ÜÇÜNCÜ KÜME: pakete giren ama HİÇBİR DERSİN yükleyemeyeceği '
         'referanslar — SAYILIR, yasaklanmaz', () {
       // C-143'ün kapısı iki yönü tutuyor: diskte olan bildirilmiş mi,
       // bildirilen diskte var mı. İkisi de **dosya** hakkında. Kimsenin
@@ -533,46 +776,61 @@ void main() {
       };
       // POZİTİF KONTROL: türetim boş dönerse aşağıdaki fark HER ŞEYİ
       // "ulaşılamaz" ilan eder ve test kendi vakumunda yeşil görünür.
-      expect(namedByALesson, isNotEmpty,
-          reason: 'hiçbir ders bir adım adlandırmıyor — türetim bozuk, '
-              'ölçüm vakumda');
+      expect(
+        namedByALesson,
+        isNotEmpty,
+        reason:
+            'hiçbir ders bir adım adlandırmıyor — türetim bozuk, '
+            'ölçüm vakumda',
+      );
 
       final Set<String> shippedUnloadable = declared.difference(namedByALesson);
       final int bytes = shippedUnloadable.fold<int>(
-          0,
-          (int a, String s) =>
-              a + File('content/references/$s.json').lengthSync());
+        0,
+        (int a, String s) =>
+            a + File('content/references/$s.json').lengthSync(),
+      );
 
-      expect(shippedUnloadable, <String>{'hh_roger_rabbit', 'hh_running_man'},
-          reason: 'pakete giren ama hiçbir dersin yükleyemeyeceği referans '
-              'kümesi DEĞİŞTİ: $shippedUnloadable ($bytes bayt). Yeni bir '
-              'referans bildirildiyse ya onu adlandıran ders eksik, ya da '
-              'bildirim erken. Küme küçüldüyse bir ders bağlandı — bu iyi '
-              'haber, sayıyı güncelle.');
+      expect(
+        shippedUnloadable,
+        <String>{'hh_roger_rabbit', 'hh_running_man'},
+        reason:
+            'pakete giren ama hiçbir dersin yükleyemeyeceği referans '
+            'kümesi DEĞİŞTİ: $shippedUnloadable ($bytes bayt). Yeni bir '
+            'referans bildirildiyse ya onu adlandıran ders eksik, ya da '
+            'bildirim erken. Küme küçüldüyse bir ders bağlandı — bu iyi '
+            'haber, sayıyı güncelle.',
+      );
 
       // Bedeli ADIYLA: bir sayı, penceresi yazılmadan başka bir sayıyla
       // karşılaştırılamaz — bu yüzden bayt burada, ölçüldüğü yerde duruyor.
-      expect(bytes, greaterThan(150 * 1024),
-          reason: 'iki referansın toplam boyutu beklenenden küçük — '
-              '$bytes bayt. Bu satır bedelin GÖRÜNÜR kalması için var; '
-              'küçüldüyse sebebini yaz.');
+      expect(
+        bytes,
+        greaterThan(150 * 1024),
+        reason:
+            'iki referansın toplam boyutu beklenenden küçük — '
+            '$bytes bayt. Bu satır bedelin GÖRÜNÜR kalması için var; '
+            'küçüldüyse sebebini yaz.',
+      );
 
       // Ve ikisinin de dersi NİYE yok, ölçülerek: `hh_l1_running_man`
       // yazılmış bir DERS ama `step` alanı yok VE adım belgesi de yok, yani
       // eksik olan kablolama değil İÇERİK (A4'ün A′ sınıfı, hasat turu).
       // `hh_roger_rabbit` ise hiçbir derse ait değil — sözlükte bir ad.
       expect(
-          File('content/styles/hip_hop_foundations/steps/'
-                  'hh_running_man.json')
-              .existsSync(),
-          isFalse,
-          reason: 'adım belgesi YAZILMIŞ — o hâlde eksik olan yalnız '
-              '`step` kablolaması ve bu HATTIN kalemi (A4 sınıf B); '
-              'gerekçe bayatladı');
+        File(
+          'content/styles/hip_hop_foundations/steps/'
+          'hh_running_man.json',
+        ).existsSync(),
+        isFalse,
+        reason:
+            'adım belgesi YAZILMIŞ — o hâlde eksik olan yalnız '
+            '`step` kablolaması ve bu HATTIN kalemi (A4 sınıf B); '
+            'gerekçe bayatladı',
+      );
     });
 
-    test(
-        'demoOpen rozeti CİHAZDA fazla-satıyor — kafesin kaynağı disk, '
+    test('demoOpen rozeti CİHAZDA fazla-satıyor — kafesin kaynağı disk, '
         'kullanıcınınki paket', () {
       // `demoOpen` means, in the registry's own words, "the user can OPEN a
       // lesson; none of them score". `validate_content` enforces that lattice
@@ -598,17 +856,21 @@ void main() {
           if (e.contentStatus == 'demoOpen') e.id,
       ];
 
-      expect(claimDemoOpen, <String>['hip_hop_foundations'],
-          reason: 'demoOpen iddia eden stil kümesi değişti: $claimDemoOpen');
+      expect(claimDemoOpen, <String>[
+        'hip_hop_foundations',
+      ], reason: 'demoOpen iddia eden stil kümesi değişti: $claimDemoOpen');
       // KAPANDI 2026-08-07 12:0x. The badge is now true where the user reads
       // it. Kept as a gate rather than deleted: the failure it caught cannot
       // be caught by `validate_content`, which reads the DISK, and this is
       // the only place the question is asked from the bundle's side.
       expect(
-          claimDemoOpen.toSet().difference(openableOnDevice.toSet()), isEmpty,
-          reason: 'demoOpen iddia eden ama CİHAZDA hiçbir ders açamayan stil '
-              'var — rozet build\'in içermediği bir şeyi vaat ediyor. '
-              'Kafes diski okur, kullanıcının elinde paket vardır (C-185)');
+        claimDemoOpen.toSet().difference(openableOnDevice.toSet()),
+        isEmpty,
+        reason:
+            'demoOpen iddia eden ama CİHAZDA hiçbir ders açamayan stil '
+            'var — rozet build\'in içermediği bir şeyi vaat ediyor. '
+            'Kafes diski okur, kullanıcının elinde paket vardır (C-185)',
+      );
     });
 
     test('açılan kapının artık ZEMİNİ VAR — ama koştuğu ölçülmedi (C-186)', () {
@@ -629,22 +891,34 @@ void main() {
       // touch path), so "the model is present and correctly addressed" is the
       // whole of the assertion. Reaching, running and WORKING are three
       // claims, and this file has now measured two of them.
-      expect(File(PoseModelPin.assetPath).existsSync(), isTrue,
-          reason: 'model yerinde değil — `tool/fetch_pose_model.sh` koş');
       expect(
-          File('pubspec.yaml').readAsStringSync(), contains('assets/models/'),
-          reason: 'model beyan edilmemiş, yani cihaza girmez');
+        File(PoseModelPin.assetPath).existsSync(),
+        isTrue,
+        reason: 'model yerinde değil — `tool/fetch_pose_model.sh` koş',
+      );
+      expect(
+        File('pubspec.yaml').readAsStringSync(),
+        contains('assets/models/'),
+        reason: 'model beyan edilmemiş, yani cihaza girmez',
+      );
 
-      final String live =
-          File('lib/app/live/live_lesson_page.dart').readAsStringSync();
+      final String live = File('lib/app/live/live_lesson_page.dart')
+          .readAsStringSync();
       expect(live, contains('DeviceCameraPoseSource()'));
-      final cameraSource =
-          File('lib/app/live/camera_pose_source.dart').readAsStringSync();
-      expect(cameraSource, contains('modelPathOpener ?? materialisePoseModel'),
-          reason: 'canlı sayfa modeli GERÇEK bir dosya yoluna çevirmeden '
-              'kameraya veriyor — eklenti asset anahtarını açamaz');
-      expect(live, isNot(contains("'assets/pose_landmarker")),
-          reason: 'eski gömülü asset yolu geri geldi');
+      final cameraSource = File('lib/app/live/camera_pose_source.dart')
+          .readAsStringSync();
+      expect(
+        cameraSource,
+        contains('modelPathOpener ?? materialisePoseModel'),
+        reason:
+            'canlı sayfa modeli GERÇEK bir dosya yoluna çevirmeden '
+            'kameraya veriyor — eklenti asset anahtarını açamaz',
+      );
+      expect(
+        live,
+        isNot(contains("'assets/pose_landmarker")),
+        reason: 'eski gömülü asset yolu geri geldi',
+      );
     });
 
     test('rota adları ölçülebilir kalmalı — isimsiz rota sayılamaz', () {

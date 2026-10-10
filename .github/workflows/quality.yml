@@ -57,6 +57,16 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Pinli içerik sözleşmesi için tarihsel Core Git kaynağı
+        # Uses the existing repository-specific Git authentication configuration.
+        # Fetch the historical contract tag, independently of the runtime Core pin.
+        run: |
+          set -euo pipefail
+          core_repo="${RUNNER_TEMP}/choreia-content-core"
+          git init --quiet "$core_repo"
+          git -C "$core_repo" fetch --depth=1 --no-tags https://github.com/kocakkmustafa/motion-core.git refs/tags/motion_core-v0.5.0:refs/tags/motion_core-v0.5.0
+          git -C "$core_repo" cat-file -e motion_core-v0.5.0:packages/motion_core/lib/src/geometry/joint_angles.dart
+
       - name: Bağımlılık envanteri (dependency audit — bilgilendirici, kapı DEĞİL)
         # Dart/Flutter ekosisteminde npm-audit dengi bir CVE veritabanı
         # yok; roadmap'in "dependency audit" maddesi burada iki parçaya
@@ -68,6 +78,8 @@ jobs:
         run: flutter pub outdated || true
 
       - name: tool/gates.sh (secret scan + analyze + 269 app + 36 engine test + 10 araç öz-testi)
+        env:
+          CHOREIA_CONTENT_CORE_REPO: ${{ runner.temp }}/choreia-content-core
         run: bash tool/gates.sh
 
   android-release-build:

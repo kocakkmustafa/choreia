@@ -21,5 +21,10 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
     }
     await loader.load();
   }
+  // Widget tests do not automatically register bundled icon fonts.
+  // Load the existing Flutter asset; keep production icon widgets unchanged.
+  final icons = FontLoader('MaterialIcons');
+  icons.addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
+  await icons.load();
   await testMain();
 }

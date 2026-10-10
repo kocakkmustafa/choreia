@@ -1,0 +1,447 @@
+{
+  "schemaVersion": 1,
+  "id": "hip_hop_foundations_skill_course",
+  "version": 1,
+  "title": {
+    "en": "Hip-Hop Foundations: beginner course candidate",
+    "tr": "Hip-Hop Temelleri: başlangıç kursu adayı"
+  },
+  "reviewNotice": {
+    "en": "Review candidate. Written coverage of a bounded beginner endpoint; demonstrations, rights, bilingual teaching and physical review are pending. Do not treat this reader as released physical instruction. No camera scoring, verified groove, musicality, mastery or course completion. Self-observation is distinct from instructional acceptance. The separate introduction remains available.",
+    "tr": "İnceleme adayı. Sınırlı başlangıç hedefinin yazılı kapsamı; gösterimler, haklar, iki dilde öğretim ve fiziksel inceleme bekleniyor. Bu okuyucuyu yayımlanmış fiziksel öğretim sayma. Kamera puanı, doğrulanmış groove, müzikalite, ustalık veya kurs tamamlanması yok. Öz gözlem, öğretim kabulünden ayrıdır. Ayrı giriş yolu kullanılabilir."
+  },
+  "boundaries": {
+    "en": "Before physical practice clear space, check grip and shoes; gradually warm up with comfortable walking and gentle joint movement, then small versions of the planned steps. Eight beats are a drill, not a full warm-up. Reduce pace gradually afterwards. Stop for pain, dizziness or unusual breathlessness. No floorwork, big kicks, deep bends, forced twists or high jumps. The named Running Man and Roger Rabbit source versions include a small hop; their physical instruction remains withheld pending demonstration and qualified physical review. Study their specification or use the explicitly different grounded preparation until reviewed. No forced one-leg holds. Repetitions below are optional ceilings; rest between attempts and stop before fatigue changes control. Use music you already lawfully access; none is bundled. A metronome tests pulse only. Without music, phrase and audible-element criteria remain unchecked. Each eight-count is eight beats; an “and” divides adjacent beats. All R/L directions name your own limbs, never the screen side.",
+    "tr": "Fiziksel çalışmadan önce alanı aç, tutuşu ve ayakkabını kontrol et; rahat yürüyüş ve yumuşak eklem hareketleriyle kademeli ısın, sonra planlanan adımları küçük biçimde dene. Sekiz vuruş bir alıştırmadır, tam ısınma değildir. Sonunda hızı kademeli azalt. Ağrı, baş dönmesi veya olağandışı nefes darlığında dur. Yer çalışması, büyük tekmeler, derin bükülme, zorlanmış burulma veya yüksek sıçrama yok. Running Man ve Roger Rabbit kaynak sürümleri küçük hop içerir; gösterim ve yetkin fiziksel inceleme olmadan fiziksel öğretim yayımlanmaz. İncelenene kadar hareket tarifini çalış veya açıkça farklı olan yerde hazırlığı kullan. Tek ayakta bekleme zorlanmaz. Aşağıdaki tekrarlar isteğe bağlı üst sınırlardır; denemeler arasında dinlen ve yorgunluk kontrolü değiştirmeden dur. Zaten yasal erişimin olan müziği kullan; müzik pakete eklenmez. Metronom yalnız vuruşu sınar. Müzik yoksa cümle ve duyulur öğe ölçütleri kontrol edilmemiş kalır. Her sekizli sekiz vuruştur; “ve” komşu vuruşları böler. Sağ/sol kendi uzuvlarını adlandırır, ekran tarafını değil. Gösterim ve fiziksel inceleme tamamlanana kadar kaynak sürümündeki hopları deneme; şimdi yalnız tanıma veya ayrı yerde hazırlık yap."
+  },
+  "startCompetency": {
+    "en": "No named-step knowledge required. Choose a comfortable mode, hear a regular pulse and distinguish a step from a touch. The introduction offers preparation. Revisit a prerequisite whenever its check is uncertain; there is no time-based promotion.",
+    "tr": "Adlandırılmış adım bilgisi gerekmez. Rahat bir biçim seç, düzenli vuruşu duy ve adımla dokunuşu ayır. Giriş yolu hazırlık sunar. Kontrol belirsizse ön koşula dön; süreye bağlı yükseltme yok."
+  },
+  "endCompetency": {
+    "en": "Bounded target: keep an external musical pulse in grounded bounce/rock, transfer weight both ways, coordinate step-touch, explain and eventually demonstrate the selected Running Man and Roger Rabbit singles, connect them, enter an identified phrase, recover time, respond deliberately to one audible element, and revise an original short sequence after identifying an error. Written or seated rehearsal cannot satisfy physical criteria. Every result is self-observed/uncertain/unattempted; media and teaching acceptance remain open.",
+    "tr": "Sınırlı hedef: yerde bounce/rock ile dış müzik vuruşunu koru, ağırlığı iki yöne aktar, step-touch koordinasyonu kur, seçilen Running Man ve Roger Rabbit tekli sürümlerini açıkla ve ileride göster, bağla, belirlenen cümleye gir, zamanı yeniden bul, bir duyulur öğeye bilinçli yanıt ver ve bir hata belirledikten sonra özgün kısa diziyi düzelt. Yazılı veya oturarak prova fiziksel ölçütleri karşılamaz. Her sonuç öz gözlem/belirsiz/denenmedi olarak ayrılır; medya ve öğretim kabulü açıktır."
+  },
+  "provenance": {
+    "en": "Sources (accessed 2026-10-03; reference links only, no footage licence): Charlene “Chi-Chi” Smith / Howcast, Running Man: https://howcast.com/videos/505188-how-to-do-the-running-man-hip-hop-dancing/ ; Roger Rabbit: https://howcast.com/videos/505189-how-to-do-the-roger-rabbit-hip-hop-dancing/ . Robert Royston / Howcast touch terminology: https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/ (generic coordination, not Hip-Hop lineage). STEEZY / Jessie Ma, listening and counts: https://www.steezy.co/posts/how-to-dance-hip-hop-for-beginners . Big Creative Education, side weight/response: https://bigcreative.education/10-easy-dance-moves-anyone-can-master/ . Ausdance general preparation: https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance . Hip-Hop is rooted in Black social culture; these studies do not represent its entire history. Drills, count scaffold, transitions, adaptations, sequence and criteria are original candidate teaching choices, not source endorsements. Howcast reserves all rights; no routines, music or video copied.",
+    "tr": "Kaynaklar (2026-10-03 erişimi; yalnız başvuru bağlantıları, görüntü lisansı değil): Charlene “Chi-Chi” Smith / Howcast, Running Man: https://howcast.com/videos/505188-how-to-do-the-running-man-hip-hop-dancing/ ; Roger Rabbit: https://howcast.com/videos/505189-how-to-do-the-roger-rabbit-hip-hop-dancing/ . Robert Royston / Howcast dokunuş terimleri: https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/ (genel koordinasyon; Hip-Hop köken iddiası değil). STEEZY / Jessie Ma, dinleme ve sayım: https://www.steezy.co/posts/how-to-dance-hip-hop-for-beginners . Big Creative Education, yanal ağırlık/yanıt: https://bigcreative.education/10-easy-dance-moves-anyone-can-master/ . Ausdance genel hazırlık: https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance . Hip-Hop Siyah toplulukların sosyal kültürüne dayanır; bu çalışmalar bütün tarihi temsil etmez. Alıştırmalar, sayım alıştırmaları, geçişler, uyarlamalar, dizi ve ölçütler özgün aday öğretim tercihleridir; kaynakların onayı değildir. Howcast tüm haklarını saklı tutar; rutin, müzik veya video kopyalanmaz."
+  },
+  "acceptance": {
+    "scoring": false,
+    "progressWrites": false,
+    "releaseEligible": false,
+    "physicalInstructionAccepted": false,
+    "mediaRightsAccepted": false,
+    "completeCurriculumAccepted": false
+  },
+  "units": [
+    {
+      "id": "hhs_01",
+      "prerequisiteIds": [],
+      "instructionalSourceIds": [
+        "steezy-listening",
+        "authored"
+      ],
+      "title": {
+        "en": "Listen, count, find an entry",
+        "tr": "Dinle, say, giriş bul"
+      },
+      "prerequisite": {
+        "en": "Comfortable preparation; lawful external sound.",
+        "tr": "Rahat hazırlık; yasal dış ses."
+      },
+      "outcome": {
+        "en": "Separate regular pulse, eight-count and musical phrase; stop and recover.",
+        "tr": "Düzenli vuruş, sekizli sayım ve müzikal cümleyi ayır; dur ve yeniden bul."
+      },
+      "instruction": {
+        "en": "A pulse is a recurring beat; your chosen “1” need not be a phrase start. Listen without moving, tap once per pulse, then count 1–8. In a simple track, listen for a repeating section and an audible change such as a returning instrumental layer; name the cue and use its return as a candidate phrase entry. Do not claim every song changes every eight beats. If unclear, mark phrase entry uncertain. A musical phrase is a coherent section of the music, not just any repeated sound. Counterexample: a snare returning on each second beat may continue unchanged across a phrase boundary; entering on that hit alone does not identify a new phrase. If no section change is distinguishable, record “cue entry observed; phrase start uncertain”.",
+        "tr": "Vuruş tekrarlanan darbedir; seçtiğin “1” cümle başlangıcı olmak zorunda değildir. Hareket etmeden dinle, her vuruşta bir dokun, sonra 1–8 say. Basit bir parçada tekrarlanan bölümü ve geri gelen enstrüman katmanı gibi duyulur değişimi dinle; ipucunu adlandır, dönüşünü aday cümle girişi seç. Her şarkının sekiz vuruşta değiştiğini iddia etme. Belirsizse cümle girişini belirsiz işaretle. Müzikal cümle, müzikte birlikte anlam taşıyan bölümdür; her tekrarlanan ses cümle başlangıcı değildir. Karşı örnek: her ikinci vuruşta gelen trampet, cümle sınırında değişmeden sürebilir; yalnız o darbeye girmek yeni cümleyi belirlemez. Bölüm değişimi ayırt edilemiyorsa “ipucuna giriş gözlendi; cümle başlangıcı belirsiz” yaz."
+      },
+      "practice": {
+        "en": "First tap sixteen external beats. Rest. Listen to the candidate phrase cue twice, then start counting on its next return for two eights. Pause intentionally for eight beats, keep listening and re-enter at the next cue. At most two attempts. Write the cue, sound source and any uncertain entry.",
+        "tr": "Önce on altı dış vuruşa dokun. Dinlen. Aday cümle ipucunu iki kez dinle, sonraki dönüşünde iki sekizli saymaya başla. Bilerek sekiz vuruş dur, dinlemeyi sürdür ve sonraki ipucunda yeniden gir. En çok iki deneme. İpucunu, ses kaynağını ve belirsiz girişi yaz."
+      },
+      "mistakes": {
+        "en": "Fast syllables between beats are not extra pulses. Compare one tap per pulse with an accidental double tap; reduce to listening only and retry. Counting from a random click tests pulse entry, not a musical phrase. If lost, pause rather than hurry to catch up.",
+        "tr": "Vuruşlar arasındaki hızlı heceler ek vuruş değildir. Her vuruşta tek dokunuşu yanlışlıkla çift dokunuşla karşılaştır; yalnız dinlemeye dön ve yeniden dene. Rastgele tıktan saymak vuruşa girişi sınar, müzikal cümleyi değil. Kaybolursan yetişmek için hızlanmak yerine dur."
+      },
+      "adaptation": {
+        "en": "Seated hand taps or spoken counts test listening/counting only; no standing movement inferred. With a metronome leave phrase entry unchecked.",
+        "tr": "Oturarak el dokunuşu veya sözlü sayım yalnız dinleme/sayımı sınar; ayakta hareket sonucu çıkarılmaz. Metronomla cümle girişini kontrol edilmemiş bırak."
+      },
+      "check": {
+        "en": "Observe: sixteen single taps aligned to audible beats; name the phrase cue and two consistent entries; pause and recover without speeding up. Record each criterion separately as observed, uncertain or unattempted. If uncertain revisit listening, not faster music. Check cue entry and phrase identification separately. Two entries on a repeated hit do not pass phrase identification without an identifiable section boundary.",
+        "tr": "Gözle: duyulur vuruşlarla hizalı on altı tek dokunuş; cümle ipucunu ve iki tutarlı girişi adlandır; hızlanmadan dur ve geri gir. Her ölçütü ayrı öz gözlem, belirsiz veya denenmedi olarak kaydet. Belirsizse daha hızlı müziğe değil dinlemeye dön. İpucuna girişi ve cümleyi belirlemeyi ayrı kontrol et. Tekrarlanan darbeye iki giriş, ayırt edilebilir bölüm sınırı olmadan cümle başlangıcını belirleme ölçütünü karşılamaz."
+      }
+    },
+    {
+      "id": "hhs_02",
+      "prerequisiteIds": [
+        "hhs_01"
+      ],
+      "instructionalSourceIds": [
+        "intro-provenance",
+        "bce-side-response",
+        "authored"
+      ],
+      "title": {
+        "en": "Grounded bounce, rock and weight",
+        "tr": "Yerde bounce, rock ve ağırlık"
+      },
+      "prerequisite": {
+        "en": "Pulse entry and recovery from stage 1.",
+        "tr": "1. aşamadaki vuruş girişi ve geri dönüş."
+      },
+      "outcome": {
+        "en": "Coordinate a small grounded down/up study and side rock with music, both directions.",
+        "tr": "Küçük yerde aşağı/yukarı çalışmasını ve yanal rock hareketini müzikle iki yönde eşleştir."
+      },
+      "instruction": {
+        "en": "Feet comfortably apart, knees soft: on each beat let the knees soften a little; between beats return toward your comfortable height without locking. Feet stay on the floor. This is our grounded bounce study, not the only correct bounce. For the side-rock study, shift toward R on 1, return centre on 2, toward L on 3, centre on 4; repeat 5–8. Let torso follow the weight gently, not a backbend. Keep both feet available on the floor; do not test a held one-leg balance.",
+        "tr": "Ayaklar rahat açıklıkta, dizler yumuşak: her vuruşta dizleri biraz yumuşat; arada kilitlemeden rahat yüksekliğine dön. Ayaklar yerde kalır. Bu bizim yerde bounce çalışmamızdır; bounce’ın tek doğru biçimi değildir. Yanal rock çalışmasında 1’de sağa aktar, 2’de merkeze dön, 3’te sola, 4’te merkeze; 5–8 tekrarla. Gövde ağırlığı yumuşak izlesin; geriye bükülme değil. İki ayak yerde hazır kalsın; tek ayakta beklenen denge sınaması yapma."
+      },
+      "practice": {
+        "en": "Without sound compare centre/R/centre/L once. Then two eights of grounded bounce to the pulse. Rest; two eights of side-rock with spoken R/centre/L/centre. Add a small shoulder response only after feet and timing are clear. At most one repeat after rest.",
+        "tr": "Sessiz merkez/sağ/merkez/sol sırasını bir kez karşılaştır. Sonra vuruşa iki sekizli yerde bounce. Dinlen; sağ/merkez/sol/merkez söyleyerek iki sekizli yanal rock. Ayaklar ve zaman netleşince küçük omuz yanıtı ekle. Dinlendikten sonra en çok bir tekrar."
+      },
+      "mistakes": {
+        "en": "Straight locked knees versus a small softening: reduce range, avoid forcing depth. Shoulder lean without side weight change versus torso following a real comfortable shift: say the side aloud and retry slowly. Arriving early versus softening on the audible beat: return to taps.",
+        "tr": "Kilitli düz diz ile küçük yumuşamayı ayır: aralığı azalt, derinliği zorlama. Yanal ağırlık değişmeden omuz eğmek ile gövdenin rahat aktarımı izlemesini ayır: yönü söyle ve yavaş yeniden dene. Erken varmak ile duyulur vuruşta yumuşamayı ayır: dokunuşa dön."
+      },
+      "adaptation": {
+        "en": "Smaller standing shifts, no shoulder addition. Seated pulse response with hands describes timing; it is not standing weight transfer or bounce/rock evidence.",
+        "tr": "Daha küçük ayakta aktarım; omuz eklemeden. Oturarak ellerle vuruş yanıtı zamanı çalışır; ayakta ağırlık aktarımı veya bounce/rock kanıtı değildir."
+      },
+      "check": {
+        "en": "Two eights of each study: pulse remains audible, knees do not lock, R and L shifts are distinguishable, return to centre is available. Name one timing or weight error and a specific smaller retry. An uncertain physical criterion sends you back to the smaller study.",
+        "tr": "Her çalışmada iki sekizli: vuruş duyulur kalır, dizler kilitlenmez, sağ ve sol aktarım ayırt edilir, merkeze dönüş mümkündür. Bir zaman veya ağırlık hatası ve daha küçük bir tekrar adlandır. Belirsiz fiziksel ölçüt daha küçük çalışmaya döndürür."
+      }
+    },
+    {
+      "id": "hhs_03",
+      "prerequisiteIds": [
+        "hhs_02"
+      ],
+      "instructionalSourceIds": [
+        "howcast-touch",
+        "authored"
+      ],
+      "title": {
+        "en": "Step-touch coordination",
+        "tr": "Step-touch koordinasyonu"
+      },
+      "prerequisite": {
+        "en": "Both-sided side shift and external pulse.",
+        "tr": "İki yöne yanal aktarım ve dış vuruş."
+      },
+      "outcome": {
+        "en": "Distinguish weight-bearing step from a closing touch; add simple arm coordination.",
+        "tr": "Ağırlık alan adımı kapanan dokunuştan ayır; basit kol koordinasyonu ekle."
+      },
+      "instruction": {
+        "en": "On 1 take a small R step to the side and transfer weight; on 2 bring L near R and touch without transferring. On 3 step L to the side with weight; on 4 touch R near L without weight. Repeat 5–8. A touch leaves the same support foot available for the next step. Add a small relaxed hand response on 2 and 4 only after the feet are clear. This generic coordination study is not a claim that line-dance teaching establishes Hip-Hop authenticity.",
+        "tr": "1’de sağa küçük sağ adım at ve ağırlığı aktar; 2’de solu sağa yaklaştırıp ağırlık vermeden dokun. 3’te sola sol adımla ağırlık al; 4’te sağı sola yaklaştırıp ağırlıksız dokun. 5–8 tekrarla. Dokunuş sonraki adım için aynı destek ayağını hazır bırakır. Ayaklar netleşince yalnız 2 ve 4’te küçük rahat el yanıtı ekle. Bu genel koordinasyon çalışmasıdır; line dance öğretiminin Hip-Hop özgünlüğü kanıtladığı iddiası değildir."
+      },
+      "practice": {
+        "en": "Say “step, touch, step, touch” without arms for one eight, then two eights to music. Rest. Repeat one eight starting L instead of R. Finally add hands for one eight. Keep the step width comfortable; do not accelerate to fit the arms.",
+        "tr": "Kolları katmadan bir sekizli “adım, dokun, adım, dokun” söyle, sonra müzikle iki sekizli. Dinlen. Sağ yerine solla başlayarak bir sekizli tekrarla. Son olarak bir sekizli elleri ekle. Adım açıklığı rahat kalsın; kolları sığdırmak için hızlanma."
+      },
+      "mistakes": {
+        "en": "Stepping onto the closing touch makes the next outward step awkward: compare weight/no weight and remove arms. Arms moving every beat instead of on the chosen touches: feet first, hands only on 2/4. Feet colliding: decrease travel and keep a little space.",
+        "tr": "Kapanan dokunuşa ağırlık vermek sonraki dış adımı zorlaştırır: ağırlıklı/ağırlıksız farkı karşılaştır, kolları dinlendir. Seçilen dokunuşlar yerine her vuruşta kolları hareket ettirmek: önce ayaklar, yalnız 2/4’te eller. Ayaklar çarpışıyorsa yolculuğu azalt ve biraz boşluk bırak."
+      },
+      "adaptation": {
+        "en": "Small grounded steps with arms resting. Seated alternating hand step/touch labels rehearse order; no foot support or standing coordination accepted.",
+        "tr": "Kollar dinlenirken küçük yerde adımlar. Oturarak ellerle adım/dokunuş etiketlerini sırayla çalış; ayak desteği veya ayakta koordinasyon kabulü yok."
+      },
+      "check": {
+        "en": "Two eights R-first and one eight L-first at a comfortable pulse, distinguish all touches from weight-bearing steps; one eight with chosen hand timing. If support is unclear, name the exact count and repeat feet only before adding hands.",
+        "tr": "Rahat vuruşta sağla iki sekizli ve solla bir sekizli; tüm dokunuşları ağırlık alan adımlardan ayır; seçilen el zamanıyla bir sekizli. Destek belirsizse tam sayıyı adlandır ve elleri eklemeden yalnız ayakları tekrarla."
+      }
+    },
+    {
+      "id": "hhs_04",
+      "prerequisiteIds": [
+        "hhs_03"
+      ],
+      "instructionalSourceIds": [
+        "howcast-running-man",
+        "authored"
+      ],
+      "title": {
+        "en": "Running Man: selected alternating variant",
+        "tr": "Running Man: seçilen dönüşümlü sürüm"
+      },
+      "prerequisite": {
+        "en": "Steps/touches, both-sided support changes, pulse; named-step demonstration and physical review must be cleared before hop practice.",
+        "tr": "Adım/dokunuş, iki taraflı destek değişimi, vuruş; hop çalışmasından önce adlandırılmış adım gösterimi ve fiziksel inceleme onaylanmalı."
+      },
+      "outcome": {
+        "en": "Explain forward lift/backward support travel and alternating down landings, then test the reviewed small-hop version.",
+        "tr": "Öne kaldırma/geriye destek hareketini ve dönüşümlü aşağı inişi açıkla, sonra incelenmiş küçük hop sürümünü sına."
+      },
+      "instruction": {
+        "en": "Selected source: Howcast / Charlene “Chi-Chi” Smith. R lifts forward; in the down action R lowers and the other foot travels back; then L lifts and the roles reverse. The source uses a hop and alternating “and, 1, and, 2”. Our count scaffold prepares the lift on “and” and the down action on the numbered beat. This is an authored timing scaffold, not a frame-validated contact claim. No required heel/toe strike, height or slide distance is inferred from the transcript. Arms may use gentle opposite arm/leg action; rest them first. Side-view specification distinguishes backward support travel from running forward. Directions refer to your own legs; a front-facing screen is not a mirror instruction.",
+        "tr": "Seçilen kaynak: Howcast / Charlene “Chi-Chi” Smith. Sağ öne kalkar; aşağı harekette sağ inerken öteki ayak geriye gider; sonra sol kalkar ve roller değişir. Kaynak hop ve dönüşümlü “ve, 1, ve, 2” kullanır. Bizim sayım alıştırması “ve”de kaldırmayı, sayı vuruşunda aşağı hareketi hazırlar. Bu özgün sayım alıştırmasıdir; kareyle doğrulanmış temas iddiası değil. Metinden zorunlu topuk/parmak basışı, yükseklik veya kayma mesafesi çıkarılmaz. Kollar yumuşak karşı kol/bacak hareketi kullanabilir; önce dinlendir. Yandan tarif geriye destek hareketini öne koşmaktan ayırır. Yönler kendi bacaklarını belirtir; önden ekran görüntüsü aynalama talimatı değildir."
+      },
+      "practice": {
+        "en": "Now: speak the R-lift/R-down/other-back sequence and its L reverse; sketch support changes. Grounded preparation: alternate small forward lifts and ordinary replacement steps without a slide or hop; this is not Running Man completion. After review: separate one R and one L down action slowly, rest, connect four alternating actions, then one eight with down actions on beats. Add arms only after stable alternation. Do not force shoe friction into a slide.",
+        "tr": "Şimdi: sağ-kaldır/sağ-in/öteki-geriye sırasını ve sol tersini söyle; destek değişimini çiz. Yerde hazırlık: kayma veya hop olmadan küçük öne kaldırma ve normal yerine adımı sırayla yap; bu Running Man tamamlanması değildir. İncelemeden sonra: sağ ve sol aşağı hareketini ayrı yavaş dene, dinlen, dört dönüşümlü hareketi bağla, sonra sayı vuruşlarında aşağı hareketle bir sekizli. Tutarlı dönüşümden sonra kolları ekle. Ayakkabı sürtünmesini kaymaya zorlama."
+      },
+      "mistakes": {
+        "en": "Running forward versus backward support travel: revisit the side-view specification. Same leg repeating versus R/L alternation: say legs aloud. Down action landing between beats versus on beats: remove arms and slow the pulse. Heel/toe guesses from camera data are not corrections; seek the reviewed demonstration.",
+        "tr": "Öne koşmak ile geriye destek hareketini ayır: yandan tarife dön. Aynı bacağı tekrarlamak ile sağ/sol dönüşümünü ayır: bacakları söyle. Aşağı hareketin vuruş arasında veya vuruşta inmesini ayır: kolları dinlendir ve vuruşu yavaşlat. Kamera verisinden topuk/parmak tahmini düzeltme değildir; incelenmiş gösterime başvur."
+      },
+      "adaptation": {
+        "en": "No-hop grounded preparation has different contacts and cannot pass the source-version physical check. Seated/verbal foot-path naming tests recognition only. If hops are unsuitable, keep this competency physically unattempted and use step-touch in the sequence.",
+        "tr": "Hopsuz yerde hazırlığın temasları farklıdır; kaynak sürümü fiziksel kontrolünü geçemez. Oturarak/sözlü ayak yolu adlandırmak yalnız tanımayı sınar. Hop uygun değilse bu yetkinliği fiziksel olarak denenmedi bırak ve dizide step-touch kullan."
+      },
+      "check": {
+        "en": "Recognition now: describe each leg’s role and two errors without mirror guessing. Physical check after review only: one eight alternating R/L, downward beat alignment, small controlled travel and recoverable stop; uncertain contacts are not accepted. Retry the isolated action, then the same pulse once; never increase speed to hide an error.",
+        "tr": "Şimdi tanıma: ayna tahmini olmadan her bacağın rolünü ve iki hatayı anlat. Yalnız incelemeden sonra fiziksel kontrol: bir sekizli sağ/sol dönüşümü, aşağı hareketin vuruşa hizası, küçük kontrollü yol ve durabilme; belirsiz temas kabul edilmez. Ayrı hareketi, sonra aynı vuruşu bir kez yeniden dene; hatayı gizlemek için hız artırma."
+      }
+    },
+    {
+      "id": "hhs_05",
+      "prerequisiteIds": [
+        "hhs_04"
+      ],
+      "instructionalSourceIds": [
+        "howcast-roger-rabbit",
+        "authored"
+      ],
+      "title": {
+        "en": "Roger Rabbit: singles, dancer-relative",
+        "tr": "Roger Rabbit: tekli, dansçıya göre"
+      },
+      "prerequisite": {
+        "en": "Running Man recognition; grounded support alternation; physical hop clearance as above.",
+        "tr": "Running Man tanıma; yerde dönüşümlü destek; yukarıdaki fiziksel hop onayı."
+      },
+      "outcome": {
+        "en": "Distinguish alternating rear support replacement from Running Man; singles only.",
+        "tr": "Dönüşümlü arkadan destek değişimini Running Man’den ayır; yalnız tekli."
+      },
+      "instruction": {
+        "en": "Selected source: Howcast / Charlene “Chi-Chi” Smith singles, not its optional doubles. R is picked up and placed behind L; as R takes support, L comes up, then reverse with L behind R. The source includes a bounce/hop and offers forward-push arms; we omit large back kicks and large lean. Our authored scaffold: prepare the rear replacement on “and”, receive support on the numbered beat while the other foot releases. Exact lateral track, foot strike and simultaneous contact require reviewed front/side demonstration; the transcript alone does not settle them. Do not force a crossing step. This is NOT the legacy reference’s unverified mirror orientation, nor a universal Roger Rabbit variant.",
+        "tr": "Seçilen kaynak: Howcast / Charlene “Chi-Chi” Smith tekli sürümü; isteğe bağlı çiftler değil. Sağ kalkıp solun arkasına yerleşir; sağ destek alırken sol kalkar, sonra sol sağın arkasında olacak şekilde tersini yap. Kaynak bounce/hop ve öne itme kol seçeneği içerir; büyük geri tekme ve büyük eğimi çıkarıyoruz. Özgün sayım alıştırmamız: “ve”de arkadan yer değiştirmeyi hazırla, sayı vuruşunda destek alırken öteki ayağı bırak. Tam yanal yol, ayak basışı ve eşzamanlı temas incelenmiş ön/yan gösterim gerektirir; metin tek başına bunları çözmez. Çapraz adımı zorlama. Bu eski referansın doğrulanmamış ayna yönü veya evrensel Roger Rabbit sürümü değildir."
+      },
+      "practice": {
+        "en": "Now name rear replacement R then L with hands marking support; contrast it verbally with Running Man’s forward lift/back travel. Grounded preparation uses small ordinary backward replacement steps without a hop; no named-step credit. After review: isolate one replacement each side, rest; link four singles; try one eight at a comfortable pulse. Then add a small forward hand push, no exaggerated lean. Doubles are outside this course.",
+        "tr": "Şimdi ellerle desteği işaretleyerek arkadan sağ sonra sol yer değiştirmeyi adlandır; Running Man’in öne kaldırma/geriye yoluyla sözlü karşılaştır. Yerde hazırlık hop olmadan küçük normal geriye yerine adımları kullanır; adlandırılmış adım kabulü yok. İncelemeden sonra: her yönde bir yer değiştirmeyi ayır, dinlen; dört tekliyi bağla; rahat vuruşta bir sekizli dene. Sonra büyük eğim olmadan küçük öne el itişi ekle. Çiftler bu kurs dışındadır."
+      },
+      "mistakes": {
+        "en": "Both feet trying to occupy the same spot or a forced crossing: stop and request the reviewed path, do not guess. Back kick without support replacement versus a genuine support change: remove arms and name the supporting side. Copying screen-right as your right: use your own limb names. Adding doubles to catch time: return to singles or pause.",
+        "tr": "İki ayağı aynı yere koymaya çalışmak veya zorla çaprazlamak: dur ve incelenmiş yolu iste, tahmin etme. Destek değişimi olmadan geri tekme ile gerçek destek değişimini ayır: kolları dinlendir ve destek tarafını adlandır. Ekran sağını kendi sağın saymak: kendi uzuv adlarını kullan. Zamana yetişmek için çift eklemek: tekliye dön veya dur."
+      },
+      "adaptation": {
+        "en": "No-hop rear-step preparation and seated hand support diagrams are distinct modes. Neither establishes the source-version hop, path, support exchange or groove. If unsuitable keep the physical criterion unattempted.",
+        "tr": "Hopsuz geri adım hazırlığı ve oturarak elle destek çizimi ayrı biçimlerdir. Hiçbiri kaynak sürümün hopunu, yolunu, destek değişimini veya groove’unu kanıtlamaz. Uygun değilse fiziksel ölçütü denenmedi bırak."
+      },
+      "check": {
+        "en": "Recognition: describe singles, support side and the difference from Running Man; name the mirror limitation. After demonstrated path/contact review: one eight alternating rear replacements with recoverable timing and no forced crossing; stop if the path is uncertain. Correction = a slower isolated replacement then reassessment at the same pulse, not bigger kicks.",
+        "tr": "Tanıma: tekliyi, destek tarafını ve Running Man’den farkı anlat; aynalama sınırını adlandır. Gösterimli yol/temas incelemesinden sonra: zaman geri kazanılabilir ve zorlanmış çaprazlama olmadan bir sekizli dönüşümlü arkadan değişim; yol belirsizse dur. Düzeltme daha yavaş ayrı bir değişim, sonra aynı vuruşta yeniden değerlendirmedir; daha büyük tekme değil."
+      }
+    },
+    {
+      "id": "hhs_06",
+      "prerequisiteIds": [
+        "hhs_05"
+      ],
+      "instructionalSourceIds": [
+        "authored"
+      ],
+      "title": {
+        "en": "Connect and recover",
+        "tr": "Bağla ve yeniden bul"
+      },
+      "prerequisite": {
+        "en": "Grounded stages 1–3; named-step recognition; physical named steps only if cleared.",
+        "tr": "Yerde 1–3. aşamalar; adlandırılmış adım tanıma; fiziksel adımlar yalnız onaylıysa."
+      },
+      "outcome": {
+        "en": "Plan a support-compatible transition, keep or recover pulse instead of rushing.",
+        "tr": "Desteğe uygun geçiş planla, acele yerine vuruşu koru veya yeniden bul."
+      },
+      "instruction": {
+        "en": "Use an eight-count grounded bounce bridge with both feet available to reset support. Example study: eight bounce beats, eight side-rock beats, eight step-touch beats, then bridge. For reviewed named-step transitions finish the last down/replacement, use the bridge to return to comfortable two-foot readiness, then begin the next named step’s own preparation. Do not force an immediate foot swap at count 8. A bridge is an original practice device, not a traditional combination.",
+        "tr": "Desteği yeniden hazırlamak için iki ayağın hazır olduğu sekizli yerde bounce köprüsü kullan. Örnek çalışma: sekiz bounce, sekiz yanal rock, sekiz step-touch, sonra köprü. İncelenmiş adlandırılmış geçişlerde son aşağı/yer değişimini bitir, köprüyle rahat iki ayak hazırlığına dön, sonra sonraki adımın kendi hazırlığını başlat. 8’de ani ayak değişimini zorlama. Köprü özgün çalışma aracıdır; geleneksel kombinasyon değil."
+      },
+      "practice": {
+        "en": "Try the grounded study once with spoken transitions, rest and repeat once to music. Later, only after named-step review, substitute one eight of Running Man or Roger Rabbit after a bridge. Intentionally stop one block, listen through a full eight and re-enter at the named phrase cue. Record where support or time became unclear.",
+        "tr": "Yerde çalışmayı geçişleri söyleyerek bir kez dene, dinlen ve müzikle bir kez tekrarla. Daha sonra yalnız adlandırılmış adım incelemesinden sonra köprü ardından bir sekizli Running Man veya Roger Rabbit koy. Bir blokta bilerek dur, tam sekizli dinle ve adlandırdığın cümle ipucunda yeniden gir. Desteğin veya zamanın nerede belirsizleştiğini yaz."
+      },
+      "mistakes": {
+        "en": "Turning a touch into a step to force the next move: use the bridge. Extra fast steps to catch up: pause and listen. Remembering the order but missing the beat: reduce to two adjacent blocks. Stopping is a recovery choice, not failure.",
+        "tr": "Sonraki hareketi zorlamak için dokunuşu adım yapmak: köprü kullan. Yetişmek için hızlı ek adımlar: dur ve dinle. Sırayı bilip vuruşu kaçırmak: iki komşu bloğa indir. Durmak geri dönüş tercihidir, başarısızlık değil."
+      },
+      "adaptation": {
+        "en": "Grounded sequence stays a preparation sequence when named steps are omitted. Seated spoken transitions test planning and counting, not weight continuity.",
+        "tr": "Adlandırılmış adımlar çıkarıldığında yerde dizi hazırlık dizisi olarak kalır. Oturarak sözlü geçişler planlama ve sayımı sınar; ağırlık sürekliliğini değil."
+      },
+      "check": {
+        "en": "Identify each next move before its block, make both R/L transfers, retain pulse through two transitions or pause/recover deliberately. Record which transitions were physically attempted. Named-step transitions remain unchecked until source-version physical criteria are eligible.",
+        "tr": "Her sonraki hareketi bloğundan önce belirle, sağ/sol aktarım yap, iki geçişte vuruşu koru veya bilerek durup geri dön. Hangi geçişlerin fiziksel denendiğini kaydet. Kaynak sürüm fiziksel ölçütleri uygun olana kadar adlandırılmış geçişler kontrol edilmemiş kalır."
+      }
+    },
+    {
+      "id": "hhs_07",
+      "prerequisiteIds": [
+        "hhs_06"
+      ],
+      "instructionalSourceIds": [
+        "steezy-listening",
+        "authored"
+      ],
+      "title": {
+        "en": "Respond to a musical element",
+        "tr": "Bir müzik öğesine yanıt ver"
+      },
+      "prerequisite": {
+        "en": "Pulse/phrase distinction, comfortable grounded coordination.",
+        "tr": "Vuruş/cümle ayrımı, rahat yerde koordinasyon."
+      },
+      "outcome": {
+        "en": "Choose and explain a deliberate response to a recurring sound while retaining pulse.",
+        "tr": "Vuruşu koruyarak tekrarlanan sese bilinçli yanıt seç ve açıkla."
+      },
+      "instruction": {
+        "en": "Listen for one recurring sound you can actually distinguish, such as a snare-like hit or bass accent. Describe the sound in your own words rather than guess its instrument. On a simple grounded bounce or step-touch base, choose a small hand opening when that sound occurs; otherwise hands rest. The base continues to the pulse. This exercises an intentional musical choice; it does not prove musicality or require accents on 2/4 in every song.",
+        "tr": "Gerçekten ayırt edebildiğin, trampet benzeri darbe veya bas vurgusu gibi tekrarlanan bir ses dinle. Enstrümanı tahmin etmek yerine sesi kendi sözlerinle anlat. Basit yerde bounce veya step-touch üzerinde ses geldiğinde küçük el açma seç; diğer zamanda eller dinlensin. Temel hareket vuruşla sürer. Bu bilinçli müzik tercihini çalışır; müzikaliteyi kanıtlamaz veya her şarkıda 2/4 vurgusu istemez."
+      },
+      "practice": {
+        "en": "First mark the sound with a spoken word over two eights. Rest; use hands only. Then add the grounded base for two eights. Compare one trial with no planned response and one with your choice at the same source/tempo. If the sound disappears, do not invent it; leave the response out and keep pulse.",
+        "tr": "Önce sesi iki sekizli boyunca sözle işaretle. Dinlen; yalnız elleri kullan. Sonra iki sekizli yerde temeli ekle. Aynı kaynak/hızda plansız yanıt denemesi ile seçtiğin yanıtı karşılaştır. Ses kaybolursa icat etme; yanıtı çıkar, vuruşu koru."
+      },
+      "mistakes": {
+        "en": "Opening hands on every beat versus on the chosen sound: remove feet and listen. Losing base timing to chase the accent: smaller hand range or spoken marking. A memorised count with no audible cue is a count exercise, not this music task.",
+        "tr": "Her vuruşta el açmak ile seçilen seste açmayı ayır: adımlara ara ver ve dinle. Vurguyu kovalamak için temel zamanı kaybetmek: daha küçük el aralığı veya sözlü işaret. Duyulur ipucu olmadan ezberlenmiş sayı müzik görevi değil, sayım çalışmasıdır."
+      },
+      "adaptation": {
+        "en": "Seated sound naming and hand response can satisfy listening criteria only. Metronome-only trials leave this musical criterion unattempted.",
+        "tr": "Oturarak sesi adlandırma ve el yanıtı yalnız dinleme ölçütlerini karşılayabilir. Yalnız metronom denemesinde bu müzik ölçütü denenmedi kalır."
+      },
+      "check": {
+        "en": "Name the audible cue, the chosen response and at least two cue/response events; observe whether the base kept its pulse. Distinguish “heard and responded”, “uncertain” and “not present”. Change only one response choice in a retry.",
+        "tr": "Duyulur ipucunu, seçilen yanıtı ve en az iki ipucu/yanıt olayını adlandır; temelin vuruşu koruyup korumadığını gözle. “Duydum ve yanıt verdim”, “belirsiz” ve “yoktu” ayrımı yap. Tekrarda yalnız bir yanıt tercihini değiştir."
+      }
+    },
+    {
+      "id": "hhs_08",
+      "prerequisiteIds": [
+        "hhs_07"
+      ],
+      "instructionalSourceIds": [
+        "authored"
+      ],
+      "title": {
+        "en": "Original sequence, diagnose, revise, reassess",
+        "tr": "Özgün dizi, belirle, düzelt, yeniden değerlendir"
+      },
+      "prerequisite": {
+        "en": "All prior recognition/listening checks; physical named-step eligibility remains separate.",
+        "tr": "Önceki tüm tanıma/dinleme kontrolleri; fiziksel adlandırılmış adım uygunluğu ayrı kalır."
+      },
+      "outcome": {
+        "en": "Build a short original sequence; identify one specific error, correct it and compare a second attempt under the same conditions.",
+        "tr": "Kısa özgün dizi kur; belirli bir hatayı bul, düzelt ve aynı koşullarda ikinci denemeyi karşılaştır."
+      },
+      "instruction": {
+        "en": "Write eight blocks of eight beats: choose the order of one bounce block, one side-rock block, one step-touch block, one Running Man block, one Roger Rabbit singles block and three bounce bridges. Put a bridge before each named-step block and after the final named-step block; choose grounded block order freely. Name starting R/L sides; include both sides inside each applicable block. Choose one audible sound/response and a phrase-entry cue. This is your original arrangement of ingredients, not a copied routine. Full physical named-step performance is deferred until demonstration/physical review; current practice replaces those blocks with step-touch and labels them substitutions.",
+        "tr": "Sekiz vuruşluk sekiz blok yaz: bir bounce, bir yanal rock, bir step-touch, bir Running Man, bir Roger Rabbit tekli bloğu ve üç bounce köprüsünün sırasını seç. Her adlandırılmış bloktan önce ve son adlandırılmış bloktan sonra köprü koy; yerde blokların sırasını serbest seç. Başlangıç sağ/sol taraflarını adlandır; uygun her blok içinde iki tarafı kullan. Bir duyulur ses/yanıt ve cümle giriş ipucu seç. Bu öğeleri özgün düzenlemendir, kopya rutin değil. Tam fiziksel adlandırılmış performans gösterim/fiziksel incelemeye kadar ertelenir; şimdiki çalışma bu blokları step-touch ile değiştirir ve yerine geçenler olarak etiketler."
+      },
+      "practice": {
+        "en": "Attempt A: note lawful sound source, tempo description, mode, cue, block plan and eligibility. Perform only eligible blocks, or rehearse verbally; if time is lost, pause through an eight and re-enter at the cue. Rest. Diagnose one count and one error category: pulse drift, support/touch confusion, wrong path/side, transition or cue response. Isolate that action for at most one eight, choose ONE correction (smaller range, feet only, bridge or listening), then attempt B with the same sound/tempo and block plan. Write what changed and what remains uncertain. No video upload required. Use an already planned bridge for correction; do not add a bridge or alter the block plan between A and B. If the plan or conditions must change, start a fresh A under the new plan before comparing a new B. If no specific error was observed, record “no observed error”; repeat the same eligible plan to check consistency instead of inventing a correction. If data are uncertain, name the uncertain criterion, return to recognition/listening or a smaller separate study, and leave the error/correction comparison unchecked until a fresh A supplies usable evidence.",
+        "tr": "A denemesi: yasal ses kaynağını, hız tarifini, biçimi, ipucunu, blok planını ve uygunluğu yaz. Yalnız uygun blokları yap veya sözlü prova et; zaman kaybolursa bir sekizli durup ipucunda yeniden gir. Dinlen. Bir sayı ve bir hata türü belirle: vuruştan kayma, destek/dokunuş karışıklığı, yanlış yol/taraf, geçiş veya ipucu yanıtı. Hareketi en çok bir sekizli ayır, TEK düzeltme seç (küçük aralık, yalnız ayak, köprü veya dinleme), sonra aynı ses/hız ve blok planında B denemesi. Değişeni ve belirsiz kalanı yaz. Video yüklemek gerekmez. Düzeltme için planda zaten bulunan köprüyü kullan; A ile B arasında yeni köprü ekleme veya blok planını değiştirme. Plan veya koşullar değişmeli ise yeni B ile karşılaştırmadan önce yeni planla taze A denemesi yap. Belirli hata gözlenmediyse “gözlenen hata yok” yaz; düzeltme uydurmak yerine aynı uygun planı tutarlılık için tekrarla. Veriler belirsizse belirsiz ölçütü adlandır, tanıma/dinleme veya ayrı küçük çalışmaya dön; taze A kullanılabilir gözlem sunana kadar hata/düzeltme karşılaştırmasını kontrol edilmemiş bırak."
+      },
+      "mistakes": {
+        "en": "“It felt wrong” is too vague: name the block/count and observable difference. Trying several corrections makes the comparison unclear: select one. Different music in B hides timing comparison: keep conditions or mark comparison invalid. A substituted or spoken named-step block cannot be reported as performed.",
+        "tr": "“Yanlış hissettirdi” fazla belirsiz: blok/sayıyı ve gözlenebilir farkı adlandır. Birkaç düzeltme karşılaştırmayı belirsizleştirir: birini seç. B’de farklı müzik zaman karşılaştırmasını gizler: koşulları koru veya karşılaştırmayı geçersiz işaretle. Yerine geçen veya sözlü adlandırılmış blok yapılmış sayılmaz."
+      },
+      "adaptation": {
+        "en": "Grounded substitution, smaller standing range, seated cue/hand study and verbal plan each have different outcomes. Keep named-step physical criteria unchecked where substituted. A comfortable adapted task is meaningful preparation without claiming the same physical endpoint.",
+        "tr": "Yerde yerine geçen hareket, daha küçük ayakta aralık, oturarak ipucu/el çalışması ve sözlü plan ayrı sonuçlar taşır. Yerine geçen adımda adlandırılmış fiziksel ölçütleri kontrol edilmemiş bırak. Rahat uyarlanmış görev aynı fiziksel hedef iddiası olmadan anlamlı hazırlıktır."
+      },
+      "check": {
+        "en": "Record each separately: pulse across blocks; phrase cue/entry; bounce and rock; R/L weight; step/touch; eligible Running Man and Roger Rabbit contacts/path/timing; two transitions; recovery; two audible cue responses; A error with count; one correction; same-condition B comparison. Use observed/uncertain/unattempted and mode for EACH. A full physical endpoint requires every physical criterion observed after eligibility review; reading is never completion. This candidate cannot award that endpoint. If B is unclear, return to the relevant earlier study and schedule another comfortable attempt, not more speed or more repetitions. No observed error is an honest consistency result, not proof that error diagnosis was demonstrated. Uncertain data cannot satisfy correction/reassessment criteria.",
+        "tr": "Ayrı kaydet: bloklar boyunca vuruş; cümle ipucu/giriş; bounce ve rock; sağ/sol ağırlık; adım/dokunuş; uygun Running Man ve Roger Rabbit temas/yol/zamanı; iki geçiş; geri dönüş; iki duyulur ipucu yanıtı; sayısıyla A hatası; bir düzeltme; aynı koşullu B karşılaştırması. HER biri için öz gözlem/belirsiz/denenmedi ve biçim kullan. Tam fiziksel hedef uygunluk incelemesinden sonra tüm fiziksel ölçütlerin gözlenmesini gerektirir; okumak tamamlanma değildir. Bu aday o hedefi veremez. B belirsizse ilgili önceki çalışmaya dön ve rahat başka deneme planla; daha fazla hız veya tekrar değil. Gözlenen hata olmaması dürüst bir tutarlılık sonucudur; hatayı belirleme becerisinin gösterildiği kanıtı değildir. Belirsiz veriler düzeltme/yeniden değerlendirme ölçütlerini karşılayamaz."
+      }
+    }
+  ],
+  "sourceRegistry": [
+    {
+      "id": "howcast-running-man",
+      "url": "https://howcast.com/videos/505188-how-to-do-the-running-man-hip-hop-dancing/",
+      "author": "Charlene Chi-Chi Smith / Howcast",
+      "accessed": "2026-10-03",
+      "scope": "Alternating lift/down and other-foot backward travel; hop; optional opposite arms. Transcript does NOT validate exact strikes, foot tracks or our count scaffold.",
+      "rights": "All Rights Reserved; reference only; no media included"
+    },
+    {
+      "id": "howcast-roger-rabbit",
+      "url": "https://howcast.com/videos/505189-how-to-do-the-roger-rabbit-hip-hop-dancing/",
+      "author": "Charlene Chi-Chi Smith / Howcast",
+      "accessed": "2026-10-03",
+      "scope": "Singles option, rear foot replacement, alternate support, forward-push arms. Excludes doubles and large back kicks; contact/track demonstration pending.",
+      "rights": "All Rights Reserved; reference only; no media included"
+    },
+    {
+      "id": "howcast-touch",
+      "url": "https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/",
+      "author": "Robert Royston / Howcast",
+      "accessed": "2026-10-03",
+      "scope": "Generic weight/no-weight and step-touch rhythm only",
+      "rights": "All Rights Reserved; reference only"
+    },
+    {
+      "id": "steezy-listening",
+      "url": "https://www.steezy.co/posts/how-to-dance-hip-hop-for-beginners",
+      "author": "Jessie Ma / STEEZY",
+      "accessed": "2026-10-03",
+      "scope": "Music listening, counts, sound elements; not endorsement of drills",
+      "rights": "Reference only"
+    },
+    {
+      "id": "bce-side-response",
+      "url": "https://bigcreative.education/10-easy-dance-moves-anyone-can-master/",
+      "author": "Big Creative Education",
+      "accessed": "2026-10-03",
+      "scope": "Side weight/upper-body response ingredient; our side-rock preparation is not a canonical named Rock",
+      "rights": "Reference only"
+    },
+    {
+      "id": "intro-provenance",
+      "url": "local:hip_hop_foundations_course.json",
+      "scope": "Reviewed introduction source registry; grounded bounce preparation"
+    },
+    {
+      "id": "authored",
+      "scope": "Original candidate pedagogy, count scaffold, drills, error comparisons, adaptations, original arrangement and criteria; qualified review pending"
+    }
+  ],
+  "finalTaskContract": {
+    "evidence": "self_observation_only",
+    "blocks": 8,
+    "beatsPerBlock": 8,
+    "requiredCompetencies": [
+      "external_pulse",
+      "phrase_entry",
+      "grounded_bounce",
+      "side_rock",
+      "two_sided_weight",
+      "step_touch",
+      "running_man_selected",
+      "roger_rabbit_singles_selected",
+      "transitions",
+      "recovery",
+      "audible_response",
+      "error_identification",
+      "correction",
+      "same_condition_reassessment"
+    ],
+    "physicalNamedStepsEligible": false,
+    "adaptationIsSamePhysicalEndpoint": false,
+    "cameraVerification": false
+  }
+}

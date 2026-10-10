@@ -22,13 +22,13 @@ SLICE = APP / "content/motion_content/choreia.source-slice.v1.json"
 PROJECTION = APP / "content/motion_content/choreia.source-projection.v1.json"
 COURSE = APP / "content/salsa_on1_course.json"
 
-# Immutable app-local pins from the independently read-back V3 export.
-SLICE_SHA256 = "7218bdf4f109844ee4c79367e3ae105c0530ac388a1732574c0d7d26b0c9d7a3"
-PROJECTION_SHA256 = "b9c731a1801ae46a27bdfdc97cbc96eeeb0f2dc291e01e81ea64d86c29765a15"
-COURSE_SHA256 = "b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7"
-CATALOG_SHA256 = "791bfea8e1479307794bcf8799cf703a7a840bcd3058c1a0d7fdf065d32d8594"
-MANIFEST_SHA256 = "d887683c9a9b9bdb8d4ab7c51cdc5a5b4b4de6a918079e4cfd9cf543e9751e60"
-PROOF_SHA256 = "dec615e14881b86b7676e1157f63b8bf6269026d856e59f2ee3a65d7f97e512a"
+# App-owned authored revision pins; independent code/source acceptance pending.
+SLICE_SHA256 = "7c62bacdfee106acc06dba4a950ecf6b23f5a0d0ea976f56ec309ea15bc077fb"
+PROJECTION_SHA256 = "af0e7bb0a865914722774e7b806e2236e963dcdd2cda1ddf3e6664eac556a69c"
+COURSE_SHA256 = "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc"
+CATALOG_SHA256 = "a6072c7e16edf43c812b508a8904ae0bf4cd0ce70842b0affc51e7514f751982"
+MANIFEST_SHA256 = "c98bde343ed0529d0717ca70b56cae529e0fbededecdbaf4ef6934230c324b64"
+PROOF_SHA256 = "8adca6131462048b24f531a2fe9ebcb999794e7fbcd7cad6514e02a8ad7ba8cd"
 COUNTS = (48, 436, 872, 0)  # lessons, scenes, variants, HOLDs
 MAX_SLICE_BYTES = 2 * 1024 * 1024
 MAX_PROJECTION_BYTES = 2 * 1024 * 1024  # Core decoder's size ceiling

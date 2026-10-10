@@ -1,0 +1,1104 @@
+{
+  "proposalSchemaVersion": 1,
+  "id": "latin_fusion_beginner_written",
+  "version": 1,
+  "catalogStyleId": "latin_fusion_fitness",
+  "status": "written_integration_candidate",
+  "title": {
+    "en": "Latin Fusion: low-impact written foundations",
+    "tr": "Latin Fusion: düşük yük yazılı temeller"
+  },
+  "acceptance": {
+    "writtenProposalIndependentlyAccepted": false,
+    "appIntegrated": false,
+    "softwareQualified": false,
+    "physicalTeachingAccepted": false,
+    "completeCurriculumAccepted": false,
+    "scoring": false,
+    "progressWrites": false,
+    "paidAccess": false,
+    "mediaRightsAccepted": false,
+    "modelVerified": false,
+    "physicalInstructionAccepted": false
+  },
+  "sources": [
+    {
+      "id": "merengue_primary",
+      "url": "https://milpasos.com.do/merengue",
+      "publisher": "Mil Pasos Dance Studio, Dominican Republic",
+      "access": "Public instructor/studio curriculum page read; no class enrolment",
+      "supports": "Two-time march and natural hip movement as foundation topics; Dominican context",
+      "doesNotSupport": "Exact contact, our eight-count arrangement, measured exertion or endorsed course",
+      "checkedAt": "2026-10-04",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "salsa_timing_primary",
+      "url": "https://thedancedojo.com/how-to-salsa-dance-for-beginners/",
+      "publisher": "Dance Dojo, Robin Campbell / Patrick and Scarlet",
+      "access": "Public educator guide read",
+      "supports": "On1 1/2/3 and 5/6/7 transfers, pauses 4/8; side basic is a beginner ingredient",
+      "doesNotSupport": "No copied linked routine, partner/turn mastery or our fusion arrangement",
+      "checkedAt": "2026-10-04",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "hold_primary",
+      "url": "https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html",
+      "publisher": "Mathias Ellmann, Salsa Movement Lexicon",
+      "access": "Public educator instruction read",
+      "supports": "Hold adds no new regular transfer; support/free foot remain organized",
+      "doesNotSupport": "No certification of our contact technique or physical assessment",
+      "checkedAt": "2026-10-04",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "cumbia_primary",
+      "url": "https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips",
+      "publisher": "Dennis PaSamba Dance Company; Dennis PaSamba",
+      "access": "Public instructor guide read, published 2026-09-07",
+      "supports": "A social cumbia variant uses back/recover/return and pause, then opposite side; compact practice",
+      "doesNotSupport": "Their angled/behind contact is NOT copied; our non-cross straight-back adaptation is not accepted cumbia drag or universal cumbia technique",
+      "checkedAt": "2026-10-04",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "reggaeton_primary",
+      "url": "https://danceflowfortmyers.com/reggaeton-dance-basics/",
+      "publisher": "Dance Flow Fort Myers studio",
+      "access": "Public studio education page read, updated 2026-10-02; author shown as Content Manager",
+      "supports": "Small comfortable pulse, step-touch, foundational weight awareness; instruction distinguishes style-specific groove and optional body rolls",
+      "doesNotSupport": "Named instructor/peer review of this article not established; no endorsement of our course, reggaeton mastery, exertion or camera claims",
+      "checkedAt": "2026-10-04",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "safe_dance_primary",
+      "url": "https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance",
+      "publisher": "Ausdance National",
+      "access": "Public dance-education guidance read",
+      "supports": "Gradual movement preparation and gradual reduction after ordinary comfortable activity",
+      "doesNotSupport": "Not an individualized clearance, a timer proving preparation, medical advice or validation of our choreography",
+      "checkedAt": "2026-10-04",
+      "mediaCopied": false,
+      "endorsement": false
+    }
+  ],
+  "scope": {
+    "en": "Learn to organize a small solo practice from contrasting count/weight patterns: prepare, read and execute the selected uncomplicated footwork when comfortable, change blocks without hidden steps, adapt load, recover, and correct one specific error. This is an original foundations proposal, not a complete course in salsa, merengue, cumbia or reggaeton, not a ready-to-publish fitness class. Eight stages are competency groupings, not a lesson-count target. Physical teaching acceptance remains open.",
+    "tr": "Farklı sayı/ağırlık örüntülerinden küçük solo pratik düzenlemeyi öğren: hazırlan, seçilmiş basit ayak çalışmasını oku ve rahatsa uygula, gizli adım eklemeden blok değiştir, yükü uyarla, toparlan ve belirli bir hatayı düzelt. Bu özgün temel önerisi salsa, merengue, cumbia veya reggaeton için tam kurs ya da yayına hazır fitness sınıfı değildir. Sekiz aşama ders sayısı hedefi değil, beceri gruplarıdır. Fiziksel öğretim kabulü açık."
+  },
+  "startCompetency": {
+    "en": "No prior Latin dance course required. For standing trials, comfortably stand and take a few ordinary small steps in the prepared space; distinguish your left/right. If this is not comfortable or clear, use verbal/table work only and leave standing skills unattempted. Before new blocks, show the preceding support/free-foot and pause check; reading does not clear a physical prerequisite.",
+    "tr": "Önceden Latin dans kursu gerekmez. Ayakta deneme için hazırlanmış alanda rahat durup birkaç sıradan küçük adım atabil ve kendi sol/sağını ayır. Rahat veya açık değilse yalnız sözlü/tablo çalış, ayakta becerileri denenmemiş bırak. Yeni bloktan önce önceki destek/boş ayak ve durak kontrolünü göster; okumak fiziksel ön koşulu karşılamaz."
+  },
+  "endCompetency": {
+    "en": "Written exit: reconstruct all four selected eight-count ledgers, contrast every-beat transfer with three-transfers-and-hold and step-touch, solve an unseen row, explain the L-ready transition at each boundary, design and revise an original 32-count plan with adaptation labels and a recovery route. Selected standing exit, if independently demonstrated/reviewed and comfortable: carry out the chosen plan twice under unchanged conditions, name where a transfer/hold/transition differed, revisit the exact drill, compare a second attempt and deliberately reduce/stop. Counts alone do not prove musicality, sustainable workload, authentic style or physical mastery.",
+    "tr": "Yazılı çıkış: seçilmiş dört sekiz sayımlı destek tablosunu yeniden kur, her vuruşta aktarımı üç aktarım–durak ve adım–dokunuş ile ayır, yeni satırı çöz, her sınırda solun neden hazır olduğunu açıkla, uyarlama etiketli özgün 32 sayımlı plan ve toparlanma yolu düzenleyip düzelt. Seçilmiş ayakta çıkış ancak bağımsız gösterim/inceleme ve rahatlık varsa: aynı koşullarda seçilen planı iki kez uygula, aktarım/durak/geçişin nerede değiştiğini adlandır, tam ilgili çalışmaya dön, ikinci denemeyi karşılaştır ve bilinçli azalt/dur. Sayılar müzikaliteyi, sürdürülebilir yükü, özgün stil karakterini veya fiziksel ustalığı kanıtlamaz."
+  },
+  "salsaSeparation": {
+    "en": "The app already has salsa_on1_solo: 8 modules/48 lessons. This proposal does not reproduce those lessons, shines, turns, history sequence or course completion. Its S block is one compact rhythm contrast for fusion transitions. Existing lessons so_03/so_04/so_07 can be revisited for pulse, support and side basic; this is a content reference, not a new route or automatic prerequisite/progress award.",
+    "tr": "Uygulamada salsa_on1_solo: 8 modül/48 ders var. Öneri bu dersleri, shines, dönüşleri, tarih dizisini veya kurs tamamlanmasını çoğaltmaz. S bloğu fusion geçişi için tek küçük ritim karşılaştırmasıdır. Vuruş, destek ve yana temel için so_03/so_04/so_07 yeniden ele alınabilir; bu içerik bağlantısıdır, yeni rota ya da otomatik ön koşul/ilerleme ödülü değildir."
+  },
+  "practiceBoundaries": {
+    "en": "Before every standing trial: clear obstacles and loose rugs, check secure footing/clothing and room for YOUR chosen small steps; choose facing FRONT and do not rotate on a planted foot. Begin with familiar small walking/side movements at an easy pace and gradually prepare for the selected action; a fixed timer or sweat is not clearance. Rest and recheck after interruptions. Use short phrases with optional rests, not mandatory nonstop work. If pain, dizziness or instability occurs, stop; gradual reduction applies only to ordinary comfortable activity, not a reason to continue through symptoms. No jumps, deep squats, forced hips/spine, turns or floorwork.",
+    "tr": "Her ayakta denemeden önce engelleri ve gevşek kilimleri kaldır; sağlam basışı/giysiyi ve SENİN seçtiğin küçük adımlara alanı kontrol et. Bakış ÖN; yere basan ayak üzerinde dönme. Bildik küçük yürüyüş/yan hareketlerle kolay hızda başla, seçilen harekete kademeli hazırlan; sabit süre veya ter onay değildir. Kesinti sonrası dinlen ve yeniden kontrol et. Zorunlu kesintisiz çalışma yerine dinlenmeli kısa diziler kullan. Ağrı, baş dönmesi veya dengesizlikte dur; kademeli azaltma yalnız olağan rahat çalışma içindir, belirtilere rağmen sürdürme nedeni değildir. Zıplama, derin çömelme, zorlanmış kalça/omurga, dönüş ve yer çalışması yok."
+  },
+  "musicAndObservation": {
+    "en": "No music, recording or metronome is supplied. Use your spoken count; optionally listen separately to music you can lawfully access, at a pulse you can comfortably follow. Eight counts here organize drills; they do not identify a song’s true phrase start or impose one meter on every tradition. If pulse/phrase is uncertain, record uncertainty, return to spoken counting and leave music alignment unverified. Self-observation can describe support and sequence only; no camera effort, heart-rate, calorie, weight-loss, groove or mastery feedback exists.",
+    "tr": "Müzik, kayıt veya metronom verilmez. Kendi sözlü sayımını kullan; istersen yasal erişebildiğin müziği ayrı dinle, rahat izleyebildiğin vuruşu seç. Sekiz sayı çalışmayı düzenler; parçanın gerçek cümle başlangıcını bulmaz ve tüm geleneklere tek ölçü dayatmaz. Vuruş/cümle belirsizse belirsizliği kaydet, sözlü sayıma dön ve müzik hizasını doğrulanmamış bırak. Öz gözlem yalnız destek ve diziyi betimler; kamera çaba, nabız, kalori, kilo kaybı, groove veya ustalık geri bildirimi yok."
+  },
+  "notation": {
+    "copy": {
+      "en": "M/S/T/C and M-side start facing FRONT, weight on R, L available. Separate P starts with both feet supporting; it has no automatic single-foot exit. L/R name YOUR limbs, not a mirrored instructor. W transfers support to the named foot, T touches without loading, H adds no transfer. B means both feet support, used only in the separate optional pulse drill; it is NOT a single-leg balance target. P_bend/P_release are tiny optional motion without a new transfer, only in the separate bilateral P table. Support is AFTER the row action. Near means return to a comfortable stance with room between feet, not force feet together. Each count is one spoken beat.",
+      "tr": "M/S/T/C ve M-side ÖN bakışla, ağırlık sağda ve sol hazırken başlar. Ayrı P iki ayak desteğiyle başlar; otomatik tek-ayak çıkışı yoktur. L/R SENİN sol/sağ uzuvlarındır, aynalanmış eğitmen değildir. W desteği adı verilen ayağa aktarır, T ağırlıksız dokunur, H yeni aktarım eklemez. B iki ayağın desteğidir, yalnız ayrı isteğe bağlı vuruş çalışmasında kullanılır; tek ayak dengesi hedefi DEĞİLDİR. P_bend/P_release yalnız ayrı iki-ayaklı P tablosunda yeni aktarım eklemeyen çok küçük isteğe bağlı harekettir. Destek satır eyleminden SONRA gösterilir. Yakın, ayakları zorla birleştirmek değil arada alan olan rahat duruşa dönmektir. Her sayı sözlü bir vuruştur."
+    },
+    "directions": {
+      "front": {
+        "en": "own front ↑",
+        "tr": "kendi önün ↑"
+      },
+      "back": {
+        "en": "own back ↓",
+        "tr": "kendi arkan ↓"
+      },
+      "left": {
+        "en": "own left ←",
+        "tr": "kendi solun ←"
+      },
+      "right": {
+        "en": "own right →",
+        "tr": "kendi sağın →"
+      },
+      "near": {
+        "en": "near starting position",
+        "tr": "başlangıç konumuna yakın"
+      },
+      "in_place": {
+        "en": "in place",
+        "tr": "yerinde"
+      }
+    }
+  },
+  "patterns": [
+    {
+      "id": "M",
+      "title": {
+        "en": "Every-beat march scaffold",
+        "tr": "Her vuruşta yürüyüş taslağı"
+      },
+      "sourceIds": [
+        "merengue_primary"
+      ],
+      "originality": {
+        "en": "Our L-first eight-count drill groups a two-time march; no forced hip action or claim of complete merengue technique.",
+        "tr": "Sol ile başlayan sekiz sayımlı çalışmamız iki zamanlı yürüyüşü gruplar; zorlanmış kalça eylemi veya tam merengue tekniği iddiası yok."
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 3,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 4,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 5,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 6,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 7,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 8,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L"
+    },
+    {
+      "id": "S",
+      "title": {
+        "en": "Selected On1 side rhythm",
+        "tr": "Seçilmiş On1 yan ritmi"
+      },
+      "sourceIds": [
+        "salsa_timing_primary",
+        "hold_primary"
+      ],
+      "originality": {
+        "en": "Original compact side/recover/near layout using the referenced six-transfer rhythm; not copied source choreography.",
+        "tr": "Kaynaklı altı aktarım ritmini kullanan özgün küçük yan/geri al/yakın yerleşimi; kaynak koreografisi kopyası değil."
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "left",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 3,
+          "foot": "L",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 4,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 5,
+          "foot": "R",
+          "action": "W",
+          "direction": "right",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 6,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 7,
+          "foot": "R",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 8,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L"
+    },
+    {
+      "id": "T",
+      "title": {
+        "en": "Compact step-touch bridge",
+        "tr": "Küçük adım–dokunuş köprüsü"
+      },
+      "sourceIds": [
+        "reggaeton_primary"
+      ],
+      "originality": {
+        "en": "Style-neutral original bridge using common step-touch ingredients; does not establish reggaeton groove.",
+        "tr": "Yaygın adım–dokunuş öğelerinden stil bakımından nötr özgün köprü; reggaeton groove kanıtı değildir."
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "left",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 3,
+          "foot": "R",
+          "action": "W",
+          "direction": "right",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 4,
+          "foot": "L",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 5,
+          "foot": "L",
+          "action": "W",
+          "direction": "left",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 6,
+          "foot": "R",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 7,
+          "foot": "R",
+          "action": "W",
+          "direction": "right",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 8,
+          "foot": "L",
+          "action": "T",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L"
+    },
+    {
+      "id": "C",
+      "title": {
+        "en": "Non-cross back/recover rhythm adaptation",
+        "tr": "Çaprazsız arka/geri al ritim uyarlaması"
+      },
+      "sourceIds": [
+        "cumbia_primary"
+      ],
+      "originality": {
+        "en": "Our small straight-back, no-drag, no-turn adaptation keeps the back/recover/return/hold rhythm. It changes the source’s angled/behind action and is NOT the catalog cumbia drag or proof of cumbia technique.",
+        "tr": "Küçük düz-arka, sürüklemesiz/dönüşsüz uyarlamamız arka/geri al/dön/durak ritmini korur. Kaynağın açılı/arkaya çapraz eylemini değiştirir; katalogdaki cumbia drag veya cumbia tekniği kanıtı DEĞİLDİR."
+      },
+      "physicalTeachingReviewed": false,
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "back",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 3,
+          "foot": "L",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 4,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 5,
+          "foot": "R",
+          "action": "W",
+          "direction": "back",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 6,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 7,
+          "foot": "R",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 8,
+          "foot": "—",
+          "action": "H",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L"
+    },
+    {
+      "id": "M-side",
+      "title": {
+        "en": "Optional lateral every-beat variation",
+        "tr": "İsteğe bağlı yan her-vuruş varyasyonu"
+      },
+      "sourceIds": [
+        "merengue_primary"
+      ],
+      "originality": {
+        "en": "Our non-cross lateral placement exercise; the public curriculum source only establishes march as a foundation topic, not these exact positions.",
+        "tr": "Kendi çaprazsız yan yerleşim çalışmamız; açık müfredat kaynağı yalnız yürüyüşü temel konu olarak belirler, bu tam konumları değil."
+      },
+      "rows": [
+        {
+          "count": 1,
+          "foot": "L",
+          "action": "W",
+          "direction": "left",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 2,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 3,
+          "foot": "L",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 4,
+          "foot": "R",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 5,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 6,
+          "foot": "R",
+          "action": "W",
+          "direction": "right",
+          "supportAfter": "R",
+          "facing": "front"
+        },
+        {
+          "count": 7,
+          "foot": "L",
+          "action": "W",
+          "direction": "in_place",
+          "supportAfter": "L",
+          "facing": "front"
+        },
+        {
+          "count": 8,
+          "foot": "R",
+          "action": "W",
+          "direction": "near",
+          "supportAfter": "R",
+          "facing": "front"
+        }
+      ],
+      "startSupport": "R",
+      "startFree": "L",
+      "endSupport": "R",
+      "nextFree": "L"
+    },
+    {
+      "id": "P",
+      "title": {
+        "en": "Separate optional bilateral pulse",
+        "tr": "Ayrı isteğe bağlı iki ayaklı vuruş"
+      },
+      "sourceIds": [
+        "reggaeton_primary"
+      ],
+      "originality": {
+        "en": "Our tiny bend/release count scaffold, not authenticated hip-driven reggaeton bounce; pause/reset before the next foot block.",
+        "tr": "Çok küçük bük/bırak sayı taslağımız; doğrulanmış kalçadan reggaeton bounce değil; sonraki ayak bloğundan önce dur/sıfırla."
+      },
+      "startSupport": "B",
+      "startFree": null,
+      "endSupport": "B",
+      "nextFree": null,
+      "physicalTeachingReviewed": false,
+      "rows": [
+        {
+          "count": 1,
+          "foot": "BOTH",
+          "action": "P_bend",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 2,
+          "foot": "BOTH",
+          "action": "P_release",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 3,
+          "foot": "BOTH",
+          "action": "P_bend",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 4,
+          "foot": "BOTH",
+          "action": "P_release",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 5,
+          "foot": "BOTH",
+          "action": "P_bend",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 6,
+          "foot": "BOTH",
+          "action": "P_release",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 7,
+          "foot": "BOTH",
+          "action": "P_bend",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        },
+        {
+          "count": 8,
+          "foot": "BOTH",
+          "action": "P_release",
+          "direction": "in_place",
+          "supportAfter": "B",
+          "facing": "front"
+        }
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "lf_01",
+      "prerequisiteIds": [],
+      "sourceIds": [
+        "safe_dance_primary"
+      ],
+      "patternIds": [],
+      "title": {
+        "en": "Choose the practice boundary",
+        "tr": "Pratik sınırını seç"
+      },
+      "prerequisite": {
+        "en": "Read boundaries; standing trials require comfortable ordinary steps.",
+        "tr": "Sınırları oku; ayakta deneme rahat sıradan adım gerektirir."
+      },
+      "outcome": {
+        "en": "Plan space, preparation, rests and stop choices before counts.",
+        "tr": "Sayılardan önce alanı, hazırlığı, dinlenme ve durma seçeneklerini planla."
+      },
+      "instruction": {
+        "en": "Pick FRONT and check left/right by your body, not a screen. Name an obstacle you removed and a comfortable movement you will begin with. Gradually prepare with familiar easy movement before testing a new block. No set count certifies readiness. Keep water accessible and take rests whenever needed.",
+        "tr": "ÖNü seç; sol/sağı ekrandan değil bedeninden kontrol et. Kaldırdığın bir engeli ve başlayacağın rahat hareketi adlandır. Yeni bloktan önce bildik kolay hareketle kademeli hazırlan. Hiçbir sabit sayı hazır oluşu onaylamaz. Suyu ulaşılır tut; gerektiğinde dinlen."
+      },
+      "practice": {
+        "en": "Say eight slow even numbers while seated or standing comfortably, without steps. Mark whether you kept the count and whether you wanted to pause. Sketch your movement area; do not keep moving just to reach eight.",
+        "tr": "Oturarak ya da rahat ayakta, adım atmadan sekiz yavaş eşit sayı söyle. Sayıyı koruyup korumadığını ve durmak isteyip istemediğini işaretle. Hareket alanını çiz; sekize ulaşmak için hareketi sürdürme."
+      },
+      "mistakes": {
+        "en": "A fast count or warm room is not preparation. An unsafe surface is not solved by smaller steps: change the setup or keep paper work. Symptoms override the planned ending.",
+        "tr": "Hızlı sayım veya sıcak oda hazırlık değildir. Güvensiz zemin küçük adımla çözülmez: düzeni değiştir veya kâğıt çalış. Belirtiler planlı bitişten önce gelir."
+      },
+      "adaptation": {
+        "en": "Use seated spoken counting and paper directions; no standing readiness is inferred.",
+        "tr": "Oturarak sözlü sayı ve kâğıt yön kullan; ayakta hazır oluş çıkarılmaz."
+      },
+      "check": {
+        "en": "State setup, preparation, ordinary rest and immediate-stop choices; uncertain setup means no standing attempt.",
+        "tr": "Düzeni, hazırlığı, olağan dinlenmeyi ve hemen durma seçeneklerini söyle; belirsiz düzende ayakta deneme yapma."
+      }
+    },
+    {
+      "id": "lf_02",
+      "prerequisiteIds": [
+        "lf_01"
+      ],
+      "sourceIds": [
+        "hold_primary",
+        "reggaeton_primary"
+      ],
+      "patternIds": [
+        "T"
+      ],
+      "title": {
+        "en": "Read support before adding rhythm",
+        "tr": "Ritimden önce desteği oku"
+      },
+      "prerequisite": {
+        "en": "Stage 1 boundary plan clear; choose standing or paper explicitly.",
+        "tr": "Aşama 1 sınır planı açık; ayakta/kâğıt biçimini açıkça seç."
+      },
+      "outcome": {
+        "en": "Distinguish W, T and H; identify support and the next available foot.",
+        "tr": "W, T ve Hyi ayır; destek ve sonraki hazır ayağı belirle."
+      },
+      "instruction": {
+        "en": "Read T’s first four rows. For W, place the available foot a small comfortable distance and let it receive weight; do not jump. For T, bring the other foot near without receiving weight. For H, continue counting without a new step. If support is unclear, stop before trying to lift any foot; table work does not require single-leg balance.",
+        "tr": "Tnin ilk dört satırını oku. Wde hazır ayağı rahat küçük mesafeye koyup ağırlığı ona aktar; zıplama. Tde diğer ayağı ağırlık almadan yaklaştır. Hde yeni adım eklemeden saymayı sürdür. Destek belirsizse ayağı kaldırmaya çalışmadan dur; tablo çalışması tek ayak dengesi istemez."
+      },
+      "practice": {
+        "en": "Start R-supported, L ready. Read T counts 1–4 without moving; name support after each. If comfortable, try this four-count drill once, pause, then try again. Keep it feet-only. Repeat neither for speed nor fatigue.",
+        "tr": "Sağ destek/sol hazır başla. T 1–4ü hareketsiz oku, her sayı sonrası desteği söyle. Rahatsa dört sayıyı bir kez dene, dur, tekrar dene. Yalnız ayaklar. Hız veya yorulmak için tekrarlama."
+      },
+      "mistakes": {
+        "en": "If T2 takes weight on R, R is no longer free for T3. Mark count 2/extra transfer; reset, rehearse only 1–2 and then rejoin 1–4. Do not add a hidden shuffle.",
+        "tr": "T2de sağ ağırlık alırsa T3 için sağ boş kalmaz. 2/ek aktarım diye işaretle; sıfırla, yalnız 1–2yi çalış, sonra 1–4e dön. Gizli ara adım ekleme."
+      },
+      "adaptation": {
+        "en": "Explain each row aloud or point to L/R cards. This observes notation, not physical transfer.",
+        "tr": "Satırları söyle veya L/R kartlarını göster. Bu işaret bilgisidir, fiziksel aktarım değil."
+      },
+      "check": {
+        "en": "Unseen row below: solve before reading the separate answer. Verify action, support and next foot, not only limb order.",
+        "tr": "Aşağıdaki yeni satırı ayrı cevabı okumadan çöz. Yalnız ayak sırasını değil eylem, destek ve sonraki ayağı doğrula."
+      },
+      "exercise": {
+        "en": "Start support R, L free. 1: L steps forward taking weight. 2: R comes near without weight. 3: R steps a little back taking weight. 4: no new step. Give W/T/H, support after each count and next available foot.",
+        "tr": "Sağ destek/sol boş başla. 1: sol öne ağırlıklı adım. 2: sağ ağırlıksız yaklaşır. 3: sağ biraz arkaya ağırlıklı adım. 4: yeni adım yok. W/T/H, her sayı sonrası destek ve sonraki hazır ayağı söyle."
+      },
+      "answer": {
+        "en": "1 W/L; 2 T/L; 3 W/R; 4 H/R; next L. If 2 accidentally loads R, the planned R at 3 is not free. Revisit 1–2; do not pretend the changed row is the same plan.",
+        "tr": "1 W/sol; 2 T/sol; 3 W/sağ; 4 H/sağ; sonraki sol. 2de sağ yanlışlıkla ağırlık alırsa 3teki sağ hazır değildir. 1–2ye dön; değişmiş satırı aynı plan sayma."
+      }
+    },
+    {
+      "id": "lf_03",
+      "prerequisiteIds": [
+        "lf_02"
+      ],
+      "sourceIds": [
+        "merengue_primary"
+      ],
+      "patternIds": [
+        "M",
+        "M-side"
+      ],
+      "title": {
+        "en": "Every-beat march and small side travel",
+        "tr": "Her vuruşta yürüyüş ve küçük yan yol"
+      },
+      "prerequisite": {
+        "en": "Distinguish transfer/touch/hold and next free foot.",
+        "tr": "Aktarım/dokunuş/durak ve sonraki boş ayak ayrımı açık."
+      },
+      "outcome": {
+        "en": "Keep alternating support on each beat; vary space without changing the ledger.",
+        "tr": "Her vuruşta desteği sırayla değiştir; tabloyu değiştirmeden alanı uyarla."
+      },
+      "instruction": {
+        "en": "M alternates L/R on every count, low ordinary steps close to the floor. Group it as four pairs, not eight high knees. Let hips remain comfortable; do not manufacture a hip drop. A march is a merengue-related entry ingredient, not full cultural/style technique. Our optional M-side table uses small lateral out-and-back weight changes with no holds. Read every row first; keep support alternating and facing FRONT. It is our space-control variation, not a prescribed merengue hip/contact technique.",
+        "tr": "M her sayıda L/R değiştirir; yere yakın küçük sıradan adımlar. Sekiz yüksek diz yerine dört çift düşün. Kalça rahat kalsın; kalça düşüşünü zorla üretme. Yürüyüş merengue ile ilişkili giriş öğesidir, tam kültür/stil tekniği değil. İsteğe bağlı M-side tablomuz duraksız küçük yana çıkış ve dönüş aktarımı kullanır. Önce her satırı oku; destek dönüşümlü, bakış ÖN kalsın. Alan kontrolü için kendi varyasyonumuzdur; belirlenmiş merengue kalça/temas tekniği değildir."
+      },
+      "practice": {
+        "en": "Try four M counts, pause, then eight if comfortable. Compare in-place M with the optional eight-row travel plan on paper first. If space is tight, keep M in place. Never add speed and travel together.",
+        "tr": "Dört M sayısını dene, dur, rahatsa sekiz. Yerinde M ile isteğe bağlı sekiz satırlı yol planını önce kâğıtta karşılaştır. Alan darsa M yerinde kalsın. Hız ve yolu birlikte artırma."
+      },
+      "mistakes": {
+        "en": "A foot order L/R becomes unclear when a near step turns into a touch. Label the first altered row, return to M1–4 and say transfer on each beat. Forced hip action is removed, not made larger.",
+        "tr": "Yakın adım dokunuşa dönüşürse L/R sırası bozulur. İlk değişen satırı etiketle, M1–4e dön, her vuruşta aktarım de. Zorlanmış kalça eylemi büyütülmez; çıkarılır."
+      },
+      "adaptation": {
+        "en": "Reduce distance and ordinary foot lift, remove travel; seated alternating spoken L/R remains notation only.",
+        "tr": "Mesafeyi ve sıradan ayak kaldırışını küçült, yolu çıkar; oturarak dönüşümlü L/R söylemek yalnız işaret bilgisi."
+      },
+      "check": {
+        "en": "M8 ends support R/L ready; show it from the ledger and identify any altered beat. Travel choice is separate from style acceptance.",
+        "tr": "M8 sağ destek/sol hazır biter; tablodan göster, değişen vuruşu bul. Yol seçimi stil kabulünden ayrı."
+      }
+    },
+    {
+      "id": "lf_04",
+      "prerequisiteIds": [
+        "lf_03"
+      ],
+      "sourceIds": [
+        "salsa_timing_primary",
+        "hold_primary"
+      ],
+      "patternIds": [
+        "M",
+        "S"
+      ],
+      "title": {
+        "en": "Switch to six transfers and two holds",
+        "tr": "Altı aktarım ve iki durağa geç"
+      },
+      "prerequisite": {
+        "en": "M ledger is clear and stage-2 hold has no extra transfer.",
+        "tr": "M tablosu açık; aşama 2 durağında ek aktarım yok."
+      },
+      "outcome": {
+        "en": "Contrast M’s eight transfers with S’s six while preserving next-foot readiness.",
+        "tr": "Mnin sekiz aktarımını Snin altısıyla karşılaştır; sonraki ayağı hazır tut."
+      },
+      "instruction": {
+        "en": "Read S: L side, recover weight R at its original place, return L near with weight, hold on 4. Then R side, recover L, return R near with weight, hold on 8. Facing remains FRONT. Steps are small; do not twist feet or force hips. The hold keeps the support shown in the table, not an extra tap/transfer. This is one selected On1 side pattern for comparison, not the app’s whole Salsa course.",
+        "tr": "Syi oku: sol yana, sağın ilk yerinde ağırlığı sağa geri al, solu yakına ağırlıklı getir, 4te durak. Sonra sağ yana, solu geri al, sağı yakına ağırlıklı getir, 8de durak. Bakış ÖN. Küçük adım; ayak/kalça zorlama yok. Durak tablodaki desteği korur; ek dokunuş/aktarım değildir. Bu tek seçilmiş On1 yan örüntü karşılaştırmasıdır; uygulamanın tüm Salsa kursu değil."
+      },
+      "practice": {
+        "en": "Count 1–4 and say hold at 4; pause. Read 5–8, then one full S. Once clear, read M8→S1 and S8→M1: both boundaries leave L ready. Try original M8/S8 only if each block is comfortable separately.",
+        "tr": "1–4ü say, 4te durak de; ara ver. 5–8i oku, sonra bir tam S. Açık olunca M8→S1 ve S8→M1i oku: ikisi de solu hazır bırakır. Özgün M8/S8i yalnız bloklar ayrı ayrı rahatsa dene."
+      },
+      "mistakes": {
+        "en": "An accidental step on 4 changes the required R at 5. Record S4/extra transfer, reset support R, rehearse S1–5 slowly. Do not call a march a correct S.",
+        "tr": "4te yanlış adım 5teki sağ hazırlığını değiştirir. S4/ek aktarım kaydet, sağ destekle sıfırla, S1–5i yavaş çalış. Yürüyüşü doğru S sayma."
+      },
+      "adaptation": {
+        "en": "Use in-place six-transfer-and-hold marking instead of side travel and label it S/no-travel. It can study rhythm but does not prove lateral control.",
+        "tr": "Yan yol yerine yerinde altı aktarım–durak çalışıp S/yolsuz etiketle. Ritim çalışılabilir; yan yol kontrolünü kanıtlamaz."
+      },
+      "check": {
+        "en": "Explain support on 3/4/5 and 7/8/next1; leave musical phrase identification uncertain when no reliable beat reference exists.",
+        "tr": "3/4/5 ile 7/8/sonraki1 desteğini açıkla; güvenilir vuruş referansı yoksa müzik cümlesini bulmayı belirsiz bırak."
+      }
+    },
+    {
+      "id": "lf_05",
+      "prerequisiteIds": [
+        "lf_04"
+      ],
+      "sourceIds": [
+        "cumbia_primary",
+        "hold_primary"
+      ],
+      "patternIds": [
+        "C",
+        "T"
+      ],
+      "title": {
+        "en": "Back/recover rhythm with explicit cumbia limit",
+        "tr": "Cumbia sınırı açık arka/geri al ritmi"
+      },
+      "prerequisite": {
+        "en": "S’s recovery and hold clear; comfortable small backward steps are a separate standing prerequisite.",
+        "tr": "Snin geri alma/durağı açık; rahat küçük arka adım ayrı ayakta ön koşuldur."
+      },
+      "outcome": {
+        "en": "Read and compare a back/recover adaptation without claiming drag or turned technique.",
+        "tr": "Sürükleme/dönüş tekniği iddia etmeden arka/geri al uyarlamasını oku ve karşılaştır."
+      },
+      "instruction": {
+        "en": "C keeps FRONT. L takes a small ordinary straight-back step, R receives weight in place, L returns near with weight; hold. Reverse the limbs for 5–8. Do not cross behind the other foot, drag a catching sole or turn on planted feet. This changes the instructor source’s angled/behind ingredient; our adaptation is not catalog cumbia drag. Exact drag friction/contact and the turned version need demonstration/physical review and are not taught here. If ordinary back travel is unclear or unstable, no standing C trial.",
+        "tr": "C ÖN bakışı korur. Sol küçük sıradan düz arka adım, sağ yerinde ağırlık alır, sol yakına ağırlıklı döner; durak. 5–8de ayaklar ters. Diğer ayağın arkasına çaprazlama, takılan tabanı sürükleme veya yere basan ayakta dönme yok. Bu eğitmen kaynağının açılı/arkaya çapraz öğesini değiştirir; uyarlamamız katalog cumbia drag değildir. Tam sürükleme sürtünmesi/teması ve dönüşlü biçim gösterim/fiziksel inceleme ister; burada öğretilmez. Sıradan arka yol belirsiz/dengesizse ayakta C denemesi yok."
+      },
+      "practice": {
+        "en": "Read C1–4, then C5–8; compare their holds with S. Only with comfortable clear back-step support, try one four-count half, pause, then eight. Repeat neither crossing nor drag from the source article.",
+        "tr": "C1–4ü sonra C5–8i oku; duraklarını S ile karşılaştır. Yalnız rahat ve açık arka adım desteğiyle dört sayılık yarıyı bir kez dene, dur, sonra sekiz. Kaynak yazıdan çaprazlama/sürükleme tekrarlama."
+      },
+      "mistakes": {
+        "en": "Drifting too far back: mark C1 or C5/travel too large and remove back travel. Extra weight on hold: revisit 3–4 or 7–8. Uncertain contact is left unverified, not diagnosed by text.",
+        "tr": "Fazla arkaya kayma: C1 veya C5/yol fazla işaretle, arka yolu çıkar. Durakta ek ağırlık: 3–4 veya 7–8e dön. Belirsiz temas doğrulanmamış kalır; metinden tanı konmaz."
+      },
+      "adaptation": {
+        "en": "Replace C with a named T bridge or a paper-only C ledger. T keeps the boundary’s next L but changes the transfer rhythm; record that substitution and leave C/back travel unchecked.",
+        "tr": "Cyi adı belli T köprüsü veya yalnız kâğıt C tablosuyla değiştir. T sınırda sonraki solu korur ama aktarım ritmini değiştirir; yerine geçeni kaydet, C/arka yolu kontrol edilmemiş bırak."
+      },
+      "check": {
+        "en": "Distinguish adaptation from cumbia drag; identify C4/C8 support and next foot, and explain why no-cross or paper work cannot clear the withheld catalog skill.",
+        "tr": "Uyarlamayı cumbia dragdan ayır; C4/C8 destek/sonraki ayağı bul, çaprazsız/kâğıt çalışmanın bekleyen katalog becerisini neden karşılamadığını açıkla."
+      }
+    },
+    {
+      "id": "lf_06",
+      "prerequisiteIds": [
+        "lf_05"
+      ],
+      "sourceIds": [
+        "reggaeton_primary"
+      ],
+      "patternIds": [
+        "T",
+        "P"
+      ],
+      "title": {
+        "en": "Comfortable pulse and one optional arm cue",
+        "tr": "Rahat vuruş ve tek isteğe bağlı kol ipucu"
+      },
+      "prerequisite": {
+        "en": "T is clear; optional pulse requires comfortable small knee bend/release, otherwise omit it.",
+        "tr": "T açık; isteğe bağlı vuruş rahat küçük diz bük/bırak gerektirir, yoksa çıkar."
+      },
+      "outcome": {
+        "en": "Coordinate a small optional detail without changing foot support or claiming reggaeton groove.",
+        "tr": "Ayak desteğini değiştirmeden küçük isteğe bağlı ayrıntıyı koordine et; reggaeton groove iddia etme."
+      },
+      "instruction": {
+        "en": "Separate optional P from the foot blocks: both feet comfortably support, tiny knee bend on odd counts and gentle release on even counts, no knee lock, deep squat, toe spring or forced pelvis. Omit if unclear. It is generic pulse study, not the catalog’s heavy hip-driven reggaeton bounce. Rest/reset to R-supported/L-ready BEFORE returning to M/S/T/C; P does not secretly award a one-foot exit. For T only, optionally let one hand make a small easy forward reach on 1 and return on 2; arms may stay resting throughout.",
+        "tr": "İsteğe bağlı P ayak bloklarından ayrıdır: iki ayak rahat destekler, tek sayıda çok küçük diz bük, çiftte nazikçe bırak; diz kilidi, derin çömelme, parmak ucundan yaylanma veya zorlanmış pelvis yok. Belirsizse çıkar. Genel vuruş çalışmasıdır, katalogdaki ağır kalçadan reggaeton bounce değil. M/S/T/Cye dönmeden ÖNCE dinlen/sıfırla, sağ destek/sol hazır ol; P gizlice tek ayak çıkışı sağlamaz. Yalnız Tde istersen bir eli 1de küçük rahat öne uzat, 2de geri al; kollar bütün süre dinlenebilir."
+      },
+      "practice": {
+        "en": "Try feet-only T4 first. If comfortable, add the single hand cue for T1–2 then T4; compare foot support, not arm size. Study P on paper before any comfortable short pulse trial; no torso roll follows.",
+        "tr": "Önce yalnız ayak T4. Rahatsa tek el ipucunu T1–2ye, sonra T4e ekle; kol büyüklüğünü değil desteği karşılaştır. Rahat kısa vuruş denemesinden önce Pyi kâğıtta çalış; ardından gövde roll gelmez."
+      },
+      "mistakes": {
+        "en": "If arm movement makes T2 load R, remove the hand cue and return to T1–2. If pulse causes heel bouncing or a deep bend, stop pulse work; do not correct it by forcing a lower position.",
+        "tr": "Kol T2de sağı yüklerse el ipucunu çıkar, T1–2ye dön. Vuruş topuk sekmesi veya derin büküş yaparsa vuruşu durdur; daha aşağı zorlayarak düzeltme."
+      },
+      "adaptation": {
+        "en": "Arms resting and no P are valid plan choices. Seated hand timing can study coordination counts only, not standing pulse or style.",
+        "tr": "Kollar dinleniyor ve P yok geçerli plan seçimleridir. Oturarak el zamanı yalnız koordinasyon sayısı çalışır; ayakta vuruş veya stil değil."
+      },
+      "check": {
+        "en": "Keep T’s original support ledger with/without cue. Explain why natural-looking movement, head-height change or a camera silhouette cannot prove exertion or reggaeton groove.",
+        "tr": "İpucuyla/ipucusuz Tnin destek tablosunu koru. Doğal görünüm, baş yüksekliği veya kamera siluetinin çaba/reggaeton groove neden kanıtlamadığını açıkla."
+      }
+    },
+    {
+      "id": "lf_07",
+      "prerequisiteIds": [
+        "lf_06"
+      ],
+      "sourceIds": [
+        "safe_dance_primary"
+      ],
+      "patternIds": [
+        "M",
+        "S",
+        "T",
+        "C"
+      ],
+      "title": {
+        "en": "Transitions, load choices and deliberate recovery",
+        "tr": "Geçiş, yük seçimi ve bilinçli toparlanma"
+      },
+      "prerequisite": {
+        "en": "Each selected pattern is clear separately; an omitted pattern stays omitted.",
+        "tr": "Seçilen örüntüler ayrı açık; çıkarılmış örüntü çıkarılmış kalır."
+      },
+      "outcome": {
+        "en": "Change patterns with count/support clarity and preserve control when simplifying or stopping.",
+        "tr": "Sayı/destek açıkken örüntü değiştir; sadeleştirirken/dururken kontrolü koru."
+      },
+      "instruction": {
+        "en": "Every M/S/T/C ends R-supported/L-ready; next block starts L. Announce the next block before entering it; no extra collection step at the boundary. First original bridge: M1–4 then T1–4 (eight counts total). Next M8→S8 (sixteen). Later choose M8→S8→T8→C8 (32) or label the final block T instead of C. Reduce step distance OR remove hand cue OR add rest between blocks; change one thing at a time. Planned ordinary ending: return to familiar easy M in place at your comfortable pace, gradually reduce movement, then stop when comfortable; no required number certifies cooling down.",
+        "tr": "Her M/S/T/C sağ destek/sol hazır biter; sonraki blok sol başlar. Girmeden sonraki bloğu söyle; sınırda ek toplama adımı yok. İlk özgün köprü M1–4 sonra T1–4 (toplam sekiz). Sonra M8→S8 (on altı). Daha sonra M8→S8→T8→C8 (32) seç veya son bloğu C yerine T diye etiketle. Adım mesafesini küçült VEYA el ipucunu çıkar VEYA blok arasında dinlen; bir seferde tek değişiklik. Planlı olağan bitiş: rahat hızda bildik kolay yerinde Mye dön, hareketi kademeli azalt, rahatsa dur; zorunlu sayı soğumayı onaylamaz."
+      },
+      "practice": {
+        "en": "Read boundaries first, practise just M8→S1 and S8→T1. If count is lost, pause immediately, identify current support without guessing, return to an easy neutral stance, reset R/L-ready when comfortable, name the intended block and start its 1 again on your count. An extra reset occurs outside the attempted phrase and is recorded.",
+        "tr": "Önce sınırları oku, yalnız M8→S1 ve S8→T1i çalış. Sayı kaybolursa hemen ara ver, mevcut desteği tahminsiz belirle, kolay nötr duruşa dön, rahatsa sağ/sol hazır sıfırla, istenen bloğu söyle, kendi sayımında 1den başla. Ek sıfırlama denenmiş dizi dışındadır ve kaydedilir."
+      },
+      "mistakes": {
+        "en": "Changing tempo and arm cue together hides the cause of an error. Mark boundary/extra step or missing hold, return to those two boundary rows and use feet-only. Switching C to T is a changed plan, not a successful C trial.",
+        "tr": "Hız ve kolu birlikte değiştirmek hatanın nedenini gizler. Sınır/ek adım veya eksik durak işaretle, iki sınır satırına yalnız ayakla dön. Cyi Tye değiştirmek plan değişikliğidir, başarılı C denemesi değil."
+      },
+      "adaptation": {
+        "en": "Keep M/T only with rests and label S/C unattempted; this is a smaller foundation plan, not all-style completion. Paper transitions prove planning only.",
+        "tr": "Dinlenmeli yalnız M/T tut, S/C denenmemiş etiketle; küçük temel planıdır, tüm stilleri tamamlama değil. Kâğıt geçişler yalnız plan kanıtı."
+      },
+      "check": {
+        "en": "Name support/next foot at each boundary, demonstrate or describe a deliberate recovery and tell what changed when reducing load. Self-reported comfort is not measured health/fitness improvement.",
+        "tr": "Her sınırda destek/sonraki ayağı söyle, bilinçli toparlanmayı göster/betimle, yük azalınca neyin değiştiğini söyle. Bildirilen rahatlık ölçülmüş sağlık/fitness gelişimi değil."
+      }
+    },
+    {
+      "id": "lf_08",
+      "prerequisiteIds": [
+        "lf_07"
+      ],
+      "sourceIds": [
+        "safe_dance_primary",
+        "hold_primary"
+      ],
+      "patternIds": [
+        "M",
+        "S",
+        "T",
+        "C"
+      ],
+      "title": {
+        "en": "Author, observe and revise your practice",
+        "tr": "Pratiğini düzenle, gözle ve düzelt"
+      },
+      "prerequisite": {
+        "en": "Earlier written checks clear; physical attempts require each selected block comfortable and demonstration/review gaps resolved.",
+        "tr": "Önceki yazılı kontroller açık; fiziksel deneme seçilmiş blokların rahatlığını ve gösterim/inceleme açıklarının giderilmesini gerektirir."
+      },
+      "outcome": {
+        "en": "Independently organize a bounded practice and compare a specific correction under unchanged conditions.",
+        "tr": "Sınırlı pratiği bağımsız düzenle; aynı koşullarda belirli bir düzeltmeyi karşılaştır."
+      },
+      "instruction": {
+        "en": "Write your original 32-count plan: M8/S8/T8/C8, or explicitly substituted M8/S8/T8/T8. State mode, facing FRONT, small-step choice, optional hand cue, count source, rests, preparation and reduction/stop plan. Read every boundary and predict support before attempting. C substitution keeps C unchecked. The optional P drill remains separate with a rest/reset, never silently inserted into the 32 counts. Final assessment is plan/control/recovery/observation for selected foundations, not a certificate in four traditions.",
+        "tr": "Özgün 32 sayı planını yaz: M8/S8/T8/C8 veya açık yerine geçen M8/S8/T8/T8. Biçimi, ÖN bakışı, küçük adım seçimini, isteğe bağlı el ipucunu, sayım kaynağını, dinlenmeyi, hazırlığı ve azaltma/durma planını belirt. Denemeden her sınırı oku, desteği öngör. C yerine geçen Cyi kontrol edilmemiş bırakır. İsteğe bağlı P ayrı dinlen/sıfırlamalı çalışmadır; 32 sayıya gizlice girmez. Final, seçilmiş temeller için plan/kontrol/toparlanma/gözlemdir; dört gelenekte sertifika değil."
+      },
+      "practice": {
+        "en": "First recorded attempt: do the selected plan once, pause/recover as needed, then rest. Record one specific difference by block/count and type (extra transfer, missed hold, wrong direction, boundary step, excessive travel or uncertain observation). Choose ONE matching earlier drill and ONE cue; rehearse that correction, then rest. Second recorded attempt: do the plan once at the same count source/tempo, mode, blocks and substitutions. Compare the same recorded location/type. If those conditions change, begin a new first recorded attempt. Optional extra repetition is a separate unscored practice repetition, never the first/second comparison; omit it whenever comfort or concentration fades. No error: record consistency; do not invent one. Uncertainty stays unchecked.",
+        "tr": "İlk kayıtlı deneme: seçilen planı bir kez yap, gerektiğinde ara/toparlan, sonra dinlen. Bir belirli farkı blok/sayı ve türüyle yaz (ek aktarım, eksik durak, yanlış yön, sınır adımı, fazla yol veya belirsiz gözlem). Uygun önceki TEK çalışmayı ve TEK ipucunu seç; bu düzeltmeyi çalış, sonra dinlen. İkinci kayıtlı deneme: aynı sayım kaynağı/hız, biçim, blok ve yerine geçenlerle planı bir kez yap. Aynı kayıtlı yer/türü karşılaştır. Bu koşullar değişirse yeni ilk kayıtlı deneme başlat. İsteğe bağlı ek tekrar ayrı ve puansız pratik tekrarıdır, ilk/ikinci karşılaştırması değildir; rahatlık veya dikkat azalırsa çıkar. Hata yoksa tutarlılık yaz; hata uydurma. Belirsizlik kontrol edilmemiş kalır."
+      },
+      "mistakes": {
+        "en": "Bad is not an error description. Example: S4 extra transfer → S3–5 only, say hold and support L → compare S4/S5 in unchanged second attempt. T2 loaded R → T1–3 feet-only. Boundary after M used R → read M8 support R/L-ready and restart S1 L; do not invent a shuffle to hide it. Pain/instability is a stop, not a technical correction drill.",
+        "tr": "Kötü hata açıklaması değil. Örnek: S4 ek aktarım → yalnız S3–5, durak ve sol destek de → aynı ikinci denemede S4/S5i karşılaştır. T2 sağı yükledi → yalnız ayak T1–3. M sonrası sınır sağ kullandı → M8 sağ destek/sol hazır oku, S1 sol başla; gizlemek için ara adım uydurma. Ağrı/dengesizlik durma nedenidir, teknik düzeltme çalışması değil."
+      },
+      "adaptation": {
+        "en": "Paper/spoken final can pass written plan checks only; mark standing transfers, travel, pulse and physical recovery unattempted. A shorter M/T plan is recorded honestly and leaves S/C exit criteria open.",
+        "tr": "Kâğıt/sözlü final yalnız yazılı plan kontrolünü karşılar; ayakta aktarım, yol, vuruş ve fiziksel toparlanma denenmemiş. Kısa M/T plan dürüst kaydedilir, S/C çıkışları açık kalır."
+      },
+      "check": {
+        "en": "Record observed/uncertain/unattempted plus mode for EACH: preparation, M every-beat pattern, S holds, T unweighted touches, selected C/adaptation, support at transitions, optional arm preservation, planned reduction, recovery, specific error and same-condition comparison. Written success does not close physical, cultural/style, app integration or software acceptance.",
+        "tr": "HER biri için gözlendi/belirsiz/denenmedi ve biçim yaz: hazırlık, M her vuruş örüntüsü, S durak, T ağırlıksız dokunuş, seçilen C/uyarlama, geçiş desteği, isteğe bağlı kol korunması, planlı azaltma, toparlanma, belirli hata ve aynı koşul karşılaştırması. Yazılı başarı fiziksel, kültür/stil, app entegrasyonu veya yazılım kabulünü kapatmaz."
+      }
+    }
+  ],
+  "openTeachingComponents": [
+    {
+      "id": "cumbia_drag_contact",
+      "catalogTerm": "Cumbia drag",
+      "status": "demonstration_and_physical_review_required",
+      "copy": {
+        "en": "No safe exact drag/friction/contact or turned-path instruction is claimed. C is an explicitly altered rhythm scaffold; do not infer the missing skill.",
+        "tr": "Güvenli tam sürükleme/sürtünme/temas veya dönüşlü yol öğretimi iddia edilmez. C açıkça değişmiş ritim taslağıdır; eksik beceriyi çıkarma."
+      },
+      "physicalAccepted": false
+    },
+    {
+      "id": "style_hip_pelvis",
+      "catalogTerm": "Merengue hip / reggaeton bounce",
+      "status": "demonstration_and_qualified_style_review_required",
+      "copy": {
+        "en": "Natural comfortable hip response is optional; no forced hip drop, pelvis drive, isolation or body roll is taught as authentic technique. Generic pulse is not the catalog reggaeton bounce.",
+        "tr": "Doğal rahat kalça tepkisi isteğe bağlı; zorlanmış kalça düşüşü, pelvis itişi, izolasyon veya gövde roll özgün teknik diye öğretilmez. Genel vuruş katalogdaki reggaeton bounce değildir."
+      },
+      "physicalAccepted": false
+    },
+    {
+      "id": "exertion_and_duration",
+      "status": "no_individualized_prescription",
+      "copy": {
+        "en": "No mandatory BPM, class duration, calorie target or health outcome. Sustained workload and personal suitability cannot be inferred from written counts or camera pose.",
+        "tr": "Zorunlu BPM, sınıf süresi, kalori hedefi veya sağlık sonucu yok. Sürdürülen yük ve kişisel uygunluk yazılı sayım/kamera pozundan çıkarılmaz."
+      },
+      "physicalAccepted": false
+    }
+  ],
+  "finalTaskContract": {
+    "beats": 32,
+    "defaultPatternOrder": [
+      "M",
+      "S",
+      "T",
+      "C"
+    ],
+    "explicitSubstitutionOrder": [
+      "M",
+      "S",
+      "T",
+      "T"
+    ],
+    "startSupport": "R",
+    "startFree": "L",
+    "endSupport": "R",
+    "nextFree": "L",
+    "facing": "front",
+    "evidence": "self_observation_only",
+    "physicalTeachingAccepted": false,
+    "completeCurriculumAccepted": false,
+    "conditionChangeStartsNewFirst": true,
+    "pulseExcludedFrom32": true
+  },
+  "schemaVersion": 1,
+  "proposalId": "latin_fusion_fitness_beginner_foundations_proposal",
+  "sourceProposalSha256": "eb2871397e1762754ded51e79a50ce5c1d403361a5096c938d430591617b3b61",
+  "reviewNotice": {
+    "en": "Written foundations candidate. Source proposal reviewed; application/software qualification and actual physical teaching acceptance remain open. No progress or physical completion is awarded.",
+    "tr": "Yazılı temel adayı. Kaynak önerisi incelendi; app/yazılım doğrulaması ve gerçek fiziksel öğretim kabulü açık. İlerleme veya fiziksel tamamlanma verilmez."
+  },
+  "boundaries": {
+    "en": "Before every standing trial: clear obstacles and loose rugs, check secure footing/clothing and room for YOUR chosen small steps; choose facing FRONT and do not rotate on a planted foot. Begin with familiar small walking/side movements at an easy pace and gradually prepare for the selected action; a fixed timer or sweat is not clearance. Rest and recheck after interruptions. Use short phrases with optional rests, not mandatory nonstop work. If pain, dizziness or instability occurs, stop; gradual reduction applies only to ordinary comfortable activity, not a reason to continue through symptoms. No jumps, deep squats, forced hips/spine, turns or floorwork.",
+    "tr": "Her ayakta denemeden önce engelleri ve gevşek kilimleri kaldır; sağlam basışı/giysiyi ve SENİN seçtiğin küçük adımlara alanı kontrol et. Bakış ÖN; yere basan ayak üzerinde dönme. Bildik küçük yürüyüş/yan hareketlerle kolay hızda başla, seçilen harekete kademeli hazırlan; sabit süre veya ter onay değildir. Kesinti sonrası dinlen ve yeniden kontrol et. Zorunlu kesintisiz çalışma yerine dinlenmeli kısa diziler kullan. Ağrı, baş dönmesi veya dengesizlikte dur; kademeli azaltma yalnız olağan rahat çalışma içindir, belirtilere rağmen sürdürme nedeni değildir. Zıplama, derin çömelme, zorlanmış kalça/omurga, dönüş ve yer çalışması yok."
+  },
+  "diagramNotice": {
+    "en": "M/S/T/C and M-side start facing FRONT, weight on R, L available. Separate P starts with both feet supporting; it has no automatic single-foot exit. L/R name YOUR limbs, not a mirrored instructor. W transfers support to the named foot, T touches without loading, H adds no transfer. B means both feet support, used only in the separate optional pulse drill; it is NOT a single-leg balance target. P_bend/P_release are tiny optional motion without a new transfer, only in the separate bilateral P table. Support is AFTER the row action. Near means return to a comfortable stance with room between feet, not force feet together. Each count is one spoken beat.",
+    "tr": "M/S/T/C ve M-side ÖN bakışla, ağırlık sağda ve sol hazırken başlar. Ayrı P iki ayak desteğiyle başlar; otomatik tek-ayak çıkışı yoktur. L/R SENİN sol/sağ uzuvlarındır, aynalanmış eğitmen değildir. W desteği adı verilen ayağa aktarır, T ağırlıksız dokunur, H yeni aktarım eklemez. B iki ayağın desteğidir, yalnız ayrı isteğe bağlı vuruş çalışmasında kullanılır; tek ayak dengesi hedefi DEĞİLDİR. P_bend/P_release yalnız ayrı iki-ayaklı P tablosunda yeni aktarım eklemeyen çok küçük isteğe bağlı harekettir. Destek satır eyleminden SONRA gösterilir. Yakın, ayakları zorla birleştirmek değil arada alan olan rahat duruşa dönmektir. Her sayı sözlü bir vuruştur."
+  },
+  "provenance": {
+    "en": "Mil Pasos Dance Studio, Dominican Republic — https://milpasos.com.do/merengue\n\nDance Dojo, Robin Campbell / Patrick and Scarlet — https://thedancedojo.com/how-to-salsa-dance-for-beginners/\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\n\nDennis PaSamba Dance Company; Dennis PaSamba — https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips\n\nDance Flow Fort Myers studio — https://danceflowfortmyers.com/reggaeton-dance-basics/\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\n\nSources inform ingredients, not this authored sequence or a licence/endorsement. Cumbia contact/turn and style-specific pelvis teaching remain open.",
+    "tr": "Mil Pasos Dance Studio, Dominican Republic — https://milpasos.com.do/merengue\n\nDance Dojo, Robin Campbell / Patrick and Scarlet — https://thedancedojo.com/how-to-salsa-dance-for-beginners/\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\n\nDennis PaSamba Dance Company; Dennis PaSamba — https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips\n\nDance Flow Fort Myers studio — https://danceflowfortmyers.com/reggaeton-dance-basics/\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\n\nKaynaklar öğelere bilgi sağlar; bu özgün diziye lisans/onay vermez. Cumbia temas/dönüş ve stile özgü pelvis öğretimi açık."
+  }
+}

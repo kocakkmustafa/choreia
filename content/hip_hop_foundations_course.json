@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "id": "hip_hop_foundations_beginner",
+  "version": 1,
+  "title": {
+    "en": "Hip-Hop Foundations: written introduction",
+    "tr": "Hip-Hop Temelleri: yazılı giriş"
+  },
+  "reviewNotice": {
+    "en": "Local content candidate: a written introduction, not a complete beginner skill curriculum. Demonstrations, media rights, bilingual teaching review and physical instruction review are pending. Reading or meeting a self-check records no completion or mastery. No camera grade.",
+    "tr": "Yerel içerik adayı: yazılı giriş; tam bir başlangıç beceri müfredatı değildir. Gösterimler, medya hakları, iki dilde öğretim incelemesi ve fiziksel öğretim incelemesi bekleniyor. Okumak veya öz kontrol maddelerini karşılamak tamamlanma ya da ustalık kaydetmez. Kamera puanı yok."
+  },
+  "boundaries": {
+    "en": "Clear space for small steps; check floor grip and comfortable shoes. Before physical practice, begin with easy walking or marching, add gentle shoulder movement, then gradually make the walk a little more active. Rehearse the lesson movement at small range before its counted practice; do not treat eight beats as a sufficient warm-up. Afterwards, gradually reduce steps and pace to easy walking until breathing settles, then rest. Do not force stretches. Stop for pain, dizziness or unusual breathlessness. No jumps, floorwork, deep bends, neck whips or forced twists. One eight-count means eight beats; two eights mean sixteen beats, not sixteen repeats of the whole exercise. Repeat once means perform the whole stated drill a second time after rest. Use an existing lawful external pulse source; no music or video is supplied. Without one, practise order only and leave external timing unchecked. Suggested repeats are ceilings, not requirements. Seated/verbal rehearsal has a limited learning outcome and cannot establish physical mastery.",
+    "tr": "Küçük adımlar için alan aç; zeminin tutuşunu ve rahat ayakkabını kontrol et. Fiziksel çalışmadan önce kolay yürüyüş veya yerinde adımla başla, yumuşak omuz hareketi ekle, sonra yürüyüşü kademeli olarak biraz daha canlı yap. Sayımlı çalışmadan önce ders hareketini küçük aralıkta dene; sekiz vuruşu yeterli ısınma sayma. Sonunda adımları ve hızı yavaşça azaltıp nefesin sakinleşene kadar kolay yürü, sonra dinlen. Esnemeyi zorlama. Ağrı, baş dönmesi veya olağandışı nefes darlığında dur. Sıçrama, yer çalışması, derin bükülme, boyun savurma veya zorlanmış burulma yok. Bir sekizli sekiz vuruş, iki sekizli on altı vuruştur; bütün alıştırmanın on altı tekrarı değildir. Bir kez tekrarla, dinlendikten sonra belirtilen çalışmayı baştan bir kez daha yap demektir. Mevcut ve yasal erişimin olan dış vuruş kaynağı kullan; müzik veya video sağlanmaz. Kaynak yoksa yalnız sırayı çalış, dış vuruşa uyumu kontrol edilmemiş bırak. Önerilen tekrarlar üst sınırdır, zorunluluk değildir. Oturarak veya sözlü prova sınırlı bir öğrenme hedefi taşır; fiziksel ustalık kanıtı olamaz."
+  },
+  "startCompetency": {
+    "en": "A newcomer can select a comfortable practice mode, listen and count; no named steps or camera setup required.",
+    "tr": "Yeni başlayan rahat çalışma biçimi seçip dinleyebilir ve sayabilir; adlandırılmış adım veya kamera kurulumu gerekmez."
+  },
+  "endCompetency": {
+    "en": "Physical attempt: combine all three studies on both sides to an external pulse, transition and restart, then identify a revision. Adapted rehearsal: describe the order and practise listening/counting only. Neither outcome is certified mastery.",
+    "tr": "Fiziksel deneme: üç çalışmayı iki tarafta dış vuruşla birleştir, geçiş yapıp yeniden başla ve bir düzeltme belirle. Uyarlanmış prova: sırayı anlat ve yalnız dinleme/sayım çalış. Hiçbiri onaylı ustalık değildir."
+  },
+  "units": [
+    {
+      "id": "hhf_01",
+      "title": {
+        "en": "Prepare and hear a pulse",
+        "tr": "Hazırlan ve düzenli vuruşu duy"
+      },
+      "prerequisite": {
+        "en": "No dance experience required. Read the practice boundaries first.",
+        "tr": "Dans deneyimi gerekmez. Önce çalışma sınırlarını oku."
+      },
+      "outcome": {
+        "en": "Choose a comfortable practice mode and count two sets of eight with an external steady pulse.",
+        "tr": "Rahat bir çalışma biçimi seç ve dışarıdan gelen düzenli vuruşla iki sekizli say."
+      },
+      "instruction": {
+        "en": "Prepare as described above. Listen to an uncomplicated external pulse, such as a metronome already available to you. First hear eight clicks without moving. Pick the next audible click as 1 for this exercise, then say one number on each click through 8 and begin again at 1. This chosen 1 is not a claim to have found the song’s downbeat. A beat is one pulse; a repetition is another attempt at the entire drill. Hip-Hop includes music, social dancing and culture rooted in Black communities; this introduction samples movement preparation rather than the whole culture.",
+        "tr": "Yukarıdaki gibi hazırlan. Örneğin zaten erişebildiğin metronom gibi basit bir dış vuruş dinle. Önce hareket etmeden sekiz tık duy. Sonraki duyulur tıkı bu alıştırmanın 1’i seç; her tıkta bir sayı söyle, 8’den sonra yeniden 1’e dön. Bu seçilmiş 1, şarkının müzikal başlangıcını bulduğun iddiası değildir. Vuruş tek bir düzenli darbedir; tekrar bütün çalışmayı yeniden denemektir. Hip-Hop, Siyah topluluklara dayanan müziği, sosyal dansı ve kültürü içerir; bu giriş kültürün tamamı yerine hareket hazırlığından örnekler sunar."
+      },
+      "practice": {
+        "en": "Listen through eight clicks; enter on the next click with spoken 1–8 for sixteen beats. Rest. Try sixteen gentle hand taps, one per click. Deliberately pause for eight clicks while the pulse continues, listen, then re-enter on the next click you choose as 1. Repeat the drill once after rest. If no external pulse is available, speak the order only; external entry and recovery remain untested.",
+        "tr": "Sekiz tık dinle; sonraki tıkta 1–8 sayarak on altı vuruş sürdür. Dinlen. Her tıkta bir hafif el vuruşuyla on altı vuruş dene. Kaynak sürerken bilerek sekiz tık dur, dinle ve sonraki seçtiğin tıkta 1 diyerek yeniden gir. Dinlendikten sonra çalışmayı bir kez daha yap. Dış vuruş kaynağı yoksa yalnız sırayı sesli söyle; dış vuruşa giriş ve yeniden giriş denenmiş sayılmaz."
+      },
+      "mistakes": {
+        "en": "Rushing the spoken count: listen through one full eight before restarting. Mistaking a lyric for the pulse: use a simpler pulse source.",
+        "tr": "Sayımı acele etmek: yeniden başlamadan tam bir sekizli dinle. Sözü vuruş sanmak: daha basit bir vuruş kaynağı kullan."
+      },
+      "adaptation": {
+        "en": "Listen and count while seated in a stable chair, feet supported. This rehearses listening, not standing dance balance.",
+        "tr": "Sabit sandalyede, ayakların desteklenirken dinle ve say. Bu dinleme çalışmasıdır; ayakta dans dengesi çalışması değildir."
+      },
+      "check": {
+        "en": "Timing: did each spoken number or tap meet one external click, including after the pause, or did you hear gaps/double taps? If uncertain, listen and tap again; own counting cannot answer this. Preparation: name your stop signal and chosen mode. Comfort is a reason to continue or stop, not evidence of timing. These are self-observations, not an app assessment.",
+        "tr": "Zamanlama: duraklamadan sonra da her sayı veya el vuruşu bir dış tıkla buluştu mu, yoksa boşluk ya da çift vuruş duydun mu? Emin değilsen yeniden dinle ve elinle vur; kendi kendine sayım bunu yanıtlayamaz. Hazırlık: durma işaretini ve seçtiğin çalışma biçimini söyle. Rahatlık devam etme veya durma nedenidir; zamanlama kanıtı değildir. Bunlar öz gözlemdir, uygulama değerlendirmesi değildir."
+      },
+      "prerequisiteIds": [],
+      "instructionalSourceIds": [
+        "steezy-culture",
+        "steezy-counting",
+        "ausdance-warmup"
+      ],
+      "authoredTechnicalChoices": "Exact practice arrangement and adaptations are authored; ingredient sources are scoped in provenance, not full technique validation."
+    },
+    {
+      "id": "hhf_02",
+      "title": {
+        "en": "A small bounce",
+        "tr": "Küçük bir bounce"
+      },
+      "prerequisite": {
+        "en": "Use the setup and pulse practice from hhf_01.",
+        "tr": "hhf_01’deki hazırlığı ve vuruş çalışmasını kullan."
+      },
+      "outcome": {
+        "en": "Attempt a small grounded down-and-return knee pulse over sixteen external beats; separately observe timing and comfort.",
+        "tr": "On altı dış vuruş boyunca ayaklar yerdeyken küçük diz alçalması ve dönüşü dene; zamanlamayı ve rahatlığı ayrı gözle."
+      },
+      "instruction": {
+        "en": "Stand with feet comfortably apart and knees soft. In this authored small bounce study, bend the knees a little on each external click and return between clicks, without locking the knees. Keep both feet grounded and let your body lower with the knees instead of folding at the waist. Arms can rest by your sides. The knee-driven down/up ingredient is described in the instructional source; this grounded range and down-on-click arrangement are our practice choices, not the only authentic bounce or a prescribed knee angle.",
+        "tr": "Ayaklar rahat aralıkta, dizler yumuşakken dur. Bu yazılmış küçük bounce çalışmasında her dış tıkta dizleri biraz bük; tıklar arasında dizleri kilitlemeden geri dön. İki ayağı yerde tut; belden katlanmak yerine bedenin dizlerle birlikte alçalsın. Kolların yanında rahatça durabilir. Dizlerden başlayan alçalma ve yükselme öğretim kaynağında anlatılır; ayakları yerde tutan küçük aralık ve tıkta alçalma bizim çalışma seçimimizdir, tek özgün bounce ya da zorunlu diz açısı değildir."
+      },
+      "practice": {
+        "en": "Try four slow down-and-return movements without a beat; that is four whole movement repetitions. Rest. Listen for eight clicks, then enter with one down-and-return per click for eight beats. Rest and attempt sixteen beats. During one attempt, pause for eight clicks and re-enter as in hhf_01. Repeat the sixteen-beat attempt at most twice more after rest, only while comfortable. No pulse source means movement-order rehearsal, not an external timing check.",
+        "tr": "Vuruş olmadan dört yavaş alçalma ve dönüş yap; bu bütün hareketin dört tekrarıdır. Dinlen. Sekiz tık dinle, sonra her tıkta bir alçalma ve dönüşle sekiz vuruş gir. Dinlenip on altı vuruş dene. Bir denemede sekiz tık dur ve hhf_01’deki gibi yeniden gir. On altı vuruşluk denemeyi dinlenerek ve yalnız rahatken en fazla iki kez daha yap. Vuruş kaynağı yoksa hareket sırasını prova etmiş olursun; dış zamanlama kontrolü yapmış olmazsın."
+      },
+      "mistakes": {
+        "en": "Making it a jump: keep the feet grounded and reduce depth. Folding the chest down: return to a tall, easy torso and smaller bends. Holding breath: pause and restart more gently.",
+        "tr": "Sıçramaya çevirmek: ayakları yerde tut, derinliği azalt. Göğsü aşağı katlamak: rahat, dik gövdeye ve küçük bükülmeye dön. Nefesi tutmak: dur ve daha yumuşak yeniden başla."
+      },
+      "adaptation": {
+        "en": "Use a barely visible knee bend or just hand-tap the pulse while seated. Seated tapping is rhythm preparation, not evidence of a bounce.",
+        "tr": "Çok küçük diz bükülmesi kullan ya da oturarak yalnız elinle vuruş tut. Oturarak vurmak ritim hazırlığıdır; bounce yapıldığına kanıt değildir."
+      },
+      "check": {
+        "en": "Timing: could you hear each click at the small downward action rather than drifting ahead or behind? Movement: did feet remain grounded and knees provide the pulse rather than a waist fold? Comfort: could you breathe freely without discomfort? Track these answers separately. Revisit hhf_01 for uncertain timing; reduce range for movement/comfort difficulty. Neither a comfortable attempt nor camera output proves groove.",
+        "tr": "Zamanlama: küçük alçalma sırasında her tıkı duyabildin mi, yoksa öne veya arkaya kaydın mı? Hareket: ayaklar yerde kaldı mı; vuruş belden katlanmak yerine dizlerden geldi mi? Rahatlık: rahatsızlık olmadan rahat nefes alabildin mi? Yanıtları ayrı tut. Zamanlamadan emin değilsen hhf_01’e dön; hareket veya rahatlık zorluğunda aralığı azalt. Rahat deneme de kamera çıktısı da groove’u kanıtlamaz."
+      },
+      "prerequisiteIds": [
+        "hhf_01"
+      ],
+      "instructionalSourceIds": [
+        "howcast-knee-bounce",
+        "steezy-counting"
+      ],
+      "authoredTechnicalChoices": "Exact practice arrangement and adaptations are authored; ingredient sources are scoped in provenance, not full technique validation."
+    },
+    {
+      "id": "hhf_03",
+      "title": {
+        "en": "Weight change and a gentle rock",
+        "tr": "Ağırlık değişimi ve yumuşak rock"
+      },
+      "prerequisite": {
+        "en": "Comfortable small bounce from hhf_02; pulse counting from hhf_01.",
+        "tr": "hhf_02’de rahat küçük bounce; hhf_01’de vuruş sayımı."
+      },
+      "outcome": {
+        "en": "Distinguish shifting weight from touching a foot, and add a small side-to-side torso rock.",
+        "tr": "Ağırlık aktarımıyla ayağı değdirmenin farkını ayırt et; küçük yana gövde salınımı ekle."
+      },
+      "instruction": {
+        "en": "A step places the foot and moves support onto it; a touch lightly meets the floor while support stays mainly on the other foot. Try a small step right, touch left near it, step left, touch right, slowly and without balancing on one leg. Now plant both feet comfortably apart: move a little more pressure over the right foot, return to centre, then left and centre. Add a small whole-body side response with relaxed shoulders. We call this a side-rock preparation study, not a definitive version of a named party step. On counts 1–4 use right, centre, left, centre; repeat that order on 5–8. Do not twist planted feet or lean far enough to need a catch step.",
+        "tr": "Adımda ayağı yerleştirip bedenin desteğini o ayağa taşırsın; dokunmada ayak yere hafifçe değse de destek esas olarak diğer ayakta kalır. Yavaşça sağa küçük adım, solu yakına dokundur, sola adım, sağı dokundur; tek ayakta denge sınaması yapma. Şimdi iki ayağı rahat aralıkta yere bas: biraz daha basıncı sağ ayağa taşı, ortaya dön, sonra sola ve ortaya geç. Omuzlar rahatken bütün bedenin yana küçük bir yanıt vermesine izin ver. Buna yana rock hazırlık çalışması diyoruz; adlandırılmış bir parti adımının kesin sürümü değildir. 1–4’te sağ, orta, sol, orta yap; 5–8’de aynı sırayı tekrarla. Basılı ayakları burma, kendini yakalamak için adım gerektirecek kadar eğilme."
+      },
+      "practice": {
+        "en": "First rehearse one slow right step/left touch and one left step/right touch; name which foot carries support. With feet planted, do one slow sequence: right, centre, left, centre (four changes). Rest. Listen for eight external clicks and attempt the side-rock order for eight beats twice, resting between attempts. Finally do eight beats of bounce followed by eight of side-rock preparation. Here eight side-rock beats contain two right/centre/left/centre cycles, not eight cycles.",
+        "tr": "Önce yavaşça bir sağ adım/sol dokunma ve bir sol adım/sağ dokunma çalış; desteği hangi ayağın taşıdığını söyle. Ayaklar basılıyken bir yavaş dizi yap: sağ, orta, sol, orta (dört değişim). Dinlen. Sekiz dış tık dinleyip yana rock sırasını sekiz vuruş boyunca iki ayrı denemede yap; arada dinlen. Son olarak sekiz vuruş bounce ardından sekiz vuruş yana rock hazırlığı yap. Burada sekiz yana rock vuruşu iki sağ/orta/sol/orta döngüsüdür; sekiz döngü değildir."
+      },
+      "mistakes": {
+        "en": "Only waving arms without a weight change: remove arms and slow down. Twisting knees with feet fixed: keep the shift small and avoid a twist. Forcing a neck accent: leave the head relaxed.",
+        "tr": "Ağırlık değiştirmeden yalnız kol sallamak: kol hareketini durdur ve yavaşla. Ayaklar sabitken dizleri burmak: aktarımı küçük tut ve burulmadan kaçın. Boyun aksanı zorlamak: başı rahat bırak."
+      },
+      "adaptation": {
+        "en": "Reduce the shift and keep both feet fully supported. Seated learners can explore tiny comfortable torso responses with feet supported; this does not practise standing weight transfer.",
+        "tr": "Aktarımı azalt, iki ayağı destekli tut. Oturanlar ayaklar destekliyken çok küçük, rahat gövde yanıtları deneyebilir; bu ayakta ağırlık aktarımı çalışması değildir."
+      },
+      "check": {
+        "en": "Support: after stepping right, can you touch left without moving support onto it, then reverse sides? For the planted study, did pressure change right/centre/left/centre, or did only the arms move? Timing: did those changes follow the selected external clicks in that order? Comfort: was the range easy? If support is unclear, rehearse the step/touch pair; if timing is unclear, repeat the clicks slowly. Comfort alone answers neither question.",
+        "tr": "Destek: sağa adım attıktan sonra desteği sola taşımadan sol ayağı dokundurup sonra ters tarafı yapabiliyor musun? Ayakların basılı olduğu çalışmada basınç sağ/orta/sol/orta değişti mi, yoksa yalnız kollar mı hareket etti? Zamanlama: değişimler seçtiğin dış tıkları bu sırayla izledi mi? Rahatlık: aralık kolay mıydı? Destek karışıyorsa adım/dokunma çiftini çalış; zamanlama karışıyorsa tıkları yavaşça tekrarla. Rahatlık tek başına bu iki soruyu yanıtlamaz."
+      },
+      "prerequisiteIds": [
+        "hhf_02"
+      ],
+      "instructionalSourceIds": [
+        "howcast-touch",
+        "bce-side-response",
+        "steezy-culture"
+      ],
+      "authoredTechnicalChoices": "Exact practice arrangement and adaptations are authored; ingredient sources are scoped in provenance, not full technique validation."
+    },
+    {
+      "id": "hhf_04",
+      "title": {
+        "en": "Step, touch, and coordinate",
+        "tr": "Adım, dokunma ve koordinasyon"
+      },
+      "prerequisite": {
+        "en": "Distinguish weight change and touch after hhf_03.",
+        "tr": "hhf_03 sonrasında ağırlık değişimiyle dokunmayı ayırt et."
+      },
+      "outcome": {
+        "en": "Repeat a right/left step-touch and add an optional easy arm response without enlarging the steps.",
+        "tr": "Sağ/sol adım-dokunmayı tekrarla; adımları büyütmeden isteğe bağlı rahat kol yanıtı ekle."
+      },
+      "instruction": {
+        "en": "On 1, take one small step right and let weight settle on that foot. On 2, bring the left foot near it for a light touch without loading the left foot. On 3, step left and settle; on 4, touch the right foot near it. Repeat on 5–8. Keep feet uncrossed and avoid dragging a planted foot. First use feet only; later let bent arms swing easily with the steps. Step-touch here is a coordination exercise, not a newly named historical party step.",
+        "tr": "1’de sağa küçük adım at ve ağırlığın o ayağa yerleşmesine izin ver. 2’de sol ayağı yaklaştırıp ağırlığı sola taşımadan hafifçe değdir. 3’te sola adım atıp yerleş; 4’te sağ ayağı yaklaştırıp değdir. 5–8’de tekrarla. Ayakları çaprazlama, basılı ayağı sürükleme. Önce yalnız ayakları kullan; sonra bükülü kolların adımlara rahatça eşlik etmesine izin ver. Buradaki adım-dokunma bir koordinasyon alıştırmasıdır; yeni adlandırılmış tarihsel parti adımı değildir."
+      },
+      "practice": {
+        "en": "Say step-touch-step-touch, then perform it with small slow steps for eight beats. Attempt sixteen external beats with arms resting by your sides; name the supporting foot after each step. Rest. Add an easy arm response for eight beats; if feet become confusing, stop the arm movement and practise feet only. Do eight bounce beats followed by eight step-touch beats. Then restart the step-touch with the left foot for eight beats. Both starting sides are part of this study.",
+        "tr": "Adım-dokun-adım-dokun söyle, sonra sekiz vuruş boyunca küçük ve yavaş adımlarla uygula. Kolların yanında rahatça dururken on altı dış vuruş dene; her adımdan sonra destek ayağını söyle. Dinlen. Sekiz vuruş rahat kol hareketi ekle; ayaklar karışırsa kol hareketini durdur, yalnız ayak adımlarını çalış. Sekiz bounce vuruşu ardından sekiz adım-dokunma vuruşu yap. Sonra adım-dokunmayı sol ayakla başlatıp sekiz vuruş dene. İki başlangıç tarafı da bu çalışmanın parçasıdır."
+      },
+      "mistakes": {
+        "en": "Putting support on the touching foot then getting stuck: pause and identify the supporting foot before the next step. Taking a wide step: make it narrower. Arms disrupting feet: let arms rest by your sides and practise the foot sequence alone.",
+        "tr": "Dokunan ayağa destek taşıyıp takılmak: dur, sonraki adımdan önce destek ayağını belirle. Geniş adım atmak: adımı daralt. Kolların ayakları bozması: kollarını yanında rahat bırak, yalnız ayak sırasını çalış."
+      },
+      "adaptation": {
+        "en": "Use a very narrow side step, or keep feet planted and rehearse small shifts. Seated foot taps or spoken step/touch labels rehearse sequence only; do not treat them as standing footwork.",
+        "tr": "Çok dar yana adım kullan veya ayaklar yerindeyken küçük aktarım çalış. Oturarak ayak dokundurma ya da sesli adım/dokunma diziyi çalıştırır; ayakta ayak çalışması sayılmaz."
+      },
+      "check": {
+        "en": "Support: after each step, did the other foot only touch rather than take weight? Sequence: can you start with either foot without crossing? Timing: were steps on 1/3/5/7 and touches on 2/4/6/8 against the external pulse? Record uncertainty rather than guessing. Comfort: is the range easy? Return to one slow step/touch pair for support, hhf_01 for pulse, and remove arm movement for coordination difficulty.",
+        "tr": "Destek: her adımdan sonra diğer ayak ağırlık almak yerine yalnız dokundu mu? Sıra: çaprazlamadan iki ayaktan da başlayabiliyor musun? Zamanlama: dış vuruşa göre adımlar 1/3/5/7’de, dokunmalar 2/4/6/8’de miydi? Tahmin etmek yerine belirsizliğini belirt. Rahatlık: aralık kolay mı? Destek için bir yavaş adım/dokunma çiftine, vuruş için hhf_01’e dön; koordinasyon zorluğunda kol hareketini durdur."
+      },
+      "prerequisiteIds": [
+        "hhf_03"
+      ],
+      "instructionalSourceIds": [
+        "howcast-touch",
+        "steezy-counting"
+      ],
+      "authoredTechnicalChoices": "Exact practice arrangement and adaptations are authored; ingredient sources are scoped in provenance, not full technique validation."
+    },
+    {
+      "id": "hhf_05",
+      "title": {
+        "en": "Contrast, transition, recover",
+        "tr": "Kontrast, geçiş ve yeniden başlama"
+      },
+      "prerequisite": {
+        "en": "Comfortable bounce, side rock and step-touch studies from hhf_02–04.",
+        "tr": "hhf_02–04’ten rahat bounce, yana rock ve adım-dokunma çalışmaları."
+      },
+      "outcome": {
+        "en": "Choose between two comfortable movement qualities, switch at an eight-count boundary and recover after losing the count.",
+        "tr": "İki rahat hareket niteliği arasında seçim yap, sekizli sınırında geçiş yap ve sayımı kaybedince yeniden başla."
+      },
+      "instruction": {
+        "en": "Try the same small bounce first with an easy flowing arm response and then with arms quieter. With music, choose one sound to respond to; this is a personal listening choice, not camera-certified musicality. Stronger expression does not require deeper knees or bigger steps. To switch studies, finish counts 1–8 and start the next movement on the next external click you call 1. If the count is lost, stop the movement, listen for eight pulses, and enter on a selected next click. That re-entry is an exercise restart; it does not prove that you identified the musical phrase boundary.",
+        "tr": "Aynı küçük bounce’u önce rahat ve akıcı kol hareketiyle, sonra daha sakin kollarla dene. Müzikte yanıt vereceğin bir ses seç; bu kişisel dinleme seçimidir, kameranın onayladığı müzikalite değildir. Güçlü ifade daha derin diz veya büyük adım gerektirmez. Çalışma değiştirmek için 1–8’i bitir, sonraki dış tıkta 1 diyerek yeni harekete başla. Sayımı kaybedersen hareketi durdur, sekiz vuruş dinle ve sonraki seçtiğin tıkta yeniden gir. Bu alıştırmayı yeniden başlatmaktır; müzikteki bölüm sınırını bulduğunu kanıtlamaz."
+      },
+      "practice": {
+        "en": "After listening for eight pulses, attempt eight beats each of bounce, side-rock preparation and step-touch. Keep the external pulse running. Rest; repeat once, changing only arm energy. Then deliberately leave movement out for eight pulses, listen and restart eight bounce beats on your chosen next click. With music, listen first and use only lawfully accessible music; do not record or upload it here. Without an external pulse, practise the movement order but leave entry/recovery timing unchecked.",
+        "tr": "Sekiz vuruş dinledikten sonra sekizer vuruş bounce, yana rock hazırlığı ve adım-dokunma dene. Dış vuruş kaynağı sürsün. Dinlen; yalnız kol enerjisini değiştirerek bir kez daha yap. Sonra bilerek sekiz vuruş hareket etme, dinle ve sonraki seçtiğin tıkta sekiz bounce vuruşuyla yeniden başla. Müzikle önce dinle; yalnız yasal erişimin olan müziği kullan, burada kaydetme veya yükleme. Dış kaynak yoksa hareket sırasını çalış; giriş ve yeniden giriş zamanlamasını kontrol edilmemiş bırak."
+      },
+      "mistakes": {
+        "en": "Changing everything at once: keep feet unchanged and vary only arms. Racing to catch missed counts: stop and restart. Chasing a large shape: return to comfortable range.",
+        "tr": "Her şeyi aynı anda değiştirmek: ayakları aynı tut, yalnız kolları değiştir. Kaçan sayıları yakalamak için hızlanmak: dur ve yeniden başla. Büyük şekil peşinde koşmak: rahat aralığa dön."
+      },
+      "adaptation": {
+        "en": "Use tiny movement or spoken choices while seated. Keep the same listen/pause/restart structure. A rhythm-only attempt is valuable preparation, not proof of full-body execution.",
+        "tr": "Çok küçük hareket ya da oturarak sesli seçim kullan. Dinle/dur/yeniden başla yapısını koru. Yalnız ritim denemesi değerli hazırlıktır; bütün bedenle uygulama kanıtı değildir."
+      },
+      "check": {
+        "en": "Timing: did each new study start on the next selected pulse after the previous eight, and did the restart follow the external source rather than a rushed private count? Movement: did you keep the step/touch support distinction through the transition? Choice: name the arm contrast or sound you followed. Comfort: was the range manageable? If timing is uncertain, alternate two studies with listening pauses first. Personal expression is not an app-scored result.",
+        "tr": "Zamanlama: önceki sekizliden sonra her yeni çalışma sonraki seçilmiş vuruşta başladı mı; yeniden giriş acele bir iç sayım yerine dış kaynağı izledi mi? Hareket: geçiş sırasında adım/dokunma destek ayrımını korudun mu? Seçim: kol kontrastını veya izlediğin sesi söyle. Rahatlık: aralık yönetilebilir miydi? Zamanlama belirsizse önce araya dinleme durakları koyarak iki çalışma sırala. Kişisel ifade uygulamanın puanladığı sonuç değildir."
+      },
+      "prerequisiteIds": [
+        "hhf_04"
+      ],
+      "instructionalSourceIds": [
+        "steezy-counting"
+      ],
+      "authoredTechnicalChoices": "Exact practice arrangement and adaptations are authored; ingredient sources are scoped in provenance, not full technique validation."
+    },
+    {
+      "id": "hhf_06",
+      "title": {
+        "en": "Arrange and revisit a short sequence",
+        "tr": "Kısa hareket dizisini kur ve yeniden değerlendir"
+      },
+      "prerequisite": {
+        "en": "Revisit hhf_01–05 checks. Choose physical practice or rhythm-only rehearsal explicitly.",
+        "tr": "hhf_01–05 kontrollerini yeniden ele al. Fiziksel çalışma veya yalnız ritim provasını açıkça seç."
+      },
+      "outcome": {
+        "en": "Physical attempt: combine all three studies on both sides to an external pulse, transition and restart, then identify a revision. Adapted rehearsal: describe the order and practise listening/counting only. Neither outcome is certified mastery.",
+        "tr": "Fiziksel deneme: üç çalışmayı iki tarafta dış vuruşla birleştir, geçiş yapıp yeniden başla ve bir düzeltme belirle. Uyarlanmış prova: sırayı anlat ve yalnız dinleme/sayım çalış. Hiçbiri onaylı ustalık değildir."
+      },
+      "instruction": {
+        "en": "A short sequence is an ordered set of movements. Arrange four blocks of eight beats: include bounce, side-rock preparation and step-touch, plus one block of your choice from those studies. Use both right and left weight shifts and touches; do not omit a side. Speak or write the order and choose one gentle arm-energy contrast. Our optional original arrangement uses bounce, side-rock preparation, step-touch, then a repeat of any one study. These ingredients and their ordering are an authored exercise, not a copied routine or a complete Hip-Hop syllabus. Rehearse transitions slowly before linking them to the external pulse.",
+        "tr": "Kısa hareket dizisi, hareketlerin belirlenmiş sırayla yapılmasıdır. Dört adet sekiz vuruşluk blok düzenle: bounce, yana rock hazırlığı ve adım-dokunmayı mutlaka kullan; dördüncü blok için bunlardan birini seç. Sağ ve sol ağırlık aktarımını ve dokunmayı kullan; bir tarafı atlama. Sırayı söyle veya yaz, bir yumuşak kol enerjisi kontrastı seç. İsteğe bağlı özgün düzenimiz bounce, yana rock hazırlığı, adım-dokunma, ardından bunlardan birinin tekrarıdır. Bu yapı taşları ve sıralama yazılmış bir alıştırmadır; kopya rutin veya tam Hip-Hop müfredatı değildir. Dış vuruşla birleştirmeden önce geçişleri yavaşça prova et."
+      },
+      "practice": {
+        "en": "Physical path: prepare gradually, listen through eight external pulses, then attempt all four blocks (thirty-two beats) with all three studies and both sides. Keep the pulse running, pause movement for eight beats, then re-enter for eight bounce beats on a chosen next pulse. Ease down and rest. Describe timing, support/touch, transitions and any discomfort separately. Choose one revision: smaller steps, arms resting by your sides while feet work, or a clearer listen-before-entry pause. Attempt the same task again after rest with only that revision. If not ready, join two blocks first and return later; the full physical task remains unattempted. No deadline or completion award.",
+        "tr": "Fiziksel yol: kademeli hazırlan, sekiz dış vuruş dinle, sonra üç çalışmanın hepsini ve iki tarafı kullanarak dört bloğu (otuz iki vuruş) dene. Kaynak sürerken sekiz vuruş hareketi durdur; sonraki seçtiğin vuruşta sekiz bounce vuruşuyla yeniden gir. Yavaşlayıp dinlen. Zamanlama, destek/dokunma, geçişler ve varsa rahatsızlığı ayrı anlat. Tek düzeltme seç: küçük adımlar, ayaklar çalışırken kolların yanında rahat durması veya girişten önce daha belirgin dinleme duraklaması. Dinlendikten sonra aynı görevi yalnız bu düzeltmeyle tekrar dene. Hazır değilsen önce iki bloğu birleştirip sonra geri dön; tam fiziksel görev denenmiş olmaz. Son tarih veya tamamlanma ödülü yok."
+      },
+      "mistakes": {
+        "en": "Treating a second attempt as automatic mastery: describe what actually changed. Repeating through discomfort: stop. Copying an online routine for the task: use these building blocks and your own order.",
+        "tr": "İkinci denemeyi otomatik ustalık saymak: gerçekten ne değiştiğini anlat. Rahatsızlığa rağmen tekrarlamak: dur. Görev için çevrimiçi rutin kopyalamak: bu yapı taşlarını ve kendi sıranı kullan."
+      },
+      "adaptation": {
+        "en": "Seated/verbal path: arrange and describe all four blocks, identify the supporting foot in words, and count or hand-tap to an external pulse with a pause/re-entry. The limited outcome is sequence understanding and self-observed listening/counting. If no pulse is available, only the order is rehearsed. Record this as seated/verbal rehearsal, never as physical dance execution or physical mastery; standing outcomes stay open.",
+        "tr": "Oturarak/sözlü yol: dört bloğu düzenleyip anlat, destek ayağını sözle belirt; dış vuruşla say veya elinle vur, duraklayıp yeniden gir. Sınırlı hedef sıra anlayışı ve öz gözlemle dinleme/sayımdır. Vuruş kaynağı yoksa yalnız sıra prova edilir. Bunu oturarak/sözlü prova olarak belirt; fiziksel dans uygulaması veya fiziksel ustalık sayma. Ayakta hareket hedefleri açık kalır."
+      },
+      "check": {
+        "en": "Physical attempt checklist: all three studies included; right/left support and touches used; each block has eight external beats; transitions occur at the planned count; pause/re-entry follows the external pulse; one contrast and one revision can be described. Report each as observed, uncertain or not attempted. Comfort is a separate stop/continue check, not a timing or weight-transfer pass. Seated/verbal checklist covers order and external counting only; it cannot satisfy the physical checklist. Revisit hhf_01 for pulse, hhf_03 for support/touch, hhf_04 for foot sequence or hhf_05 for transitions. These self-reports do not certify Hip-Hop skill, groove, musicality or mastery.",
+        "tr": "Fiziksel deneme listesi: üç çalışma da var; sağ/sol destek ve dokunmalar kullanıldı; her blok sekiz dış vuruş sürdü; geçişler planlanan sayıda oldu; duraklama ve yeniden giriş dış kaynağı izledi; bir kontrast ve bir düzeltme anlatılabiliyor. Her maddeyi gözlendi, belirsiz veya denenmedi diye belirt. Rahatlık ayrı bir durma/devam etme kontrolüdür; zamanlama veya ağırlık aktarımı geçer sonucu değildir. Oturarak/sözlü liste yalnız sırayı ve dış sayımı kapsar; fiziksel listeyi karşılayamaz. Vuruş için hhf_01’e, destek/dokunma için hhf_03’e, ayak sırası için hhf_04’e, geçiş için hhf_05’e dön. Bu öz beyanlar Hip-Hop becerisini, groove’u, müzikaliteyi veya ustalığı onaylamaz."
+      },
+      "prerequisiteIds": [
+        "hhf_05"
+      ],
+      "instructionalSourceIds": [
+        "steezy-counting",
+        "authored"
+      ],
+      "authoredTechnicalChoices": "Exact practice arrangement and adaptations are authored; ingredient sources are scoped in provenance, not full technique validation."
+    }
+  ],
+  "acceptance": {
+    "content": "written introduction only; complete beginner skill curriculum NOT accepted; revised after pedagogy review, re-review pending",
+    "software": "separate local checks; no release acceptance",
+    "instruction": "no demonstrations or physical assessment; final full-curriculum acceptance open",
+    "scoring": false,
+    "progressWrites": false
+  },
+  "provenance": [
+    {
+      "id": "steezy-culture",
+      "url": "https://www.steezy.co/posts/what-is-hip-hop-dance",
+      "accessed": "2026-10-03",
+      "retrieval": "full article retrieved",
+      "supports": "General bounce/rock, music and Black community cultural framing. No exact knee angle, side-rock canonical form or six-lesson completeness claim."
+    },
+    {
+      "id": "steezy-counting",
+      "url": "https://www.steezy.co/posts/how-to-dance-hip-hop-for-beginners",
+      "accessed": "2026-10-03",
+      "retrieval": "full article retrieved",
+      "supports": "Eight-beat counting aligned to music; listening choices; movement rehearsal. No claim that private counting proves external timing."
+    },
+    {
+      "id": "howcast-knee-bounce",
+      "url": "https://howcast.com/videos/508483-how-to-do-the-funky-walk-kids-hip-hop-moves/",
+      "accessed": "2026-10-03",
+      "retrieval": "instructor transcript retrieved; video not visually reviewed",
+      "supports": "Knee-driven bounce down/up ingredient only. Named Funky Walk sequence, arms and travelling pattern are not reproduced; our feet-grounded range and per-click arrangement are authored proposals."
+    },
+    {
+      "id": "howcast-touch",
+      "url": "https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/",
+      "accessed": "2026-10-03",
+      "retrieval": "Robert Royston instructional transcript retrieved; video not visually reviewed",
+      "supports": "General dance distinction: touch carries no weight; step-touch steps on odd counts and touches on even counts. Source is line-dance instruction, not Hip-Hop authenticity or an endorsement of this path. No routine/turn copied."
+    },
+    {
+      "id": "bce-side-response",
+      "url": "https://bigcreative.education/10-easy-dance-moves-anyone-can-master/",
+      "accessed": "2026-10-03",
+      "retrieval": "education provider article retrieved",
+      "supports": "Section 10 describes side-to-side weight shift with a body/shoulder response. Our small planted-foot right/centre/left/centre study is authored preparation, not a sourced canonical Rock or a reproduction of Shoulder Lean."
+    },
+    {
+      "id": "ausdance-warmup",
+      "url": "https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance",
+      "accessed": "2026-10-03",
+      "retrieval": "general structure inspected in earlier pass",
+      "supports": "General gradual warm-up and gradual cool-down structure only. Does not validate our specific preparation examples, technique or adaptations."
+    },
+    {
+      "id": "smithsonian-social",
+      "url": "https://folklife.si.edu/magazine/freedom-sounds-generations-of-african-american-social-dance-in-dc-hand-dancing-hip-hop-and-go-go",
+      "accessed": "2026-10-03",
+      "retrieval": "FAILED: 500 on re-retrieval in this correction pass; not treated as verified support",
+      "supports": "No claims in this revision rely on this unavailable page."
+    },
+    {
+      "id": "authored",
+      "supports": "Original wording, small ranges, count arrangements, entry/recovery drills, self-checks, adaptations and capstone. Ingredient-level sources above do not certify full technique or curriculum completeness. Instructor/physical review pending."
+    }
+  ],
+  "technicalReviewNotes": {
+    "legacyRock": "Catalog retains six demoOnly entries and one locked Rock. This study does not resolve that reference or unlock it.",
+    "namedStepGaps": "Running Man and Roger Rabbit remain legacy incomplete demo content; their technique/demonstration/feedback gaps are not closed here and they are not universal mandatory steps."
+  },
+  "finalTaskContract": {
+    "assessment": "self_observation_only",
+    "physicalStudies": [
+      "bounce",
+      "side_rock_preparation",
+      "step_touch"
+    ],
+    "sides": [
+      "right",
+      "left"
+    ],
+    "externalPulseRequiredForTiming": true,
+    "transitionsRequired": true,
+    "pauseAndReentryRequired": true,
+    "blocks": 4,
+    "beatsPerBlock": 8,
+    "adaptedOutcome": "sequence understanding and listening/counting only",
+    "adaptationEstablishesPhysicalMastery": false,
+    "completeBeginnerCurriculumAccepted": false
+  }
+}
