@@ -331,6 +331,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             // behind it.
             return FirstRunView(
               tally: LibraryTally.from(snap.data!.cards),
+              cameraSessionsAvailable: widget.cameraSessionsAvailable,
               onContinue: _dismissIntro,
             );
           }
@@ -468,7 +469,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                   summary: _progress!,
                   catalog: library.allCourses,
                   courseEntry: _salsaCourseEntry),
-            ProfileView(accountPageBuilder: widget.accountPageBuilder),
+            ProfileView(accountPageBuilder: widget.accountPageBuilder,
+                cameraSessionsAvailable: widget.cameraSessionsAvailable),
           ],
         ),
         bottomNavigationBar: NavigationBar(

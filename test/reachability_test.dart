@@ -485,7 +485,7 @@ void main() {
           .value;
       expect(
         shellSrc,
-        contains('ProfileView(accountPageBuilder: widget.accountPageBuilder)'),
+        contains('ProfileView(accountPageBuilder: widget.accountPageBuilder,'),
         reason: 'Profil artık kabukta değilse rota sayımı bayatladı',
       );
       final File looseWalk = File('test/reachability_test.dart');

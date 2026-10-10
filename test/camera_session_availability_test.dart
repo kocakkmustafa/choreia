@@ -10,6 +10,8 @@ import 'package:choreia/app/live/live_environment.dart';
 import 'package:choreia/app/live/live_lesson_page.dart';
 import 'package:choreia/app/live/live_state.dart';
 import 'package:choreia/app/onboarding/first_run_flag.dart';
+import 'package:choreia/app/onboarding/first_run_view.dart';
+import 'package:choreia/app/shell/profile_view.dart';
 import 'package:choreia/app/shell/choreia_shell.dart';
 import 'package:choreia/main.dart';
 import 'package:flutter/material.dart';
@@ -201,6 +203,148 @@ void main() {
         }
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pump();
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
+  for (final language in ['en', 'tr']) {
+    for (final available in [false, true]) {
+      testWidgets(
+          '$language: fresh intro, library and configured profile agree ($available)',
+          (tester) async {
+        phone(tester, language);
+        var permissions = 0;
+        await tester.pumpWidget(MaterialApp(
+            home: ChoreiaShell(
+          cameraSessionsAvailable: available,
+          bundleOverride: () async => library,
+          flagOverride: MemoryFirstRunFlag(),
+          accountPageBuilder: (_) =>
+              const Scaffold(body: Text('local account fixture')),
+          env: LiveEnvironment(
+              storeOpener: () async => RoundTripStore(),
+              cameraPermissionRequest: () async {
+                permissions++;
+                return true;
+              }),
+        )));
+        for (var i = 0; i < 8; i++) {
+          await tester.pump(const Duration(milliseconds: 50));
+        }
+        expect(
+            tester
+                .widget<FirstRunView>(find.byType(FirstRunView))
+                .cameraSessionsAvailable,
+            available);
+        await reveal(tester, find.byKey(FirstRunView.cameraKey));
+        final cameraText = tester
+            .widgetList<Text>(find.descendant(
+                of: find.byKey(FirstRunView.cameraKey),
+                matching: find.byType(Text)))
+            .map((text) => text.data ?? '')
+            .join(' ');
+        expect(
+            cameraText,
+            contains(available
+                ? (language == 'tr'
+                    ? 'cihaz izni ve erişim kontrolü'
+                    : 'device permission and access checks')
+                : (language == 'tr'
+                    ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
+                    : 'Live camera practice and subscription sales are closed')));
+        if (available) {
+          expect(
+              cameraText,
+              contains(language == 'tr'
+                  ? 'Abonelik satışı kapalı kalır'
+                  : 'Subscription sales remain closed'));
+          expect(
+              cameraText,
+              isNot(contains(language == 'tr'
+                  ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
+                  : 'Live camera practice and subscription sales are closed')));
+        }
+        await reveal(tester, find.byKey(FirstRunView.stateKey));
+        final stateText = tester
+            .widgetList<Text>(find.descendant(
+                of: find.byKey(FirstRunView.stateKey),
+                matching: find.byType(Text)))
+            .map((text) => text.data ?? '')
+            .join(' ');
+        expect(
+            stateText,
+            contains(language == 'tr'
+                ? 'kamera seansı referans notları'
+                : 'camera-session reference notes'));
+        expect(stateText, isNot(contains('with lesson previews')));
+        expect(stateText, isNot(contains('ders ön izlemesi var')));
+        expect(
+            stateText,
+            contains(available
+                ? (language == 'tr'
+                    ? 'cihaz izni ve erişim kontrolü'
+                    : 'device permission and access checks')
+                : (language == 'tr'
+                    ? 'oynatılabilir bir önizleme değildir'
+                    : 'not a playable preview')));
+        await tester.tap(find.byKey(FirstRunView.continueKey));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(
+            tester
+                .widget<LibraryView>(find.byType(LibraryView))
+                .cameraSessionsAvailable,
+            available);
+        await tester.tap(find.byKey(ChoreiaShell.profileTabKey));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(
+            tester
+                .widget<ProfileView>(find.byType(ProfileView))
+                .cameraSessionsAvailable,
+            available);
+        expect(
+            find.textContaining(available
+                ? (language == 'tr'
+                    ? 'cihaz izni ve erişim kontrolü'
+                    : 'device permission and access checks')
+                : (language == 'tr'
+                    ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
+                    : 'Live camera practice and subscription sales are closed')),
+            findsOneWidget);
+        expect(find.byKey(ProfileView.accountEntryKey), findsOneWidget);
+        expect(find.byKey(ProfileView.licensesEntryKey), findsOneWidget);
+        expect(permissions, 0);
+        expect(find.byType(LiveLessonPage), findsNothing);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+      });
+      testWidgets(
+          '$language: profile fallback describes the same session state ($available)',
+          (tester) async {
+        phone(tester, language);
+        await tester.pumpWidget(MaterialApp(
+            home: Scaffold(
+                body: ProfileView(
+          cameraSessionsAvailable: available,
+        ))));
+        final text = tester
+            .widgetList<Text>(find.byType(Text))
+            .map((widget) => widget.data ?? '')
+            .join(' ');
+        expect(
+            text,
+            contains(available
+                ? (language == 'tr'
+                    ? 'cihaz izni ve erişim kontrolü'
+                    : 'device permission and access checks')
+                : (language == 'tr'
+                    ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
+                    : 'Live camera practice and subscription sales are closed')));
+        expect(find.byKey(ProfileView.licensesEntryKey), findsOneWidget);
+        expect(find.byKey(ProfileView.accountEntryKey), findsNothing);
         expect(tester.takeException(), isNull);
       });
     }
