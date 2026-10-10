@@ -65,6 +65,7 @@ void main() {
 
   Future<void> show(WidgetTester tester, String styleId,
       {Set<String>? runnable,
+      bool cameraSessionsAvailable = false,
       Future<bool> Function(BuildContext)? beforeStart}) async {
     tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1.0;
@@ -74,7 +75,8 @@ void main() {
       home: StyleDetailView(
           card: lib.cardFor(styleId)!,
           runnableSteps: runnable ?? deviceRunnable,
-          beforeStart: beforeStart),
+          beforeStart: beforeStart,
+          cameraSessionsAvailable: cameraSessionsAvailable),
     ));
     await tester.pump();
   }
@@ -96,12 +98,14 @@ void main() {
       tester,
       'hip_hop_foundations',
       runnable: const <String>{'hh_bounce'},
+      // Isolated future-capability host; current production remains closed.
+      cameraSessionsAvailable: true,
       beforeStart: (_) async {
         checks++;
         return false;
       },
     );
-    final start = find.widgetWithText(FilledButton, 'Start');
+    final start = find.widgetWithText(FilledButton, StyleStrings.start);
     await scrollTo(tester, start);
     await tester.ensureVisible(start);
     await tester.pump();
@@ -242,18 +246,10 @@ void main() {
   });
 
   group('no button promises a door that does not open', () {
-    testWidgets('MEASURED: no lesson in the app can be started today',
+    testWidgets('one lesson has a reference but the current release stays closed',
         (WidgetTester tester) async {
-      // The honest state of the whole app, asserted rather than described.
-      // Was 0 until 2026-08-07 12:0x, when `hh_bounce` was declared in
-      // `pubspec.yaml` and `hip_hop_foundations` finally became openable on a
-      // device — the badge had been claiming `demoOpen` all along (C-185).
-      //
-      // ⚠️ REACHING A LESSON IS NOT THE LESSON WORKING. The pose model the
-      // live page asks for ships nowhere (C-186), so this 1 counts a door
-      // that opens, not a room with a floor. Pinned in
-      // `reachability_test.dart`; named here so this number is never read as
-      // "the core loop is live".
+      // Content readiness and release access are independent: the bundled
+      // Bounce reference remains counted while the camera session is closed.
       int startable = 0;
       for (final StyleCard c in lib.cards) {
         startable += c
@@ -264,6 +260,11 @@ void main() {
       expect(startable, 1,
           reason: 'başlatılabilir ders sayısı değişti — referansının diskte '
               'DEĞİL, pubspec\'te BEYANLI olduğunu doğrula (C-185)');
+
+      await show(tester, 'hip_hop_foundations');
+      await scrollTo(tester, find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce')));
+      expect(find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce')), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, StyleStrings.start), findsNothing);
 
       // The release-gated style stays shut regardless: its bpm range is
       // DISPUTED, so no lesson in it may ship at all.
@@ -277,10 +278,8 @@ void main() {
     testWidgets('a blocked lesson gets a sentence, never a greyed-out button',
         (WidgetTester tester) async {
       await show(tester, 'hip_hop_foundations');
-      // This style now has exactly ONE startable lesson, so a Start button is
-      // expected — what must NOT exist is a DISABLED one. A greyed-out
-      // "Start" says the door might open if you tried harder; a sentence says
-      // what is missing and whose job it is.
+      // A bundled reference is not an accessible camera session. Blocking
+      // reasons remain sentences; no unavailable action is a greyed button.
       for (final FilledButton b
           in tester.widgetList<FilledButton>(find.byType(FilledButton))) {
         expect(b.onPressed, isNotNull,
@@ -926,19 +925,23 @@ void main() {
         // bakan bir tarama, suçluyu göremez.
         await scrollTo(tester, card_);
         expect(card_, findsOneWidget);
-        final Finder preview = find.descendant(
-            of: card_, matching: find.textContaining('PREVIEW'));
-        expect(preview, o.canStart ? findsOneWidget : findsNothing,
-            reason: '${o.lesson.id}: preview badge must match its tap outcome');
         expect(
-            find.descendant(
-                of: card_, matching: find.textContaining('NO SCORING')),
+            find.descendant(of: card_, matching: find.textContaining('PREVIEW')),
+            findsNothing,
+            reason: 'Reference notes cannot promise a preview player');
+        expect(
+            find.descendant(of: card_, matching: find.text(
+                o.canStart ? 'REFERENCE · SESSION CLOSED' : 'NO SCORING')),
             findsOneWidget,
-            reason: 'The release must retain its no-scoring disclosure');
+            reason: '${o.lesson.id}: readiness and release access must remain distinct');
+        if (o.canStart) {
+          expect(find.byKey(StyleDetailView.sessionUnavailableKey(o.lesson.id)), findsOneWidget);
+        }
+        expect(find.byKey(StyleDetailView.lessonStartKey(o.lesson.id)), findsNothing);
         expect(
             find.descendant(of: card_, matching: find.textContaining('OPEN')),
             findsNothing,
-            reason: 'A reference preview cannot promise open camera practice');
+            reason: 'A reference cannot promise an open camera session');
       }
     });
   });

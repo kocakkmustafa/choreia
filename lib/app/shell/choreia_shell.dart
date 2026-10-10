@@ -60,6 +60,7 @@ class ChoreiaShell extends StatefulWidget {
     this.env = const LiveEnvironment(),
     this.accountPageBuilder,
     this.beforeLessonStart,
+    this.cameraSessionsAvailable = false,
   });
 
   /// The device-only dependencies of the whole flow — content bundle, pose
@@ -76,6 +77,9 @@ class ChoreiaShell extends StatefulWidget {
   /// Until then Profile keeps its honest unconnected state.
   final WidgetBuilder? accountPageBuilder;
   final Future<bool> Function(BuildContext)? beforeLessonStart;
+
+  /// Session access is separate from content/reference readiness.
+  final bool cameraSessionsAvailable;
 
   /// Lets a test drive the shell off repository files instead of the asset
   /// bundle — `rootBundle.loadString` deadlocks under `flutter test` in this
@@ -444,6 +448,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
               library: library,
               env: widget.env,
               beforeLessonStart: widget.beforeLessonStart,
+              cameraSessionsAvailable: widget.cameraSessionsAvailable,
             ),
             // READ FROM THE STORE (2026-08-13). This used to hand
             // `ProgressSummary.build` an empty history and

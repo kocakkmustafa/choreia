@@ -65,6 +65,8 @@ void main() {
   Widget app(NavigatorObserver spy, {bool introSeen = false}) => MaterialApp(
     navigatorObservers: <NavigatorObserver>[spy],
     home: ChoreiaShell(
+          // Isolated future-capability route probe, not production release access.
+          cameraSessionsAvailable: true,
       bundleOverride: () async => library,
       flagOverride: MemoryFirstRunFlag(seen: introSeen),
       // An EMPTY store, injected for the same reason the bundle and the
@@ -147,7 +149,7 @@ void main() {
       // here: the lesson was written, the page was built, the reference was
       // on disk — and `pubspec.yaml` did not ship it, so no device could
       // open it and no button was painted. One manifest line, one ruling.
-      final Finder startButton = find.widgetWithText(FilledButton, 'Start');
+      final Finder startButton = find.widgetWithText(FilledButton, StyleStrings.start);
       await _scrollTo(tester, startButton);
       expect(
         startButton,
@@ -692,7 +694,7 @@ void main() {
       await _settle(tester);
       expect(find.byType(StyleDetailView), findsOneWidget);
 
-      final Finder startButton = find.widgetWithText(FilledButton, 'Start');
+      final Finder startButton = find.widgetWithText(FilledButton, StyleStrings.start);
       await _scrollTo(tester, startButton);
       await tester.ensureVisible(startButton);
       await _settle(tester);

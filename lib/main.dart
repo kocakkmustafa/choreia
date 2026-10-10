@@ -181,6 +181,8 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
           accountRuntime == null ? null : accountPage;
       return widget.shellBuilder?.call(env, accountBuilder) ?? ChoreiaShell(
           env: env,
+          // Match the current beforeStart release policy without enabling it.
+          cameraSessionsAvailable: motionPaidFeaturesAvailable,
           accountPageBuilder: accountBuilder,
           beforeLessonStart: accountRuntime == null
               ? null
