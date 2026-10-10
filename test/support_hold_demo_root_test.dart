@@ -442,7 +442,10 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
-  testWidgets('actual lesson placement exists only for so_04', (tester) async {
+  final placementCourse = SalsaCourse.fromJson(jsonDecode(
+      File('content/salsa_on1_course.json').readAsStringSync()) as Map<String, dynamic>);
+  for (final lesson in placementCourse.lessons) {
+    testWidgets('actual lesson placement exists only for so_04: ${lesson.id}', (tester) async {
     final temp = Directory.systemTemp.createTempSync('choreia-demo-placement-');
     final owners = AppStoreOwnerRegistry();
     addTearDown(() async {
@@ -453,8 +456,7 @@ void main() {
       await drainOwners(tester, owners, [_alice]);
       temp.deleteSync(recursive: true);
     });
-    final course = SalsaCourse.fromJson(jsonDecode(
-        File('content/salsa_on1_course.json').readAsStringSync()) as Map<String, dynamic>);
+    final course = placementCourse;
     final store = await tester.runAsync(() => SalsaProgressStore.open(
         accountUserId: _alice, supportDirectory: temp, owners: owners));
     final user = ValueNotifier<String?>(_alice);
@@ -462,7 +464,6 @@ void main() {
     final env = LiveEnvironment(bundle: DeviceBundle(declaredReferences()),
         historyDirectoryOverride: temp, accountUserId: user, storeOwners: owners,
         source: () => throw StateError('Placement must not start camera'));
-    for (final lesson in course.lessons) {
       await tester.pumpWidget(MaterialApp(home: SalsaLessonPage(
         key: ValueKey(lesson.id), course: course, lesson: lesson, store: store!,
         env: env, initialTurkish: false)));
@@ -489,8 +490,8 @@ void main() {
         expect(entry, findsNothing, reason: lesson.id);
       }
       expect(tester.takeException(), isNull);
-    }
-  }, timeout: const Timeout(Duration(seconds: 45)));
+    }, timeout: const Timeout(Duration(seconds: 45)));
+  }
 
   for (final retirement in ['owner', 'recovery', 'epoch']) {
     testWidgets('retained real lesson callback rejects mounted $retirement retirement', (tester) async {
