@@ -803,16 +803,14 @@ void main() {
     });
 
     test('iki dürüstlük listesi BÖLÜNTÜ gibi sunulamaz', () {
-      // measured TAM (skorlanan her şey), notMeasured ÖRNEKLEM (kontrol
-      // edilmeyen sonsuz). Aynı registerde yan yana iki başlık kapalı bir
-      // bölüntü okutur — ve bu, sınırları EKSİK gösterir, yani bu uygulamanın
-      // asla yanılmaması gereken yön.
-      expect(StyleStrings.measuredTitle, contains('ALL OF IT'));
-      expect(StyleStrings.notMeasuredTitle, contains('AMONG OTHERS'));
-      expect(StyleStrings.honestyNote, contains('complete'));
-      expect(StyleStrings.honestyNote, contains('is not, and cannot be'),
-          reason: 'ikinci listenin tamamlanamaz olduğu SÖYLENMELİ — yoksa '
-              'dört madde, kontrol edilmeyen her şey sanılır');
+      // This release presents recorded reference research, never a complete
+      // partition of live scoring. The limits are explicitly a sample.
+      expect(StyleStrings.measuredTitle, contains('RECORDED REFERENCE'));
+      expect(StyleStrings.notMeasuredTitle, contains('SOME REFERENCE LIMITS'));
+      expect(StyleStrings.honestyNote, contains('recorded reference research'));
+      expect(StyleStrings.honestyNote, contains('some of its limits'));
+      expect(StyleStrings.honestyNote, contains('not live assessments of you'));
+      expect(StyleStrings.honestyNote, contains('unavailable in this version'));
     });
 
     testWidgets('authored stilde iki liste birlikte ve notuyla görünür',
@@ -874,27 +872,23 @@ void main() {
               'öznesiz taşıyordu');
     });
 
-    test('özne cümleleri ÖLÇÜMÜ konu eder, kullanıcının çabasını değil', () {
-      // Yasak: dansçının performansını özne yapan biçimler. İzinli: bizim
-      // aletimizi özne yapanlar.
+    test('referans cümleleri kamera kapısını belirtir, kullanıcıyı yargılamaz', () {
       for (final MapEntry<String, String> e in <String, String>{
         'openUngraded': StyleStrings.openUngradedMeaning,
         'scored': StyleStrings.scoredMeaning,
       }.entries) {
-        expect(e.value, contains('we'),
-            reason: '${e.key}: cümlenin öznesi biz olmalı');
+        expect(e.value, contains('recorded'),
+            reason: '${e.key}: release copy must identify recorded references');
+        expect(
+            RegExp(r'camera practice.*unavailable', caseSensitive: false)
+                .hasMatch(e.value),
+            isTrue,
+            reason: '${e.key}: camera practice remains unavailable');
         expect(
             RegExp(r'your (attempt|practice|dancing) (does not|will not) count',
                     caseSensitive: false)
                 .hasMatch(e.value),
             isFalse);
-        expect(
-            RegExp(r'not about how you danced|not in your dancing',
-                    caseSensitive: false)
-                .hasMatch(e.value),
-            isTrue,
-            reason: '${e.key}: ölçüm yokluğunun BAŞARISIZLIK OLMADIĞI açıkça '
-                'söylenmeli — bu uygulamanın çekirdek disiplini');
       }
     });
 
@@ -932,25 +926,19 @@ void main() {
         // bakan bir tarama, suçluyu göremez.
         await scrollTo(tester, card_);
         expect(card_, findsOneWidget);
-        final Finder open =
-            find.descendant(of: card_, matching: find.textContaining('OPEN'));
-        if (o.canStart) {
-          expect(open, findsOneWidget,
-              reason: '${o.lesson.id} BAŞLATILABİLİR ve rozeti bunu '
-                  'söylemiyor — eksik-iddia da bir yanlış');
-        } else {
-          expect(open, findsNothing,
-              reason: '${o.lesson.id} başlatılamıyor ama rozeti OPEN diyor: '
-                  'dokunuşun bir şey yapacağına dair söz veriliyor, ve kartın '
-                  'kendi gövdesi bunu çürütüyor');
-          // Ve sessizleşmedi: sınıfını hâlâ söylüyor.
-          expect(
-              find.descendant(
-                  of: card_, matching: find.textContaining('NOT GRADED')),
-              findsOneWidget,
-              reason: 'rozet OPEN\'i kaybederken sınıfını da kaybetti — '
-                  'kullanıcı dersin ne olduğunu artık okuyamıyor');
-        }
+        final Finder preview = find.descendant(
+            of: card_, matching: find.textContaining('PREVIEW'));
+        expect(preview, o.canStart ? findsOneWidget : findsNothing,
+            reason: '${o.lesson.id}: preview badge must match its tap outcome');
+        expect(
+            find.descendant(
+                of: card_, matching: find.textContaining('NO SCORING')),
+            findsOneWidget,
+            reason: 'The release must retain its no-scoring disclosure');
+        expect(
+            find.descendant(of: card_, matching: find.textContaining('OPEN')),
+            findsNothing,
+            reason: 'A reference preview cannot promise open camera practice');
       }
     });
   });
