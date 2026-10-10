@@ -9,6 +9,7 @@ import 'package:motion_account/motion_account.dart';
 import 'app/account_bridge.dart';
 import 'app/account_recovery_host.dart';
 import 'app/history/account_store_lifetime.dart';
+import 'app/font_licenses.dart';
 import 'app/live/live_environment.dart';
 import 'app/shell/choreia_shell.dart';
 import 'app/theme.dart';
@@ -31,6 +32,7 @@ import 'app/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+  registerBundledFontLicenses();
   await launchChoreia();
 }
 

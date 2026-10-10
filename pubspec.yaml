@@ -158,6 +158,9 @@ flutter:
     # `google_fonts` 6.3.3 package would fetch at runtime); files are NOT
     # committed to git (same pattern as `assets/models/`).
     - assets/fonts/
+    - assets/fonts/OFL-InstrumentSerif.txt
+    - assets/fonts/OFL-IBMPlexMono.txt
+    - assets/fonts/OFL-Manrope.txt
 
   fonts:
     - family: Manrope
