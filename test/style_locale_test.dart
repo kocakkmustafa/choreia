@@ -44,9 +44,9 @@ void main() {
       (WidgetTester tester) async {
     await showTurkish(tester, 'hip_hop_foundations');
 
-    expect(find.text('AÇIK · PUANSIZ'), findsWidgets);
+    expect(find.text('ÖNİZLEME · PUAN YOK'), findsWidgets);
     expect(find.text('Hip-Hop Temelleri'), findsWidgets);
-    expect(find.textContaining('ölçebildiklerimizin sınırı'), findsOneWidget);
+    expect(find.textContaining('kamera çalışması ve puanlama kapalı'), findsOneWidget);
     expect(find.textContaining('Hip-hop dansının temelindeki parti dansı'),
         findsOneWidget);
     expect(find.textContaining('Siyah Amerikalı gençler'), findsOneWidget);
@@ -89,7 +89,7 @@ void main() {
       (WidgetTester tester) async {
     await showTurkish(tester, 'salsa_shines');
 
-    expect(find.text('HAZIR · KAPALI'), findsOneWidget);
+    expect(find.text('KAMERA KAPALI'), findsOneWidget);
     expect(
         find.textContaining('müzik vuruşu henüz doğrulanmadı'), findsOneWidget);
     await bringIntoView(
