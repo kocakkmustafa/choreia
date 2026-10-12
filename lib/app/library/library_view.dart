@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../study_review.dart';
 
 import '../live/live_environment.dart';
 import '../course/salsa_course_page.dart';
@@ -113,6 +114,7 @@ class _LibraryViewState extends State<LibraryView> {
             ),
             const SizedBox(height: 18),
             SalsaCourseEntry(env: widget.env),
+            const StudyReviewEntry(),
             const SizedBox(height: 24),
             Text(_tr ? 'Kamera seansı referans notları' : 'Camera-session reference notes',
                 style: ChoreiaType.display(size: 25)),
