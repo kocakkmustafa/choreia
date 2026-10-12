@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../study_review.dart';
 
 import '../live/live_environment.dart';
 import '../course/salsa_course_page.dart';
@@ -107,9 +108,32 @@ class _LibraryViewState extends State<LibraryView> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              _tr ? 'Stiller' : 'Styles',
-              style: ChoreiaType.display(size: 33),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    _tr ? 'Stiller' : 'Styles',
+                    style: ChoreiaType.display(size: 33),
+                  ),
+                ),
+                SizedBox(
+                  width: 40,
+                  height: 32,
+                  child: IconButton(
+                    key: const Key('study-review-entry'),
+                    padding: EdgeInsets.zero,
+                    tooltip: _tr
+                        ? 'Yazılı hatırlama ve değerlendirme'
+                        : 'Written recall and review',
+                    icon: const Icon(Icons.menu_book_outlined, size: 20),
+                    onPressed: () => Navigator.of(context).push<void>(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const StudyReviewPage(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 18),
             SalsaCourseEntry(env: widget.env),
