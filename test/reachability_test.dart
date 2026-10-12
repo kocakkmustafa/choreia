@@ -1,3 +1,5 @@
+import 'package:choreia/app/study_review.dart';
+import 'package:choreia/app/study_review_content.dart';
 import 'dart:io';
 
 import 'package:choreia/app/course_catalog.dart';
@@ -283,6 +285,8 @@ void main() {
       const Set<String> knownFloor = <String>{
         'FirstRunView',
         'LibraryView',
+        'StudyReviewPage',
+        'RecallLessonPage',
         'ProgressView',
         'StyleDetailView',
         'LiveLessonPage',
@@ -317,6 +321,27 @@ void main() {
       snapshot(); // tanıtım
       await passIntro(tester);
       snapshot(); // kütüphane
+      // Both new reading destinations are reached through visible controls.
+      await tester.tap(find.byKey(const Key('study-review-entry')));
+      await _settle(tester);
+      expect(find.byType(StudyReviewPage), findsOneWidget);
+      snapshot();
+      final reading = find.byKey(
+        Key('study-lesson-${studyAreas.first.lessons.first.id}'),
+      );
+      await _scrollTo(tester, reading);
+      await tester.ensureVisible(reading);
+      await _settle(tester);
+      await tester.tap(reading.hitTestable());
+      await _settle(tester);
+      expect(find.byType(RecallLessonPage), findsOneWidget);
+      snapshot();
+      await tester.tap(find.byType(BackButton));
+      await _settle(tester);
+      await tester.tap(find.byType(BackButton));
+      await _settle(tester);
+      expect(find.byType(LibraryView), findsOneWidget);
+
       await tester.tap(find.byKey(ChoreiaShell.progressTabKey));
       await _settle(tester);
       snapshot(); // ilerleme
