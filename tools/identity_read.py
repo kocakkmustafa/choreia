@@ -426,9 +426,11 @@ def main() -> int:
           " · ".join(f"{k}={v}" for k, v in sorted(counts.items())))
 
     fresh = []
+    carried = 0
     for step, v, o, c in red:
         k = ADJUDICATED.get(v)
         if k and k["step"] == step and k["own"] == o and k["confusable"] == c:
+            carried += 1
             print(f"  📌 {v} ({step}): çürütme sinyali TAŞINIYOR — açık kalem, "
                   f"sayılar değişmedi (kendi={o} karışt={c})")
         else:
@@ -448,8 +450,13 @@ def main() -> int:
               f"{REGISTER.name} kütüğünde sayılır.)")
         return 1
 
-    print("OK — hiçbir kabul edilmiş kaynağın transkripti atandığı dersi "
-          "çürütmüyor. (Sessizlik/kanıt-yok BLOKLAMAZ ve kütükte sayılıdır.)")
+    if carried:
+        print(f"OK — yeni/değişmiş çürütme yok; {carried} açık çürütme kaydı "
+              "TAŞINIYOR. Bu sonuç kaynak/segment kimliği veya fiziksel "
+              "doğruluk onayı değildir.")
+    else:
+        print("OK — hiçbir kabul edilmiş kaynağın transkripti atandığı dersi "
+              "çürütmüyor. (Sessizlik/kanıt-yok BLOKLAMAZ ve kütükte sayılıdır.)")
     return 0
 
 
