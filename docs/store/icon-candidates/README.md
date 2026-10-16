@@ -1,3 +1,13 @@
+# Güncel native simge — 2026-10-16
+
+Yeni onay: **v15-human-dancer**. Güncel master, platform envanteri,
+boyutlar ve hashler [onaylı simge kaydında](../../design/icon/approved-2026-10-16/README.md).
+15 iOS AppIcon ve 5 Android launcher PNG güncellendi. Aşağıdaki adaylar ve
+mağaza dosyaları tarihsel kayıttır; yeni onaylı simgeyle mağaza görsellerinin
+hazır olduğu anlamına gelmez. Native kurulum ve mağaza yüklemesi yapılmadı.
+
+---
+
 # Choreia mağaza simgesi adayı — 2026-09-24
 
 Kurucu, aynı dansçının art arda iki pozunu gösteren **Hareket izi** görselinin son özenli yeniden çizimini seçti. Seçilen kaynak `motion-trace-dancer-selected-reference-1254.png` dosyasıdır (SHA-256: `90c12f2a184584f5b2f797759f719eda9cf5814f9f9478df675af84a4f82f4da`).
