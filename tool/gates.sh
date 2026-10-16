@@ -115,6 +115,7 @@ run "camera_angle_gate self-test"   python3 tools/camera_angle_gate.py --self-te
 run "build_reference self-test"     python3 tools/build_reference.py --self-test
 run "beat_annotate self-test"       python3 tools/beat_annotate.py --self-test
 run "identity_read self-test"     python3 tools/identity_read.py --self-test
+run "identity output regression" python3 tools/test_identity_read.py
 run "closure_authority self-test" python3 tools/closure_authority.py --self-test
 run "ledger_freshness self-test"  python3 tools/ledger_freshness_check.py --self-test
 run "artifact_keyset_gate self-test" python3 tools/artifact_keyset_gate.py --self-test
