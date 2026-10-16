@@ -20,7 +20,7 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
   @override
   void initState() {
     super.initState();
-    _course = _load();
+    _course = _load()..ignore();
   }
 
   @override
@@ -28,10 +28,12 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.skillCourse != widget.skillCourse ||
         oldWidget.bundle != widget.bundle) {
-      _course = _load();
+      _course = _load()..ignore();
     }
   }
 
+  // Observe immediately: a retry can fail before FutureBuilder rebuilds.
+  // The original future still delivers its error to the reader UI.
   Future<HipHopCourse> _load() async {
     // Capture the request's mode before I/O; a later widget update cannot
     // reinterpret an old response as another curriculum.
@@ -87,7 +89,8 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
       body: FutureBuilder<HipHopCourse>(
         future: _course,
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasError) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -101,7 +104,7 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
                     ),
                     TextButton(
                       onPressed: () => setState(() {
-                        _course = _load();
+                        _course = _load()..ignore();
                       }),
                       child: Text(tr ? 'Tekrar dene' : 'Retry'),
                     ),

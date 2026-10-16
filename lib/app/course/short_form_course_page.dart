@@ -20,17 +20,19 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
   @override
   void initState() {
     super.initState();
-    _course = _load();
+    _course = _load()..ignore();
   }
 
   @override
   void didUpdateWidget(covariant ShortFormCoursePage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.bundle != widget.bundle) {
-      _course = _load();
+      _course = _load()..ignore();
     }
   }
 
+  // Observe immediately: a retry can fail before FutureBuilder rebuilds.
+  // The original future still delivers its error to the reader UI.
   Future<ShortFormCourse> _load() async {
     final bundle = widget.bundle ?? rootBundle;
     final source = await bundle
@@ -94,7 +96,8 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
       body: FutureBuilder<ShortFormCourse>(
         future: _course,
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasError) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -106,7 +109,7 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
                     ),
                     TextButton(
                       onPressed: () => setState(() {
-                        _course = _load();
+                        _course = _load()..ignore();
                       }),
                       child: Text(tr ? 'Tekrar dene' : 'Retry'),
                     ),
