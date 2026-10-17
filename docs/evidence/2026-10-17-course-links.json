@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-17",
+  "baseline_sha": "970b62d848607432690a02db251334531f009d21",
+  "scope": "Only written-recall to existing course/symbolic-aid navigation. No course content, rules, sensors, Core pins, production media catalog, entitlements or native package changed.",
+  "areas": [
+    {
+      "project": "choreia",
+      "area": "HipHop Foundations",
+      "courses": [
+        {
+          "path": "content/hip_hop_foundations_course.json",
+          "id": "hip_hop_foundations_beginner",
+          "version": 1,
+          "units": 6,
+          "sha256": "6e4b03606a225add1a7d233fb0f3d90a09dcb87d3f915acc3a43eac3eb7c2838",
+          "bytes": 40297
+        },
+        {
+          "path": "content/hip_hop_foundations_skill_course.json",
+          "id": "hip_hop_foundations_skill_course",
+          "version": 1,
+          "units": 8,
+          "sha256": "719b1f24e10b0eda492265160296e1c34c079061dfbc7b8b875019a5979dd8ee",
+          "bytes": 49753
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [],
+      "remaining_acceptance": "6 yazılı giriş + 8 beceri adayı birimi; Running Man/Roger Rabbit vb. gerçek gösterim/öğrenci gözlemi açık. Gerçek hareket/müzik eşleme ve yetkin inceleme açık; uygulama müzik kataloğu lisansı onaylanmadı.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "choreia",
+      "area": "Salsa Shines",
+      "courses": [
+        {
+          "path": "content/salsa_on1_course.json",
+          "id": "salsa_on1_solo",
+          "version": 1,
+          "units": 48,
+          "sha256": "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc",
+          "bytes": 402293
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/course/support_hold_demo.dart",
+          "sha256": "bb1df99643aedc5ed04d8ee67ba14c40799e6114415952ef8b69749022393fe4"
+        }
+      ],
+      "remaining_acceptance": "48 ders/8 modül; A/B destek-durak şeması fiziksel ağırlık aktarımı veya müzik vuruşu değildir. Gerçek hareket/müzik eşleme ve yetkin inceleme açık; uygulama müzik kataloğu lisansı onaylanmadı.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "choreia",
+      "area": "Line Dance",
+      "courses": [
+        {
+          "path": "content/line_dance_beginner_course.json",
+          "id": "line_dance_beginner_written",
+          "version": 2,
+          "units": 9,
+          "sha256": "7c03a3294cccac8b82c70eb8fe36b481e8cf836966af06f89ded185317a8534a",
+          "bytes": 49106
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/course/line_dance_direction_diagram.dart",
+          "sha256": "9e491e53e8771a16d16cebacaab21dd41d628fa66cadb2bab0d94de548b6910f"
+        }
+      ],
+      "remaining_acceptance": "9 yazılı birim; yön/ağırlık defteri gerçek dönüş, grapevine veya aktarım ustalığı değildir. Gerçek hareket/müzik eşleme ve yetkin inceleme açık; uygulama müzik kataloğu lisansı onaylanmadı.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "choreia",
+      "area": "Latin Fusion Fitness",
+      "courses": [
+        {
+          "path": "content/latin_fusion_beginner_course.json",
+          "id": "latin_fusion_beginner_written",
+          "version": 1,
+          "units": 8,
+          "sha256": "c44513a64ae5bbc3ddebf68ce75d909323d1ff0403f64664435f8cf022616455",
+          "bytes": 63799
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [],
+      "remaining_acceptance": "8 yazılı birim; M/S/T/C ve azaltılmış C ritim iskelesi fiziksel cumbia drag kabulü değildir. Gerçek hareket/müzik eşleme ve yetkin inceleme açık; uygulama müzik kataloğu lisansı onaylanmadı.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "choreia",
+      "area": "Özgün kısa-form",
+      "courses": [
+        {
+          "path": "content/original_short_form_beginner_course.json",
+          "id": "original_short_form_beginner_written",
+          "version": 1,
+          "units": 7,
+          "sha256": "b4746faa5d64e430a5c948555219ea3f4ecccf5f80e294c4de3cdd411542b06d",
+          "bytes": 56238
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/course/line_dance_direction_diagram.dart",
+          "sha256": "9e491e53e8771a16d16cebacaab21dd41d628fa66cadb2bab0d94de548b6910f"
+        }
+      ],
+      "remaining_acceptance": "7 yazılı birim; özgün sayım dizileri fiziksel kısa-form öğretim kabulü değildir. Gerçek hareket/müzik eşleme ve yetkin inceleme açık; uygulama müzik kataloğu lisansı onaylanmadı.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    }
+  ],
+  "source_media_rights_or_expert_approval_added": false,
+  "verification": {
+    "new_link_tests": 2,
+    "existing_regression_tests": 16,
+    "passed": 18,
+    "accepted_logs": [
+      "choreia-links-tests-real-zone.log"
+    ],
+    "analyze": "choreia-analyze-accepted.log",
+    "existing_regression_log": "choreia-links-tests-initial.log: 16 PASS; overall exit 1 from two new fixture errors later corrected. Existing sixteen were not needlessly repeated."
+  },
+  "shipping_playable_demonstrations": 0,
+  "release_acceptance": "OPEN",
+  "native_runtime_real_hardware_iap_store": "UNRUN in this change; prior scoped acceptance stays historical.",
+  "changed_behavior": "Recall opens four actual written courses and the existing Salsa support/hold symbolic diagram, with the existing course music/physical-review boundaries.",
+  "evidence_source_manifest": {
+    "lib/app/study_review.dart": "98fa68e098bc6a1e6f2ad6eebacf804cf6934f0a8a66f0f9930edc21913ed472",
+    "test/study_course_links_test.dart": "a960e6537a2171d06cf69ab95d78cfdf85ba8a05c3ec59274956003ae636d75b"
+  }
+}

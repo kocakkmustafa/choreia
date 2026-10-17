@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'ui_language.dart';
+import 'course/hip_hop_course_page.dart';
+import 'course/line_dance_course_page.dart';
+import 'course/latin_fusion_course_page.dart';
+import 'course/short_form_course_page.dart';
+import 'course/support_hold_demo.dart';
+import 'shell/choreia_page_route.dart';
 
 import 'study_review_content.dart';
 
@@ -34,6 +40,15 @@ class StudyReviewEntry extends StatelessWidget {
 class StudyReviewPage extends StatelessWidget {
   const StudyReviewPage({super.key});
 
+  Widget _related(String area, bool turkish) => switch (area) {
+    'hiphop' => const HipHopCoursePage(),
+    'line' => const LineDanceCoursePage(),
+    'latin' => const LatinFusionCoursePage(),
+    'shortform' => const ShortFormCoursePage(),
+    'salsa' => SupportHoldDemo(turkish: turkish),
+    _ => throw ArgumentError.value(area),
+  };
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
@@ -60,6 +75,18 @@ class StudyReviewPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(area.boundary.inContext(context)),
+                TextButton.icon(
+                  key: Key('study-related-${area.id}'),
+                  icon: const Icon(Icons.menu_book_outlined),
+                  label: Text(area.id == 'salsa'
+                    ? _text(context, 'Inspect the support and hold diagram', 'Destek ve durak şemasını incele')
+                    : _text(context, 'Open existing written course', 'Mevcut yazılı kursu aç')),
+                  onPressed: () => Navigator.of(context).push<void>(
+                    ChoreiaPageRoute<void>(
+                      builder: (_) => _related(area.id, UiLanguage.isTurkish(context)),
+                    ),
+                  ),
+                ),
                 for (final RecallLesson lesson in area.lessons)
                   ListTile(
                     key: Key('study-lesson-${lesson.id}'),
