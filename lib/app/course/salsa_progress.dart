@@ -10,6 +10,25 @@ import 'salsa_self_check_policy.dart';
 
 export 'salsa_self_check_policy.dart' show SalsaPracticeOption;
 
+/// Written-study records use a separate file so a rollback to an older Salsa
+/// build cannot make the existing Salsa journal unreadable. They share the
+/// same atomic writer, namespace ticket and account-deletion drain.
+const writtenStudyCourses = <String, ({String prefix, int count, int version})>{
+  'hip_hop_foundations_beginner': (prefix: 'hhf_', count: 6, version: 1),
+  'hip_hop_foundations_skill_course': (prefix: 'hhs_', count: 8, version: 1),
+  'line_dance_beginner_written': (prefix: 'ld_', count: 9, version: 2),
+  'latin_fusion_beginner_written': (prefix: 'lf_', count: 8, version: 1),
+  'original_short_form_beginner_written': (prefix: 'sf_', count: 7, version: 1),
+};
+
+bool _validStudyIdentity(String course, String lesson) {
+  final spec = writtenStudyCourses[course];
+  if (spec == null) return false;
+  return List.generate(spec.count,
+          (n) => '${spec.prefix}${(n + 1).toString().padLeft(2, '0')}')
+      .contains(lesson);
+}
+
 enum SalsaEvidence { viewed, practised, selfReportedComplete }
 
 /// Every record describes a user action. There is no sensor-evidence variant.
@@ -30,14 +49,16 @@ final class SalsaProgressEvent {
         DateTime.tryParse(data['at'] is String ? data['at'] as String : '');
     if (version is! int ||
         version < 1 ||
-        course != 'salsa_on1_solo' ||
+        course is! String ||
         lesson is! String ||
-        !RegExp(r'^so_[0-9]{2}$').hasMatch(lesson) ||
+        !(course == 'salsa_on1_solo'
+            ? RegExp(r'^so_[0-9]{2}$').hasMatch(lesson)
+            : _validStudyIdentity(course, lesson)) ||
         at == null) {
       throw const FormatException('Invalid course progress record.');
     }
     return SalsaProgressEvent(
-      courseId: course as String,
+      courseId: course,
       version: version,
       lessonId: lesson,
       kind: SalsaEvidence.values.byName(data['kind'] as String),
@@ -81,7 +102,9 @@ final class SalsaProgress {
 /// closes admission synchronously and drains queued and dispatched operations
 /// before deletion; an opener retains its ticket across directory resolution.
 final class SalsaProgressStore {
-  SalsaProgressStore._(this.file, this.owner, this._ownerTicket);
+  SalsaProgressStore._(
+      this.file, this.owner, this._ownerTicket, this._writtenStudy);
+  final bool _writtenStudy;
   final File file;
   final String owner;
   final AppStoreOwnerTicket _ownerTicket;
@@ -90,10 +113,11 @@ final class SalsaProgressStore {
       r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
   static String ownerFor(String? id) => appStoreOwnerFor(id);
 
-  static String fileNameFor(String? id) =>
-      'course-choreia-${ownerFor(id)}.json';
+  static String fileNameFor(String? id, {bool writtenStudy = false}) =>
+      '${writtenStudy ? 'study' : 'course'}-choreia-${ownerFor(id)}.json';
   static Future<SalsaProgressStore> open(
       {String? accountUserId,
+      bool writtenStudy = false,
       Directory? supportDirectory,
       Future<Directory> Function()? directoryResolver,
       File Function(File file)? fileFactory,
@@ -102,9 +126,10 @@ final class SalsaProgressStore {
     final support = supportDirectory ??
         await (directoryResolver ?? getApplicationSupportDirectory)();
     ticket.checkActive();
-    final file = File('${support.absolute.path}/${fileNameFor(accountUserId)}');
-    return SalsaProgressStore._(
-        fileFactory?.call(file) ?? file, ownerFor(accountUserId), ticket);
+    final file = File(
+        '${support.absolute.path}/${fileNameFor(accountUserId, writtenStudy: writtenStudy)}');
+    return SalsaProgressStore._(fileFactory?.call(file) ?? file,
+        ownerFor(accountUserId), ticket, writtenStudy);
   }
 
   static Future<T> _locked<T>(String path, Future<T> Function() action) {
@@ -150,8 +175,17 @@ final class SalsaProgressStore {
           'Course progress is unreadable or has another owner.');
     }
     // No partial totals and no overwrite when any record is unreadable.
-    return SalsaProgress((data['events'] as List)
-        .map((v) => SalsaProgressEvent.fromJson(v as Map<String, dynamic>)));
+    final events = (data['events'] as List)
+        .map((v) => SalsaProgressEvent.fromJson(v as Map<String, dynamic>))
+        .toList();
+    if ((_writtenStudy && data['kind'] != 'writtenStudy') ||
+        events.any((e) => _writtenStudy
+            ? e.courseId == 'salsa_on1_solo' ||
+                e.kind != SalsaEvidence.practised
+            : e.courseId != 'salsa_on1_solo')) {
+      throw const FormatException('Course journal kind mismatch');
+    }
+    return SalsaProgress(events);
   }
 
   Future<SalsaProgress> record(
@@ -160,6 +194,7 @@ final class SalsaProgressStore {
           DateTime? at}) =>
       _ownerTicket.run(() => _locked(file.path, () async {
             _checkOwner();
+            if (_writtenStudy) throw StateError('Wrong journal kind');
             if (!course.lessons.any((l) => identical(l, lesson))) {
               throw ArgumentError('Lesson does not belong to this course.');
             }
@@ -195,40 +230,74 @@ final class SalsaProgressStore {
                   option: option,
                   at: at ?? DateTime.now())
             ]);
-            await file.parent.create(recursive: true);
-            _checkOwner();
-            final temporary = File('${file.path}.tmp');
-            final tempType =
-                await FileSystemEntity.type(temporary.path, followLinks: false);
-            _checkOwner();
-            if (tempType != FileSystemEntityType.notFound &&
-                tempType != FileSystemEntityType.file) {
-              throw const FileSystemException(
-                  'Temporary progress path is not a regular file.');
-            }
-            var temporaryStarted = false;
-            try {
-              temporaryStarted = true;
-              await temporary.writeAsString(
-                  jsonEncode({
-                    'schemaVersion': 1,
-                    'owner': owner,
-                    'events': updated.events.map((e) => e.toJson()).toList()
-                  }),
-                  flush: true);
-              _checkOwner();
-              await temporary.rename(file.path);
-              _checkOwner();
-              return updated;
-            } finally {
-              if (temporaryStarted &&
-                  await FileSystemEntity.type(temporary.path,
-                          followLinks: false) ==
-                      FileSystemEntityType.file) {
-                await temporary.delete();
-              }
-            }
+            await _persist(updated);
+            return updated;
           }));
+
+  Future<void> _persist(SalsaProgress updated) async {
+    await file.parent.create(recursive: true);
+    _checkOwner();
+    final temporary = File('${file.path}.tmp');
+    final tempType =
+        await FileSystemEntity.type(temporary.path, followLinks: false);
+    _checkOwner();
+    if (tempType != FileSystemEntityType.notFound &&
+        tempType != FileSystemEntityType.file) {
+      throw const FileSystemException(
+          'Temporary progress path is not a regular file.');
+    }
+    var temporaryStarted = false;
+    try {
+      temporaryStarted = true;
+      await temporary.writeAsString(
+          jsonEncode({
+            'schemaVersion': 1,
+            if (_writtenStudy) 'kind': 'writtenStudy',
+            'owner': owner,
+            'events': updated.events.map((e) => e.toJson()).toList()
+          }),
+          flush: true);
+      _checkOwner();
+      await temporary.rename(file.path);
+      _checkOwner();
+    } finally {
+      if (temporaryStarted &&
+          await FileSystemEntity.type(temporary.path, followLinks: false) ==
+              FileSystemEntityType.file) {
+        await temporary.delete();
+      }
+    }
+  }
+
+  Future<SalsaProgress> recordWrittenStudy(
+          {required String courseId,
+          required int version,
+          required String lessonId,
+          DateTime? at}) =>
+      _ownerTicket.run(() => _locked(file.path, () async {
+            _checkOwner();
+            if (!_writtenStudy ||
+                !_validStudyIdentity(courseId, lessonId) ||
+                writtenStudyCourses[courseId]?.version != version) {
+              throw ArgumentError('Unsupported written-study identity');
+            }
+            final current = await _read();
+            _checkOwner();
+            final updated = SalsaProgress([
+              ...current.events,
+              SalsaProgressEvent(
+                courseId: courseId,
+                version: version,
+                lessonId: lessonId,
+                kind: SalsaEvidence.practised,
+                option: SalsaPracticeOption.standard,
+                at: at ?? DateTime.now(),
+              )
+            ]);
+            await _persist(updated);
+            return updated;
+          }));
+
   static Future<void> clearAccount(String accountUserId,
       {Directory? supportDirectory,
       Future<Directory> Function()? directoryResolver,
@@ -240,7 +309,14 @@ final class SalsaProgressStore {
             await (directoryResolver ?? getApplicationSupportDirectory)();
         final file =
             File('${support.absolute.path}/${fileNameFor(accountUserId)}');
-        for (final path in [file.path, '${file.path}.tmp']) {
+        final study = File(
+            '${support.absolute.path}/${fileNameFor(accountUserId, writtenStudy: true)}');
+        for (final path in [
+          file.path,
+          '${file.path}.tmp',
+          study.path,
+          '${study.path}.tmp'
+        ]) {
           if (await FileSystemEntity.type(path, followLinks: false) ==
               FileSystemEntityType.file) {
             await File(path).delete();
@@ -258,12 +334,16 @@ final class SalsaProgressStore {
     await for (final entity in support.list(followLinks: false)) {
       if (entity is! File) continue;
       final name = entity.uri.pathSegments.last;
-      final match = RegExp(r'^course-choreia-([0-9a-f-]+)\.json(?:\.tmp)?$')
-          .firstMatch(name);
+      final match =
+          RegExp(r'^(?:course|study)-choreia-([0-9a-f-]+)\.json(?:\.tmp)?$')
+              .firstMatch(name);
       if (match == null) continue;
       final id = match.group(1)!;
       if (accountIdPattern.hasMatch(id) &&
-          (name == fileNameFor(id) || name == '${fileNameFor(id)}.tmp')) {
+          (name == fileNameFor(id) ||
+              name == '${fileNameFor(id)}.tmp' ||
+              name == fileNameFor(id, writtenStudy: true) ||
+              name == '${fileNameFor(id, writtenStudy: true)}.tmp')) {
         ids.add(id);
       }
     }

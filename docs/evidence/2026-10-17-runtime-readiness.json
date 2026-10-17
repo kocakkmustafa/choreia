@@ -28,7 +28,7 @@
       "id": "CH-04",
       "action": "Targeted software and account-scope regression",
       "prerequisite": "Final edited source",
-      "evidence": "task-16/targeted-tests.log: 163 PASS; final course acceptance logged separately",
+      "evidence": "163 runtime + 110 course/account tests at 70c31fa; 79 existing affected course/account tests and 14 new written-study tests at final source, with overlap not summed",
       "closure": "Host/widget/replay only; real account/IAP/physical acceptance open"
     },
     {
@@ -93,11 +93,37 @@
   "verification": {
     "targetedRuntimeTests": 163,
     "courseAccountAcceptanceTests": 110,
-    "totalDisjointTests": 273,
     "analyzer": "No issues found",
     "physicalDeviceTests": 0,
     "realProviderTests": 0,
     "newTraining": false,
-    "initialHarnessFailures": "Preserved in task-16/new-tests.log and new-tests-second.log; corrected by final targeted-tests.log"
+    "initialHarnessFailures": "Preserved in task-16/new-tests.log and new-tests-second.log; corrected by final targeted-tests.log",
+    "initialRuntimeSource": "70c31fae8c3ca8e5ba21a0df0333b9c4c14f9144",
+    "totalDisjointTestsAtInitialSource": 273,
+    "finalAffectedCourseAccountTests": 79,
+    "finalNewWrittenStudyTests": 14,
+    "finalEvidence": [
+      "task-16/written-acceptance-final.log (79 existing tests passed; new test file initially did not compile)",
+      "task-16/written-practice-final.log (14 final new tests passed)",
+      "task-16/analyze-final-source.log"
+    ],
+    "countsNote": "Final groups overlap the initial 110; do not add them into a unique total."
+  },
+  "writtenStudy": {
+    "status": "self_report_only_no_mastery",
+    "courses": 5,
+    "unitsOutsideSalsa": 38,
+    "source": "lib/app/course/written_unit_practice.dart",
+    "journal": "Separate study-choreia owner file; previous Salsa file unchanged for rollback",
+    "guards": [
+      "known course/version/unit identity",
+      "serialized atomic writes",
+      "guest/account isolation",
+      "owner retirement and deletion drain",
+      "background write refusal and resume reload",
+      "read/save failure preserves bytes"
+    ],
+    "media": "Each unit uses existing EMPTY media catalog; no fixture in production",
+    "recall": "Existing written recall answers remain ephemeral; only explicit study action persists"
   }
 }

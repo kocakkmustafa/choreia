@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../ui_language.dart';
+import '../live/live_environment.dart';
+import 'written_unit_practice.dart';
 import 'line_dance_course.dart';
 import 'line_dance_direction_diagram.dart';
 import 'practice_music_notice.dart';
 
 class LineDanceCoursePage extends StatefulWidget {
-  const LineDanceCoursePage({this.bundle, super.key});
+  const LineDanceCoursePage(
+      {this.bundle, this.env = const LiveEnvironment(), super.key});
   final AssetBundle? bundle;
+  final LiveEnvironment env;
 
   @override
   State<LineDanceCoursePage> createState() => _LineDanceCoursePageState();
@@ -143,6 +147,15 @@ class _LineDanceCoursePageState extends State<LineDanceCoursePage> {
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      WrittenUnitPractice(
+                        key: ValueKey('written.practice.${unit.id}'),
+                        courseId: 'line_dance_beginner_written',
+                        version: 2,
+                        unitId: unit.id,
+                        bundle: widget.bundle ?? rootBundle,
+                        env: widget.env,
+                      ),
+                      const SizedBox(height: 12),
                       if (['ld_02', 'ld_03', 'ld_04', 'ld_08']
                           .contains(unit.id))
                         LineDanceWeightLedger(unitId: unit.id, turkish: tr),

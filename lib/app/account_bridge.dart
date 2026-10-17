@@ -151,7 +151,11 @@ Future<void> clearLocalHistoryFor(
       final file = sessionFileFor(support, accountUserId);
       final courseFile = File(
           '${support.path}/${SalsaProgressStore.fileNameFor(accountUserId)}');
+      final studyFile = File(
+          '${support.path}/${SalsaProgressStore.fileNameFor(accountUserId, writtenStudy: true)}');
       for (final exactFile in [
+        studyFile,
+        File('${studyFile.path}.tmp'),
         file,
         File('${file.path}.tmp'),
         courseFile,
@@ -160,7 +164,8 @@ Future<void> clearLocalHistoryFor(
         await _deleteRegularFileIfPresent(exactFile);
       }
     }, expectedOwner: expectedOwner);
-    if (acceptsTicket && registry.isErasing(accountUserId) &&
+    if (acceptsTicket &&
+        registry.isErasing(accountUserId) &&
         onNamespaceFenced != null) {
       // erase publishes the UUID fence and retires every admitted data lease
       // synchronously. Resource listeners run here before its first IO await.

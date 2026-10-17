@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../ui_language.dart';
+import '../live/live_environment.dart';
+import 'written_unit_practice.dart';
 import 'short_form_course.dart';
 import 'line_dance_direction_diagram.dart';
 import 'practice_music_notice.dart';
 
 class ShortFormCoursePage extends StatefulWidget {
-  const ShortFormCoursePage({this.bundle, super.key});
+  const ShortFormCoursePage(
+      {this.bundle, this.env = const LiveEnvironment(), super.key});
   final AssetBundle? bundle;
+  final LiveEnvironment env;
 
   @override
   State<ShortFormCoursePage> createState() => _ShortFormCoursePageState();
@@ -161,6 +165,15 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      WrittenUnitPractice(
+                        key: ValueKey('written.practice.${unit.id}'),
+                        courseId: 'original_short_form_beginner_written',
+                        version: 1,
+                        unitId: unit.id,
+                        bundle: widget.bundle ?? rootBundle,
+                        env: widget.env,
+                      ),
+                      const SizedBox(height: 12),
                       for (final id in unit.patternIds)
                         _PatternTable(
                           pattern: course.patterns[id]!,

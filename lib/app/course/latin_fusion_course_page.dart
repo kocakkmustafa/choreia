@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../ui_language.dart';
+import '../live/live_environment.dart';
+import 'written_unit_practice.dart';
 import 'latin_fusion_course.dart';
 import 'line_dance_direction_diagram.dart';
 import 'practice_music_notice.dart';
 
 class LatinFusionCoursePage extends StatefulWidget {
-  const LatinFusionCoursePage({this.bundle, super.key});
+  const LatinFusionCoursePage(
+      {this.bundle, this.env = const LiveEnvironment(), super.key});
   final AssetBundle? bundle;
+  final LiveEnvironment env;
 
   @override
   State<LatinFusionCoursePage> createState() => _LatinFusionCoursePageState();
@@ -160,6 +164,15 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      WrittenUnitPractice(
+                        key: ValueKey('written.practice.${unit.id}'),
+                        courseId: 'latin_fusion_beginner_written',
+                        version: 1,
+                        unitId: unit.id,
+                        bundle: widget.bundle ?? rootBundle,
+                        env: widget.env,
+                      ),
+                      const SizedBox(height: 12),
                       for (final id in unit.patternIds)
                         _PatternTable(
                           pattern: course.patterns[id]!,

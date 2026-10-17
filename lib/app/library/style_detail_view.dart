@@ -139,7 +139,7 @@ class StyleDetailView extends StatelessWidget {
                   key: const Key('style.hipHopWrittenPath'),
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
-                      builder: (_) => const HipHopCoursePage(),
+                      builder: (_) => HipHopCoursePage(env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(
@@ -153,7 +153,7 @@ class StyleDetailView extends StatelessWidget {
                   key: const Key('style.hipHopSkillCourse'),
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
-                      builder: (_) => const HipHopCoursePage(skillCourse: true),
+                      builder: (_) => HipHopCoursePage(skillCourse: true, env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(
@@ -170,7 +170,7 @@ class StyleDetailView extends StatelessWidget {
                       settings: const RouteSettings(
                         name: 'course/line-dance-written',
                       ),
-                      builder: (_) => const LineDanceCoursePage(),
+                      builder: (_) => LineDanceCoursePage(env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(
@@ -187,7 +187,7 @@ class StyleDetailView extends StatelessWidget {
                       settings: const RouteSettings(
                         name: 'course/latin-fusion-written',
                       ),
-                      builder: (_) => const LatinFusionCoursePage(),
+                      builder: (_) => LatinFusionCoursePage(env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(
@@ -202,7 +202,7 @@ class StyleDetailView extends StatelessWidget {
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
                       settings: const RouteSettings(name: 'course/original-short-form-written'),
-                      builder: (_) => const ShortFormCoursePage(),
+                      builder: (_) => ShortFormCoursePage(env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(

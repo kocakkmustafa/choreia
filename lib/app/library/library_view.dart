@@ -128,7 +128,7 @@ class _LibraryViewState extends State<LibraryView> {
                     icon: const Icon(Icons.menu_book_outlined, size: 20),
                     onPressed: () => Navigator.of(context).push<void>(
                       MaterialPageRoute<void>(
-                        builder: (_) => const StudyReviewPage(),
+                        builder: (_) => StudyReviewPage(env: widget.env),
                       ),
                     ),
                   ),

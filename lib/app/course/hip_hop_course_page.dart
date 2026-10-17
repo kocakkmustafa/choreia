@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../ui_language.dart';
+import '../live/live_environment.dart';
+import 'written_unit_practice.dart';
 import 'hip_hop_course.dart';
 import 'practice_music_notice.dart';
 
 class HipHopCoursePage extends StatefulWidget {
-  const HipHopCoursePage({this.bundle, this.skillCourse = false, super.key});
+  const HipHopCoursePage(
+      {this.bundle,
+      this.skillCourse = false,
+      this.env = const LiveEnvironment(),
+      super.key});
   final bool skillCourse;
   final AssetBundle? bundle;
+  final LiveEnvironment env;
 
   @override
   State<HipHopCoursePage> createState() => _HipHopCoursePageState();
@@ -142,6 +149,17 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      WrittenUnitPractice(
+                        key: ValueKey('written.practice.${unit.id}'),
+                        courseId: widget.skillCourse
+                            ? 'hip_hop_foundations_skill_course'
+                            : 'hip_hop_foundations_beginner',
+                        version: 1,
+                        unitId: unit.id,
+                        bundle: widget.bundle ?? rootBundle,
+                        env: widget.env,
+                      ),
+                      const SizedBox(height: 12),
                       for (final field in HipHopUnit.fields.where(
                         (f) => f != 'title',
                       ))

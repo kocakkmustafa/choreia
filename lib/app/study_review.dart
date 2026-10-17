@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'ui_language.dart';
+import 'live/live_environment.dart';
 import 'course/hip_hop_course_page.dart';
 import 'course/line_dance_course_page.dart';
 import 'course/latin_fusion_course_page.dart';
@@ -15,7 +16,8 @@ String _text(BuildContext context, String en, String tr) =>
 
 /// Written recall only. Responses never enter a course, sensor or account store.
 class StudyReviewEntry extends StatelessWidget {
-  const StudyReviewEntry({super.key});
+  const StudyReviewEntry({this.env = const LiveEnvironment(), super.key});
+  final LiveEnvironment env;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -31,20 +33,21 @@ class StudyReviewEntry extends StatelessWidget {
         ),
       ),
       onPressed: () => Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(builder: (_) => const StudyReviewPage()),
+        MaterialPageRoute<void>(builder: (_) => StudyReviewPage(env: env)),
       ),
     ),
   );
 }
 
 class StudyReviewPage extends StatelessWidget {
-  const StudyReviewPage({super.key});
+  const StudyReviewPage({this.env = const LiveEnvironment(), super.key});
+  final LiveEnvironment env;
 
   Widget _related(String area, bool turkish) => switch (area) {
-    'hiphop' => const HipHopCoursePage(),
-    'line' => const LineDanceCoursePage(),
-    'latin' => const LatinFusionCoursePage(),
-    'shortform' => const ShortFormCoursePage(),
+    'hiphop' => HipHopCoursePage(env: env, bundle: env.bundle),
+    'line' => LineDanceCoursePage(env: env, bundle: env.bundle),
+    'latin' => LatinFusionCoursePage(env: env, bundle: env.bundle),
+    'shortform' => ShortFormCoursePage(env: env, bundle: env.bundle),
     'salsa' => SupportHoldDemo(turkish: turkish),
     _ => throw ArgumentError.value(area),
   };
