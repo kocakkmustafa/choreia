@@ -1,0 +1,339 @@
+{
+  "date": "2026-10-17",
+  "full_teaching_goal_preserved": true,
+  "baseline": "edb1e18dcf0463b2050ffc8076cce79013176dbb",
+  "shared_offline_intake": "ventures/motion-core/lib/tools/fixture_pipeline/first_party_capture.py",
+  "delivery_spec": "ventures/motion-core/lib/tools/fixture_pipeline/FIRST_PARTY_VIDEO_DELIVERY.tr.txt",
+  "areas": [
+    {
+      "app": "choreia",
+      "area": "hiphop",
+      "title": "HipHop Foundations",
+      "courses": [
+        {
+          "path": "content/hip_hop_foundations_course.json",
+          "id": "hip_hop_foundations_beginner",
+          "version": 1,
+          "units": 6,
+          "sha256": "6e4b03606a225add1a7d233fb0f3d90a09dcb87d3f915acc3a43eac3eb7c2838",
+          "bytes": 40297,
+          "lesson_ids": [
+            "hhf_01",
+            "hhf_02",
+            "hhf_03",
+            "hhf_04",
+            "hhf_05",
+            "hhf_06"
+          ]
+        },
+        {
+          "path": "content/hip_hop_foundations_skill_course.json",
+          "id": "hip_hop_foundations_skill_course",
+          "version": 1,
+          "units": 8,
+          "sha256": "719b1f24e10b0eda492265160296e1c34c079061dfbc7b8b875019a5979dd8ee",
+          "bytes": 49753,
+          "lesson_ids": [
+            "hhs_01",
+            "hhs_02",
+            "hhs_03",
+            "hhs_04",
+            "hhs_05",
+            "hhs_06",
+            "hhs_07",
+            "hhs_08"
+          ]
+        }
+      ],
+      "current_baseline": "edb1e18dcf0463b2050ffc8076cce79013176dbb",
+      "existing_architecture": "Existing pose-derived cycle/reference builder + phase-aligned angular tolerances, mirroring and audio timing/latency. Build only named-step reference/calibration candidates from authorized takes; preserve report-only identity measures and provisional reference flags. Generic all-style classifier or calibrated physical weight/contact claims are not implemented.",
+      "source_references": [
+        {
+          "path": "packages/choreia_engine/lib/src/judge.dart",
+          "sha256": "eb6638effecbfa7dc0db9d7998353471684799966117338c14f05f65fda58e75"
+        },
+        {
+          "path": "packages/choreia_engine/lib/src/reference.dart",
+          "sha256": "4f0b29984a013f3c350841791cf5990fc86b0385027e51988d39cfb0ce1071af"
+        },
+        {
+          "path": "tools/build_reference.py",
+          "sha256": "4b632f819371a9f6d46df9da06729c1b39f47ce6991d39cadcf502e752f09501"
+        },
+        {
+          "path": "tools/beat_annotate.py",
+          "sha256": "8e942df9136f3df3260660a69651e812835095bb7e6d78ebe61039762cd4911b"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "choreia",
+      "area": "salsa",
+      "title": "Salsa Shines",
+      "courses": [
+        {
+          "path": "content/salsa_on1_course.json",
+          "id": "salsa_on1_solo",
+          "version": 1,
+          "units": 48,
+          "sha256": "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc",
+          "bytes": 402293,
+          "lesson_ids": [
+            "so_01",
+            "so_02",
+            "so_03",
+            "so_04",
+            "so_05",
+            "so_06",
+            "so_07",
+            "so_08",
+            "so_09",
+            "so_10",
+            "so_11",
+            "so_12",
+            "so_13",
+            "so_14",
+            "so_15",
+            "so_16",
+            "so_17",
+            "so_18",
+            "so_19",
+            "so_20",
+            "so_21",
+            "so_22",
+            "so_23",
+            "so_24",
+            "so_25",
+            "so_26",
+            "so_27",
+            "so_28",
+            "so_29",
+            "so_30",
+            "so_31",
+            "so_32",
+            "so_33",
+            "so_34",
+            "so_35",
+            "so_36",
+            "so_37",
+            "so_38",
+            "so_39",
+            "so_40",
+            "so_41",
+            "so_42",
+            "so_43",
+            "so_44",
+            "so_45",
+            "so_46",
+            "so_47",
+            "so_48"
+          ]
+        }
+      ],
+      "current_baseline": "edb1e18dcf0463b2050ffc8076cce79013176dbb",
+      "existing_architecture": "Existing pose-derived cycle/reference builder + phase-aligned angular tolerances, mirroring and audio timing/latency. Build only named-step reference/calibration candidates from authorized takes; preserve report-only identity measures and provisional reference flags. Generic all-style classifier or calibrated physical weight/contact claims are not implemented.",
+      "source_references": [
+        {
+          "path": "packages/choreia_engine/lib/src/judge.dart",
+          "sha256": "eb6638effecbfa7dc0db9d7998353471684799966117338c14f05f65fda58e75"
+        },
+        {
+          "path": "packages/choreia_engine/lib/src/reference.dart",
+          "sha256": "4f0b29984a013f3c350841791cf5990fc86b0385027e51988d39cfb0ce1071af"
+        },
+        {
+          "path": "tools/build_reference.py",
+          "sha256": "4b632f819371a9f6d46df9da06729c1b39f47ce6991d39cadcf502e752f09501"
+        },
+        {
+          "path": "tools/beat_annotate.py",
+          "sha256": "8e942df9136f3df3260660a69651e812835095bb7e6d78ebe61039762cd4911b"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "choreia",
+      "area": "line",
+      "title": "Line Dance",
+      "courses": [
+        {
+          "path": "content/line_dance_beginner_course.json",
+          "id": "line_dance_beginner_written",
+          "version": 2,
+          "units": 9,
+          "sha256": "7c03a3294cccac8b82c70eb8fe36b481e8cf836966af06f89ded185317a8534a",
+          "bytes": 49106,
+          "lesson_ids": [
+            "ld_01",
+            "ld_02",
+            "ld_03",
+            "ld_04",
+            "ld_05",
+            "ld_06",
+            "ld_07",
+            "ld_08",
+            "ld_09"
+          ]
+        }
+      ],
+      "current_baseline": "edb1e18dcf0463b2050ffc8076cce79013176dbb",
+      "existing_architecture": "Existing pose-derived cycle/reference builder + phase-aligned angular tolerances, mirroring and audio timing/latency. Build only named-step reference/calibration candidates from authorized takes; preserve report-only identity measures and provisional reference flags. Generic all-style classifier or calibrated physical weight/contact claims are not implemented.",
+      "source_references": [
+        {
+          "path": "packages/choreia_engine/lib/src/judge.dart",
+          "sha256": "eb6638effecbfa7dc0db9d7998353471684799966117338c14f05f65fda58e75"
+        },
+        {
+          "path": "packages/choreia_engine/lib/src/reference.dart",
+          "sha256": "4f0b29984a013f3c350841791cf5990fc86b0385027e51988d39cfb0ce1071af"
+        },
+        {
+          "path": "tools/build_reference.py",
+          "sha256": "4b632f819371a9f6d46df9da06729c1b39f47ce6991d39cadcf502e752f09501"
+        },
+        {
+          "path": "tools/beat_annotate.py",
+          "sha256": "8e942df9136f3df3260660a69651e812835095bb7e6d78ebe61039762cd4911b"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "choreia",
+      "area": "latin",
+      "title": "Latin Fusion Fitness",
+      "courses": [
+        {
+          "path": "content/latin_fusion_beginner_course.json",
+          "id": "latin_fusion_beginner_written",
+          "version": 1,
+          "units": 8,
+          "sha256": "c44513a64ae5bbc3ddebf68ce75d909323d1ff0403f64664435f8cf022616455",
+          "bytes": 63799,
+          "lesson_ids": [
+            "lf_01",
+            "lf_02",
+            "lf_03",
+            "lf_04",
+            "lf_05",
+            "lf_06",
+            "lf_07",
+            "lf_08"
+          ]
+        }
+      ],
+      "current_baseline": "edb1e18dcf0463b2050ffc8076cce79013176dbb",
+      "existing_architecture": "Existing pose-derived cycle/reference builder + phase-aligned angular tolerances, mirroring and audio timing/latency. Build only named-step reference/calibration candidates from authorized takes; preserve report-only identity measures and provisional reference flags. Generic all-style classifier or calibrated physical weight/contact claims are not implemented.",
+      "source_references": [
+        {
+          "path": "packages/choreia_engine/lib/src/judge.dart",
+          "sha256": "eb6638effecbfa7dc0db9d7998353471684799966117338c14f05f65fda58e75"
+        },
+        {
+          "path": "packages/choreia_engine/lib/src/reference.dart",
+          "sha256": "4f0b29984a013f3c350841791cf5990fc86b0385027e51988d39cfb0ce1071af"
+        },
+        {
+          "path": "tools/build_reference.py",
+          "sha256": "4b632f819371a9f6d46df9da06729c1b39f47ce6991d39cadcf502e752f09501"
+        },
+        {
+          "path": "tools/beat_annotate.py",
+          "sha256": "8e942df9136f3df3260660a69651e812835095bb7e6d78ebe61039762cd4911b"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "choreia",
+      "area": "shortform",
+      "title": "Özgün kısa-form",
+      "courses": [
+        {
+          "path": "content/original_short_form_beginner_course.json",
+          "id": "original_short_form_beginner_written",
+          "version": 1,
+          "units": 7,
+          "sha256": "b4746faa5d64e430a5c948555219ea3f4ecccf5f80e294c4de3cdd411542b06d",
+          "bytes": 56238,
+          "lesson_ids": [
+            "sf_01",
+            "sf_02",
+            "sf_03",
+            "sf_04",
+            "sf_05",
+            "sf_06",
+            "sf_07"
+          ]
+        }
+      ],
+      "current_baseline": "edb1e18dcf0463b2050ffc8076cce79013176dbb",
+      "existing_architecture": "Existing pose-derived cycle/reference builder + phase-aligned angular tolerances, mirroring and audio timing/latency. Build only named-step reference/calibration candidates from authorized takes; preserve report-only identity measures and provisional reference flags. Generic all-style classifier or calibrated physical weight/contact claims are not implemented.",
+      "source_references": [
+        {
+          "path": "packages/choreia_engine/lib/src/judge.dart",
+          "sha256": "eb6638effecbfa7dc0db9d7998353471684799966117338c14f05f65fda58e75"
+        },
+        {
+          "path": "packages/choreia_engine/lib/src/reference.dart",
+          "sha256": "4f0b29984a013f3c350841791cf5990fc86b0385027e51988d39cfb0ce1071af"
+        },
+        {
+          "path": "tools/build_reference.py",
+          "sha256": "4b632f819371a9f6d46df9da06729c1b39f47ce6991d39cadcf502e752f09501"
+        },
+        {
+          "path": "tools/beat_annotate.py",
+          "sha256": "8e942df9136f3df3260660a69651e812835095bb7e6d78ebe61039762cd4911b"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    }
+  ],
+  "inference_checks": {
+    "choreia": {
+      "exit_code": 0,
+      "cwd": "/Users/mustafakaankocak/Developer/YULAlab-AI/ventures/choreia/app/packages/choreia_engine",
+      "tests": [
+        "judge_test.dart"
+      ],
+      "log": "choreia-inference.log",
+      "dependency_resolution": "existing engine package config; direct VM test runner, no pub command/network",
+      "scope": "logic/recorded fixture replay only; not first-party training, native or physical acceptance"
+    }
+  },
+  "first_party_data_received": false,
+  "new_model_training": false,
+  "device_validation_completed": false,
+  "runtime_model_rules_or_pins_changed": false,
+  "large_changes": [
+    "Gravita three dedicated missing course/variant definitions",
+    "Lissom yoga-course pose/transition assessment",
+    "JabLab other-discipline live recognition",
+    "Ostinato finger/key/contact or broader instrument-specific feedback",
+    "Choreia all-style choreography/physical support recognition",
+    "Existing extract_landmarks.py timestamps are frame-index/fps, not original variable-rate PTS: intake blocks VFR timing calibration until a compatible PTS-preserving extractor proposal is accepted. No timestamp rewrite in this change."
+  ]
+}
