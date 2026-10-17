@@ -1,3 +1,22 @@
+# Güncel mağaza metni girişi · 17 Ekim 2026
+
+Yayıma hazırlanacak TR/EN metinlerin kaynağı [listing.json](listing.json) ve
+[listing.tr-TR.json](listing.tr-TR.json) dosyalarıdır. Güncel dar kurs kapsamı
+**48 ders / 8 modül solo Salsa On1**; kurs varlık kimliği ve hashleri JSON içindeki `$` kaynak notlarındadır.
+Sessiz görsel sayım ve öz kayıt; kamera puanı, müzik temposu doğrulaması veya abonelik satışı yoktur.
+
+Kurs ilerlemesi kullanıcının kendi çalışma kaydıdır; ustalık veya fiziksel öğretim
+kabulü değildir. Hesap ve destek/gizlilik metinleri güncel JSON'dan alınır.
+Yerel metin, eski ekran görüntüsü veya kaynak testi mağazada kaydedildiği, güncel
+imzalı pakette bulunduğu ya da fiziksel cihazda kabul edildiği anlamına gelmez.
+Bu bakımda mağaza paneline yazılmadı ve yükleme yapılmadı.
+
+## Tarihsel araştırma · aşağıdaki metni yayın metni olarak kullanmayın
+
+Aşağıdaki eski katalog/kamera incelemesi kendi tarihinin kanıtıdır. Eski “bugün”,
+“sıradaki” ve simge onayı ifadeleri güncel yayın durumu değildir; yukarıdaki iki
+JSON ve kaynaklarına bağlı güncel kabul kullanılır.
+
 # Mağaza Liste Metni — TASLAK (D6, 2026-08-17, YAYIN-YOLU-CHOREIA madde 2)
 
 **Makine-okur kaynak:** `docs/store/listing.json` — metnin kendisi orada, bu dosya insan-okur

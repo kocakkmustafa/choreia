@@ -46,7 +46,8 @@
     "lessonCount": 48,
     "moduleCount": 8,
     "mediaIncluded": false,
-    "physicalDeviceAccepted": false
+    "physicalDeviceAccepted": false,
+    "historical": true
   },
   "$sourceOfFacts": "Current course: content/salsa_on1_course.json; its app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Readback of provider metadata is separate.",
   "$courseSourceReadback20261002": {
@@ -60,6 +61,19 @@
     "variantCount": 872,
     "mediaIncluded": false,
     "physicalDeviceAccepted": false,
-    "historicalBlock": "$coursePreparation20260926 is historical; current source bytes are recorded here"
+    "historicalBlock": "$coursePreparation20260926 is historical; current source bytes are recorded here",
+    "historical": true
+  },
+  "$courseSourceReadback20261017": {
+    "status": "local_source_readback_not_provider_or_physical_acceptance",
+    "sourceCommit": "aea5112d22f4b8236ba32c78fcf29ebeef1e20b1",
+    "asset": "content/salsa_on1_course.json",
+    "version": 1,
+    "sha256": "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc",
+    "bytes": 402293,
+    "lessonCount": 48,
+    "moduleCount": 8,
+    "mediaIncluded": false,
+    "physicalDeviceAccepted": false
   }
 }
