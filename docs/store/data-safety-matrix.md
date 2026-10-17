@@ -29,6 +29,30 @@ Play eşlemeleri form adayıdır; güncel sağlayıcı saklama/SDK trafiği ve
 konsol readback'iyle finalleştirilir. Bu kaynak onarımı yeni canlı veri
 ölçümü veya mağaza formu değişikliği değildir.
 
+## 17 Ekim 2026 · final adayın gerçek kapsamı
+
+`642a7d0` kaynaklı `1.0.0 (3)` IPA/AAB okundu; paketler yeniden üretilmedi.
+[Hesap gizlilik taslağı](account-data-safety-draft.md) artık Salsa'nın
+48 ders kaydı yanında diğer 38 birimin ayrı çalışma günlüğünü, SDK oturum
+saklamasını, altı yerel dosya yolunun silinmesini ve OS yedek sınırını içerir.
+Bunlar yerel kayıt/hesap ayrımıdır; yeni sunucu collection türü değildir.
+
+IPA'daki 9 privacy manifestin tamamında tracking=false. Runner'ın 6
+collected-data beyanı kaynak plist ile anlamsal olarak aynı; SDK required-reason
+kayıtları da paket içinden okundu. Android merged manifestte INTERNET/CAMERA'ya
+SDK'ların ACCESS_NETWORK_STATE, WAKE_LOCK ve BILLING izinleri ile uygulamanın
+receiver izni eklenir; mikrofon/konum izni yoktur. Aşağıdaki kaynak manifest
+satırları bu nedenle birleşik paket envanteri diye okunmamalı.
+
+Apple/Play tabloları hâlâ **yerel form adayıdır**. Paylaşım/retention, gerçek
+hesap ve provider trafiği, konsol readback'i veya OS yedek kabulü kapanmadı.
+Play dış silme URL adayı mevcut https://yulalab.com/en/privacy/motion sayfasıdır;
+silme bölümü support@yulalab.com isteğini ve uygulama içi yolu açıklar.
+Form alanına yazılmadı; talep gönderilmedi. [Google'ın gereksinimi](https://support.google.com/googleplay/android-developer/answer/13327111),
+uygulama içi silmeye ek olarak uygulamayı tekrar yükletmeden istek alabilen
+çalışır web yolu ister; mevcut politika/support yolu final form incelemesine
+hazırdır. [Kabul adımları](RELEASE-ACCOUNT-SANDBOX-CHECKLIST.md).
+
 ## 0. Baseline — ne VAR, ne YOK (formu doldurmadan önce)
 
 - Ortak Motion hesap/giriş arayüzü **VAR**; 2026-09-25 yerel path açıklaması
@@ -76,7 +100,7 @@ konsol readback'iyle finalleştirilir. Bu kaynak onarımı yeni canlı veri
 | Health & fitness | HAYIR | — | — | — | Sağlık verisi toplanmaz (uygulama tıbbi/sağlık verisi işlemez) |
 
 **Data deletion bölümü:** Ortak hesap silme arayüzü Core'da var; uzak silme
-başarılı olursa ilgili kullanıcıya ait yerel JSONL silinir. Gerçek sağlayıcı
+doğrulanırsa ilgili hesabın seans JSONL, Salsa JSON ve çalışma JSON günlükleri ile kendi `.tmp` dosyaları temizlenir. Gerçek sağlayıcı
 ve Play Console beyanı ayrıca doğrulanmalı (`account-data-safety-draft.md`).
 2026-09-26 kurs JSON'u da aynı hesabın yerel silme kapsamına dahildir.
 **Encryption in transit:** Motion hesap trafiğinin TLS/HTTPS yapılandırması

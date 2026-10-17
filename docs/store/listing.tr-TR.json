@@ -26,7 +26,7 @@
     "physicalDeviceAccepted": false,
     "historical": true
   },
-  "$sourceOfFacts": "Current course: content/salsa_on1_course.json; its app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Readback of provider metadata is separate.",
+  "$sourceOfFacts": "Five-area course hashes in $candidate20261017; Salsa journal plus per-unit written-study journal and account_bridge cleanup at package source642a7d0. Current public description remains a draft; provider readback and real device/privacy acceptance are separate.",
   "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded.",
   "$courseSourceReadback20261002": {
     "status": "local_source_readback_not_provider_or_release_acceptance",
@@ -70,5 +70,19 @@
       "content/original_short_form_beginner_course.json": "b4746faa5d64e430a5c948555219ea3f4ecccf5f80e294c4de3cdd411542b06d"
     },
     "publicationGate": "User decision after first three acceptance groups; no upload authorized"
+  },
+  "$modelIndependentReview20261017": {
+    "packageSource": "642a7d0998cc566570b342f4e7054ffe620b2327",
+    "privacyDraft": "account-data-safety-draft.md",
+    "accountSandboxChecklist": "RELEASE-ACCOUNT-SANDBOX-CHECKLIST.md",
+    "accountDeletionWebCandidate": "https://yulalab.com/en/privacy/motion",
+    "webDeletionPath": "Delete a Motion account and its data section; existing support email request link; not sent",
+    "webDeletionFormSaved": false,
+    "restore": "Existing shipping release keeps membership/purchase/restore entry closed; no real restoration acceptance",
+    "iOSPackageType": "App Store distribution; not direct-install development",
+    "androidPackageType": "Release AAB signed with existing upload key; Play certificate enrollment not read back",
+    "newBuild": false,
+    "storeWritten": false,
+    "publicationGate": "Separate final user upload approval after first three groups and product acceptance gates; training/calibration later"
   }
 }

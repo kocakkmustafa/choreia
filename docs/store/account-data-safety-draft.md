@@ -10,6 +10,56 @@ doğrulanacak; bu dosya konsolda onaylanmış nihai beyan değildir.
 Mevcut ilk kurs, yerel ilerleme ve native izin dosyaları kontrol edildi.
 Mağaza formlarının final paket/SDK ve sağlayıcı kabulü ayrıca yapılır.
 
+## 17 Ekim 2026 · mevcut paket ve beş alan uzlaştırması
+
+Paket kaynağı `642a7d0998cc566570b342f4e7054ffe620b2327`, sürüm
+`1.0.0 (3)`. Bu güncelleme belge bakımıdır; yeni paket, sağlayıcı sorgusu,
+satın alma veya gerçek hesap silme yapılmadı. Ayrıntılı kabul adımları
+[hesap/sandbox kontrol listesinde](RELEASE-ACCOUNT-SANDBOX-CHECKLIST.md).
+
+- Salsa'nın 48 dersi `course-choreia-<owner>.json` günlüğünü kullanır.
+  Diğer 38 birim, iki HipHop yolu, Line Dance, Latin Fusion ve kısa-form
+  için `study-choreia-<owner>.json` dosyasına yalnız açıkça istenen
+  “çalıştım” kaydını ekler. Tekrarlar korunur; sensör/ustalık puanı verilmez.
+- Seans JSONL'i, Salsa JSON'u ve yeni çalışma JSON'u konuk/hesap kapsamında
+  ayrıdır. Kayıtlar Motion hesabına senkronize edilmez. Normal çıkış bunları
+  silmez; konuk kaydı girişte hesaba taşınmaz. Yazılı hatırlama cevapları
+  geçicidir; bu cevaplar çalışma günlüğüne eklenmez.
+- Uzak silme yalnız yakalanan hesaba ait doğrulanmış UUID cevabıyla kabul
+  edilir. `clearLocalHistoryFor` o hesabın üç günlüğünü ve bunların `.tmp`
+  dosyalarını owner fence/drain sonrası temizler. Başarısız uzak istek yerel
+  geçmişi silmez; onaylanmış uzak silme sonrası yerel hata ayrı
+  “temizleme bekliyor” durumudur. Diğer uygulama/cihaz, çevrimiçi silme
+  makbuzunu okuyunca kendi kapsamını temizler. Bu bir gerçek cihaz kanıtı değildir.
+- Pinli Supabase Flutter SDK'sı oturumu varsayılan yerel
+  SharedPreferences depolamasında kalıcılaştırır; parola bu ders günlüklerine
+  yazılmaz. OS yedekleri veya bütün cihazlardaki erişim tokenlarının anında
+  yok olduğu söylenmez. [Supabase](https://supabase.com/docs/guides/auth/managing-user-data)
+  daha önce verilmiş JWT'nin süresine kadar geçerli kalabileceğini açıklar;
+  canlı servis/session-revocation kabulü ayrıca gereklidir.
+- IPA içinde **9** privacy manifest var. Runner'ın altı collected-data tipi
+  kaynakla parse edilmiş plist düzeyinde aynıdır; Xcode XML'i binary pliste
+  dönüştürdüğünden dosya hashlerinin aynı olması beklenmez. Bütün paket
+  manifestlerinde tracking=false; SDK required-reason API kayıtları ayrıca
+  envanterlenmiştir. Bu liste ağ trafiği veya Apple birleşik privacy raporu değildir.
+- Android birleştirilmiş pakette INTERNET, CAMERA, ACCESS_NETWORK_STATE,
+  WAKE_LOCK, BILLING ve uygulamanın DYNAMIC_RECEIVER_NOT_EXPORTED izni var.
+  Mikrofon ve konum izni yok. BILLING varlığı satış/restore yolunun açık
+  olduğunu göstermez; `motionPaidFeaturesAvailable=false` kalır.
+- Android'de açık `allowBackup`/data-extraction kuralı yok; iOS için app-owned
+  backup exclusion kanıtlanmadı. “Motion'a senkronize edilmez” uygulama ağ
+  davranışını anlatır; OS bulut yedeği hiç oluşmaz veya hesap silme eski
+  OS yedeklerini de yok eder iddiası değildir. Gerçek yedek/geri yükleme
+  ve sağlayıcı saklama süreleri final gizlilik kabulünde doğrulanır.
+
+[Canlı ortak politika](https://yulalab.com/en/privacy/motion), uygulama içi
+silme yolunun yanında uygulamayı kaldıran kullanıcı için
+support@yulalab.com'a silme isteği bağlantısı içerir. İstek göndermedik.
+Bu sayfa Play Data deletion URL alanı için mevcut yerel adaydır; formda
+kaydedildiği veya taleplerin uçtan uca sonuçlandığı kanıtlanmadı. Politika,
+silme makbuzu ile sağlayıcı log/yedek döngülerini ayrı açıklar; sayısal bir
+saklama süresi bu kaynak kontrolünden türetilmez.
+
 ## Sağlayıcı günlükleri ve kimlik doğrulama — 2026-09-27
 
 Üretim sağlayıcısının 2026-09-26 21:36 UTC tarihli salt okunur alan/sayı
@@ -63,10 +113,11 @@ akışı ve son paket/SDK gizlilik raporu ayrı kabul kapılarıdır.
 | Satın alma geçmişi | İlk sürümde satış ve satın alma doğrulaması kapalı; uygulama işlem geçmişi göndermez | İlk sürüm Apple/Play veri beyanına girmez; satış açılırsa yeniden değerlendirilir |
 | Kamera görüntüsü ve eklem noktaları | Cihazda işlenir; hesap servisine gönderilmez | Görüntü yükleme beyanı yok; canlı SDK ve ağ trafiği release öncesi tekrar denetlenmeli |
 | Salsa kursu ilerlemesi | `salsa_progress.dart` konuk/hesap kapsamına ayrılmış yerel JSON yazar; görüntüleme, çalışma ve öz beyan kayıtları Motion hesabına senkronize edilmez | Cihaz dışına gönderilmediği için Apple/Play “collected” beyanına girmez; ders bitirme ustalık puanı değildir |
+| Diğer dört alanın çalışma kaydı | `study-choreia-<owner>.json` dosyasında yalnız açık “çalıştım” eylemi ve tekrarı saklanır; hesap servisine gönderilmez | Cihaz dışına aktarılmadığı için collection beyanı eklenmez; fiziksel başarı/ustalık değildir |
 | Seans geçmişi | Kullanıcıya ayrılmış yerel JSONL dosyasında kalır; guest geçmişi girişte devralınmaz | Sunucuya aktarılmadığı sürece Apple/Play “collected” tanımına girmez; eski yerel dosya = collected varsayımı `data-safety-matrix.md` içinde tarihsel düzeltme olarak tutulur |
 | Mikrofon/ses | İlk kurs mikrofon kullanmaz; iOS mikrofon gerekçesi ve Android `RECORD_AUDIO` yoktur | Ses collected beyanı yoktur; Ostinato'nun isteğe bağlı mikrofon kararı Choreia'ya uygulanmaz |
 
-Kaynakta iOS `PrivacyInfo.xcprivacy` altı hesap/sağlayıcı veri tipini `Linked=true`, `Tracking=false`, `PurposeAppFunctionality` ile beyan eder; Android INTERNET ve exact `com.yulalab.choreia://auth/callback` kaydı var. Tracking false kalır. Mikrofon API'si kullanılmadığı sürece mikrofon izni eklenmez. Supabase ve native eklentilerin birleşik Xcode privacy raporu, Android manifest merge ve gerçek mağaza formları ayrı release kapısıdır. Hesap silme uzakta başarılı olduktan sonra yalnız ilgili kullanıcıya ait yerel seans dosyası silinir; sunucu hatasında yerel dosya korunur.
+Kaynakta iOS `PrivacyInfo.xcprivacy` altı hesap/sağlayıcı veri tipini `Linked=true`, `Tracking=false`, `PurposeAppFunctionality` ile beyan eder; Android INTERNET ve exact `com.yulalab.choreia://auth/callback` kaydı var. Tracking false kalır. Mikrofon API'si kullanılmadığı sürece mikrofon izni eklenmez. Supabase ve native eklentilerin birleşik Xcode privacy raporu, Android manifest merge ve gerçek mağaza formları ayrı release kapısıdır. Hesap silme uzakta doğrulandıktan sonra ilgili hesabın seans, Salsa ve çalışma günlükleri ile kendi `.tmp` dosyaları temizlenir; uzak hata halinde bu geçmiş korunur.
 
 2026-09-26 kontrolde hesap silme yerel kurs JSON'u ve seans JSONL'i için
 `account_bridge.dart` kapsamını kullanır. Çözümlenen `motion_account`

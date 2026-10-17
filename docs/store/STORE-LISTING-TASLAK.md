@@ -1,7 +1,7 @@
 # Güncel mağaza metni girişi · 17 Ekim 2026
 
 Yayıma hazırlanacak TR/EN metinlerin kaynağı [listing.json](listing.json) ve
-[listing.tr-TR.json](listing.tr-TR.json) dosyalarıdır. Güncel dar kurs kapsamı
+[listing.tr-TR.json](listing.tr-TR.json) dosyalarıdır. Mevcut yazılı içerik
 **beş mevcut yazılı yol / 86 birim** (HipHop 6 temel + 8 beceri; Salsa 48 ders/8 modül; Line Dance 9; Latin Fusion 8; özgün kısa-form 7). Kurs hashleri JSON içindeki `$candidate20261017` kaydındadır. Gerçek gösterim, uzman/öğrenci ve model kabulü açık; tam öğretim hedefi korunur.
 Sessiz görsel sayım ve öz kayıt; kamera puanı, müzik temposu doğrulaması veya abonelik satışı yoktur.
 
@@ -10,6 +10,12 @@ kabulü değildir. Hesap ve destek/gizlilik metinleri güncel JSON'dan alınır.
 Yerel metin, eski ekran görüntüsü veya kaynak testi mağazada kaydedildiği, güncel
 imzalı pakette bulunduğu ya da fiziksel cihazda kabul edildiği anlamına gelmez.
 Bu bakımda mağaza paneline yazılmadı ve yükleme yapılmadı.
+
+17 Ekim modelden bağımsız bakım: [gizlilik uzlaştırması](account-data-safety-draft.md),
+[form matrisi](data-safety-matrix.md) ve [hesap/sandbox/dağıtım kabulü](RELEASE-ACCOUNT-SANDBOX-CHECKLIST.md)
+güncellendi. İmzalı paketler `642a7d0` kaynaklı distribution adaylarıdır;
+belge commit'i runtime girdilerini değiştirmez ve yeni derleme gerektirmez.
+Kullanıcı kapılar kapandıktan sonra ayrıca son yükleme onayı verilmesini seçti.
 
 ## Tarihsel araştırma · aşağıdaki metni yayın metni olarak kullanmayın
 

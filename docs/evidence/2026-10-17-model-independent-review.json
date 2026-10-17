@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "at_utc": "2026-10-17T18:15:55.079707+00:00",
+  "status": "MODEL_INDEPENDENT_LOCAL_DRAFTS_COMPLETE_REAL_ACCOUNT_DEVICE_STORE_ACCEPTANCE_PENDING",
+  "packageSourceSha": "642a7d0998cc566570b342f4e7054ffe620b2327",
+  "runtimeSourcesChanged": false,
+  "corePinChanged": false,
+  "newNativeBuild": false,
+  "newSigningOperation": false,
+  "publicListingFieldsUnchanged": {
+    "listing.json": {
+      "appStore": true,
+      "playStore": true,
+      "description": true,
+      "cameraPermissionRationale": true,
+      "supportUrl": true,
+      "privacyPolicyUrl": true
+    },
+    "listing.tr-TR.json": {
+      "appStore": true,
+      "playStore": true,
+      "description": true,
+      "cameraPermissionRationale": true,
+      "supportUrl": true,
+      "privacyPolicyUrl": true
+    }
+  },
+  "packageHashesUnchanged": {
+    "ios": true,
+    "android": true
+  },
+  "privacy": {
+    "actualPackagedManifests": 9,
+    "runnerCollectedTypes": 6,
+    "allTrackingFalse": true,
+    "rootManifestSemanticallyEqualsSource": true,
+    "journals": "sessions JSONL +Salsa course JSON +written study JSON; each with own atomic tmp",
+    "remoteDeletionBeforeLocalErase": true,
+    "realProviderOrTrafficAcceptance": false,
+    "osBackups": "No exclusion proved; backup/restore and retained copies not claimed erased",
+    "externalDeletionResource": "https://yulalab.com/en/privacy/motion",
+    "externalDeletionResourceObserved": "Live public policy section and support@yulalab.com mail request link; no request sent",
+    "playDataDeletionFieldWritten": false,
+    "providerRetentionDurations": "Not established by static source; preserve separate owner readback gate"
+  },
+  "restore": {
+    "shippingPaidFeaturesAvailable": false,
+    "shippingMembershipRouteReachable": false,
+    "realRestorationPerformed": false,
+    "futureQA": "User and sole Core owner must agree a controlled path before sandbox transactions; no production gate override",
+    "iosProducts": [
+      "com.yulalab.choreia.individual.monthly",
+      "com.yulalab.choreia.individual.yearly",
+      "com.yulalab.choreia.motionplus.monthly",
+      "com.yulalab.choreia.motionplus.yearly"
+    ],
+    "iosInventoryStatus": "Prepare for Submission in earlier task-6 readback; not new product availability acceptance",
+    "androidProductsExpectedByCode": [
+      "choreia_individual",
+      "choreia_motion_plus"
+    ],
+    "androidBasePlans": [
+      "monthly",
+      "yearly"
+    ],
+    "androidConsoleReadback": false
+  },
+  "distribution": {
+    "iOS": "APP_STORE_DISTRIBUTION_NOT_DEVELOPMENT",
+    "Android": "RELEASE_SIGNED_AAB_UPLOAD_KEY_NOT_DIRECT_INSTALL_APK",
+    "bundle": "com.yulalab.choreia",
+    "version": "1.0.0",
+    "build": 3,
+    "directUSBInstallOfCurrentIPA": "Not an authorized development installation route",
+    "playUploadCertificateMatchedToConsole": false,
+    "uniqueBuild3RecheckedAtUpload": false,
+    "serverUploadValidation": "Not called; local signed package does not prove provider acceptance"
+  },
+  "verification": {
+    "newChecks": [
+      "Read all9 actual IPA privacy manifests, compared parsed root plist to source",
+      "Read existing AAB merged Android permission/SDK/debug metadata",
+      "Traced pinned current account/deletion/restore flow without editing Core",
+      "Checked relative documentation links, JSON syntax, unchanged public listing fields and runtime inputs",
+      "Recomputed retained package hashes to confirm no rebuild/mutation"
+    ],
+    "previousPassingTestsRepeated": false,
+    "newRuntimeTests": false,
+    "why": "Documentation-only maintenance and package declaration inspection; existing unit/native results preserved",
+    "newRealAuthIAPDeviceTests": false
+  },
+  "officialSources": [
+    {
+      "url": "https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/",
+      "supports": "Upload role, app/build association and upload/processing separation"
+    },
+    {
+      "url": "https://developer.apple.com/help/app-store-connect/test-in-app-purchases/overview-of-testing-in-sandbox/",
+      "supports": "Free sandbox accounts and development-signed/Developer Mode device path"
+    },
+    {
+      "url": "https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion",
+      "supports": "In-app deletion and separate subscription cancellation"
+    },
+    {
+      "url": "https://developer.android.com/studio/publish/app-signing",
+      "supports": "Upload vs Play app-signing keys"
+    },
+    {
+      "url": "https://developer.android.com/google/play/billing/test",
+      "supports": "License tester/test-payment requirement; ordinary test track can charge"
+    },
+    {
+      "url": "https://support.google.com/googleplay/android-developer/answer/13327111",
+      "supports": "In-app plus accessible web request resource; support email allowed"
+    },
+    {
+      "url": "https://supabase.com/docs/guides/auth/managing-user-data",
+      "supports": "Deletion/access-token expiry boundary"
+    },
+    {
+      "url": "https://yulalab.com/en/privacy/motion",
+      "supports": "Existing public policy/deletion request path and retained provider-cycle statement"
+    }
+  ],
+  "skill": {
+    "name": "supabase:supabase",
+    "resource": "skill://plugin_asdk_app_69d3e5ee6a708191baa733f7b8931995/supabase/SKILL.md",
+    "changelogMd": "Tool could not fetch; no SDK/config/schema implementation or upgrade made",
+    "securityChecklistApplied": "Read-only review: no metadata authorization, no public secret, current UUID/session fences; no new schema/privilege/storage change"
+  },
+  "externalMutations": [],
+  "cost": 0,
+  "blocks": "main-chat-actions.json",
+  "autoReviewRejections": []
+}
