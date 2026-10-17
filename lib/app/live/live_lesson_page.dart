@@ -18,6 +18,7 @@ import '../history/account_store_lifetime.dart';
 import 'camera_pose_source.dart';
 import 'live_environment.dart';
 import 'live_session.dart';
+import 'dance_runtime.dart';
 import 'live_state.dart';
 import 'live_view.dart';
 import 'session_result_view.dart';
@@ -180,8 +181,8 @@ class _LiveLessonPageState extends State<LiveLessonPage>
     super.initState();
     _recordOwnerUserId = widget.env.accountUserId?.value;
     _source = widget.env.source?.call() ?? DeviceCameraPoseSource();
-    _resourceOwner = (widget.env.storeOwners ?? appStoreOwners)
-        .capture(_recordOwnerUserId);
+    _resourceOwner =
+        (widget.env.storeOwners ?? appStoreOwners).capture(_recordOwnerUserId);
     _resourceOwner!.registerResource(_closeOwnedResource);
     WidgetsBinding.instance.addObserver(this);
     widget.env.accountUserId?.addListener(_revokeOwner);
@@ -326,6 +327,18 @@ class _LiveLessonPageState extends State<LiveLessonPage>
     _clock.start();
     setState(() => _state = const LiveIdle());
     try {
+      final binding = await DanceRuntimeManifest.loadBinding(
+          bundle: _bundle,
+          stepId: widget.stepId,
+          stepPath: _stepPath(widget.stepId));
+      if (!_captureAllowed(epoch)) return;
+      if (!binding.diagnosticAngles) {
+        setState(() => _state = LiveObservationUnavailable(
+            binding.status == DanceCapabilityStatus.unsupported
+                ? ObservationBlocker.unsupported
+                : ObservationBlocker.incompatible));
+        return;
+      }
       final DanceReference reference = DanceReference.fromJson(jsonDecode(
               await _bundle
                   .loadString('content/references/${widget.stepId}.json'))
@@ -335,6 +348,7 @@ class _LiveLessonPageState extends State<LiveLessonPage>
               as Map<String, dynamic>;
 
       final LiveSession session = LiveSession(
+        provider: binding,
         reference: reference,
         stepConfig: step,
         lessonClass: widget.lessonClass,

@@ -254,6 +254,7 @@ class LiveView extends StatelessWidget {
         LiveMeasured() ||
         LiveJudged() =>
           true,
+        LiveObservationUnavailable() ||
         LiveIdle() ||
         LiveInterrupted() ||
         LivePermissionDenied() ||
@@ -325,6 +326,23 @@ class LiveView extends StatelessWidget {
         LiveIdle() => <Widget>[_idleCard(tr)],
         LiveInterrupted(:final accountChanged) => <Widget>[
             _interruptedCard(tr, accountChanged: accountChanged)
+          ],
+        LiveObservationUnavailable(:final reason) => <Widget>[
+            _AttentionCard(
+              icon: Icons.info_outline,
+              tone: ChoreiaColors.amber,
+              body: switch (reason) {
+                ObservationBlocker.unsupported => tr
+                    ? 'Bu hareket için kamera değerlendirmesi desteklenmiyor. Yazılı derse devam edebilirsin.'
+                    : 'Camera assessment is unsupported for this movement. You can continue with the written lesson.',
+                ObservationBlocker.incompatible => tr
+                    ? 'Hareket modeli ve ders sürümü eşleşmiyor. Yazılı derse devam edebilirsin.'
+                    : 'The movement model and lesson versions do not match. You can continue with the written lesson.',
+                ObservationBlocker.clockDiscontinuity => tr
+                    ? 'Kamera verisinde kesinti var. Kesintiden önceki hareket değerlendirmeye katılmadı.'
+                    : 'The camera stream was interrupted. Movement before the gap was excluded.',
+              },
+            ),
           ],
         LivePermissionDenied() => <Widget>[_permissionCard(tr)],
         LiveCameraUnavailable(:final CameraFailure failure) => <Widget>[

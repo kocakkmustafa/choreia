@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "baselineSource": "12f79600f1cec7ab8d84e61ebd45c97c950b9326",
+  "status": "LOCAL_SOFTWARE_CANDIDATE_NOT_RELEASE_ACCEPTED",
+  "tasks": [
+    {
+      "id": "CH-01",
+      "action": "Verify canonical source and five written paths",
+      "prerequisite": "Holding and Choreia instructions",
+      "evidence": "five-area-inventory.json; exact unchanged course hashes",
+      "closure": "five paths/86 units; zero real demonstrations"
+    },
+    {
+      "id": "CH-02",
+      "action": "Seek and transport retirement; presentation clock/latency contract",
+      "prerequisite": "Existing muted test-only video adapter",
+      "evidence": "lesson_media_seek_test.dart; dance_runtime_timeline_test.dart",
+      "closure": "Synthetic contract and lifecycle tests; no real audio-camera parity claim"
+    },
+    {
+      "id": "CH-03",
+      "action": "Versioned model/reference binding and verified model cache",
+      "prerequisite": "Existing full-v1 pin; no shared Core edits",
+      "evidence": "content/dance_runtime.v1.json; dance_runtime.dart; pose_model.dart",
+      "closure": "Unsupported/incompatible/calibration-required are explicit; judgments remain disabled"
+    },
+    {
+      "id": "CH-04",
+      "action": "Targeted software and account-scope regression",
+      "prerequisite": "Final edited source",
+      "evidence": "task-16/targeted-tests.log: 163 PASS; final course acceptance logged separately",
+      "closure": "Host/widget/replay only; real account/IAP/physical acceptance open"
+    },
+    {
+      "id": "CH-05",
+      "action": "Source-bound signed packages and final publication decision",
+      "prerequisite": "Native mutex; installed signing material; final public config",
+      "evidence": "task-16 package and lease receipts",
+      "closure": "Package result separate from store upload and physical correctness"
+    }
+  ],
+  "trainingAcceptance": {
+    "status": "DEFERRED",
+    "intake": "Reuse motion-core 8455a56b first_party_capture.py/schema/splits/test-open marker; do not duplicate",
+    "requiredBindings": [
+      "course/lesson and named step",
+      "model and extractor SHA",
+      "reference/rules/calibration SHA",
+      "camera view/actual side/mirror",
+      "device/OS and audio-route clock calibration",
+      "independent human labels and reviewer",
+      "participant/session/source-disjoint splits"
+    ],
+    "procedure": [
+      "Accept original authorized local video and separate display/training/evaluation permissions. Music distribution/synchronization rights are separate from video ownership.",
+      "Freeze per-step phase/count/identity definitions and expert numeric tolerances on validation before opening holdout. No invented achieved threshold.",
+      "Freeze candidate, compare all eligible clips against human annotations; report false accepts/rejects, abstentions, phase/event/count/timing error and confusion by person/device/view.",
+      "Retain unsupported styles, unobservable feet/contacts and physical support as unmeasured.",
+      "Open holdout once using existing Core marker; no retuning on seen test.",
+      "Compare host/native on the same authorized source and physical device; measure actual capture/presentation latency, frame drops and lifecycle interruptions.",
+      "Review licensed demonstrations, captions, direction/mirror and teaching outcome with qualified reviewer/learner per lesson. Promote only accepted tasks through a reviewed application update."
+    ]
+  },
+  "mediaAcceptance": {
+    "shippingCatalog": "EMPTY",
+    "testMedia": "SYNTHETIC_ONLY_NOT_PRODUCT_DEMONSTRATIONS",
+    "required": [
+      "original asset SHA/size",
+      "lesson/scene/variant/course hashes",
+      "performer display consent evidence reference",
+      "separate video and music distribution/synchronization license evidence",
+      "locale-bound captions",
+      "actual side/mirror/view and beat/phase human annotations",
+      "native playback review",
+      "separate signed media acceptance root"
+    ],
+    "productionAudio": "muted; no music downloaded or enabled"
+  },
+  "openGates": [
+    "first-party demonstrations and expert/learner acceptance",
+    "trained/calibrated model and independent physical accuracy",
+    "real Motion account and purchase/restoration",
+    "physical camera/audio-device performance",
+    "official runtime trust HOLD -67054",
+    "final privacy/signed-package equivalence",
+    "first-three-group completion and explicit final publication decision"
+  ],
+  "sharedCoreWritten": false,
+  "newDependencyOrModelDownloaded": false,
+  "externalVideoUpload": false,
+  "paidProviderOrCI": false,
+  "storeWritten": false,
+  "verification": {
+    "targetedRuntimeTests": 163,
+    "courseAccountAcceptanceTests": 110,
+    "totalDisjointTests": 273,
+    "analyzer": "No issues found",
+    "physicalDeviceTests": 0,
+    "realProviderTests": 0,
+    "newTraining": false,
+    "initialHarnessFailures": "Preserved in task-16/new-tests.log and new-tests-second.log; corrected by final targeted-tests.log"
+  }
+}

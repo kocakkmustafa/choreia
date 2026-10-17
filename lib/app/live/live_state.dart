@@ -39,6 +39,14 @@ final class LiveInterrupted extends LiveState {
   final bool accountChanged;
 }
 
+enum ObservationBlocker { unsupported, incompatible, clockDiscontinuity }
+
+/// No assessment is available; this is neither a zero nor a completed cycle.
+final class LiveObservationUnavailable extends LiveState {
+  const LiveObservationUnavailable(this.reason);
+  final ObservationBlocker reason;
+}
+
 /// The user has not granted camera permission (or revoked it).
 ///
 /// Its OWN state rather than a flavour of "unavailable": this is the one

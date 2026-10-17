@@ -2,14 +2,14 @@
   "$doc": "Magaza liste metni TASLAGI — makine-okur kaynak. Insan-okur baglam: docs/store/STORE-LISTING-TASLAK.md. Desen: ostinato/app/docs/store/listing.json (aile emsali, en yeni tamamlanan D6, ayni claim-audit yapisi). Gonderim KURUCU kalemi (B7) — bu dosya yalniz TASLAK, onay bekliyor. SUBMIT edilmiyor. H-58 uyarinca yazildiktan sonra orkestratore bildirilir, yan yana okuma yapilir — bu commit TEK BASINA yeterli degil.",
   "appStore": {
     "name": "Choreia: Learn to Dance",
-    "subtitle": "Your solo Salsa On1 path",
-    "promotionalText": "Explore Salsa On1 through solo steps, rhythm, turns, combinations and an independent routine. Learn at your pace with silent counts and self-checks.",
+    "subtitle": "Five solo dance practice paths",
+    "promotionalText": "Explore solo Salsa On1, HipHop foundations, Line Dance, Latin Fusion Fitness and original short combinations with written lessons, visual counts and self-checks.",
     "keywords": "dance,hip hop,dance styles,steps,practice,reference,movement"
   },
   "playStore": {
-    "shortDescription": "Learn solo Salsa On1 with step-by-step lessons, visual counts and progress."
+    "shortDescription": "Five solo dance paths with written lessons, counts and your practice record."
   },
-  "description": "Choreia offers 48 original English and Turkish solo Salsa On1 lessons across 8 modules. Learn the count structure, weight transfers, basic steps, direction changes, turns and combinations before arranging your own routine. A silent visual counter supports practice. This is a solo learning path, not a partner-leading or following qualification.\n\nRead original text lessons, follow practice tasks, review your own practice and continue from your local lesson record. You can browse without signing in and use an optional shared Motion account. The account uses your email address, account ID and optional display name; account deletion is available in the app. Course records stay on the device within the current guest or account scope. No lesson completion certifies mastery. Demonstration video is not included in this content preparation version.\n\nYou record your practice and self-checks. The course does not listen to a song, verify musical tempo or grade your steps with the camera. Camera coaching and subscription sales are not open.",
+  "description": "Choreia brings together five solo dance practice paths: HipHop Foundations, Salsa Shines, Line Dance, Latin Fusion Fitness and original short-form combinations. The bundled English and Turkish material includes 6 HipHop foundation units plus 8 skill-study units, 48 solo Salsa On1 lessons across 8 modules, 9 Line Dance units, 8 Latin Fusion units and 7 original short-form units. These 86 written units include practice tasks, count structures and self-checks. Salsa is a solo path; it does not establish partner-leading or following qualification.\n\nRead the lessons, revisit a task and continue from your local practice record. Records describe your own study and self-checks; lesson completion does not certify mastery. You can browse without signing in and use an optional shared Motion account. The account uses your email address, account ID and optional display name; account deletion is available in the app. Course records stay on the device within the current guest or account scope.\n\nDemonstration video and an in-app music catalogue are not included in this candidate. Visual counts do not listen to a song or verify its tempo. Camera observations do not confirm step identity, musical timing, physical weight transfer or correct dance technique. Independently calibrated camera assessment and subscription sales are not open.",
   "$measurementDisclosureLine": "hip_hop_foundations/style.json'un honesty blogu bu stilde HICBIR SEYIN 'measured' olmadigini soyluyor (measured: [] — 'bu stil bugun hicbir sey puanlamiyor'). Ama bu, hicbir olcum yapilmadigi anlamina gelmiyor: Bounce lesson'i CANLI olcum URETIYOR (judge.dart'in kneeDeltaDeg/identityWorstJointDeg gibi olcum anahtarlari, live_view.dart'taki 'What we measured' karti) — yalniz bunlari TEK bir SKORA indirgemiyor. 'Measured ama graded degil' ayrimini description'a tasidim (Ostinato'nun 'reported plainly, not a fake precise number' deseniyle ayni sinif), stilin kendi honesty blogunun 'measured:[]' cumlesini 'hicbir sey olculmuyor' diye YANLIS okumadan.",
   "$onlyOneStartableLessonWhy": "🔴 EN KRITIK BULGU, KAYDA GECMESI GEREKEN: hip_hop_foundations'in 7 dersinden yalniz BIRI (`hh_l1_bounce`) gercekten baslatilabilir. `library_catalog.dart:476` (`_offer`): `l.stepId == null` -> `LessonBlock.noLessonBuilt`, baslatilamaz. style.json'da `step` alani yalniz `hh_l1_bounce`de dolu (`hh_bounce`); `hh_l1_running_man`/`hh_l1_groove`/`hh_l1_roger_rabbit` HICBIRINDE `step` alani YOK (null) — yani bunlar demoOnly:true olsalar bile kamera ekranina HIC ULASMIYOR, yalniz bilgilendirici sayfa. `hh_l1_rock` zaten `status:locked`. Iki drill (`hh_bounce_slow`/`hh_bounce_wall`) de `step` tasimiyor. SONUC: bugun sevk edilirse, Choreia'nin TUM etkilesimli/kamera-canli deneyimi TEK bir dersten (Bounce, demo-only) ibarettir — description bunu 'INTERACTIVE TODAY' basligi ile TEK dersle sinirlayarak yansitti, digerlerini 'SHOWN, NOT YET INTERACTIVE' diye ayirdi. Bu ayrimi yapmadan yazsaydim (butun demoOnly derslerin kamerayla etkilesimli oldugunu ima etseydim) JabLab'in tempo-hatasiyla AYNI SINIF bir asiri-iddia olurdu.",
   "$salsaExcludedWhy": "🔴 IKINCI KRITIK BULGU: salsa_shines HIC ACILAMIYOR, description'a HIC GIRMEDI. `content/library.json` satir ~150: `status:\"live\"` (icerik gercekligi — `ss_l1_footwork` GERCEKTEN puanli, 8 bacak-eklemi 1.57-5.76deg, hangi ayagin onde oldugu 15.6deg marj) AMA `style.json`nin `shipGates`i `bpmResolved:blocked=true` tasiyor (bpmStatus DISPUTED, iki olcum ~2x farkli: 89-100 vs 160-220 BPM) VE `style_availability.dart`in kendi yorumu bunu adiyla soyluyor: 'A style can honestly be live... and still be unopenable (salsa_shines today: BPM disputed)' — `shipGatesNote`: 'bu stil BPM cozulmeden yayina cikmaz, statu live olsa da'. Yani salsa'nin puanli dersi VAR ama KULLANICI ONA HIC ULASAMIYOR — description'da salsa'dan HIC bahsetmedim (JabLab'in 'olculuyor ama gosterilmiyor' hatasinin ayna-goruntusu olurdu: bu kez 'puanli ama ULASILAMAZ'i puanli-ve-mevcut gibi yazmak). Tek referans: kapanis paragrafinda 'more are being built' — isim verilmeden.",
@@ -75,5 +75,22 @@
     "moduleCount": 8,
     "mediaIncluded": false,
     "physicalDeviceAccepted": false
+  },
+  "$candidate20261017": {
+    "status": "LOCAL_DRAFT_NOT_UPLOADED",
+    "scope": "five existing written paths; full teaching objective preserved",
+    "units": 86,
+    "demonstrations": 0,
+    "training": "deferred",
+    "modelAccuracy": "OPEN",
+    "sourceCourseHashes": {
+      "content/hip_hop_foundations_course.json": "6e4b03606a225add1a7d233fb0f3d90a09dcb87d3f915acc3a43eac3eb7c2838",
+      "content/hip_hop_foundations_skill_course.json": "719b1f24e10b0eda492265160296e1c34c079061dfbc7b8b875019a5979dd8ee",
+      "content/salsa_on1_course.json": "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc",
+      "content/line_dance_beginner_course.json": "7c03a3294cccac8b82c70eb8fe36b481e8cf836966af06f89ded185317a8534a",
+      "content/latin_fusion_beginner_course.json": "c44513a64ae5bbc3ddebf68ce75d909323d1ff0403f64664435f8cf022616455",
+      "content/original_short_form_beginner_course.json": "b4746faa5d64e430a5c948555219ea3f4ecccf5f80e294c4de3cdd411542b06d"
+    },
+    "publicationGate": "User decision after first three acceptance groups; no upload authorized"
   }
 }

@@ -2,7 +2,7 @@
 
 Yayıma hazırlanacak TR/EN metinlerin kaynağı [listing.json](listing.json) ve
 [listing.tr-TR.json](listing.tr-TR.json) dosyalarıdır. Güncel dar kurs kapsamı
-**48 ders / 8 modül solo Salsa On1**; kurs varlık kimliği ve hashleri JSON içindeki `$` kaynak notlarındadır.
+**beş mevcut yazılı yol / 86 birim** (HipHop 6 temel + 8 beceri; Salsa 48 ders/8 modül; Line Dance 9; Latin Fusion 8; özgün kısa-form 7). Kurs hashleri JSON içindeki `$candidate20261017` kaydındadır. Gerçek gösterim, uzman/öğrenci ve model kabulü açık; tam öğretim hedefi korunur.
 Sessiz görsel sayım ve öz kayıt; kamera puanı, müzik temposu doğrulaması veya abonelik satışı yoktur.
 
 Kurs ilerlemesi kullanıcının kendi çalışma kaydıdır; ustalık veya fiziksel öğretim

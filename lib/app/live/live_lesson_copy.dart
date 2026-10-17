@@ -8,7 +8,9 @@ abstract final class LiveLessonCopy {
 
   static String gatedReason(String? lessonId, String code, String source,
           {required bool turkish}) =>
-      _choose('$lessonId/$code', source, _gatedReasons, turkish: turkish);
+      turkish && code == 'CALIBRATION_REQUIRED'
+          ? 'Dans değerlendirmesi için bağımsız kalibrasyon gerekli. Bu kamera gözlemleri doğru adımı, müziğe uyumu veya gerçek ağırlık aktarımını doğrulamaz.'
+          : _choose('$lessonId/$code', source, _gatedReasons, turkish: turkish);
 
   static String measurementLabel(String? lessonId, String key, String source,
           {required bool turkish}) =>

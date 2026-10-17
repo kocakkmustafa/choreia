@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "providerProtocol": "choreia-cycle-v1",
+  "modelId": "pose_landmarker_full/float16/1",
+  "modelSha256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+  "calibration": null,
+  "evaluation": null,
+  "tasks": [
+    {
+      "stepId": "hh_bounce",
+      "styleId": "hip_hop_foundations",
+      "status": "calibrationRequired",
+      "referenceSha256": "3dd7299ed6a2b4f7150f95492ad4b51b686e579483c7e1bd3f1445c101a631e7",
+      "stepSha256": "4dd9aa416d090f2435296bdf15882a1e89ba84518628f5954bc10c231c19c88a"
+    },
+    {
+      "stepId": "ss_shine_footwork",
+      "styleId": "salsa_shines",
+      "status": "calibrationRequired",
+      "referenceSha256": "da9ded076b5302a2eccd295f788f7a2990ca76adab5c020a022268595fdac6f4",
+      "stepSha256": "e10a97b2c38c61a7262a102b3074335cf52706fbde337bd8af0ef433a870a457"
+    }
+  ]
+}

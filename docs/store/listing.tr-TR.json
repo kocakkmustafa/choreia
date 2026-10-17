@@ -2,14 +2,14 @@
   "$doc": "Türkçe mağaza metni taslağı. İngilizce kaynak: listing.json. Sağlayıcıya gönderilmedi; mağaza ve cihaz kabulü açık.",
   "appStore": {
     "name": "Choreia: Dans Pratiği",
-    "subtitle": "Solo Salsa On1 yolculuğun",
-    "promotionalText": "Solo adımlar, ritim, dönüş, kombinasyon ve bağımsız rutinle Salsa On1 yolunu keşfet. Sessiz sayım ve öz denetimle kendi hızında çalış.",
+    "subtitle": "Beş solo dans çalışma yolu",
+    "promotionalText": "Solo Salsa On1, HipHop temelleri, Line Dance, Latin Fusion Fitness ve özgün kısa kombinasyonları yazılı dersler, görsel sayım ve öz denetimle çalış.",
     "keywords": "dans,hip hop,dans stilleri,adımlar,pratik,referans,hareket"
   },
   "playStore": {
-    "shortDescription": "Solo Salsa On1: sıralı dersler, görsel sayım ve kendi ilerleme kaydın."
+    "shortDescription": "Beş solo dans yolu: yazılı dersler, sayım ve kendi çalışma kaydın."
   },
-  "description": "Choreia, 8 modülde 48 özgün Türkçe ve İngilizce solo Salsa On1 dersi sunar. Kendi rutinini kurmadan önce sayım, ağırlık aktarımı, temel adımlar, yön değişimi, dönüş ve kombinasyonları öğren. Sessiz görsel sayaç çalışmayı destekler. Bu solo öğrenme yolu eşli dansta yönlendirme veya takip yeterliği vermez.\n\nÖzgün metin derslerini oku, uygulama görevlerini takip et, kendi çalışmanı değerlendir ve cihazdaki ders kaydından devam et. Hesabın olmadan kataloğu gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır. Ders bitirme ustalık belgesi değildir. Bu içerik hazırlığı sürümünde gösterim videosu bulunmaz.\n\nÇalışmanı ve öz denetimini kendin kaydedersin. Kurs parçayı dinlemez, müzik temposunu doğrulamaz veya kamerayla adım puanı vermez. Kamera koçluğu ve abonelik satışı açık değildir.",
+  "description": "Choreia beş solo dans çalışma yolunu bir araya getirir: HipHop Foundations, Salsa Shines, Line Dance, Latin Fusion Fitness ve özgün kısa-form kombinasyonları. Türkçe ve İngilizce paketli içerikte 6 HipHop temel birimi ve 8 beceri çalışma birimi, 8 modülde 48 solo Salsa On1 dersi, 9 Line Dance, 8 Latin Fusion ve 7 özgün kısa-form birimi bulunur. Toplam 86 yazılı birim uygulama görevleri, sayım yapıları ve öz denetimler içerir. Salsa yolu solodur; eşli dansta yönlendirme veya takip yeterliği vermez.\n\nDersleri oku, bir görevi yeniden çalış ve cihazındaki çalışma kaydından devam et. Kayıtlar kendi çalışmanı ve öz denetimini anlatır; ders tamamlama ustalığı belgelemez. Hesapsız gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır.\n\nBu adayda gösterim videosu ve uygulama içi müzik kataloğu bulunmaz. Görsel sayım parçayı dinlemez veya temposunu doğrulamaz. Kamera gözlemleri adım kimliğini, müziğe uyumu, gerçek ağırlık aktarımını veya doğru dans tekniğini doğrulamaz. Bağımsız kalibrasyonu tamamlanmış kamera değerlendirmesi ve abonelik satışı açık değildir.",
   "cameraPermissionRationale": {
     "ios": "Choreia, dans adımlarına ilişkin geri bildirim vermek için kamerayı kullanır. Video telefonundan çıkmaz; yalnızca eklem konumları okunur ve video kaydedilmez veya yüklenmez."
   },
@@ -53,5 +53,22 @@
     "moduleCount": 8,
     "mediaIncluded": false,
     "physicalDeviceAccepted": false
+  },
+  "$candidate20261017": {
+    "status": "LOCAL_DRAFT_NOT_UPLOADED",
+    "scope": "five existing written paths; full teaching objective preserved",
+    "units": 86,
+    "demonstrations": 0,
+    "training": "deferred",
+    "modelAccuracy": "OPEN",
+    "sourceCourseHashes": {
+      "content/hip_hop_foundations_course.json": "6e4b03606a225add1a7d233fb0f3d90a09dcb87d3f915acc3a43eac3eb7c2838",
+      "content/hip_hop_foundations_skill_course.json": "719b1f24e10b0eda492265160296e1c34c079061dfbc7b8b875019a5979dd8ee",
+      "content/salsa_on1_course.json": "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc",
+      "content/line_dance_beginner_course.json": "7c03a3294cccac8b82c70eb8fe36b481e8cf836966af06f89ded185317a8534a",
+      "content/latin_fusion_beginner_course.json": "c44513a64ae5bbc3ddebf68ce75d909323d1ff0403f64664435f8cf022616455",
+      "content/original_short_form_beginner_course.json": "b4746faa5d64e430a5c948555219ea3f4ecccf5f80e294c4de3cdd411542b06d"
+    },
+    "publicationGate": "User decision after first three acceptance groups; no upload authorized"
   }
 }

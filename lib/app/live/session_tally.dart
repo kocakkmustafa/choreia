@@ -80,6 +80,7 @@ final class SessionTally {
         _cycles++;
         _stamp(elapsed);
       // Nothing arrived from the camera in these: no clock, no cycles.
+      case LiveObservationUnavailable():
       case LiveIdle():
       case LiveInterrupted():
       case LivePermissionDenied():

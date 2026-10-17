@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart' show AssetBundle, rootBundle;
+import 'package:motion_content/motion_content.dart' show computeSha256Hex;
 import 'package:path_provider/path_provider.dart';
 
 /// The pose model this app runs, pinned.
@@ -48,12 +49,32 @@ final class PoseModelPin {
 /// `path_provider` sat in `pubspec.yaml` unimported for exactly as long as this
 /// function was missing: the dependency was the fossil of a step someone had
 /// planned and never written.
-Future<String> materialisePoseModel() async {
-  final Directory dir = await getApplicationSupportDirectory();
-  final File out = File('${dir.path}/${PoseModelPin.assetPath.split('/').last}');
-  if (!out.existsSync()) {
-    final ByteData data = await rootBundle.load(PoseModelPin.assetPath);
-    await out.writeAsBytes(data.buffer.asUint8List(), flush: true);
+Future<String> materialisePoseModel({
+  Directory? supportDirectory,
+  AssetBundle? bundle,
+}) async {
+  final dir = supportDirectory ?? await getApplicationSupportDirectory();
+  // A new model pin never silently reuses an older version's cache.
+  final out = File('${dir.path}/pose-${PoseModelPin.sha256}.task');
+  if (await out.exists()) {
+    if (computeSha256Hex(await out.readAsBytes()) != PoseModelPin.sha256) {
+      throw const FormatException('Cached pose model integrity mismatch');
+    }
+    return out.path;
+  }
+  final data = await (bundle ?? rootBundle).load(PoseModelPin.assetPath);
+  final bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  if (computeSha256Hex(bytes) != PoseModelPin.sha256) {
+    throw const FormatException('Bundled pose model integrity mismatch');
+  }
+  final staging = await dir.createTemp('choreia-model-');
+  try {
+    final pending = File('${staging.path}/verified.task');
+    await pending.writeAsBytes(bytes, flush: true);
+    await pending.rename(out.path);
+  } finally {
+    // Only this invocation's derived temporary file is retired.
+    await staging.delete(recursive: true);
   }
   return out.path;
 }

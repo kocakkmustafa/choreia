@@ -52,11 +52,14 @@ final class LessonVideoFrame {
     this.hasError = false,
     this.aspectRatio = 16 / 9,
     this.caption = '',
+    this.position = Duration.zero,
+    this.duration = Duration.zero,
   });
 
   final bool initialized, playing, hasError;
   final double aspectRatio;
   final String caption;
+  final Duration position, duration;
 }
 
 /// Small adapter so lifecycle tests never need a native video texture.
@@ -70,6 +73,12 @@ abstract interface class LessonVideoHandle {
   Widget buildVideo();
 }
 
+/// Optional transport capability; existing playback-only adapters remain valid.
+abstract interface class SeekableLessonVideoHandle
+    implements LessonVideoHandle {
+  Future<void> seekTo(Duration position);
+}
+
 typedef LessonVideoFactory = LessonVideoHandle Function(
     String videoAssetPath, String captionText);
 
@@ -77,7 +86,7 @@ LessonVideoHandle createAssetLessonVideo(
         String videoAssetPath, String captionText) =>
     _AssetLessonVideo(videoAssetPath, captionText);
 
-final class _AssetLessonVideo implements LessonVideoHandle {
+final class _AssetLessonVideo implements SeekableLessonVideoHandle {
   _AssetLessonVideo(String videoAssetPath, String captionText)
       : _controller = VideoPlayerController.asset(
           videoAssetPath,
@@ -109,6 +118,8 @@ final class _AssetLessonVideo implements LessonVideoHandle {
           ? value.aspectRatio
           : 16 / 9,
       caption: value.caption.text,
+      position: value.position,
+      duration: value.duration,
     );
   }
 
@@ -128,6 +139,9 @@ final class _AssetLessonVideo implements LessonVideoHandle {
 
   @override
   Future<void> pause() => _controller.pause();
+
+  @override
+  Future<void> seekTo(Duration position) => _controller.seekTo(position);
 
   @override
   Widget buildVideo() => VideoPlayer(_controller);
@@ -379,6 +393,40 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
     }
   }
 
+  Future<void> _seek(Duration target) async {
+    final video = _video;
+    if (!_admitted ||
+        video is! SeekableLessonVideoHandle ||
+        !_ready ||
+        _failed ||
+        _commandPending) {
+      return;
+    }
+    final duration = video.frame.value.duration;
+    if (duration <= Duration.zero ||
+        target < Duration.zero ||
+        target > duration) {
+      return;
+    }
+    final epoch = _epoch;
+    setState(() => _commandPending = true);
+    try {
+      // Seek stays paused. Each acknowledgement is bounded by the route and
+      // account generation, including backgrounding during a pending pause.
+      await _invokeNative(video.pause);
+      if (!mounted || !_admitted || epoch != _epoch || _video != video) return;
+      await _invokeNative(() => video.seekTo(target));
+    } catch (_) {
+      if (!mounted || !_admitted || epoch != _epoch || _video != video) return;
+      _drop();
+      setState(() => _failed = true);
+      return;
+    }
+    if (mounted && _admitted && epoch == _epoch && _video == video) {
+      setState(() => _commandPending = false);
+    }
+  }
+
   @override
   void dispose() {
     widget.admissionOpen?.removeListener(_onAdmission);
@@ -446,6 +494,24 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
               ),
             ),
           const SizedBox(height: 8),
+          if (_ready &&
+              video is SeekableLessonVideoHandle &&
+              frame != null &&
+              frame.duration > Duration.zero)
+            Slider(
+              key: const Key('choreia.mediaPlaybackSeek'),
+              semanticFormatterCallback: (value) =>
+                  tr ? '${value.round()} saniye' : '${value.round()} seconds',
+              min: 0,
+              max: frame.duration.inMilliseconds / 1000,
+              value: frame.position.inMilliseconds
+                      .clamp(0, frame.duration.inMilliseconds) /
+                  1000,
+              onChanged: _commandPending
+                  ? null
+                  : (seconds) =>
+                      _seek(Duration(milliseconds: (seconds * 1000).round())),
+            ),
           TextButton.icon(
             key: const Key('choreia.mediaPlaybackToggle'),
             onPressed: _ready && !_commandPending ? _toggle : null,

@@ -4,6 +4,7 @@ import 'package:choreia_engine/choreia_engine.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'live_state.dart';
+import 'dance_runtime.dart';
 
 /// Turns camera frames into honest live readings for ONE lesson.
 ///
@@ -40,6 +41,7 @@ final class LiveSession {
     required this.lessonClass,
     required this.judge,
     ConfidenceGate? gate,
+    this.provider,
   })  : _gate = gate ?? ConfidenceGate.forVariant(PoseModelVariant.full),
         _normalizer = PoseNormalizer(),
         _angles = const JointAngleExtractor();
@@ -57,6 +59,7 @@ final class LiveSession {
   final String lessonClass;
 
   final DanceJudge judge;
+  final DanceProviderBinding? provider;
   final ConfidenceGate _gate;
 
   // Geometry comes from the core, unchanged. Two copies of an angle
@@ -67,7 +70,10 @@ final class LiveSession {
   late final DanceAssessmentGate assessmentGate =
       DanceAssessmentGate.forReference(reference);
 
-  bool get isScored => lessonClass == 'scored' && assessmentGate.allowsScoring;
+  bool get isScored =>
+      lessonClass == 'scored' &&
+      assessmentGate.allowsScoring &&
+      provider?.allowsScoring != false;
 
   /// Checks this lesson cannot make, derived FROM CONTENT.
   ///
@@ -78,7 +84,13 @@ final class LiveSession {
   /// technical string never reaches the surface, a generic honest sentence
   /// does).
   List<GatedCheck> gatedChecks() {
-    final List<GatedCheck> out = <GatedCheck>[];
+    final List<GatedCheck> out = <GatedCheck>[
+      if (provider != null)
+        const GatedCheck(
+            code: 'CALIBRATION_REQUIRED',
+            why:
+                'Dance assessment needs independent calibration. These camera observations do not confirm a correct step, beat timing or physical weight transfer.'),
+    ];
     if (lessonClass == 'scored' && !assessmentGate.allowsScoring) {
       out.add(const GatedCheck(
         code: 'ASSESSMENT_UNVALIDATED',
@@ -169,11 +181,31 @@ final class LiveSession {
   Stream<LiveState> run(Stream<PoseFrame> frames) async* {
     yield const LiveIdle();
 
+    if (provider?.diagnosticAngles == false) {
+      yield LiveObservationUnavailable(
+          provider!.status == DanceCapabilityStatus.unsupported
+              ? ObservationBlocker.unsupported
+              : ObservationBlocker.incompatible);
+      return;
+    }
     final CyclePeriodEstimator estimator = CyclePeriodEstimator();
     final List<JointAngleVector> window = <JointAngleVector>[];
     int cyclesSeen = 0;
+    int? previousUs;
 
     await for (final PoseFrame frame in frames) {
+      final previous = previousUs;
+      previousUs = frame.tUs;
+      // Never infer a continuously observed cycle over a missing/reordered
+      // interval. 250 ms is an input continuity ceiling, not dance accuracy.
+      if (frame.tUs < 0 ||
+          (previous != null &&
+              (frame.tUs <= previous || frame.tUs - previous > 250000))) {
+        window.clear();
+        yield const LiveObservationUnavailable(
+            ObservationBlocker.clockDiscontinuity);
+        continue;
+      }
       final FrameQuality quality = _gate.evaluate(frame);
       if (!quality.judgeable) {
         // A cycle must be continuously observed. Joining visible fragments
