@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "pilotId": "choreia.egoexo.salsa.single-choreography.exo.p0",
+  "status": "BLOCKED_DATASET_LICENSE_AND_ACCESS_NOT_STARTED",
+  "proposalNotDownloadOrComputeAuthorization": true,
+  "latestUserIntent": "Use internet data and start training when lawful access is available; custom/professional user capture cannot be supplied. Prior wait-for-first-party-only assumption superseded.",
+  "dataset": {
+    "name": "Ego-Exo4D",
+    "releaseCandidate": "v2",
+    "actualReleaseId": null,
+    "acceptedContractSha256": null,
+    "metadataSha256": null,
+    "accessGranted": false,
+    "actualTakeUids": [],
+    "selectedFiles": [],
+    "actualBytesDownloaded": 0
+  },
+  "candidate": {
+    "siteFamily": "Universidad de los Andes Salsa academy (paper Appendix8.8)",
+    "oneChoreography": "Published beginner choreography; exact task_id plus choreography version must be confirmed from licensed metadata",
+    "actualTaskId": null,
+    "on1Confirmed": false,
+    "soloConfirmed": false,
+    "expertNumericRatingsPresent": null,
+    "appCourseCandidate": "salsa_on1_solo",
+    "appLessonMatchStatus": "UNVERIFIED; no scoring/progress link"
+  },
+  "supervision": {
+    "primary": "Original human expert whole-take numeric rating from per-expert data.json, same rater and same choreography only",
+    "target": "Research-only relative execution-quality predictor within that exact rater/choreography; not dance-step correctness or app mastery",
+    "notTargets": [
+      "Whisper transcript as verbatim expert truth",
+      "Novice/EarlyExpert/IntermediateExpert/LateExpert participant category as per-execution score",
+      "Missing commentary as a bad-execution label",
+      "Unverified ASR/translation/LLM text as expert label",
+      "Auto pose/pseudo-GT as physical contact/weight or human correctness"
+    ]
+  },
+  "admissionGates": [
+    "Human licensee reviews final agreements and intended commercial derivative scope; keeps executed contract receipt privately; no raw product-video/music redistribution inferred.",
+    "Approved metadata confirms exact single choreography, solo/multi-person status, exo is_ego=false, frame alignment, rater scores and source/capture/participant aliases.",
+    "Build connected components across global authorized metadata by participant aliases OR capture/source recording OR byte-identical source; never split components or camera angles.",
+    "Find at least12 independent components/participants with at least2 eligible takes each, and same-rater numeric target variation in train/validation; availability is unknown.",
+    "If a capture connects participants, keep the whole connected component together; if12 useful components cannot be formed, report insufficiency rather than random-frame split.",
+    "Pick one comparable full-body non-overhead external view per take from metadata/view quality; selection cannot use performance label or held-out result.",
+    "Resolve exact per-file transfer and sizes before download. --views exo may include all exo cameras; do not assume it selects one. No unconditional/default/all download.",
+    "Core single owner accepts external-license provenance sidecar and purpose mapping; do not mislabel external assets as user-created first-party consent."
+  ],
+  "proposedBoundsOnly": {
+    "metadataAndSelectedAnnotationMaxMiB": 128,
+    "pilotVideoMaxGiB": 2,
+    "maxTakes": 24,
+    "oneExoViewPerTake": true,
+    "targetMinutesApproximately": 24,
+    "resampleFPS": 10,
+    "estimatedFrameCountIf24OneMinuteTakes": 14400,
+    "cpuThreadsMax": 2,
+    "cpuWallMinutesMax": 30,
+    "cloudGPU": false,
+    "paidProvider": false,
+    "downloadRunNow": false,
+    "trainingRunNow": false,
+    "ifExceeded": "Stop and report, no automatic budget/scope increase. Bounds are proposals for later coordinator approval."
+  },
+  "split": {
+    "proposedComponents": {
+      "train": 8,
+      "validation": 2,
+      "test": 2
+    },
+    "unit": "Connected participant/capture/source component; all takes and all views in one partition",
+    "seed": 20261017,
+    "selectionBeforeTestOpen": true,
+    "officialSplits": "Honor sealed official test, do not request hidden benchmark labels. Freeze eligible train/val source universe and custom internal holdout before training; do not report official benchmark scores. If official partitions conflict with grouping, exclude conflicted groups.",
+    "sharedChoreographyAndSong": "Intentional single-task restriction; no unseen-song/choreography/site/device generalization claim. No audio features inP0.",
+    "testMarker": "Reuse shared Core test-open receipt, single owner; no repeated tuning after holdout"
+  },
+  "model": {
+    "backbone": "Existing bundled pose_landmarker_full/float16/1; frozen",
+    "backboneSha256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+    "features": "Small predefined normalized2D pose/velocity/missingness whole-take summary; no raw RGB, audio, face or identity features",
+    "head": "CPU regularized linear/ridge research head; train-only scaling and median imputation",
+    "hyperparameterSelection": "Predeclared small regularization grid using validation only; choose/report once",
+    "baselines": [
+      "Train-only median human rating",
+      "Nearest reference sequence/DTW if a valid train-only reference exists, separately labelled diagnostic"
+    ],
+    "newWeightsProduced": false
+  },
+  "evaluation": {
+    "level": "Whole take and participant component; never frame-independent accuracy",
+    "metrics": [
+      "MAE vs train-only median baseline",
+      "Per-rater rank correlation where score variation permits",
+      "Group-bootstrap uncertainty and per-participant failure/missing-pose coverage",
+      "Same-score tie handling and camera/visibility quality strata"
+    ],
+    "success": "Pipeline runs on licensed genuine labels and leakage checks pass; measured gain is evidence for another research phase only. No achieved threshold or product acceptance asserted.",
+    "ifScoresMissing": "Stop supervised fitting; optional later authorized decode/feature IO sanity is not training or model accuracy.",
+    "physicalDeviceAcceptance": false,
+    "stepPhaseTimingAcceptance": false
+  },
+  "coreAdapterRequest": {
+    "owner": "Lissom Motion Core sole writer",
+    "action": "Review existing capture intake plus an external-license provenance sidecar; no new pipeline in this app",
+    "sidecarFields": [
+      "dataset/release/metadata hash",
+      "executed-license evidence reference/hash/licensee scope",
+      "participant global/site alias mapping",
+      "capture/take/source/camera/PTS identities",
+      "media hash/bytes",
+      "expert ID/numeric target/annotation original path+hash",
+      "label origin:human expert vs ASR vs pseudo",
+      "train/eval/display/music permissions per purpose",
+      "component partition/test-open receipt"
+    ],
+    "coreWritten": false,
+    "appCorePinChanged": false
+  },
+  "productBoundary": {
+    "enableModelAssessment": false,
+    "bundleModelOrCalibrationChanged": false,
+    "packageRebuilt": false,
+    "shippingDemonstrationCatalog": "EMPTY remains; dataset training license is not raw demonstration/music distribution permission",
+    "inAppUnsupportedStates": "Remain until task-specific independent calibration/device acceptance and a reviewed app update"
+  },
+  "excludedSources": {
+    "AISTplusplus": "AnnotationsCC BY4.0 distinct from academic-research AIST raw video/music terms; no blanket commercial corpus use; excluded fromP0",
+    "HDance": "Conflicting source/rights information; no use this turn"
+  },
+  "humanNextStep": {
+    "action": "User personally chooses correct licensee in official portal, supplies own fields and reviews/submits/signs final HelloSign agreements if acceptable; no model-agent signature or application submission",
+    "target": "https://ego4d.dev/request/ego-exo4d",
+    "fee": "Official getting-started says no dataset fee; no spend now",
+    "risks": "Legally binding agreement plus private contact/address transmission; user handles these directly. Raw video/audio and participant identities cannot be republished by assumption.",
+    "afterApproval": "User keeps emailed temporary credentials in secure local storage; never posts them to chat/repo; coordinator confirms exact bounded metadata/download scope first"
+  }
+}
