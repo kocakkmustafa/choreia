@@ -14,24 +14,115 @@
     "uploaded": false
   },
   "playIcon": {
-    "status": "PENDING_512_FROM_APPROVED_V15_MASTER",
+    "path": "choreia-v15-play-512.png",
+    "sha256": "0b9140e8bec68f87e18bcbdabb2b0a6ff483bf6b5ee0efb857048fe61a30043a",
     "dimensions": [
       512,
       512
     ],
-    "historicalIconEligible": false
+    "mode": "RGBA",
+    "byteSize": 230404,
+    "approvedMasterEmbeddedByteForByte": true,
+    "noCropOrMask": true,
+    "opaqueRgbConversionPreservesRenderedPixels": true,
+    "pngChunks": [
+      "IHDR",
+      "IDAT",
+      "IDAT",
+      "IDAT",
+      "IDAT",
+      "IDAT",
+      "IDAT",
+      "IDAT",
+      "IDAT",
+      "IEND"
+    ],
+    "technicalStatus": "PASS",
+    "visualReview": "PASS: full figure preserved; no clipping/overlap; EN/TR copy fits; no model or native screenshot claim",
+    "source": "choreia-v15-play-512.svg",
+    "status": "LOCAL_DRAFT_TECHNICAL_AND_VISUAL_PASS_NOT_UPLOADED",
+    "masterSha256": "51148ac9504aed95bb952d3b1c67d6234708960ae2d667a8a4864218135659b4",
+    "altText": {
+      "en-US": "Choreia dance figure on a burgundy background.",
+      "tr-TR": "Bordo arka planda Choreia dansçı figürü."
+    },
+    "historicalIconEligible": false,
+    "hasAlphaChannel": true,
+    "hasTransparency": false
   },
   "playFeatureGraphic": {
-    "status": "PENDING_CURRENT_V15_ARTWORK_REVIEW",
-    "dimensions": [
-      1024,
-      500
+    "status": "LOCAL_EN_TR_DRAFT_TECHNICAL_AND_VISUAL_PASS_NOT_UPLOADED",
+    "variants": [
+      {
+        "path": "choreia-v15-feature-en-US.png",
+        "sha256": "6befe66d7287a74ecb218cffe54ff89e95b43dba6995a905bd2fcab048ab0947",
+        "dimensions": [
+          1024,
+          500
+        ],
+        "mode": "RGB",
+        "byteSize": 154527,
+        "approvedMasterEmbeddedByteForByte": true,
+        "noCropOrMask": true,
+        "opaqueRgbConversionPreservesRenderedPixels": true,
+        "pngChunks": [
+          "IHDR",
+          "IDAT",
+          "IDAT",
+          "IDAT",
+          "IDAT",
+          "IDAT",
+          "IEND"
+        ],
+        "technicalStatus": "PASS",
+        "visualReview": "PASS: full figure preserved; no clipping/overlap; EN/TR copy fits; no model or native screenshot claim",
+        "locale": "en-US",
+        "source": "choreia-v15-feature-en-US.svg",
+        "altText": "Five solo dance paths with written lessons, visual counts and a personal practice record.",
+        "hasAlphaChannel": false,
+        "hasTransparency": false
+      },
+      {
+        "path": "choreia-v15-feature-tr-TR.png",
+        "sha256": "b3d0a6c454e1a33c4b0e7622dfcc75c2cc08f147ba0d878093c98448df6a1216",
+        "dimensions": [
+          1024,
+          500
+        ],
+        "mode": "RGB",
+        "byteSize": 153341,
+        "approvedMasterEmbeddedByteForByte": true,
+        "noCropOrMask": true,
+        "opaqueRgbConversionPreservesRenderedPixels": true,
+        "pngChunks": [
+          "IHDR",
+          "IDAT",
+          "IDAT",
+          "IDAT",
+          "IDAT",
+          "IDAT",
+          "IEND"
+        ],
+        "technicalStatus": "PASS",
+        "visualReview": "PASS: full figure preserved; no clipping/overlap; EN/TR copy fits; no model or native screenshot claim",
+        "locale": "tr-TR",
+        "source": "choreia-v15-feature-tr-TR.svg",
+        "altText": "Yazılı dersler, görsel sayım ve kişisel çalışma kaydıyla beş solo dans yolu.",
+        "hasAlphaChannel": false,
+        "hasTransparency": false
+      }
     ],
-    "historicalGraphicEligible": false
+    "historicalGraphicEligible": false,
+    "nativeScreenshot": false,
+    "claims": "Only existing written study/count/record features; no demonstration, music, AI score, real skill or released-product claim."
   },
   "screenshots": {
-    "status": "PENDING_CURRENT_NATIVE_DEVICE_CAPTURE",
-    "syntheticOrHistoricalEligible": false
+    "status": "PENDING_CURRENT_NATIVE_UI_CAPTURE",
+    "syntheticOrHistoricalEligible": false,
+    "blocker": "Simulator is not in enabled native CUA surfaces (Invalid app). Existing simulator output1.0.0(2) is not proven b5ff2c4. No new access/build/install attempted.",
+    "physicalAcceptance": false
   },
-  "storeReady": false
+  "storeReady": false,
+  "rendering": "Existing offline rsvg-convert + opaque32-bit RGBA icon and24-bit RGB feature PNG export. Declared system fonts Georgia/Arial with generic fallbacks. No redraw/crop/mask of approved master, network, browser or font installation.",
+  "lastPreparedAt": "2026-10-18T00:35:53.565240+00:00"
 }

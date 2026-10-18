@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_FORM_CANDIDATE_NOT_PROVIDER_WRITE_OR_FINAL_TRAFFIC_ACCEPTANCE",
+  "packageSource": "b5ff2c4fe48745a1fac78103c1fb245a034affc3",
+  "bundle": "com.yulalab.choreia",
+  "version": "1.0.0",
+  "build": 3,
+  "packages": [
+    {
+      "platform": "iOS",
+      "sha256": "9f1749d3b77fc381e7f0c81548e50c8bb34b94f574d006d7daf8294540f09069"
+    },
+    {
+      "platform": "Android",
+      "sha256": "0b5bea5c20a612c605040cd612abe83e3ad7c462139a1b0a1f80b1f7481e1277"
+    }
+  ],
+  "appleCollectedData": [
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeEmailAddress",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeName",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeOtherDiagnosticData",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeCoarseLocation",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeOtherDataTypes",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeTracking": false
+    }
+  ],
+  "allPackagedManifestTracking": false,
+  "packagedManifestCount": 9,
+  "playMappingCandidates": [
+    {
+      "appleType": "NSPrivacyCollectedDataTypeEmailAddress",
+      "playCandidate": "Personal info / Email address",
+      "status": "SOURCE_AND_SAVED_FORM_CATEGORY_ALIGNED",
+      "optionalAtAppLevel": true
+    },
+    {
+      "appleType": "NSPrivacyCollectedDataTypeName",
+      "playCandidate": "Personal info / Name",
+      "status": "SOURCE_AND_SAVED_FORM_CATEGORY_ALIGNED",
+      "optionalAtAppLevel": true
+    },
+    {
+      "appleType": "NSPrivacyCollectedDataTypeUserID",
+      "playCandidate": "Personal info / User IDs",
+      "status": "SOURCE_AND_SAVED_FORM_CATEGORY_ALIGNED",
+      "optionalAtAppLevel": true
+    },
+    {
+      "appleType": "NSPrivacyCollectedDataTypeOtherDiagnosticData",
+      "playCandidate": "App info & performance / Diagnostics",
+      "status": "PENDING_PROVIDER_SCOPE_AND_TAXONOMY_REVIEW",
+      "optionalAtAppLevel": null,
+      "optionalityNote": "Actual provider scope remains open; do not derive optionality from Apple type."
+    },
+    {
+      "appleType": "NSPrivacyCollectedDataTypeCoarseLocation",
+      "playCandidate": "Location / Approximate location",
+      "status": "PENDING_PROVIDER_SCOPE_AND_TAXONOMY_REVIEW",
+      "optionalAtAppLevel": null,
+      "optionalityNote": "Actual provider scope remains open; do not derive optionality from Apple type."
+    },
+    {
+      "appleType": "NSPrivacyCollectedDataTypeOtherDataTypes",
+      "playCandidate": "Personal info / Other info (classification inference)",
+      "status": "PENDING_PROVIDER_SCOPE_AND_TAXONOMY_REVIEW",
+      "optionalAtAppLevel": null,
+      "optionalityNote": "Actual provider scope remains open; do not derive optionality from Apple type."
+    }
+  ],
+  "scopeNotes": [
+    "Optional means courses are available to a guest without account collection; email/ID are still required within the chosen account flow.",
+    "Third-party service-provider sharing exception, actual retention, partial deletion and real traffic remain unverified; do not automatically change console.",
+    "Local three journals/own tmp files and no app-cloud history sync do not exclude OS backups.",
+    "Native BILLING/CAMERA permissions do not establish open purchase/restore/camera policy."
+  ],
+  "playSavedReadback": {
+    "at": "2026-10-18T00:13:32.486703+00:00",
+    "url": "https://play.google.com/console/u/0/developers/6869748413101138395/app/4972759001780942116/app-content/data-privacy-security",
+    "types": [
+      {
+        "type": "Name",
+        "optional": true,
+        "purpose": [
+          "Account management"
+        ]
+      },
+      {
+        "type": "Email address",
+        "optional": true,
+        "purpose": [
+          "App functionality",
+          "Account management"
+        ]
+      },
+      {
+        "type": "User IDs",
+        "optional": true,
+        "purpose": [
+          "App functionality",
+          "Account management"
+        ]
+      },
+      {
+        "type": "Other info",
+        "optional": true,
+        "purpose": [
+          "Account management"
+        ]
+      }
+    ],
+    "accountDeletionUrl": "https://yulalab.com/en/privacy/motion#motion-account-deletion",
+    "partialDataDeletionUrl": "https://yulalab.com/en/privacy/motion",
+    "encryptedInTransitDeclared": true,
+    "noSharingDeclared": true,
+    "locationAndDiagnosticsGroupsSelected": false
+  },
+  "liveProviderRead": false,
+  "portalWrite": false,
+  "finalPrivacyAccepted": false,
+  "ascFormReadback": {
+    "status": "PENDING_USER_SECURE_LOGIN_REFRESH_PRIVACY_VALUES_UNREAD",
+    "recordedAt": "2026-10-18T00:34:44.637659+00:00",
+    "authenticatedValuesRead": false,
+    "loginRefreshByUserRequired": true
+  }
+}

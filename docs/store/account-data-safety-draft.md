@@ -1,5 +1,38 @@
 # Motion hesabı bağlanınca mağaza gizlilik beyanı taslağı — Choreia
 
+## 18 Ekim 2026 · b5ff2c4 final binary karşılaştırması
+
+Paket kaynağı `b5ff2c4fe48745a1fac78103c1fb245a034affc3`, sürüm `1.0.0 (3)`.
+Yeni IPA/AAB üretilmedi; mevcut doğrulanmış binary'ler okundu. IPA'daki 9
+privacy manifest ve Runner'ın 6 veri tipi önceki doğrulanmış paketten
+anlamsal/byte düzeyinde değişmemiştir. Runner plist'i kaynakla parse edilmiş
+olarak eşittir; tüm türler Linked=true, App Functionality, Tracking=false;
+9 manifestin tamamında tracking=false. Merged Android izinleri mevcut final
+makbuzuyla aynı; mikrofon ve konum izni yoktur. BILLING izni satışın açık
+olduğu anlamına gelmez. [Makine-okur form adayı](privacy-form-candidate.v1.json).
+
+18 Ekim 00:31:52 UTC Play kontrolünde üretim başvurusu kapalı, kurulum 10/11,
+kayıtlı testçi 0; en az 12 kullanıcının kesintisiz 14 gün kapalı teste kayıtlı
+olması isteniyor. Yerel paket hazırlamak bu süreyi başlatmaz.
+
+18 Ekim önceki salt okunur veri güvenliği formunda ad/e-posta/kullanıcı ID'si/
+diğer kişisel bilgi seçili; konum ve tanılama grupları seçilmemiştir. Hesap silme
+URL'si `https://yulalab.com/en/privacy/motion#motion-account-deletion`, kısmi veri
+silme ve politika URL'si `https://yulalab.com/en/privacy/motion` kaydedilmiştir.
+Bunlar form readback'idir; talebin gerçekten sonuçlandığı kanıtı değildir.
+Hesap isteğe bağlı olduğundan Play'de e-posta/ID uygulama düzeyinde opsiyonel
+olabilir; seçilen hesap akışında e-posta/ID yine gereklidir. Tanılama/konum ve
+diğer bilgi için gerçek sağlayıcı kapsamı/opsiyonellik ayrıca doğrulanmalıdır.
+
+Yerel binary ↔ kaynak ↔ taslak eşliği PASS. Canlı provider güvenlik günlükleri,
+saklama/erişim/silme, gerçek ağ/hesap akışı ve OS yedeği kabulü açık. Bu takipte
+ASC hedefi `authResult=FAILED` ile resmi giriş sayfasına döndüğünden
+privacy değerleri okunamadı. Gerekli tek ortak portal adımı, kullanıcının
+mevcut Apple hesabında güvenli giriş/2FA yenilemesidir; alternatif erişim,
+sözleşme kabulü veya otomatik giriş denemesi yapılmadı. Play kategorileri Apple tiplerinden otomatik
+üretilip konsola yazılmadı; hiçbir provider/portal değeri değiştirilmedi.
+
+
 Durum (2026-09-25): Motion üretim şeması ve SMTP kuruldu; gerçek
 e-posta teslimi gözlendi. Kurucu ilk sürümde ücretli kamera oturumlarını ve
 abonelik satışını erteledi. Mağaza veri formları ve iPhone kabulü ayrıca

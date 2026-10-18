@@ -52,9 +52,10 @@ girişi kapalıdır. Bunların gerçek kabulü host testlerinden çıkarılamaz.
   fiziksel iOS/Android yaşam döngüsü/çevrimdışı kontrolleri açık.
 - Lisanslı gösterim ve müzik hakları/mahremiyet/uzman kabulü açık. Gösterim
   yerine sentetik veri konmaz; gerçek model başarımı sonraki eğitim aşamasında.
-- Güncel EN/TR native ekranlar, Play 512 simge/feature graphic ve son gizlilik
-  karşılaştırması açık. [Görsel manifesti](current-assets/manifest.json).
-- Play Console salt okunur 18 Ekim kontrolünde mağaza kurulumu 10/11;
+- Güncel Play 512 simge ve EN/TR feature graphic yerel taslakları hazır.
+  Güncel native ekranlar ve canlı provider son gizlilik kabulü açık. Yerel
+  binary/kaynak/taslak privacy eşliği PASS; yeni build yok. [Görsel manifesti](current-assets/manifest.json).
+- Play Console salt okunur 18 Ekim 00:31:52 UTC kontrolünde mağaza kurulumu 10/11;
   son adım mağaza girişi. Üretim erişimi için en az 12 test kullanıcısıyla
   kesintisiz 14 gün kapalı test isteniyor, mevcut kayıtlı kullanıcı 0.
 - Play yükleme sertifikası ilk AAB yüklenene kadar görünmüyor. Google'ın
