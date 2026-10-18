@@ -1,3 +1,5 @@
+Güncel mağaza kullanım durumu: [18 Ekim manifesti](../current-assets/manifest.json).
+
 # Güncel native simge — 2026-10-16
 
 Yeni onay: **v15-human-dancer**. Güncel master, platform envanteri,

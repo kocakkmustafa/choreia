@@ -5,20 +5,13 @@ import '../onboarding/first_run_view.dart';
 import '../theme.dart';
 import '../ui_language.dart';
 
-/// The "Profil" (Profile) tab (roadmap §5.5).
-///
-/// Unlike Today and Practice Lab, some of what this tab should eventually
-/// show already exists in code form — `permission_handler` is a real
-/// dependency and camera permission state is real and readable today. That
-/// makes a fully-honest Profile screen a genuinely smaller lift than the
-/// other two, and a reasonable NEXT increment — but calibration, export/
-/// delete, and subscription all still name capabilities with zero
-/// implementation (`lib/services/entitlements/`, `lib/data/local/` do not
-/// exist), so a screen mixing real permission state with placeholder
-/// sections for the rest was judged a bigger, less reviewable change than
-/// keeping this tab uniformly honest for now, same as its two siblings.
+/// Optional shared account entry and licenses for the five written dance paths.
+/// Practice journals remain local and scoped to the current guest or account.
+/// The unconfigured fallback is used by isolated hosts without an account route.
 class ProfileView extends StatelessWidget {
-  const ProfileView({super.key, this.accountPageBuilder,
+  const ProfileView(
+      {super.key,
+      this.accountPageBuilder,
       this.cameraSessionsAvailable = false});
 
   final WidgetBuilder? accountPageBuilder;
@@ -53,8 +46,8 @@ class ProfileView extends StatelessWidget {
                   Text(
                     UiLanguage.text(
                       context,
-                      en: 'Learn Salsa On1 without an account or camera. Course progress stays on this device and reflects your own practice record. A Motion account is optional. ${IntroStrings.cameraStatus(cameraSessionsAvailable)}',
-                      tr: 'Salsa On1 kursunu hesap veya kamera olmadan çalışabilirsiniz. Kurs ilerlemesi bu cihazda kalır ve kendi çalışma kaydınızı gösterir. Motion hesabı isteğe bağlıdır. ${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}',
+                      en: 'Explore five solo dance paths without an account or camera. Practice records stay on this device within your guest or account scope and reflect your own study. A Motion account is optional. ${IntroStrings.cameraStatus(cameraSessionsAvailable)}',
+                      tr: 'Beş solo dans yolunu hesap veya kamera olmadan çalışabilirsiniz. Çalışma kayıtları bu cihazda konuk veya hesabınız kapsamında kalır ve kendi çalışmanızı gösterir. Motion hesabı isteğe bağlıdır. ${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}',
                     ),
                     style: ChoreiaType.body(size: 13.5),
                   ),

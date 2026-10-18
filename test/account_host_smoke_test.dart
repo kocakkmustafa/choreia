@@ -29,7 +29,9 @@ void main() {
         ),
       ),
     ));
-    expect(find.textContaining('Learn Salsa On1 without an account or camera'),
+    expect(
+        find.textContaining(
+            'Explore five solo dance paths without an account or camera'),
         findsOneWidget);
     expect(
         find.textContaining('subscription sales are closed'), findsOneWidget);
@@ -43,8 +45,15 @@ void main() {
   });
 
   for (final locale in ['en', 'tr']) {
-    testWidgets('profile explains current course and closed sales in $locale',
+    testWidgets(
+        'profile keeps account reachable on a narrow large-text screen in $locale',
         (tester) async {
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      tester.platformDispatcher.textScaleFactorTestValue = 2.5;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       tester.platformDispatcher.localeTestValue = Locale(locale);
       addTearDown(tester.platformDispatcher.clearLocaleTestValue);
       await tester.pumpWidget(MaterialApp(
@@ -54,8 +63,8 @@ void main() {
       ))));
       expect(
           find.textContaining(locale == 'tr'
-              ? 'Salsa On1 kursunu hesap veya kamera olmadan'
-              : 'Learn Salsa On1 without an account or camera'),
+              ? 'Beş solo dans yolunu hesap veya kamera olmadan'
+              : 'Explore five solo dance paths without an account or camera'),
           findsOneWidget);
       expect(
           find.textContaining(locale == 'tr'
@@ -64,6 +73,8 @@ void main() {
           findsOneWidget);
       expect(find.textContaining('requires a Motion account'), findsNothing);
       expect(find.textContaining('üyeliği gerekir'), findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.ensureVisible(find.byKey(ProfileView.accountEntryKey));
       await tester.tap(find.byKey(ProfileView.accountEntryKey));
       await tester.pumpAndSettle();
       expect(find.text('Account route'), findsOneWidget);
