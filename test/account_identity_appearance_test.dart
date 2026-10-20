@@ -337,8 +337,7 @@ class _ClosedFixture {
 
   Never reject(Invocation invocation) {
     unexpectedClientCalls++;
-    throw StateError(
-        'Unexpected Supabase operation: ' + invocation.memberName.toString());
+    throw StateError('Unexpected Supabase operation: ${invocation.memberName}');
   }
 
   void expectNoEffects() {
