@@ -438,14 +438,13 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                         key: const Key('salsa.completedCount'),
                         style: ChoreiaType.of(context).body(size: 16)),
                     const SizedBox(height: 8),
+                    // Flutter's progressBar role requires a numeric value.
+                    // Keep its default range value and localize the label.
                     LinearProgressIndicator(
                         value: completed.length / course.lessons.length,
                         color: ChoreiaPalette.of(context).amber,
                         semanticsLabel: t('Self-reported completion',
-                            'Öz beyanla tamamlanma'),
-                        semanticsValue: NumberFormat.percentPattern(
-                                _salsaLocale(context, tr))
-                            .format(completed.length / course.lessons.length)),
+                            'Öz beyanla tamamlanma')),
                     const SizedBox(height: 12),
                     Text(
                         fmt(
