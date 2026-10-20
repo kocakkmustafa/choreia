@@ -19,7 +19,7 @@ import 'app/theme/theme_preference.dart';
 import 'app/ui_language.dart';
 import 'app/support_action.dart';
 import 'app/localization/choreia_locale.dart';
-import 'app/localization/choreia_messages.dart';
+import 'app/localization/choreia_locale_resources.dart';
 import 'app/localization/translation_fallback.dart';
 
 /// Choreia's entry point.
@@ -147,8 +147,10 @@ class _ChoreiaAccountStartupFailureState
         controller: themes,
         child: ChoreiaLocaleScope(
             controller: locales,
-            child: AnimatedBuilder(
-              animation: Listenable.merge([locales, themes]),
+            child: ChoreiaLocaleResources(
+              controller: locales,
+              builder: (_, locale, delegate) => AnimatedBuilder(
+              animation: themes,
               builder: (_, __) => MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'Choreia',
@@ -156,7 +158,7 @@ class _ChoreiaAccountStartupFailureState
                 darkTheme: ChoreiaTheme.dark,
                 themeMode: themes.value,
                 themeAnimationDuration: Duration.zero,
-                locale: locales.value,
+                locale: locale,
                 supportedLocales: ChoreiaLocaleController.supported,
                 localeResolutionCallback: ChoreiaLocaleController.resolve,
                 localeListResolutionCallback:
@@ -166,8 +168,8 @@ class _ChoreiaAccountStartupFailureState
                         value: ChoreiaTheme.overlayFor(
                             Theme.of(context).brightness),
                         child: TranslationFallback(child: child!)),
-                localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-                  ChoreiaMessagesDelegate(),
+                localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                  delegate,
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
@@ -178,7 +180,7 @@ class _ChoreiaAccountStartupFailureState
                             child: Center(child: _AccountStartupWaiting())))
                     : const ChoreiaAccountFailureView(),
               ),
-            )),
+            ))),
       );
 }
 
@@ -351,8 +353,11 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
           controller: _themes,
           child: ChoreiaLocaleScope(
               controller: _locales,
-              child: AnimatedBuilder(
-                  animation: Listenable.merge([_locales, _themes]),
+              child: ChoreiaLocaleResources(
+                  controller: _locales,
+                  bundle: widget.localeBundle,
+                  builder: (_, locale, delegate) => AnimatedBuilder(
+                  animation: _themes,
                   builder: (_, __) => MaterialApp(
                         key: navigationKey,
                         debugShowCheckedModeBanner: false,
@@ -361,7 +366,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
                         darkTheme: ChoreiaTheme.dark,
                         themeMode: _themes.value,
                         themeAnimationDuration: Duration.zero,
-                        locale: _locales.value,
+                        locale: locale,
                         supportedLocales: ChoreiaLocaleController.supported,
                         localeResolutionCallback:
                             ChoreiaLocaleController.resolve,
@@ -374,7 +379,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
                                 child: TranslationFallback(child: child!)),
                         localizationsDelegates: <LocalizationsDelegate<
                             dynamic>>[
-                          ChoreiaMessagesDelegate(bundle: widget.localeBundle),
+                          delegate,
                           GlobalMaterialLocalizations.delegate,
                           GlobalWidgetsLocalizations.delegate,
                           GlobalCupertinoLocalizations.delegate,
@@ -384,7 +389,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
                                     _hostController.requiresAccountRoute)
                             ? accountPage(context)
                             : shell(ownerEpoch),
-                      ))));
+                      )))));
     }
 
     final runtime = accountRuntime;
