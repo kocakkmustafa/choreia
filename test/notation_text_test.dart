@@ -199,40 +199,40 @@ void main() {
       addTearDown(tester.view.reset);
       final semantics = tester.ensureSemantics();
       try {
-      final text = _diagrams(language)[7];
-      await tester.pumpWidget(_screen(text, language: language));
-      await tester.pumpAndSettle();
-      final normalHeight = _rects(tester, 0).first.height;
-      await tester.pumpWidget(_screen(text, language: language, scale: 2));
-      await tester.pumpAndSettle();
-      expect(_rects(tester, 0).first.height, closeTo(normalHeight * 2, 1));
-      expect(find.bySemanticsLabel(text), findsOneWidget);
-      final scrollView = tester
-          .widget<SingleChildScrollView>(find.byType(SingleChildScrollView));
-      final controller = scrollView.controller!;
-      expect(controller.position.maxScrollExtent, greaterThan(0));
-      expect(controller.offset, 0);
-      final scrollNode = tester.getSemantics(find.byType(Scrollable));
-      expect(
-          scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollLeft),
-          isTrue);
-      tester.binding.rootPipelineOwner.semanticsOwner!
-          .performAction(scrollNode.id, SemanticsAction.scrollLeft);
-      await tester.pumpAndSettle();
-      expect(controller.offset, greaterThan(0));
-      controller.jumpTo(0);
-      await tester.pump();
-      await tester.drag(
-          find.byType(SingleChildScrollView), const Offset(-180, 0));
-      await tester.pumpAndSettle();
-      expect(controller.offset, greaterThan(0));
-      for (var line = 0; line < text.split('\n').length; line++) {
-        _expectPhysicalOrder(tester, line);
+        final text = _diagrams(language)[7];
+        await tester.pumpWidget(_screen(text, language: language));
+        await tester.pumpAndSettle();
+        final normalHeight = _rects(tester, 0).first.height;
+        await tester.pumpWidget(_screen(text, language: language, scale: 2));
+        await tester.pumpAndSettle();
+        expect(_rects(tester, 0).first.height, closeTo(normalHeight * 2, 1));
+        expect(find.bySemanticsLabel(text), findsOneWidget);
+        final scrollView = tester
+            .widget<SingleChildScrollView>(find.byType(SingleChildScrollView));
+        final controller = scrollView.controller!;
+        expect(controller.position.maxScrollExtent, greaterThan(0));
+        expect(controller.offset, 0);
+        final scrollNode = tester.getSemantics(find.byType(Scrollable));
+        expect(
+            scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollLeft),
+            isTrue);
+        tester.binding.rootPipelineOwner.semanticsOwner!
+            .performAction(scrollNode.id, SemanticsAction.scrollLeft);
+        await tester.pumpAndSettle();
+        expect(controller.offset, greaterThan(0));
+        controller.jumpTo(0);
+        await tester.pump();
+        await tester.drag(
+            find.byType(SingleChildScrollView), const Offset(-180, 0));
+        await tester.pumpAndSettle();
+        expect(controller.offset, greaterThan(0));
+        for (var line = 0; line < text.split('\n').length; line++) {
+          _expectPhysicalOrder(tester, line);
+        }
+        expect(tester.takeException(), isNull);
+      } finally {
+        semantics.dispose();
       }
-      expect(tester.takeException(), isNull);
-    } finally {
-      semantics.dispose();
-    }
     });
   }
 
@@ -241,21 +241,21 @@ void main() {
     const text = 'L   ←\n\nالقدم المتحركة\tR →';
     final semantics = tester.ensureSemantics();
     try {
-    await tester.pumpWidget(_screen(text, language: 'ar'));
-    await tester.pumpAndSettle();
-    expect(find.bySemanticsLabel(text), findsOneWidget);
-    expect(find.byType(Row), findsNWidgets(3));
-    expect(tester.getSize(_line(1)).height, greaterThan(0));
-    expect(_texts(tester, 0).map((text) => text.data),
-        ['L', '\u00A0\u00A0\u00A0', '←']);
-    expect(_texts(tester, 2).map((text) => text.data), [
-      'القدم\u00A0المتحركة',
-      '\u00A0\u00A0\u00A0\u00A0',
-      'R',
-      '\u00A0',
-      '→',
-    ]);
-    expect(tester.takeException(), isNull);
+      await tester.pumpWidget(_screen(text, language: 'ar'));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel(text), findsOneWidget);
+      expect(find.byType(Row), findsNWidgets(3));
+      expect(tester.getSize(_line(1)).height, greaterThan(0));
+      expect(_texts(tester, 0).map((text) => text.data),
+          ['L', '\u00A0\u00A0\u00A0', '←']);
+      expect(_texts(tester, 2).map((text) => text.data), [
+        'القدم\u00A0المتحركة',
+        '\u00A0\u00A0\u00A0\u00A0',
+        'R',
+        '\u00A0',
+        '→',
+      ]);
+      expect(tester.takeException(), isNull);
     } finally {
       semantics.dispose();
     }

@@ -247,45 +247,45 @@ void main() {
       (tester) async {
     final semantics = tester.ensureSemantics();
     try {
-    await show(tester, Scaffold(body: LibraryView(library: library)));
-    final review = find.byKey(const Key('study-review-entry'));
-    expect(tester.getSize(review), const Size(48, 48));
-    final reviewData = tester.getSemantics(review).getSemanticsData();
-    expect(reviewData.hasFlag(SemanticsFlag.isButton), isTrue);
-    expect(reviewData.hasAction(SemanticsAction.tap), isTrue);
+      await show(tester, Scaffold(body: LibraryView(library: library)));
+      final review = find.byKey(const Key('study-review-entry'));
+      expect(tester.getSize(review), const Size(48, 48));
+      final reviewData = tester.getSemantics(review).getSemanticsData();
+      expect(reviewData.hasFlag(SemanticsFlag.isButton), isTrue);
+      expect(reviewData.hasAction(SemanticsAction.tap), isTrue);
 
-    final references = find.widgetWithText(ChoiceChip,
-        '${LibraryStrings.filterOpenNow} · ${LibraryTally.from(library.cards).openable}');
-    await reach(tester, references);
-    expect(tester.getSize(references).height, greaterThanOrEqualTo(48));
-    await tester.tap(references);
-    await tester.pump();
-    expect(tester.widget<ChoiceChip>(references).selected, isTrue);
-    expect(
-        tester
-            .getSemantics(references)
-            .getSemanticsData()
-            .hasFlag(SemanticsFlag.isSelected),
-        isTrue);
+      final references = find.widgetWithText(ChoiceChip,
+          '${LibraryStrings.filterOpenNow} · ${LibraryTally.from(library.cards).openable}');
+      await reach(tester, references);
+      expect(tester.getSize(references).height, greaterThanOrEqualTo(48));
+      await tester.tap(references);
+      await tester.pump();
+      expect(tester.widget<ChoiceChip>(references).selected, isTrue);
+      expect(
+          tester
+              .getSemantics(references)
+              .getSemanticsData()
+              .hasFlag(SemanticsFlag.isSelected),
+          isTrue);
 
-    final tile = find.byKey(LibraryView.tileKey('hip_hop_foundations'));
-    await reach(tester, tile);
-    final focus = Focus.of(tester.element(tile));
-    focus.requestFocus();
-    await tester.pump();
-    expect(focus.hasFocus, isTrue);
-    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-    await tester.pump();
-    await tester.pump(ChoreiaMotion.screenTransition);
-    expect(find.byType(StyleDetailView), findsOneWidget);
-    expect(
-        tester
-            .widget<StyleDetailView>(find.byType(StyleDetailView))
-            .card
-            .entry
-            .id,
-        'hip_hop_foundations');
-    expect(tester.takeException(), isNull);
+      final tile = find.byKey(LibraryView.tileKey('hip_hop_foundations'));
+      await reach(tester, tile);
+      final focus = Focus.of(tester.element(tile));
+      focus.requestFocus();
+      await tester.pump();
+      expect(focus.hasFocus, isTrue);
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      await tester.pump();
+      await tester.pump(ChoreiaMotion.screenTransition);
+      expect(find.byType(StyleDetailView), findsOneWidget);
+      expect(
+          tester
+              .widget<StyleDetailView>(find.byType(StyleDetailView))
+              .card
+              .entry
+              .id,
+          'hip_hop_foundations');
+      expect(tester.takeException(), isNull);
     } finally {
       semantics.dispose();
     }
