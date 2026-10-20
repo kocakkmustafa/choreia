@@ -98,6 +98,12 @@ void main() {
   testWidgets('skill course uses existing navigation and separate asset',
       (tester) async {
     final library = await tester.runAsync(testLibrary);
+    // Start the real large-asset read outside the widget fake-async zone.
+    // The subsequent route still loads the actual bundled skill asset.
+    final bundled = await tester.runAsync(() =>
+        rootBundle.loadString('content/hip_hop_foundations_skill_course.json'));
+    expect(bundled, source);
+    expect(HipHopCourse.decode(bundled!, skillCourse: true).units.length, 8);
     await tester.pumpWidget(MaterialApp(
         home: StyleDetailView(card: library!.cardFor('hip_hop_foundations')!)));
     final link = find.byKey(const Key('style.hipHopSkillCourse'));
@@ -107,9 +113,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 450));
     final page = tester.widget<HipHopCoursePage>(find.byType(HipHopCoursePage));
     expect(page.skillCourse, isTrue);
-    final bundled = await tester.runAsync(() =>
-        rootBundle.loadString('content/hip_hop_foundations_skill_course.json'));
-    expect(HipHopCourse.decode(bundled!, skillCourse: true).units.length, 8);
     await tester.pumpAndSettle();
     expect(find.text('Hip-Hop Foundations: beginner course'), findsOneWidget);
     expect(
