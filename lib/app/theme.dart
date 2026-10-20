@@ -345,11 +345,11 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
             _blob(_a,
                 alignment: const Alignment(-0.75, -0.9),
                 color: ChoreiaPalette.of(context).rose,
-                size: 460),
+                size: 460, peakAlpha: ChoreiaPalette.of(context).glowRoseAlpha),
             _blob(_b,
                 alignment: const Alignment(0.85, 0.95),
                 color: ChoreiaPalette.of(context).glowWarm,
-                size: 420,
+                size: 420, peakAlpha: ChoreiaPalette.of(context).glowWarmAlpha,
                 reverse: true),
             if (widget.child != null) widget.child!,
           ],
@@ -361,6 +361,7 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
     required Alignment alignment,
     required Color color,
     required double size,
+    required double peakAlpha,
     bool reverse = false,
   }) =>
       AnimatedBuilder(
@@ -388,7 +389,7 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
                       // floor back down to 0.55 and RAISED the hierarchy
                       // spread from 1.86x to 2.59x — the trade runs the right
                       // way round.
-                      color.withValues(alpha: ChoreiaPalette.of(context).glowRoseAlpha),
+                      color.withValues(alpha: peakAlpha),
                       color.withValues(alpha: 0),
                     ],
                   ),
@@ -447,7 +448,7 @@ class GlassPanel extends StatelessWidget {
                 // (C-157): a panel tint that lightens the surface is paid for
                 // by every string sitting on it.
                 base.withValues(alpha: ChoreiaPalette.of(context).panelTintAlpha),
-                ChoreiaPalette.of(context).pillFill.withValues(alpha: ChoreiaPalette.of(context).panelWhiteAlpha),
+                Colors.white.withValues(alpha: ChoreiaPalette.of(context).panelWhiteAlpha),
               ],
             ),
             border:
@@ -583,6 +584,14 @@ class TitleWithPill extends StatelessWidget {
 /// Material and custom surfaces share the same immutable semantic palette.
 abstract final class ChoreiaTheme {
   ChoreiaTheme._();
+  static SystemUiOverlayStyle overlayFor(Brightness brightness) {
+    final p = brightness == Brightness.dark ? ChoreiaPalette.dark : ChoreiaPalette.light;
+    return SystemUiOverlayStyle(statusBarColor: Colors.transparent,
+      statusBarIconBrightness: brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      statusBarBrightness: brightness,
+      systemNavigationBarColor: p.stage,
+      systemNavigationBarIconBrightness: brightness == Brightness.dark ? Brightness.light : Brightness.dark);
+  }
   static ThemeData get light => _build(Brightness.light, ChoreiaPalette.light);
   static ThemeData get dark => _build(Brightness.dark, ChoreiaPalette.dark);
   static ThemeData _build(Brightness brightness, ChoreiaPalette p) {
@@ -605,7 +614,7 @@ abstract final class ChoreiaTheme {
         backgroundColor: p.stage, foregroundColor: p.bright, surfaceTintColor: Colors.transparent,
         elevation: 0, titleTextStyle: ChoreiaType.display(size: 22, color: p.bright),
         iconTheme: IconThemeData(color: p.text(.8)),
-        systemOverlayStyle: brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        systemOverlayStyle: overlayFor(brightness),
       ),
       filledButtonTheme: FilledButtonThemeData(style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith((states) => states.contains(WidgetState.disabled) ? p.disabledSurface : p.rose),

@@ -21,6 +21,7 @@ Widget notBuiltTabBody(
   required Key key,
   required String title,
   required String plannedContent,
+  List<Widget> trailing = const [],
 }) => ChoreiaBackdrop(
   child: SafeArea(
     child: SingleChildScrollView(
@@ -56,6 +57,7 @@ Widget notBuiltTabBody(
                 color: ChoreiaPalette.of(context).text(0.55),
               ),
             ),
+            ...trailing,
           ],
         ),
       ),

@@ -1,0 +1,2 @@
+/* Camera remains unavailable in this release. Native permission acceptance is separate. */
+"NSCameraUsageDescription" = "Choreia는 춤추는 모습을 관찰하여 스텝에 대한 피드백을 제공합니다. 영상은 휴대폰 밖으로 나가지 않습니다. 관절의 위치만 읽으며 영상을 녹화하거나 업로드하지 않습니다.";

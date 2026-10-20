@@ -82,31 +82,14 @@ class ProfileView extends StatelessWidget {
         ),
       );
     }
-    return Column(
-      children: <Widget>[
-        Expanded(
-            child: notBuiltTabBody(
-          context,
-          key: notBuiltKey,
-          title: UiLanguage.text(context, en: 'Profile', tr: 'Profil'),
-          plannedContent: UiLanguage.text(
-            context,
-            en: 'Account creation and membership access are not connected. '
-                'Camera permissions and practice data controls '
-                'are also not available on this screen. '
-                '${IntroStrings.cameraStatus(cameraSessionsAvailable)}',
-            tr: 'Hesap oluşturma ve üyelik erişimi bağlı değil. Kamera '
-                'izinleri ve pratik verisi denetimleri de '
-                'bu ekranda kullanılamıyor. '
-                '${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}',
-          ),
-        )),
-        const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: ChoreiaLanguagePicker()),
-        const Padding(padding: EdgeInsets.symmetric(horizontal: 24), child: ChoreiaThemePicker()),
-        SafeArea(top: false, child: _licensesButton(context)),
-      ],
+    return notBuiltTabBody(
+      context, key: notBuiltKey,
+      title: UiLanguage.text(context, en: 'Profile', tr: 'Profil'),
+      plannedContent: UiLanguage.text(context,
+        en: 'Account creation and membership access are not connected. Camera permissions and practice data controls are also not available on this screen. ${IntroStrings.cameraStatus(cameraSessionsAvailable)}',
+        tr: 'Hesap oluşturma ve üyelik erişimi bağlı değil. Kamera izinleri ve pratik verisi denetimleri de bu ekranda kullanılamıyor. ${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}'),
+      trailing: [const ChoreiaLanguagePicker(), const ChoreiaThemePicker(),
+        _licensesButton(context), const SupportAction(surface: SupportSurface.profile)],
     );
   }
 }

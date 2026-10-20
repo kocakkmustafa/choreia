@@ -3,6 +3,7 @@ import 'package:choreia/app/theme.dart';
 import 'package:choreia/app/theme/theme_preference.dart';
 import 'package:choreia/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -65,7 +66,10 @@ void main() {
     await tester.pumpWidget(app(themes,home:Scaffold(body:ProfileView(accountPageBuilder:(_)=>const Scaffold()))));
     await tester.pump();
     final dark=find.byKey(const Key('theme.choice.dark'));
-    await tester.ensureVisible(dark); await tester.tap(dark); await tester.pump();
+    await tester.ensureVisible(dark);
+    final label=find.descendant(of:dark,matching:find.byType(Text)).first;
+    Focus.of(tester.element(label)).requestFocus();await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);await tester.pump();
     expect(themes.value,ThemeMode.dark);expect(tester.widget<ChoiceChip>(dark).selected,true);
     expect(tester.getSize(dark).height,greaterThanOrEqualTo(48));
     expect(tester.takeException(),isNull);await tester.pumpWidget(const SizedBox.shrink());

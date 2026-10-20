@@ -53,7 +53,7 @@
   "Compare attempts": "Versuche vergleichen",
   "Self-observation notes, not an assessment. No score, mastery, camera verification or course completion is awarded. Notes exist only while this page is open and are lost when closed. Choreia keeps no persistent copy of these notes and sends none.": "Selbstbeobachtungsnotizen, keine Bewertung. Keine Punkte, Beherrschung, Kamerabestätigung oder Kursabschluss. Notizen existieren nur bei offener Seite und gehen beim Schließen verloren. Choreia speichert keine dauerhafte Kopie und sendet nichts davon.",
   "First read the existing lesson prerequisites and boundaries. Do not perform an unreviewed movement for this page; read, listen or describe it. This form adds no physical instruction.": "Zuerst Voraussetzungen/Grenzen der bestehenden Lektion lesen. Keine ungeprüfte Bewegung für diese Seite ausführen; lesen, hören oder beschreiben. Dieses Formular ergänzt keine körperliche Anleitung.",
-  "Give A one question: which count/transition and which action? If you cannot observe it clearly, write “uncertain”. After a break, change one cue and note B under the same conditions. If you change several conditions, B is a new baseline; do not compare it to A as improvement.": "A eine Frage geben: Welche Zeit/Übergang, welche Aktion? Bei unklarer Beobachtung „unsicher“ schreiben. Nach Pause ein Signal ändern, B unter gleichen Bedingungen notieren. Bei mehreren geänderten Bedingungen ist B neue Ausgangslage; nicht als Verbesserung gegenüber A vergleichen.",
+  "Give A one question: which count/transition and which action? If you cannot observe it clearly, write “uncertain”. After a break, change one cue and note B under the same conditions. If you change several conditions, B is a new baseline; do not compare it to A as improvement.": "A eine Frage geben: Welche Zählzeit oder welcher Übergang, welche Aktion? Bei unklarer Beobachtung „unsicher“ schreiben. Nach Pause ein Signal ändern, B unter gleichen Bedingungen notieren. Bei mehreren geänderten Bedingungen ist B neue Ausgangslage; nicht als Verbesserung gegenüber A vergleichen.",
   "For a timing question, keep the external sound/tempo and entry point the same. Use only music you can legally access or your own separate metronome; the app supplies no sound, does not listen and does not measure your beat. Self-counting/silent reading alone is not evidence of alignment with an external beat.": "Für Timing gleiche externe Klangquelle/Tempo und Einstieg halten. Nur rechtmäßig zugängliche Musik oder eigenes separates Metronom; App liefert keinen Klang, hört nicht zu und misst deinen Schlag nicht. Selbstzählen/lautloses Lesen allein belegt keine Ausrichtung auf externen Schlag.",
   "Your note; may stay blank": "Deine Notiz; darf leer bleiben",
   "If the result did not change, revisit an easier reading/listening question or seek separate qualified instructor feedback. The app does not verify your notes or interpret its silence as success.": "Bei unverändertem Ergebnis leichtere Lese-/Hörfrage oder separates qualifiziertes Lehrfeedback suchen. App prüft Notizen nicht und deutet Schweigen nicht als Erfolg.",
@@ -114,7 +114,7 @@
   "Prepare for this session": "Für diese Einheit vorbereiten",
   "Take the time you need; reading this card is not warming up. Stop for pain, dizziness or feeling unwell. You may read or count aloud without dancing.": "Nimm nötige Zeit; diese Karte lesen ist kein Aufwärmen. Bei Schmerzen, Schwindel oder Unwohlsein stoppen. Lesen/laut zählen ohne Tanzen möglich.",
   "I have prepared for this session": "Ich habe mich für diese Einheit vorbereitet",
-  "Your report only; the app has not checked readiness or medical suitability.": "Nur deine Angabe; App prüfte weder Bereitschaft noch medizinische Eignung.",
+  "Your report only; the app has not checked readiness or medical suitability.": "Nur deine Angabe; die App hat weder geprüft, ob du für diese Einheit vorbereitet bist, noch ob die Übungen medizinisch für dich geeignet sind.",
   "Read / count aloud only": "Nur lesen / laut zählen",
   "Stop · back to course": "Stopp · zum Kurs zurück",
   "Preparation source": "Quelle zur Vorbereitung",
@@ -150,10 +150,10 @@
   "WRITTEN COURSE": "SCHRIFTLICHER KURS",
   "Camera references": "Kamerareferenzen",
   "Open written course": "Schriftlichen Kurs öffnen",
-  "Written beginner path · instructor review pending": "Schriftlicher Anfängerweg · Lehrprüfung ausstehend",
+  "Written beginner path · instructor review pending": "Schriftlicher Anfängerweg · Prüfung durch eine Lehrkraft ausstehend",
   "Compare attempts · temporary self-observation notes": "Versuche vergleichen · vorübergehende Selbstbeobachtungsnotizen",
   "Camera-session reference lessons": "Referenzlektionen für Kamerasitzungen",
-  "A self-guided written course is available. Demonstration and instructor review remain open; completing a written unit does not verify movement skill.": "Selbst angeleiteter schriftlicher Kurs verfügbar. Vorführung/Lehrprüfung bleiben offen; schriftliche Einheit abschließen bestätigt keine Bewegungsfertigkeit.",
+  "A self-guided written course is available. Demonstration and instructor review remain open; completing a written unit does not verify movement skill.": "Selbst angeleiteter schriftlicher Kurs verfügbar. Vorführung und Prüfung durch eine Lehrkraft bleiben offen; schriftliche Einheit abschließen bestätigt keine Bewegungsfertigkeit.",
   "There are no camera-session reference lessons for this style. The written course is available above.": "Für diesen Stil keine Kamerasitzungs-Referenzlektionen. Schriftlicher Kurs oben verfügbar.",
   "These lists describe recorded reference research and some of its limits. They are not live assessments of you. Camera practice requires device permission; demo-only lessons are not scored.": "Listen beschreiben aufgezeichnete Referenzforschung und einige Grenzen, keine Live-Bewertung deiner Person. Kameraübung benötigt Geräteerlaubnis; reine Vorführlektionen werden nicht bewertet.",
   "WHERE THIS DANCE COMES FROM": "WOHER DIESER TANZ KOMMT",
@@ -364,5 +364,6 @@
   "Light theme": "Helles Design",
   "Dark theme": "Dunkles Design",
   "This theme applies for this session. The device preference could not be saved.": "Dieses Design gilt für die aktuelle Sitzung. Die Gerätepräferenz konnte nicht gespeichert werden.",
-  "Your saved theme could not be read. System theme is used until you choose another option.": "Dein gespeichertes Design konnte nicht gelesen werden. Bis du eine andere Option wählst, wird das Systemdesign verwendet."
+  "Your saved theme could not be read. System theme is used until you choose another option.": "Dein gespeichertes Design konnte nicht gelesen werden. Bis du eine andere Option wählst, wird das Systemdesign verwendet.",
+  "Your saved language could not be read. System language is used until you choose another option.": "Deine gespeicherte Sprache konnte nicht gelesen werden. Bis du eine andere Option wählst, wird die Systemsprache verwendet."
 }

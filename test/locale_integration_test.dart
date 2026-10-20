@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/test_catalog.dart';
 
 void main() {
-  test('regional language requests resolve to the eight approved variants', () {
+  test('regional language requests resolve to the fourteen approved variants', () {
     final cases = <Locale, String>{
       Locale('tr', 'TR'): 'tr',
       Locale('en', 'GB'): 'en',
@@ -23,7 +23,14 @@ void main() {
       Locale('fr', 'CA'): 'fr',
       Locale('ja', 'JP'): 'ja',
       Locale('ar', 'EG'): 'ar',
-      Locale('zh', 'CN'): 'en',
+      Locale('zh', 'CN'): 'zh-Hans',
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'SG'): 'zh-Hans',
+      Locale('it', 'IT'): 'it',
+      Locale('ko', 'KR'): 'ko',
+      Locale('id', 'ID'): 'id',
+      Locale('pl', 'PL'): 'pl',
+      Locale('hi', 'IN'): 'hi',
+      Locale('ru'): 'en',
     };
     for (final entry in cases.entries) {
       expect(
@@ -31,8 +38,27 @@ void main() {
               entry.key, ChoreiaLocaleController.supported)),
           entry.value);
     }
-    expect(const ChoreiaMessagesDelegate().isSupported(const Locale('zh')),
+    expect(const ChoreiaMessagesDelegate().isSupported(const Locale('ru')),
         isFalse);
+  });
+
+  testWidgets('system preferences skip an unsupported first language', (tester) async {
+    tester.platformDispatcher.localesTestValue = const [Locale('ru'), Locale('fr', 'CA')];
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+    final controller = ChoreiaLocaleController.memory();
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(ChoreiaApp(
+      localeController: controller,
+      localeBundle: DiskBundle(),
+      shellBuilder: (_, __) => Builder(builder: (context) => Scaffold(
+        body: Text(ChoreiaMessages.of(context).localeTag, key: const Key('ordered.locale')))),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('fr'), findsOneWidget);
+    await controller.select(const Locale('ar'));
+    await tester.pumpAndSettle();
+    expect(find.text('ar'), findsOneWidget);
+    expect(ChoreiaLocaleController.resolveLocales(const [Locale('ru')], ChoreiaLocaleController.supported), const Locale('en'));
   });
 
   for (final locale in ChoreiaLocaleController.supported) {

@@ -36,7 +36,7 @@ void main() {
     final backdrop = over(p.glowWarm.withValues(alpha: p.glowWarmAlpha), over(p.rose.withValues(alpha: p.glowRoseAlpha), p.stage));
     final surfaces = [p.stage, p.raisedSurface, backdrop,
       over(p.rose.withValues(alpha: p.panelTintAlpha), backdrop),
-      over(p.pillFill.withValues(alpha: p.panelWhiteAlpha), backdrop),
+      over(Colors.white.withValues(alpha: p.panelWhiteAlpha), backdrop),
     ];
     test('${entry.key}: every requested text alpha clears 4.5 on composed surfaces', () {
       for (final surface in surfaces) {

@@ -97,7 +97,8 @@ const _arabicWord = '[$_arabicLetters\u200C\u200D]+';
 final _hasArabicLetter = RegExp('[$_arabicLetters]', unicode: true);
 final _runPattern = RegExp(
   '$_arabicWord(?:[ \t]+$_arabicWord)*|[ \t]+|'
-  '[A-Za-z0-9\u00C0-\u02AF\u0660-\u0669\u06F0-\u06F9]+|'
+  '(?:(?![$_arabicLetters])'
+  r'[\p{L}\p{M}\p{N}\u200C\u200D])+|'
   r'[\s\S]',
   unicode: true,
 );

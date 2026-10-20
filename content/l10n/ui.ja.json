@@ -175,7 +175,7 @@
   "These lists describe recorded reference research and some of its limits. They are not live assessments of you. Camera practice and scoring are unavailable in this version.": "記録された参照研究と一部の限界を説明する一覧です。自分へのライブ評価ではありません。この版ではカメラ練習と採点を利用できません。",
   "RECORDED REFERENCE RESEARCH": "記録された参照研究",
   "SOME REFERENCE LIMITS": "参照の限界の一部",
-  "THIS ONE WILL NOT CHANGE": "これは変わりません",
+  "THIS ONE WILL NOT CHANGE": "このレッスンは今後も採点しません",
   "Start camera practice": "カメラ練習を開始",
   "Camera practice is unavailable in this release. The movement reference is bundled, but it is not a playable preview. Use the written courses for self-guided practice.": "この版ではカメラ練習を利用できません。動作参照は同梱されていますが再生可能なプレビューではありません。自習には文章コースを使ってください。",
   "Camera assessment is unsupported for this movement. You can continue with the written lesson.": "この動作のカメラ評価は非対応です。文章レッスンを続けられます。",
@@ -317,7 +317,7 @@
   "It establishes a count against a pulse. A phrase boundary requires an audible musical reference; if no music was used, leave phrasing unobserved.": "確認できるのは拍に対するカウントです。フレーズ境界には聞こえる音楽の基準が必要です。音楽なしならフレーズは未観察にします。",
   "Support and direction": "支持と方向",
   "The course names the dancer’s own left and right. A step transfers support; a touch does not. A screen image cannot establish the pressure through a foot.": "このコースの左右は踊り手自身の左右です。ステップは支持を移し、タッチは移しません。画面の画像では足にかかる圧力は確認できません。",
-  "After a right step and a left touch, name the supporting foot on paper.": "右へのステップと左のタッチの後、支持する足を紙に書きます。",
+  "After a right step and a left touch, name the supporting foot on paper.": "右足でステップし、左足でタッチした後、支持している足を紙に書きます。",
   "Right remains the support. If the touch takes weight, this is a different action. Describe the uncertainty rather than reporting a correct weight transfer from appearance.": "右が支持のままです。タッチで体重を受けるなら別の動作です。見た目から正しい体重移動と報告せず、不確かさを説明します。",
   "Salsa Shines": "サルサ・シャイン",
   "Read the On1 count": "On1のカウントを読む",
@@ -330,9 +330,9 @@
   "Keep the same sequence and examine count 6 only. Rewrite that location, then recall the same passage without the reference; do not infer physical timing from this answer.": "同じ順序を保ち、6だけを確認します。その箇所を書き直し、参照なしで同じ部分を思い出します。この回答から身体のタイミングを推定しません。",
   "Line Dance": "ラインダンス",
   "Step versus touch": "ステップとタッチの違い",
-  "In the lesson’s four-count example: right step, left touch, left step, right touch. Support after each count is right, right, left, left. Touch adds no transfer.": "レッスンの4カウント例は右ステップ、左タッチ、左ステップ、右タッチです。各数後の支持は右・右・左・左。タッチで移動は加わりません。",
+  "In the lesson’s four-count example: right step, left touch, left step, right touch. Support after each count is right, right, left, left. Touch adds no transfer.": "レッスンの4カウント例は右足でステップ、左足でタッチ、左足でステップ、右足でタッチです。各カウント後の支持足は右・右・左・左です。タッチでは体重移動を加えません。",
   "Which foot supports counts 2 and 4? Explain without moving.": "2と4を支えるのはどちらの足ですか。動かず説明します。",
-  "Right on 2; left on 4. The closing foot touches without taking support. If support is unknown, leave it uncertain.": "2は右、4は左です。閉じる足は支持を受けずタッチします。支持が不明なら不確かなままにします。",
+  "Right on 2; left on 4. The closing foot touches without taking support. If support is unknown, leave it uncertain.": "2では右足、4では左足が支えます。寄せる足には体重を移さずにタッチします。支持する足が不明なら、不確かなままにします。",
   "Dancer-relative directions": "踊り手を基準にした方向",
   "Front follows the dancer’s facing direction. Right means the dancer’s own right, not the viewer’s screen-right. A top-down diagram is a notation aid, not footage of correct technique.": "前は踊り手の向きに従います。右は踊り手自身の右で、見る人の画面右ではありません。上からの図は記法の補助で、正しい技法の映像ではありません。",
   "A dancer turns to a new wall. Does their front stay fixed to the phone?": "踊り手が新しいウォールへ向きを変えました。その人の前はスマートフォンに固定されたままですか。",
@@ -364,5 +364,6 @@
   "Light theme": "ライトテーマ",
   "Dark theme": "ダークテーマ",
   "This theme applies for this session. The device preference could not be saved.": "このテーマは今回のセッションで有効です。端末にテーマ設定を保存できませんでした。",
-  "Your saved theme could not be read. System theme is used until you choose another option.": "保存済みのテーマを読み込めませんでした。別のテーマを選ぶまで、システムのテーマを使用します。"
+  "Your saved theme could not be read. System theme is used until you choose another option.": "保存済みのテーマを読み込めませんでした。別のテーマを選ぶまで、システムのテーマを使用します。",
+  "Your saved language could not be read. System language is used until you choose another option.": "保存済みの言語設定を読み込めませんでした。別の言語を選ぶまで、システムの言語を使用します。"
 }

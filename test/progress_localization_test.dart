@@ -36,7 +36,7 @@ Widget _screen(Locale locale) => MaterialApp(
     );
 
 void main() {
-  test('Progress has the same complete key set in all eight locales', () {
+  test('Progress has the same complete key set in all fourteen locales', () {
     final expected = ChoreiaLocaleController.names.keys.toSet();
     expect(progressMessages.keys.toSet(), expected);
     final english = progressMessages['en']!;

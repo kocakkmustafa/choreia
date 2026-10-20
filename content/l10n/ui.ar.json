@@ -175,7 +175,7 @@
   "These lists describe recorded reference research and some of its limits. They are not live assessments of you. Camera practice and scoring are unavailable in this version.": "تصف هذه القوائم بحثًا مرجعيًا مسجلًا وبعض حدوده. وليست تقييمات مباشرة لك. التدريب بالكاميرا ومنح الدرجات غير متاحين في هذا الإصدار.",
   "RECORDED REFERENCE RESEARCH": "بحث مرجعي مسجل",
   "SOME REFERENCE LIMITS": "بعض حدود المرجع",
-  "THIS ONE WILL NOT CHANGE": "هذا لن يتغير",
+  "THIS ONE WILL NOT CHANGE": "لن يُقيَّم هذا الدرس بالدرجات أبدًا",
   "Start camera practice": "ابدأ التدريب بالكاميرا",
   "Camera practice is unavailable in this release. The movement reference is bundled, but it is not a playable preview. Use the written courses for self-guided practice.": "التدريب بالكاميرا غير متاح في هذا الإصدار. مرجع الحركة مرفق، لكنه ليس معاينة قابلة للتشغيل. استخدم المقررات المكتوبة للتدريب الذاتي.",
   "Camera assessment is unsupported for this movement. You can continue with the written lesson.": "التقييم بالكاميرا غير مدعوم لهذه الحركة. يمكنك متابعة الدرس المكتوب.",
@@ -217,7 +217,7 @@
   "Saved on this device for a guest. No camera mastery score.": "محفوظ على هذا الجهاز لضيف. لا توجد درجة إتقان بالكاميرا.",
   "Saved on this device for the current account. No camera mastery score.": "محفوظ على هذا الجهاز للحساب الحالي. لا توجد درجة إتقان بالكاميرا.",
   "Continue: {order}. {title}": "تابع: {order}. {title}",
-  "Four calendar weeks as of {date}. Saved course actions include rhythm-only practice; they do not prove movement or camera skill.": "أربعة أسابيع تقويمية اعتبارًا من {date}. تشمل أنشطة المقرر المحفوظة تدريب الإيقاع فقط؛ ولا تثبت مهارة حركية أو مهارة بالكاميرا.",
+  "Four calendar weeks as of {date}. Saved course actions include rhythm-only practice; they do not prove movement or camera skill.": "أربعة أسابيع تقويمية حتى تاريخ {date}. تشمل أنشطة المقرر المحفوظة تدريب الإيقاع فقط؛ ولا تثبت مهارة حركية أو مهارة بالكاميرا.",
   "Future-dated saved attempts: {count}. They remain in course history and the overall lesson count, but are omitted from these weeks. Check the device clock.": "عدد المحاولات المحفوظة ذات التاريخ المستقبلي: {count}. تبقى في سجل المقرر وإجمالي عدد الدروس، لكنها لا تدخل في هذه الأسابيع. تحقّق من ساعة الجهاز.",
   "Suggested {minutes} min · adjust freely": "المدة المقترحة بالدقائق: {minutes} · عدّلها بحرية",
   "{count} records from other content versions are retained and excluded from this version’s totals.": "يُحتفَظ بسجلات إصدارات المحتوى الأخرى، وعددها {count}، وتُستبعَد من إجماليات هذا الإصدار.",
@@ -364,5 +364,6 @@
   "Light theme": "السمة الفاتحة",
   "Dark theme": "السمة الداكنة",
   "This theme applies for this session. The device preference could not be saved.": "تُطبَّق هذه السمة خلال هذه الجلسة. تعذّر حفظ تفضيلك على الجهاز.",
-  "Your saved theme could not be read. System theme is used until you choose another option.": "تعذّرت قراءة السمة المحفوظة. ستُستخدم سمة النظام إلى أن تختار خيارًا آخر."
+  "Your saved theme could not be read. System theme is used until you choose another option.": "تعذّرت قراءة السمة المحفوظة. ستُستخدم سمة النظام إلى أن تختار خيارًا آخر.",
+  "Your saved language could not be read. System language is used until you choose another option.": "تعذّرت قراءة اللغة المحفوظة. ستُستخدم لغة النظام إلى أن تختار خيارًا آخر."
 }

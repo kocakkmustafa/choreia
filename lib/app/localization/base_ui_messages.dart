@@ -367,6 +367,7 @@ const baseUiMessages = <String, Map<String, String>>{
     "Dark theme": "Dark theme",
     "This theme applies for this session. The device preference could not be saved.": "This theme applies for this session. The device preference could not be saved.",
     "Your saved theme could not be read. System theme is used until you choose another option.": "Your saved theme could not be read. System theme is used until you choose another option.",
+    "Your saved language could not be read. System language is used until you choose another option.": "Your saved language could not be read. System language is used until you choose another option.",
   },
   "tr": <String, String>{
     "Sources and limits": "Kaynaklar ve sınırlar",
@@ -735,5 +736,6 @@ const baseUiMessages = <String, Map<String, String>>{
     "Dark theme": "Koyu tema",
     "This theme applies for this session. The device preference could not be saved.": "Bu tema bu oturumda geçerli. Cihaz tercihi kaydedilemedi.",
     "Your saved theme could not be read. System theme is used until you choose another option.": "Kayıtlı temanız okunamadı. Başka bir seçenek belirleyene kadar sistem teması kullanılır.",
+    "Your saved language could not be read. System language is used until you choose another option.": "Kayıtlı diliniz okunamadı. Başka bir seçenek belirleyene kadar sistem dili kullanılır.",
   },
 };

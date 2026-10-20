@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart'
     show ValueListenable, visibleForTesting;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_account/motion_account.dart';
@@ -41,9 +42,8 @@ Future<void> main() async {
   GoogleFonts.config.allowRuntimeFetching = false;
   registerBundledFontLicenses();
   final localeController = ChoreiaLocaleController.persisted();
-  unawaited(localeController.restore());
   final themes = ChoreiaThemeController.persisted();
-  await themes.restore();
+  await Future.wait([localeController.restore(), themes.restore()]);
   await launchChoreia(localeController: localeController, themeController: themes);
 }
 
@@ -139,7 +139,8 @@ class _ChoreiaAccountStartupFailureState extends State<ChoreiaAccountStartupFail
         themeAnimationDuration: Duration.zero,
         locale: locales.value, supportedLocales: ChoreiaLocaleController.supported,
         localeResolutionCallback: ChoreiaLocaleController.resolve,
-        builder: (_, child) => TranslationFallback(child: child!),
+                    localeListResolutionCallback: ChoreiaLocaleController.resolveLocales,
+        builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(value: ChoreiaTheme.overlayFor(Theme.of(context).brightness), child: TranslationFallback(child: child!)),
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           ChoreiaMessagesDelegate(), GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
@@ -330,7 +331,8 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
                     locale: _locales.value,
                     supportedLocales: ChoreiaLocaleController.supported,
                     localeResolutionCallback: ChoreiaLocaleController.resolve,
-                    builder: (_, child) => TranslationFallback(child: child!),
+                    localeListResolutionCallback: ChoreiaLocaleController.resolveLocales,
+                    builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(value: ChoreiaTheme.overlayFor(Theme.of(context).brightness), child: TranslationFallback(child: child!)),
                     localizationsDelegates: <LocalizationsDelegate<dynamic>>[
                       ChoreiaMessagesDelegate(bundle: widget.localeBundle),
                       GlobalMaterialLocalizations.delegate,

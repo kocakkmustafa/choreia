@@ -20,7 +20,7 @@ import ui_inventory
 from generate_bases import check_bases, load_string_map
 
 APP = Path(__file__).resolve().parents[2]
-LOCALES = ('en', 'tr', 'es-419', 'pt-BR', 'de', 'fr', 'ja', 'ar')
+LOCALES = ('en', 'tr', 'es-419', 'pt-BR', 'de', 'fr', 'ja', 'ar', 'it', 'ko', 'id', 'pl', 'hi', 'zh-Hans')
 # UI grows with app-owned copy; its English asset defines the current key set.
 EXPECTED_COUNTS = {'course': 1054, 'ui': None, 'catalog': 430}
 PLACEHOLDER = re.compile(r'\{([A-Za-z][A-Za-z0-9_]*)\}')

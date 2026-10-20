@@ -92,6 +92,23 @@ Rect _runRect(WidgetTester tester, int line, String data) {
 }
 
 void main() {
+  for (final sample in <String>['R क्षण → L भार', 'R क्\u200Dषि → L बाएँ', 'R 한국어 → L 왼발', 'R 左脚 → L 支持']) {
+    testWidgets('connected script words remain complete visual runs: $sample', (tester) async {
+      final semantics = tester.ensureSemantics();
+      try {
+        await tester.pumpWidget(MaterialApp(home: Scaffold(body: NotationText(sample))));
+        final visual = tester.widgetList<Text>(find.descendant(of: find.byType(NotationText), matching: find.byType(Text)))
+            .map((widget) => widget.data!).toList();
+        expect(visual.join().replaceAll('\u00A0', ' '), sample);
+        for (final word in sample.split(' ').where((word) => word != 'R' && word != 'L' && word != '→')) {
+          expect(visual, contains(word), reason: 'letters, matras, virama and joiners of one word must stay in one Text');
+        }
+        expect(find.bySemanticsLabel(sample), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      } finally { semantics.dispose(); }
+    });
+  }
+
   final english = _diagrams('en');
   final arabic = _diagrams('ar');
 

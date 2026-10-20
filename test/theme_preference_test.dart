@@ -82,7 +82,8 @@ void main() {
   test('dispose fences notifications while a real write completes', () async {
     final store = MemoryAppearanceStore()..blockWrites=true;
     final controller = ChoreiaThemeController.persisted(store: store);
-    final pending=controller.select(ThemeMode.dark); controller.dispose();
+    final pending=controller.select(ThemeMode.dark);
+    await Future<void>.delayed(Duration.zero); controller.dispose();
     store.barriers.first.complete(); await pending; expect(store.active,0);
   });
 }

@@ -12,11 +12,11 @@ class LineDanceDirectionDiagram extends StatelessWidget {
             en: 'Top-down direction map: front upward, your own right on the right, left on the left. Not a movement demonstration.',
             tr: 'Üstten yön haritası: ön yukarı, kendi sağın sağda, solun solda. Hareket gösterimi değildir.'),
         image: true,
-        child: SizedBox(
+        child: _ScalableDiagram(
+            id: 'direction',
             height: 160,
-            width: double.infinity,
-            child: CustomPaint(
-                painter: _DirectionPainter({
+            fontSize: 14,
+            painter: (scale) => _DirectionPainter({
               'front': UiLanguage.pair(context,
                   turkish: turkish, en: 'FRONT', tr: 'ÖN'),
               'back': UiLanguage.pair(context,
@@ -26,17 +26,21 @@ class LineDanceDirectionDiagram extends StatelessWidget {
               'right': UiLanguage.pair(context,
                   turkish: turkish, en: 'RIGHT', tr: 'SAĞ'),
             }, Directionality.of(context),
-                    Theme.of(context).colorScheme.onSurface))),
+                    Theme.of(context).colorScheme.onSurface, scale)),
       );
 }
 
 class _DirectionPainter extends CustomPainter {
-  _DirectionPainter(this.labels, this.direction, this.color);
+  _DirectionPainter(this.labels, this.direction, this.color, this.scale);
   final Map<String, String> labels;
   final TextDirection direction;
   final Color color;
+  final double scale;
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.scale(scale);
+    size = Size(size.width / scale, size.height / scale);
     final centre = Offset(size.width / 2, 80);
     final paint = Paint()
       ..color = color
@@ -64,7 +68,10 @@ class _DirectionPainter extends CustomPainter {
                   TextStyle(color: color, fontSize: 14, fontFamily: 'Manrope')),
           textDirection: direction)
         ..layout();
-      tp.paint(canvas, position - Offset(tp.width / 2, tp.height / 2));
+      final x = (position.dx - tp.width / 2)
+          .clamp(0.0, (size.width - tp.width).clamp(0.0, double.infinity))
+          .toDouble();
+      tp.paint(canvas, Offset(x, position.dy - tp.height / 2));
     }
 
     // Canvas coordinates describe the dancer's own axes. RTL changes label
@@ -81,6 +88,7 @@ class _DirectionPainter extends CustomPainter {
         Rect.fromCenter(
             center: centre + const Offset(9, 15), width: 9, height: 16),
         paint);
+    canvas.restore();
   }
 
   @override
@@ -88,7 +96,8 @@ class _DirectionPainter extends CustomPainter {
       labels.entries
           .any((entry) => oldDelegate.labels[entry.key] != entry.value) ||
       oldDelegate.direction != direction ||
-      oldDelegate.color != color;
+      oldDelegate.color != color ||
+      oldDelegate.scale != scale;
 }
 
 /// Original room-facing maps. The room labels stay fixed; own-limb axes rotate.
@@ -113,14 +122,14 @@ class LineDanceWallMaps extends StatelessWidget {
                             tr: 'Bakış {facing}: kendi uzuv yönlerin',
                             values: {'facing': row[0]}),
                         style: Theme.of(context).textTheme.titleSmall),
-                    SizedBox(
+                    _ScalableDiagram(
+                        id: 'wall.${row[0]}',
                         height: 200,
-                        width: double.infinity,
-                        child: CustomPaint(
-                            painter: _WallPainter(
+                        fontSize: 16,
+                        painter: (scale) => _WallPainter(
                                 row[0],
                                 Theme.of(context).colorScheme.onSurface,
-                                Theme.of(context).colorScheme.primary))),
+                                Theme.of(context).colorScheme.primary, scale)),
                     Text(UiLanguage.format(context,
                         en: 'Front {front} • Right {right} • Left {left} • Back {back}',
                         tr: 'Ön {front} • Sağ {right} • Sol {left} • Arka {back}',
@@ -139,11 +148,15 @@ class LineDanceWallMaps extends StatelessWidget {
 }
 
 class _WallPainter extends CustomPainter {
-  _WallPainter(this.facing, this.ink, this.accent);
+  _WallPainter(this.facing, this.ink, this.accent, this.scale);
   final String facing;
   final Color ink, accent;
+  final double scale;
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.scale(scale);
+    size = Size(size.width / scale, size.height / scale);
     final c = Offset(size.width / 2, 100);
     final forward = switch (facing) {
       '9' => const Offset(-1, 0),
@@ -189,13 +202,85 @@ class _WallPainter extends CustomPainter {
     // Foot symbols distinguish own sides; they do not encode foot angles/contact.
     canvas.drawCircle(c - right * 13, 5, p);
     canvas.drawCircle(c + right * 13, 5, p);
+    canvas.restore();
   }
 
   @override
   bool shouldRepaint(covariant _WallPainter oldDelegate) =>
       oldDelegate.facing != facing ||
       oldDelegate.ink != ink ||
-      oldDelegate.accent != accent;
+      oldDelegate.accent != accent ||
+      oldDelegate.scale != scale;
+}
+
+/// Scale the whole notation, including custom-painted text, without changing
+/// its physical axes. A wide map scrolls from the same left edge in every UI.
+class _ScalableDiagram extends StatefulWidget {
+  const _ScalableDiagram({
+    required this.id,
+    required this.height,
+    required this.fontSize,
+    required this.painter,
+  });
+
+  final String id;
+  final double height, fontSize;
+  final CustomPainter Function(double scale) painter;
+
+  @override
+  State<_ScalableDiagram> createState() => _ScalableDiagramState();
+}
+
+class _ScalableDiagramState extends State<_ScalableDiagram> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final requestedScale =
+              MediaQuery.textScalerOf(context).scale(widget.fontSize) /
+                  widget.fontSize;
+          final scale = requestedScale.isFinite && requestedScale > 0
+              ? requestedScale
+              : 1.0;
+          final width =
+              constraints.hasBoundedWidth ? constraints.maxWidth : 320.0;
+          final scrolls = width * scale > width;
+          return SizedBox(
+            width: width,
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Scrollbar(
+                controller: _scrollController,
+                thumbVisibility: scrolls,
+                interactive: true,
+                scrollbarOrientation: ScrollbarOrientation.bottom,
+                child: SingleChildScrollView(
+                  key: ValueKey('lineDance.${widget.id}.scroll'),
+                  controller: _scrollController,
+                  primary: false,
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(bottom: scrolls ? 16 : 0),
+                  child: SizedBox(
+                    width: width * scale,
+                    height: widget.height * scale,
+                    child: CustomPaint(
+                      key: ValueKey('lineDance.${widget.id}.canvas'),
+                      painter: widget.painter(scale),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
 }
 
 /// Explicit weight ledger: T never changes the support foot.

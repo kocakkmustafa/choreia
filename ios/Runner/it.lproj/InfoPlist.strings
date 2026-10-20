@@ -1,0 +1,2 @@
+/* Camera remains unavailable in this release. Native permission acceptance is separate. */
+"NSCameraUsageDescription" = "Choreia osserva la tua danza per darti un riscontro sui passi. Il video non lascia mai il telefono: leggiamo solo le posizioni delle articolazioni e nessun video viene registrato o caricato.";

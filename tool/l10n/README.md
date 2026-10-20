@@ -12,7 +12,7 @@ python3 -B tool/l10n/ui_inventory.py
 
 The validator exits **0** for PASS or **1** for FAIL and prints JSON. It checks:
 
-- All eight locale files: EN, TR, es-419, pt-BR, DE, FR, JA and AR.
+- All fourteen locale files: EN, TR, es-419, pt-BR, DE, FR, JA, AR, IT, KO, ID, PL, HI and zh-Hans.
 - Course/index: 1054 keys, unique IDs, `course.` + the first 16 hex characters
   of SHA-256 of the exact UTF-8 English source, and English/index identity.
 - UI: the English asset defines the current key set; no fixed UI count.
