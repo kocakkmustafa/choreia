@@ -244,8 +244,7 @@ class StyleDetailView extends StatelessWidget {
                   ),
                   child: Text(
                     copy._pick(
-                        "Open Hip-Hop introduction",
-                        "Hip-Hop girişini aç"),
+                        "Open Hip-Hop introduction", "Hip-Hop girişini aç"),
                   ),
                 ),
               if (PracticeComparisonPage.supportedStyles

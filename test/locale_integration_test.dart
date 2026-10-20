@@ -132,15 +132,18 @@ void main() {
       final skill = jsonDecode(
           File('content/hip_hop_foundations_skill_course.json')
               .readAsStringSync()) as Map<String, dynamic>;
-      final salsa = jsonDecode(File('content/salsa_on1_course.json')
-          .readAsStringSync()) as Map<String, dynamic>;
+      final salsa =
+          jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+              as Map<String, dynamic>;
       final salsaCheck = (salsa['lessons'] as List)[31]['selfCheck'] as Map;
       final revisedPairs = <Map<String, String>>[
         (raw['reviewNotice'] as Map).cast<String, String>(),
         ((skill['units'] as List)[2]['instruction'] as Map)
             .cast<String, String>(),
-        {'en': salsaCheck['en'][0] as String,
-         'tr': salsaCheck['tr'][0] as String},
+        {
+          'en': salsaCheck['en'][0] as String,
+          'tr': salsaCheck['tr'][0] as String
+        },
       ];
       final index =
           (jsonDecode(File('content/l10n/course.index.json').readAsStringSync())
@@ -156,7 +159,8 @@ void main() {
         localeBundle: DiskBundle(),
         shellBuilder: (_, __) => Builder(
             builder: (context) => Scaffold(
-                    body: SingleChildScrollView(child: Column(children: [
+                    body: SingleChildScrollView(
+                        child: Column(children: [
                   Text(UiLanguage.courseText(context, title),
                       key: const Key('course.title')),
                   for (var i = 0; i < revisedPairs.length; i++)

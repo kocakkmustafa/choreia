@@ -246,7 +246,8 @@ void main() {
   });
 
   group('no button promises a door that does not open', () {
-    testWidgets('one lesson has a reference but the current release stays closed',
+    testWidgets(
+        'one lesson has a reference but the current release stays closed',
         (WidgetTester tester) async {
       // Content readiness and release access are independent: the bundled
       // Bounce reference remains counted while the camera session is closed.
@@ -262,9 +263,12 @@ void main() {
               'DEĞİL, pubspec\'te BEYANLI olduğunu doğrula (C-185)');
 
       await show(tester, 'hip_hop_foundations');
-      await scrollTo(tester, find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce')));
-      expect(find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce')), findsOneWidget);
-      expect(find.widgetWithText(FilledButton, StyleStrings.start), findsNothing);
+      await scrollTo(tester,
+          find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce')));
+      expect(find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce')),
+          findsOneWidget);
+      expect(
+          find.widgetWithText(FilledButton, StyleStrings.start), findsNothing);
 
       // The release-gated style stays shut regardless: its bpm range is
       // DISPUTED, so no lesson in it may ship at all.
@@ -871,7 +875,8 @@ void main() {
               'öznesiz taşıyordu');
     });
 
-    test('referans cümleleri kamera kapısını belirtir, kullanıcıyı yargılamaz', () {
+    test('referans cümleleri kamera kapısını belirtir, kullanıcıyı yargılamaz',
+        () {
       for (final MapEntry<String, String> e in <String, String>{
         'openUngraded': StyleStrings.openUngradedMeaning,
         'scored': StyleStrings.scoredMeaning,
@@ -926,18 +931,24 @@ void main() {
         await scrollTo(tester, card_);
         expect(card_, findsOneWidget);
         expect(
-            find.descendant(of: card_, matching: find.textContaining('PREVIEW')),
+            find.descendant(
+                of: card_, matching: find.textContaining('PREVIEW')),
             findsNothing,
             reason: 'Reference notes cannot promise a preview player');
         expect(
-            find.descendant(of: card_, matching: find.text(
-                o.canStart ? 'REFERENCE · SESSION CLOSED' : 'NO SCORING')),
+            find.descendant(
+                of: card_,
+                matching: find.text(
+                    o.canStart ? 'REFERENCE · SESSION CLOSED' : 'NO SCORING')),
             findsOneWidget,
-            reason: '${o.lesson.id}: readiness and release access must remain distinct');
+            reason:
+                '${o.lesson.id}: readiness and release access must remain distinct');
         if (o.canStart) {
-          expect(find.byKey(StyleDetailView.sessionUnavailableKey(o.lesson.id)), findsOneWidget);
+          expect(find.byKey(StyleDetailView.sessionUnavailableKey(o.lesson.id)),
+              findsOneWidget);
         }
-        expect(find.byKey(StyleDetailView.lessonStartKey(o.lesson.id)), findsNothing);
+        expect(find.byKey(StyleDetailView.lessonStartKey(o.lesson.id)),
+            findsNothing);
         expect(
             find.descendant(of: card_, matching: find.textContaining('OPEN')),
             findsNothing,
