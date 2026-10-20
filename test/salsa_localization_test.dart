@@ -74,7 +74,8 @@ void main() {
       final expected = template
           .replaceAll('{modules}', number.format(8))
           .replaceAll('{lessons}', number.format(48))
-          .replaceAll('{languages}', number.format(ChoreiaLocaleController.supported.length));
+          .replaceAll('{languages}',
+              number.format(ChoreiaLocaleController.supported.length));
       expect(find.text(expected), findsOneWidget);
       expect(find.textContaining('{modules}'), findsNothing);
       if (tag != 'en') {

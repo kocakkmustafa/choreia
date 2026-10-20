@@ -7,9 +7,13 @@ import 'package:path_provider/path_provider.dart';
 
 /// A device display preference. It contains no account or practice data.
 class ChoreiaLocaleController extends ValueNotifier<Locale?> {
-  ChoreiaLocaleController.memory([super.value]) : _persist = false, _preferenceFile = null;
+  ChoreiaLocaleController.memory([super.value])
+      : _persist = false,
+        _preferenceFile = null;
   ChoreiaLocaleController.persisted({Future<File> Function()? preferenceFile})
-      : _persist = true, _preferenceFile = preferenceFile, super(null);
+      : _persist = true,
+        _preferenceFile = preferenceFile,
+        super(null);
 
   final bool _persist;
   final Future<File> Function()? _preferenceFile;
@@ -76,7 +80,8 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
     // over region; a Traditional request must keep its place in the OS list.
     final script = locale.scriptCode?.toLowerCase();
     if (script != null) return script == 'hans';
-    return !const {'TW', 'HK', 'MO'}.contains(locale.countryCode?.toUpperCase());
+    return !const {'TW', 'HK', 'MO'}
+        .contains(locale.countryCode?.toUpperCase());
   }
 
   static Locale resolve(Locale? requested, Iterable<Locale> _) {
@@ -105,7 +110,9 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
     final file = await _file();
     if (!await file.exists()) return null;
     final raw = jsonDecode(await file.readAsString());
-    if (raw is! Map || raw['schemaVersion'] != 1 || !raw.containsKey('locale')) {
+    if (raw is! Map ||
+        raw['schemaVersion'] != 1 ||
+        !raw.containsKey('locale')) {
       throw const FormatException('Invalid language preference');
     }
     final saved = raw['locale'];
@@ -116,14 +123,17 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
   }
 
   /// One total deadline; late reads never overwrite a newer choice or first frame.
-  Future<void> restore({Duration deadline = const Duration(milliseconds: 500)}) async {
+  Future<void> restore(
+      {Duration deadline = const Duration(milliseconds: 500)}) async {
     if (!_persist || _disposed) return;
     final revision = _revision;
     try {
       final saved = await _readSaved().timeout(deadline);
       if (!_disposed && revision == _revision) {
         readFailed = false;
-        value = saved == null ? null : supported.firstWhere((locale) => tag(locale) == saved);
+        value = saved == null
+            ? null
+            : supported.firstWhere((locale) => tag(locale) == saved);
         notifyListeners();
       }
     } on Object {
@@ -134,7 +144,8 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
     }
   }
 
-  Future<void> select(Locale? locale, {bool persist = true, Duration deadline = const Duration(seconds: 3)}) {
+  Future<void> select(Locale? locale,
+      {bool persist = true, Duration deadline = const Duration(seconds: 3)}) {
     if (_disposed) return Future<void>.value();
     final hadReadFailure = readFailed;
     readFailed = false;

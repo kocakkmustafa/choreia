@@ -30,7 +30,8 @@ void main() {
   /// Source of every Dart file under `lib/`, concatenated.
   String appSource() {
     final StringBuffer b = StringBuffer();
-    for (final FileSystemEntity f in Directory('lib').listSync(recursive: true)) {
+    for (final FileSystemEntity f
+        in Directory('lib').listSync(recursive: true)) {
       if (f is File && f.path.endsWith('.dart')) b.write(f.readAsStringSync());
     }
     return b.toString();
@@ -74,7 +75,8 @@ void main() {
   });
 
   group('a surface must not describe a mechanism that is absent', () {
-    test('THE FINDING, INVERTED 2026-08-13: the app writes now, so it may no '
+    test(
+        'THE FINDING, INVERTED 2026-08-13: the app writes now, so it may no '
         'longer say it does not', () {
       // 🔔 THIS ASSERTION FIRED, AND THAT WAS ITS JOB.
       //
@@ -92,8 +94,7 @@ void main() {
       // the surface. The talkative-absence class has a talkative-PRESENCE
       // twin — a surface that keeps apologising for a mechanism that has
       // since been built teaches the learner to ignore it.
-      final bool anythingWrites =
-          RegExp(r'\.append\(').hasMatch(appCode());
+      final bool anythingWrites = RegExp(r'\.append\(').hasMatch(appCode());
       expect(anythingWrites, isTrue,
           reason: 'hiçbir şey oturum yazmıyor — o hâlde ilerleme yüzeyi '
               '`notRecorded` demeliydi; bu testin ESKİ hâline dönülmeli');
@@ -227,7 +228,8 @@ void main() {
       final String app = allCode
           .replaceFirst(dictionary, maskedDictionary)
           .replaceAll(
-          RegExp(r'static const String historyNotRecorded =[\s\S]*?;'), marker);
+              RegExp(r'static const String historyNotRecorded =[\s\S]*?;'),
+              marker);
       final String unconditional =
           'Text(${jsonEncode(ProgressStrings.historyNotRecorded)});';
       expect(stateEntry.hasMatch(unconditional), isFalse,
@@ -306,7 +308,8 @@ void main() {
               'kullanıcı pratiğine ne olduğunu öğrenemiyor');
     });
 
-    test('THE TWIN: a surface must not call ABSENT a mechanism that is '
+    test(
+        'THE TWIN: a surface must not call ABSENT a mechanism that is '
         'PRESENT — the Evaluated reason', () {
       // FOUND BY WALKING THE BUILT APP, not by reading the code. On the
       // simulator the Progress tab still read "Grading needs the camera check,
@@ -355,14 +358,14 @@ void main() {
       // is precisely the shape JabLab found (a progression gate described to
       // the user with no producer anywhere), caught here before it is spoken
       // rather than after.
-      final String styleDoc =
-          lib('content/styles/salsa_shines/style.json');
+      final String styleDoc = lib('content/styles/salsa_shines/style.json');
       expect(styleDoc, contains('unlockRule'),
           reason: 'if content stops declaring it, this guard is measuring '
               'nothing');
 
       final String code = appCode();
-      expect(code, isNot(matches(RegExp(r"'[^'\n]*\bunlock", caseSensitive: false))),
+      expect(code,
+          isNot(matches(RegExp(r"'[^'\n]*\bunlock", caseSensitive: false))),
           reason: 'a user-facing string mentions unlocking, and nothing '
               'implements it — the talkative-absence class');
       expect(code, isNot(contains("json['unlockRule']")),
@@ -381,7 +384,8 @@ void main() {
           caseSensitive: false);
       final List<String> offenders = <String>[
         for (final Object? s in styles)
-          for (final Object? l in ((s as Map)['cameraLimits'] as List? ?? const []))
+          for (final Object? l
+              in ((s as Map)['cameraLimits'] as List? ?? const []))
             if (mechanism.hasMatch(l! as String)) '${s['id']}: $l',
       ];
       expect(offenders, isEmpty, reason: '$offenders');
@@ -397,7 +401,10 @@ void main() {
             in ((s as Map)['cameraLimits'] as List? ?? const [])) {
           final String line = l! as String;
           if (!line.toLowerCase().contains('beat grid')) continue;
-          expect(line, matches(RegExp(r'we do not have|cannot measure|without a beat grid')),
+          expect(
+              line,
+              matches(
+                  RegExp(r'we do not have|cannot measure|without a beat grid')),
               reason: '${s['id']} names a beat grid without saying we have '
                   'none: "$line"');
         }

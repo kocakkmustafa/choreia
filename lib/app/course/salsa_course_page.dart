@@ -101,7 +101,8 @@ class SalsaCourseEntry extends StatelessWidget {
       radius: 18,
       tint: ChoreiaPalette.of(context).amber,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Salsa On1 · Solo', style: ChoreiaType.of(context).display(size: 25)),
+        Text('Salsa On1 · Solo',
+            style: ChoreiaType.of(context).display(size: 25)),
         const SizedBox(height: 8),
         Text(
             _salsaFormat(
@@ -526,7 +527,8 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
             for (final lesson
                 in course.lessons.where((l) => l.moduleId == module.id))
               Card(
-                  color: ChoreiaPalette.of(context).oxblood.withValues(alpha: .7),
+                  color:
+                      ChoreiaPalette.of(context).oxblood.withValues(alpha: .7),
                   child: ListTile(
                     key: Key('salsa.lesson.${lesson.id}'),
                     leading: Text(
@@ -1072,7 +1074,8 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                     Text(
                         t('Keep movement comfortable. Stop for pain, dizziness or feeling unwell.',
                             'Hareketi rahat sınırında tut. Ağrı, baş dönmesi veya kötü hissetmede dur.'),
-                        style: ChoreiaType.of(context).body(color: ChoreiaPalette.of(context).amber)),
+                        style: ChoreiaType.of(context)
+                            .body(color: ChoreiaPalette.of(context).amber)),
                     const SizedBox(height: 10),
                     if (_needsPreparation)
                       Text(
@@ -1162,7 +1165,8 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                           t('Could not save. Your earlier records were not replaced. Return to the course and retry.',
                               'Kaydedilemedi. Önceki kayıtların üzerine yazılmadı. Kursa dönüp tekrar dene.'),
                           key: const Key('salsa.saveError'),
-                          style: ChoreiaType.of(context).body(color: ChoreiaPalette.of(context).error)),
+                          style: ChoreiaType.of(context)
+                              .body(color: ChoreiaPalette.of(context).error)),
                     FilledButton(
                         onPressed: _busy ||
                                 _accountChanged ||
@@ -1211,22 +1215,26 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(source.title,
-                                          style: ChoreiaType.of(context).body()),
+                                          style:
+                                              ChoreiaType.of(context).body()),
                                       SelectableText(source.url,
-                                          style: ChoreiaType.of(context).body()),
+                                          style:
+                                              ChoreiaType.of(context).body()),
                                       if (source.supports case final support?)
                                         Text(
                                             '${t('Supports only:', 'Yalnız destekler:')} ${support.localized(context, turkish: tr)}',
                                             key: Key(
                                                 'salsa.sourceScope.${source.id}'),
-                                            style: ChoreiaType.of(context).body()),
+                                            style:
+                                                ChoreiaType.of(context).body()),
                                       if (source.doesNotSupport
                                           case final limit?)
                                         Text(
                                             '${t('Does not establish:', 'Kanıtlamaz:')} ${limit.localized(context, turkish: tr)}',
                                             key: Key(
                                                 'salsa.sourceLimit.${source.id}'),
-                                            style: ChoreiaType.of(context).body()),
+                                            style:
+                                                ChoreiaType.of(context).body()),
                                       TextButton.icon(
                                           icon: const Icon(Icons.copy_outlined),
                                           onPressed: () => Clipboard.setData(
@@ -1338,8 +1346,8 @@ Widget _safetyPanel(BuildContext context, SalsaCourse course, bool tr) =>
                   ['health', 'pregnancy', 'pregnancySignals'].contains(s.id)))
                 Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child:
-                        SelectableText(source.url, style: ChoreiaType.of(context).body())),
+                    child: SelectableText(source.url,
+                        style: ChoreiaType.of(context).body())),
             ]))
       ],
     );

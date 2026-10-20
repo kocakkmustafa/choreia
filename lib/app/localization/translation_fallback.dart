@@ -16,11 +16,15 @@ const translationFallbackCopy = <String, String>{
       'Certains textes sont affichés en anglais, car une traduction n’a pas pu être chargée.',
   'ja': '翻訳を読み込めなかったため、一部の文章は英語で表示されています。',
   'ar': 'تُعرض بعض النصوص بالإنجليزية لتعذّر تحميل ترجمتها.',
-  "it": "Alcuni testi sono mostrati in inglese perché non è stato possibile caricare una traduzione.",
+  "it":
+      "Alcuni testi sono mostrati in inglese perché non è stato possibile caricare una traduzione.",
   "ko": "번역을 불러오지 못해 일부 텍스트가 영어로 표시됩니다.",
-  "id": "Sebagian teks ditampilkan dalam bahasa Inggris karena terjemahan tidak dapat dimuat.",
-  "pl": "Niektóre teksty są wyświetlane po angielsku, ponieważ nie udało się wczytać tłumaczenia.",
-  "hi": "अनुवाद लोड नहीं हो सका, इसलिए कुछ लिखित सामग्री अंग्रेज़ी में दिखाई जा रही है।",
+  "id":
+      "Sebagian teks ditampilkan dalam bahasa Inggris karena terjemahan tidak dapat dimuat.",
+  "pl":
+      "Niektóre teksty są wyświetlane po angielsku, ponieważ nie udało się wczytać tłumaczenia.",
+  "hi":
+      "अनुवाद लोड नहीं हो सका, इसलिए कुछ लिखित सामग्री अंग्रेज़ी में दिखाई जा रही है।",
   "zh-Hans": "由于无法加载翻译，部分文字以英语显示。",
 };
 

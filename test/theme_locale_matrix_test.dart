@@ -88,7 +88,8 @@ Future<void> _advance(WidgetTester tester) async {
   await tester.pump();
 }
 
-Future<void> _waitFor(WidgetTester tester, Finder finder, {Locale? locale}) async {
+Future<void> _waitFor(WidgetTester tester, Finder finder,
+    {Locale? locale}) async {
   for (var frame = 0; frame < 120; frame++) {
     if (finder.evaluate().isNotEmpty &&
         (locale == null ||
@@ -100,8 +101,8 @@ Future<void> _waitFor(WidgetTester tester, Finder finder, {Locale? locale}) asyn
     }
     // Yalnız yerel Salsa dosya IO'sunun gerçek event loop'una fırsat verir.
     // Ağ, SDK, platform izin veya production servis çağrısı yoktur.
-    await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 2)));
+    await tester
+        .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
     await tester.pump(const Duration(milliseconds: 50));
     _clean(tester, 'bekleme $frame: $finder');
   }
@@ -177,8 +178,11 @@ void _surface(WidgetTester tester, Finder finder, _Host host,
   expect(ChoreiaLocaleController.tag(Localizations.localeOf(context)), tag);
   expect(Directionality.of(context),
       tag == 'ar' ? TextDirection.rtl : TextDirection.ltr);
-  expect(Theme.of(context).brightness,
-      (mode ?? host.mode) == ThemeMode.light ? Brightness.light : Brightness.dark);
+  expect(
+      Theme.of(context).brightness,
+      (mode ?? host.mode) == ThemeMode.light
+          ? Brightness.light
+          : Brightness.dark);
   expect(MediaQuery.textScalerOf(context).scale(10), host.scale * 10);
   expect(MediaQuery.disableAnimationsOf(context), isTrue);
   _clean(tester, '$tag/${(mode ?? host.mode).name}/${host.scale}: $finder');
@@ -205,7 +209,8 @@ void _scriptRun(WidgetTester tester, Finder scope, Locale locale) {
   final boxes = paragraph.getBoxesForSelection(
       TextSelection(baseOffset: span.start, extentOffset: span.end));
   expect(boxes, isNotEmpty);
-  expect(boxes.any((box) => box.right > box.left && box.bottom > box.top), isTrue);
+  expect(
+      boxes.any((box) => box.right > box.left && box.bottom > box.top), isTrue);
   // Metin ve layout kutusu gözlenir; tofu/glyph estetiği veya anadil kabulü değil.
 }
 
@@ -213,10 +218,15 @@ Future<void> _openStyle(WidgetTester tester, String id) async {
   final tile = find.byKey(LibraryView.tileKey(id));
   await _reach(tester, tile);
   // 2x'te kart viewport'tan uzun olabilir. Ortası yerine gerçek başlık tıklanır.
-  await _tap(tester,
-      find.descendant(of: tile, matching: find.byType(Text)).first);
+  await _tap(
+      tester, find.descendant(of: tile, matching: find.byType(Text)).first);
   await _waitFor(tester, find.byType(StyleDetailView));
-  expect(tester.widget<StyleDetailView>(find.byType(StyleDetailView)).card.entry.id,
+  expect(
+      tester
+          .widget<StyleDetailView>(find.byType(StyleDetailView))
+          .card
+          .entry
+          .id,
       id);
 }
 
@@ -280,30 +290,33 @@ class _Host {
 
   Widget app(WidgetTester tester) => MediaQuery.fromView(
         view: tester.view,
-        child: Builder(builder: (context) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.linear(scale), disableAnimations: true),
-          child: ChoreiaApp(
-            localeController: locales,
-            themeController: themes,
-            localeBundle: bundle,
-            shellBuilder: (_, __) => ChoreiaShell(
-              env: env,
-              // Üretim kapısı false kalır; Core/Auth test rotası verilmez.
-              cameraSessionsAvailable: false,
-              flagOverride: MemoryFirstRunFlag(seen: introSeen),
-              bundleOverride: () async {
-                if (failCatalog) throw StateError('Yerel katalog okuma arızası');
-                return library;
-              },
-            ),
-          ),
-        )),
+        child: Builder(
+            builder: (context) => MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                      textScaler: TextScaler.linear(scale),
+                      disableAnimations: true),
+                  child: ChoreiaApp(
+                    localeController: locales,
+                    themeController: themes,
+                    localeBundle: bundle,
+                    shellBuilder: (_, __) => ChoreiaShell(
+                      env: env,
+                      // Üretim kapısı false kalır; Core/Auth test rotası verilmez.
+                      cameraSessionsAvailable: false,
+                      flagOverride: MemoryFirstRunFlag(seen: introSeen),
+                      bundleOverride: () async {
+                        if (failCatalog)
+                          throw StateError('Yerel katalog okuma arızası');
+                        return library;
+                      },
+                    ),
+                  ),
+                )),
       );
 }
 
-Future<_Host> _mount(WidgetTester tester, LibraryCatalog library,
-    Locale locale, ThemeMode mode, double scale,
+Future<_Host> _mount(WidgetTester tester, LibraryCatalog library, Locale locale,
+    ThemeMode mode, double scale,
     {bool failThemeSave = false,
     bool failPreferencesRead = false,
     bool failHistory = false,
@@ -371,40 +384,50 @@ Future<void> _formRoundTrip(WidgetTester tester, _Host host) async {
   final text = 'draft ${host.locale.toLanguageTag()} — A/B uncertain';
   await tester.enterText(_note(6), text);
   final controller = tester.widget<TextField>(_note(6)).controller!;
-  final editable = find.descendant(of: _note(6), matching: find.byType(EditableText));
+  final editable =
+      find.descendant(of: _note(6), matching: find.byType(EditableText));
   final focus = tester.widget<EditableText>(editable).focusNode;
   tester.view.viewInsets = const FakeViewPadding(bottom: 240);
   await tester.pump();
   await _reach(tester, _note(6));
   expect(tester.getRect(_note(6)).bottom, lessThanOrEqualTo(520.5));
   expect(focus.hasFocus, isTrue);
-  final otherMode = host.mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+  final otherMode =
+      host.mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
   await host.themes.select(otherMode);
   await _advance(tester);
   _surface(tester, find.byType(PracticeComparisonPage), host, mode: otherMode);
-  expect(identical(state, tester.state(find.byType(PracticeComparisonPage))), isTrue);
-  expect(identical(controller, tester.widget<TextField>(_note(6)).controller), isTrue);
+  expect(identical(state, tester.state(find.byType(PracticeComparisonPage))),
+      isTrue);
+  expect(identical(controller, tester.widget<TextField>(_note(6)).controller),
+      isTrue);
   expect(controller.text, text);
   expect(focus.hasFocus, isTrue);
   // Aynı Navigator rotasında gerçek delegate yeniden yüklenir.
-  final otherLocale = host.locale.languageCode == 'ar' ? const Locale('hi') : const Locale('ar');
+  final otherLocale = host.locale.languageCode == 'ar'
+      ? const Locale('hi')
+      : const Locale('ar');
   await host.locales.select(otherLocale);
-  await _waitFor(tester, find.byType(PracticeComparisonPage), locale: otherLocale);
+  await _waitFor(tester, find.byType(PracticeComparisonPage),
+      locale: otherLocale);
   _surface(tester, find.byType(PracticeComparisonPage), host,
       mode: otherMode, locale: otherLocale);
-  expect(identical(state, tester.state(find.byType(PracticeComparisonPage))), isTrue);
+  expect(identical(state, tester.state(find.byType(PracticeComparisonPage))),
+      isTrue);
   expect(controller.text, text);
   expect(focus.hasFocus, isTrue);
   await host.locales.select(host.locale);
   await host.themes.select(host.mode);
-  await _waitFor(tester, find.byType(PracticeComparisonPage), locale: host.locale);
+  await _waitFor(tester, find.byType(PracticeComparisonPage),
+      locale: host.locale);
   tester.view.resetViewInsets();
   FocusManager.instance.primaryFocus?.unfocus();
   await _back(tester);
   await _tap(tester, find.byKey(const Key('style.practiceComparison')));
   await _reach(tester, _note(6));
   expect(tester.widget<TextField>(_note(6)).controller!.text, isEmpty,
-      reason: 'Tema/dil değişimi taslağı korur; sayfadan çıkış geçici notu siler');
+      reason:
+          'Tema/dil değişimi taslağı korur; sayfadan çıkış geçici notu siler');
   await _back(tester);
 }
 
@@ -413,9 +436,26 @@ void main() {
   setUpAll(() async => library = await testLibrary());
 
   test('matris on dört onaylı dili ve beş yazılı yolu gerçekten kapsar', () {
-    expect(ChoreiaLocaleController.supported.map(ChoreiaLocaleController.tag).toSet(),
-        <String>{'tr', 'en', 'es-419', 'pt-BR', 'de', 'fr', 'ja', 'ar',
-          'it', 'ko', 'id', 'pl', 'hi', 'zh-Hans'});
+    expect(
+        ChoreiaLocaleController.supported
+            .map(ChoreiaLocaleController.tag)
+            .toSet(),
+        <String>{
+          'tr',
+          'en',
+          'es-419',
+          'pt-BR',
+          'de',
+          'fr',
+          'ja',
+          'ar',
+          'it',
+          'ko',
+          'id',
+          'pl',
+          'hi',
+          'zh-Hans'
+        });
     expect(_writtenTypes.keys.toSet(), PracticeComparisonPage.supportedStyles);
   });
 
@@ -426,59 +466,78 @@ void main() {
         testWidgets('matris $tag ${mode.name} ${scale}x 320px', (tester) async {
           final semantics = tester.ensureSemantics();
           try {
-          final host = await _mount(tester, library, locale, mode, scale,
-              failThemeSave: true);
-          await _waitFor(tester, find.byType(LibraryView));
-          _surface(tester, find.byType(LibraryView), host);
-          await _scan(tester, 'katalog $tag');
-          await _tap(tester, find.byKey(ChoreiaShell.progressTabKey));
-          await _waitFor(tester, find.byType(ProgressView));
-          _surface(tester, find.byType(ProgressView), host);
-          await _reach(tester, find.byKey(ProgressView.emptyReasonKey));
-          expect(tester.widget<ProgressView>(find.byType(ProgressView)).summary
-              .integrity.fidelity, HistoryFidelity.ok);
-          await _scan(tester, 'boş ilerleme $tag');
-          await _tap(tester, find.byKey(ChoreiaShell.profileTabKey));
-          _surface(tester, find.byType(ProfileView), host);
-          await _reach(tester, find.byType(ChoreiaThemePicker));
-          _scriptRun(tester, find.byType(ChoreiaThemePicker), locale);
-          final selected = find.byKey(Key('theme.choice.${mode.name}'));
-          await _reach(tester, selected);
-          expect(tester.getSemantics(selected).getSemanticsData()
-              .flagsCollection.isSelected, Tristate.isTrue);
-          expect(tester.getSize(selected).height, greaterThanOrEqualTo(48));
-          expect(host.themes.saveFailed, isTrue);
-          expect(find.descendant(of: find.byType(ChoreiaThemePicker),
-              matching: find.byWidgetPredicate((w) =>
-                  w is Semantics && w.properties.liveRegion == true)), findsOneWidget);
-          final language = find.byKey(const Key('profile.language'));
-          expect(tester.widget<PopupMenuButton<String>>(language).initialValue, tag);
-          await _tap(tester, language);
-          expect(find.byWidgetPredicate((w) => w is PopupMenuItem<String>),
-              findsNWidgets(15));
-          await tester.sendKeyEvent(LogicalKeyboardKey.escape);
-          await _advance(tester);
-          await _scan(tester, 'profil ve tercih hata mesajı $tag');
-          await _tap(tester, find.byKey(ChoreiaShell.libraryTabKey));
-          await _openStyle(tester, 'line_dance');
-          _surface(tester, find.byType(StyleDetailView), host);
-          await _scan(tester, 'gerçek Line Dance detayı $tag');
-          await _tap(tester, find.byKey(WrittenCourseLink.startKey('line_dance')));
-          await _waitFor(tester, find.byType(LineDanceCoursePage));
-          await _reach(tester, find.byType(LineDanceDirectionDiagram));
-          _surface(tester, find.byType(LineDanceCoursePage), host);
-          final diagram = tester.getSemantics(find.byType(LineDanceDirectionDiagram))
-              .getSemanticsData();
-          expect(diagram.flagsCollection.isImage, isTrue);
-          expect(diagram.label.trim(), isNotEmpty);
-          await _scan(tester, 'yazılı Line Dance okuyucu $tag');
-          await _back(tester);
-          await _formRoundTrip(tester, host);
-          await _back(tester);
-          expect(find.byType(LibraryView), findsOneWidget);
-          expect(host.cameraCalls, 0);
-          _clean(tester, 'matris sonu $tag');
-          } finally { semantics.dispose(); }
+            final host = await _mount(tester, library, locale, mode, scale,
+                failThemeSave: true);
+            await _waitFor(tester, find.byType(LibraryView));
+            _surface(tester, find.byType(LibraryView), host);
+            await _scan(tester, 'katalog $tag');
+            await _tap(tester, find.byKey(ChoreiaShell.progressTabKey));
+            await _waitFor(tester, find.byType(ProgressView));
+            _surface(tester, find.byType(ProgressView), host);
+            await _reach(tester, find.byKey(ProgressView.emptyReasonKey));
+            expect(
+                tester
+                    .widget<ProgressView>(find.byType(ProgressView))
+                    .summary
+                    .integrity
+                    .fidelity,
+                HistoryFidelity.ok);
+            await _scan(tester, 'boş ilerleme $tag');
+            await _tap(tester, find.byKey(ChoreiaShell.profileTabKey));
+            _surface(tester, find.byType(ProfileView), host);
+            await _reach(tester, find.byType(ChoreiaThemePicker));
+            _scriptRun(tester, find.byType(ChoreiaThemePicker), locale);
+            final selected = find.byKey(Key('theme.choice.${mode.name}'));
+            await _reach(tester, selected);
+            expect(
+                tester
+                    .getSemantics(selected)
+                    .getSemanticsData()
+                    .flagsCollection
+                    .isSelected,
+                Tristate.isTrue);
+            expect(tester.getSize(selected).height, greaterThanOrEqualTo(48));
+            expect(host.themes.saveFailed, isTrue);
+            expect(
+                find.descendant(
+                    of: find.byType(ChoreiaThemePicker),
+                    matching: find.byWidgetPredicate((w) =>
+                        w is Semantics && w.properties.liveRegion == true)),
+                findsOneWidget);
+            final language = find.byKey(const Key('profile.language'));
+            expect(
+                tester.widget<PopupMenuButton<String>>(language).initialValue,
+                tag);
+            await _tap(tester, language);
+            expect(find.byWidgetPredicate((w) => w is PopupMenuItem<String>),
+                findsNWidgets(15));
+            await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+            await _advance(tester);
+            await _scan(tester, 'profil ve tercih hata mesajı $tag');
+            await _tap(tester, find.byKey(ChoreiaShell.libraryTabKey));
+            await _openStyle(tester, 'line_dance');
+            _surface(tester, find.byType(StyleDetailView), host);
+            await _scan(tester, 'gerçek Line Dance detayı $tag');
+            await _tap(
+                tester, find.byKey(WrittenCourseLink.startKey('line_dance')));
+            await _waitFor(tester, find.byType(LineDanceCoursePage));
+            await _reach(tester, find.byType(LineDanceDirectionDiagram));
+            _surface(tester, find.byType(LineDanceCoursePage), host);
+            final diagram = tester
+                .getSemantics(find.byType(LineDanceDirectionDiagram))
+                .getSemanticsData();
+            expect(diagram.flagsCollection.isImage, isTrue);
+            expect(diagram.label.trim(), isNotEmpty);
+            await _scan(tester, 'yazılı Line Dance okuyucu $tag');
+            await _back(tester);
+            await _formRoundTrip(tester, host);
+            await _back(tester);
+            expect(find.byType(LibraryView), findsOneWidget);
+            expect(host.cameraCalls, 0);
+            _clean(tester, 'matris sonu $tag');
+          } finally {
+            semantics.dispose();
+          }
         }, timeout: const Timeout(Duration(minutes: 2)));
       }
     }
@@ -487,54 +546,71 @@ void main() {
   for (final locale in _sweepLocales) {
     for (final mode in _modes) {
       final tag = ChoreiaLocaleController.tag(locale);
-      testWidgets('hata ve kurtarma $tag ${mode.name} 2x 320px', (tester) async {
+      testWidgets('hata ve kurtarma $tag ${mode.name} 2x 320px',
+          (tester) async {
         final semantics = tester.ensureSemantics();
         try {
-        final bundle = _CourseFaultBundle();
-        final host = await _mount(tester, library, locale, mode, 2,
-            failPreferencesRead: true, failHistory: true,
-            failCatalog: true, bundle: bundle);
-        await _waitFor(tester, find.byKey(ChoreiaShell.loadFailureKey));
-        _surface(tester, find.byKey(ChoreiaShell.loadFailureKey), host);
-        await _scan(tester, 'katalog okuma hatası');
-        host.failCatalog = false;
-        await _tap(tester, find.descendant(
-            of: find.byKey(ChoreiaShell.loadFailureKey),
-            matching: find.byType(FilledButton)));
-        await _waitFor(tester, find.byType(LibraryView));
-        await _tap(tester, find.byKey(ChoreiaShell.progressTabKey));
-        await _waitFor(tester, find.byType(ProgressView));
-        final summary = tester.widget<ProgressView>(find.byType(ProgressView)).summary;
-        expect(summary.integrity.fidelity, HistoryFidelity.unavailable);
-        expect(summary.totals, isNull, reason: 'Okunamayan kayıt sıfır toplam değildir');
-        await _reach(tester, find.byKey(ProgressView.integrityNoteKey));
-        await _scan(tester, 'okunamayan geçmiş');
-        await _tap(tester, find.byKey(ChoreiaShell.profileTabKey));
-        _surface(tester, find.byType(ProfileView), host);
-        expect(host.locales.readFailed, isTrue);
-        expect(host.themes.readFailed, isTrue);
-        await _scan(tester, 'dil ve tema okuma hataları');
-        expect(find.descendant(of: find.byType(ProfileView),
-            matching: find.byWidgetPredicate((w) =>
-                w is Semantics && w.properties.liveRegion == true)), findsNWidgets(2));
-        await _tap(tester, find.byKey(ChoreiaShell.libraryTabKey));
-        await _tap(tester, find.byKey(WrittenCourseLink.startKey('line_dance')));
-        await _waitFor(tester, find.descendant(
-            of: find.byType(LineDanceCoursePage),
-            matching: find.byType(TextButton)));
-        final retry = find.descendant(of: find.byType(LineDanceCoursePage),
-            matching: find.byType(TextButton));
-        _surface(tester, find.byType(LineDanceCoursePage), host);
-        expect(retry, findsOneWidget);
-        bundle.failCourse = false;
-        await _tap(tester, retry);
-        await _reach(tester, find.byType(LineDanceDirectionDiagram));
-        await _scan(tester, 'yeniden okunmuş kurs');
-        await _back(tester);
-        } finally { semantics.dispose(); }
+          final bundle = _CourseFaultBundle();
+          final host = await _mount(tester, library, locale, mode, 2,
+              failPreferencesRead: true,
+              failHistory: true,
+              failCatalog: true,
+              bundle: bundle);
+          await _waitFor(tester, find.byKey(ChoreiaShell.loadFailureKey));
+          _surface(tester, find.byKey(ChoreiaShell.loadFailureKey), host);
+          await _scan(tester, 'katalog okuma hatası');
+          host.failCatalog = false;
+          await _tap(
+              tester,
+              find.descendant(
+                  of: find.byKey(ChoreiaShell.loadFailureKey),
+                  matching: find.byType(FilledButton)));
+          await _waitFor(tester, find.byType(LibraryView));
+          await _tap(tester, find.byKey(ChoreiaShell.progressTabKey));
+          await _waitFor(tester, find.byType(ProgressView));
+          final summary =
+              tester.widget<ProgressView>(find.byType(ProgressView)).summary;
+          expect(summary.integrity.fidelity, HistoryFidelity.unavailable);
+          expect(summary.totals, isNull,
+              reason: 'Okunamayan kayıt sıfır toplam değildir');
+          await _reach(tester, find.byKey(ProgressView.integrityNoteKey));
+          await _scan(tester, 'okunamayan geçmiş');
+          await _tap(tester, find.byKey(ChoreiaShell.profileTabKey));
+          _surface(tester, find.byType(ProfileView), host);
+          expect(host.locales.readFailed, isTrue);
+          expect(host.themes.readFailed, isTrue);
+          await _scan(tester, 'dil ve tema okuma hataları');
+          expect(
+              find.descendant(
+                  of: find.byType(ProfileView),
+                  matching: find.byWidgetPredicate((w) =>
+                      w is Semantics && w.properties.liveRegion == true)),
+              findsNWidgets(2));
+          await _tap(tester, find.byKey(ChoreiaShell.libraryTabKey));
+          await _tap(
+              tester, find.byKey(WrittenCourseLink.startKey('line_dance')));
+          await _waitFor(
+              tester,
+              find.descendant(
+                  of: find.byType(LineDanceCoursePage),
+                  matching: find.byType(TextButton)));
+          final retry = find.descendant(
+              of: find.byType(LineDanceCoursePage),
+              matching: find.byType(TextButton));
+          _surface(tester, find.byType(LineDanceCoursePage), host);
+          expect(retry, findsOneWidget);
+          bundle.failCourse = false;
+          await _tap(tester, retry);
+          await _reach(tester, find.byType(LineDanceDirectionDiagram));
+          await _scan(tester, 'yeniden okunmuş kurs');
+          await _back(tester);
+        } finally {
+          semantics.dispose();
+        }
       }, timeout: const Timeout(Duration(minutes: 2)));
 
-      testWidgets('public rota aileleri $tag ${mode.name} 2x 320px', (tester) async {
+      testWidgets('public rota aileleri $tag ${mode.name} 2x 320px',
+          (tester) async {
         final host = await _mount(tester, library, locale, mode, 2,
             introSeen: false, localCourseFiles: true);
         await _waitFor(tester, find.byType(FirstRunView));
@@ -552,7 +628,8 @@ void main() {
           await _scan(tester, 'detay $id');
           styles.add(id);
           if (_writtenTypes.containsKey(id)) {
-            await _tap(tester, find.byKey(const Key('style.practiceComparison')));
+            await _tap(
+                tester, find.byKey(const Key('style.practiceComparison')));
             await _waitFor(tester, find.byType(PracticeComparisonPage));
             _surface(tester, find.byType(PracticeComparisonPage), host);
             await _scan(tester, 'form $id');
@@ -564,22 +641,34 @@ void main() {
             if (id == 'salsa_shines') {
               await _waitFor(tester, find.byKey(const Key('salsa.overview')));
               await _tap(tester, find.byKey(const Key('salsa.lesson.so_04')));
-              await _waitFor(tester, find.byKey(const ValueKey('salsa.lessonBody.so_04')));
-              _surface(tester, find.byKey(const ValueKey('salsa.lessonBody.so_04')), host);
+              await _waitFor(
+                  tester, find.byKey(const ValueKey('salsa.lessonBody.so_04')));
+              _surface(tester,
+                  find.byKey(const ValueKey('salsa.lessonBody.so_04')), host);
               await _scan(tester, 'Salsa so_04');
               await _back(tester);
             } else {
-              await _waitFor(tester, find.descendant(of: page, matching: find.byType(ListView)));
+              await _waitFor(tester,
+                  find.descendant(of: page, matching: find.byType(ListView)));
             }
             _surface(tester, page, host);
             await _scan(tester, 'kurs $id');
             courses.add(id);
             await _back(tester);
             if (id == 'hip_hop_foundations') {
-              await _tap(tester, find.byKey(const Key('style.hipHopWrittenPath')));
+              await _tap(
+                  tester, find.byKey(const Key('style.hipHopWrittenPath')));
               await _waitFor(tester, find.byType(HipHopCoursePage));
-              await _waitFor(tester, find.descendant(of: find.byType(HipHopCoursePage), matching: find.byType(ListView)));
-              expect(tester.widget<HipHopCoursePage>(find.byType(HipHopCoursePage)).skillCourse, isFalse);
+              await _waitFor(
+                  tester,
+                  find.descendant(
+                      of: find.byType(HipHopCoursePage),
+                      matching: find.byType(ListView)));
+              expect(
+                  tester
+                      .widget<HipHopCoursePage>(find.byType(HipHopCoursePage))
+                      .skillCourse,
+                  isFalse);
               await _scan(tester, 'ayrı Hip-Hop giriş okuyucusu');
               courses.add('hip_hop_introduction');
               await _back(tester);
@@ -606,7 +695,10 @@ void main() {
             await _back(tester);
           }
         }
-        expect(recalled, {for (final area in studyAreas) for (final lesson in area.lessons) lesson.id});
+        expect(recalled, {
+          for (final area in studyAreas)
+            for (final lesson in area.lessons) lesson.id
+        });
         await _tap(tester, find.byKey(const Key('study-related-salsa')));
         await _waitFor(tester, find.byType(SupportHoldDemo));
         _surface(tester, find.byType(SupportHoldDemo), host);

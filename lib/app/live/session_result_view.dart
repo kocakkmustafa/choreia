@@ -103,7 +103,8 @@ class SessionResultView extends StatelessWidget {
             key: bodyKey,
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
             children: <Widget>[
-              Text(lessonName, style: ChoreiaType.of(context).display(size: 24)),
+              Text(lessonName,
+                  style: ChoreiaType.of(context).display(size: 24)),
               const SizedBox(height: 16),
               _outcomeCard(context, tr),
               const SizedBox(height: 16),
@@ -132,7 +133,8 @@ class SessionResultView extends StatelessWidget {
   }
 
   Widget _outcomeCard(BuildContext context, bool tr) => switch (outcome) {
-        RecordWritten(:final SessionRecord record) => _storedCard(context, record, tr),
+        RecordWritten(:final SessionRecord record) =>
+          _storedCard(context, record, tr),
         RecordNothingToStore() => _AttentionPanel(
             key: notStoredKey,
             icon: Icons.videocam_off_outlined,
@@ -152,7 +154,8 @@ class SessionResultView extends StatelessWidget {
           ),
       };
 
-  Widget _storedCard(BuildContext context, SessionRecord record, bool tr) => GlassPanel(
+  Widget _storedCard(BuildContext context, SessionRecord record, bool tr) =>
+      GlassPanel(
         key: storedKey,
         radius: 22,
         child: Column(
@@ -193,8 +196,8 @@ class SessionResultView extends StatelessWidget {
                 tr
                     ? 'Bu seans bu telefona kaydedildi ve İlerleme bölümünde görünür. Hiçbir şey yüklenmedi ve video saklanmadı; yalnızca bu sayılar kaydedildi.'
                     : ResultStrings.storedNote,
-                style:
-                    ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.6))),
+                style: ChoreiaType.of(context).body(
+                    size: 12, color: ChoreiaPalette.of(context).text(0.6))),
             // The one thing the counts above cannot say. Shown only when it
             // happened, and worded as a limit of ours rather than a shortfall
             // of theirs.

@@ -22,45 +22,44 @@ Widget notBuiltTabBody(
   required String title,
   required String plannedContent,
   List<Widget> trailing = const [],
-}) => ChoreiaBackdrop(
-  child: SafeArea(
-    child: SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: GlassPanel(
-        key: key,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(title, style: ChoreiaType.of(context).display(size: 24)),
-            const SizedBox(height: 12),
-            Text(
-              UiLanguage.text(
-                context,
-                en:
-                    'Named here so you can see the whole plan. Nothing is '
-                    'built here yet.',
-                tr:
-                    'Bu bölüm plandaki yerini gösterir. Burada '
-                    'kullanılabilir bir özellik yok.',
-              ),
-              style: ChoreiaType.of(context).body(
-                size: 13.5,
-                color: ChoreiaPalette.of(context).text(0.78),
-              ),
+}) =>
+    ChoreiaBackdrop(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: GlassPanel(
+            key: key,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(title, style: ChoreiaType.of(context).display(size: 24)),
+                const SizedBox(height: 12),
+                Text(
+                  UiLanguage.text(
+                    context,
+                    en: 'Named here so you can see the whole plan. Nothing is '
+                        'built here yet.',
+                    tr: 'Bu bölüm plandaki yerini gösterir. Burada '
+                        'kullanılabilir bir özellik yok.',
+                  ),
+                  style: ChoreiaType.of(context).body(
+                    size: 13.5,
+                    color: ChoreiaPalette.of(context).text(0.78),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  plannedContent,
+                  style: ChoreiaType.of(context).body(
+                    size: 12.5,
+                    color: ChoreiaPalette.of(context).text(0.55),
+                  ),
+                ),
+                ...trailing,
+              ],
             ),
-            const SizedBox(height: 14),
-            Text(
-              plannedContent,
-              style: ChoreiaType.of(context).body(
-                size: 12.5,
-                color: ChoreiaPalette.of(context).text(0.55),
-              ),
-            ),
-            ...trailing,
-          ],
+          ),
         ),
       ),
-    ),
-  ),
-);
+    );

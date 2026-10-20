@@ -265,7 +265,8 @@ void main() {
           tester
               .getSemantics(references)
               .getSemanticsData()
-              .flagsCollection.isSelected,
+              .flagsCollection
+              .isSelected,
           Tristate.isTrue);
 
       final tile = find.byKey(LibraryView.tileKey('hip_hop_foundations'));

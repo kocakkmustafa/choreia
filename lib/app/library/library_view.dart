@@ -234,8 +234,8 @@ class _LibraryViewState extends State<LibraryView> {
                   en: '{count} styles are in the catalogue.',
                   tr: 'Katalogda {count} dans stili var.',
                   values: {'count': t.total}),
-              style:
-                  ChoreiaType.of(context).body(size: 13.5, color: ChoreiaPalette.of(context).text(0.85)),
+              style: ChoreiaType.of(context).body(
+                  size: 13.5, color: ChoreiaPalette.of(context).text(0.85)),
             ),
             const SizedBox(height: 10),
             Text(
@@ -245,8 +245,8 @@ class _LibraryViewState extends State<LibraryView> {
                       : '{count} styles have camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.',
                   tr: 'Kamera referans notları: {count} stil. {status} Rehberli dersler için aşağıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.',
                   values: {'count': t.openable, 'status': _cameraNotice}),
-              style:
-                  ChoreiaType.of(context).body(size: 12.5, color: ChoreiaPalette.of(context).text(0.62)),
+              style: ChoreiaType.of(context).body(
+                  size: 12.5, color: ChoreiaPalette.of(context).text(0.62)),
             ),
           ],
         ),
@@ -279,13 +279,16 @@ class _LibraryViewState extends State<LibraryView> {
       visualDensity: VisualDensity.standard,
       showCheckmark: false,
       selectedColor: ChoreiaPalette.of(context).rose.withValues(alpha: 0.14),
-      side: BorderSide(color: ChoreiaPalette.of(context).hairline(on ? 0.32 : 0.13)),
+      side: BorderSide(
+          color: ChoreiaPalette.of(context).hairline(on ? 0.32 : 0.13)),
       label: Text(
         '$label · ${UiLanguage.number(context, count)}',
         style: ChoreiaType.of(context).label(
           size: 9.5,
           letterSpacingEm: 0.1,
-          color: on ? ChoreiaPalette.of(context).rose : ChoreiaPalette.of(context).text(0.55),
+          color: on
+              ? ChoreiaPalette.of(context).rose
+              : ChoreiaPalette.of(context).text(0.55),
         ),
       ),
     );
@@ -297,7 +300,8 @@ class _LibraryViewState extends State<LibraryView> {
           _tr
               ? 'Bu filtreye uyan stil yok. Hiçbir şey gizlenmedi.'
               : LibraryStrings.emptyFilter,
-          style: ChoreiaType.of(context).body(size: 13, color: ChoreiaPalette.of(context).text(0.65)),
+          style: ChoreiaType.of(context)
+              .body(size: 13, color: ChoreiaPalette.of(context).text(0.65)),
         ),
       );
 
@@ -335,7 +339,8 @@ class _LibraryViewState extends State<LibraryView> {
           const SizedBox(height: 4),
           Text(
             _sectionNote(badge),
-            style: ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.55)),
+            style: ChoreiaType.of(context)
+                .body(size: 12, color: ChoreiaPalette.of(context).text(0.55)),
           ),
           const SizedBox(height: 12),
           for (final StyleCard c in cards)
@@ -418,13 +423,14 @@ class _LibraryViewState extends State<LibraryView> {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: ChoreiaPalette.of(context).hairline(0.10)),
+            border:
+                Border.all(color: ChoreiaPalette.of(context).hairline(0.10)),
           ),
           child: TitleWithPill(
             title: Text(
               _text(StyleContentCopy.styleName(c.entry, turkish: _tr)),
-              style:
-                  ChoreiaType.of(context).body(size: 13.5, color: ChoreiaPalette.of(context).text(0.8)),
+              style: ChoreiaType.of(context).body(
+                  size: 13.5, color: ChoreiaPalette.of(context).text(0.8)),
             ),
             pill: StatusPill(
               label: _tr
@@ -473,7 +479,8 @@ class _LibraryViewState extends State<LibraryView> {
         : _pair(source, StyleStatusCopy.reason(c, turkish: true) ?? source);
   }
 
-  Color _tone(StyleBadge b) => badgeTone(b, palette: ChoreiaPalette.of(context));
+  Color _tone(StyleBadge b) =>
+      badgeTone(b, palette: ChoreiaPalette.of(context));
 }
 
 /// The badge tone map — ONE copy.
@@ -489,7 +496,8 @@ class _LibraryViewState extends State<LibraryView> {
 /// when `contrast_test.dart` needed to measure these tones and found two
 /// candidates for the truth — the same "two copies of a truth drift" rule this
 /// app applies to derived data (C-091), reaching styling.
-Color badgeTone(StyleBadge b, {ChoreiaPalette palette = ChoreiaPalette.dark}) => switch (b) {
+Color badgeTone(StyleBadge b, {ChoreiaPalette palette = ChoreiaPalette.dark}) =>
+    switch (b) {
       // roseBright, not rose (C-159). Raising the demo-only badge to the
       // legibility floor in C-156 pushed it PAST the graded one — 9.59 against
       // 8.08, so "not graded" was reading louder than "graded". The brief's

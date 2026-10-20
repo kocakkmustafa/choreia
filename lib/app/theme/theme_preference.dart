@@ -17,11 +17,13 @@ class FileChoreiaThemeStore implements ChoreiaThemeStore {
     final directory = await getApplicationSupportDirectory();
     return File('${directory.path}/choreia_display_theme.json');
   }
+
   @override
   Future<String?> read() async {
     final file = await _file();
     return await file.exists() ? file.readAsString() : null;
   }
+
   @override
   Future<void> write(String contents) async {
     final file = await _file();
@@ -34,9 +36,12 @@ class FileChoreiaThemeStore implements ChoreiaThemeStore {
 
 class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
   ChoreiaThemeController.memory([ThemeMode mode = ThemeMode.system])
-      : _store = null, super(mode);
-  ChoreiaThemeController.persisted({ChoreiaThemeStore store = const FileChoreiaThemeStore()})
-      : _store = store, super(ThemeMode.system);
+      : _store = null,
+        super(mode);
+  ChoreiaThemeController.persisted(
+      {ChoreiaThemeStore store = const FileChoreiaThemeStore()})
+      : _store = store,
+        super(ThemeMode.system);
   final ChoreiaThemeStore? _store;
   bool readFailed = false;
   bool saveFailed = false;
@@ -46,7 +51,8 @@ class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
   Future<void>? _draining;
 
   /// The entire read has one deadline. Its late result is never applied.
-  Future<void> restore({Duration deadline = const Duration(milliseconds: 500)}) async {
+  Future<void> restore(
+      {Duration deadline = const Duration(milliseconds: 500)}) async {
     final store = _store;
     if (store == null || _disposed) return;
     final revision = _revision;
@@ -54,10 +60,14 @@ class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
       final contents = await store.read().timeout(deadline);
       if (_disposed || revision != _revision || contents == null) return;
       final raw = jsonDecode(contents);
-      if (raw is! Map || raw['schemaVersion'] != 1 || raw['themeMode'] is! String) {
+      if (raw is! Map ||
+          raw['schemaVersion'] != 1 ||
+          raw['themeMode'] is! String) {
         throw const FormatException('Invalid appearance preference');
       }
-      final mode = ThemeMode.values.where((mode) => mode.name == raw['themeMode']).firstOrNull;
+      final mode = ThemeMode.values
+          .where((mode) => mode.name == raw['themeMode'])
+          .firstOrNull;
       if (mode == null) throw const FormatException('Unknown appearance mode');
       readFailed = false;
       value = mode;
@@ -69,7 +79,8 @@ class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
     }
   }
 
-  Future<void> select(ThemeMode mode, {Duration deadline = const Duration(seconds: 3)}) {
+  Future<void> select(ThemeMode mode,
+      {Duration deadline = const Duration(seconds: 3)}) {
     if (_disposed) return Future<void>.value();
     final revision = ++_revision;
     readFailed = false;
@@ -98,7 +109,8 @@ class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
       final revision = _revision;
       _pending = null;
       try {
-        await _store!.write(jsonEncode({'schemaVersion': 1, 'themeMode': mode.name}));
+        await _store!
+            .write(jsonEncode({'schemaVersion': 1, 'themeMode': mode.name}));
         if (!_disposed && revision == _revision) {
           saveFailed = false;
           notifyListeners();
@@ -123,6 +135,11 @@ class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
 }
 
 class ChoreiaThemeScope extends InheritedNotifier<ChoreiaThemeController> {
-  const ChoreiaThemeScope({required ChoreiaThemeController controller, required super.child, super.key}) : super(notifier: controller);
-  static ChoreiaThemeController? maybeOf(BuildContext context) => context.dependOnInheritedWidgetOfExactType<ChoreiaThemeScope>()?.notifier;
+  const ChoreiaThemeScope(
+      {required ChoreiaThemeController controller,
+      required super.child,
+      super.key})
+      : super(notifier: controller);
+  static ChoreiaThemeController? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ChoreiaThemeScope>()?.notifier;
 }

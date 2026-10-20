@@ -46,8 +46,8 @@ class ChoreiaMessagesDelegate extends LocalizationsDelegate<ChoreiaMessages> {
 
   @override
   Future<ChoreiaMessages> load(Locale locale) {
-    final tag = ChoreiaLocaleController.tag(
-        ChoreiaLocaleController.resolve(locale, ChoreiaLocaleController.supported));
+    final tag = ChoreiaLocaleController.tag(ChoreiaLocaleController.resolve(
+        locale, ChoreiaLocaleController.supported));
     if (tag == 'en' || tag == 'tr') {
       return SynchronousFuture(ChoreiaMessages(
           localeTag: tag,

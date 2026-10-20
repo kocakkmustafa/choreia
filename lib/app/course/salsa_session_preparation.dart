@@ -60,7 +60,8 @@ class SalsaSessionPreparation extends StatelessWidget {
         for (final (index, step) in steps.indexed)
           Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: Text('${index + 1}. $step', style: ChoreiaType.of(context).body())),
+              child: Text('${index + 1}. $step',
+                  style: ChoreiaType.of(context).body())),
         Text(
             t('Take the time you need; reading this card is not warming up. Stop for pain, dizziness or feeling unwell. You may read or count aloud without dancing.',
                 'Gereken zamanı ayır; kartı okumak ısınmak değildir. Ağrı, baş dönmesi veya kötü hissetmede dur. Dans etmeden okuyabilir veya sesli sayabilirsin.'),

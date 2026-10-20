@@ -367,8 +367,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                 ),
                 key: ChoreiaShell.loadingKey,
                 textAlign: TextAlign.center,
-                style:
-                    ChoreiaType.of(context).body(size: 14, color: ChoreiaPalette.of(context).text(0.6)),
+                style: ChoreiaType.of(context).body(
+                    size: 14, color: ChoreiaPalette.of(context).text(0.6)),
               ),
             ),
           ),
@@ -391,7 +391,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             ),
             key: ChoreiaShell.historyLoadingKey,
             textAlign: TextAlign.center,
-            style: ChoreiaType.of(context).body(size: 14, color: ChoreiaPalette.of(context).text(0.6)),
+            style: ChoreiaType.of(context)
+                .body(size: 14, color: ChoreiaPalette.of(context).text(0.6)),
           ),
         ),
       );
@@ -502,8 +503,10 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             // denies the practice you just did.
             if (i == _progressIndex) _refreshProgress(library);
           },
-          backgroundColor: ChoreiaPalette.of(context).oxblood.withValues(alpha: 0.55),
-          indicatorColor: ChoreiaPalette.of(context).rose.withValues(alpha: 0.16),
+          backgroundColor:
+              ChoreiaPalette.of(context).oxblood.withValues(alpha: 0.55),
+          indicatorColor:
+              ChoreiaPalette.of(context).rose.withValues(alpha: 0.16),
           surfaceTintColor: Colors.transparent,
           height: 64,
           labelTextStyle: WidgetStateProperty.resolveWith(

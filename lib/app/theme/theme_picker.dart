@@ -9,11 +9,13 @@ class ChoreiaThemePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = ChoreiaThemeScope.maybeOf(context);
     if (controller == null) return const SizedBox.shrink();
-    String text(String en, String tr) => UiLanguage.text(context, en: en, tr: tr);
+    String text(String en, String tr) =>
+        UiLanguage.text(context, en: en, tr: tr);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(text('Appearance', 'Görünüm'), style: Theme.of(context).textTheme.titleMedium),
+        Text(text('Appearance', 'Görünüm'),
+            style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         Wrap(spacing: 8, runSpacing: 8, children: [
           for (final mode in ThemeMode.values)
@@ -30,13 +32,21 @@ class ChoreiaThemePicker extends StatelessWidget {
             ),
         ]),
         if (controller.saveFailed || controller.readFailed)
-          Semantics(liveRegion: true, child: Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(controller.saveFailed
-              ? text('This theme applies for this session. The device preference could not be saved.', 'Bu tema bu oturumda geçerli. Cihaz tercihi kaydedilemedi.')
-              : text('Your saved theme could not be read. System theme is used until you choose another option.', 'Kayıtlı temanız okunamadı. Başka bir seçenek belirleyene kadar sistem teması kullanılır.'),
-              style: TextStyle(color: Theme.of(context).colorScheme.error)),
-          )),
+          Semantics(
+              liveRegion: true,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                    controller.saveFailed
+                        ? text(
+                            'This theme applies for this session. The device preference could not be saved.',
+                            'Bu tema bu oturumda geçerli. Cihaz tercihi kaydedilemedi.')
+                        : text(
+                            'Your saved theme could not be read. System theme is used until you choose another option.',
+                            'Kayıtlı temanız okunamadı. Başka bir seçenek belirleyene kadar sistem teması kullanılır.'),
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error)),
+              )),
       ]),
     );
   }

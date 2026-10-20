@@ -462,7 +462,8 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(tr ? 'Gösterim' : 'Demonstration',
-              style: ChoreiaType.of(context).label(color: ChoreiaPalette.of(context).amber)),
+              style: ChoreiaType.of(context)
+                  .label(color: ChoreiaPalette.of(context).amber)),
           const SizedBox(height: 10),
           if (!_ready || video == null || frame == null)
             const AspectRatio(
@@ -486,7 +487,8 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
                         child: Text(
                           frame.caption,
                           textAlign: TextAlign.center,
-                          style: ChoreiaType.of(context).body(color: ChoreiaPalette.onVideoCaption),
+                          style: ChoreiaType.of(context)
+                              .body(color: ChoreiaPalette.onVideoCaption),
                         ),
                       ),
                     ),

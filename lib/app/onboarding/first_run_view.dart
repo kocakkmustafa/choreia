@@ -85,7 +85,8 @@ class FirstRunView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 26),
-                      _panel(context: context,
+                      _panel(
+                        context: context,
                         key: cameraKey,
                         icon: Icons.videocam_outlined,
                         tone: ChoreiaPalette.of(context).rose,
@@ -102,7 +103,8 @@ class FirstRunView extends StatelessWidget {
                                 turkish: true)),
                       ),
                       const SizedBox(height: 14),
-                      _panel(context: context,
+                      _panel(
+                        context: context,
                         icon: Icons.music_note_outlined,
                         tone: ChoreiaPalette.of(context).amber,
                         title: UiLanguage.text(
@@ -120,7 +122,8 @@ class FirstRunView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 14),
-                      _panel(context: context,
+                      _panel(
+                        context: context,
                         icon: Icons.straighten_outlined,
                         tone: ChoreiaPalette.of(context).amber,
                         title: UiLanguage.text(
@@ -137,7 +140,8 @@ class FirstRunView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 14),
-                      _panel(context: context,
+                      _panel(
+                        context: context,
                         key: stateKey,
                         icon: Icons.inventory_2_outlined,
                         tone: ChoreiaPalette.of(context).roseDeep,
@@ -180,7 +184,8 @@ class FirstRunView extends StatelessWidget {
         ),
       );
 
-  Widget _panel({required BuildContext context,
+  Widget _panel({
+    required BuildContext context,
     Key? key,
     required IconData icon,
     required Color tone,
@@ -199,7 +204,9 @@ class FirstRunView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(title, style: ChoreiaType.of(context).label(size: 9.5, color: tone)),
+                  Text(title,
+                      style: ChoreiaType.of(context)
+                          .label(size: 9.5, color: tone)),
                   const SizedBox(height: 6),
                   Text(
                     body,

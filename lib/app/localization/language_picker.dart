@@ -47,9 +47,11 @@ class ChoreiaLanguagePicker extends StatelessWidget {
                 ])),
       ),
       if (controller.readFailed && !compact)
-        Semantics(liveRegion: true, child: Text(UiLanguage.text(context,
-            en: 'Your saved language could not be read. System language is used until you choose another option.',
-            tr: 'Kayıtlı diliniz okunamadı. Başka bir seçenek belirleyene kadar sistem dili kullanılır.'))),
+        Semantics(
+            liveRegion: true,
+            child: Text(UiLanguage.text(context,
+                en: 'Your saved language could not be read. System language is used until you choose another option.',
+                tr: 'Kayıtlı diliniz okunamadı. Başka bir seçenek belirleyene kadar sistem dili kullanılır.'))),
       if (controller.persistenceFailed && !compact)
         Text(UiLanguage.text(context,
             en: 'This language works for this session. The device preference could not be saved.',

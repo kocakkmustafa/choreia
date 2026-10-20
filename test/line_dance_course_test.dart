@@ -15,8 +15,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'hip_hop_course_page_test.dart' show WrittenBundle;
 import 'support/test_catalog.dart';
 
-Finder get _verticalCourseScroll => find.byWidgetPredicate(
-    (widget) => widget is Scrollable && widget.axisDirection == AxisDirection.down);
+Finder get _verticalCourseScroll => find.byWidgetPredicate((widget) =>
+    widget is Scrollable && widget.axisDirection == AxisDirection.down);
 
 void main() {
   final source =
