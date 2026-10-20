@@ -17,7 +17,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   for (final lateTag in const ['fr', 'ar']) {
-    testWidgets('late $lateTag resources cannot replace the latest EN selection',
+    testWidgets(
+        'late $lateTag resources cannot replace the latest EN selection',
         (tester) async {
       final controller = ChoreiaLocaleController.memory(const Locale('en'));
       final bundle = _DelayedLocaleBundle(lateTag);
@@ -40,7 +41,8 @@ void main() {
         expect(bundle.hasCompleted, isFalse);
         expect(controller.value, Locale(lateTag));
         // Localizations intentionally keeps the old resources while loading.
-        expect(ChoreiaMessages.of(tester.element(find.byType(_Probe))).localeTag,
+        expect(
+            ChoreiaMessages.of(tester.element(find.byType(_Probe))).localeTag,
             'en');
 
         // The second selection is applied before the old asset is released.
@@ -88,7 +90,8 @@ void _expectLatestEnglish(WidgetTester tester,
   expect(WidgetsLocalizations.of(context).textDirection, TextDirection.ltr);
   expect(tester.widget<Text>(find.byKey(const Key('probe.translation'))).data,
       'Progress');
-  expect(identical(tester.state<_ProbeState>(find.byType(_Probe)), originalState),
+  expect(
+      identical(tester.state<_ProbeState>(find.byType(_Probe)), originalState),
       isTrue);
   expect(find.text('counter=1'), findsOneWidget);
 }
