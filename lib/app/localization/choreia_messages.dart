@@ -42,13 +42,12 @@ class ChoreiaMessagesDelegate extends LocalizationsDelegate<ChoreiaMessages> {
   const ChoreiaMessagesDelegate({this.bundle});
   final AssetBundle? bundle;
   @override
-  bool isSupported(Locale locale) =>
-      ChoreiaLocaleController.supported.any((supported) =>
-          supported.languageCode == locale.languageCode.toLowerCase());
+  bool isSupported(Locale locale) => ChoreiaLocaleController.supports(locale);
 
   @override
   Future<ChoreiaMessages> load(Locale locale) {
-    final tag = ChoreiaLocaleController.tag(locale);
+    final tag = ChoreiaLocaleController.tag(
+        ChoreiaLocaleController.resolve(locale, ChoreiaLocaleController.supported));
     if (tag == 'en' || tag == 'tr') {
       return SynchronousFuture(ChoreiaMessages(
           localeTag: tag,

@@ -68,15 +68,27 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
         _ => 'en',
       };
 
+  static bool supports(Locale locale) {
+    final language = locale.languageCode.toLowerCase();
+    if (!supported.any((entry) => entry.languageCode == language)) return false;
+    if (language != 'zh') return true;
+    // This release contains Simplified Chinese only. An explicit script wins
+    // over region; a Traditional request must keep its place in the OS list.
+    final script = locale.scriptCode?.toLowerCase();
+    if (script != null) return script == 'hans';
+    return !const {'TW', 'HK', 'MO'}.contains(locale.countryCode?.toUpperCase());
+  }
+
   static Locale resolve(Locale? requested, Iterable<Locale> _) {
-    final wanted = requested == null ? 'en' : tag(requested);
+    if (requested == null || !supports(requested)) return const Locale('en');
+    final wanted = tag(requested);
     return supported.firstWhere((locale) => tag(locale) == wanted);
   }
 
   /// Respect the OS preference order before falling back to English.
   static Locale resolveLocales(List<Locale>? requested, Iterable<Locale> _) {
     for (final locale in requested ?? const <Locale>[]) {
-      if (supported.any((entry) => entry.languageCode == locale.languageCode.toLowerCase())) {
+      if (supports(locale)) {
         return resolve(locale, supported);
       }
     }

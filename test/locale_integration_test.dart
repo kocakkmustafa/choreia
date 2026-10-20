@@ -24,6 +24,11 @@ void main() {
       Locale('ja', 'JP'): 'ja',
       Locale('ar', 'EG'): 'ar',
       Locale('zh', 'CN'): 'zh-Hans',
+      Locale('zh', 'TW'): 'en',
+      Locale('zh', 'HK'): 'en',
+      Locale('zh', 'MO'): 'en',
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'CN'): 'en',
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'TW'): 'zh-Hans',
       Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'SG'): 'zh-Hans',
       Locale('it', 'IT'): 'it',
       Locale('ko', 'KR'): 'ko',
@@ -59,6 +64,38 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('ar'), findsOneWidget);
     expect(ChoreiaLocaleController.resolveLocales(const [Locale('ru')], ChoreiaLocaleController.supported), const Locale('en'));
+  });
+
+  test('unsupported Chinese script never loads the Simplified asset', () async {
+    const delegate = ChoreiaMessagesDelegate();
+    for (final locale in const [
+      Locale('zh', 'TW'), Locale('zh', 'HK'), Locale('zh', 'MO'),
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Latn'),
+    ]) {
+      expect(delegate.isSupported(locale), isFalse);
+      expect((await delegate.load(locale)).localeTag, 'en');
+      expect(ChoreiaLocaleController.resolveLocales([locale, const Locale('fr')], ChoreiaLocaleController.supported), const Locale('fr'));
+    }
+  });
+
+  testWidgets('Traditional Chinese falls through to the next supported OS preference', (tester) async {
+    tester.platformDispatcher.localesTestValue = const [
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'),
+      Locale('fr', 'CA'),
+    ];
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+    final controller = ChoreiaLocaleController.memory();
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(ChoreiaApp(
+      localeController: controller,
+      localeBundle: DiskBundle(),
+      shellBuilder: (_, __) => Builder(builder: (context) => Scaffold(
+        body: Text(ChoreiaMessages.of(context).localeTag))),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('fr'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   for (final locale in ChoreiaLocaleController.supported) {
