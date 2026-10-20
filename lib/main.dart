@@ -148,39 +148,42 @@ class _ChoreiaAccountStartupFailureState
         child: ChoreiaLocaleScope(
             controller: locales,
             child: ChoreiaLocaleResources(
-              controller: locales,
-              builder: (_, locale, delegate) => AnimatedBuilder(
-              animation: themes,
-              builder: (_, __) => MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Choreia',
-                theme: ChoreiaTheme.light,
-                darkTheme: ChoreiaTheme.dark,
-                themeMode: themes.value,
-                themeAnimationDuration: Duration.zero,
-                locale: locale,
-                supportedLocales: ChoreiaLocaleController.supported,
-                localeResolutionCallback: ChoreiaLocaleController.resolve,
-                localeListResolutionCallback:
-                    ChoreiaLocaleController.resolveLocales,
-                builder: (context, child) =>
-                    AnnotatedRegion<SystemUiOverlayStyle>(
-                        value: ChoreiaTheme.overlayFor(
-                            Theme.of(context).brightness),
-                        child: TranslationFallback(child: child!)),
-                localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-                  delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                home: widget.waiting
-                    ? const Scaffold(
-                        body: SafeArea(
-                            child: Center(child: _AccountStartupWaiting())))
-                    : const ChoreiaAccountFailureView(),
-              ),
-            ))),
+                controller: locales,
+                builder: (_, locale, delegate) => AnimatedBuilder(
+                      animation: themes,
+                      builder: (_, __) => MaterialApp(
+                        debugShowCheckedModeBanner: false,
+                        title: 'Choreia',
+                        theme: ChoreiaTheme.light,
+                        darkTheme: ChoreiaTheme.dark,
+                        themeMode: themes.value,
+                        themeAnimationDuration: Duration.zero,
+                        locale: locale,
+                        supportedLocales: ChoreiaLocaleController.supported,
+                        localeResolutionCallback:
+                            ChoreiaLocaleController.resolve,
+                        localeListResolutionCallback:
+                            ChoreiaLocaleController.resolveLocales,
+                        builder: (context, child) =>
+                            AnnotatedRegion<SystemUiOverlayStyle>(
+                                value: ChoreiaTheme.overlayFor(
+                                    Theme.of(context).brightness),
+                                child: TranslationFallback(child: child!)),
+                        localizationsDelegates: <LocalizationsDelegate<
+                            dynamic>>[
+                          delegate,
+                          GlobalMaterialLocalizations.delegate,
+                          GlobalWidgetsLocalizations.delegate,
+                          GlobalCupertinoLocalizations.delegate,
+                        ],
+                        home: widget.waiting
+                            ? const Scaffold(
+                                body: SafeArea(
+                                    child: Center(
+                                        child: _AccountStartupWaiting())))
+                            : const ChoreiaAccountFailureView(),
+                      ),
+                    ))),
       );
 }
 
@@ -357,39 +360,39 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
                   controller: _locales,
                   bundle: widget.localeBundle,
                   builder: (_, locale, delegate) => AnimatedBuilder(
-                  animation: _themes,
-                  builder: (_, __) => MaterialApp(
-                        key: navigationKey,
-                        debugShowCheckedModeBanner: false,
-                        title: 'Choreia',
-                        theme: ChoreiaTheme.light,
-                        darkTheme: ChoreiaTheme.dark,
-                        themeMode: _themes.value,
-                        themeAnimationDuration: Duration.zero,
-                        locale: locale,
-                        supportedLocales: ChoreiaLocaleController.supported,
-                        localeResolutionCallback:
-                            ChoreiaLocaleController.resolve,
-                        localeListResolutionCallback:
-                            ChoreiaLocaleController.resolveLocales,
-                        builder: (context, child) =>
-                            AnnotatedRegion<SystemUiOverlayStyle>(
-                                value: ChoreiaTheme.overlayFor(
-                                    Theme.of(context).brightness),
-                                child: TranslationFallback(child: child!)),
-                        localizationsDelegates: <LocalizationsDelegate<
-                            dynamic>>[
-                          delegate,
-                          GlobalMaterialLocalizations.delegate,
-                          GlobalWidgetsLocalizations.delegate,
-                          GlobalCupertinoLocalizations.delegate,
-                        ],
-                        home: recovery ||
-                                (accountRuntime != null &&
-                                    _hostController.requiresAccountRoute)
-                            ? accountPage(context)
-                            : shell(ownerEpoch),
-                      )))));
+                      animation: _themes,
+                      builder: (_, __) => MaterialApp(
+                            key: navigationKey,
+                            debugShowCheckedModeBanner: false,
+                            title: 'Choreia',
+                            theme: ChoreiaTheme.light,
+                            darkTheme: ChoreiaTheme.dark,
+                            themeMode: _themes.value,
+                            themeAnimationDuration: Duration.zero,
+                            locale: locale,
+                            supportedLocales: ChoreiaLocaleController.supported,
+                            localeResolutionCallback:
+                                ChoreiaLocaleController.resolve,
+                            localeListResolutionCallback:
+                                ChoreiaLocaleController.resolveLocales,
+                            builder: (context, child) =>
+                                AnnotatedRegion<SystemUiOverlayStyle>(
+                                    value: ChoreiaTheme.overlayFor(
+                                        Theme.of(context).brightness),
+                                    child: TranslationFallback(child: child!)),
+                            localizationsDelegates: <LocalizationsDelegate<
+                                dynamic>>[
+                              delegate,
+                              GlobalMaterialLocalizations.delegate,
+                              GlobalWidgetsLocalizations.delegate,
+                              GlobalCupertinoLocalizations.delegate,
+                            ],
+                            home: recovery ||
+                                    (accountRuntime != null &&
+                                        _hostController.requiresAccountRoute)
+                                ? accountPage(context)
+                                : shell(ownerEpoch),
+                          )))));
     }
 
     final runtime = accountRuntime;

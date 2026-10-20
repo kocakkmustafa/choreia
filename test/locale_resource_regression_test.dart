@@ -128,13 +128,15 @@ void main() {
       oldBundle.expectPending('fr');
       final replacement = h.newBundle('replacement');
       h.bundle = replacement;
-      await h.mount(); // Same ChoreiaApp key/controller, different localeBundle.
+      await h
+          .mount(); // Same ChoreiaApp key/controller, different localeBundle.
       await _flush(tester);
       _expectEffective(h, 'fr');
       expect(replacement.requested('fr'), isTrue);
       oldBundle.complete('fr');
       await _flush(tester);
-      _expectEffective(h, 'fr'); // Also checks the replacement marker, not tag only.
+      _expectEffective(
+          h, 'fr'); // Also checks the replacement marker, not tag only.
     });
   });
 
@@ -183,7 +185,8 @@ void main() {
       (tester) async {
     await _withHarness(tester, (h) async {
       await tester.tap(find.byKey(_openKey));
-      await tester.pumpAndSettle(); // No pending asset and field not focused yet.
+      await tester
+          .pumpAndSettle(); // No pending asset and field not focused yet.
       final route = tester.state<_RouteProbeState>(find.byType(_RouteProbe));
       final field = tester.widget<TextField>(find.byKey(_fieldKey));
       final originalController = field.controller!;
@@ -194,8 +197,10 @@ void main() {
       originalFocus.requestFocus();
       await tester.pump();
       void expectRoute() {
-        expect(identical(tester.state<_RouteProbeState>(find.byType(_RouteProbe)),
-            route), isTrue);
+        expect(
+            identical(tester.state<_RouteProbeState>(find.byType(_RouteProbe)),
+                route),
+            isTrue);
         final currentField = tester.widget<TextField>(find.byKey(_fieldKey));
         expect(identical(currentField.controller, originalController), isTrue);
         expect(identical(currentField.focusNode, originalFocus), isTrue);
@@ -271,16 +276,16 @@ void main() {
       await h.close();
     }
   });
-
 }
 
-Future<void> _withHarness(WidgetTester tester,
-    Future<void> Function(_Harness) body,
+Future<void> _withHarness(
+    WidgetTester tester, Future<void> Function(_Harness) body,
     {Locale? initialLocale = const Locale('en')}) async {
   final harness = _Harness(tester, initialLocale);
   try {
     await harness.mount();
-    await tester.pumpAndSettle(); // All cases start at the completed warm EN state.
+    await tester
+        .pumpAndSettle(); // All cases start at the completed warm EN state.
     _expectEffective(harness, 'en');
     await body(harness);
     expect(tester.takeException(), isNull);
@@ -300,10 +305,13 @@ void _expectEffective(_Harness h, String tag) {
   final expected = Locale(tag); // These fixtures request EN, FR and AR only.
   final selected = h.controller.value;
   if (selected != null) expect(selected, expected);
-  final configured = h.tester.widget<MaterialApp>(find.byType(MaterialApp)).locale;
+  final configured =
+      h.tester.widget<MaterialApp>(find.byType(MaterialApp)).locale;
   if (configured != null) {
-    expect(ChoreiaLocaleController.resolve(
-        configured, ChoreiaLocaleController.supported), expected);
+    expect(
+        ChoreiaLocaleController.resolve(
+            configured, ChoreiaLocaleController.supported),
+        expected);
   }
   expect(Localizations.localeOf(context), expected);
   expect(UiLanguage.locale(context), expected);
@@ -387,12 +395,14 @@ class _ControlledBundle extends CachingAssetBundle {
   bool requested(String tag) => _requested.contains(tag);
 
   void hold(String tag) {
-    if (_gates.containsKey(tag)) throw StateError('Duplicate fixture gate: $tag');
+    if (_gates.containsKey(tag))
+      throw StateError('Duplicate fixture gate: $tag');
     _gates[tag] = Completer<String>();
   }
 
   void expectPending(String tag) {
-    expect(requested(tag), isTrue, reason: '$id/$tag must actually have started');
+    expect(requested(tag), isTrue,
+        reason: '$id/$tag must actually have started');
     expect(_gates.containsKey(tag), isTrue);
     expect(_gates[tag]!.isCompleted, isFalse);
   }
@@ -405,7 +415,8 @@ class _ControlledBundle extends CachingAssetBundle {
   }
 
   void fail(String tag) {
-    expectPending(tag); // The delegate has attached its real Future.wait listener.
+    expectPending(
+        tag); // The delegate has attached its real Future.wait listener.
     _gates[tag]!.completeError(
         FlutterError('Controlled old locale read failure: $id/$tag'));
   }
@@ -424,7 +435,8 @@ class _ControlledBundle extends CachingAssetBundle {
     final match = RegExp(r'^content/l10n/(course|ui|catalog)\.([^/]+)\.json$')
         .firstMatch(key);
     if (match == null) {
-      return Future<String>.error(FlutterError('Unexpected fixture asset: $key'));
+      return Future<String>.error(
+          FlutterError('Unexpected fixture asset: $key'));
     }
     if (match[1] != 'ui') return Future<String>.value('{}');
     final tag = match[2]!;
@@ -458,8 +470,8 @@ class _Entry extends StatelessWidget {
           const _LocaleProbe(),
           TextButton(
             key: _openKey,
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-                builder: (_) => const _RouteProbe())),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const _RouteProbe())),
             child: const Text('Open controlled route'),
           ),
         ]),

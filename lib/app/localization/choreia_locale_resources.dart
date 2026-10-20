@@ -46,7 +46,8 @@ class _ChoreiaLocaleResourcesState extends State<ChoreiaLocaleResources>
   @override
   void didUpdateWidget(covariant ChoreiaLocaleResources oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller || oldWidget.bundle != widget.bundle) {
+    if (oldWidget.controller != widget.controller ||
+        oldWidget.bundle != widget.bundle) {
       oldWidget.controller.removeListener(_prepare);
       widget.controller.addListener(_prepare);
       _prepare(force: true);
@@ -64,7 +65,8 @@ class _ChoreiaLocaleResourcesState extends State<ChoreiaLocaleResources>
         ? ChoreiaLocaleController.resolveLocales(
             WidgetsBinding.instance.platformDispatcher.locales,
             ChoreiaLocaleController.supported)
-        : ChoreiaLocaleController.resolve(requested, ChoreiaLocaleController.supported);
+        : ChoreiaLocaleController.resolve(
+            requested, ChoreiaLocaleController.supported);
     if (!force && locale == _requested) return;
     _requested = locale;
     final generation = ++_generation;
@@ -76,14 +78,16 @@ class _ChoreiaLocaleResourcesState extends State<ChoreiaLocaleResources>
       });
       _releaseFirstFrame();
     }
+
     // The loader has a bounded asset deadline and returns a tagged fallback.
     // A late result is ignored here, before Flutter can publish its locale.
-    unawaited(ChoreiaMessagesDelegate(bundle: widget.bundle).load(locale).then<void>(
-      publish,
-      onError: (Object _, StackTrace __) => publish(ChoreiaMessages(
-          localeTag: ChoreiaLocaleController.tag(locale),
-          translationUnavailable: true)),
-    ));
+    unawaited(
+        ChoreiaMessagesDelegate(bundle: widget.bundle).load(locale).then<void>(
+              publish,
+              onError: (Object _, StackTrace __) => publish(ChoreiaMessages(
+                  localeTag: ChoreiaLocaleController.tag(locale),
+                  translationUnavailable: true)),
+            ));
     if (_messages == null && !_firstFrameDeferred) {
       _firstFrameDeferred = true;
       WidgetsBinding.instance.deferFirstFrame();
@@ -109,7 +113,8 @@ class _ChoreiaLocaleResourcesState extends State<ChoreiaLocaleResources>
   Widget build(BuildContext context) {
     final messages = _messages;
     if (messages == null) return const SizedBox.shrink();
-    return widget.builder(context, _applied!, _PreparedMessagesDelegate(messages));
+    return widget.builder(
+        context, _applied!, _PreparedMessagesDelegate(messages));
   }
 }
 
@@ -126,5 +131,6 @@ class _PreparedMessagesDelegate extends LocalizationsDelegate<ChoreiaMessages> {
   Future<ChoreiaMessages> load(Locale locale) => SynchronousFuture(messages);
 
   @override
-  bool shouldReload(_PreparedMessagesDelegate old) => !identical(messages, old.messages);
+  bool shouldReload(_PreparedMessagesDelegate old) =>
+      !identical(messages, old.messages);
 }
