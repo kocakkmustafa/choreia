@@ -286,7 +286,7 @@ class LiveView extends StatelessWidget {
             // whether content fits, never whether it starts where it should.
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
             children: <Widget>[
-              ..._forState(tr),
+              ..._forState(context, tr),
               // THE TERMINAL. Until this existed the live path had no exit
               // that kept anything: the back arrow discarded the session, so
               // nothing was ever written and the progress surface was
@@ -322,7 +322,7 @@ class LiveView extends StatelessWidget {
 
   /// The compiler enforces exhaustiveness here — adding an eighth state
   /// breaks the build rather than silently rendering nothing.
-  List<Widget> _forState(bool tr) => switch (state) {
+  List<Widget> _forState(BuildContext context, bool tr) => switch (state) {
         LiveIdle() => <Widget>[_idleCard(context, tr)],
         LiveInterrupted(:final accountChanged) => <Widget>[
             _interruptedCard(context, tr, accountChanged: accountChanged)

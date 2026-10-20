@@ -35,9 +35,8 @@ class FileChoreiaThemeStore implements ChoreiaThemeStore {
 }
 
 class ChoreiaThemeController extends ValueNotifier<ThemeMode> {
-  ChoreiaThemeController.memory([ThemeMode mode = ThemeMode.system])
-      : _store = null,
-        super(mode);
+  ChoreiaThemeController.memory([super.value = ThemeMode.system])
+      : _store = null;
   ChoreiaThemeController.persisted(
       {ChoreiaThemeStore store = const FileChoreiaThemeStore()})
       : _store = store,

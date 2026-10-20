@@ -126,7 +126,7 @@ Future<void> _reach(WidgetTester tester, Finder target) async {
     }
   }
   expect(target, findsOneWidget);
-  await tester.ensureVisible(target, alignment: .35);
+  await Scrollable.ensureVisible(tester.element(target), alignment: .35);
   await _advance(tester);
   _clean(tester, 'erişim: $target');
 }
@@ -305,8 +305,9 @@ class _Host {
                       cameraSessionsAvailable: false,
                       flagOverride: MemoryFirstRunFlag(seen: introSeen),
                       bundleOverride: () async {
-                        if (failCatalog)
+                        if (failCatalog) {
                           throw StateError('Yerel katalog okuma arızası');
+                        }
                         return library;
                       },
                     ),

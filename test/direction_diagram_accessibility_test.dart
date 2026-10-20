@@ -76,7 +76,9 @@ bool _hasAccent(Uint8List pixels, Size size, Offset point) {
       if (pixels[index] == 0 &&
           pixels[index + 1] == 0x66 &&
           pixels[index + 2] == 0xff &&
-          pixels[index + 3] > 0) return true;
+          pixels[index + 3] > 0) {
+        return true;
+      }
     }
   }
   return false;
