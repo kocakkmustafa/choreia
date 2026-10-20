@@ -2,6 +2,7 @@ import 'package:choreia/app/live/live_session.dart';
 import 'package:choreia/app/live/live_state.dart';
 import 'package:choreia/app/live/session_result_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -16,6 +17,9 @@ void main() {
 
   Future<void> show(WidgetTester tester, RecordOutcome outcome) =>
       tester.pumpWidget(MaterialApp(
+        locale: const Locale('tr'),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         home: SessionResultView(
           lessonName: 'Test',
           outcome: outcome,
@@ -54,6 +58,9 @@ void main() {
         'for this movement, so calling your starting foot wrong would be a '
         'coin flip presented as a judgement.';
     await tester.pumpWidget(const MaterialApp(
+      locale: const Locale('tr'),
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: SessionResultView(
         lessonId: 'hh_l1_bounce',
         lessonName: 'The Bounce (puanlanmıyor)',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../live/live_environment.dart';
 import '../ui_language.dart';
+import '../read_deadline.dart';
 import 'media/lesson_media_slot.dart';
 import 'salsa_progress.dart';
 
@@ -28,6 +29,7 @@ class _WrittenUnitPracticeState extends State<WrittenUnitPractice>
   late final LiveEnvironment _ownerEnv;
   SalsaProgressStore? _store;
   int _epoch = 0;
+  final _reads = ReadDeadline(const Duration(seconds: 10));
   int? _count;
   bool _busy = false, _failed = false, _retired = false, _foreground = true;
 
@@ -96,13 +98,13 @@ class _WrittenUnitPracticeState extends State<WrittenUnitPractice>
       _count = null;
     });
     try {
-      final store = await SalsaProgressStore.open(
+      final store = await _reads.run(SalsaProgressStore.open(
           accountUserId: widget.env.accountUserId?.value,
           supportDirectory: widget.env.historyDirectoryOverride,
           owners: widget.env.storeOwners,
-          writtenStudy: true);
+          writtenStudy: true));
       if (!_current(epoch)) return;
-      final progress = await store.read();
+      final progress = await _reads.run(store.read());
       if (!_current(epoch)) return;
       setState(() {
         _store = store;
@@ -147,6 +149,7 @@ class _WrittenUnitPracticeState extends State<WrittenUnitPractice>
   @override
   void dispose() {
     _epoch++;
+    _reads.retire();
     _ownerEnv.accountUserId?.removeListener(_retire);
     _ownerEnv.ownerEpoch?.removeListener(_retire);
     _ownerEnv.passwordRecovery?.removeListener(_onRecovery);
@@ -160,41 +163,34 @@ class _WrittenUnitPracticeState extends State<WrittenUnitPractice>
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       LessonMediaSlot.empty(
           lessonId: widget.unitId,
-          locale: tr ? 'tr' : 'en',
+          locale: UiLanguage.tag(context),
           bundle: widget.bundle,
           accountUserId: widget.env.accountUserId,
           passwordRecovery: widget.env.passwordRecovery,
           ownerEpoch: widget.env.ownerEpoch),
       if (_retired)
-        Text(tr
-            ? 'Hesap oturumu değişti. Derse yeniden gir.'
-            : 'The account session changed. Reopen the lesson.')
+        Text(UiLanguage.pair(context, turkish: tr, en: 'The account session changed. Reopen the lesson.', tr: 'Hesap oturumu değişti. Derse yeniden gir.'))
       else if (_failed) ...[
-        Text(tr
-            ? 'Çalışma kaydı okunamadı veya kaydedilemedi. Mevcut kayıtlar korunuyor.'
-            : 'The study record could not be read or saved. Existing records are preserved.'),
+        Text(UiLanguage.pair(context, turkish: tr, en: 'The study record could not be read or saved. Existing records are preserved.', tr: 'Çalışma kaydı okunamadı veya kaydedilemedi. Mevcut kayıtlar korunuyor.')),
         TextButton(
             key: Key('written.retry.${widget.unitId}'),
             onPressed: _busy ? null : _load,
-            child: Text(tr ? 'Kaydı yeniden oku' : 'Reload record')),
+            child: Text(UiLanguage.pair(context, turkish: tr, en: 'Reload record', tr: 'Kaydı yeniden oku'))),
       ] else ...[
         Text(
             _count == null
-                ? (tr ? 'Çalışma kaydı okunuyor…' : 'Reading study record…')
-                : (tr
-                    ? 'Kendi çalışma kaydın: $_count'
-                    : 'Your study entries: $_count'),
+                ? (UiLanguage.pair(context, turkish: tr, en: 'Reading study record…', tr: 'Çalışma kaydı okunuyor…'))
+                : UiLanguage.format(context,
+                    en: 'Your study entries: {count}',
+                    tr: 'Kendi çalışma kaydın: {count}',
+                    values: {'count': _count!}),
             key: Key('written.count.${widget.unitId}')),
         OutlinedButton(
             key: Key('written.record.${widget.unitId}'),
             onPressed: _busy || _count == null || !_foreground ? null : _record,
-            child: Text(tr
-                ? 'Bu birimi çalıştığımı kaydet'
-                : 'Record my study of this unit')),
+            child: Text(UiLanguage.pair(context, turkish: tr, en: 'Record my study of this unit', tr: 'Bu birimi çalıştığımı kaydet'))),
       ],
-      Text(tr
-          ? 'Bu öz beyanlı kayıttır. Adım/faz, müziğe uyum veya ustalık doğrulanmaz.'
-          : 'This is your own report. Step, phase, musical timing and mastery are not verified.'),
+      Text(UiLanguage.pair(context, turkish: tr, en: 'This is your own report. Step, phase, musical timing and mastery are not verified.', tr: 'Bu öz beyanlı kayıttır. Adım/faz, müziğe uyum veya ustalık doğrulanmaz.')),
     ]);
   }
 }

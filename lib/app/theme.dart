@@ -169,8 +169,31 @@ class SlowBreath extends StatefulWidget {
 class _SlowBreathState extends State<SlowBreath>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c =
-      AnimationController(vsync: this, duration: widget.duration)
-        ..repeat(reverse: true);
+      AnimationController(vsync: this, duration: widget.duration);
+  bool? _reduceMotion;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bool reduceMotion = MediaQuery.disableAnimationsOf(context);
+    if (_reduceMotion == reduceMotion) return;
+    _reduceMotion = reduceMotion;
+    if (reduceMotion) {
+      _c.stop();
+      _c.value = 0;
+    } else {
+      _c.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant SlowBreath oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.duration != widget.duration) {
+      _c.duration = widget.duration;
+      if (_reduceMotion == false) _c.repeat(reverse: true);
+    }
+  }
 
   @override
   void dispose() {
@@ -209,7 +232,31 @@ class SlowSpin extends StatefulWidget {
 class _SlowSpinState extends State<SlowSpin>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c =
-      AnimationController(vsync: this, duration: widget.duration)..repeat();
+      AnimationController(vsync: this, duration: widget.duration);
+  bool? _reduceMotion;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bool reduceMotion = MediaQuery.disableAnimationsOf(context);
+    if (_reduceMotion == reduceMotion) return;
+    _reduceMotion = reduceMotion;
+    if (reduceMotion) {
+      _c.stop();
+      _c.value = 0;
+    } else {
+      _c.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant SlowSpin oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.duration != widget.duration) {
+      _c.duration = widget.duration;
+      if (_reduceMotion == false) _c.repeat();
+    }
+  }
 
   @override
   void dispose() {
@@ -238,11 +285,26 @@ class ChoreiaBackdrop extends StatefulWidget {
 class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
     with TickerProviderStateMixin {
   late final AnimationController _a =
-      AnimationController(vsync: this, duration: ChoreiaMotion.sceneGlow)
-        ..repeat(reverse: true);
+      AnimationController(vsync: this, duration: ChoreiaMotion.sceneGlow);
   late final AnimationController _b = AnimationController(
-      vsync: this, duration: ChoreiaMotion.sceneGlowReverse)
-    ..repeat(reverse: true);
+      vsync: this, duration: ChoreiaMotion.sceneGlowReverse);
+  bool? _reduceMotion;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bool reduceMotion = MediaQuery.disableAnimationsOf(context);
+    if (_reduceMotion == reduceMotion) return;
+    _reduceMotion = reduceMotion;
+    for (final AnimationController controller in <AnimationController>[_a, _b]) {
+      if (reduceMotion) {
+        controller.stop();
+        controller.value = 0;
+      } else {
+        controller.repeat(reverse: true);
+      }
+    }
+  }
 
   @override
   void dispose() {

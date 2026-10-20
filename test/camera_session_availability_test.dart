@@ -16,6 +16,7 @@ import 'package:choreia/app/shell/choreia_shell.dart';
 import 'package:choreia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:motion_account/motion_account.dart';
@@ -75,6 +76,9 @@ void main() {
           var checks = 0, permissions = 0, factories = 0;
           final source = _CountingSource();
           await tester.pumpWidget(MaterialApp(
+              locale: Locale(language),
+              supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+              localizationsDelegates: GlobalMaterialLocalizations.delegates,
               home: StyleDetailView(
             card: library.cardFor('hip_hop_foundations')!,
             runnableSteps: reference ? const {'hh_bounce'} : const {},
@@ -161,6 +165,9 @@ void main() {
         final grant = Completer<bool>();
         final source = _CountingSource();
         await tester.pumpWidget(MaterialApp(
+            locale: Locale(language),
+            supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: StyleDetailView(
           card: library.cardFor('hip_hop_foundations')!,
           runnableSteps: const {'hh_bounce'},
@@ -216,6 +223,9 @@ void main() {
         phone(tester, language);
         var permissions = 0;
         await tester.pumpWidget(MaterialApp(
+            locale: Locale(language),
+            supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: ChoreiaShell(
           cameraSessionsAvailable: available,
           bundleOverride: () async => library,
@@ -326,6 +336,9 @@ void main() {
           (tester) async {
         phone(tester, language);
         await tester.pumpWidget(MaterialApp(
+            locale: Locale(language),
+            supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: Scaffold(
                 body: ProfileView(
           cameraSessionsAvailable: available,

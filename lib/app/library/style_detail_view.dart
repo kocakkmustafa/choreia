@@ -5,6 +5,7 @@ import '../course/hip_hop_course_page.dart';
 import '../course/line_dance_course_page.dart';
 import '../course/latin_fusion_course_page.dart';
 import '../course/short_form_course_page.dart';
+import '../course/salsa_course_page.dart';
 import '../course/practice_comparison_page.dart';
 import '../live/live_environment.dart';
 import '../live/live_lesson_page.dart';
@@ -18,6 +19,78 @@ import 'style_content_copy.dart';
 // what the same style is called.
 import 'library_view.dart';
 import 'style_status_copy.dart';
+
+/// The written routes are independent of the camera-reference catalogue.
+/// Keep their actual builders together so a tile cannot advertise an absent
+/// course, and the catalogue and style page open the same curriculum.
+class WrittenCourseLink extends StatelessWidget {
+  const WrittenCourseLink({
+    required this.styleId,
+    this.env = const LiveEnvironment(),
+    super.key,
+  });
+
+  final String styleId;
+  final LiveEnvironment env;
+
+  static final Map<String, (String, Widget Function(LiveEnvironment))> _routes =
+      <String, (String, Widget Function(LiveEnvironment))>{
+    'salsa_shines': ('course/salsa-on1', (env) => SalsaCoursePage(env: env)),
+    'hip_hop_foundations': (
+      'course/hip-hop-written',
+      (env) => HipHopCoursePage(skillCourse: true, env: env, bundle: env.bundle),
+    ),
+    'line_dance': (
+      'course/line-dance-written',
+      (env) => LineDanceCoursePage(env: env, bundle: env.bundle),
+    ),
+    'latin_fusion_fitness': (
+      'course/latin-fusion-written',
+      (env) => LatinFusionCoursePage(env: env, bundle: env.bundle),
+    ),
+    'tiktok_format': (
+      'course/original-short-form-written',
+      (env) => ShortFormCoursePage(env: env, bundle: env.bundle),
+    ),
+  };
+
+  static bool supports(String styleId) => _routes.containsKey(styleId);
+  static Key startKey(String styleId) => switch (styleId) {
+    'salsa_shines' => const Key('salsa.open'),
+    'hip_hop_foundations' => const Key('style.hipHopSkillCourse'),
+    'line_dance' => const Key('style.lineDanceWrittenCourse'),
+    'latin_fusion_fitness' => const Key('style.latinFusionWrittenCourse'),
+    'tiktok_format' => const Key('style.shortFormWrittenCourse'),
+    _ => Key('writtenCourse.open.$styleId'),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final route = _routes[styleId];
+    if (route == null) return const SizedBox.shrink();
+    final int? entryEpoch = env.ownerEpoch?.value;
+    return FilledButton.tonalIcon(
+      key: startKey(styleId),
+      style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
+      icon: const Icon(Icons.menu_book_outlined),
+      onPressed: () {
+        if (!context.mounted ||
+            env.passwordRecovery?.value == true ||
+            entryEpoch != env.ownerEpoch?.value) {
+          return;
+        }
+        Navigator.of(context).push<void>(
+          ChoreiaPageRoute<void>(
+            settings: RouteSettings(name: route.$1),
+            builder: (_) => route.$2(env),
+          ),
+        );
+      },
+      label: Text(UiLanguage.text(context,
+          en: 'Open written course', tr: 'Yazılı kursu aç')),
+    );
+  }
+}
 
 /// One style's page.
 ///
@@ -76,6 +149,8 @@ class StyleDetailView extends StatelessWidget {
   static const Key cameraLimitsKey = Key('style.cameraLimits');
   static const Key descriptionKey = Key('style.description');
   static const Key glossaryKey = Key('style.glossary');
+  static const Key writtenCourseKey = Key('style.writtenCourse');
+  static const Key noCameraLessonsKey = Key('style.noCameraLessons');
 
   static Key lessonStartKey(String id) => Key('style.start.$id');
   static Key sessionUnavailableKey(String id) => Key('style.sessionUnavailable.$id');
@@ -92,12 +167,15 @@ class StyleDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<LessonOffer> offers = card.offers(runnableSteps);
     final StyleDetailCopy copy = StyleDetailCopy(UiLanguage.isTurkish(context),
-        cameraSessionsAvailable: cameraSessionsAvailable);
+        cameraSessionsAvailable: cameraSessionsAvailable,
+        translate: (en, tr) => UiLanguage.text(context, en: en, tr: tr),
+        format: (en, tr, values) => UiLanguage.format(context,
+            en: en, tr: tr, values: values));
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          StyleContentCopy.styleName(card.entry, turkish: copy.turkish),
+          copy.authored(StyleContentCopy.styleName(card.entry, turkish: copy.turkish)),
         ),
       ),
       body: ChoreiaBackdrop(
@@ -121,10 +199,10 @@ class StyleDetailView extends StatelessWidget {
               const SizedBox(height: 20),
               if (card.entry.description != null) ...<Widget>[
                 Text(
-                  StyleContentCopy.styleDescription(
+                  copy.authored(StyleContentCopy.styleDescription(
                     card.entry,
                     turkish: copy.turkish,
-                  )!,
+                  )!),
                   key: descriptionKey,
                   style: ChoreiaType.body(
                     size: 14.5,
@@ -134,86 +212,43 @@ class StyleDetailView extends StatelessWidget {
                 const SizedBox(height: 20),
               ],
               _attributionSection(copy),
+              if (WrittenCourseLink.supports(card.entry.id)) ...<Widget>[
+                const SizedBox(height: 16),
+                GlassPanel(
+                  key: writtenCourseKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(copy.writtenCourseMeaning,
+                          style: ChoreiaType.body()),
+                      const SizedBox(height: 12),
+                      WrittenCourseLink(styleId: card.entry.id, env: env),
+                    ],
+                  ),
+                ),
+              ],
               if (card.entry.id == 'hip_hop_foundations')
                 TextButton(
                   key: const Key('style.hipHopWrittenPath'),
+                  style: TextButton.styleFrom(
+                    minimumSize: const Size(48, 48),
+                  ),
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
                       builder: (_) => HipHopCoursePage(env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(
-                    copy.turkish
-                        ? 'Yazılı başlangıç yolu · eğitmen incelemesi bekleniyor'
-                        : 'Written beginner path · instructor review pending',
-                  ),
-                ),
-              if (card.entry.id == 'hip_hop_foundations')
-                TextButton(
-                  key: const Key('style.hipHopSkillCourse'),
-                  onPressed: () => Navigator.of(context).push<void>(
-                    ChoreiaPageRoute<void>(
-                      builder: (_) => HipHopCoursePage(skillCourse: true, env: env, bundle: env.bundle),
-                    ),
-                  ),
-                  child: Text(
-                    copy.turkish
-                        ? 'Başlangıç kurs adayı · gösterim ve fiziksel inceleme açık'
-                        : 'Beginner course candidate · demonstration and physical review open',
-                  ),
-                ),
-              if (card.entry.id == 'line_dance')
-                TextButton(
-                  key: const Key('style.lineDanceWrittenCourse'),
-                  onPressed: () => Navigator.of(context).push<void>(
-                    ChoreiaPageRoute<void>(
-                      settings: const RouteSettings(
-                        name: 'course/line-dance-written',
-                      ),
-                      builder: (_) => LineDanceCoursePage(env: env, bundle: env.bundle),
-                    ),
-                  ),
-                  child: Text(
-                    copy.turkish
-                        ? 'Başlangıç yazılı kursu · fiziksel dönüş incelemesi açık'
-                        : 'Beginner written course · physical turn review open',
-                  ),
-                ),
-              if (card.entry.id == 'latin_fusion_fitness')
-                TextButton(
-                  key: const Key('style.latinFusionWrittenCourse'),
-                  onPressed: () => Navigator.of(context).push<void>(
-                    ChoreiaPageRoute<void>(
-                      settings: const RouteSettings(
-                        name: 'course/latin-fusion-written',
-                      ),
-                      builder: (_) => LatinFusionCoursePage(env: env, bundle: env.bundle),
-                    ),
-                  ),
-                  child: Text(
-                    copy.turkish
-                        ? 'Düşük yük yazılı temeller · gösterim/fiziksel inceleme açık'
-                        : 'Low-impact written foundations · demonstration/physical review open',
-                  ),
-                ),
-              if (card.entry.id == 'tiktok_format')
-                TextButton(
-                  key: const Key('style.shortFormWrittenCourse'),
-                  onPressed: () => Navigator.of(context).push<void>(
-                    ChoreiaPageRoute<void>(
-                      settings: const RouteSettings(name: 'course/original-short-form-written'),
-                      builder: (_) => ShortFormCoursePage(env: env, bundle: env.bundle),
-                    ),
-                  ),
-                  child: Text(
-                    copy.turkish
-                        ? 'Özgün kısa-form yazılı temeller · gösterim/fiziksel inceleme açık'
-                        : 'Original short-form written foundations · demonstration/physical review open',
+                    copy._pick('Written beginner path · instructor review pending',
+                        'Yazılı başlangıç yolu · eğitmen incelemesi bekleniyor'),
                   ),
                 ),
               if (PracticeComparisonPage.supportedStyles.contains(card.entry.id))
                 TextButton(
                   key: const Key('style.practiceComparison'),
+                  style: TextButton.styleFrom(
+                    minimumSize: const Size(48, 48),
+                  ),
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
                       settings: const RouteSettings(name: 'course/practice-comparison'),
@@ -221,9 +256,8 @@ class StyleDetailView extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    copy.turkish
-                        ? 'Denemeleri karşılaştır · geçici öz gözlem notu'
-                        : 'Compare attempts · temporary self-observation notes',
+                    copy._pick('Compare attempts · temporary self-observation notes',
+                        'Denemeleri karşılaştır · geçici öz gözlem notu'),
                   ),
                 ),
               if (card.prose?.tempo != null) ...<Widget>[
@@ -265,16 +299,29 @@ class StyleDetailView extends StatelessWidget {
   Widget _header(StyleDetailCopy copy) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      StatusPill(
-        label: copy.turkish
-            ? LibraryStrings.badgeTr(card.badge)
-            : LibraryStrings.badge(card.badge),
-        tone: _badgeTone(),
-      ),
+      if (WrittenCourseLink.supports(card.entry.id))
+        StatusPill(
+          label: copy._pick('WRITTEN COURSE', 'YAZILI KURS'),
+          tone: ChoreiaColors.amber,
+        ),
+      if (!WrittenCourseLink.supports(card.entry.id) ||
+          card.badge != StyleBadge.inPreparation) ...<Widget>[
+        if (WrittenCourseLink.supports(card.entry.id))
+          const SizedBox(height: 8),
+        StatusPill(
+          label: copy.authored(copy.turkish
+              ? LibraryStrings.badgeTr(card.badge)
+              : LibraryStrings.badge(card.badge)),
+          tone: _badgeTone(),
+        ),
+      ],
       const SizedBox(height: 12),
-      Text(
-        StyleContentCopy.styleName(card.entry, turkish: copy.turkish),
-        style: ChoreiaType.display(size: 34),
+      Semantics(
+        header: true,
+        child: Text(
+          copy.authored(StyleContentCopy.styleName(card.entry, turkish: copy.turkish)),
+          style: ChoreiaType.display(size: 34),
+        ),
       ),
       if (card.entry.subDances.isNotEmpty) ...<Widget>[
         const SizedBox(height: 8),
@@ -312,9 +359,19 @@ class StyleDetailView extends StatelessWidget {
   /// inversion is the one this whole app is built to refuse
   /// (ölçülemedi != başarısızlık), and it was sitting on the only style a
   /// dancer can actually open.
-  String? _statusSentence(StyleDetailCopy copy) =>
-      StyleStatusCopy.reason(card, turkish: copy.turkish) ??
-      _openStyleSentence(copy);
+  String? _statusSentence(StyleDetailCopy copy) {
+    if (WrittenCourseLink.supports(card.entry.id) &&
+        card.badge == StyleBadge.inPreparation) {
+      return copy.authored(LibraryStrings.sessionNotice(cameraSessionsAvailable,
+          turkish: copy.turkish));
+    }
+    final String? reason = StyleStatusCopy.reason(card, turkish: copy.turkish);
+    if (WrittenCourseLink.supports(card.entry.id) &&
+        card.badge == StyleBadge.builtButGated && reason != null) {
+      return '${copy._pick('Camera references', 'Kamera referansları')}: ${copy.authored(reason)}';
+    }
+    return reason == null ? _openStyleSentence(copy) : copy.authored(reason);
+  }
 
   /// The subject-carrying sentence for a style that IS open.
   String? _openStyleSentence(StyleDetailCopy copy) => switch (card.badge) {
@@ -343,7 +400,7 @@ class StyleDetailView extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          sentence,
+          copy.authored(sentence),
           style: ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.82)),
         ),
       ],
@@ -375,7 +432,7 @@ class StyleDetailView extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            attribution ?? copy.attributionMissing,
+            copy.authored(attribution ?? copy.attributionMissing),
             // Full body size in both branches. A gap rendered in small grey
             // type would be a way of apologising quietly; this one is meant to
             // be read.
@@ -449,7 +506,7 @@ class StyleDetailView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                g.name,
+                copy.authored(g.name),
                 style: ChoreiaType.label(
                   size: 10.5,
                   color: ChoreiaColors.text(0.72),
@@ -457,11 +514,11 @@ class StyleDetailView extends StatelessWidget {
               ),
               const SizedBox(height: 3),
               Text(
-                StyleContentCopy.glossaryGloss(
+                copy.authored(StyleContentCopy.glossaryGloss(
                   card.entry.id,
                   g,
                   turkish: copy.turkish,
-                ),
+                )),
                 style: ChoreiaType.body(
                   size: 12.5,
                   color: ChoreiaColors.text(0.66),
@@ -518,13 +575,22 @@ class StyleDetailView extends StatelessWidget {
     key: lessonsKey,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      Text(copy.lessonsTitle, style: ChoreiaType.display(size: 21)),
+      Text(
+        WrittenCourseLink.supports(card.entry.id)
+            ? copy.cameraLessonsTitle
+            : copy.lessonsTitle,
+        style: ChoreiaType.display(size: 21),
+      ),
       const SizedBox(height: 12),
       if (offers.isEmpty)
         GlassPanel(
-          key: noLessonsKey,
+          key: WrittenCourseLink.supports(card.entry.id)
+              ? noCameraLessonsKey
+              : noLessonsKey,
           child: Text(
-            copy.noLessons,
+            WrittenCourseLink.supports(card.entry.id)
+                ? copy.noCameraLessons
+                : copy.noLessons,
             style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.66)),
           ),
         )
@@ -564,7 +630,7 @@ class StyleDetailView extends StatelessWidget {
         children: <Widget>[
           TitleWithPill(
             title: Text(
-              StyleContentCopy.lessonName(l, turkish: copy.turkish),
+              copy.authored(StyleContentCopy.lessonName(l, turkish: copy.turkish)),
               style: ChoreiaType.display(size: 19),
             ),
             pill: StatusPill(
@@ -649,10 +715,10 @@ class StyleDetailView extends StatelessWidget {
                       stepId: l.stepId!,
                       lessonId: l.id,
                       styleId: l.styleId,
-                      lessonName: StyleContentCopy.lessonName(
+                      lessonName: copy.authored(StyleContentCopy.lessonName(
                         l,
                         turkish: copy.turkish,
-                      ),
+                      )),
                       lessonClass: l.isScored ? 'scored' : 'demoOnly',
                       cycleTarget: l.cycleTarget,
                       env: env,
@@ -714,7 +780,7 @@ class StyleDetailView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  line,
+                  copy.authored(line),
                   style: ChoreiaType.body(
                     size: 12.5,
                     color: ChoreiaColors.text(0.76),
@@ -741,22 +807,23 @@ class StyleDetailView extends StatelessWidget {
       ),
       const SizedBox(height: 12),
       if (p.measured.isNotEmpty)
-        _honestyBlock(copy.measuredTitle, p.measured, ChoreiaColors.rose),
+        _honestyBlock(copy, copy.measuredTitle, p.measured, ChoreiaColors.rose),
       if (p.measured.isNotEmpty && p.notMeasured.isNotEmpty)
         const SizedBox(height: 10),
       if (p.notMeasured.isNotEmpty)
-        _honestyBlock(copy.notMeasuredTitle, <String>[
+        _honestyBlock(copy, copy.notMeasuredTitle, <String>[
           for (final String line in p.notMeasured)
-            StyleContentCopy.honestyNotMeasured(
+            copy.authored(StyleContentCopy.honestyNotMeasured(
               card.entry.id,
               line,
               turkish: copy.turkish,
-            ),
+            )),
         ], ChoreiaColors.amber),
     ],
   );
 
-  Widget _honestyBlock(String title, List<String> lines, Color tone) =>
+  Widget _honestyBlock(StyleDetailCopy copy,
+      String title, List<String> lines, Color tone) =>
       GlassPanel(
         tint: tone,
         child: Column(
@@ -768,7 +835,7 @@ class StyleDetailView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  line,
+                  copy.authored(line),
                   style: ChoreiaType.body(
                     size: 12.5,
                     color: ChoreiaColors.text(0.76),
@@ -945,14 +1012,29 @@ abstract final class StyleStrings {
 /// [StyleContentCopy] where a reviewed translation matches its exact source;
 /// attribution uses the same review rule for the one open Hip-Hop style.
 final class StyleDetailCopy {
-  const StyleDetailCopy(this.turkish, {this.cameraSessionsAvailable = false});
+  const StyleDetailCopy(this.turkish, {this.cameraSessionsAvailable = false,
+    this.translate, this.format});
 
   final bool cameraSessionsAvailable;
 
   final bool turkish;
+  final String Function(String en, String tr)? translate;
+  final String Function(String en, String tr, Map<String, Object> values)? format;
 
   String _pick(String english, String turkishText) =>
-      turkish ? turkishText : english;
+      translate?.call(english, turkishText) ??
+      (turkish ? turkishText : english);
+
+  String authored(String source) => _pick(source, source);
+
+  String _format(String en, String tr, Map<String, Object> values) {
+    if (format != null) return format!(en, tr, values);
+    var result = turkish ? tr : en;
+    for (final entry in values.entries) {
+      result = result.replaceAll('{${entry.key}}', entry.value.toString());
+    }
+    return result;
+  }
 
   String get attributionTitle =>
       _pick(StyleStrings.attributionTitle, 'BU DANSIN KÖKENİ');
@@ -969,9 +1051,11 @@ final class StyleDetailCopy {
   String get cautionTitle =>
       _pick(StyleStrings.cautionTitle, 'BAŞLAMADAN ÖNCE');
   String excluded(String what) =>
-      _pick(StyleStrings.excluded(what), 'Burada öğretilmeyen: $what');
+      _format('Not taught here: {item}', 'Burada öğretilmeyen: {item}',
+          {'item': authored(what)});
   String needs(List<String> items) =>
-      _pick(StyleStrings.needs(items), 'Gerekenler: ${items.join(', ')}');
+      _format('You will need: {items}', 'Gerekenler: {items}',
+          {'items': items.map(authored).join(', ')});
 
   String get openUngradedMeaning => cameraSessionsAvailable
       ? _pick(StyleStrings.liveUngradedMeaning,
@@ -1001,6 +1085,19 @@ final class StyleDetailCopy {
     'bir ders olduğu anlamına da gelmez.',
   );
   String get lessonsTitle => _pick(StyleStrings.lessonsTitle, 'Dersler');
+  String get cameraLessonsTitle =>
+      _pick('Camera-session reference lessons', 'Kamera seansı referans dersleri');
+  String get writtenCourseMeaning => _pick(
+    'A self-guided written course is available. Demonstration and instructor '
+        'review remain open; completing a written unit does not verify movement skill.',
+    'Öz denetimli yazılı kurs açık. Gösterim ve eğitmen incelemesi tamamlanmadı; '
+        'yazılı birimi tamamlamak hareket becerisini doğrulamaz.',
+  );
+  String get noCameraLessons => _pick(
+    'There are no camera-session reference lessons for this style. '
+        'The written course is available above.',
+    'Bu stil için kamera seansı referans dersi yok. Yazılı kurs yukarıda açık.',
+  );
   String get noLessons => _pick(
     StyleStrings.noLessons,
     'Bu stil için hazırlanmış bir ders yok. Adı katalogda görünür, '
@@ -1036,13 +1133,11 @@ final class StyleDetailCopy {
   String get sessionUnavailable => _pick(StyleStrings.sessionUnavailable,
       'Bu sürümde kamera pratiği kullanılamıyor. Hareket referansı pakette var, '
       'ancak oynatılabilir bir önizleme değildir. Öz denetimli çalışma için yazılı kursları kullan.');
-  String permissionNotice(LessonKind kind) => _pick(
-      kind == LessonKind.demoOnly
-          ? 'This session requests camera permission on your device. It does not produce a score.'
-          : 'This session requests camera permission before using the camera.',
-      kind == LessonKind.demoOnly
-          ? 'Bu seans cihazında kamera izni ister. Sayısal puan üretmez.'
-          : 'Bu seans kamerayı kullanmadan önce cihaz izni ister.');
+  String permissionNotice(LessonKind kind) => kind == LessonKind.demoOnly
+      ? _pick('This session requests camera permission on your device. It does not produce a score.',
+          'Bu seans cihazında kamera izni ister. Sayısal puan üretmez.')
+      : _pick('This session requests camera permission before using the camera.',
+          'Bu seans kamerayı kullanmadan önce cihaz izni ister.');
 
   String kind(LessonKind kind, {required bool canStart}) =>
       _pick(StyleStrings.kind(kind, canStart: canStart,
@@ -1055,10 +1150,9 @@ final class StyleDetailCopy {
         LessonKind.locked => 'KİLİTLİ',
       });
 
-  String minutes(int value) => _pick(
-    StyleStrings.minutes(value),
-    value > 0 ? '$value DK' : 'SÜRE BELİRLENMEDİ',
-  );
+  String minutes(int value) => value > 0
+      ? _format('{count} MIN', '{count} DK', {'count': value})
+      : _pick('LENGTH NOT SET', 'SÜRE BELİRLENMEDİ');
 
   String blocked(LessonBlock block) =>
       _pick(StyleStrings.blocked(block), switch (block) {

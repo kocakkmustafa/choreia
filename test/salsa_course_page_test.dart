@@ -203,7 +203,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.text('1 / 48 self-reported complete'));
-    expect(find.text('1 opened · 1 practised lessons'), findsOneWidget);
+    expect(find.text('Lessons opened: 1 · Lessons practised: 1'), findsOneWidget);
     expect(find.byKey(const Key('salsa.weeklyPractice')), findsOneWidget);
     expect(
         find.descendant(
@@ -402,7 +402,7 @@ void main() {
     file.writeAsStringSync(old);
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.text('1 / 48 self-reported complete'));
-    expect(find.text('1 opened · 1 practised lessons'), findsOneWidget);
+    expect(find.text('Lessons opened: 1 · Lessons practised: 1'), findsOneWidget);
     expect(file.readAsStringSync(), old);
     expect(tester.takeException(), isNull);
   });
@@ -474,7 +474,7 @@ void main() {
         course, course.lessons.first, SalsaEvidence.practised,
         at: DateTime.now().add(const Duration(days: 1))));
     await pumpApp(tester, SalsaCoursePage(env: env));
-    await loaded(tester, find.text('0 opened · 1 practised lessons'));
+    await loaded(tester, find.text('Lessons opened: 0 · Lessons practised: 1'));
     expect(
         find.descendant(
             of: find.byKey(const Key('salsa.weeklyPractice.week0')),
@@ -534,10 +534,10 @@ void main() {
         ['viewed', 'practised']);
     expect((raw['events'] as List).last['option'], 'rhythmOnly');
     await tester.pageBack();
-    await loaded(tester, find.text('1 opened · 1 practised lessons'));
+    await loaded(tester, find.text('Lessons opened: 1 · Lessons practised: 1'));
     await tester.pumpWidget(const SizedBox());
     await pumpApp(tester, SalsaCoursePage(env: env));
-    await loaded(tester, find.text('1 opened · 1 practised lessons'));
+    await loaded(tester, find.text('Lessons opened: 1 · Lessons practised: 1'));
     expect(find.text('0 / 48 self-reported complete'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -62,6 +63,9 @@ void main() {
         tester.view.devicePixelRatio = 1;
         addTearDown(tester.view.reset);
         await tester.pumpWidget(MaterialApp(
+            locale: Locale(language),
+            supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: ProfileView(
           accountPageBuilder: configured ? (_) => const SizedBox() : null,
         )));

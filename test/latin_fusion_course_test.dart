@@ -7,6 +7,7 @@ import 'package:choreia/app/course/latin_fusion_course_page.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'hip_hop_course_page_test.dart' show WrittenBundle;
@@ -118,6 +119,9 @@ void main() {
         addTearDown(tester.view.reset);
         await tester.pumpWidget(
           MaterialApp(
+            locale: Locale(lang),
+            supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
             builder: (context, child) => MediaQuery(
               data: MediaQuery.of(context)
                   .copyWith(textScaler: const TextScaler.linear(2)),

@@ -14,6 +14,8 @@ import '../progress_summary.dart';
 import '../progress_view.dart';
 import '../theme.dart';
 import '../ui_language.dart';
+import '../read_deadline.dart';
+import '../support_action.dart';
 import 'profile_view.dart';
 
 /// How long the shell waits for the practice record before calling it
@@ -132,6 +134,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
 
   /// Cancelled on dispose — see [_withinTimeout].
   Timer? _historyTimer;
+  Timer? _introTimer;
+  final _catalogReads = ReadDeadline(const Duration(seconds: 10));
 
   @override
   void initState() {
@@ -140,8 +144,15 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
     widget.env.passwordRecovery?.addListener(_onRecoveryChanged);
     widget.env.ownerEpoch?.addListener(_onOwnerEpochChanged);
     _historyRetired = widget.env.passwordRecovery?.value ?? false;
+    _introTimer = Timer(const Duration(seconds: 5), () {
+      if (mounted && _introSeen == null) setState(() => _introSeen = false);
+    });
     _flag.hasSeenIntro().then((bool seen) {
-      if (mounted) setState(() => _introSeen = seen);
+      _introTimer?.cancel();
+      if (mounted && _introSeen == null) setState(() => _introSeen = seen);
+    }, onError: (Object _, StackTrace __) {
+      _introTimer?.cancel();
+      if (mounted && _introSeen == null) setState(() => _introSeen = false);
     });
     _refreshProgressWhenCatalogReady(_catalog);
   }
@@ -282,17 +293,21 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
     widget.env.passwordRecovery?.removeListener(_onRecoveryChanged);
     widget.env.ownerEpoch?.removeListener(_onOwnerEpochChanged);
     _historyTimer?.cancel();
+    _introTimer?.cancel();
+    _catalogReads.retire();
     super.dispose();
   }
 
   Future<void> _dismissIntro() async {
-    await _flag.markSeen();
     if (mounted) setState(() => _introSeen = true);
+    // The intro marker never gates navigation or journal access. A late write
+    // contains no account data and may only suppress the next launch's intro.
+    unawaited(_flag.markSeen().catchError((Object _) {}));
   }
 
-  Future<LibraryCatalog> _load() => widget.bundleOverride != null
+  Future<LibraryCatalog> _load() => _catalogReads.run(widget.bundleOverride != null
       ? widget.bundleOverride!()
-      : LibraryCatalog.load(rootBundle);
+      : LibraryCatalog.load(rootBundle));
 
   void _refreshProgressWhenCatalogReady(Future<LibraryCatalog> catalog) {
     unawaited(catalog.then<void>(
@@ -384,7 +399,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
         body: ChoreiaBackdrop(
           child: SafeArea(
             child: Center(
-              child: Padding(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
                 child: GlassPanel(
                   key: ChoreiaShell.loadFailureKey,
@@ -426,6 +441,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      const SupportAction(surface: SupportSurface.catalog),
                     ],
                   ),
                 ),

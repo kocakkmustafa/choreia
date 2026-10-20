@@ -1,5 +1,6 @@
 import 'package:choreia/app/course/support_hold_demo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const currentKey = Key('supportHold.current');
@@ -40,7 +41,11 @@ void main() {
     testWidgets('$lang actual UI shows both holds and extra-transfer consequence', (tester) async {
       tester.binding.platformDispatcher.localeTestValue = Locale(lang);
       addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
-      await tester.pumpWidget(const MaterialApp(home: SupportHoldDemo()));
+      await tester.pumpWidget(MaterialApp(
+        locale: Locale(lang),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        home: const SupportHoldDemo()));
       expect(find.text(lang == 'tr' ? 'Destek ve durak şeması' : 'Support and hold diagram'), findsOneWidget);
       final state = lang == 'tr' ? 'destek durumu' : 'support state';
       final hold = lang == 'tr' ? 'aynı destek / durak' : 'same support / hold';
@@ -159,7 +164,11 @@ void main() {
       addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
       final semantics = tester.ensureSemantics();
       try {
-      await tester.pumpWidget(MaterialApp(builder: (context, child) => MediaQuery(
+      await tester.pumpWidget(MaterialApp(
+        locale: Locale(lang),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(2)),
         child: child!), home: const SupportHoldDemo()));
       for (final n in [3, 4, 7, 8]) {

@@ -720,8 +720,8 @@ void main() {
           reason: 'nothing is being written and the screen does not say so — '
               'the absence is silent again');
       expect(find.textContaining('does not save'), findsOneWidget);
-      expect(find.textContaining('nothing of'), findsOneWidget,
-          reason: 'the clause that removes the false alarm must survive too');
+      expect(find.textContaining('nothing in this source'), findsOneWidget,
+          reason: 'the absence claim must stay scoped to this source');
     });
 
     testWidgets('a healthy history says NOTHING extra',

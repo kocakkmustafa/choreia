@@ -1,6 +1,7 @@
 import 'package:choreia/app/account_bridge.dart';
 import 'package:choreia/app/shell/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:motion_account/motion_account.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -57,6 +58,9 @@ void main() {
       tester.platformDispatcher.localeTestValue = Locale(locale);
       addTearDown(tester.platformDispatcher.clearLocaleTestValue);
       await tester.pumpWidget(MaterialApp(
+          locale: Locale(locale),
+          supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
           home: Scaffold(
               body: ProfileView(
         accountPageBuilder: (_) => const Scaffold(body: Text('Account route')),

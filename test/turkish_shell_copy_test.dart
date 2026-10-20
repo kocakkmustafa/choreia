@@ -3,6 +3,7 @@ import 'package:choreia/app/live/live_environment.dart';
 import 'package:choreia/app/shell/choreia_shell.dart';
 import 'package:choreia/app/shell/profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -11,7 +12,11 @@ void main() {
     tester.binding.platformDispatcher.localeTestValue = const Locale('tr');
     addTearDown(() => tester.binding.platformDispatcher.clearLocaleTestValue());
 
-    await tester.pumpWidget(const MaterialApp(home: ProfileView()));
+    await tester.pumpWidget(const MaterialApp(
+        locale: Locale('tr'),
+        supportedLocales: <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        home: ProfileView()));
 
     expect(find.text('Profil'), findsOneWidget);
     expect(find.textContaining('Hesap oluşturma ve üyelik erişimi bağlı değil'),
@@ -29,6 +34,9 @@ void main() {
       addTearDown(owner.dispose);
 
       await tester.pumpWidget(MaterialApp(
+        locale: Locale(language),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         home: ChoreiaShell(
           bundleOverride: () async => throw StateError('catalogue unavailable'),
           flagOverride: MemoryFirstRunFlag(seen: true),

@@ -7,6 +7,7 @@ import 'package:choreia/app/live/live_state.dart';
 import 'package:choreia/app/live/live_view.dart';
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:motion_camera/motion_camera.dart';
 
@@ -14,6 +15,9 @@ void main() {
   Future<void> show(WidgetTester tester, LiveState state,
       {bool permanent = false}) async {
     await tester.pumpWidget(MaterialApp(
+      locale: const Locale('tr'),
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: LiveView(
         state: state,
         gated: const <GatedCheck>[],
@@ -113,6 +117,9 @@ void main() {
         'for this movement, so calling your starting foot wrong would be a '
         'coin flip presented as a judgement.';
     await tester.pumpWidget(MaterialApp(
+      locale: const Locale('tr'),
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: LiveView(
         lessonId: 'hh_l1_bounce',
         state: const LiveMeasured(

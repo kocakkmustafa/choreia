@@ -4,6 +4,7 @@ import 'package:choreia/app/live/live_state.dart';
 import 'package:choreia/app/live/live_view.dart';
 import 'package:choreia_engine/choreia_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:motion_camera/motion_camera.dart';
 import 'package:motion_core/motion_core.dart';
@@ -29,10 +30,14 @@ void main() {
   /// rewrite what the other tests mean. The production value is measured
   /// separately, from the production file, in `kalıcı ret dalı` below.
   Future<void> show(WidgetTester tester, LiveState state,
-          {int? cycles,
+          {Locale locale = const Locale('en'),
+          int? cycles,
           bool permanent = false,
           VoidCallback? openSettings = _stubOpenSettings}) =>
       tester.pumpWidget(MaterialApp(
+        locale: locale,
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         home: LiveView(
           state: state,
           gated: gated,
@@ -105,7 +110,8 @@ void main() {
         tester.platformDispatcher.localeTestValue = Locale(locale);
         addTearDown(tester.platformDispatcher.clearLocaleTestValue);
         await show(
-            tester, LiveCameraUnavailable(failure, 'private driver detail'));
+            tester, LiveCameraUnavailable(failure, 'private driver detail'),
+            locale: Locale(locale));
         expect(find.text(locale == 'tr' ? 'Derse dön' : 'Back to lesson'),
             findsOneWidget);
         expect(find.text(locale == 'tr' ? 'Tekrar dene' : 'Try again'),

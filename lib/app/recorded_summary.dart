@@ -110,15 +110,22 @@ final class RecordedSummary {
     return rem == 0 ? '${h}h' : '${h}h ${rem}m';
   }
 
-  static Future<RecordedSummary> from(SessionStore store) async {
-    final List<SessionRecord> all = await store.recent();
+  static Future<RecordedSummary> from(SessionStore store) async =>
+      RecordedSummary.fromRecords(await store.recent());
+
+  /// Derives totals from the same reading that supplies the visible rows.
+  /// Opening a store again here can mix a later append into the totals while
+  /// the screen still renders rows from the earlier reading.
+  factory RecordedSummary.fromRecords(Iterable<SessionRecord> records) {
     int worked = 0;
     int targeted = 0;
     int done = 0;
     int scored = 0;
     int demo = 0;
     int unmeasured = 0;
-    for (final SessionRecord r in all) {
+    int sessions = 0;
+    for (final SessionRecord r in records) {
+      sessions++;
       worked += r.workedSeconds;
       // `> 0`, not `!= 0`: a negative target is an upstream bug, and the safe
       // reading of a bug is the one that claims least — an unreadable plan is
@@ -140,7 +147,7 @@ final class RecordedSummary {
       }
     }
     return RecordedSummary(
-      sessions: all.length,
+      sessions: sessions,
       targetedSessions: targeted,
       completed: done,
       workedSeconds: worked,

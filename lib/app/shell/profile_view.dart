@@ -4,6 +4,8 @@ import 'not_built_tab_body.dart';
 import '../onboarding/first_run_view.dart';
 import '../theme.dart';
 import '../ui_language.dart';
+import '../localization/language_picker.dart';
+import '../support_action.dart';
 
 /// Optional shared account entry and licenses for the five written dance paths.
 /// Practice journals remain local and scoped to the current guest or account.
@@ -46,12 +48,18 @@ class ProfileView extends StatelessWidget {
                   Text(
                     UiLanguage.text(
                       context,
-                      en: 'Explore five solo dance paths without an account or camera. Practice records stay on this device within your guest or account scope and reflect your own study. A Motion account is optional. ${IntroStrings.cameraStatus(cameraSessionsAvailable)}',
-                      tr: 'Beş solo dans yolunu hesap veya kamera olmadan çalışabilirsiniz. Çalışma kayıtları bu cihazda konuk veya hesabınız kapsamında kalır ve kendi çalışmanızı gösterir. Motion hesabı isteğe bağlıdır. ${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}',
+                      en: 'Explore five solo dance paths without an account or camera. Practice records stay on this device within your guest or account scope and reflect your own study. A Motion account is optional.',
+                      tr: 'Beş solo dans yolunu hesap veya kamera olmadan çalışabilirsiniz. Çalışma kayıtları bu cihazda konuk veya hesabınız kapsamında kalır ve kendi çalışmanızı gösterir. Motion hesabı isteğe bağlıdır.',
                     ),
                     style: ChoreiaType.body(size: 13.5),
                   ),
+                  const SizedBox(height: 12),
+                  Text(UiLanguage.text(context,
+                    en: IntroStrings.cameraStatus(cameraSessionsAvailable),
+                    tr: IntroStrings.cameraStatus(cameraSessionsAvailable,
+                        turkish: true)), style: ChoreiaType.body(size: 13.5)),
                   const SizedBox(height: 18),
+                  const ChoreiaLanguagePicker(),
                   FilledButton(
                     key: accountEntryKey,
                     onPressed: () => Navigator.of(context).push<void>(
@@ -61,6 +69,7 @@ class ProfileView extends StatelessWidget {
                         UiLanguage.text(context, en: 'Account', tr: 'Hesap')),
                   ),
                   _licensesButton(context),
+                  const SupportAction(surface: SupportSurface.profile),
                 ],
               ),
             ),
@@ -87,6 +96,8 @@ class ProfileView extends StatelessWidget {
                 '${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}',
           ),
         )),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 24),
+            child: ChoreiaLanguagePicker()),
         SafeArea(top: false, child: _licensesButton(context)),
       ],
     );

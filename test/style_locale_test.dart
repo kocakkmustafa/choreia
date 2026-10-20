@@ -6,6 +6,7 @@ import 'package:choreia/app/library/style_detail_view.dart';
 import 'package:choreia/app/library/style_status_copy.dart';
 import 'package:choreia/app/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_catalog.dart';
@@ -23,6 +24,9 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(MaterialApp(
+      locale: const Locale('tr'),
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       theme: ChoreiaTheme.dark,
       home: StyleDetailView(
         card: library.cardFor(id)!,
@@ -58,8 +62,8 @@ void main() {
     );
     expect(find.text('Bu stil yaklaşık 85–105 BPM temposunda dans edilir.'),
         findsOneWidget);
-    await bringIntoView(tester, find.text('Dersler'));
-    expect(find.text('Dersler'), findsOneWidget);
+    await bringIntoView(tester, find.text('Kamera seansı referans dersleri'));
+    expect(find.text('Kamera seansı referans dersleri'), findsOneWidget);
     final unavailable = find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce'));
     await bringIntoView(tester, unavailable);
     expect(unavailable, findsOneWidget);
@@ -124,6 +128,9 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(MaterialApp(
+      locale: const Locale('tr'),
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       theme: ChoreiaTheme.dark,
       home: Scaffold(body: LibraryView(library: library)),
     ));

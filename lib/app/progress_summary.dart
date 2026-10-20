@@ -3,6 +3,21 @@ import 'package:motion_core/motion_core.dart';
 import 'course_catalog.dart';
 import 'recorded_summary.dart';
 
+/// Keeps the data layer independent of Flutter while the view supplies its
+/// current locale. Templates reach this seam before values are interpolated.
+typedef ProgressMessageFormatter = String Function(
+    String template, Map<String, Object> values);
+
+String _progressMessage(String template, Map<String, Object> values,
+    ProgressMessageFormatter? format) {
+  if (format != null) return format(template, values);
+  var result = template;
+  for (final value in values.entries) {
+    result = result.replaceAll('{${value.key}}', value.value.toString());
+  }
+  return result;
+}
+
 /// One row of the **Recorded** section: MEASUREMENTS only.
 ///
 /// Every lesson appears here, graded or not. The reasoning chain (UI-BRIEF
@@ -20,6 +35,7 @@ final class RecordedRow {
     required this.workedSeconds,
     required this.cyclesCompleted,
     required this.plannedCycles,
+    required this.targetedSessions,
     required this.completedSessions,
     required this.unmeasuredCycles,
   });
@@ -41,6 +57,9 @@ final class RecordedRow {
   final int workedSeconds;
   final int cyclesCompleted;
   final int plannedCycles;
+
+  /// Only sessions with a positive declared target can be finished against it.
+  final int targetedSessions;
   final int completedSessions;
 
   /// Cycles attempted but not judgeable. Kept per row so the surface can say
@@ -196,16 +215,21 @@ final class HistoryIntegrity {
       };
 
   /// The sentence for this state, or null when there is nothing to say.
-  String? get note => switch (fidelity) {
+  String? get note => noteFor();
+
+  String? noteFor({ProgressMessageFormatter? format}) => switch (fidelity) {
         HistoryFidelity.ok => null,
-        HistoryFidelity.unavailable => ProgressStrings.historyUnavailable,
-        HistoryFidelity.notRecorded => ProgressStrings.historyNotRecorded,
+        HistoryFidelity.unavailable =>
+          _progressMessage(ProgressStrings.historyUnavailable, const {}, format),
+        HistoryFidelity.notRecorded =>
+          _progressMessage(ProgressStrings.historyNotRecorded, const {}, format),
         // "SOME of it" and "NONE of it" are separate sentences on purpose.
         // Collapsing them would let "your totals are a floor" appear above a
         // screen whose floor is zero — technically true, and useless.
         HistoryFidelity.partial => readableRecords == 0
-            ? ProgressStrings.historyNoneReadable(unreadableRecords)
-            : ProgressStrings.historyPartial(unreadableRecords),
+            ? ProgressStrings.historyNoneReadable(unreadableRecords,
+                format: format)
+            : ProgressStrings.historyPartial(unreadableRecords, format: format),
       };
 }
 
@@ -278,13 +302,15 @@ final class ProgressSummary {
   /// POLICY — and only presupposes the store in passing. A presupposition is
   /// the cheapest place for a false claim to hide: nobody re-reads the clause
   /// that is not the point of the sentence.
-  static String retroactiveCreditNote(HistoryFidelity fidelity) =>
-      switch (fidelity) {
+  static String retroactiveCreditNote(HistoryFidelity fidelity,
+          {ProgressMessageFormatter? format}) =>
+      _progressMessage(switch (fidelity) {
         HistoryFidelity.notRecorded =>
           'When a check opens up later, it applies from that point on — never '
               'backwards over dancing we were not measuring at the time. '
-              'This build saves nothing, so there is no past practice waiting '
-              'to be re-scored either way.',
+              'This history source saves no camera sessions, so it has no '
+              'past sessions waiting to be re-scored. Written-course records '
+              'are separate.',
         HistoryFidelity.ok ||
         HistoryFidelity.partial ||
         HistoryFidelity.unavailable =>
@@ -292,7 +318,7 @@ final class ProgressSummary {
               'Practice time already recorded stays a record of practice — it '
               'is not converted into a score for something we were not '
               'measuring at the time.',
-      };
+      }, const {}, format);
 
   factory ProgressSummary.build({
     required List<SessionRecord> history,
@@ -326,40 +352,24 @@ final class ProgressSummary {
             rows.fold(0, (int a, SessionRecord r) => a + r.unitsCompleted),
         plannedCycles:
             rows.fold(0, (int a, SessionRecord r) => a + r.plannedUnits),
-        completedSessions: rows.where((SessionRecord r) => r.isComplete).length,
+        targetedSessions:
+            rows.where((SessionRecord r) => r.plannedUnits > 0).length,
+        completedSessions: rows
+            .where((SessionRecord r) => r.plannedUnits > 0 && r.isComplete)
+            .length,
         unmeasuredCycles:
             rows.fold(0, (int a, SessionRecord r) => a + r.unmeasuredUnits),
       ));
     }
     recorded.sort((a, b) => a.displayName.compareTo(b.displayName));
 
-    // No judgement is stored, so none is reported. The reason names the missing
-    // MECHANISM, not a missing effort by the user.
-    //
-    // ⚠️ REWRITTEN 2026-08-13, and the old one had gone FALSE UNDER OUR FEET.
-    // It said "grading needs the camera check, and that is not wired up in this
-    // build". The camera check IS wired — the live path opens the camera, reads
-    // cycles and shows findings. What is not kept is the JUDGEMENT: the record
-    // this app stores has no verdict field, deliberately (the core's own note:
-    // "recording zeros before the camera bridge would draw zeros on tomorrow's
-    // progress chart").
-    //
-    // Found by WALKING the built app on a simulator, not by reading the code —
-    // the sentence was true when it was written and nobody had reason to
-    // re-read it. ⇒ *A SENTENCE ABOUT WHAT IS MISSING GOES STALE THE DAY THE
-    // MISSING THING ARRIVES, AND NOTHING ABOUT IT LOOKS WRONG.*
-    const String reason =
-        'No lesson has been graded. The camera does read your steps and tells '
-        'you what it saw while you practise — but that reading is not kept: '
-        'what we save has no verdict in it, on purpose, so a session never '
-        'turns into a score here. The one lesson open today is taught rather '
-        'than graded in any case. Nothing here, rather than a zero — zeros '
-        'would look like results.';
-
+    // The record format has no verdict field. This explains that fact without
+    // promising that a camera route is currently available or describing the
+    // separate written-course self reports as measured dance skill.
     return ProgressSummary(
       recorded: recorded,
       evaluated: const <EvaluatedRow>[],
-      evaluatedUnavailableReason: reason,
+      evaluatedUnavailableReason: ProgressStrings.evaluatedUnavailableReason,
       blockedGates: catalog.blockedGates,
       totals: totals,
       integrity: integrity ??
@@ -377,12 +387,13 @@ final class ProgressSummary {
     // a field written and never read is the failure class this repo already
     // named once (R12).
     try {
-      final List<SessionRecord> history = await store.recent();
+      final List<SessionRecord> history =
+          List<SessionRecord>.unmodifiable(await store.recent());
       final int unreadable = await store.unreadableRecords();
       return ProgressSummary.build(
         history: history,
         catalog: catalog,
-        totals: await RecordedSummary.from(store),
+        totals: RecordedSummary.fromRecords(history),
         integrity: HistoryIntegrity.opened(
           unreadable: unreadable,
           readable: history.length,
@@ -413,13 +424,23 @@ final class ProgressSummary {
 /// **Units are part of the string, never left to the caller.** JabLab's K8
 /// lesson: a bare number on a progress surface reads as a score.
 abstract final class ProgressStrings {
-  static const String recordedSection = 'Recorded';
+  static const String historyScope =
+      'The session history below covers camera practice only. Written-course '
+      'practice and self reports are kept separately in each course; they are '
+      'not included in these session counts.';
+
+  static const String recordedSection = 'Camera-session records';
   static const String recordedSubtitle =
-      'What you practised. Measured, not graded.';
+      'Saved session measurements, not dance-skill grades.';
 
   static const String evaluatedSection = 'Evaluated';
   static const String evaluatedSubtitle =
       'Judgements about how you did. Graded lessons only.';
+  static const String evaluatedUnavailableReason =
+      'No camera-session grades are shown here. A verdict is not kept in '
+      'these session records, so they never turn into a score. Written-course '
+      'practice and self reports are separate learning records, not measured '
+      'dance skill. An absent grade is not a zero.';
 
   static const String blockedSection = 'What we cannot check';
   static const String blockedSubtitle =
@@ -431,13 +452,17 @@ abstract final class ProgressStrings {
   /// make a claim they cannot support — JabLab's measured case said
   /// "10 sessions" over a file where 40 of 50 lines were corrupt, and every
   /// number on that screen was a confident understatement.
-  static String historyPartial(int unreadable) => unreadable == 1
+  static String historyPartial(int unreadable,
+          {ProgressMessageFormatter? format}) =>
+      _progressMessage(unreadable == 1
       ? 'One saved session could not be read back. Everything below counts '
           'what we could read, so treat it as "at least this much" rather '
           'than a full total.'
-      : '$unreadable saved sessions could not be read back. Everything below '
+      : '{count} saved sessions could not be read back. Everything below '
           'counts what we could read, so treat it as "at least this much" '
-          'rather than a full total.';
+          'rather than a full total.',
+          unreadable == 1 ? const <String, Object>{} : {'count': unreadable},
+          format);
 
   /// The store opened and NOTHING in it could be read.
   ///
@@ -445,13 +470,17 @@ abstract final class ProgressStrings {
   /// their totals are "a floor" when that floor is zero is technically true
   /// and useless. This says the actual thing — the practice happened, we
   /// just cannot read it back.
-  static String historyNoneReadable(int unreadable) => unreadable == 1
+  static String historyNoneReadable(int unreadable,
+          {ProgressMessageFormatter? format}) =>
+      _progressMessage(unreadable == 1
       ? 'We found one saved session but could not read it. That is not the '
           'same as you not having practised — we simply cannot tell you '
           'what is in it.'
-      : 'We found $unreadable saved sessions but could not read any of '
+      : 'We found {count} saved sessions but could not read any of '
           'them. That is not the same as you not having practised — we '
-          'simply cannot tell you what is in them.';
+          'simply cannot tell you what is in them.',
+          unreadable == 1 ? const <String, Object>{} : {'count': unreadable},
+          format);
 
   /// The store never opened. NO numbers accompany this string.
   ///
@@ -460,17 +489,17 @@ abstract final class ProgressStrings {
   /// Says the mechanism is ABSENT, and says the thing the old sentence took
   /// away by accident: nothing has been lost.
   static const String historyNotRecorded =
-      'Choreia does not save your practice in this build. Nothing you do here '
-      'is written down, so there is nothing to show you — and nothing of '
-      'yours has been lost.';
+      'This session-history source does not save camera practice. There is '
+      'nothing in this source to show or lose. Written-course learning '
+      'records are kept separately.';
 
   static const String historyUnavailable =
-      'We could not open your practice history. Rather than show you a zero '
+      'We could not open your camera-session history. Rather than show you a zero '
       'that would be wrong, we are not showing numbers until we can read it.';
 
   static const String emptyHistory =
-      'No practice recorded. Nothing has been hidden — there is simply '
-      'nothing here.';
+      'No camera sessions are saved in this history. Written-course practice '
+      'may still be recorded in the courses.';
 
   /// What the Recorded section says when the list is empty **and we cannot say
   /// why** — see `HistoryIntegrity.canClaimEmpty`.
@@ -480,20 +509,25 @@ abstract final class ProgressStrings {
   /// the two it meant, and the guess a blank invites is "nothing" — the very
   /// reading this string exists to prevent.
   static const String unknownHistory =
-      'We cannot show what is here, because your practice history could not '
-      'be read. That is not the same as it being empty — if you have '
-      'practised, it is still there.';
+      'We cannot show these camera-session records because the history could '
+      'not be read. That is not the same as an empty history; its contents '
+      'cannot be confirmed. Written-course records are separate.';
 
   /// The band column for a demo-only lesson: a mark that there IS no judgement,
   /// which is different from a judgement of zero.
   static const String noBand = '—';
 
-  static String duration(int seconds) {
+  static String duration(int seconds, {ProgressMessageFormatter? format}) {
     final int m = seconds ~/ 60;
-    if (m < 60) return '$m min practised';
+    if (m < 60) {
+      return _progressMessage('{minutes} min practised', {'minutes': m}, format);
+    }
     final int h = m ~/ 60;
     final int rem = m % 60;
-    return rem == 0 ? '${h}h practised' : '${h}h ${rem}m practised';
+    return rem == 0
+        ? _progressMessage('{hours}h practised', {'hours': h}, format)
+        : _progressMessage('{hours}h {minutes}m practised',
+            {'hours': h, 'minutes': rem}, format);
   }
 
   /// Cycles read, against a target ONLY when one exists.
@@ -508,9 +542,14 @@ abstract final class ProgressStrings {
   /// The rule is `planned <= 0`, not `== 0`: a negative target is a bug
   /// upstream, and the safe rendering of a bug is the sentence that claims
   /// least.
-  static String cycles(int completed, int planned) => planned <= 0
-      ? (completed == 1 ? '1 cycle read' : '$completed cycles read')
-      : '$completed of $planned cycles';
+  static String cycles(int completed, int planned,
+          {ProgressMessageFormatter? format}) =>
+      planned <= 0
+          ? _progressMessage(
+              completed == 1 ? '{count} cycle read' : '{count} cycles read',
+              {'count': completed}, format)
+          : _progressMessage('{completed} of {planned} cycles',
+              {'completed': completed, 'planned': planned}, format);
 
   /// How many of these sessions were finished.
   ///
@@ -521,13 +560,19 @@ abstract final class ProgressStrings {
   /// an absent plan as an achievement. The count of sessions is still a fact,
   /// so it is the one that is shown.
   static String sessionsCompleted(int completed, int total,
-          {required bool anyTarget}) =>
+          {required bool anyTarget, ProgressMessageFormatter? format}) =>
       anyTarget
-          ? '$completed of $total sessions finished'
-          : (total == 1 ? '1 session' : '$total sessions');
+          ? _progressMessage('{completed} of {total} sessions finished',
+              {'completed': completed, 'total': total}, format)
+          : _progressMessage(total == 1 ? '{count} session' : '{count} sessions',
+              {'count': total}, format);
 
-  static String demoOnlyMark(String? reason) =>
-      reason == null ? 'Taught, not graded' : 'Taught, not graded — $reason';
+  static String demoOnlyMark(String? reason,
+          {ProgressMessageFormatter? format}) =>
+      reason == null
+          ? _progressMessage('Taught, not graded', const {}, format)
+          : _progressMessage(
+              'Taught, not graded — {reason}', {'reason': reason}, format);
 
   /// Cycles the learner did that could not be judged.
   ///
@@ -535,7 +580,9 @@ abstract final class ProgressStrings {
   /// "8 of 8 cycles" for a session where one went unmeasured, which is the
   /// silence the core's `unmeasuredUnits` field exists to prevent. Phrased so
   /// the fault is the product's, not the dancer's.
-  static String unmeasured(int cycles) => cycles == 1
-      ? '1 cycle we could not check (framing or lighting)'
-      : '$cycles cycles we could not check (framing or lighting)';
+  static String unmeasured(int cycles, {ProgressMessageFormatter? format}) =>
+      _progressMessage(cycles == 1
+          ? '{count} cycle we could not check (framing or lighting)'
+          : '{count} cycles we could not check (framing or lighting)',
+          {'count': cycles}, format);
 }

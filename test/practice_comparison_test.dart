@@ -4,6 +4,7 @@ import 'package:choreia/app/history/account_store_lifetime.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
 import 'package:choreia/app/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_catalog.dart';
@@ -64,7 +65,11 @@ void main() {
         (tester) async {
       tester.binding.platformDispatcher.localeTestValue = Locale(lang);
       addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
-      await tester.pumpWidget(MaterialApp(theme: ChoreiaTheme.dark, home: root()));
+      await tester.pumpWidget(MaterialApp(
+        locale: Locale(lang),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        theme: ChoreiaTheme.dark, home: root()));
       await open(tester);
       final semantics = tester.ensureSemantics();
       try {
@@ -140,13 +145,22 @@ void main() {
   });
 
   testWidgets('Repeated input and locale changes keep notes until page closes', (tester) async {
-    await tester.pumpWidget(MaterialApp(home: root()));
+    final selectedLocale = ValueNotifier<Locale>(const Locale('en'));
+    addTearDown(selectedLocale.dispose);
+    await tester.pumpWidget(ValueListenableBuilder<Locale>(
+      valueListenable: selectedLocale,
+      builder: (_, locale, __) => MaterialApp(
+        locale: locale,
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        home: root(),
+      ),
+    ));
     await open(tester);
     for (var i = 0; i < 12; i++) {
       await enter(tester, 3, 'A revision $i; uncertain');
     }
-    tester.binding.platformDispatcher.localeTestValue = const Locale('tr');
-    addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
+    selectedLocale.value = const Locale('tr');
     await tester.pump();
     expect(value(tester, 3), 'A revision 11; uncertain');
     await enter(tester, 5, 'B has changed tempo; new baseline');
@@ -224,7 +238,11 @@ void main() {
       final library = await tester.runAsync(testLibrary);
       final card = library!.cardFor(id)!;
       final status = card.entry.contentStatus;
-      await tester.pumpWidget(MaterialApp(theme: ChoreiaTheme.dark,
+      await tester.pumpWidget(MaterialApp(
+        locale: Locale(lang),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        theme: ChoreiaTheme.dark,
           home: StyleDetailView(card: card)));
       final link = find.byKey(const Key('style.practiceComparison'));
       await reach(tester, link);

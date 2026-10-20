@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../study_review.dart';
 
 import '../live/live_environment.dart';
-import '../course/salsa_course_page.dart';
 import '../shell/choreia_page_route.dart';
 import '../theme.dart';
 import '../ui_language.dart';
@@ -11,31 +10,8 @@ import 'style_content_copy.dart';
 import 'style_detail_view.dart';
 import 'style_status_copy.dart';
 
-/// The catalogue screen — 34 styles, one of which can be opened.
-///
-/// THE PROBLEM THIS SCREEN EXISTS TO SOLVE
-/// ---------------------------------------
-/// Show the full scope of what Choreia intends to teach without looking full.
-/// Those pull against each other: hiding the 31 unbuilt styles would understate
-/// the product, and listing them as if they were courses would be the "sahte
-/// dolu" (fake-full) failure — a catalogue that reads as 34 dances you could
-/// start tonight when the number is one.
-///
-/// The resolution here is GROUPING, not filtering. Every style is on this
-/// screen, always; what changes between them is which group they sit in and
-/// what their tile says. A dancer scrolling sees breadth immediately and sees,
-/// just as immediately, that breadth is not availability. No tile ever
-/// advertises a lesson that cannot be opened, and no style is dropped to make
-/// the screen look tidier.
-///
-/// WHY THE COUNTS ARE NOT THE DESIGN'S COUNTS
-/// ------------------------------------------
-/// The mockup's stat panel reads "1 scored · 1 open, ungraded · 32 in
-/// preparation". Those are `library.json`'s own `status` values — CONTENT
-/// truth. The surface truth is different, because `salsa_shines` is `live` AND
-/// release-gated: **no scored style can be opened today**. Every number on this
-/// screen comes from [LibraryTally], which counts derived badges, so the panel
-/// cannot drift from what the tiles below it show.
+/// All catalogue styles, with written courses and camera references kept
+/// distinct. A camera-content gate never hides an existing written route.
 class LibraryView extends StatefulWidget {
   const LibraryView({
     required this.library,
@@ -57,6 +33,7 @@ class LibraryView extends StatefulWidget {
   static const Key tallyKey = Key('library.tally');
   static const Key emptyFilterKey = Key('library.emptyFilter');
   static const Key gridKey = Key('library.grid');
+  static const Key writtenCoursesKey = Key('library.writtenCourses');
 
   static Key sectionKey(StyleBadge b) => Key('library.section.${b.name}');
   static Key tileKey(String styleId) => Key('library.tile.$styleId');
@@ -76,11 +53,56 @@ class _LibraryViewState extends State<LibraryView> {
 
   bool get _tr => UiLanguage.isTurkish(context);
 
+  String _text(String value) => UiLanguage.text(context, en: value, tr: value);
+  String _pair(String en, String tr) => UiLanguage.text(context, en: en, tr: tr);
+
+  String get _cameraNotice => _pair(
+      LibraryStrings.sessionNotice(widget.cameraSessionsAvailable),
+      LibraryStrings.sessionNotice(widget.cameraSessionsAvailable, turkish: true));
+
+  String _sectionNote(StyleBadge badge) => switch (badge) {
+    StyleBadge.scored || StyleBadge.openUngraded =>
+      '${_pair('Read the written explanations and recorded references.', 'Yazılı açıklamaları ve kayıtlı referansları oku.')} $_cameraNotice',
+    StyleBadge.builtButGated =>
+      '${_pair('Reference notes are written; this style still has incomplete content checks.', 'Referans notları yazılmış; bu stilin içerik kontrolleri tamamlanmamış.')} $_cameraNotice',
+    _ => _pair(LibraryStrings.sectionNote(badge), LibraryStrings.sectionNoteTr(badge)),
+  };
+
+  String _lessonLine(StyleCard card) {
+    final startable = card.offers(widget.library.runnableSteps)
+        .where((offer) => offer.canStart).length;
+    if (WrittenCourseLink.supports(card.entry.id)) {
+      return widget.cameraSessionsAvailable
+          ? UiLanguage.format(context,
+              en: 'WRITTEN COURSE AVAILABLE · {count} CAMERA REFERENCES READY',
+              tr: 'YAZILI KURS AÇIK · {count} KAMERA REFERANSI HAZIR',
+              values: {'count': startable})
+          : _pair('WRITTEN COURSE AVAILABLE · CAMERA OFF · NO SCORING',
+              'YAZILI KURS AÇIK · KAMERA KAPALI · PUAN YOK');
+    }
+    if (card.lessons.isEmpty) return _pair('NO LESSONS BUILT', 'DERS YOK');
+    return widget.cameraSessionsAvailable
+        ? UiLanguage.format(context,
+            en: '{total} LESSONS WRITTEN · {count} CAMERA REFERENCES READY',
+            tr: '{total} DERS YAZILDI · {count} KAMERA REFERANSI HAZIR',
+            values: {'total': card.lessons.length, 'count': startable})
+        : UiLanguage.format(context,
+            en: '{total} LESSONS WRITTEN · CAMERA OFF · NO SCORING',
+            tr: '{total} DERS YAZILDI · KAMERA KAPALI · PUAN YOK',
+            values: {'total': card.lessons.length});
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<StyleCard> cards = widget.library.cards;
     final LibraryTally tally = LibraryTally.from(cards);
     final List<StyleCard> shown = cards.where(_matches).toList(growable: false);
+    final List<StyleCard> written = shown
+        .where((StyleCard c) => WrittenCourseLink.supports(c.entry.id))
+        .toList(growable: false);
+    final List<StyleCard> other = shown
+        .where((StyleCard c) => !WrittenCourseLink.supports(c.entry.id))
+        .toList(growable: false);
 
     // Order is the honesty here: what you can do, then what is built but shut,
     // then what is deliberately parked, then what does not exist. Putting
@@ -101,7 +123,7 @@ class _LibraryViewState extends State<LibraryView> {
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: <Widget>[
             Text(
-              _tr ? 'ÖĞRENEBİLECEKLERİN' : 'What you can learn',
+              _pair('What you can learn', 'ÖĞRENEBİLECEKLERİN'),
               style: ChoreiaType.label(
                 size: 10,
                 color: ChoreiaColors.text(0.42),
@@ -112,19 +134,17 @@ class _LibraryViewState extends State<LibraryView> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    _tr ? 'Stiller' : 'Styles',
+                    _pair('Styles', 'Stiller'),
                     style: ChoreiaType.display(size: 33),
                   ),
                 ),
                 SizedBox(
-                  width: 40,
-                  height: 32,
+                  width: 48,
+                  height: 48,
                   child: IconButton(
                     key: const Key('study-review-entry'),
                     padding: EdgeInsets.zero,
-                    tooltip: _tr
-                        ? 'Yazılı hatırlama ve değerlendirme'
-                        : 'Written recall and review',
+                    tooltip: _pair('Written recall and review', 'Yazılı hatırlama ve değerlendirme'),
                     icon: const Icon(Icons.menu_book_outlined, size: 20),
                     onPressed: () => Navigator.of(context).push<void>(
                       MaterialPageRoute<void>(
@@ -136,23 +156,42 @@ class _LibraryViewState extends State<LibraryView> {
               ],
             ),
             const SizedBox(height: 18),
-            SalsaCourseEntry(env: widget.env),
-            const SizedBox(height: 24),
-            Text(_tr ? 'Kamera seansı referans notları' : 'Camera-session reference notes',
-                style: ChoreiaType.display(size: 25)),
-            const SizedBox(height: 12),
             _tallyPanel(tally),
             const SizedBox(height: 18),
             _chips(tally),
             const SizedBox(height: 22),
+            if (written.isNotEmpty)
+              Column(
+                key: LibraryView.writtenCoursesKey,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Semantics(
+                    header: true,
+                    child: Text(_pair('Written courses', 'Yazılı kurslar'),
+                        style: ChoreiaType.display(size: 25)),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _pair('Self-guided lessons are available. Written progress does not verify movement skill.', 'Öz denetimli dersler açık. Yazılı ilerleme, hareket becerisi doğrulaması değildir.'),
+                    style: ChoreiaType.body(size: 12.5),
+                  ),
+                  const SizedBox(height: 12),
+                  for (final StyleCard c in written)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _heroCard(c, writtenCourse: true),
+                    ),
+                  const SizedBox(height: 16),
+                ],
+              ),
             if (shown.isEmpty)
               _emptyFilter()
             else
               for (final StyleBadge badge in order)
-                if (shown.any((StyleCard c) => c.badge == badge))
+                if (other.any((StyleCard c) => c.badge == badge))
                   _section(
                     badge,
-                    shown
+                    other
                         .where((StyleCard c) => c.badge == badge)
                         .toList(growable: false),
                   ),
@@ -182,17 +221,19 @@ class _LibraryViewState extends State<LibraryView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              _tr ? LibraryStrings.scopeLineTr(t) : LibraryStrings.scopeLine(t),
+              UiLanguage.format(context, en: '{count} styles are in the catalogue.',
+                  tr: 'Katalogda {count} dans stili var.', values: {'count': t.total}),
               style:
                   ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.85)),
             ),
             const SizedBox(height: 10),
             Text(
-              _tr
-                  ? LibraryStrings.availabilityLineTr(t,
-                      cameraSessionsAvailable: widget.cameraSessionsAvailable)
-                  : LibraryStrings.availabilityLine(t,
-                      cameraSessionsAvailable: widget.cameraSessionsAvailable),
+              UiLanguage.format(context,
+                  en: t.openable == 1
+                      ? '{count} style has camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.'
+                      : '{count} styles have camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.',
+                  tr: 'Kamera referans notları: {count} stil. {status} Rehberli dersler için aşağıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.',
+                  values: {'count': t.openable, 'status': _cameraNotice}),
               style:
                   ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.62)),
             ),
@@ -204,15 +245,15 @@ class _LibraryViewState extends State<LibraryView> {
         spacing: 8,
         runSpacing: 8,
         children: <Widget>[
-          _chip(_Filter.all, _tr ? 'TÜMÜ' : LibraryStrings.filterAll, t.total),
+          _chip(_Filter.all, _pair(LibraryStrings.filterAll, 'TÜMÜ'), t.total),
           _chip(
             _Filter.openNow,
-            _tr ? 'REFERANSLAR' : LibraryStrings.filterOpenNow,
+            _pair(LibraryStrings.filterOpenNow, 'REFERANSLAR'),
             t.openable,
           ),
           _chip(
             _Filter.notOpen,
-            _tr ? 'REFERANS EKSİKLERİ' : LibraryStrings.filterNotOpen,
+            _pair(LibraryStrings.filterNotOpen, 'REFERANS EKSİKLERİ'),
             t.total - t.openable,
           ),
         ],
@@ -220,24 +261,20 @@ class _LibraryViewState extends State<LibraryView> {
 
   Widget _chip(_Filter f, String label, int count) {
     final bool on = _filter == f;
-    return GestureDetector(
-      onTap: () => setState(() => _filter = f),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(999),
-          color: on ? ChoreiaColors.rose.withValues(alpha: 0.14) : null,
-          border: Border.all(color: ChoreiaColors.hairline(on ? 0.32 : 0.13)),
-        ),
-        // The count travels WITH the label. A chip that says "Open now" and
-        // reveals "1" only after a tap invites the assumption that it is many.
-        child: Text(
-          '$label · $count',
-          style: ChoreiaType.label(
-            size: 9.5,
-            letterSpacingEm: 0.1,
-            color: on ? ChoreiaColors.rose : ChoreiaColors.text(0.55),
-          ),
+    return ChoiceChip(
+      selected: on,
+      onSelected: (_) => setState(() => _filter = f),
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      visualDensity: VisualDensity.standard,
+      showCheckmark: false,
+      selectedColor: ChoreiaColors.rose.withValues(alpha: 0.14),
+      side: BorderSide(color: ChoreiaColors.hairline(on ? 0.32 : 0.13)),
+      label: Text(
+        '$label · ${UiLanguage.number(context, count)}',
+        style: ChoreiaType.label(
+          size: 9.5,
+          letterSpacingEm: 0.1,
+          color: on ? ChoreiaColors.rose : ChoreiaColors.text(0.55),
         ),
       ),
     );
@@ -270,14 +307,13 @@ class _LibraryViewState extends State<LibraryView> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  _tr
-                      ? LibraryStrings.sectionTitleTr(badge)
-                      : LibraryStrings.sectionTitle(badge),
+                  _pair(LibraryStrings.sectionTitle(badge),
+                      LibraryStrings.sectionTitleTr(badge)),
                   style: ChoreiaType.display(size: 19),
                 ),
               ),
               Text(
-                '${cards.length}',
+                UiLanguage.number(context, cards.length),
                 style: ChoreiaType.label(
                   size: 11,
                   color: ChoreiaColors.text(0.4),
@@ -287,11 +323,7 @@ class _LibraryViewState extends State<LibraryView> {
           ),
           const SizedBox(height: 4),
           Text(
-            _tr
-                ? LibraryStrings.sectionNoteTr(badge,
-                      cameraSessionsAvailable: widget.cameraSessionsAvailable)
-                : LibraryStrings.sectionNote(badge,
-                      cameraSessionsAvailable: widget.cameraSessionsAvailable),
+            _sectionNote(badge),
             style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
           ),
           const SizedBox(height: 12),
@@ -305,7 +337,7 @@ class _LibraryViewState extends State<LibraryView> {
     );
   }
 
-  Widget _heroCard(StyleCard c) => _tappable(
+  Widget _heroCard(StyleCard c, {bool writtenCourse = false}) => _tappable(
         c,
         GlassPanel(
           key: LibraryView.tileKey(c.entry.id),
@@ -317,13 +349,15 @@ class _LibraryViewState extends State<LibraryView> {
             children: <Widget>[
               TitleWithPill(
                 title: Text(
-                  StyleContentCopy.styleName(c.entry, turkish: _tr),
+                  _text(StyleContentCopy.styleName(c.entry, turkish: _tr)),
                   style: ChoreiaType.display(size: 25),
                 ),
                 pill: StatusPill(
-                  label: _tr
-                      ? LibraryStrings.badgeTr(c.badge)
-                      : LibraryStrings.badge(c.badge),
+                  label: writtenCourse
+                      ? (_pair('WRITTEN COURSE', 'YAZILI KURS'))
+                      : (_tr
+                          ? _text(LibraryStrings.badgeTr(c.badge))
+                          : _text(LibraryStrings.badge(c.badge))),
                   tone: _tone(c.badge),
                 ),
               ),
@@ -332,18 +366,11 @@ class _LibraryViewState extends State<LibraryView> {
               // card; on a gated one it would read as an inventory the user can
               // reach. Both are shown, worded to say which is which.
               Text(
-                (_tr ? LibraryStrings.lessonLineTr : LibraryStrings.lessonLine)(
-                  c,
-                  cameraSessionsAvailable: widget.cameraSessionsAvailable,
-                  startable: c
-                      .offers(widget.library.runnableSteps)
-                      .where((LessonOffer o) => o.canStart)
-                      .length,
-                ),
+                _lessonLine(c),
                 style: ChoreiaType.label(
                     size: 10, color: ChoreiaColors.text(0.48)),
               ),
-              if (_reason(c) != null) ...<Widget>[
+              if (!writtenCourse && _reason(c) != null) ...<Widget>[
                 const SizedBox(height: 12),
                 Text(
                   _reason(c)!,
@@ -352,6 +379,21 @@ class _LibraryViewState extends State<LibraryView> {
                     color: ChoreiaColors.text(0.72),
                   ),
                 ),
+              ],
+              if (writtenCourse) ...<Widget>[
+                const SizedBox(height: 12),
+                if (c.badge == StyleBadge.builtButGated && _reason(c) != null)
+                  Text(
+                    '${_pair('Camera references', 'Kamera referansları')}: ${_reason(c)}',
+                    style: ChoreiaType.body(size: 12.5),
+                  ),
+                Text(
+                  LibraryStrings.sessionNotice(widget.cameraSessionsAvailable,
+                      turkish: _tr),
+                  style: ChoreiaType.body(size: 12.5),
+                ),
+                const SizedBox(height: 12),
+                WrittenCourseLink(styleId: c.entry.id, env: widget.env),
               ],
             ],
           ),
@@ -369,14 +411,14 @@ class _LibraryViewState extends State<LibraryView> {
           ),
           child: TitleWithPill(
             title: Text(
-              StyleContentCopy.styleName(c.entry, turkish: _tr),
+              _text(StyleContentCopy.styleName(c.entry, turkish: _tr)),
               style:
                   ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.8)),
             ),
             pill: StatusPill(
               label: _tr
-                  ? LibraryStrings.badgeTr(c.badge)
-                  : LibraryStrings.badge(c.badge),
+                  ? _text(LibraryStrings.badgeTr(c.badge))
+                  : _text(LibraryStrings.badge(c.badge)),
               tone: _tone(c.badge),
               filled: false,
             ),
@@ -384,26 +426,40 @@ class _LibraryViewState extends State<LibraryView> {
         ),
       );
 
-  Widget _tappable(StyleCard c, Widget child) => GestureDetector(
-        onTap: () => Navigator.of(context).push(
-          ChoreiaPageRoute<void>(
-            settings: RouteSettings(name: 'style/${c.entry.id}'),
-            builder: (_) => StyleDetailView(
-              card: c,
-              runnableSteps: widget.library.runnableSteps,
-              env: widget.env,
-              beforeStart: widget.beforeLessonStart,
-              cameraSessionsAvailable: widget.cameraSessionsAvailable,
+  Widget _tappable(StyleCard c, Widget child) => Semantics(
+        button: true,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: () => Navigator.of(context).push(
+              ChoreiaPageRoute<void>(
+                settings: RouteSettings(name: 'style/${c.entry.id}'),
+                builder: (_) => StyleDetailView(
+                  card: c,
+                  runnableSteps: widget.library.runnableSteps,
+                  env: widget.env,
+                  beforeStart: widget.beforeLessonStart,
+                  cameraSessionsAvailable: widget.cameraSessionsAvailable,
+                ),
+              ),
+            ),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 48),
+              child: child,
             ),
           ),
         ),
-        child: child,
       );
 
   /// The user-facing reason a style is shut, taken from the DERIVATION rather
   /// than written here. One source of truth: `AvailabilityStrings` already
   /// owns this copy and is tested against leaking technical text.
-  String? _reason(StyleCard c) => StyleStatusCopy.reason(c, turkish: _tr);
+  String? _reason(StyleCard c) {
+    final source = StyleStatusCopy.reason(c, turkish: false);
+    return source == null ? null : _pair(source,
+        StyleStatusCopy.reason(c, turkish: true) ?? source);
+  }
 
   Color _tone(StyleBadge b) => badgeTone(b);
 }
@@ -468,14 +524,14 @@ abstract final class LibraryStrings {
   static String availabilityLine(LibraryTally t,
           {bool cameraSessionsAvailable = false}) =>
       '${t.openable} ${t.openable == 1 ? 'style has' : 'styles have'} camera-session reference notes. '
-      '${sessionNotice(cameraSessionsAvailable)} Use the written courses above '
+      '${sessionNotice(cameraSessionsAvailable)} Use the written courses below '
       'for guided lessons. Other catalogue entries show their current status.';
 
   static String availabilityLineTr(LibraryTally t,
           {bool cameraSessionsAvailable = false}) =>
       '${t.openable} stilde kamera seansı referans notları var. '
       '${sessionNotice(cameraSessionsAvailable, turkish: true)} Rehberli dersler '
-      'için yukarıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.';
+      'için aşağıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.';
 
   static const String filterAll = 'ALL';
   static const String filterOpenNow = 'REFERENCES';
@@ -544,6 +600,11 @@ abstract final class LibraryStrings {
 
   static String lessonLineTr(StyleCard c,
       {required int startable, bool cameraSessionsAvailable = false}) {
+    if (WrittenCourseLink.supports(c.entry.id)) {
+      return cameraSessionsAvailable
+          ? 'YAZILI KURS AÇIK · $startable KAMERA REFERANSI HAZIR'
+          : 'YAZILI KURS AÇIK · KAMERA KAPALI · PUAN YOK';
+    }
     if (c.lessons.isEmpty) return 'DERS YOK';
     final int total = c.lessons.length;
     return cameraSessionsAvailable
@@ -572,6 +633,11 @@ abstract final class LibraryStrings {
   /// distinction `LibraryCatalog.runnableSteps` exists to make.
   static String lessonLine(StyleCard c,
       {required int startable, bool cameraSessionsAvailable = false}) {
+    if (WrittenCourseLink.supports(c.entry.id)) {
+      return cameraSessionsAvailable
+          ? 'WRITTEN COURSE AVAILABLE · $startable CAMERA REFERENCES READY'
+          : 'WRITTEN COURSE AVAILABLE · CAMERA OFF · NO SCORING';
+    }
     if (c.lessons.isEmpty) return 'NO LESSONS BUILT';
     final int total = c.lessons.length;
     return cameraSessionsAvailable

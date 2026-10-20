@@ -50,29 +50,25 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
     final tr = UiLanguage.isTurkish(context);
     final lang = tr ? 'tr' : 'en';
     final labels = <String, String>{
-      'scope': tr ? 'Yazılı kapsam' : 'Written scope',
-      'catalogBoundary': tr ? 'Katalog kapsam sınırı' : 'Catalog scope boundary',
-      'soundAndObservation': tr
-          ? 'Müzik ve öz gözlem'
-          : 'Music and self-observation',
-      'exercise': tr ? 'Yeni satırı çöz' : 'Solve a new row',
-      'answer': tr ? 'Cevabı göster' : 'Reveal the answer',
-      'diagramNotice': tr ? 'Çizimleri oku' : 'Read the diagrams',
-      'diagram': tr
-          ? 'Özgün sayı ve ayak haritası'
-          : 'Original count and foot map',
-      'provenance': tr ? 'Kaynaklar ve sınırlar' : 'Sources and limits',
-      'reviewNotice': tr ? 'İnceleme durumu' : 'Review status',
-      'boundaries': tr ? 'Her denemeden önce' : 'Before every attempt',
-      'startCompetency': tr ? 'Başlangıç' : 'Starting point',
-      'endCompetency': tr ? 'Hedef' : 'Target',
-      'prerequisite': tr ? 'Ön koşul' : 'Prerequisite',
-      'outcome': tr ? 'Bu aşamanın hedefi' : 'Stage target',
-      'instruction': tr ? 'Öğren' : 'Learn',
-      'practice': tr ? 'Çalış' : 'Practise',
-      'mistakes': tr ? 'Yaygın hatalar ve dönüş' : 'Common mistakes and reset',
-      'adaptation': tr ? 'Daha düşük yük seçeneği' : 'Lower-impact option',
-      'check': tr ? 'Öz kontrol ve tekrar' : 'Self-check and revisit',
+      'scope': UiLanguage.pair(context, turkish: tr, en: 'Written scope', tr: 'Yazılı kapsam'),
+      'catalogBoundary': UiLanguage.pair(context, turkish: tr, en: 'Catalog scope boundary', tr: 'Katalog kapsam sınırı'),
+      'soundAndObservation': UiLanguage.pair(context, turkish: tr, en: 'Music and self-observation', tr: 'Müzik ve öz gözlem'),
+      'exercise': UiLanguage.pair(context, turkish: tr, en: 'Solve a new row', tr: 'Yeni satırı çöz'),
+      'answer': UiLanguage.pair(context, turkish: tr, en: 'Reveal the answer', tr: 'Cevabı göster'),
+      'diagramNotice': UiLanguage.pair(context, turkish: tr, en: 'Read the diagrams', tr: 'Çizimleri oku'),
+      'diagram': UiLanguage.pair(context, turkish: tr, en: 'Original count and foot map', tr: 'Özgün sayı ve ayak haritası'),
+      'provenance': UiLanguage.pair(context, turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
+      'reviewNotice': UiLanguage.pair(context, turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
+      'boundaries': UiLanguage.pair(context, turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
+      'startCompetency': UiLanguage.pair(context, turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
+      'endCompetency': UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
+      'prerequisite': UiLanguage.pair(context, turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
+      'outcome': UiLanguage.pair(context, turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
+      'instruction': UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
+      'practice': UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
+      'mistakes': UiLanguage.pair(context, turkish: tr, en: 'Common mistakes and reset', tr: 'Yaygın hatalar ve dönüş'),
+      'adaptation': UiLanguage.pair(context, turkish: tr, en: 'Lower-impact option', tr: 'Daha düşük yük seçeneği'),
+      'check': UiLanguage.pair(context, turkish: tr, en: 'Self-check and revisit', tr: 'Öz kontrol ve tekrar'),
     };
     Widget section(String field, Map<String, Map<String, String>> copy) =>
         Padding(
@@ -85,16 +81,14 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               const SizedBox(height: 6),
-              Text(copy[field]![lang]!),
+              Text(UiLanguage.courseText(context, copy[field]!)),
             ],
           ),
         );
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          tr
-              ? 'Özgün kısa dans yazılı temeller'
-              : 'Original short-form written foundations',
+          UiLanguage.pair(context, turkish: tr, en: 'Original short-form written foundations', tr: 'Özgün kısa dans yazılı temeller'),
         ),
       ),
       body: FutureBuilder<ShortFormCourse>(
@@ -109,13 +103,13 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      tr ? 'Yazılı yol okunamadı. İlerleme kaydedilmedi.' : 'The written path could not be read. No progress was recorded.',
+                      UiLanguage.pair(context, turkish: tr, en: 'The written path could not be read. No progress was recorded.', tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
                     ),
                     TextButton(
                       onPressed: () => setState(() {
                         _course = _load()..ignore();
                       }),
-                      child: Text(tr ? 'Tekrar dene' : 'Retry'),
+                      child: Text(UiLanguage.pair(context, turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
                     ),
                   ],
                 ),
@@ -135,7 +129,7 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
             padding: const EdgeInsets.all(20),
             children: [
               Text(
-                course.copy['title']![lang]!,
+                UiLanguage.courseText(context, course.copy['title']!),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 20),
@@ -147,21 +141,19 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
               LineDanceDirectionDiagram(turkish: tr),
               section('diagramNotice', course.copy),
               Text(
-                tr
-                    ? 'Açık fiziksel öğretim bileşenleri'
-                    : 'Open physical teaching components',
+                UiLanguage.pair(context, turkish: tr, en: 'Open physical teaching components', tr: 'Açık fiziksel öğretim bileşenleri'),
               ),
               for (final gap in course.openTeaching)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(gap[lang]!),
+                  child: Text(UiLanguage.courseText(context, gap)),
                 ),
               const SizedBox(height: 16),
               for (final unit in course.units)
                 Card(
                   child: ExpansionTile(
                     key: ValueKey(unit.id),
-                    title: Text(unit.copy['title']![lang]!),
+                    title: Text(UiLanguage.courseText(context, unit.copy['title']!)),
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -192,7 +184,7 @@ class _ShortFormCoursePageState extends State<ShortFormCoursePage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(12),
-                                child: Text(unit.copy[field]![lang]!),
+                                child: Text(UiLanguage.courseText(context, unit.copy[field]!)),
                               ),
                             ],
                           )
@@ -222,15 +214,19 @@ class _PatternTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = lang == 'tr';
-    final headings = tr
-        ? ['Sayı', 'Ayak', 'Eylem', 'Yön', 'Destek']
-        : ['Count', 'Foot', 'Action', 'Direction', 'Support'];
+    final headings = [
+      UiLanguage.pair(context, turkish: tr, en: 'Count', tr: 'Sayı'),
+      UiLanguage.pair(context, turkish: tr, en: 'Foot', tr: 'Ayak'),
+      UiLanguage.pair(context, turkish: tr, en: 'Action', tr: 'Eylem'),
+      UiLanguage.pair(context, turkish: tr, en: 'Direction', tr: 'Yön'),
+      UiLanguage.pair(context, turkish: tr, en: 'Support', tr: 'Destek'),
+    ];
     Widget cell(String text) =>
         Padding(padding: const EdgeInsets.all(4), child: Text(text));
     String action(String value) => switch (value) {
-      'W' => tr ? 'Ağırlık' : 'Weight',
-      'T' => tr ? 'Dokun' : 'Touch',
-      'H' => tr ? 'Durak' : 'Hold',
+      'W' => UiLanguage.pair(context, turkish: tr, en: 'Weight', tr: 'Ağırlık'),
+      'T' => UiLanguage.pair(context, turkish: tr, en: 'Touch', tr: 'Dokun'),
+      'H' => UiLanguage.pair(context, turkish: tr, en: 'Hold', tr: 'Durak'),
       _ => throw const FormatException('Unknown short-form action'),
     };
     return Padding(
@@ -240,18 +236,18 @@ class _PatternTable extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${pattern.id}: ${pattern.copy['title']![lang]!}',
+            '${pattern.id}: ${UiLanguage.courseText(context, pattern.copy['title']!)}',
             style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
-          Text(pattern.copy['originality']![lang]!),
+          Text(UiLanguage.courseText(context, pattern.copy['originality']!)),
           const SizedBox(height: 8),
           Text(
-            tr ? 'ÖN bakış. Destek eylemden SONRA. L sol, R sağ.' : 'Facing FRONT. Support AFTER action. L left, R right.',
+            UiLanguage.pair(context, turkish: tr, en: 'Facing FRONT. Support AFTER action. L left, R right.', tr: 'ÖN bakış. Destek eylemden SONRA. L sol, R sağ.'),
           ),
           const SizedBox(height: 6),
           Text(
-            tr ? 'Beş sütun: gerekiyorsa yana kaydır.' : 'Five columns: swipe sideways when needed.',
+            UiLanguage.pair(context, turkish: tr, en: 'Five columns: swipe sideways when needed.', tr: 'Beş sütun: gerekiyorsa yana kaydır.'),
           ),
           LayoutBuilder(builder: (context, constraints) {
             final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
@@ -275,7 +271,7 @@ class _PatternTable extends StatelessWidget {
                     cell('${row['count']}'),
                     cell(row['foot'] as String),
                     cell(action(row['action'] as String)),
-                    cell(course.directions[row['direction']]![lang]!),
+                    cell(UiLanguage.courseText(context, course.directions[row['direction']]!)),
                     cell(row['supportAfter'] as String),
                   ],
                 ),
@@ -284,11 +280,11 @@ class _PatternTable extends StatelessWidget {
             );
           }),
           const SizedBox(height: 8),
-          Text(tr ? 'İsteğe bağlı jest planı; fiziksel doğrulama değil' : 'Optional gesture plan; no physical verification'),
+          Text(UiLanguage.pair(context, turkish: tr, en: 'Optional gesture plan; no physical verification', tr: 'İsteğe bağlı jest planı; fiziksel doğrulama değil')),
           for (final row in pattern.rows)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text('${row['count']}: ${course.gestures[row['optionalGesture']]![lang]!}'),
+              child: Text('${row['count']}: ${UiLanguage.courseText(context, course.gestures[row['optionalGesture']]!)}'),
             ),
         ],
       ),

@@ -75,10 +75,10 @@ class FirstRunView extends StatelessWidget {
                       context,
                       en: IntroStrings.what,
                       tr:
-                          'Choreia, sıralı dersler, çalışma görevleri ve öz '
-                          'denetimlerle Salsa On1 öğrenmeni sağlar. Kurs '
-                          'hesap veya kamera olmadan çalışır. İlerleme '
-                          'kaydın bu cihazda kalır.',
+                          'Beş solo dans yolunu sıralı yazılı dersler, çalışma '
+                          'görevleri ve öz denetimlerle keşfet: Hip-Hop, Salsa '
+                          'On1, Line Dance, Latin Fusion ve özgün kısa dans. '
+                          'Hesap veya kamera gerekmez. Çalışma kaydın bu cihazda kalır.',
                     ),
                     style: ChoreiaType.body(
                       size: 15,
@@ -95,8 +95,10 @@ class FirstRunView extends StatelessWidget {
                       en: IntroStrings.cameraTitle,
                       tr: 'KAMERA',
                     ),
-                    body: IntroStrings.cameraStatus(cameraSessionsAvailable,
-                        turkish: UiLanguage.isTurkish(context)),
+                    body: UiLanguage.text(context,
+                        en: IntroStrings.cameraStatus(cameraSessionsAvailable),
+                        tr: IntroStrings.cameraStatus(cameraSessionsAvailable,
+                            turkish: true)),
                   ),
                   const SizedBox(height: 14),
                   _panel(
@@ -219,9 +221,10 @@ abstract final class IntroStrings {
   static const String title = 'Choreia';
 
   static const String what =
-      'Learn Salsa On1 through progressive lessons, practice tasks and '
-      'self-checks. The course works without an account or camera. Your '
-      'practice record stays on this device.';
+      'Explore five solo dance paths through sequenced written lessons, practice '
+      'tasks and self-checks: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and '
+      'original short-form dance. No account or camera is required. Your '
+      'study record stays on this device.';
 
   static const String currentCamera =
       'Live camera practice and subscription sales are closed in this release. '

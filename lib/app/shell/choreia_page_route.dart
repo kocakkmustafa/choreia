@@ -42,8 +42,11 @@ class ChoreiaPageRoute<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
+    // Depend on MediaQuery here so an OS preference change also updates a
+    // transition already in flight, in either navigation direction.
+    if (MediaQuery.disableAnimationsOf(context)) return child;
     final Animation<double> curved =
-        CurvedAnimation(parent: animation, curve: ChoreiaMotion.transition);
+        animation.drive(CurveTween(curve: ChoreiaMotion.transition));
     return FadeTransition(
       opacity: curved,
       child: SlideTransition(

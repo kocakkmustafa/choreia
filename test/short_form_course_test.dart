@@ -7,6 +7,7 @@ import 'package:choreia/app/course/short_form_course_page.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'hip_hop_course_page_test.dart' show WrittenBundle;
@@ -148,6 +149,9 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       await tester.pumpWidget(MaterialApp(
+        locale: Locale(lang),
+        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(2)), child: child!),
         home: ShortFormCoursePage(bundle: WrittenBundle(source))));
@@ -254,7 +258,10 @@ void main() {
     await tester.pumpWidget(MaterialApp(navigatorObservers: [spy], home: StyleDetailView(card: card)));
     final link = find.byKey(const Key('style.shortFormWrittenCourse'));
     await reach(tester, link, animatedStyle: true);
-    expect(find.text('Original short-form written foundations · demonstration/physical review open'), findsOneWidget);
+    expect(find.descendant(of: link, matching: find.text('Open written course')),
+        findsOneWidget);
+    expect(tester.widget<FilledButton>(link).onPressed, isNotNull);
+    expect(find.textContaining('Demonstration and instructor review remain open'), findsOneWidget);
     await tester.tap(link);
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));

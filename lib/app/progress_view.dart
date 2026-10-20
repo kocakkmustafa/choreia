@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'course_catalog.dart';
+import 'localization/progress_messages.dart';
 import 'progress_summary.dart';
 import 'theme.dart';
+import 'ui_language.dart';
 
 /// The progress surface.
 ///
@@ -42,6 +44,7 @@ class ProgressView extends StatelessWidget {
   static const Key evaluatedSectionKey = Key('progress.evaluated');
   static const Key blockedSectionKey = Key('progress.blocked');
   static const Key retroactiveNoteKey = Key('progress.retroactiveNote');
+  static const Key historyScopeKey = Key('progress.historyScope');
 
   final ProgressSummary summary;
 
@@ -59,24 +62,42 @@ class ProgressView extends StatelessWidget {
   /// WHICH line it is is the claim (C-280).
   static const Key emptyReasonKey = Key('progress.emptyReason');
 
+  String _text(BuildContext context, String english) => UiLanguage.text(context,
+      en: english, tr: progressMessages['tr']?[english] ?? english);
+
+  String _format(BuildContext context, String template,
+          Map<String, Object> values) =>
+      UiLanguage.format(context,
+          en: template,
+          tr: progressMessages['tr']?[template] ?? template,
+          values: values);
+
   @override
   Widget build(BuildContext context) {
-    final String? integrityNote = summary.integrity.note;
+    String message(String template, Map<String, Object> values) =>
+        _format(context, template, values);
+    final String? integrityNote = summary.integrity.noteFor(format: message);
     return ChoreiaBackdrop(
       child: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: <Widget>[
-            Text('Your practice',
+            Text(_text(context, 'Your practice'),
                 style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.42))),
             const SizedBox(height: 8),
-            Text('Progress', style: ChoreiaType.display(size: 33)),
+            Text(_text(context, 'Progress'), style: ChoreiaType.display(size: 33)),
             const SizedBox(height: 18),
 
             if (courseEntry != null) ...[
               courseEntry!,
               const SizedBox(height: 24),
             ],
+
+            Text(_text(context, ProgressStrings.historyScope),
+                key: historyScopeKey,
+                style: ChoreiaType.body(
+                    size: 12.5, color: ChoreiaColors.text(0.65))),
+            const SizedBox(height: 16),
 
             // INTEGRITY FIRST, above the numbers it qualifies.
             //
@@ -99,8 +120,8 @@ class ProgressView extends StatelessWidget {
 
             _section(
               sectionKey: recordedSectionKey,
-              title: ProgressStrings.recordedSection,
-              subtitle: ProgressStrings.recordedSubtitle,
+              title: _text(context, ProgressStrings.recordedSection),
+              subtitle: _text(context, ProgressStrings.recordedSubtitle),
               accent: ChoreiaColors.rose,
               children: summary.recorded.isEmpty
                   ? <Widget>[
@@ -108,40 +129,45 @@ class ProgressView extends StatelessWidget {
                       // An unreadable history and an empty one produce the
                       // same empty list and mean opposite things (C-280).
                       Text(
-                          summary.integrity.canClaimEmpty
+                          _text(context, summary.integrity.canClaimEmpty
                               ? ProgressStrings.emptyHistory
-                              : ProgressStrings.unknownHistory,
+                              : ProgressStrings.unknownHistory),
                           key: emptyReasonKey,
                           style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.6)))
                     ]
-                  : summary.recorded.map(_recordedRow).toList(growable: false),
+                  : summary.recorded
+                      .map((row) => _recordedRow(context, row))
+                      .toList(growable: false),
             ),
             const SizedBox(height: 28),
 
             _section(
               sectionKey: evaluatedSectionKey,
-              title: ProgressStrings.evaluatedSection,
-              subtitle: ProgressStrings.evaluatedSubtitle,
+              title: _text(context, ProgressStrings.evaluatedSection),
+              subtitle: _text(context, ProgressStrings.evaluatedSubtitle),
               accent: ChoreiaColors.rose,
               children: summary.evaluated.isEmpty
                   // The reason goes INSIDE this section: a blank Evaluated section
                   // reads as a statement about the user ("you earned nothing"),
                   // when the true statement is about the product.
                   ? <Widget>[
-                      Text(summary.evaluatedUnavailableReason ?? '',
+                      Text(_text(context, summary.evaluatedUnavailableReason ?? ''),
                           style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.6)))
                     ]
-                  : summary.evaluated.map(_evaluatedRow).toList(growable: false),
+                  : summary.evaluated
+                      .map((row) => _evaluatedRow(context, row))
+                      .toList(growable: false),
             ),
             const SizedBox(height: 28),
 
             _section(
               sectionKey: blockedSectionKey,
-              title: ProgressStrings.blockedSection,
-              subtitle: ProgressStrings.blockedSubtitle,
+              title: _text(context, ProgressStrings.blockedSection),
+              subtitle: _text(context, ProgressStrings.blockedSubtitle),
               accent: ChoreiaColors.amber,
               children: <Widget>[
-                for (final BlockedGate g in summary.blockedGates) _blockedRow(g),
+                for (final BlockedGate g in summary.blockedGates)
+                  _blockedRow(context, g),
                 // Sits in the blocked section on purpose: it is the answer to the
                 // question this section provokes ("so what happens to my work when
                 // these open?").
@@ -150,7 +176,7 @@ class ProgressView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
                       ProgressSummary.retroactiveCreditNote(
-                          summary.integrity.fidelity),
+                          summary.integrity.fidelity, format: message),
                       style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.48))),
                 ),
               ],
@@ -161,7 +187,9 @@ class ProgressView extends StatelessWidget {
     );
   }
 
-  Widget _recordedRow(RecordedRow row) {
+  Widget _recordedRow(BuildContext context, RecordedRow row) {
+    String message(String template, Map<String, Object> values) =>
+        _format(context, template, values);
     final LessonInfo? info = catalog?.lessonById(row.lessonId);
     final Color tone = row.isDemoOnly ? ChoreiaColors.amber : ChoreiaColors.rose;
     return Padding(
@@ -183,7 +211,7 @@ class ProgressView extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(row.displayName,
+                  child: Text(_text(context, row.displayName),
                       style: ChoreiaType.body(
                           size: 14, weight: FontWeight.w600, color: ChoreiaColors.bright)),
                 ),
@@ -191,24 +219,34 @@ class ProgressView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             // Units live in the strings, so no caller can emit a bare number.
-            Text(ProgressStrings.duration(row.workedSeconds),
+            Text(ProgressStrings.duration(row.workedSeconds, format: message),
                 style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
-            Text(ProgressStrings.cycles(row.cyclesCompleted, row.plannedCycles),
+            Text(ProgressStrings.cycles(
+                    row.cyclesCompleted,
+                    // A mixed history must not compare all read cycles with
+                    // a plan that only some sessions declared.
+                    row.targetedSessions == row.sessions ? row.plannedCycles : 0,
+                    format: message),
                 style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
             Text(
                 ProgressStrings.sessionsCompleted(
-                    row.completedSessions, row.sessions,
-                    // No target, no "finished" — the row's own planned total
-                    // is the only thing that can say whether one existed.
-                    anyTarget: row.plannedCycles > 0),
+                    0, row.sessions, anyTarget: false, format: message),
                 style: ChoreiaType.label(size: 10.5, color: ChoreiaColors.text(0.5))),
+            if (row.targetedSessions > 0)
+              Text(
+                  ProgressStrings.sessionsCompleted(
+                      row.completedSessions, row.targetedSessions,
+                      anyTarget: true, format: message),
+                  style: ChoreiaType.label(
+                      size: 10.5, color: ChoreiaColors.text(0.5))),
             // Unmeasured work is named on the row it happened in — an aggregate
             // elsewhere would tell the user something went unchecked without
             // saying where.
             if (row.unmeasuredCycles > 0)
               Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: Text(ProgressStrings.unmeasured(row.unmeasuredCycles),
+                child: Text(ProgressStrings.unmeasured(row.unmeasuredCycles,
+                    format: message),
                     style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.amberDeep)),
               ),
             // A demo-only lesson EARNS the completion mark and shows `—` where a
@@ -225,7 +263,9 @@ class ProgressView extends StatelessWidget {
                   // synthetic test fixture. Expanded so it WRAPS instead of
                   // pushing the fixed-width dash off the right edge.
                   Expanded(
-                    child: Text(ProgressStrings.demoOnlyMark(info?.reason),
+                    child: Text(ProgressStrings.demoOnlyMark(
+                        info?.reason == null ? null : _text(context, info!.reason!),
+                        format: message),
                         style:
                             ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.62))),
                   ),
@@ -241,7 +281,7 @@ class ProgressView extends StatelessWidget {
     );
   }
 
-  Widget _evaluatedRow(EvaluatedRow row) => Padding(
+  Widget _evaluatedRow(BuildContext context, EvaluatedRow row) => Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: GlassPanel(
           radius: 16,
@@ -250,12 +290,13 @@ class ProgressView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: Text(row.displayName,
+                child: Text(_text(context, row.displayName),
                     style: ChoreiaType.body(
                         size: 14, weight: FontWeight.w600, color: ChoreiaColors.bright)),
               ),
               const SizedBox(width: 10),
-              Text(row.band, style: ChoreiaType.display(size: 17, color: ChoreiaColors.roseBright)),
+              Text(_text(context, row.band),
+                  style: ChoreiaType.display(size: 17, color: ChoreiaColors.roseBright)),
             ],
           ),
         ),
@@ -288,7 +329,7 @@ class ProgressView extends StatelessWidget {
         GateScope.style || GateScope.errorCode => g.id,
       };
 
-  Widget _blockedRow(BlockedGate g) => Padding(
+  Widget _blockedRow(BuildContext context, BlockedGate g) => Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: GlassPanel(
           radius: 14,
@@ -298,15 +339,17 @@ class ProgressView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(_gateLabel(g),
+              Text(_text(context, _gateLabel(g)),
                   style: ChoreiaType.label(
                       size: 9.5, color: ChoreiaColors.amberDeep, letterSpacingEm: 0.1)),
               const SizedBox(height: 6),
-              Text(g.why, style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.78))),
+              Text(_text(context, g.why),
+                  style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.78))),
               if (g.unblockedBy != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
-                  child: Text('Opens when: ${g.unblockedBy}',
+                  child: Text(_format(context, 'Opens when: {condition}',
+                      {'condition': _text(context, g.unblockedBy!)}),
                       style: ChoreiaType.body(size: 11.5, color: ChoreiaColors.text(0.5))),
                 ),
             ],

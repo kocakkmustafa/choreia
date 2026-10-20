@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  # Already resolved by flutter_localizations; declare the app's formatting use.
+  intl: 0.20.3
   # Ortak hesap, çekirdek ve kamera aynı değişmez Git sürümünden çözülür.
   motion_account:
     git:
@@ -120,6 +122,7 @@ flutter:
     # Content is versioned JSON the engine interprets at runtime (plan §7):
     # a new style is a content pack, not a code change.
     - content/
+    - content/l10n/
     - content/motion_content/manifest.json
     # Code-pinned, closed QA source membership; the production media slot is empty.
     - content/motion_content/choreia_source_pins_v2k.json

@@ -36,7 +36,7 @@ void main() {
       final String note =
           ProgressSummary.retroactiveCreditNote(HistoryFidelity.notRecorded);
       expect(note.toLowerCase(), isNot(contains('already recorded')));
-      expect(note.toLowerCase(), contains('saves nothing'),
+      expect(note.toLowerCase(), contains('saves no camera sessions'),
           reason: 'yokluk YERİNE geçen bir cümle değil, yokluğu SÖYLEYEN bir '
               'cümle olmalı');
     });

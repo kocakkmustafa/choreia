@@ -7,6 +7,7 @@ import 'package:choreia/app/onboarding/first_run_view.dart';
 import 'package:choreia/app/shell/choreia_shell.dart';
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_catalog.dart';
@@ -17,8 +18,12 @@ void main() {
 
   setUpAll(() async => library = await testLibrary());
 
-  Future<void> pump(WidgetTester tester, FirstRunFlag flag) async {
+  Future<void> pump(WidgetTester tester, FirstRunFlag flag,
+      {Locale locale = const Locale('en')}) async {
     await tester.pumpWidget(MaterialApp(
+      locale: locale,
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: ChoreiaShell(
         bundleOverride: () async => library,
         flagOverride: flag,
@@ -106,7 +111,7 @@ void main() {
       testWidgets('current course and closed camera intro in $language', (tester) async {
         tester.platformDispatcher.localeTestValue = Locale(language);
         addTearDown(tester.platformDispatcher.clearLocaleTestValue);
-        await pump(tester, MemoryFirstRunFlag());
+        await pump(tester, MemoryFirstRunFlag(), locale: Locale(language));
         expect(find.textContaining(language == 'tr' ? 'Kurs hesap veya kamera olmadan çalışır' : 'The course works without an account or camera'), findsOneWidget);
         final gate = find.textContaining(language == 'tr' ? 'canlı kamera pratiği ve abonelik satışı kapalıdır' : 'Live camera practice and subscription sales are closed');
         for (var i = 0; i < 12 && gate.evaluate().isEmpty; i++) {

@@ -345,7 +345,7 @@ void main() {
             nowForWeeklyPractice: () => now)));
     await drain(tester);
     expect(find.text('0 / 48 self-reported complete'), findsOneWidget);
-    expect(find.text('0 opened · 0 practised lessons'), findsOneWidget);
+    expect(find.text('Lessons opened: 0 · Lessons practised: 0'), findsOneWidget);
     expect(find.text('Saved attempts: 0 · Lessons with attempts: 0'),
         findsNWidgets(4));
     await tester.scrollUntilVisible(find.text('Practice history'), 600,

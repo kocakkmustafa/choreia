@@ -214,11 +214,9 @@ class _RecallLessonPageState extends State<RecallLessonPage> {
           key: const Key('study-reference-toggle'),
           onPressed: () => setState(() => _revealed = !_revealed),
           child: Text(
-            _text(
-              context,
-              _revealed ? 'Hide reference' : 'Compare with reference',
-              _revealed ? 'Kaynağı gizle' : 'Kaynakla karşılaştır',
-            ),
+            _revealed
+                ? _text(context, 'Hide reference', 'Kaynağı gizle')
+                : _text(context, 'Compare with reference', 'Kaynakla karşılaştır'),
           ),
         ),
         if (_revealed) ...<Widget>[
