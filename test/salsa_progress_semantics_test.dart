@@ -22,7 +22,8 @@ void main() {
   // Each definition visits every locale on the same real course page. The
   // iterations are not separate executed test bodies or native AT acceptance.
   for (final completed in [0, 1, 48]) {
-    testWidgets('Salsa numeric progress semantics $completed of 48 in 14 locales',
+    testWidgets(
+        'Salsa numeric progress semantics $completed of 48 in 14 locales',
         (tester) async {
       final fixtureZone = Zone.current;
       final directory =
@@ -55,7 +56,8 @@ void main() {
           await tester.pump(const Duration(milliseconds: 50));
         }
         expect(drained, isTrue,
-            reason: 'The actual owner drain must finish before fixture deletion');
+            reason:
+                'The actual owner drain must finish before fixture deletion');
         final failure = drainError;
         if (failure != null) Error.throwWithStackTrace(failure, drainStack!);
         directory.deleteSync(recursive: true);
@@ -65,16 +67,21 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      final course = SalsaCourse.fromJson(jsonDecode(
-          File('content/salsa_on1_course.json').readAsStringSync())
-          as Map<String, dynamic>);
+      final course = SalsaCourse.fromJson(
+          jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+              as Map<String, dynamic>);
       expect(course.lessons, hasLength(48));
       final events = <SalsaProgressEvent>[];
       for (final lesson in course.lessons.take(completed)) {
-        expect(lesson.selfChecksFor(SalsaPracticeOption.standard).completionAllowed,
+        expect(
+            lesson
+                .selfChecksFor(SalsaPracticeOption.standard)
+                .completionAllowed,
             isTrue);
-        for (final kind in
-            [SalsaEvidence.practised, SalsaEvidence.selfReportedComplete]) {
+        for (final kind in [
+          SalsaEvidence.practised,
+          SalsaEvidence.selfReportedComplete
+        ]) {
           events.add(SalsaProgressEvent(
               courseId: course.id,
               version: course.version,
@@ -156,11 +163,11 @@ void main() {
   }
 }
 
-Future<void> _waitFor(WidgetTester tester, bool Function() ready,
-    String witness) async {
+Future<void> _waitFor(
+    WidgetTester tester, bool Function() ready, String witness) async {
   for (var turn = 0; turn < 120 && !ready(); turn++) {
-    await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 2)));
+    await tester
+        .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
     await tester.pump(const Duration(milliseconds: 50));
     expect(tester.takeException(), isNull, reason: witness);
   }
