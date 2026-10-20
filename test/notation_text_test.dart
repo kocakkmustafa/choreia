@@ -198,7 +198,7 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       final semantics = tester.ensureSemantics();
-      addTearDown(semantics.dispose);
+      try {
       final text = _diagrams(language)[7];
       await tester.pumpWidget(_screen(text, language: language));
       await tester.pumpAndSettle();
@@ -214,10 +214,10 @@ void main() {
       expect(controller.offset, 0);
       final scrollNode = tester.getSemantics(find.byType(Scrollable));
       expect(
-          scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollRight),
+          scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollLeft),
           isTrue);
       tester.binding.rootPipelineOwner.semanticsOwner!
-          .performAction(scrollNode.id, SemanticsAction.scrollRight);
+          .performAction(scrollNode.id, SemanticsAction.scrollLeft);
       await tester.pumpAndSettle();
       expect(controller.offset, greaterThan(0));
       controller.jumpTo(0);
@@ -230,6 +230,9 @@ void main() {
         _expectPhysicalOrder(tester, line);
       }
       expect(tester.takeException(), isNull);
+    } finally {
+      semantics.dispose();
+    }
     });
   }
 
@@ -237,7 +240,7 @@ void main() {
       (tester) async {
     const text = 'L   ←\n\nالقدم المتحركة\tR →';
     final semantics = tester.ensureSemantics();
-    addTearDown(semantics.dispose);
+    try {
     await tester.pumpWidget(_screen(text, language: 'ar'));
     await tester.pumpAndSettle();
     expect(find.bySemanticsLabel(text), findsOneWidget);
@@ -253,5 +256,8 @@ void main() {
       '→',
     ]);
     expect(tester.takeException(), isNull);
+    } finally {
+      semantics.dispose();
+    }
   });
 }

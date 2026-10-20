@@ -246,7 +246,7 @@ void main() {
       'review target, filter state and card navigation support keyboard',
       (tester) async {
     final semantics = tester.ensureSemantics();
-    addTearDown(semantics.dispose);
+    try {
     await show(tester, Scaffold(body: LibraryView(library: library)));
     final review = find.byKey(const Key('study-review-entry'));
     expect(tester.getSize(review), const Size(48, 48));
@@ -286,6 +286,9 @@ void main() {
             .id,
         'hip_hop_foundations');
     expect(tester.takeException(), isNull);
+    } finally {
+      semantics.dispose();
+    }
   });
 
   testWidgets('stale owner and recovery callbacks cannot open a written route',

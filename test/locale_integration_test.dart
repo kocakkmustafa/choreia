@@ -13,7 +13,7 @@ import 'support/test_catalog.dart';
 
 void main() {
   test('regional language requests resolve to the eight approved variants', () {
-    const cases = <Locale, String>{
+    final cases = <Locale, String>{
       Locale('tr', 'TR'): 'tr',
       Locale('en', 'GB'): 'en',
       Locale('es', 'MX'): 'es-419',

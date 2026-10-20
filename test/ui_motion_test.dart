@@ -151,6 +151,7 @@ void main() {
     await tester.pumpWidget(preferenceHost(reduceMotion, routeHome()));
     await tester.tap(find.text('Open'));
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1));
     expect(find.byKey(destinationKey), findsOneWidget);
     expect(routeSlides(), findsNothing);
     expect(routeFades(), findsNothing);
