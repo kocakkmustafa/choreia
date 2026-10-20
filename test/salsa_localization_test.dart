@@ -170,6 +170,9 @@ void main() {
       if (ChoreiaMessages.of(tester.element(check)).localeTag == 'ar') break;
     }
     expect(ChoreiaMessages.of(tester.element(check)).localeTag, 'ar');
+    // The resources getter can update before the inherited tree's next frame.
+    await tester.pump();
+    expect(Localizations.localeOf(tester.element(check)), const Locale('ar'));
     expect(tester.widget<CheckboxListTile>(check).value, isTrue);
     expect(Directionality.of(tester.element(check)), TextDirection.rtl);
     await tester.scrollUntilVisible(
