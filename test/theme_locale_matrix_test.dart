@@ -395,12 +395,13 @@ Future<_Host> _mount(WidgetTester tester, LibraryCatalog library, Locale locale,
       }));
     });
     for (var turn = 0; turn < 300 && !drained; turn++) {
-      await tester
-          .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 2)));
       await tester.pump(const Duration(milliseconds: 50));
     }
     expect(drained, isTrue,
-        reason: 'Owner drain must finish before deleting the fixture directory');
+        reason:
+            'Owner drain must finish before deleting the fixture directory');
     final failure = drainError;
     if (failure != null) Error.throwWithStackTrace(failure, drainStack!);
     _routeTrace('teardown.drain.returned');
