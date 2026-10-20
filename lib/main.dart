@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_account/motion_account.dart';
 
 import 'app/account_bridge.dart';
+import 'app/account_identity_appearance.dart';
 import 'app/account_recovery_host.dart';
 import 'app/history/account_store_lifetime.dart';
 import 'app/font_licenses.dart';
@@ -82,8 +83,10 @@ Future<void> launchChoreia({
       if (abandoned) runtime.dispose();
     }, onError: (Object _, StackTrace __) {}));
     final MotionAccountRuntime runtime = await pending.timeout(startupTimeout);
-    runApp(MotionIdentityGate(
+    runApp(ChoreiaIdentityAppearance(
       runtime: runtime,
+      locales: locales,
+      themes: themes,
       child: ChoreiaApp(
           accountRuntime: runtime,
           accountHostController: hostController,

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-const currentMotionSha = 'ef60e346934d7e5d45c87deb81583b263575b208';
+const currentMotionSha = 'd69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d';
 
 bool hasLocalMotionOverrides([String? source]) {
   final file = File('pubspec_overrides.yaml');
