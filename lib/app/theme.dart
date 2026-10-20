@@ -296,7 +296,10 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
     final bool reduceMotion = MediaQuery.disableAnimationsOf(context);
     if (_reduceMotion == reduceMotion) return;
     _reduceMotion = reduceMotion;
-    for (final AnimationController controller in <AnimationController>[_a, _b]) {
+    for (final AnimationController controller in <AnimationController>[
+      _a,
+      _b
+    ]) {
       if (reduceMotion) {
         controller.stop();
         controller.value = 0;
@@ -427,7 +430,8 @@ class GlassPanel extends StatelessWidget {
                 Colors.white.withValues(alpha: 0.02),
               ],
             ),
-            border: Border.all(color: borderColor ?? ChoreiaColors.hairline(0.13)),
+            border:
+                Border.all(color: borderColor ?? ChoreiaColors.hairline(0.13)),
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.4),
@@ -513,13 +517,13 @@ class StatusPill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          color: filled
-              ? Colors.black.withValues(alpha: fillScrim)
-              : null,
-          border: Border.all(color: tone.withValues(alpha: filled ? 0.4 : 0.55)),
+          color: filled ? Colors.black.withValues(alpha: fillScrim) : null,
+          border:
+              Border.all(color: tone.withValues(alpha: filled ? 0.4 : 0.55)),
         ),
         child: Text(label,
-            style: ChoreiaType.label(size: 9.5, color: tone, letterSpacingEm: 0.1)),
+            style: ChoreiaType.label(
+                size: 9.5, color: tone, letterSpacingEm: 0.1)),
       );
 }
 
@@ -563,12 +567,11 @@ abstract final class ChoreiaTheme {
   ChoreiaTheme._();
 
   static ThemeData get dark {
-    final TextTheme base =
-        ThemeData.dark().textTheme.apply(
-      fontFamily: 'Manrope',
-      bodyColor: ChoreiaColors.text(0.86),
-      displayColor: ChoreiaColors.bright,
-    );
+    final TextTheme base = ThemeData.dark().textTheme.apply(
+          fontFamily: 'Manrope',
+          bodyColor: ChoreiaColors.text(0.86),
+          displayColor: ChoreiaColors.bright,
+        );
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,

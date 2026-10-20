@@ -21,11 +21,13 @@ void main() {
     expect(find.text('Profil'), findsOneWidget);
     expect(find.textContaining('Hesap oluşturma ve üyelik erişimi bağlı değil'),
         findsOneWidget);
-    expect(find.textContaining('kullanılabilir bir özellik yok'), findsOneWidget);
+    expect(
+        find.textContaining('kullanılabilir bir özellik yok'), findsOneWidget);
   });
 
   for (final language in <String>['en', 'tr']) {
-    testWidgets('failed catalogue survives account change and Retry in $language',
+    testWidgets(
+        'failed catalogue survives account change and Retry in $language',
         (WidgetTester tester) async {
       tester.binding.platformDispatcher.localeTestValue = Locale(language);
       addTearDown(
@@ -52,6 +54,7 @@ void main() {
         }
         expect(find.byKey(ChoreiaShell.loadFailureKey), findsOneWidget);
       }
+
       await waitForFailure();
 
       if (language == 'tr') {
@@ -69,7 +72,8 @@ void main() {
       await tester.pump();
       await waitForFailure();
       expect(tester.takeException(), isNull);
-      await tester.tap(find.text(language == 'tr' ? 'Tekrar dene' : 'Try again'));
+      await tester
+          .tap(find.text(language == 'tr' ? 'Tekrar dene' : 'Try again'));
       await tester.pump();
       await waitForFailure();
       expect(tester.takeException(), isNull);

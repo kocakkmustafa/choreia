@@ -54,10 +54,13 @@ class ProfileView extends StatelessWidget {
                     style: ChoreiaType.body(size: 13.5),
                   ),
                   const SizedBox(height: 12),
-                  Text(UiLanguage.text(context,
-                    en: IntroStrings.cameraStatus(cameraSessionsAvailable),
-                    tr: IntroStrings.cameraStatus(cameraSessionsAvailable,
-                        turkish: true)), style: ChoreiaType.body(size: 13.5)),
+                  Text(
+                      UiLanguage.text(context,
+                          en: IntroStrings.cameraStatus(
+                              cameraSessionsAvailable),
+                          tr: IntroStrings.cameraStatus(cameraSessionsAvailable,
+                              turkish: true)),
+                      style: ChoreiaType.body(size: 13.5)),
                   const SizedBox(height: 18),
                   const ChoreiaLanguagePicker(),
                   FilledButton(
@@ -96,7 +99,8 @@ class ProfileView extends StatelessWidget {
                 '${IntroStrings.cameraStatus(cameraSessionsAvailable, turkish: true)}',
           ),
         )),
-        const Padding(padding: EdgeInsets.symmetric(horizontal: 24),
+        const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: ChoreiaLanguagePicker()),
         SafeArea(top: false, child: _licensesButton(context)),
       ],

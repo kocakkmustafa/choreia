@@ -80,25 +80,25 @@ void main() {
               supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
               localizationsDelegates: GlobalMaterialLocalizations.delegates,
               home: StyleDetailView(
-            card: library.cardFor('hip_hop_foundations')!,
-            runnableSteps: reference ? const {'hh_bounce'} : const {},
-            cameraSessionsAvailable: available,
-            beforeStart: (_) async {
-              checks++;
-              return true;
-            },
-            env: LiveEnvironment(
-                bundle: DeviceBundle(declaredReferences()),
-                storeOpener: () async => RoundTripStore(),
-                cameraPermissionRequest: () async {
-                  permissions++;
+                card: library.cardFor('hip_hop_foundations')!,
+                runnableSteps: reference ? const {'hh_bounce'} : const {},
+                cameraSessionsAvailable: available,
+                beforeStart: (_) async {
+                  checks++;
                   return true;
                 },
-                source: () {
-                  factories++;
-                  return source;
-                }),
-          )));
+                env: LiveEnvironment(
+                    bundle: DeviceBundle(declaredReferences()),
+                    storeOpener: () async => RoundTripStore(),
+                    cameraPermissionRequest: () async {
+                      permissions++;
+                      return true;
+                    },
+                    source: () {
+                      factories++;
+                      return source;
+                    }),
+              )));
           await reveal(tester, find.byKey(StyleDetailView.lessonKey(lessonId)));
           final card = find.byKey(StyleDetailView.lessonKey(lessonId));
           if (available && reference) {
@@ -169,23 +169,23 @@ void main() {
             supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: StyleDetailView(
-          card: library.cardFor('hip_hop_foundations')!,
-          runnableSteps: const {'hh_bounce'},
-          cameraSessionsAvailable: true,
-          beforeStart: (_) async {
-            checks++;
-            return permitted;
-          },
-          env: LiveEnvironment(
-              bundle: DeviceBundle(declaredReferences()),
-              source: () => source,
-              storeOpener: () async => RoundTripStore(),
-              permanentlyDeniedProbe: () async => false,
-              cameraPermissionRequest: () {
-                permissions++;
-                return grant.future;
-              }),
-        )));
+              card: library.cardFor('hip_hop_foundations')!,
+              runnableSteps: const {'hh_bounce'},
+              cameraSessionsAvailable: true,
+              beforeStart: (_) async {
+                checks++;
+                return permitted;
+              },
+              env: LiveEnvironment(
+                  bundle: DeviceBundle(declaredReferences()),
+                  source: () => source,
+                  storeOpener: () async => RoundTripStore(),
+                  permanentlyDeniedProbe: () async => false,
+                  cameraPermissionRequest: () {
+                    permissions++;
+                    return grant.future;
+                  }),
+            )));
         await reveal(tester, find.byKey(startKey));
         await tester.tap(find.byKey(startKey));
         for (var i = 0;
@@ -227,18 +227,18 @@ void main() {
             supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: ChoreiaShell(
-          cameraSessionsAvailable: available,
-          bundleOverride: () async => library,
-          flagOverride: MemoryFirstRunFlag(),
-          accountPageBuilder: (_) =>
-              const Scaffold(body: Text('local account fixture')),
-          env: LiveEnvironment(
-              storeOpener: () async => RoundTripStore(),
-              cameraPermissionRequest: () async {
-                permissions++;
-                return true;
-              }),
-        )));
+              cameraSessionsAvailable: available,
+              bundleOverride: () async => library,
+              flagOverride: MemoryFirstRunFlag(),
+              accountPageBuilder: (_) =>
+                  const Scaffold(body: Text('local account fixture')),
+              env: LiveEnvironment(
+                  storeOpener: () async => RoundTripStore(),
+                  cameraPermissionRequest: () async {
+                    permissions++;
+                    return true;
+                  }),
+            )));
         for (var i = 0; i < 8; i++) {
           await tester.pump(const Duration(milliseconds: 50));
         }
@@ -341,8 +341,8 @@ void main() {
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: Scaffold(
                 body: ProfileView(
-          cameraSessionsAvailable: available,
-        ))));
+              cameraSessionsAvailable: available,
+            ))));
         final text = tester
             .widgetList<Text>(find.byType(Text))
             .map((widget) => widget.data ?? '')

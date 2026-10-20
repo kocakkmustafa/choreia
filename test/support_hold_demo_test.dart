@@ -16,7 +16,9 @@ Future<void> reach(WidgetTester tester, Finder target) async {
   }
   for (var i = 0; i < 200 && target.evaluate().isEmpty; i++) {
     if (position.pixels >= position.maxScrollExtent) break;
-    position.jumpTo((position.pixels + 150).clamp(0.0, position.maxScrollExtent).toDouble());
+    position.jumpTo((position.pixels + 150)
+        .clamp(0.0, position.maxScrollExtent)
+        .toDouble());
     await tester.pump();
   }
   expect(target, findsOneWidget);
@@ -38,15 +40,21 @@ Future<String> current(WidgetTester tester) async {
 
 void main() {
   for (final lang in ['en', 'tr']) {
-    testWidgets('$lang actual UI shows both holds and extra-transfer consequence', (tester) async {
+    testWidgets(
+        '$lang actual UI shows both holds and extra-transfer consequence',
+        (tester) async {
       tester.binding.platformDispatcher.localeTestValue = Locale(lang);
       addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
       await tester.pumpWidget(MaterialApp(
-        locale: Locale(lang),
-        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        home: const SupportHoldDemo()));
-      expect(find.text(lang == 'tr' ? 'Destek ve durak şeması' : 'Support and hold diagram'), findsOneWidget);
+          locale: Locale(lang),
+          supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          home: const SupportHoldDemo()));
+      expect(
+          find.text(lang == 'tr'
+              ? 'Destek ve durak şeması'
+              : 'Support and hold diagram'),
+          findsOneWidget);
       final state = lang == 'tr' ? 'destek durumu' : 'support state';
       final hold = lang == 'tr' ? 'aynı destek / durak' : 'same support / hold';
       await tapKey(tester, const Key('supportHold.count.3'));
@@ -69,7 +77,9 @@ void main() {
     });
   }
 
-  testWidgets('eight-second one-shot ends without looping and explicit replay resets', (tester) async {
+  testWidgets(
+      'eight-second one-shot ends without looping and explicit replay resets',
+      (tester) async {
     await tester.pumpWidget(const MaterialApp(home: SupportHoldDemo()));
     await tapKey(tester, playKey);
     await tester.pump(const Duration(seconds: 7));
@@ -92,7 +102,9 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('background pause and resume do not restart; playing dispose cancels ticker', (tester) async {
+  testWidgets(
+      'background pause and resume do not restart; playing dispose cancels ticker',
+      (tester) async {
     await tester.pumpWidget(const MaterialApp(home: SupportHoldDemo()));
     await tapKey(tester, playKey);
     await tester.pump(const Duration(milliseconds: 3100));
@@ -118,15 +130,20 @@ void main() {
   });
 
   for (final initial in [true, false]) {
-    testWidgets('reduced motion initial=$initial stops clock and never auto-resumes', (tester) async {
+    testWidgets(
+        'reduced motion initial=$initial stops clock and never auto-resumes',
+        (tester) async {
       final reduced = ValueNotifier(initial);
       addTearDown(reduced.dispose);
       await tester.pumpWidget(MaterialApp(
-        builder: (context, child) => ValueListenableBuilder<bool>(
-          valueListenable: reduced,
-          builder: (context, value, _) => MediaQuery(
-            data: MediaQuery.of(context).copyWith(disableAnimations: value), child: child!),
-        ), home: const SupportHoldDemo()));
+          builder: (context, child) => ValueListenableBuilder<bool>(
+                valueListenable: reduced,
+                builder: (context, value, _) => MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(disableAnimations: value),
+                    child: child!),
+              ),
+          home: const SupportHoldDemo()));
       if (!initial) {
         await tapKey(tester, playKey);
         await tester.pump(const Duration(milliseconds: 2100));
@@ -156,7 +173,8 @@ void main() {
   }
 
   for (final lang in ['tr', 'en']) {
-    testWidgets('$lang 320x640 double text remains scrollable and operable', (tester) async {
+    testWidgets('$lang 320x640 double text remains scrollable and operable',
+        (tester) async {
       tester.view.physicalSize = const Size(320, 640);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -164,27 +182,32 @@ void main() {
       addTearDown(tester.binding.platformDispatcher.clearLocaleTestValue);
       final semantics = tester.ensureSemantics();
       try {
-      await tester.pumpWidget(MaterialApp(
-        locale: Locale(lang),
-        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(2)),
-        child: child!), home: const SupportHoldDemo()));
-      for (final n in [3, 4, 7, 8]) {
-        await tapKey(tester, Key('supportHold.count.$n'));
-        expect(await current(tester), startsWith('$n/8'));
+        await tester.pumpWidget(MaterialApp(
+            locale: Locale(lang),
+            supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            builder: (context, child) => MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: const TextScaler.linear(2)),
+                child: child!),
+            home: const SupportHoldDemo()));
+        for (final n in [3, 4, 7, 8]) {
+          await tapKey(tester, Key('supportHold.count.$n'));
+          expect(await current(tester), startsWith('$n/8'));
+          expect(tester.takeException(), isNull);
+        }
+        await reach(tester, find.byKey(playKey));
+        expect(
+            find.bySemanticsLabel(
+                RegExp(lang == 'tr' ? 'Bir kez göster' : 'Show once')),
+            findsOneWidget);
+        await tapKey(tester, playKey);
+        await tester.pump(const Duration(milliseconds: 1100));
+        expect(await current(tester), startsWith('2/8'));
         expect(tester.takeException(), isNull);
-      }
-      await reach(tester, find.byKey(playKey));
-      expect(find.bySemanticsLabel(RegExp(lang == 'tr' ? 'Bir kez göster' : 'Show once')), findsOneWidget);
-      await tapKey(tester, playKey);
-      await tester.pump(const Duration(milliseconds: 1100));
-      expect(await current(tester), startsWith('2/8'));
-      expect(tester.takeException(), isNull);
-      await tester.pumpWidget(const SizedBox.shrink());
-      await tester.pump();
-      expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(tester.takeException(), isNull);
       } finally {
         semantics.dispose();
       }

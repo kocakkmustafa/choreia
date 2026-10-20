@@ -42,8 +42,8 @@ Widget _localized(ChoreiaLocaleController controller, Widget home) =>
 
 Future<void> _loaded(WidgetTester tester, Finder finder) async {
   for (var i = 0; i < 60; i++) {
-    await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 5)));
+    await tester
+        .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
     await tester.pump(const Duration(milliseconds: 50));
     if (finder.evaluate().isNotEmpty) return;
   }
@@ -60,8 +60,8 @@ void main() {
       tester.view.physicalSize = const Size(320, 640);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(_localized(
-          controller, const Scaffold(body: SalsaCourseEntry())));
+      await tester.pumpWidget(
+          _localized(controller, const Scaffold(body: SalsaCourseEntry())));
       await _loaded(tester, find.byKey(const Key('salsa.open')));
 
       final template = switch (tag) {
@@ -91,7 +91,8 @@ void main() {
     final controller = ChoreiaLocaleController.memory(const Locale('de'));
     addTearDown(controller.dispose);
     addTearDown(() => directory.deleteSync(recursive: true));
-    final env = LiveEnvironment(bundle: DeviceBundle(declaredReferences()),
+    final env = LiveEnvironment(
+        bundle: DeviceBundle(declaredReferences()),
         historyDirectoryOverride: directory);
     final asOf = DateTime(2027, 1, 1, 12);
     await tester.pumpWidget(_localized(controller,
@@ -111,21 +112,29 @@ void main() {
 
   testWidgets('TR to Arabic changes the open lesson without clearing checks',
       (tester) async {
-    final directory = Directory.systemTemp.createTempSync('choreia-route-locale-');
+    final directory =
+        Directory.systemTemp.createTempSync('choreia-route-locale-');
     final controller = ChoreiaLocaleController.memory(const Locale('tr'));
     addTearDown(controller.dispose);
     addTearDown(() => directory.deleteSync(recursive: true));
-    final course = SalsaCourse.fromJson(jsonDecode(
-        File('content/salsa_on1_course.json').readAsStringSync())
-        as Map<String, dynamic>);
-    final store = (await tester.runAsync(() => SalsaProgressStore.open(
-        supportDirectory: directory)))!;
-    final env = LiveEnvironment(bundle: DeviceBundle(declaredReferences()),
+    final course = SalsaCourse.fromJson(
+        jsonDecode(File('content/salsa_on1_course.json').readAsStringSync())
+            as Map<String, dynamic>);
+    final store = (await tester
+        .runAsync(() => SalsaProgressStore.open(supportDirectory: directory)))!;
+    final env = LiveEnvironment(
+        bundle: DeviceBundle(declaredReferences()),
         historyDirectoryOverride: directory,
-        source: () => throw StateError('Locale changes must not start camera.'));
-    await tester.pumpWidget(_localized(controller, SalsaLessonPage(
-        course: course, lesson: course.lessons.first, store: store, env: env,
-        initialTurkish: true)));
+        source: () =>
+            throw StateError('Locale changes must not start camera.'));
+    await tester.pumpWidget(_localized(
+        controller,
+        SalsaLessonPage(
+            course: course,
+            lesson: course.lessons.first,
+            store: store,
+            env: env,
+            initialTurkish: true)));
     final check = find.byKey(const Key('salsa.check.0'));
     await _loaded(tester, find.byKey(const ValueKey('salsa.lessonBody.so_01')));
     await tester.scrollUntilVisible(check, 400,
@@ -133,7 +142,8 @@ void main() {
     await tester.tap(check);
     await tester.pump();
     expect(tester.widget<CheckboxListTile>(check).value, isTrue);
-    final file = File('${directory.path}/${SalsaProgressStore.fileNameFor(null)}');
+    final file =
+        File('${directory.path}/${SalsaProgressStore.fileNameFor(null)}');
     for (var i = 0; i < 60 && !file.existsSync(); i++) {
       await tester.runAsync(
           () => Future<void>.delayed(const Duration(milliseconds: 5)));

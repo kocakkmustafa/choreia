@@ -12,34 +12,36 @@ class SupportAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      const SelectableText('support@yulalab.com'),
-      TextButton.icon(
-        key: const Key('support.copy'),
-        style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
-        icon: const Icon(Icons.copy),
-        label: Text(UiLanguage.text(context,
-            en: 'Copy support details', tr: 'Destek bilgilerini kopyala')),
-        onPressed: () async {
-          try {
-            await Clipboard.setData(ClipboardData(text:
-              'support@yulalab.com\nApp: Choreia\nSurface: ${surface.name}\nLocale: ${UiLanguage.tag(context)}'));
-          } on Object {
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
-                UiLanguage.text(context,
-                  en: 'Could not copy. You can select the support address above.',
-                  tr: 'Kopyalanamadı. Yukarıdaki destek adresini seçebilirsin.'))));
-            return;
-          }
-          if (!context.mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
-              UiLanguage.text(context, en: 'Support details copied.',
-                  tr: 'Destek bilgileri kopyalandı.'))));
-        },
-      ),
-    ],
-  );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SelectableText('support@yulalab.com'),
+          TextButton.icon(
+            key: const Key('support.copy'),
+            style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+            icon: const Icon(Icons.copy),
+            label: Text(UiLanguage.text(context,
+                en: 'Copy support details', tr: 'Destek bilgilerini kopyala')),
+            onPressed: () async {
+              try {
+                await Clipboard.setData(ClipboardData(
+                    text:
+                        'support@yulalab.com\nApp: Choreia\nSurface: ${surface.name}\nLocale: ${UiLanguage.tag(context)}'));
+              } on Object {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(UiLanguage.text(context,
+                        en: 'Could not copy. You can select the support address above.',
+                        tr: 'Kopyalanamadı. Yukarıdaki destek adresini seçebilirsin.'))));
+                return;
+              }
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(UiLanguage.text(context,
+                      en: 'Support details copied.',
+                      tr: 'Destek bilgileri kopyalandı.'))));
+            },
+          ),
+        ],
+      );
 }

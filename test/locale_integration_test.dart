@@ -14,17 +14,25 @@ import 'support/test_catalog.dart';
 void main() {
   test('regional language requests resolve to the eight approved variants', () {
     const cases = <Locale, String>{
-      Locale('tr', 'TR'): 'tr', Locale('en', 'GB'): 'en',
-      Locale('es', 'MX'): 'es-419', Locale('es', 'ES'): 'es-419',
-      Locale('pt', 'PT'): 'pt-BR', Locale('de', 'AT'): 'de',
-      Locale('fr', 'CA'): 'fr', Locale('ja', 'JP'): 'ja',
-      Locale('ar', 'EG'): 'ar', Locale('zh', 'CN'): 'en',
+      Locale('tr', 'TR'): 'tr',
+      Locale('en', 'GB'): 'en',
+      Locale('es', 'MX'): 'es-419',
+      Locale('es', 'ES'): 'es-419',
+      Locale('pt', 'PT'): 'pt-BR',
+      Locale('de', 'AT'): 'de',
+      Locale('fr', 'CA'): 'fr',
+      Locale('ja', 'JP'): 'ja',
+      Locale('ar', 'EG'): 'ar',
+      Locale('zh', 'CN'): 'en',
     };
     for (final entry in cases.entries) {
-      expect(ChoreiaLocaleController.tag(ChoreiaLocaleController.resolve(
-          entry.key, ChoreiaLocaleController.supported)), entry.value);
+      expect(
+          ChoreiaLocaleController.tag(ChoreiaLocaleController.resolve(
+              entry.key, ChoreiaLocaleController.supported)),
+          entry.value);
     }
-    expect(const ChoreiaMessagesDelegate().isSupported(const Locale('zh')), isFalse);
+    expect(const ChoreiaMessagesDelegate().isSupported(const Locale('zh')),
+        isFalse);
   });
 
   for (final locale in ChoreiaLocaleController.supported) {
@@ -36,21 +44,31 @@ void main() {
       final raw = jsonDecode(File('content/hip_hop_foundations_course.json')
           .readAsStringSync()) as Map<String, dynamic>;
       final title = (raw['title'] as Map).cast<String, String>();
-      final index = (jsonDecode(File('content/l10n/course.index.json')
-          .readAsStringSync()) as Map).cast<String, String>();
-      final translated = (jsonDecode(File('content/l10n/course.$tag.json')
-          .readAsStringSync()) as Map).cast<String, String>();
+      final index =
+          (jsonDecode(File('content/l10n/course.index.json').readAsStringSync())
+                  as Map)
+              .cast<String, String>();
+      final translated =
+          (jsonDecode(File('content/l10n/course.$tag.json').readAsStringSync())
+                  as Map)
+              .cast<String, String>();
       final expected = translated[index[title['en']]]!;
-      await tester.pumpWidget(ChoreiaApp(localeController: controller,
-        localeBundle: DiskBundle(), shellBuilder: (_, __) => Builder(
-          builder: (context) => Scaffold(body: Column(children: [
-            Text(UiLanguage.courseText(context, title), key: const Key('course.title')),
-            const ChoreiaLanguagePicker(),
-          ]))),
+      await tester.pumpWidget(ChoreiaApp(
+        localeController: controller,
+        localeBundle: DiskBundle(),
+        shellBuilder: (_, __) => Builder(
+            builder: (context) => Scaffold(
+                    body: Column(children: [
+                  Text(UiLanguage.courseText(context, title),
+                      key: const Key('course.title')),
+                  const ChoreiaLanguagePicker(),
+                ]))),
       ));
       await tester.pumpAndSettle();
       expect(find.text(expected), findsOneWidget);
-      expect(Directionality.of(tester.element(find.byKey(const Key('course.title')))),
+      expect(
+          Directionality.of(
+              tester.element(find.byKey(const Key('course.title')))),
           tag == 'ar' ? TextDirection.rtl : TextDirection.ltr);
       expect(tester.takeException(), isNull);
     });
@@ -60,12 +78,16 @@ void main() {
       (tester) async {
     final controller = ChoreiaLocaleController.memory(const Locale('en'));
     addTearDown(controller.dispose);
-    await tester.pumpWidget(ChoreiaApp(localeController: controller,
-      localeBundle: DiskBundle(), shellBuilder: (_, __) => Builder(
-        builder: (context) => Scaffold(body: TextButton(
-          onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-              builder: (_) => const _OpenRoute())),
-          child: const Text('Open test route')))),
+    await tester.pumpWidget(ChoreiaApp(
+      localeController: controller,
+      localeBundle: DiskBundle(),
+      shellBuilder: (_, __) => Builder(
+          builder: (context) => Scaffold(
+              body: TextButton(
+                  onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const _OpenRoute())),
+                  child: const Text('Open test route')))),
     ));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Open test route'));
@@ -77,7 +99,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('1'), findsOneWidget);
     expect(find.text('التقدم'), findsOneWidget);
-    expect(Directionality.of(tester.element(find.byKey(const Key('route.increment')))),
+    expect(
+        Directionality.of(
+            tester.element(find.byKey(const Key('route.increment')))),
         TextDirection.rtl);
     expect(tester.takeException(), isNull);
   });
@@ -87,15 +111,19 @@ void main() {
     late BuildContext context;
     final controller = ChoreiaLocaleController.memory(const Locale('fr'));
     addTearDown(controller.dispose);
-    await tester.pumpWidget(ChoreiaApp(localeController: controller,
-      localeBundle: DiskBundle(), shellBuilder: (_, __) => Builder(builder: (value) {
+    await tester.pumpWidget(ChoreiaApp(
+      localeController: controller,
+      localeBundle: DiskBundle(),
+      shellBuilder: (_, __) => Builder(builder: (value) {
         context = value;
         return const Scaffold();
       }),
     ));
     await tester.pumpAndSettle();
-    expect(() => UiLanguage.format(context, en: '{count} items',
-        tr: '{count} öğe', values: {}), throwsArgumentError);
+    expect(
+        () => UiLanguage.format(context,
+            en: '{count} items', tr: '{count} öğe', values: {}),
+        throwsArgumentError);
     expect(UiLanguage.number(context, 1234.5), contains(',5'));
     expect(UiLanguage.currency(context, 12.5, 'EUR'), contains('€'));
     expect(UiLanguage.date(context, DateTime(2026, 10, 20)), contains('2026'));
@@ -105,13 +133,16 @@ void main() {
       (tester) async {
     final controller = ChoreiaLocaleController.memory(const Locale('de'));
     addTearDown(controller.dispose);
-    await tester.pumpWidget(ChoreiaApp(localeController: controller,
-      localeBundle: _UnavailableBundle(), shellBuilder: (_, __) => Builder(
-        builder: (context) => Scaffold(body: Text(UiLanguage.text(context,
-            en: 'Progress', tr: 'İlerleme'))))));
+    await tester.pumpWidget(ChoreiaApp(
+        localeController: controller,
+        localeBundle: _UnavailableBundle(),
+        shellBuilder: (_, __) => Builder(
+            builder: (context) => Scaffold(
+                body: Text(UiLanguage.text(context,
+                    en: 'Progress', tr: 'İlerleme'))))));
     await tester.pumpAndSettle();
     expect(find.text(translationFallbackCopy['de']!), findsOneWidget);
-    expect(find.text('Progress'), findsOneWidget);
+    expect(find.text('Fortschritt'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
@@ -127,13 +158,17 @@ class _OpenRoute extends StatefulWidget {
   @override
   State<_OpenRoute> createState() => _OpenRouteState();
 }
+
 class _OpenRouteState extends State<_OpenRoute> {
   int count = 0;
   @override
-  Widget build(BuildContext context) => Scaffold(body: Column(children: [
-    Text(UiLanguage.text(context, en: 'Progress', tr: 'İlerleme')),
-    Text('$count'),
-    TextButton(key: const Key('route.increment'),
-        onPressed: () => setState(() => count++), child: const Text('+')),
-  ]));
+  Widget build(BuildContext context) => Scaffold(
+          body: Column(children: [
+        Text(UiLanguage.text(context, en: 'Progress', tr: 'İlerleme')),
+        Text('$count'),
+        TextButton(
+            key: const Key('route.increment'),
+            onPressed: () => setState(() => count++),
+            child: const Text('+')),
+      ]));
 }

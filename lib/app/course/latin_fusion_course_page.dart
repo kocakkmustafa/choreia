@@ -50,25 +50,54 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
     final tr = UiLanguage.isTurkish(context);
     final lang = tr ? 'tr' : 'en';
     final labels = <String, String>{
-      'scope': UiLanguage.pair(context, turkish: tr, en: 'Written scope', tr: 'Yazılı kapsam'),
-      'salsaSeparation': UiLanguage.pair(context, turkish: tr, en: 'Salsa course boundary', tr: 'Salsa kursuyla sınır'),
-      'musicAndObservation': UiLanguage.pair(context, turkish: tr, en: 'Music and self-observation', tr: 'Müzik ve öz gözlem'),
-      'exercise': UiLanguage.pair(context, turkish: tr, en: 'Solve a new row', tr: 'Yeni satırı çöz'),
-      'answer': UiLanguage.pair(context, turkish: tr, en: 'Reveal the answer', tr: 'Cevabı göster'),
-      'diagramNotice': UiLanguage.pair(context, turkish: tr, en: 'Read the diagrams', tr: 'Çizimleri oku'),
-      'diagram': UiLanguage.pair(context, turkish: tr, en: 'Original count and foot map', tr: 'Özgün sayı ve ayak haritası'),
-      'provenance': UiLanguage.pair(context, turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
-      'reviewNotice': UiLanguage.pair(context, turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
-      'boundaries': UiLanguage.pair(context, turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
-      'startCompetency': UiLanguage.pair(context, turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
-      'endCompetency': UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
-      'prerequisite': UiLanguage.pair(context, turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
-      'outcome': UiLanguage.pair(context, turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
-      'instruction': UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
-      'practice': UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
-      'mistakes': UiLanguage.pair(context, turkish: tr, en: 'Common mistakes and reset', tr: 'Yaygın hatalar ve dönüş'),
-      'adaptation': UiLanguage.pair(context, turkish: tr, en: 'Lower-impact option', tr: 'Daha düşük yük seçeneği'),
-      'check': UiLanguage.pair(context, turkish: tr, en: 'Self-check and revisit', tr: 'Öz kontrol ve tekrar'),
+      'scope': UiLanguage.pair(context,
+          turkish: tr, en: 'Written scope', tr: 'Yazılı kapsam'),
+      'salsaSeparation': UiLanguage.pair(context,
+          turkish: tr, en: 'Salsa course boundary', tr: 'Salsa kursuyla sınır'),
+      'musicAndObservation': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Music and self-observation',
+          tr: 'Müzik ve öz gözlem'),
+      'exercise': UiLanguage.pair(context,
+          turkish: tr, en: 'Solve a new row', tr: 'Yeni satırı çöz'),
+      'answer': UiLanguage.pair(context,
+          turkish: tr, en: 'Reveal the answer', tr: 'Cevabı göster'),
+      'diagramNotice': UiLanguage.pair(context,
+          turkish: tr, en: 'Read the diagrams', tr: 'Çizimleri oku'),
+      'diagram': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Original count and foot map',
+          tr: 'Özgün sayı ve ayak haritası'),
+      'provenance': UiLanguage.pair(context,
+          turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
+      'reviewNotice': UiLanguage.pair(context,
+          turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
+      'boundaries': UiLanguage.pair(context,
+          turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
+      'startCompetency': UiLanguage.pair(context,
+          turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
+      'endCompetency':
+          UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
+      'prerequisite': UiLanguage.pair(context,
+          turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
+      'outcome': UiLanguage.pair(context,
+          turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
+      'instruction':
+          UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
+      'practice':
+          UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
+      'mistakes': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Common mistakes and reset',
+          tr: 'Yaygın hatalar ve dönüş'),
+      'adaptation': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Lower-impact option',
+          tr: 'Daha düşük yük seçeneği'),
+      'check': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Self-check and revisit',
+          tr: 'Öz kontrol ve tekrar'),
     };
     Widget section(String field, Map<String, Map<String, String>> copy) =>
         Padding(
@@ -88,7 +117,10 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          UiLanguage.pair(context, turkish: tr, en: 'Latin Fusion written foundations', tr: 'Latin Fusion yazılı temeller'),
+          UiLanguage.pair(context,
+              turkish: tr,
+              en: 'Latin Fusion written foundations',
+              tr: 'Latin Fusion yazılı temeller'),
         ),
       ),
       body: FutureBuilder<LatinFusionCourse>(
@@ -103,13 +135,17 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      UiLanguage.pair(context, turkish: tr, en: 'The written path could not be read. No progress was recorded.', tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
+                      UiLanguage.pair(context,
+                          turkish: tr,
+                          en: 'The written path could not be read. No progress was recorded.',
+                          tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
                     ),
                     TextButton(
                       onPressed: () => setState(() {
                         _course = _load()..ignore();
                       }),
-                      child: Text(UiLanguage.pair(context, turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
+                      child: Text(UiLanguage.pair(context,
+                          turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
                     ),
                   ],
                 ),
@@ -140,7 +176,10 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
               LineDanceDirectionDiagram(turkish: tr),
               section('diagramNotice', course.copy),
               Text(
-                UiLanguage.pair(context, turkish: tr, en: 'Open physical teaching components', tr: 'Açık fiziksel öğretim bileşenleri'),
+                UiLanguage.pair(context,
+                    turkish: tr,
+                    en: 'Open physical teaching components',
+                    tr: 'Açık fiziksel öğretim bileşenleri'),
               ),
               for (final gap in course.openTeaching)
                 Padding(
@@ -152,7 +191,8 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
                 Card(
                   child: ExpansionTile(
                     key: ValueKey(unit.id),
-                    title: Text(UiLanguage.courseText(context, unit.copy['title']!)),
+                    title: Text(
+                        UiLanguage.courseText(context, unit.copy['title']!)),
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -182,7 +222,8 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(12),
-                                child: Text(UiLanguage.courseText(context, unit.copy[field]!)),
+                                child: Text(UiLanguage.courseText(
+                                    context, unit.copy[field]!)),
                               ),
                             ],
                           )
@@ -222,12 +263,16 @@ class _PatternTable extends StatelessWidget {
     Widget cell(String text) =>
         Padding(padding: const EdgeInsets.all(4), child: Text(text));
     String action(String value) => switch (value) {
-      'W' => UiLanguage.pair(context, turkish: tr, en: 'Weight', tr: 'Ağırlık'),
-      'T' => UiLanguage.pair(context, turkish: tr, en: 'Touch', tr: 'Dokun'),
-      'H' => UiLanguage.pair(context, turkish: tr, en: 'Hold', tr: 'Durak'),
-      'P_bend' => UiLanguage.pair(context, turkish: tr, en: 'Tiny bend', tr: 'Küçük bük'),
-      _ => UiLanguage.pair(context, turkish: tr, en: 'Release', tr: 'Bırak'),
-    };
+          'W' =>
+            UiLanguage.pair(context, turkish: tr, en: 'Weight', tr: 'Ağırlık'),
+          'T' =>
+            UiLanguage.pair(context, turkish: tr, en: 'Touch', tr: 'Dokun'),
+          'H' => UiLanguage.pair(context, turkish: tr, en: 'Hold', tr: 'Durak'),
+          'P_bend' => UiLanguage.pair(context,
+              turkish: tr, en: 'Tiny bend', tr: 'Küçük bük'),
+          _ =>
+            UiLanguage.pair(context, turkish: tr, en: 'Release', tr: 'Bırak'),
+        };
     return Padding(
       key: ValueKey('latin.pattern.${pattern.id}'),
       padding: const EdgeInsets.only(bottom: 16),
@@ -242,44 +287,57 @@ class _PatternTable extends StatelessWidget {
           Text(UiLanguage.courseText(context, pattern.copy['originality']!)),
           const SizedBox(height: 8),
           Text(
-            UiLanguage.pair(context, turkish: tr, en: 'Facing FRONT. Support AFTER action. L left, R right, B both feet.', tr: 'ÖN bakış. Destek eylemden SONRA. L sol, R sağ, B iki ayak.'),
+            UiLanguage.pair(context,
+                turkish: tr,
+                en: 'Facing FRONT. Support AFTER action. L left, R right, B both feet.',
+                tr: 'ÖN bakış. Destek eylemden SONRA. L sol, R sağ, B iki ayak.'),
           ),
           const SizedBox(height: 6),
           Text(
-            UiLanguage.pair(context, turkish: tr, en: 'Five columns: swipe sideways when needed.', tr: 'Beş sütun: gerekiyorsa yana kaydır.'),
+            UiLanguage.pair(context,
+                turkish: tr,
+                en: 'Five columns: swipe sideways when needed.',
+                tr: 'Beş sütun: gerekiyorsa yana kaydır.'),
           ),
           LayoutBuilder(builder: (context, constraints) {
             final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
-            final width = constraints.maxWidth.clamp(480 * scale, double.infinity).toDouble();
+            final width = constraints.maxWidth
+                .clamp(480 * scale, double.infinity)
+                .toDouble();
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: SizedBox(width: width, child: Table(
-            border: TableBorder.all(color: Theme.of(context).dividerColor),
-            columnWidths: const {
-              0: FlexColumnWidth(.65),
-              1: FlexColumnWidth(.8),
-              2: FlexColumnWidth(1.15),
-              3: FlexColumnWidth(1.55),
-              4: FlexColumnWidth(1),
-            },
-            children: [
-              TableRow(children: headings.map(cell).toList()),
-              for (final row in pattern.rows)
-                TableRow(
-                  children: [
-                    cell('${row['count']}'),
-                    cell(
-                      row['foot'] == 'BOTH'
-                          ? (UiLanguage.pair(context, turkish: tr, en: 'Both', tr: 'İki ayak'))
-                          : row['foot'] as String,
-                    ),
-                    cell(action(row['action'] as String)),
-                    cell(UiLanguage.courseText(context, course.directions[row['direction']]!)),
-                    cell(row['supportAfter'] as String),
-                  ],
-                ),
-            ],
-          )),
+              child: SizedBox(
+                  width: width,
+                  child: Table(
+                    border:
+                        TableBorder.all(color: Theme.of(context).dividerColor),
+                    columnWidths: const {
+                      0: FlexColumnWidth(.65),
+                      1: FlexColumnWidth(.8),
+                      2: FlexColumnWidth(1.15),
+                      3: FlexColumnWidth(1.55),
+                      4: FlexColumnWidth(1),
+                    },
+                    children: [
+                      TableRow(children: headings.map(cell).toList()),
+                      for (final row in pattern.rows)
+                        TableRow(
+                          children: [
+                            cell('${row['count']}'),
+                            cell(
+                              row['foot'] == 'BOTH'
+                                  ? (UiLanguage.pair(context,
+                                      turkish: tr, en: 'Both', tr: 'İki ayak'))
+                                  : row['foot'] as String,
+                            ),
+                            cell(action(row['action'] as String)),
+                            cell(UiLanguage.courseText(
+                                context, course.directions[row['direction']]!)),
+                            cell(row['supportAfter'] as String),
+                          ],
+                        ),
+                    ],
+                  )),
             );
           }),
         ],

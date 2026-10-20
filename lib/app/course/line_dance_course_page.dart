@@ -50,23 +50,46 @@ class _LineDanceCoursePageState extends State<LineDanceCoursePage> {
   Widget build(BuildContext context) {
     final tr = UiLanguage.isTurkish(context);
     final labels = <String, String>{
-      'exercise': UiLanguage.pair(context, turkish: tr, en: 'Solve a new row', tr: 'Yeni satırı çöz'),
-      'answer': UiLanguage.pair(context, turkish: tr, en: 'Reveal the answer', tr: 'Cevabı göster'),
-      'diagramNotice': UiLanguage.pair(context, turkish: tr, en: 'Read the diagrams', tr: 'Çizimleri oku'),
-      'diagram':
-          UiLanguage.pair(context, turkish: tr, en: 'Original count and foot map', tr: 'Özgün sayı ve ayak haritası'),
-      'provenance': UiLanguage.pair(context, turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
-      'reviewNotice': UiLanguage.pair(context, turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
-      'boundaries': UiLanguage.pair(context, turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
-      'startCompetency': UiLanguage.pair(context, turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
-      'endCompetency': UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
-      'prerequisite': UiLanguage.pair(context, turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
-      'outcome': UiLanguage.pair(context, turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
-      'instruction': UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
-      'practice': UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
-      'mistakes': UiLanguage.pair(context, turkish: tr, en: 'Common mistakes and reset', tr: 'Yaygın hatalar ve dönüş'),
-      'adaptation': UiLanguage.pair(context, turkish: tr, en: 'Lower-impact option', tr: 'Daha düşük yük seçeneği'),
-      'check': UiLanguage.pair(context, turkish: tr, en: 'Self-check and revisit', tr: 'Öz kontrol ve tekrar'),
+      'exercise': UiLanguage.pair(context,
+          turkish: tr, en: 'Solve a new row', tr: 'Yeni satırı çöz'),
+      'answer': UiLanguage.pair(context,
+          turkish: tr, en: 'Reveal the answer', tr: 'Cevabı göster'),
+      'diagramNotice': UiLanguage.pair(context,
+          turkish: tr, en: 'Read the diagrams', tr: 'Çizimleri oku'),
+      'diagram': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Original count and foot map',
+          tr: 'Özgün sayı ve ayak haritası'),
+      'provenance': UiLanguage.pair(context,
+          turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
+      'reviewNotice': UiLanguage.pair(context,
+          turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
+      'boundaries': UiLanguage.pair(context,
+          turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
+      'startCompetency': UiLanguage.pair(context,
+          turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
+      'endCompetency':
+          UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
+      'prerequisite': UiLanguage.pair(context,
+          turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
+      'outcome': UiLanguage.pair(context,
+          turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
+      'instruction':
+          UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
+      'practice':
+          UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
+      'mistakes': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Common mistakes and reset',
+          tr: 'Yaygın hatalar ve dönüş'),
+      'adaptation': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Lower-impact option',
+          tr: 'Daha düşük yük seçeneği'),
+      'check': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Self-check and revisit',
+          tr: 'Öz kontrol ve tekrar'),
     };
     Widget section(String field, Map<String, Map<String, String>> copy) =>
         Padding(
@@ -88,8 +111,10 @@ class _LineDanceCoursePageState extends State<LineDanceCoursePage> {
         );
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(UiLanguage.pair(context, turkish: tr, en: 'Line Dance written course', tr: 'Line Dance yazılı kursu')),
+        title: Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'Line Dance written course',
+            tr: 'Line Dance yazılı kursu')),
       ),
       body: FutureBuilder<LineDanceCourse>(
         future: _course,
@@ -103,13 +128,17 @@ class _LineDanceCoursePageState extends State<LineDanceCoursePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      UiLanguage.pair(context, turkish: tr, en: 'The written path could not be read. No progress was recorded.', tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
+                      UiLanguage.pair(context,
+                          turkish: tr,
+                          en: 'The written path could not be read. No progress was recorded.',
+                          tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
                     ),
                     TextButton(
                       onPressed: () => setState(() {
                         _course = _load()..ignore();
                       }),
-                      child: Text(UiLanguage.pair(context, turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
+                      child: Text(UiLanguage.pair(context,
+                          turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
                     ),
                   ],
                 ),
@@ -144,7 +173,8 @@ class _LineDanceCoursePageState extends State<LineDanceCoursePage> {
                 Card(
                   child: ExpansionTile(
                     key: ValueKey(unit.id),
-                    title: Text(UiLanguage.courseText(context, unit.copy['title']!)),
+                    title: Text(
+                        UiLanguage.courseText(context, unit.copy['title']!)),
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -171,7 +201,8 @@ class _LineDanceCoursePageState extends State<LineDanceCoursePage> {
                               children: [
                                 Padding(
                                     padding: const EdgeInsets.all(12),
-                                    child: Text(UiLanguage.courseText(context, unit.copy[field]!)))
+                                    child: Text(UiLanguage.courseText(
+                                        context, unit.copy[field]!)))
                               ])
                         else
                           section(field, unit.copy),

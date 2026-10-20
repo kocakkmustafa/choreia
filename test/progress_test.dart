@@ -52,7 +52,9 @@ void main() {
             'scored': false,
             'demoOnly': true,
             'demoOnlyClass': 'structural-circular',
-            'demoOnlyReason': {'en': 'the plateau is below what we can measure'},
+            'demoOnlyReason': {
+              'en': 'the plateau is below what we can measure'
+            },
             'promotionPath': {'unblockedBy': 'a source with visible holds'},
             'minutes': 8,
           },
@@ -68,7 +70,8 @@ void main() {
     ],
   };
 
-  final Map<String, Map<String, dynamic>> steps = <String, Map<String, dynamic>>{
+  final Map<String, Map<String, dynamic>> steps =
+      <String, Map<String, dynamic>>{
     'ss_shine_footwork': <String, dynamic>{
       // Key is `errors`, matching the real step documents.
       'errors': <Map<String, dynamic>>[
@@ -88,8 +91,9 @@ void main() {
     'ss_basic': <String, dynamic>{'errors': <Map<String, dynamic>>[]},
   };
 
-  final CourseCatalog catalog =
-      CourseCatalog.fromStyles(<Map<String, dynamic>>[salsaStyle], steps: steps);
+  final CourseCatalog catalog = CourseCatalog.fromStyles(
+      <Map<String, dynamic>>[salsaStyle],
+      steps: steps);
 
   SessionRecord rec({
     required String lesson,
@@ -128,11 +132,11 @@ void main() {
     test('all three scopes are picked up, and only the blocked ones', () {
       final Set<String> ids =
           catalog.blockedGates.map((BlockedGate g) => g.id).toSet();
-      expect(ids, contains('bpmResolved'));           // style scope
-      expect(ids, contains('NO_WEIGHT_TRANSFER'));    // errorCode scope
-      expect(ids, contains('STEP_LATE'));             // errorCode scope
-      expect(ids, contains('ss_l1_basic'));           // lesson scope
-      expect(ids, contains('ss_l1_locked_example'));  // lesson scope
+      expect(ids, contains('bpmResolved')); // style scope
+      expect(ids, contains('NO_WEIGHT_TRANSFER')); // errorCode scope
+      expect(ids, contains('STEP_LATE')); // errorCode scope
+      expect(ids, contains('ss_l1_basic')); // lesson scope
+      expect(ids, contains('ss_l1_locked_example')); // lesson scope
 
       expect(ids, isNot(contains('referencesBuilt')),
           reason: 'a PASSED gate must not be listed as blocked — '
@@ -147,8 +151,8 @@ void main() {
         () {
       expect(catalog.lessonById('ss_l1_footwork')!.kind, LessonKind.scored);
       expect(catalog.lessonById('ss_l1_basic')!.kind, LessonKind.demoOnly);
-      expect(catalog.lessonById('ss_l1_locked_example')!.kind,
-          LessonKind.locked);
+      expect(
+          catalog.lessonById('ss_l1_locked_example')!.kind, LessonKind.locked);
     });
 
     test('every ungraded lesson carries a reason', () {
@@ -198,9 +202,13 @@ void main() {
     test('a lesson practised across a promotion reports the CAUTIOUS class',
         () {
       final ProgressSummary s = summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly,
+        rec(
+            lesson: 'ss_l1_basic',
+            klass: ChoreiaLessonClass.demoOnly,
             at: DateTime.utc(2026, 1, 1)),
-        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.scored,
+        rec(
+            lesson: 'ss_l1_basic',
+            klass: ChoreiaLessonClass.scored,
             at: DateTime.utc(2026, 7, 1)),
       ]);
       expect(s.recorded.single.lessonClass, ChoreiaLessonClass.demoOnly,
@@ -208,7 +216,8 @@ void main() {
               'the sessions danced before the promotion');
     });
 
-    test('display names come from content, unknown ids fall back to the id', () {
+    test('display names come from content, unknown ids fall back to the id',
+        () {
       final ProgressSummary s = summaryOf(<SessionRecord>[
         rec(lesson: 'ss_l1_footwork'),
         rec(lesson: 'a_lesson_no_longer_in_content'),
@@ -267,46 +276,51 @@ void main() {
           child: ProgressView(summary: s, catalog: catalog),
         ));
 
-    Finder inSection(Key section, String text) => find.descendant(
-        of: find.byKey(section), matching: find.text(text));
+    Finder inSection(Key section, String text) =>
+        find.descendant(of: find.byKey(section), matching: find.text(text));
 
-    testWidgets('the reason for an empty Evaluated sits INSIDE Evaluated, '
+    testWidgets(
+        'the reason for an empty Evaluated sits INSIDE Evaluated, '
         'not in Recorded', (WidgetTester tester) async {
       final ProgressSummary s = summaryOf(<SessionRecord>[
         rec(lesson: 'ss_l1_footwork'),
       ]);
       await pump(tester, s);
       final String reason = s.evaluatedUnavailableReason!;
-      expect(inSection(ProgressView.evaluatedSectionKey, reason), findsOneWidget);
+      expect(
+          inSection(ProgressView.evaluatedSectionKey, reason), findsOneWidget);
       expect(inSection(ProgressView.recordedSectionKey, reason), findsNothing);
     });
 
     testWidgets('practice facts land in Recorded and NOWHERE in Evaluated',
         (WidgetTester tester) async {
-      await pump(tester, summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_footwork', worked: 600, cycles: 8, planned: 8),
-      ]));
+      await pump(
+          tester,
+          summaryOf(<SessionRecord>[
+            rec(lesson: 'ss_l1_footwork', worked: 600, cycles: 8, planned: 8),
+          ]));
       expect(inSection(ProgressView.recordedSectionKey, '10 min practised'),
           findsOneWidget);
       expect(inSection(ProgressView.evaluatedSectionKey, '10 min practised'),
           findsNothing,
-          reason: 'a measurement rendered under Evaluated would read as a grade');
+          reason:
+              'a measurement rendered under Evaluated would read as a grade');
     });
 
     testWidgets('a demoOnly row shows the completion mark AND the no-band dash',
         (WidgetTester tester) async {
-      await pump(tester, summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
-      ]));
+      await pump(
+          tester,
+          summaryOf(<SessionRecord>[
+            rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
+          ]));
       final Finder row = find.byKey(const Key('progress.recorded.ss_l1_basic'));
       expect(
           find.descendant(
-              of: row,
-              matching: find.textContaining('Taught, not graded')),
+              of: row, matching: find.textContaining('Taught, not graded')),
           findsOneWidget);
       expect(
-          find.descendant(
-              of: row, matching: find.text(ProgressStrings.noBand)),
+          find.descendant(of: row, matching: find.text(ProgressStrings.noBand)),
           findsOneWidget,
           reason: 'a blank would look like a missing value; the dash says the '
               'judgement is ABSENT, not zero');
@@ -321,9 +335,11 @@ void main() {
 
     testWidgets('a scored lesson row carries NO band and NO demo mark',
         (WidgetTester tester) async {
-      await pump(tester, summaryOf(<SessionRecord>[
-        rec(lesson: 'ss_l1_footwork'),
-      ]));
+      await pump(
+          tester,
+          summaryOf(<SessionRecord>[
+            rec(lesson: 'ss_l1_footwork'),
+          ]));
       final Finder row =
           find.byKey(const Key('progress.recorded.ss_l1_footwork'));
       expect(
@@ -331,8 +347,7 @@ void main() {
               of: row, matching: find.textContaining('Taught, not graded')),
           findsNothing);
       expect(
-          find.descendant(
-              of: row, matching: find.text(ProgressStrings.noBand)),
+          find.descendant(of: row, matching: find.text(ProgressStrings.noBand)),
           findsNothing,
           reason: 'the dash is the demo-only marker; on a scored lesson it '
               'would claim a judgement was withheld');
@@ -340,19 +355,21 @@ void main() {
 
     testWidgets('unmeasured cycles are NAMED on the row they happened in',
         (WidgetTester tester) async {
-      await pump(tester, summaryOf(<SessionRecord>[
-        SessionRecord(
-          lessonId: 'ss_l1_footwork',
-          lessonClass: ChoreiaLessonClass.scored,
-          completedAt: DateTime.utc(2026, 7, 30, 12),
-          workedSeconds: 600,
-          unitsCompleted: 7,
-          plannedUnits: 8,
-          unitLabel: choreiaUnitLabel,
-          unmeasuredUnits: 1,
-          unmeasuredReason: 'framing',
-        ),
-      ]));
+      await pump(
+          tester,
+          summaryOf(<SessionRecord>[
+            SessionRecord(
+              lessonId: 'ss_l1_footwork',
+              lessonClass: ChoreiaLessonClass.scored,
+              completedAt: DateTime.utc(2026, 7, 30, 12),
+              workedSeconds: 600,
+              unitsCompleted: 7,
+              plannedUnits: 8,
+              unitLabel: choreiaUnitLabel,
+              unmeasuredUnits: 1,
+              unmeasuredReason: 'framing',
+            ),
+          ]));
       final Finder row =
           find.byKey(const Key('progress.recorded.ss_l1_footwork'));
       expect(
@@ -368,7 +385,8 @@ void main() {
         (WidgetTester tester) async {
       // The positive twin's negative half: an always-present notice would be
       // noise, and a surface that always warns is a surface nobody reads.
-      await pump(tester, summaryOf(<SessionRecord>[rec(lesson: 'ss_l1_footwork')]));
+      await pump(
+          tester, summaryOf(<SessionRecord>[rec(lesson: 'ss_l1_footwork')]));
       expect(
           find.descendant(
               of: find.byKey(const Key('progress.recorded.ss_l1_footwork')),
@@ -446,7 +464,8 @@ void main() {
               'ayırt edebileceği bir şey yok, vakumda yeşil');
     });
 
-    test('VE KABUK KATALOĞU GERÇEKTEN GEÇİRİYOR — yoksa düzeltme üretimde '
+    test(
+        'VE KABUK KATALOĞU GERÇEKTEN GEÇİRİYOR — yoksa düzeltme üretimde '
         'sessizce NO-OP (C-279)', () {
       // NİYE VAR: yukarıdaki widget testleri `ProgressView`e kataloğu ELDEN
       // veriyor. `catalog` alanı nullable; kabuk onu geçirmeyi bırakırsa her
@@ -510,8 +529,8 @@ void main() {
       await pump(tester, s);
 
       expect(
-          inSection(ProgressView.recordedSectionKey,
-              ProgressStrings.unknownHistory),
+          inSection(
+              ProgressView.recordedSectionKey, ProgressStrings.unknownHistory),
           findsOneWidget,
           reason: 'depo AÇILAMADI ve bölüm bunu söylemiyor');
       expect(
@@ -539,8 +558,8 @@ void main() {
           reason: 'temiz okunan boş geçmiş artık boş diyemiyor — düzeltme '
               'fazla kapsadı');
       expect(
-          inSection(ProgressView.recordedSectionKey,
-              ProgressStrings.unknownHistory),
+          inSection(
+              ProgressView.recordedSectionKey, ProgressStrings.unknownHistory),
           findsNothing);
     });
 
@@ -674,9 +693,14 @@ void main() {
           rec(lesson: 'ss_l1_basic', klass: ChoreiaLessonClass.demoOnly),
         ],
         catalog: real,
-        totals: const RecordedSummary(sessions: 2, targetedSessions: 0,
-            completed: 0, workedSeconds: 1200, scoredSessions: 1,
-            demoOnlySessions: 1, unmeasuredUnits: 0),
+        totals: const RecordedSummary(
+            sessions: 2,
+            targetedSessions: 0,
+            completed: 0,
+            workedSeconds: 1200,
+            scoredSessions: 1,
+            demoOnlySessions: 1,
+            unmeasuredUnits: 0),
       );
       await tester.pumpWidget(Directionality(
         textDirection: TextDirection.ltr,
@@ -713,7 +737,8 @@ void main() {
     testWidgets('a build that records nothing SAYS so',
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
-          home: ProgressView(summary: summaryWith(HistoryIntegrity.notRecorded))));
+          home: ProgressView(
+              summary: summaryWith(HistoryIntegrity.notRecorded))));
       await tester.pump();
 
       expect(find.byKey(ProgressView.integrityNoteKey), findsOneWidget,

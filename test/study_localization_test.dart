@@ -17,11 +17,13 @@ void main() {
     addTearDown(locales.dispose);
     final area = studyAreas.first;
     final lesson = area.lessons.first;
-    final arabic = (jsonDecode(File('content/l10n/ui.ar.json').readAsStringSync())
-        as Map).cast<String, String>();
-    await tester.pumpWidget(ChoreiaApp(localeController: locales,
-      localeBundle: DiskBundle(), shellBuilder: (_, __) =>
-          RecallLessonPage(area: area, lesson: lesson)));
+    final arabic =
+        (jsonDecode(File('content/l10n/ui.ar.json').readAsStringSync()) as Map)
+            .cast<String, String>();
+    await tester.pumpWidget(ChoreiaApp(
+        localeController: locales,
+        localeBundle: DiskBundle(),
+        shellBuilder: (_, __) => RecallLessonPage(area: area, lesson: lesson)));
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const Key('study-answer')), 'my draft');
     await tester.ensureVisible(find.byKey(const Key('study-reference-toggle')));
@@ -31,12 +33,15 @@ void main() {
 
     await locales.select(const Locale('ar'));
     await tester.pumpAndSettle();
-    final answer = tester.widget<TextField>(find.byKey(const Key('study-answer')));
+    final answer =
+        tester.widget<TextField>(find.byKey(const Key('study-answer')));
     expect(answer.controller!.text, 'my draft');
     expect(find.text(arabic[lesson.title.en]!), findsOneWidget);
     expect(tester.widget<Text>(find.byKey(const Key('study-reference'))).data,
         arabic[lesson.answer.en]);
-    expect(Directionality.of(tester.element(find.byKey(const Key('study-answer')))),
+    expect(
+        Directionality.of(
+            tester.element(find.byKey(const Key('study-answer')))),
         TextDirection.rtl);
     expect(tester.takeException(), isNull);
   });

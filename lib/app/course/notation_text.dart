@@ -90,8 +90,7 @@ class _NotationTextState extends State<NotationText> {
 // Keep Arabic letters and their combining marks connected. Consecutive Arabic
 // words form one label so phrases read normally within their fixed box. Arabic
 // numerals, punctuation, arrows and Latin notation codes remain separate runs.
-const _arabicLetters =
-    '\u0620-\u065F\u066E-\u06D3\u06D5-\u06ED'
+const _arabicLetters = '\u0620-\u065F\u066E-\u06D3\u06D5-\u06ED'
     '\u06EE-\u06EF\u06FA-\u06FC\u0750-\u077F\u08A0-\u08FF'
     '\uFB50-\uFDFF\uFE70-\uFEFC';
 const _arabicWord = '[$_arabicLetters\u200C\u200D]+';
@@ -113,6 +112,7 @@ String _visibleWhitespace(String run) {
   // original spaces/tabs/newlines remain unchanged in the semantics label.
   // A blank line also keeps one full line height at the inherited text scale.
   if (run.isEmpty) return '\u00A0';
-  return run.replaceAll('\t', '\u00A0\u00A0\u00A0\u00A0')
+  return run
+      .replaceAll('\t', '\u00A0\u00A0\u00A0\u00A0')
       .replaceAll(' ', '\u00A0');
 }

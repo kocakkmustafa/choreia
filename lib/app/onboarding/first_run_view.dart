@@ -48,136 +48,137 @@ class FirstRunView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: ChoreiaBackdrop(
-      child: SafeArea(
-        // The way in is PINNED, the reading scrolls. Measured at 375x812:
-        // with the button inside the list it sat below the fold, so the
-        // only exit from the first screen a user ever sees was behind a
-        // scroll they had no reason to expect. A first-run screen whose
-        // exit must be discovered is a dead end with extra steps
-        // (M-F-268).
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(22, 40, 22, 20),
-                children: <Widget>[
-                  Text(
-                    IntroStrings.title,
-                    style: ChoreiaType.display(
-                      size: 34,
-                      color: ChoreiaColors.text(0.92),
-                    ),
+        body: ChoreiaBackdrop(
+          child: SafeArea(
+            // The way in is PINNED, the reading scrolls. Measured at 375x812:
+            // with the button inside the list it sat below the fold, so the
+            // only exit from the first screen a user ever sees was behind a
+            // scroll they had no reason to expect. A first-run screen whose
+            // exit must be discovered is a dead end with extra steps
+            // (M-F-268).
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(22, 40, 22, 20),
+                    children: <Widget>[
+                      Text(
+                        IntroStrings.title,
+                        style: ChoreiaType.display(
+                          size: 34,
+                          color: ChoreiaColors.text(0.92),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        UiLanguage.text(
+                          context,
+                          en: IntroStrings.what,
+                          tr: 'Beş solo dans yolunu sıralı yazılı dersler, çalışma '
+                              'görevleri ve öz denetimlerle keşfet: Hip-Hop, Salsa '
+                              'On1, Line Dance, Latin Fusion ve özgün kısa dans. '
+                              'Hesap veya kamera gerekmez. Çalışma kaydın bu cihazda kalır.',
+                        ),
+                        style: ChoreiaType.body(
+                          size: 15,
+                          color: ChoreiaColors.text(0.78),
+                        ),
+                      ),
+                      const SizedBox(height: 26),
+                      _panel(
+                        key: cameraKey,
+                        icon: Icons.videocam_outlined,
+                        tone: ChoreiaColors.rose,
+                        title: UiLanguage.text(
+                          context,
+                          en: IntroStrings.cameraTitle,
+                          tr: 'KAMERA',
+                        ),
+                        body: UiLanguage.text(context,
+                            en: IntroStrings.cameraStatus(
+                                cameraSessionsAvailable),
+                            tr: IntroStrings.cameraStatus(
+                                cameraSessionsAvailable,
+                                turkish: true)),
+                      ),
+                      const SizedBox(height: 14),
+                      _panel(
+                        icon: Icons.music_note_outlined,
+                        tone: ChoreiaColors.amber,
+                        title: UiLanguage.text(
+                          context,
+                          en: IntroStrings.musicTitle,
+                          tr: 'KENDİ MÜZİĞİN',
+                        ),
+                        body: UiLanguage.text(
+                          context,
+                          en: IntroStrings.music,
+                          tr: 'Choreia içinde müzik kütüphanesi yok. İstersen '
+                              'başka bir uygulamadan müzik açabilir veya '
+                              'müziksiz çalışabilirsin. Kurs adımları otomatik '
+                              'saymaz; müziğin ritmine göre puan verilmez.',
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      _panel(
+                        icon: Icons.straighten_outlined,
+                        tone: ChoreiaColors.amber,
+                        title: UiLanguage.text(
+                          context,
+                          en: IntroStrings.limitsTitle,
+                          tr: 'NEYE PUAN VERMEZ',
+                        ),
+                        body: UiLanguage.text(
+                          context,
+                          en: IntroStrings.limits,
+                          tr: 'Kurs ilerlemesi kendi çalışma kaydındır. Otomatik '
+                              'hareket doğruluğu, ritim, zamanlama veya ustalık '
+                              'puanı verilmez. His, tarz ve ifade sana aittir.',
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      _panel(
+                        key: stateKey,
+                        icon: Icons.inventory_2_outlined,
+                        tone: ChoreiaColors.roseDeep,
+                        title: UiLanguage.text(
+                          context,
+                          en: IntroStrings.todayTitle,
+                          tr: 'BUGÜNKÜ DURUM',
+                        ),
+                        body: UiLanguage.text(
+                          context,
+                          en: IntroStrings.today(tally,
+                              cameraSessionsAvailable: cameraSessionsAvailable),
+                          tr: IntroStrings.todayTr(tally,
+                              cameraSessionsAvailable: cameraSessionsAvailable),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    UiLanguage.text(
-                      context,
-                      en: IntroStrings.what,
-                      tr:
-                          'Beş solo dans yolunu sıralı yazılı dersler, çalışma '
-                          'görevleri ve öz denetimlerle keşfet: Hip-Hop, Salsa '
-                          'On1, Line Dance, Latin Fusion ve özgün kısa dans. '
-                          'Hesap veya kamera gerekmez. Çalışma kaydın bu cihazda kalır.',
-                    ),
-                    style: ChoreiaType.body(
-                      size: 15,
-                      color: ChoreiaColors.text(0.78),
-                    ),
-                  ),
-                  const SizedBox(height: 26),
-                  _panel(
-                    key: cameraKey,
-                    icon: Icons.videocam_outlined,
-                    tone: ChoreiaColors.rose,
-                    title: UiLanguage.text(
-                      context,
-                      en: IntroStrings.cameraTitle,
-                      tr: 'KAMERA',
-                    ),
-                    body: UiLanguage.text(context,
-                        en: IntroStrings.cameraStatus(cameraSessionsAvailable),
-                        tr: IntroStrings.cameraStatus(cameraSessionsAvailable,
-                            turkish: true)),
-                  ),
-                  const SizedBox(height: 14),
-                  _panel(
-                    icon: Icons.music_note_outlined,
-                    tone: ChoreiaColors.amber,
-                    title: UiLanguage.text(
-                      context,
-                      en: IntroStrings.musicTitle,
-                      tr: 'KENDİ MÜZİĞİN',
-                    ),
-                    body: UiLanguage.text(
-                      context,
-                      en: IntroStrings.music,
-                      tr:
-                          'Choreia içinde müzik kütüphanesi yok. İstersen '
-                          'başka bir uygulamadan müzik açabilir veya '
-                          'müziksiz çalışabilirsin. Kurs adımları otomatik '
-                          'saymaz; müziğin ritmine göre puan verilmez.',
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  _panel(
-                    icon: Icons.straighten_outlined,
-                    tone: ChoreiaColors.amber,
-                    title: UiLanguage.text(
-                      context,
-                      en: IntroStrings.limitsTitle,
-                      tr: 'NEYE PUAN VERMEZ',
-                    ),
-                    body: UiLanguage.text(
-                      context,
-                      en: IntroStrings.limits,
-                      tr:
-                          'Kurs ilerlemesi kendi çalışma kaydındır. Otomatik '
-                          'hareket doğruluğu, ritim, zamanlama veya ustalık '
-                          'puanı verilmez. His, tarz ve ifade sana aittir.',
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  _panel(
-                    key: stateKey,
-                    icon: Icons.inventory_2_outlined,
-                    tone: ChoreiaColors.roseDeep,
-                    title: UiLanguage.text(
-                      context,
-                      en: IntroStrings.todayTitle,
-                      tr: 'BUGÜNKÜ DURUM',
-                    ),
-                    body: UiLanguage.text(
-                      context,
-                      en: IntroStrings.today(tally, cameraSessionsAvailable: cameraSessionsAvailable),
-                      tr: IntroStrings.todayTr(tally, cameraSessionsAvailable: cameraSessionsAvailable),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(22, 4, 22, 20),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  key: continueKey,
-                  onPressed: onContinue,
-                  child: Text(
-                    UiLanguage.text(
-                      context,
-                      en: IntroStrings.continueLabel,
-                      tr: 'Kataloğu aç',
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(22, 4, 22, 20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      key: continueKey,
+                      onPressed: onContinue,
+                      child: Text(
+                        UiLanguage.text(
+                          context,
+                          en: IntroStrings.continueLabel,
+                          tr: 'Kataloğu aç',
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   Widget _panel({
     Key? key,
@@ -185,33 +186,34 @@ class FirstRunView extends StatelessWidget {
     required Color tone,
     required String title,
     required String body,
-  }) => GlassPanel(
-    key: key,
-    tint: tone,
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        StatusRing(icon: icon, tone: tone, breathing: false, size: 40),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(title, style: ChoreiaType.label(size: 9.5, color: tone)),
-              const SizedBox(height: 6),
-              Text(
-                body,
-                style: ChoreiaType.body(
-                  size: 13,
-                  color: ChoreiaColors.text(0.75),
-                ),
+  }) =>
+      GlassPanel(
+        key: key,
+        tint: tone,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            StatusRing(icon: icon, tone: tone, breathing: false, size: 40),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(title, style: ChoreiaType.label(size: 9.5, color: tone)),
+                  const SizedBox(height: 6),
+                  Text(
+                    body,
+                    style: ChoreiaType.body(
+                      size: 13,
+                      color: ChoreiaColors.text(0.75),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 }
 
 /// The intro's copy, in one place — same seam as `ShellStrings`.

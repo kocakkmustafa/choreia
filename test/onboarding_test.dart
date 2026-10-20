@@ -84,7 +84,8 @@ void main() {
       // the only exit from a user's first screen something they had to
       // discover. `find` cannot tell those apart; geometry can.
       final Rect rect = tester.getRect(button);
-      final Size screen = tester.view.physicalSize / tester.view.devicePixelRatio;
+      final Size screen =
+          tester.view.physicalSize / tester.view.devicePixelRatio;
       expect(rect.bottom, lessThanOrEqualTo(screen.height),
           reason: 'çıkış düğmesi ekranın altında kalıyor — açılış ekranının '
               'tek çıkışı keşfedilmeyi gerektiriyor');
@@ -108,18 +109,26 @@ void main() {
 
   group('söylediği şey DOĞRU', () {
     for (final language in ['en', 'tr']) {
-      testWidgets('current course and closed camera intro in $language', (tester) async {
+      testWidgets('current course and closed camera intro in $language',
+          (tester) async {
         tester.platformDispatcher.localeTestValue = Locale(language);
         addTearDown(tester.platformDispatcher.clearLocaleTestValue);
         await pump(tester, MemoryFirstRunFlag(), locale: Locale(language));
-        expect(find.textContaining(language == 'tr' ? 'Kurs hesap veya kamera olmadan çalışır' : 'The course works without an account or camera'), findsOneWidget);
-        final gate = find.textContaining(language == 'tr' ? 'canlı kamera pratiği ve abonelik satışı kapalıdır' : 'Live camera practice and subscription sales are closed');
+        expect(
+            find.textContaining(language == 'tr'
+                ? 'Kurs hesap veya kamera olmadan çalışır'
+                : 'The course works without an account or camera'),
+            findsOneWidget);
+        final gate = find.textContaining(language == 'tr'
+            ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
+            : 'Live camera practice and subscription sales are closed');
         for (var i = 0; i < 12 && gate.evaluate().isEmpty; i++) {
           await tester.drag(find.byType(ListView), const Offset(0, -160));
           await tester.pump(const Duration(milliseconds: 300));
         }
         expect(gate, findsOneWidget);
-        expect(find.textContaining('watches your dancing to give you feedback'), findsNothing);
+        expect(find.textContaining('watches your dancing to give you feedback'),
+            findsNothing);
         expect(find.byKey(FirstRunView.continueKey), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
@@ -184,9 +193,18 @@ void main() {
       // family forbids, so a rewrite that reintroduces one fails even if the
       // exact wording is new.
       const List<String> banned = <String>[
-        "let's go", 'awesome', 'amazing', 'unlock', 'level up', 'streak',
-        'crush it', 'get started in seconds', 'personalised plan',
-        'ai coach', 'perfect your', 'master ',
+        "let's go",
+        'awesome',
+        'amazing',
+        'unlock',
+        'level up',
+        'streak',
+        'crush it',
+        'get started in seconds',
+        'personalised plan',
+        'ai coach',
+        'perfect your',
+        'master ',
       ];
       for (final String word in banned) {
         expect(all, isNot(contains(word)),

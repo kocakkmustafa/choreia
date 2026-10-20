@@ -38,7 +38,8 @@ class WrittenCourseLink extends StatelessWidget {
     'salsa_shines': ('course/salsa-on1', (env) => SalsaCoursePage(env: env)),
     'hip_hop_foundations': (
       'course/hip-hop-written',
-      (env) => HipHopCoursePage(skillCourse: true, env: env, bundle: env.bundle),
+      (env) =>
+          HipHopCoursePage(skillCourse: true, env: env, bundle: env.bundle),
     ),
     'line_dance': (
       'course/line-dance-written',
@@ -56,13 +57,13 @@ class WrittenCourseLink extends StatelessWidget {
 
   static bool supports(String styleId) => _routes.containsKey(styleId);
   static Key startKey(String styleId) => switch (styleId) {
-    'salsa_shines' => const Key('salsa.open'),
-    'hip_hop_foundations' => const Key('style.hipHopSkillCourse'),
-    'line_dance' => const Key('style.lineDanceWrittenCourse'),
-    'latin_fusion_fitness' => const Key('style.latinFusionWrittenCourse'),
-    'tiktok_format' => const Key('style.shortFormWrittenCourse'),
-    _ => Key('writtenCourse.open.$styleId'),
-  };
+        'salsa_shines' => const Key('salsa.open'),
+        'hip_hop_foundations' => const Key('style.hipHopSkillCourse'),
+        'line_dance' => const Key('style.lineDanceWrittenCourse'),
+        'latin_fusion_fitness' => const Key('style.latinFusionWrittenCourse'),
+        'tiktok_format' => const Key('style.shortFormWrittenCourse'),
+        _ => Key('writtenCourse.open.$styleId'),
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +154,8 @@ class StyleDetailView extends StatelessWidget {
   static const Key noCameraLessonsKey = Key('style.noCameraLessons');
 
   static Key lessonStartKey(String id) => Key('style.start.$id');
-  static Key sessionUnavailableKey(String id) => Key('style.sessionUnavailable.$id');
+  static Key sessionUnavailableKey(String id) =>
+      Key('style.sessionUnavailable.$id');
 
   static Key lessonKey(String id) => Key('style.lesson.$id');
   static Key permanenceKey(String id) => Key('style.permanent.$id');
@@ -169,13 +171,14 @@ class StyleDetailView extends StatelessWidget {
     final StyleDetailCopy copy = StyleDetailCopy(UiLanguage.isTurkish(context),
         cameraSessionsAvailable: cameraSessionsAvailable,
         translate: (en, tr) => UiLanguage.text(context, en: en, tr: tr),
-        format: (en, tr, values) => UiLanguage.format(context,
-            en: en, tr: tr, values: values));
+        format: (en, tr, values) =>
+            UiLanguage.format(context, en: en, tr: tr, values: values));
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          copy.authored(StyleContentCopy.styleName(card.entry, turkish: copy.turkish)),
+          copy.authored(
+              StyleContentCopy.styleName(card.entry, turkish: copy.turkish)),
         ),
       ),
       body: ChoreiaBackdrop(
@@ -235,15 +238,18 @@ class StyleDetailView extends StatelessWidget {
                   ),
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
-                      builder: (_) => HipHopCoursePage(env: env, bundle: env.bundle),
+                      builder: (_) =>
+                          HipHopCoursePage(env: env, bundle: env.bundle),
                     ),
                   ),
                   child: Text(
-                    copy._pick('Written beginner path · instructor review pending',
+                    copy._pick(
+                        'Written beginner path · instructor review pending',
                         'Yazılı başlangıç yolu · eğitmen incelemesi bekleniyor'),
                   ),
                 ),
-              if (PracticeComparisonPage.supportedStyles.contains(card.entry.id))
+              if (PracticeComparisonPage.supportedStyles
+                  .contains(card.entry.id))
                 TextButton(
                   key: const Key('style.practiceComparison'),
                   style: TextButton.styleFrom(
@@ -251,12 +257,15 @@ class StyleDetailView extends StatelessWidget {
                   ),
                   onPressed: () => Navigator.of(context).push<void>(
                     ChoreiaPageRoute<void>(
-                      settings: const RouteSettings(name: 'course/practice-comparison'),
-                      builder: (_) => PracticeComparisonPage(styleId: card.entry.id),
+                      settings: const RouteSettings(
+                          name: 'course/practice-comparison'),
+                      builder: (_) =>
+                          PracticeComparisonPage(styleId: card.entry.id),
                     ),
                   ),
                   child: Text(
-                    copy._pick('Compare attempts · temporary self-observation notes',
+                    copy._pick(
+                        'Compare attempts · temporary self-observation notes',
                         'Denemeleri karşılaştır · geçici öz gözlem notu'),
                   ),
                 ),
@@ -297,53 +306,56 @@ class StyleDetailView extends StatelessWidget {
   // ── Header ───────────────────────────────────────────────────────────
 
   Widget _header(StyleDetailCopy copy) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      if (WrittenCourseLink.supports(card.entry.id))
-        StatusPill(
-          label: copy._pick('WRITTEN COURSE', 'YAZILI KURS'),
-          tone: ChoreiaColors.amber,
-        ),
-      if (!WrittenCourseLink.supports(card.entry.id) ||
-          card.badge != StyleBadge.inPreparation) ...<Widget>[
-        if (WrittenCourseLink.supports(card.entry.id))
-          const SizedBox(height: 8),
-        StatusPill(
-          label: copy.authored(copy.turkish
-              ? LibraryStrings.badgeTr(card.badge)
-              : LibraryStrings.badge(card.badge)),
-          tone: _badgeTone(),
-        ),
-      ],
-      const SizedBox(height: 12),
-      Semantics(
-        header: true,
-        child: Text(
-          copy.authored(StyleContentCopy.styleName(card.entry, turkish: copy.turkish)),
-          style: ChoreiaType.display(size: 34),
-        ),
-      ),
-      if (card.entry.subDances.isNotEmpty) ...<Widget>[
-        const SizedBox(height: 8),
-        // A family page names its members rather than implying one dance.
-        Text(
-          card.entry.subDances.join(' · '),
-          style: ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.6)),
-        ),
-      ],
-      if (_statusSentence(copy) != null) ...<Widget>[
-        const SizedBox(height: 14),
-        GlassPanel(
-          tint: ChoreiaColors.amber,
-          borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
-          child: Text(
-            _statusSentence(copy)!,
-            style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.82)),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (WrittenCourseLink.supports(card.entry.id))
+            StatusPill(
+              label: copy._pick('WRITTEN COURSE', 'YAZILI KURS'),
+              tone: ChoreiaColors.amber,
+            ),
+          if (!WrittenCourseLink.supports(card.entry.id) ||
+              card.badge != StyleBadge.inPreparation) ...<Widget>[
+            if (WrittenCourseLink.supports(card.entry.id))
+              const SizedBox(height: 8),
+            StatusPill(
+              label: copy.authored(copy.turkish
+                  ? LibraryStrings.badgeTr(card.badge)
+                  : LibraryStrings.badge(card.badge)),
+              tone: _badgeTone(),
+            ),
+          ],
+          const SizedBox(height: 12),
+          Semantics(
+            header: true,
+            child: Text(
+              copy.authored(StyleContentCopy.styleName(card.entry,
+                  turkish: copy.turkish)),
+              style: ChoreiaType.display(size: 34),
+            ),
           ),
-        ),
-      ],
-    ],
-  );
+          if (card.entry.subDances.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 8),
+            // A family page names its members rather than implying one dance.
+            Text(
+              card.entry.subDances.join(' · '),
+              style:
+                  ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.6)),
+            ),
+          ],
+          if (_statusSentence(copy) != null) ...<Widget>[
+            const SizedBox(height: 14),
+            GlassPanel(
+              tint: ChoreiaColors.amber,
+              borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
+              child: Text(
+                _statusSentence(copy)!,
+                style:
+                    ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.82)),
+              ),
+            ),
+          ],
+        ],
+      );
 
   /// What the badge means, in a sentence whose SUBJECT IS US (C-178).
   ///
@@ -367,7 +379,8 @@ class StyleDetailView extends StatelessWidget {
     }
     final String? reason = StyleStatusCopy.reason(card, turkish: copy.turkish);
     if (WrittenCourseLink.supports(card.entry.id) &&
-        card.badge == StyleBadge.builtButGated && reason != null) {
+        card.badge == StyleBadge.builtButGated &&
+        reason != null) {
       return '${copy._pick('Camera references', 'Kamera referansları')}: ${copy.authored(reason)}';
     }
     return reason == null ? _openStyleSentence(copy) : copy.authored(reason);
@@ -375,10 +388,10 @@ class StyleDetailView extends StatelessWidget {
 
   /// The subject-carrying sentence for a style that IS open.
   String? _openStyleSentence(StyleDetailCopy copy) => switch (card.badge) {
-    StyleBadge.openUngraded => copy.openUngradedMeaning,
-    StyleBadge.scored => copy.scoredMeaning,
-    _ => null,
-  };
+        StyleBadge.openUngraded => copy.openUngradedMeaning,
+        StyleBadge.scored => copy.scoredMeaning,
+        _ => null,
+      };
 
   // ── Tempo ────────────────────────────────────────────────────────────
   //
@@ -388,24 +401,26 @@ class StyleDetailView extends StatelessWidget {
   // complete reader sentence; this widget only lays it out.
 
   Widget _tempoSection(String sentence, StyleDetailCopy copy) => GlassPanel(
-    key: tempoKey,
-    radius: 18,
-    padding: const EdgeInsets.all(18),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          copy.tempoTitle,
-          style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.5)),
+        key: tempoKey,
+        radius: 18,
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              copy.tempoTitle,
+              style:
+                  ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.5)),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              copy.authored(sentence),
+              style:
+                  ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.82)),
+            ),
+          ],
         ),
-        const SizedBox(height: 10),
-        Text(
-          copy.authored(sentence),
-          style: ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.82)),
-        ),
-      ],
-    ),
-  );
+      );
 
   // ── Attribution ──────────────────────────────────────────────────────
 
@@ -489,81 +504,81 @@ class StyleDetailView extends StatelessWidget {
   // is styled like the lesson cards below it.
 
   Widget _glossarySection(StyleDetailCopy copy) => Column(
-    key: glossaryKey,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(copy.glossaryTitle, style: ChoreiaType.display(size: 21)),
-      const SizedBox(height: 4),
-      Text(
-        copy.glossaryNote,
-        style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
-      ),
-      const SizedBox(height: 12),
-      for (final GlossaryEntry g in card.entry.stepGlossary)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                copy.authored(g.name),
-                style: ChoreiaType.label(
-                  size: 10.5,
-                  color: ChoreiaColors.text(0.72),
-                ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                copy.authored(StyleContentCopy.glossaryGloss(
-                  card.entry.id,
-                  g,
-                  turkish: copy.turkish,
-                )),
-                style: ChoreiaType.body(
-                  size: 12.5,
-                  color: ChoreiaColors.text(0.66),
-                ),
-              ),
-            ],
+        key: glossaryKey,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(copy.glossaryTitle, style: ChoreiaType.display(size: 21)),
+          const SizedBox(height: 4),
+          Text(
+            copy.glossaryNote,
+            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
           ),
-        ),
-    ],
-  );
+          const SizedBox(height: 12),
+          for (final GlossaryEntry g in card.entry.stepGlossary)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    copy.authored(g.name),
+                    style: ChoreiaType.label(
+                      size: 10.5,
+                      color: ChoreiaColors.text(0.72),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    copy.authored(StyleContentCopy.glossaryGloss(
+                      card.entry.id,
+                      g,
+                      turkish: copy.turkish,
+                    )),
+                    style: ChoreiaType.body(
+                      size: 12.5,
+                      color: ChoreiaColors.text(0.66),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      );
 
   // ── Cautions ─────────────────────────────────────────────────────────
 
   List<String> _cautions(StyleDetailCopy copy) => <String>[
-    if (card.entry.safetyOnboarding != null) card.entry.safetyOnboarding!,
-    for (final String e in card.entry.safetyExclusions) copy.excluded(e),
-    if (card.entry.hardwareRequired.isNotEmpty)
-      copy.needs(card.entry.hardwareRequired),
-  ];
+        if (card.entry.safetyOnboarding != null) card.entry.safetyOnboarding!,
+        for (final String e in card.entry.safetyExclusions) copy.excluded(e),
+        if (card.entry.hardwareRequired.isNotEmpty)
+          copy.needs(card.entry.hardwareRequired),
+      ];
 
   Widget _cautionSection(StyleDetailCopy copy) => GlassPanel(
-    key: cautionKey,
-    tint: ChoreiaColors.amber,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          copy.cautionTitle,
-          style: ChoreiaType.label(size: 10, color: ChoreiaColors.amber),
-        ),
-        const SizedBox(height: 10),
-        for (final String c in _cautions(copy))
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(
-              '· $c',
-              style: ChoreiaType.body(
-                size: 12.5,
-                color: ChoreiaColors.text(0.78),
-              ),
+        key: cautionKey,
+        tint: ChoreiaColors.amber,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              copy.cautionTitle,
+              style: ChoreiaType.label(size: 10, color: ChoreiaColors.amber),
             ),
-          ),
-      ],
-    ),
-  );
+            const SizedBox(height: 10),
+            for (final String c in _cautions(copy))
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(
+                  '· $c',
+                  style: ChoreiaType.body(
+                    size: 12.5,
+                    color: ChoreiaColors.text(0.78),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
 
   // ── Lessons ──────────────────────────────────────────────────────────
 
@@ -571,37 +586,39 @@ class StyleDetailView extends StatelessWidget {
     List<LessonOffer> offers,
     BuildContext context,
     StyleDetailCopy copy,
-  ) => Column(
-    key: lessonsKey,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        WrittenCourseLink.supports(card.entry.id)
-            ? copy.cameraLessonsTitle
-            : copy.lessonsTitle,
-        style: ChoreiaType.display(size: 21),
-      ),
-      const SizedBox(height: 12),
-      if (offers.isEmpty)
-        GlassPanel(
-          key: WrittenCourseLink.supports(card.entry.id)
-              ? noCameraLessonsKey
-              : noLessonsKey,
-          child: Text(
+  ) =>
+      Column(
+        key: lessonsKey,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
             WrittenCourseLink.supports(card.entry.id)
-                ? copy.noCameraLessons
-                : copy.noLessons,
-            style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.66)),
+                ? copy.cameraLessonsTitle
+                : copy.lessonsTitle,
+            style: ChoreiaType.display(size: 21),
           ),
-        )
-      else
-        for (final LessonOffer o in offers)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: _lessonCard(o, context, copy),
-          ),
-    ],
-  );
+          const SizedBox(height: 12),
+          if (offers.isEmpty)
+            GlassPanel(
+              key: WrittenCourseLink.supports(card.entry.id)
+                  ? noCameraLessonsKey
+                  : noLessonsKey,
+              child: Text(
+                WrittenCourseLink.supports(card.entry.id)
+                    ? copy.noCameraLessons
+                    : copy.noLessons,
+                style:
+                    ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.66)),
+              ),
+            )
+          else
+            for (final LessonOffer o in offers)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _lessonCard(o, context, copy),
+              ),
+        ],
+      );
 
   Widget _lessonCard(
     LessonOffer o,
@@ -630,7 +647,8 @@ class StyleDetailView extends StatelessWidget {
         children: <Widget>[
           TitleWithPill(
             title: Text(
-              copy.authored(StyleContentCopy.lessonName(l, turkish: copy.turkish)),
+              copy.authored(
+                  StyleContentCopy.lessonName(l, turkish: copy.turkish)),
               style: ChoreiaType.display(size: 19),
             ),
             pill: StatusPill(
@@ -761,69 +779,74 @@ class StyleDetailView extends StatelessWidget {
   // caveat on a product that is here, rather than a fact about the dance.
 
   Widget _cameraLimitsSection(StyleDetailCopy copy) => Column(
-    key: cameraLimitsKey,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(copy.limitsTitle, style: ChoreiaType.display(size: 21)),
-      const SizedBox(height: 4),
-      Text(
-        copy.limitsNote,
-        style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
-      ),
-      const SizedBox(height: 12),
-      GlassPanel(
-        tint: ChoreiaColors.amber,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            for (final String line in card.entry.cameraLimits)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  copy.authored(line),
-                  style: ChoreiaType.body(
-                    size: 12.5,
-                    color: ChoreiaColors.text(0.76),
+        key: cameraLimitsKey,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(copy.limitsTitle, style: ChoreiaType.display(size: 21)),
+          const SizedBox(height: 4),
+          Text(
+            copy.limitsNote,
+            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+          ),
+          const SizedBox(height: 12),
+          GlassPanel(
+            tint: ChoreiaColors.amber,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                for (final String line in card.entry.cameraLimits)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      copy.authored(line),
+                      style: ChoreiaType.body(
+                        size: 12.5,
+                        color: ChoreiaColors.text(0.76),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    ],
-  );
+              ],
+            ),
+          ),
+        ],
+      );
 
   // ── Honesty ──────────────────────────────────────────────────────────
 
   Widget _honestySection(StyleProse p, StyleDetailCopy copy) => Column(
-    key: honestyKey,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(copy.honestyTitle, style: ChoreiaType.display(size: 21)),
-      const SizedBox(height: 4),
-      Text(
-        copy.honestyNote,
-        style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
-      ),
-      const SizedBox(height: 12),
-      if (p.measured.isNotEmpty)
-        _honestyBlock(copy, copy.measuredTitle, p.measured, ChoreiaColors.rose),
-      if (p.measured.isNotEmpty && p.notMeasured.isNotEmpty)
-        const SizedBox(height: 10),
-      if (p.notMeasured.isNotEmpty)
-        _honestyBlock(copy, copy.notMeasuredTitle, <String>[
-          for (final String line in p.notMeasured)
-            copy.authored(StyleContentCopy.honestyNotMeasured(
-              card.entry.id,
-              line,
-              turkish: copy.turkish,
-            )),
-        ], ChoreiaColors.amber),
-    ],
-  );
+        key: honestyKey,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(copy.honestyTitle, style: ChoreiaType.display(size: 21)),
+          const SizedBox(height: 4),
+          Text(
+            copy.honestyNote,
+            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+          ),
+          const SizedBox(height: 12),
+          if (p.measured.isNotEmpty)
+            _honestyBlock(
+                copy, copy.measuredTitle, p.measured, ChoreiaColors.rose),
+          if (p.measured.isNotEmpty && p.notMeasured.isNotEmpty)
+            const SizedBox(height: 10),
+          if (p.notMeasured.isNotEmpty)
+            _honestyBlock(
+                copy,
+                copy.notMeasuredTitle,
+                <String>[
+                  for (final String line in p.notMeasured)
+                    copy.authored(StyleContentCopy.honestyNotMeasured(
+                      card.entry.id,
+                      line,
+                      turkish: copy.turkish,
+                    )),
+                ],
+                ChoreiaColors.amber),
+        ],
+      );
 
-  Widget _honestyBlock(StyleDetailCopy copy,
-      String title, List<String> lines, Color tone) =>
+  Widget _honestyBlock(
+          StyleDetailCopy copy, String title, List<String> lines, Color tone) =>
       GlassPanel(
         tint: tone,
         child: Column(
@@ -978,48 +1001,52 @@ abstract final class StyleStrings {
   /// catalogue's business (and a design call). Removing a false assertion is
   /// not.
   static String kind(LessonKind k,
-      {required bool canStart, bool cameraSessionsAvailable = false}) => switch (k) {
-    LessonKind.scored => canStart && cameraSessionsAvailable
-        ? 'CAMERA PRACTICE' : 'REFERENCE',
-    // `OPEN` is a promise about what a tap does. Only make it when a tap
-    // does something.
-    LessonKind.demoOnly => canStart
-        ? (cameraSessionsAvailable ? 'LIVE PRACTICE · NO SCORING' : 'REFERENCE · SESSION CLOSED')
-        : 'NO SCORING',
-    LessonKind.locked => 'LOCKED',
-  };
+          {required bool canStart, bool cameraSessionsAvailable = false}) =>
+      switch (k) {
+        LessonKind.scored =>
+          canStart && cameraSessionsAvailable ? 'CAMERA PRACTICE' : 'REFERENCE',
+        // `OPEN` is a promise about what a tap does. Only make it when a tap
+        // does something.
+        LessonKind.demoOnly => canStart
+            ? (cameraSessionsAvailable
+                ? 'LIVE PRACTICE · NO SCORING'
+                : 'REFERENCE · SESSION CLOSED')
+            : 'NO SCORING',
+        LessonKind.locked => 'LOCKED',
+      };
 
   static String minutes(int m) => m > 0 ? '$m MIN' : 'LENGTH NOT SET';
 
   static String blocked(LessonBlock b) => switch (b) {
-    LessonBlock.styleShut =>
-      'This lesson is finished, and the style it belongs to is not open — '
-          'the reason is at the top of this page.',
-    LessonBlock.measurementMissing =>
-      'This one stays locked because the measurement it would grade does '
-          'not exist. The note above names which one.',
-    LessonBlock.referenceMissing =>
-      'The movement reference behind this lesson is not built, so there is '
-          'nothing to check you against. The teaching is written; the '
-          'measurement is not.',
-    LessonBlock.noLessonBuilt =>
-      'There is nothing built to walk you through this one — only the note '
-          'above. It is a real lesson in the plan and an empty one today.',
-  };
+        LessonBlock.styleShut =>
+          'This lesson is finished, and the style it belongs to is not open — '
+              'the reason is at the top of this page.',
+        LessonBlock.measurementMissing =>
+          'This one stays locked because the measurement it would grade does '
+              'not exist. The note above names which one.',
+        LessonBlock.referenceMissing =>
+          'The movement reference behind this lesson is not built, so there is '
+              'nothing to check you against. The teaching is written; the '
+              'measurement is not.',
+        LessonBlock.noLessonBuilt =>
+          'There is nothing built to walk you through this one — only the note '
+              'above. It is a real lesson in the plan and an empty one today.',
+      };
 }
 
 /// Shared reader-facing chrome for the style page. Authored content uses
 /// [StyleContentCopy] where a reviewed translation matches its exact source;
 /// attribution uses the same review rule for the one open Hip-Hop style.
 final class StyleDetailCopy {
-  const StyleDetailCopy(this.turkish, {this.cameraSessionsAvailable = false,
-    this.translate, this.format});
+  const StyleDetailCopy(this.turkish,
+      {this.cameraSessionsAvailable = false, this.translate, this.format});
 
   final bool cameraSessionsAvailable;
 
   final bool turkish;
   final String Function(String en, String tr)? translate;
-  final String Function(String en, String tr, Map<String, Object> values)? format;
+  final String Function(String en, String tr, Map<String, Object> values)?
+      format;
 
   String _pick(String english, String turkishText) =>
       translate?.call(english, turkishText) ??
@@ -1039,90 +1066,89 @@ final class StyleDetailCopy {
   String get attributionTitle =>
       _pick(StyleStrings.attributionTitle, 'BU DANSIN KÖKENİ');
   String get attributionMissing => _pick(
-    StyleStrings.attributionMissing,
-    'Bu köken açıklamasını henüz yazmadık. Katalogdaki her dans, belirli '
-    'insanların ve yerlerin tarihini taşır. Belirsiz bir cümleyle '
-    'doldurmak yerine bu eksikliği açıkça gösteriyoruz.',
-  );
+        StyleStrings.attributionMissing,
+        'Bu köken açıklamasını henüz yazmadık. Katalogdaki her dans, belirli '
+        'insanların ve yerlerin tarihini taşır. Belirsiz bir cümleyle '
+        'doldurmak yerine bu eksikliği açıkça gösteriyoruz.',
+      );
   String get boundaryTitle => _pick(
-    StyleStrings.boundaryTitle,
-    'NEYİ YENİDEN ÜRETİYORUZ, NEYİ ÜRETMİYORUZ',
-  );
+        StyleStrings.boundaryTitle,
+        'NEYİ YENİDEN ÜRETİYORUZ, NEYİ ÜRETMİYORUZ',
+      );
   String get cautionTitle =>
       _pick(StyleStrings.cautionTitle, 'BAŞLAMADAN ÖNCE');
-  String excluded(String what) =>
-      _format('Not taught here: {item}', 'Burada öğretilmeyen: {item}',
-          {'item': authored(what)});
-  String needs(List<String> items) =>
-      _format('You will need: {items}', 'Gerekenler: {items}',
-          {'items': items.map(authored).join(', ')});
+  String excluded(String what) => _format('Not taught here: {item}',
+      'Burada öğretilmeyen: {item}', {'item': authored(what)});
+  String needs(List<String> items) => _format('You will need: {items}',
+      'Gerekenler: {items}', {'items': items.map(authored).join(', ')});
 
   String get openUngradedMeaning => cameraSessionsAvailable
       ? _pick(StyleStrings.liveUngradedMeaning,
           'Canlı kamera pratiği cihaz izni ve erişim kontrolü gerektirir. Bu puansız dersler sayısal puan üretmez.')
       : _pick(
-    StyleStrings.openUngradedMeaning,
-    'Yazılı açıklamaları ve kayıtlı kamera seansı referanslarını okuyabilirsin. '
-    'Bu sürümde kamera çalışması ve puanlama kapalı. Referans oynatılabilir '
-    'bir önizleme değildir. Öz denetimli '
-    'çalışma için yazılı kursları kullan.',
-  );
+          StyleStrings.openUngradedMeaning,
+          'Yazılı açıklamaları ve kayıtlı kamera seansı referanslarını okuyabilirsin. '
+          'Bu sürümde kamera çalışması ve puanlama kapalı. Referans oynatılabilir '
+          'bir önizleme değildir. Öz denetimli '
+          'çalışma için yazılı kursları kullan.',
+        );
   String get scoredMeaning => cameraSessionsAvailable
       ? _pick(StyleStrings.liveScoredMeaning,
           'Kayıtlı referanslar bu kamera dersini açıklar. Kamera kullanımı cihaz izni ve erişim kontrolü gerektirir; her dersin sınırlarını oku.')
       : _pick(
-    StyleStrings.scoredMeaning,
-    'Bu notlar kayıtlı hareket referanslarını açıklar. Bu sürüm hareketini '
-    'değerlendirmez veya puanlamaz; kamera çalışması kapalı.',
-  );
+          StyleStrings.scoredMeaning,
+          'Bu notlar kayıtlı hareket referanslarını açıklar. Bu sürüm hareketini '
+          'değerlendirmez veya puanlamaz; kamera çalışması kapalı.',
+        );
 
   String get glossaryTitle =>
       _pick(StyleStrings.glossaryTitle, 'Adlarını duyacağın adımlar');
   String get glossaryNote => _pick(
-    StyleStrings.glossaryNote,
-    'Bunlar ders değil, adım adlarıdır. Burada öğretilip puanlandıkları '
-    'anlamına gelmez; listede bir adın bulunması arkasında açılabilir '
-    'bir ders olduğu anlamına da gelmez.',
-  );
+        StyleStrings.glossaryNote,
+        'Bunlar ders değil, adım adlarıdır. Burada öğretilip puanlandıkları '
+        'anlamına gelmez; listede bir adın bulunması arkasında açılabilir '
+        'bir ders olduğu anlamına da gelmez.',
+      );
   String get lessonsTitle => _pick(StyleStrings.lessonsTitle, 'Dersler');
-  String get cameraLessonsTitle =>
-      _pick('Camera-session reference lessons', 'Kamera seansı referans dersleri');
+  String get cameraLessonsTitle => _pick(
+      'Camera-session reference lessons', 'Kamera seansı referans dersleri');
   String get writtenCourseMeaning => _pick(
-    'A self-guided written course is available. Demonstration and instructor '
-        'review remain open; completing a written unit does not verify movement skill.',
-    'Öz denetimli yazılı kurs açık. Gösterim ve eğitmen incelemesi tamamlanmadı; '
-        'yazılı birimi tamamlamak hareket becerisini doğrulamaz.',
-  );
+        'A self-guided written course is available. Demonstration and instructor '
+            'review remain open; completing a written unit does not verify movement skill.',
+        'Öz denetimli yazılı kurs açık. Gösterim ve eğitmen incelemesi tamamlanmadı; '
+            'yazılı birimi tamamlamak hareket becerisini doğrulamaz.',
+      );
   String get noCameraLessons => _pick(
-    'There are no camera-session reference lessons for this style. '
-        'The written course is available above.',
-    'Bu stil için kamera seansı referans dersi yok. Yazılı kurs yukarıda açık.',
-  );
+        'There are no camera-session reference lessons for this style. '
+            'The written course is available above.',
+        'Bu stil için kamera seansı referans dersi yok. Yazılı kurs yukarıda açık.',
+      );
   String get noLessons => _pick(
-    StyleStrings.noLessons,
-    'Bu stil için hazırlanmış bir ders yok. Adı katalogda görünür, '
-    'ancak bugün açılabilecek bir ders bulunmaz.',
-  );
+        StyleStrings.noLessons,
+        'Bu stil için hazırlanmış bir ders yok. Adı katalogda görünür, '
+        'ancak bugün açılabilecek bir ders bulunmaz.',
+      );
   String get limitsTitle =>
       _pick(StyleStrings.limitsTitle, 'Kameranın bu dansta göremedikleri');
   String get limitsNote => _pick(
-    StyleStrings.limitsNote,
-    'Bunlar dans ve telefon kamerası hakkındaki örnek sınırlardır; '
-    'açık dersler hakkında değildir. Bu stil için ders hazırlanmadı. '
-    'Liste tam değildir ve başka hareketlerin ölçüldüğünü vaat etmez.',
-  );
+        StyleStrings.limitsNote,
+        'Bunlar dans ve telefon kamerası hakkındaki örnek sınırlardır; '
+        'açık dersler hakkında değildir. Bu stil için ders hazırlanmadı. '
+        'Liste tam değildir ve başka hareketlerin ölçüldüğünü vaat etmez.',
+      );
   String get tempoTitle => _pick(StyleStrings.tempoTitle, 'TEMPO');
   String get honestyTitle =>
       _pick(StyleStrings.honestyTitle, 'Bu stil hakkında ne söyleyebiliriz?');
   String get honestyNote => cameraSessionsAvailable
-      ? _pick('These lists describe recorded reference research and some of its limits. They are not live assessments of you. Camera practice requires device permission; demo-only lessons are not scored.',
+      ? _pick(
+          'These lists describe recorded reference research and some of its limits. They are not live assessments of you. Camera practice requires device permission; demo-only lessons are not scored.',
           'Bu listeler kayıtlı referans araştırmasını ve bazı sınırlarını açıklar. Senin canlı değerlendirmen değildir. Kamera pratiği cihaz izni gerektirir; puansız derslere puan verilmez.')
       : _pick(
-    StyleStrings.honestyNote,
-    'Bu listeler kayıtlı referans araştırmasını ve bazı sınırlarını açıklar. '
-    'Senin canlı değerlendirmen değildir. Bu sürümde kamera çalışması ve '
-    'puanlama kapalı.',
-  );
+          StyleStrings.honestyNote,
+          'Bu listeler kayıtlı referans araştırmasını ve bazı sınırlarını açıklar. '
+          'Senin canlı değerlendirmen değildir. Bu sürümde kamera çalışması ve '
+          'puanlama kapalı.',
+        );
   String get measuredTitle =>
       _pick(StyleStrings.measuredTitle, 'KAYITLI REFERANS ARAŞTIRMASI');
   String get notMeasuredTitle =>
@@ -1130,22 +1156,28 @@ final class StyleDetailCopy {
   String get permanentTitle =>
       _pick(StyleStrings.permanentTitle, 'BU DERS PUANLANMAYACAK');
   String get start => _pick(StyleStrings.start, 'Kamera pratiğini başlat');
-  String get sessionUnavailable => _pick(StyleStrings.sessionUnavailable,
+  String get sessionUnavailable => _pick(
+      StyleStrings.sessionUnavailable,
       'Bu sürümde kamera pratiği kullanılamıyor. Hareket referansı pakette var, '
       'ancak oynatılabilir bir önizleme değildir. Öz denetimli çalışma için yazılı kursları kullan.');
   String permissionNotice(LessonKind kind) => kind == LessonKind.demoOnly
-      ? _pick('This session requests camera permission on your device. It does not produce a score.',
+      ? _pick(
+          'This session requests camera permission on your device. It does not produce a score.',
           'Bu seans cihazında kamera izni ister. Sayısal puan üretmez.')
-      : _pick('This session requests camera permission before using the camera.',
+      : _pick(
+          'This session requests camera permission before using the camera.',
           'Bu seans kamerayı kullanmadan önce cihaz izni ister.');
 
-  String kind(LessonKind kind, {required bool canStart}) =>
-      _pick(StyleStrings.kind(kind, canStart: canStart,
-          cameraSessionsAvailable: cameraSessionsAvailable), switch (kind) {
-        LessonKind.scored => canStart && cameraSessionsAvailable
-            ? 'KAMERA PRATİĞİ' : 'REFERANS',
+  String kind(LessonKind kind, {required bool canStart}) => _pick(
+      StyleStrings.kind(kind,
+          canStart: canStart, cameraSessionsAvailable: cameraSessionsAvailable),
+      switch (kind) {
+        LessonKind.scored =>
+          canStart && cameraSessionsAvailable ? 'KAMERA PRATİĞİ' : 'REFERANS',
         LessonKind.demoOnly => canStart
-            ? (cameraSessionsAvailable ? 'CANLI PRATİK · PUAN YOK' : 'REFERANS · SEANS KAPALI')
+            ? (cameraSessionsAvailable
+                ? 'CANLI PRATİK · PUAN YOK'
+                : 'REFERANS · SEANS KAPALI')
             : 'PUAN YOK',
         LessonKind.locked => 'KİLİTLİ',
       });
@@ -1154,8 +1186,9 @@ final class StyleDetailCopy {
       ? _format('{count} MIN', '{count} DK', {'count': value})
       : _pick('LENGTH NOT SET', 'SÜRE BELİRLENMEDİ');
 
-  String blocked(LessonBlock block) =>
-      _pick(StyleStrings.blocked(block), switch (block) {
+  String blocked(LessonBlock block) => _pick(
+      StyleStrings.blocked(block),
+      switch (block) {
         LessonBlock.styleShut =>
           'Bu ders yazılmış, ancak bağlı olduğu stil açık değil. '
               'Gerekçe sayfanın başında.',

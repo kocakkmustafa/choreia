@@ -15,29 +15,44 @@ import 'support/test_catalog.dart';
 
 // Source-only queued qualification; no test result is claimed for this candidate.
 void main() {
-  final source = File('content/latin_fusion_beginner_course.json')
-      .readAsStringSync();
+  final source =
+      File('content/latin_fusion_beginner_course.json').readAsStringSync();
 
-  Future<void> checkHorizontalLedger(WidgetTester tester, Finder pattern, String lang) async {
+  Future<void> checkHorizontalLedger(
+      WidgetTester tester, Finder pattern, String lang) async {
     final table = find.descendant(of: pattern, matching: find.byType(Table));
-    expect(tester.widget<Table>(table).children.every((row) => row.children.length == 5), true);
-    expect(tester.getSize(table).width, greaterThan(tester.view.physicalSize.width));
-    final scroll = find.descendant(of: pattern, matching: find.byType(SingleChildScrollView));
-    expect(tester.widget<SingleChildScrollView>(scroll).scrollDirection, Axis.horizontal);
+    expect(
+        tester
+            .widget<Table>(table)
+            .children
+            .every((row) => row.children.length == 5),
+        true);
+    expect(tester.getSize(table).width,
+        greaterThan(tester.view.physicalSize.width));
+    final scroll = find.descendant(
+        of: pattern, matching: find.byType(SingleChildScrollView));
+    expect(tester.widget<SingleChildScrollView>(scroll).scrollDirection,
+        Axis.horizontal);
     await tester.ensureVisible(scroll);
     await tester.pumpAndSettle();
-    final state = tester.state<ScrollableState>(find.descendant(of: scroll, matching: find.byType(Scrollable)).first);
+    final state = tester.state<ScrollableState>(
+        find.descendant(of: scroll, matching: find.byType(Scrollable)).first);
     final minimum = state.position.minScrollExtent;
     final maximum = state.position.maxScrollExtent;
     expect(minimum, 0);
     expect(maximum, greaterThan(minimum));
     expect(state.position.pixels, closeTo(minimum, .5));
     final viewport = tester.getRect(scroll);
-    final y = (viewport.top + 20).clamp(80.0, tester.view.physicalSize.height - 20).toDouble();
+    final y = (viewport.top + 20)
+        .clamp(80.0, tester.view.physicalSize.height - 20)
+        .toDouble();
     final origin = Offset(viewport.left + 30, y);
-    final rightHeading = find.descendant(of: pattern, matching: find.text(lang == 'tr' ? 'Destek' : 'Support'));
+    final rightHeading = find.descendant(
+        of: pattern, matching: find.text(lang == 'tr' ? 'Destek' : 'Support'));
     expect(rightHeading, findsOneWidget);
-    for (var attempt = 0; attempt < 4 && state.position.pixels < maximum - .5; attempt++) {
+    for (var attempt = 0;
+        attempt < 4 && state.position.pixels < maximum - .5;
+        attempt++) {
       await tester.dragFrom(origin, Offset(-(maximum + viewport.width), 0));
       await tester.pumpAndSettle();
     }
@@ -46,12 +61,15 @@ void main() {
     expect(right.left, greaterThanOrEqualTo(viewport.left - .5));
     expect(right.right, lessThanOrEqualTo(viewport.right + .5));
     // Return by the opposite real gesture, not jumpTo or a changed expectation.
-    for (var attempt = 0; attempt < 4 && state.position.pixels > minimum + .5; attempt++) {
+    for (var attempt = 0;
+        attempt < 4 && state.position.pixels > minimum + .5;
+        attempt++) {
       await tester.dragFrom(origin, Offset(maximum + viewport.width, 0));
       await tester.pumpAndSettle();
     }
     expect(state.position.pixels, closeTo(minimum, .5));
-    final leftHeading = find.descendant(of: pattern, matching: find.text(lang == 'tr' ? 'Sayı' : 'Count'));
+    final leftHeading = find.descendant(
+        of: pattern, matching: find.text(lang == 'tr' ? 'Sayı' : 'Count'));
     expect(leftHeading, findsOneWidget);
     final left = tester.getRect(leftHeading);
     expect(left.left, greaterThanOrEqualTo(viewport.left - .5));
@@ -132,26 +150,28 @@ void main() {
         );
         await tester.pumpAndSettle();
         final stage = find.byKey(const ValueKey('lf_02'));
-        await tester.scrollUntilVisible(stage, 250, maxScrolls: 500, scrollable: find.byType(Scrollable).first);
+        await tester.scrollUntilVisible(stage, 250,
+            maxScrolls: 500, scrollable: find.byType(Scrollable).first);
         await tester.ensureVisible(stage);
         await tester.pumpAndSettle();
         await tester.tap(stage);
         await tester.pumpAndSettle();
         final pattern = find.byKey(const ValueKey('latin.pattern.T'));
-        await tester.scrollUntilVisible(pattern, 250, maxScrolls: 500, scrollable: find.byType(Scrollable).first);
+        await tester.scrollUntilVisible(pattern, 250,
+            maxScrolls: 500, scrollable: find.byType(Scrollable).first);
         await tester.ensureVisible(pattern);
         await tester.pumpAndSettle();
         await checkHorizontalLedger(tester, pattern, lang);
-        final text = LatinFusionCourse.decode(source)
-            .units[1]
-            .copy['answer']![lang]!;
+        final text =
+            LatinFusionCourse.decode(source).units[1].copy['answer']![lang]!;
         final semantics = tester.ensureSemantics();
         try {
           await tester.pump();
           expect(find.text(text, skipOffstage: false), findsNothing);
           expect(find.bySemanticsLabel(text), findsNothing);
           final answer = find.byKey(const ValueKey('latin.answer'));
-          await tester.scrollUntilVisible(answer, 250, maxScrolls: 500, scrollable: find.byType(Scrollable).first);
+          await tester.scrollUntilVisible(answer, 250,
+              maxScrolls: 500, scrollable: find.byType(Scrollable).first);
           await tester.ensureVisible(answer);
           await tester.pumpAndSettle();
           await tester.tap(answer);
@@ -162,13 +182,15 @@ void main() {
           semantics.dispose();
         }
         final last = find.byKey(const ValueKey('lf_08'));
-        await tester.scrollUntilVisible(last, 250, maxScrolls: 500, scrollable: find.byType(Scrollable).first);
+        await tester.scrollUntilVisible(last, 250,
+            maxScrolls: 500, scrollable: find.byType(Scrollable).first);
         await tester.ensureVisible(last);
         await tester.pumpAndSettle();
         await tester.tap(last);
         await tester.pumpAndSettle();
         final practice = find.text(lang == 'tr' ? 'Çalış' : 'Practise').last;
-        await tester.scrollUntilVisible(practice, 250, maxScrolls: 500, scrollable: find.byType(Scrollable).first);
+        await tester.scrollUntilVisible(practice, 250,
+            maxScrolls: 500, scrollable: find.byType(Scrollable).first);
         expect(practice, findsOneWidget);
         expect(find.byType(Checkbox), findsNothing);
         expect(tester.takeException(), isNull);
@@ -184,11 +206,13 @@ void main() {
     // Prime the real bundled asset outside the fake clock. Above 50 KB,
     // AssetBundle.loadString uses compute; starting that read inside a widget
     // frame can leave its isolate waiting on the test's fake clock.
-    final primed = await tester.runAsync(() => rootBundle.loadString('content/latin_fusion_beginner_course.json'));
+    final primed = await tester.runAsync(() =>
+        rootBundle.loadString('content/latin_fusion_beginner_course.json'));
     expect(primed, isNotEmpty);
     await tester.pumpWidget(MaterialApp(home: StyleDetailView(card: card)));
     final link = find.byKey(const Key('style.latinFusionWrittenCourse'));
-    await tester.scrollUntilVisible(link, 200, maxScrolls: 500, scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(link, 200,
+        maxScrolls: 500, scrollable: find.byType(Scrollable).first);
     await tester.tap(link);
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
@@ -201,12 +225,18 @@ void main() {
     expect(card.entry.contentStatus, 'comingSoon');
     expect(tester.takeException(), isNull);
   });
-  testWidgets('Back and unmount while loading discard late Latin content', (tester) async {
+  testWidgets('Back and unmount while loading discard late Latin content',
+      (tester) async {
     final pending = WrittenBundle(source)..pending = Completer<String>();
-    await tester.pumpWidget(MaterialApp(home: Builder(builder: (context) =>
-      Scaffold(body: TextButton(onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => LatinFusionCoursePage(bundle: pending))),
-        child: const Text('Open'))))));
+    await tester.pumpWidget(MaterialApp(
+        home: Builder(
+            builder: (context) => Scaffold(
+                body: TextButton(
+                    onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (_) =>
+                                LatinFusionCoursePage(bundle: pending))),
+                    child: const Text('Open'))))));
     await tester.tap(find.text('Open'));
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
@@ -219,7 +249,8 @@ void main() {
     await tester.pump();
     expect(find.byType(LatinFusionCoursePage), findsNothing);
     final next = WrittenBundle(source)..pending = Completer<String>();
-    await tester.pumpWidget(MaterialApp(home: LatinFusionCoursePage(bundle: next)));
+    await tester
+        .pumpWidget(MaterialApp(home: LatinFusionCoursePage(bundle: next)));
     await tester.pump();
     await tester.pumpWidget(const MaterialApp(home: SizedBox()));
     next.pending!.complete('invalid');

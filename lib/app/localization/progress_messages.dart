@@ -4,22 +4,35 @@ const progressMessages = <String, Map<String, String>>{
   "en": <String, String>{
     "Your practice": "Your practice",
     "Progress": "Progress",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.",
     "Camera-session records": "Camera-session records",
-    "Saved session measurements, not dance-skill grades.": "Saved session measurements, not dance-skill grades.",
+    "Saved session measurements, not dance-skill grades.":
+        "Saved session measurements, not dance-skill grades.",
     "Evaluated": "Evaluated",
-    "Judgements about how you did. Graded lessons only.": "Judgements about how you did. Graded lessons only.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.",
+    "Judgements about how you did. Graded lessons only.":
+        "Judgements about how you did. Graded lessons only.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.",
     "What we cannot check": "What we cannot check",
-    "Named, with the reason. We would rather tell you than leave it out.": "Named, with the reason. We would rather tell you than leave it out.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "Named, with the reason. We would rather tell you than leave it out.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.",
     "—": "—",
     "{minutes} min practised": "{minutes} min practised",
     "{hours}h practised": "{hours}h practised",
@@ -27,36 +40,54 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "{count} cycle read",
     "{count} cycles read": "{count} cycles read",
     "{completed} of {planned} cycles": "{completed} of {planned} cycles",
-    "{completed} of {total} sessions finished": "{completed} of {total} sessions finished",
+    "{completed} of {total} sessions finished":
+        "{completed} of {total} sessions finished",
     "{count} session": "{count} session",
     "{count} sessions": "{count} sessions",
     "Taught, not graded": "Taught, not graded",
     "Taught, not graded — {reason}": "Taught, not graded — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "{count} cycle we could not check (framing or lighting)",
-    "{count} cycles we could not check (framing or lighting)": "{count} cycles we could not check (framing or lighting)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.",
+    "{count} cycle we could not check (framing or lighting)":
+        "{count} cycle we could not check (framing or lighting)",
+    "{count} cycles we could not check (framing or lighting)":
+        "{count} cycles we could not check (framing or lighting)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.",
     "Opens when: {condition}": "Opens when: {condition}",
   },
   "tr": <String, String>{
     "Your practice": "Çalışmaların",
     "Progress": "İlerleme",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "Aşağıdaki oturum geçmişi yalnızca kamera ile çalışmayı kapsar. Yazılı kurs çalışmaları ve öz beyanlar her kursta ayrı tutulur; bu oturum sayılarına dahil edilmez.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "Aşağıdaki oturum geçmişi yalnızca kamera ile çalışmayı kapsar. Yazılı kurs çalışmaları ve öz beyanlar her kursta ayrı tutulur; bu oturum sayılarına dahil edilmez.",
     "Camera-session records": "Kamera oturumu kayıtları",
-    "Saved session measurements, not dance-skill grades.": "Kaydedilmiş oturum ölçümleri; dans becerisi notu değildir.",
+    "Saved session measurements, not dance-skill grades.":
+        "Kaydedilmiş oturum ölçümleri; dans becerisi notu değildir.",
     "Evaluated": "Değerlendirme",
-    "Judgements about how you did. Graded lessons only.": "Performansına ilişkin değerlendirmeler. Yalnızca puanlanan dersler.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "Burada kamera oturumu notu gösterilmez. Bu oturum kayıtlarında değerlendirme sonucu saklanmadığı için kayıtlar puana dönüşmez. Yazılı kurs çalışmaları ve öz beyanlar ayrı öğrenme kayıtlarıdır; ölçülmüş dans becerisi değildir. Notun bulunmaması sıfır aldığın anlamına gelmez.",
+    "Judgements about how you did. Graded lessons only.":
+        "Performansına ilişkin değerlendirmeler. Yalnızca puanlanan dersler.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "Burada kamera oturumu notu gösterilmez. Bu oturum kayıtlarında değerlendirme sonucu saklanmadığı için kayıtlar puana dönüşmez. Yazılı kurs çalışmaları ve öz beyanlar ayrı öğrenme kayıtlarıdır; ölçülmüş dans becerisi değildir. Notun bulunmaması sıfır aldığın anlamına gelmez.",
     "What we cannot check": "Kontrol edemediklerimiz",
-    "Named, with the reason. We would rather tell you than leave it out.": "Nedenleriyle açıkça belirtilir. Eksikleri gizlemek yerine sana anlatırız.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "Kaydedilmiş bir oturum okunamadı. Aşağıdaki sayılar yalnızca okuyabildiğimiz kayıtları kapsar; tam toplam yerine “en az bu kadar” olarak değerlendirilmelidir.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "Kaydedilmiş {count} oturum okunamadı. Aşağıdaki sayılar yalnızca okuyabildiğimiz kayıtları kapsar; tam toplam yerine “en az bu kadar” olarak değerlendirilmelidir.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "Kaydedilmiş bir oturum bulundu ancak okunamadı. Bu, çalışmadığın anlamına gelmez; yalnızca kaydın içeriğini söyleyemiyoruz.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "Kaydedilmiş {count} oturum bulundu ancak hiçbiri okunamadı. Bu, çalışmadığın anlamına gelmez; yalnızca kayıtların içeriğini söyleyemiyoruz.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "Bu oturum geçmişi kaynağı kamera ile çalışmayı kaydetmez. Bu kaynakta gösterilecek veya kaybolacak bir kayıt yoktur. Yazılı kurs öğrenme kayıtları ayrı tutulur.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "Kamera oturumu geçmişini açamadık. Yanlış bir sıfır göstermek yerine, geçmiş okunabilene kadar sayıları göstermiyoruz.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "Bu geçmişte kayıtlı kamera oturumu yok. Yazılı kurs çalışmaların kurslarda kayıtlı olabilir.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "Geçmiş okunamadığı için bu kamera oturumu kayıtlarını gösteremiyoruz. Bu, geçmişin boş olduğu anlamına gelmez; içeriğini doğrulayamıyoruz. Yazılı kurs kayıtları ayrıdır.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "Nedenleriyle açıkça belirtilir. Eksikleri gizlemek yerine sana anlatırız.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "Kaydedilmiş bir oturum okunamadı. Aşağıdaki sayılar yalnızca okuyabildiğimiz kayıtları kapsar; tam toplam yerine “en az bu kadar” olarak değerlendirilmelidir.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "Kaydedilmiş {count} oturum okunamadı. Aşağıdaki sayılar yalnızca okuyabildiğimiz kayıtları kapsar; tam toplam yerine “en az bu kadar” olarak değerlendirilmelidir.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "Kaydedilmiş bir oturum bulundu ancak okunamadı. Bu, çalışmadığın anlamına gelmez; yalnızca kaydın içeriğini söyleyemiyoruz.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "Kaydedilmiş {count} oturum bulundu ancak hiçbiri okunamadı. Bu, çalışmadığın anlamına gelmez; yalnızca kayıtların içeriğini söyleyemiyoruz.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "Bu oturum geçmişi kaynağı kamera ile çalışmayı kaydetmez. Bu kaynakta gösterilecek veya kaybolacak bir kayıt yoktur. Yazılı kurs öğrenme kayıtları ayrı tutulur.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "Kamera oturumu geçmişini açamadık. Yanlış bir sıfır göstermek yerine, geçmiş okunabilene kadar sayıları göstermiyoruz.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "Bu geçmişte kayıtlı kamera oturumu yok. Yazılı kurs çalışmaların kurslarda kayıtlı olabilir.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "Geçmiş okunamadığı için bu kamera oturumu kayıtlarını gösteremiyoruz. Bu, geçmişin boş olduğu anlamına gelmez; içeriğini doğrulayamıyoruz. Yazılı kurs kayıtları ayrıdır.",
     "—": "—",
     "{minutes} min practised": "{minutes} dk çalışıldı",
     "{hours}h practised": "{hours} sa çalışıldı",
@@ -64,36 +95,54 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "{count} döngü okundu",
     "{count} cycles read": "{count} döngü okundu",
     "{completed} of {planned} cycles": "{planned} döngünün {completed} tanesi",
-    "{completed} of {total} sessions finished": "{total} oturumun {completed} tanesi tamamlandı",
+    "{completed} of {total} sessions finished":
+        "{total} oturumun {completed} tanesi tamamlandı",
     "{count} session": "{count} oturum",
     "{count} sessions": "{count} oturum",
     "Taught, not graded": "Öğretilir, puanlanmaz",
     "Taught, not graded — {reason}": "Öğretilir, puanlanmaz — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "Kontrol edilemeyen {count} döngü (kadraj veya aydınlatma)",
-    "{count} cycles we could not check (framing or lighting)": "Kontrol edilemeyen {count} döngü (kadraj veya aydınlatma)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "Bir kontrol daha sonra kullanıma açılırsa o andan itibaren uygulanır; o sırada ölçmediğimiz eski dans çalışmalarına geriye dönük uygulanmaz. Bu geçmiş kaynağı kamera oturumu kaydetmediği için yeniden puanlanmayı bekleyen eski oturumu yoktur. Yazılı kurs kayıtları ayrıdır.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "Bir kontrol daha sonra kullanıma açılırsa o andan itibaren uygulanır. Önceden kaydedilmiş çalışma süresi çalışma kaydı olarak kalır; o sırada ölçmediğimiz bir şeyin puanına dönüştürülmez.",
+    "{count} cycle we could not check (framing or lighting)":
+        "Kontrol edilemeyen {count} döngü (kadraj veya aydınlatma)",
+    "{count} cycles we could not check (framing or lighting)":
+        "Kontrol edilemeyen {count} döngü (kadraj veya aydınlatma)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "Bir kontrol daha sonra kullanıma açılırsa o andan itibaren uygulanır; o sırada ölçmediğimiz eski dans çalışmalarına geriye dönük uygulanmaz. Bu geçmiş kaynağı kamera oturumu kaydetmediği için yeniden puanlanmayı bekleyen eski oturumu yoktur. Yazılı kurs kayıtları ayrıdır.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "Bir kontrol daha sonra kullanıma açılırsa o andan itibaren uygulanır. Önceden kaydedilmiş çalışma süresi çalışma kaydı olarak kalır; o sırada ölçmediğimiz bir şeyin puanına dönüştürülmez.",
     "Opens when: {condition}": "Açılma koşulu: {condition}",
   },
   "es-419": <String, String>{
     "Your practice": "Tu práctica",
     "Progress": "Progreso",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "El historial de abajo incluye solo prácticas con cámara. La práctica de los cursos escritos y las autoevaluaciones se guardan por separado en cada curso y no se incluyen en estos conteos.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "El historial de abajo incluye solo prácticas con cámara. La práctica de los cursos escritos y las autoevaluaciones se guardan por separado en cada curso y no se incluyen en estos conteos.",
     "Camera-session records": "Registros de sesiones con cámara",
-    "Saved session measurements, not dance-skill grades.": "Mediciones de sesiones guardadas, sin calificar tu habilidad para bailar.",
+    "Saved session measurements, not dance-skill grades.":
+        "Mediciones de sesiones guardadas, sin calificar tu habilidad para bailar.",
     "Evaluated": "Evaluación",
-    "Judgements about how you did. Graded lessons only.": "Evaluaciones de tu desempeño. Solo lecciones con calificación.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "Aquí no se muestran calificaciones de sesiones con cámara. Estos registros no guardan un resultado de evaluación, así que no se convierten en puntajes. La práctica de los cursos escritos y las autoevaluaciones son registros de aprendizaje separados, no mediciones de habilidad para bailar. La ausencia de una calificación no equivale a un cero.",
+    "Judgements about how you did. Graded lessons only.":
+        "Evaluaciones de tu desempeño. Solo lecciones con calificación.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "Aquí no se muestran calificaciones de sesiones con cámara. Estos registros no guardan un resultado de evaluación, así que no se convierten en puntajes. La práctica de los cursos escritos y las autoevaluaciones son registros de aprendizaje separados, no mediciones de habilidad para bailar. La ausencia de una calificación no equivale a un cero.",
     "What we cannot check": "Lo que no podemos verificar",
-    "Named, with the reason. We would rather tell you than leave it out.": "Lo indicamos junto con el motivo. Preferimos explicártelo a omitirlo.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "No se pudo leer una sesión guardada. Lo que aparece abajo cuenta solo lo que pudimos leer; considéralo como “al menos esta cantidad”, no como el total completo.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "No se pudieron leer {count} sesiones guardadas. Lo que aparece abajo cuenta solo lo que pudimos leer; considéralo como “al menos esta cantidad”, no como el total completo.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "Encontramos una sesión guardada, pero no pudimos leerla. Eso no significa que no hayas practicado; simplemente no podemos decirte qué contiene.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "Encontramos {count} sesiones guardadas, pero no pudimos leer ninguna. Eso no significa que no hayas practicado; simplemente no podemos decirte qué contienen.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "Esta fuente de historial no guarda prácticas con cámara. No hay registros de esta fuente que mostrar ni perder. Los registros de aprendizaje de los cursos escritos se guardan por separado.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "No pudimos abrir tu historial de sesiones con cámara. Para no mostrar un cero incorrecto, no mostramos números hasta poder leerlo.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "No hay sesiones con cámara guardadas en este historial. Aun así, puede haber prácticas registradas dentro de los cursos escritos.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "No podemos mostrar estos registros de sesiones con cámara porque no se pudo leer el historial. Eso no equivale a un historial vacío: no podemos confirmar su contenido. Los registros de los cursos escritos son independientes.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "Lo indicamos junto con el motivo. Preferimos explicártelo a omitirlo.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "No se pudo leer una sesión guardada. Lo que aparece abajo cuenta solo lo que pudimos leer; considéralo como “al menos esta cantidad”, no como el total completo.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "No se pudieron leer {count} sesiones guardadas. Lo que aparece abajo cuenta solo lo que pudimos leer; considéralo como “al menos esta cantidad”, no como el total completo.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "Encontramos una sesión guardada, pero no pudimos leerla. Eso no significa que no hayas practicado; simplemente no podemos decirte qué contiene.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "Encontramos {count} sesiones guardadas, pero no pudimos leer ninguna. Eso no significa que no hayas practicado; simplemente no podemos decirte qué contienen.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "Esta fuente de historial no guarda prácticas con cámara. No hay registros de esta fuente que mostrar ni perder. Los registros de aprendizaje de los cursos escritos se guardan por separado.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "No pudimos abrir tu historial de sesiones con cámara. Para no mostrar un cero incorrecto, no mostramos números hasta poder leerlo.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "No hay sesiones con cámara guardadas en este historial. Aun así, puede haber prácticas registradas dentro de los cursos escritos.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "No podemos mostrar estos registros de sesiones con cámara porque no se pudo leer el historial. Eso no equivale a un historial vacío: no podemos confirmar su contenido. Los registros de los cursos escritos son independientes.",
     "—": "—",
     "{minutes} min practised": "{minutes} min de práctica",
     "{hours}h practised": "{hours} h de práctica",
@@ -101,36 +150,54 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "{count} ciclo leído",
     "{count} cycles read": "{count} ciclos leídos",
     "{completed} of {planned} cycles": "{completed} de {planned} ciclos",
-    "{completed} of {total} sessions finished": "{completed} de {total} sesiones terminadas",
+    "{completed} of {total} sessions finished":
+        "{completed} de {total} sesiones terminadas",
     "{count} session": "{count} sesión",
     "{count} sessions": "{count} sesiones",
     "Taught, not graded": "Se enseña, sin calificación",
     "Taught, not graded — {reason}": "Se enseña, sin calificación — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "{count} ciclo que no pudimos verificar (encuadre o iluminación)",
-    "{count} cycles we could not check (framing or lighting)": "{count} ciclos que no pudimos verificar (encuadre o iluminación)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "Si una verificación se habilita más adelante, se aplica desde ese momento, nunca de forma retroactiva a una práctica que no medimos en su momento. Esta fuente de historial no guarda sesiones con cámara, así que no hay sesiones anteriores pendientes de volver a calificarse. Los registros de los cursos escritos son independientes.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "Si una verificación se habilita más adelante, se aplica desde ese momento. El tiempo de práctica ya registrado sigue siendo un registro de práctica; no se convierte en un puntaje de algo que no medimos en su momento.",
+    "{count} cycle we could not check (framing or lighting)":
+        "{count} ciclo que no pudimos verificar (encuadre o iluminación)",
+    "{count} cycles we could not check (framing or lighting)":
+        "{count} ciclos que no pudimos verificar (encuadre o iluminación)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "Si una verificación se habilita más adelante, se aplica desde ese momento, nunca de forma retroactiva a una práctica que no medimos en su momento. Esta fuente de historial no guarda sesiones con cámara, así que no hay sesiones anteriores pendientes de volver a calificarse. Los registros de los cursos escritos son independientes.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "Si una verificación se habilita más adelante, se aplica desde ese momento. El tiempo de práctica ya registrado sigue siendo un registro de práctica; no se convierte en un puntaje de algo que no medimos en su momento.",
     "Opens when: {condition}": "Se habilita cuando: {condition}",
   },
   "pt-BR": <String, String>{
     "Your practice": "Sua prática",
     "Progress": "Progresso",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "O histórico abaixo inclui apenas práticas com câmera. As práticas dos cursos escritos e os relatos pessoais ficam separados em cada curso e não entram nestas contagens.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "O histórico abaixo inclui apenas práticas com câmera. As práticas dos cursos escritos e os relatos pessoais ficam separados em cada curso e não entram nestas contagens.",
     "Camera-session records": "Registros de sessões com câmera",
-    "Saved session measurements, not dance-skill grades.": "Medições de sessões salvas, sem avaliar sua habilidade na dança.",
+    "Saved session measurements, not dance-skill grades.":
+        "Medições de sessões salvas, sem avaliar sua habilidade na dança.",
     "Evaluated": "Avaliação",
-    "Judgements about how you did. Graded lessons only.": "Avaliações do seu desempenho. Apenas aulas com avaliação.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "Não são exibidas notas de sessões com câmera aqui. Esses registros não guardam um resultado de avaliação e, por isso, não se transformam em pontuação. A prática dos cursos escritos e os relatos pessoais são registros de aprendizagem separados, não medições da habilidade na dança. A ausência de nota não significa zero.",
+    "Judgements about how you did. Graded lessons only.":
+        "Avaliações do seu desempenho. Apenas aulas com avaliação.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "Não são exibidas notas de sessões com câmera aqui. Esses registros não guardam um resultado de avaliação e, por isso, não se transformam em pontuação. A prática dos cursos escritos e os relatos pessoais são registros de aprendizagem separados, não medições da habilidade na dança. A ausência de nota não significa zero.",
     "What we cannot check": "O que não podemos verificar",
-    "Named, with the reason. We would rather tell you than leave it out.": "Apresentamos cada limite com seu motivo. Preferimos explicar a omitir.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "Não foi possível ler uma sessão salva. As contagens abaixo incluem apenas o que conseguimos ler; considere-as como “pelo menos esta quantidade”, e não como o total completo.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "Não foi possível ler {count} sessões salvas. As contagens abaixo incluem apenas o que conseguimos ler; considere-as como “pelo menos esta quantidade”, e não como o total completo.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "Encontramos uma sessão salva, mas não conseguimos lê-la. Isso não significa que você não praticou; apenas não podemos informar o que há nela.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "Encontramos {count} sessões salvas, mas não conseguimos ler nenhuma delas. Isso não significa que você não praticou; apenas não podemos informar o que há nos registros.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "Esta fonte de histórico não salva práticas com câmera. Não há registros desta fonte para exibir ou perder. Os registros de aprendizagem dos cursos escritos ficam separados.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "Não conseguimos abrir seu histórico de sessões com câmera. Para não exibir um zero incorreto, não mostramos números até conseguir lê-lo.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "Não há sessões com câmera salvas neste histórico. Ainda pode haver práticas registradas nos cursos escritos.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "Não podemos exibir esses registros de sessões com câmera porque não foi possível ler o histórico. Isso não significa que ele esteja vazio; não podemos confirmar seu conteúdo. Os registros dos cursos escritos são separados.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "Apresentamos cada limite com seu motivo. Preferimos explicar a omitir.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "Não foi possível ler uma sessão salva. As contagens abaixo incluem apenas o que conseguimos ler; considere-as como “pelo menos esta quantidade”, e não como o total completo.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "Não foi possível ler {count} sessões salvas. As contagens abaixo incluem apenas o que conseguimos ler; considere-as como “pelo menos esta quantidade”, e não como o total completo.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "Encontramos uma sessão salva, mas não conseguimos lê-la. Isso não significa que você não praticou; apenas não podemos informar o que há nela.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "Encontramos {count} sessões salvas, mas não conseguimos ler nenhuma delas. Isso não significa que você não praticou; apenas não podemos informar o que há nos registros.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "Esta fonte de histórico não salva práticas com câmera. Não há registros desta fonte para exibir ou perder. Os registros de aprendizagem dos cursos escritos ficam separados.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "Não conseguimos abrir seu histórico de sessões com câmera. Para não exibir um zero incorreto, não mostramos números até conseguir lê-lo.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "Não há sessões com câmera salvas neste histórico. Ainda pode haver práticas registradas nos cursos escritos.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "Não podemos exibir esses registros de sessões com câmera porque não foi possível ler o histórico. Isso não significa que ele esteja vazio; não podemos confirmar seu conteúdo. Os registros dos cursos escritos são separados.",
     "—": "—",
     "{minutes} min practised": "{minutes} min de prática",
     "{hours}h practised": "{hours} h de prática",
@@ -138,36 +205,54 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "{count} ciclo lido",
     "{count} cycles read": "{count} ciclos lidos",
     "{completed} of {planned} cycles": "{completed} de {planned} ciclos",
-    "{completed} of {total} sessions finished": "{completed} de {total} sessões concluídas",
+    "{completed} of {total} sessions finished":
+        "{completed} de {total} sessões concluídas",
     "{count} session": "{count} sessão",
     "{count} sessions": "{count} sessões",
     "Taught, not graded": "Ensinado, sem avaliação",
     "Taught, not graded — {reason}": "Ensinado, sem avaliação — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "{count} ciclo que não conseguimos verificar (enquadramento ou iluminação)",
-    "{count} cycles we could not check (framing or lighting)": "{count} ciclos que não conseguimos verificar (enquadramento ou iluminação)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "Se uma verificação for disponibilizada depois, ela passa a valer a partir daquele momento, nunca retroativamente para uma prática que não medimos na época. Esta fonte de histórico não salva sessões com câmera, portanto não há sessões anteriores aguardando uma nova avaliação. Os registros dos cursos escritos são separados.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "Se uma verificação for disponibilizada depois, ela passa a valer a partir daquele momento. O tempo de prática já registrado continua sendo um registro de prática; não é convertido em pontuação de algo que não medimos na época.",
+    "{count} cycle we could not check (framing or lighting)":
+        "{count} ciclo que não conseguimos verificar (enquadramento ou iluminação)",
+    "{count} cycles we could not check (framing or lighting)":
+        "{count} ciclos que não conseguimos verificar (enquadramento ou iluminação)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "Se uma verificação for disponibilizada depois, ela passa a valer a partir daquele momento, nunca retroativamente para uma prática que não medimos na época. Esta fonte de histórico não salva sessões com câmera, portanto não há sessões anteriores aguardando uma nova avaliação. Os registros dos cursos escritos são separados.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "Se uma verificação for disponibilizada depois, ela passa a valer a partir daquele momento. O tempo de prática já registrado continua sendo um registro de prática; não é convertido em pontuação de algo que não medimos na época.",
     "Opens when: {condition}": "Disponível quando: {condition}",
   },
   "de": <String, String>{
     "Your practice": "Dein Training",
     "Progress": "Fortschritt",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "Der folgende Verlauf umfasst nur das Training mit Kamera. Übungen und Selbstauskünfte aus den schriftlichen Kursen werden im jeweiligen Kurs getrennt gespeichert und sind in diesen Zahlen nicht enthalten.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "Der folgende Verlauf umfasst nur das Training mit Kamera. Übungen und Selbstauskünfte aus den schriftlichen Kursen werden im jeweiligen Kurs getrennt gespeichert und sind in diesen Zahlen nicht enthalten.",
     "Camera-session records": "Aufzeichnungen der Kameraeinheiten",
-    "Saved session measurements, not dance-skill grades.": "Gespeicherte Messungen der Einheiten, keine Bewertung deiner Tanzfähigkeiten.",
+    "Saved session measurements, not dance-skill grades.":
+        "Gespeicherte Messungen der Einheiten, keine Bewertung deiner Tanzfähigkeiten.",
     "Evaluated": "Bewertung",
-    "Judgements about how you did. Graded lessons only.": "Bewertungen deiner Ausführung. Nur bewertete Lektionen.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "Hier werden keine Bewertungen von Kameraeinheiten angezeigt. Diese Aufzeichnungen enthalten kein Urteil und werden daher nicht nachträglich zu einer Punktzahl. Übungen aus schriftlichen Kursen und Selbstauskünfte sind getrennte Lernaufzeichnungen, keine Messung deiner Tanzfähigkeiten. Eine fehlende Bewertung ist keine Null.",
+    "Judgements about how you did. Graded lessons only.":
+        "Bewertungen deiner Ausführung. Nur bewertete Lektionen.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "Hier werden keine Bewertungen von Kameraeinheiten angezeigt. Diese Aufzeichnungen enthalten kein Urteil und werden daher nicht nachträglich zu einer Punktzahl. Übungen aus schriftlichen Kursen und Selbstauskünfte sind getrennte Lernaufzeichnungen, keine Messung deiner Tanzfähigkeiten. Eine fehlende Bewertung ist keine Null.",
     "What we cannot check": "Was wir nicht prüfen können",
-    "Named, with the reason. We would rather tell you than leave it out.": "Mit Begründung benannt. Wir erklären dir die Grenzen, statt sie wegzulassen.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "Eine gespeicherte Einheit konnte nicht gelesen werden. Die folgenden Zahlen umfassen nur lesbare Aufzeichnungen. Verstehe sie daher als „mindestens so viel“, nicht als vollständige Summe.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "{count} gespeicherte Einheiten konnten nicht gelesen werden. Die folgenden Zahlen umfassen nur lesbare Aufzeichnungen. Verstehe sie daher als „mindestens so viel“, nicht als vollständige Summe.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "Wir haben eine gespeicherte Einheit gefunden, konnten sie aber nicht lesen. Das heißt nicht, dass du nicht geübt hast. Wir können dir lediglich nicht sagen, was darin steht.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "Wir haben {count} gespeicherte Einheiten gefunden, konnten aber keine davon lesen. Das heißt nicht, dass du nicht geübt hast. Wir können dir lediglich nicht sagen, was darin steht.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "Diese Verlaufsquelle speichert kein Training mit Kamera. Aus dieser Quelle gibt es daher nichts anzuzeigen oder zu verlieren. Lernaufzeichnungen schriftlicher Kurse werden getrennt gespeichert.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "Wir konnten deinen Verlauf der Kameraeinheiten nicht öffnen. Statt eine falsche Null anzuzeigen, zeigen wir keine Zahlen, bis wir ihn lesen können.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "In diesem Verlauf sind keine Kameraeinheiten gespeichert. Übungen aus schriftlichen Kursen können trotzdem in den Kursen aufgezeichnet sein.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "Wir können diese Kameraaufzeichnungen nicht anzeigen, weil der Verlauf nicht gelesen werden konnte. Das ist nicht dasselbe wie ein leerer Verlauf: Sein Inhalt lässt sich nicht bestätigen. Aufzeichnungen schriftlicher Kurse sind getrennt.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "Mit Begründung benannt. Wir erklären dir die Grenzen, statt sie wegzulassen.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "Eine gespeicherte Einheit konnte nicht gelesen werden. Die folgenden Zahlen umfassen nur lesbare Aufzeichnungen. Verstehe sie daher als „mindestens so viel“, nicht als vollständige Summe.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "{count} gespeicherte Einheiten konnten nicht gelesen werden. Die folgenden Zahlen umfassen nur lesbare Aufzeichnungen. Verstehe sie daher als „mindestens so viel“, nicht als vollständige Summe.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "Wir haben eine gespeicherte Einheit gefunden, konnten sie aber nicht lesen. Das heißt nicht, dass du nicht geübt hast. Wir können dir lediglich nicht sagen, was darin steht.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "Wir haben {count} gespeicherte Einheiten gefunden, konnten aber keine davon lesen. Das heißt nicht, dass du nicht geübt hast. Wir können dir lediglich nicht sagen, was darin steht.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "Diese Verlaufsquelle speichert kein Training mit Kamera. Aus dieser Quelle gibt es daher nichts anzuzeigen oder zu verlieren. Lernaufzeichnungen schriftlicher Kurse werden getrennt gespeichert.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "Wir konnten deinen Verlauf der Kameraeinheiten nicht öffnen. Statt eine falsche Null anzuzeigen, zeigen wir keine Zahlen, bis wir ihn lesen können.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "In diesem Verlauf sind keine Kameraeinheiten gespeichert. Übungen aus schriftlichen Kursen können trotzdem in den Kursen aufgezeichnet sein.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "Wir können diese Kameraaufzeichnungen nicht anzeigen, weil der Verlauf nicht gelesen werden konnte. Das ist nicht dasselbe wie ein leerer Verlauf: Sein Inhalt lässt sich nicht bestätigen. Aufzeichnungen schriftlicher Kurse sind getrennt.",
     "—": "—",
     "{minutes} min practised": "{minutes} Min. geübt",
     "{hours}h practised": "{hours} Std. geübt",
@@ -175,36 +260,54 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "{count} Zyklus erfasst",
     "{count} cycles read": "{count} Zyklen erfasst",
     "{completed} of {planned} cycles": "{completed} von {planned} Zyklen",
-    "{completed} of {total} sessions finished": "{completed} von {total} Einheiten abgeschlossen",
+    "{completed} of {total} sessions finished":
+        "{completed} von {total} Einheiten abgeschlossen",
     "{count} session": "{count} Einheit",
     "{count} sessions": "{count} Einheiten",
     "Taught, not graded": "Unterrichtet, nicht bewertet",
     "Taught, not graded — {reason}": "Unterrichtet, nicht bewertet — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "{count} Zyklus konnte nicht geprüft werden (Bildausschnitt oder Beleuchtung)",
-    "{count} cycles we could not check (framing or lighting)": "{count} Zyklen konnten nicht geprüft werden (Bildausschnitt oder Beleuchtung)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "Wird eine Prüfung später verfügbar, gilt sie erst ab diesem Zeitpunkt und niemals rückwirkend für Tanzübungen, die wir damals nicht gemessen haben. Diese Verlaufsquelle speichert keine Kameraeinheiten; es warten daher keine früheren Einheiten auf eine neue Bewertung. Aufzeichnungen schriftlicher Kurse sind getrennt.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "Wird eine Prüfung später verfügbar, gilt sie erst ab diesem Zeitpunkt. Bereits aufgezeichnete Übungszeit bleibt eine Übungsaufzeichnung. Sie wird nicht zu einer Punktzahl für etwas, das wir damals nicht gemessen haben.",
+    "{count} cycle we could not check (framing or lighting)":
+        "{count} Zyklus konnte nicht geprüft werden (Bildausschnitt oder Beleuchtung)",
+    "{count} cycles we could not check (framing or lighting)":
+        "{count} Zyklen konnten nicht geprüft werden (Bildausschnitt oder Beleuchtung)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "Wird eine Prüfung später verfügbar, gilt sie erst ab diesem Zeitpunkt und niemals rückwirkend für Tanzübungen, die wir damals nicht gemessen haben. Diese Verlaufsquelle speichert keine Kameraeinheiten; es warten daher keine früheren Einheiten auf eine neue Bewertung. Aufzeichnungen schriftlicher Kurse sind getrennt.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "Wird eine Prüfung später verfügbar, gilt sie erst ab diesem Zeitpunkt. Bereits aufgezeichnete Übungszeit bleibt eine Übungsaufzeichnung. Sie wird nicht zu einer Punktzahl für etwas, das wir damals nicht gemessen haben.",
     "Opens when: {condition}": "Verfügbar, wenn: {condition}",
   },
   "fr": <String, String>{
     "Your practice": "Votre pratique",
     "Progress": "Progression",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "L’historique ci-dessous concerne uniquement la pratique avec caméra. La pratique des cours écrits et les déclarations personnelles sont conservées séparément dans chaque cours et ne sont pas incluses dans ces décomptes.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "L’historique ci-dessous concerne uniquement la pratique avec caméra. La pratique des cours écrits et les déclarations personnelles sont conservées séparément dans chaque cours et ne sont pas incluses dans ces décomptes.",
     "Camera-session records": "Séances avec caméra enregistrées",
-    "Saved session measurements, not dance-skill grades.": "Des mesures de séances enregistrées, sans notation de votre niveau de danse.",
+    "Saved session measurements, not dance-skill grades.":
+        "Des mesures de séances enregistrées, sans notation de votre niveau de danse.",
     "Evaluated": "Évaluation",
-    "Judgements about how you did. Graded lessons only.": "Des appréciations de votre exécution. Uniquement pour les leçons notées.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "Aucune note de séance avec caméra n’est affichée ici. Ces enregistrements ne conservent aucun jugement et ne deviennent donc jamais un score. La pratique des cours écrits et les déclarations personnelles sont des traces d’apprentissage distinctes, et non une mesure de votre niveau de danse. L’absence de note ne signifie pas zéro.",
+    "Judgements about how you did. Graded lessons only.":
+        "Des appréciations de votre exécution. Uniquement pour les leçons notées.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "Aucune note de séance avec caméra n’est affichée ici. Ces enregistrements ne conservent aucun jugement et ne deviennent donc jamais un score. La pratique des cours écrits et les déclarations personnelles sont des traces d’apprentissage distinctes, et non une mesure de votre niveau de danse. L’absence de note ne signifie pas zéro.",
     "What we cannot check": "Ce que nous ne pouvons pas vérifier",
-    "Named, with the reason. We would rather tell you than leave it out.": "Nous les indiquons avec leur raison. Nous préférons vous les expliquer plutôt que les passer sous silence.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "Une séance enregistrée n’a pas pu être lue. Les chiffres ci-dessous ne comptent que les données lisibles ; considérez-les comme « au moins cette quantité », et non comme un total complet.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "{count} séances enregistrées n’ont pas pu être lues. Les chiffres ci-dessous ne comptent que les données lisibles ; considérez-les comme « au moins cette quantité », et non comme un total complet.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "Nous avons trouvé une séance enregistrée, mais n’avons pas pu la lire. Cela ne veut pas dire que vous n’avez pas pratiqué ; nous ne pouvons simplement pas vous indiquer son contenu.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "Nous avons trouvé {count} séances enregistrées, mais n’avons pu en lire aucune. Cela ne veut pas dire que vous n’avez pas pratiqué ; nous ne pouvons simplement pas vous indiquer leur contenu.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "Cette source d’historique ne conserve pas la pratique avec caméra. Elle ne contient donc aucun enregistrement à afficher ou à perdre. Les traces d’apprentissage des cours écrits sont conservées séparément.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "Nous n’avons pas pu ouvrir votre historique de séances avec caméra. Plutôt que d’afficher un zéro erroné, nous n’affichons aucun chiffre tant que nous ne pouvons pas le lire.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "Aucune séance avec caméra n’est enregistrée dans cet historique. La pratique des cours écrits peut toutefois être enregistrée dans les cours.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "Nous ne pouvons pas afficher ces séances avec caméra, car l’historique n’a pas pu être lu. Cela ne signifie pas qu’il est vide : son contenu ne peut pas être confirmé. Les enregistrements des cours écrits sont distincts.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "Nous les indiquons avec leur raison. Nous préférons vous les expliquer plutôt que les passer sous silence.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "Une séance enregistrée n’a pas pu être lue. Les chiffres ci-dessous ne comptent que les données lisibles ; considérez-les comme « au moins cette quantité », et non comme un total complet.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "{count} séances enregistrées n’ont pas pu être lues. Les chiffres ci-dessous ne comptent que les données lisibles ; considérez-les comme « au moins cette quantité », et non comme un total complet.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "Nous avons trouvé une séance enregistrée, mais n’avons pas pu la lire. Cela ne veut pas dire que vous n’avez pas pratiqué ; nous ne pouvons simplement pas vous indiquer son contenu.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "Nous avons trouvé {count} séances enregistrées, mais n’avons pu en lire aucune. Cela ne veut pas dire que vous n’avez pas pratiqué ; nous ne pouvons simplement pas vous indiquer leur contenu.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "Cette source d’historique ne conserve pas la pratique avec caméra. Elle ne contient donc aucun enregistrement à afficher ou à perdre. Les traces d’apprentissage des cours écrits sont conservées séparément.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "Nous n’avons pas pu ouvrir votre historique de séances avec caméra. Plutôt que d’afficher un zéro erroné, nous n’affichons aucun chiffre tant que nous ne pouvons pas le lire.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "Aucune séance avec caméra n’est enregistrée dans cet historique. La pratique des cours écrits peut toutefois être enregistrée dans les cours.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "Nous ne pouvons pas afficher ces séances avec caméra, car l’historique n’a pas pu être lu. Cela ne signifie pas qu’il est vide : son contenu ne peut pas être confirmé. Les enregistrements des cours écrits sont distincts.",
     "—": "—",
     "{minutes} min practised": "{minutes} min de pratique",
     "{hours}h practised": "{hours} h de pratique",
@@ -212,36 +315,54 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "{count} cycle lu",
     "{count} cycles read": "{count} cycles lus",
     "{completed} of {planned} cycles": "{completed} cycles sur {planned}",
-    "{completed} of {total} sessions finished": "{completed} séances terminées sur {total}",
+    "{completed} of {total} sessions finished":
+        "{completed} séances terminées sur {total}",
     "{count} session": "{count} séance",
     "{count} sessions": "{count} séances",
     "Taught, not graded": "Enseigné, sans notation",
     "Taught, not graded — {reason}": "Enseigné, sans notation — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "{count} cycle non vérifiable (cadrage ou éclairage)",
-    "{count} cycles we could not check (framing or lighting)": "{count} cycles non vérifiables (cadrage ou éclairage)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "Si une vérification devient disponible plus tard, elle s’applique à partir de ce moment, jamais rétroactivement à une pratique que nous ne mesurions pas alors. Cette source d’historique ne conserve aucune séance avec caméra ; aucune séance passée n’attend donc une nouvelle notation. Les enregistrements des cours écrits sont distincts.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "Si une vérification devient disponible plus tard, elle s’applique à partir de ce moment. Le temps de pratique déjà enregistré reste une trace de pratique ; il n’est pas converti en score pour un élément que nous ne mesurions pas alors.",
+    "{count} cycle we could not check (framing or lighting)":
+        "{count} cycle non vérifiable (cadrage ou éclairage)",
+    "{count} cycles we could not check (framing or lighting)":
+        "{count} cycles non vérifiables (cadrage ou éclairage)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "Si une vérification devient disponible plus tard, elle s’applique à partir de ce moment, jamais rétroactivement à une pratique que nous ne mesurions pas alors. Cette source d’historique ne conserve aucune séance avec caméra ; aucune séance passée n’attend donc une nouvelle notation. Les enregistrements des cours écrits sont distincts.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "Si une vérification devient disponible plus tard, elle s’applique à partir de ce moment. Le temps de pratique déjà enregistré reste une trace de pratique ; il n’est pas converti en score pour un élément que nous ne mesurions pas alors.",
     "Opens when: {condition}": "Disponible lorsque : {condition}",
   },
   "ja": <String, String>{
     "Your practice": "練習の記録",
     "Progress": "進捗",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "以下の履歴はカメラを使った練習のみが対象です。文章で学ぶコースの練習や自己申告は各コースに別途保存され、このセッション数には含まれません。",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "以下の履歴はカメラを使った練習のみが対象です。文章で学ぶコースの練習や自己申告は各コースに別途保存され、このセッション数には含まれません。",
     "Camera-session records": "カメラ練習の記録",
-    "Saved session measurements, not dance-skill grades.": "保存された練習の測定値であり、ダンス技能の評価ではありません。",
+    "Saved session measurements, not dance-skill grades.":
+        "保存された練習の測定値であり、ダンス技能の評価ではありません。",
     "Evaluated": "評価",
-    "Judgements about how you did. Graded lessons only.": "取り組み方の評価です。採点対象のレッスンのみが対象です。",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "ここにはカメラ練習の評価点は表示されません。練習記録には判定結果を保存していないため、後から点数に変換されることもありません。文章で学ぶコースの練習や自己申告は別の学習記録であり、測定されたダンス技能ではありません。評価がないことは、0点という意味ではありません。",
+    "Judgements about how you did. Graded lessons only.":
+        "取り組み方の評価です。採点対象のレッスンのみが対象です。",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "ここにはカメラ練習の評価点は表示されません。練習記録には判定結果を保存していないため、後から点数に変換されることもありません。文章で学ぶコースの練習や自己申告は別の学習記録であり、測定されたダンス技能ではありません。評価がないことは、0点という意味ではありません。",
     "What we cannot check": "確認できないこと",
-    "Named, with the reason. We would rather tell you than leave it out.": "理由とともに明示します。省略せず、できないことをお伝えします。",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "保存されたセッションを1件読み取れませんでした。以下は読み取れた記録のみの集計です。全体の合計ではなく「少なくともこれだけ」と受け取ってください。",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "保存されたセッションを{count}件読み取れませんでした。以下は読み取れた記録のみの集計です。全体の合計ではなく「少なくともこれだけ」と受け取ってください。",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "保存されたセッションが1件見つかりましたが、読み取れませんでした。練習していないという意味ではありません。記録の内容をお伝えできない状態です。",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "保存されたセッションが{count}件見つかりましたが、どれも読み取れませんでした。練習していないという意味ではありません。記録の内容をお伝えできない状態です。",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "この履歴元ではカメラ練習を保存しません。そのため、この履歴元には表示する記録も失われる記録もありません。文章で学ぶコースの学習記録は別途保存されます。",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "カメラ練習の履歴を開けませんでした。誤った0を表示しないよう、履歴を読み取れるまで数値は表示しません。",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "この履歴にはカメラ練習の記録がありません。文章で学ぶコースの練習は、各コースに記録されている場合があります。",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "履歴を読み取れないため、カメラ練習の記録を表示できません。履歴が空という意味ではなく、内容を確認できない状態です。文章で学ぶコースの記録は別に保存されています。",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "理由とともに明示します。省略せず、できないことをお伝えします。",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "保存されたセッションを1件読み取れませんでした。以下は読み取れた記録のみの集計です。全体の合計ではなく「少なくともこれだけ」と受け取ってください。",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "保存されたセッションを{count}件読み取れませんでした。以下は読み取れた記録のみの集計です。全体の合計ではなく「少なくともこれだけ」と受け取ってください。",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "保存されたセッションが1件見つかりましたが、読み取れませんでした。練習していないという意味ではありません。記録の内容をお伝えできない状態です。",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "保存されたセッションが{count}件見つかりましたが、どれも読み取れませんでした。練習していないという意味ではありません。記録の内容をお伝えできない状態です。",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "この履歴元ではカメラ練習を保存しません。そのため、この履歴元には表示する記録も失われる記録もありません。文章で学ぶコースの学習記録は別途保存されます。",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "カメラ練習の履歴を開けませんでした。誤った0を表示しないよう、履歴を読み取れるまで数値は表示しません。",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "この履歴にはカメラ練習の記録がありません。文章で学ぶコースの練習は、各コースに記録されている場合があります。",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "履歴を読み取れないため、カメラ練習の記録を表示できません。履歴が空という意味ではなく、内容を確認できない状態です。文章で学ぶコースの記録は別に保存されています。",
     "—": "—",
     "{minutes} min practised": "練習時間：{minutes}分",
     "{hours}h practised": "練習時間：{hours}時間",
@@ -249,52 +370,77 @@ const progressMessages = <String, Map<String, String>>{
     "{count} cycle read": "読み取ったサイクル数：{count}",
     "{count} cycles read": "読み取ったサイクル数：{count}",
     "{completed} of {planned} cycles": "{planned}サイクル中{completed}サイクル",
-    "{completed} of {total} sessions finished": "{total}セッション中{completed}セッション完了",
+    "{completed} of {total} sessions finished":
+        "{total}セッション中{completed}セッション完了",
     "{count} session": "セッション数：{count}",
     "{count} sessions": "セッション数：{count}",
     "Taught, not graded": "指導のみ・採点なし",
     "Taught, not graded — {reason}": "指導のみ・採点なし — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "確認できなかったサイクル数：{count}（画角または照明）",
-    "{count} cycles we could not check (framing or lighting)": "確認できなかったサイクル数：{count}（画角または照明）",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "後から確認機能が使えるようになっても、適用されるのはその時点以降です。当時測定していなかった過去の練習をさかのぼって評価することはありません。この履歴元ではカメラ練習を保存していないため、再評価を待つ過去のセッションもありません。文章で学ぶコースの記録は別です。",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "後から確認機能が使えるようになっても、適用されるのはその時点以降です。すでに記録された練習時間は練習の記録のまま残り、当時測定していなかった内容の点数に変換されることはありません。",
+    "{count} cycle we could not check (framing or lighting)":
+        "確認できなかったサイクル数：{count}（画角または照明）",
+    "{count} cycles we could not check (framing or lighting)":
+        "確認できなかったサイクル数：{count}（画角または照明）",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "後から確認機能が使えるようになっても、適用されるのはその時点以降です。当時測定していなかった過去の練習をさかのぼって評価することはありません。この履歴元ではカメラ練習を保存していないため、再評価を待つ過去のセッションもありません。文章で学ぶコースの記録は別です。",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "後から確認機能が使えるようになっても、適用されるのはその時点以降です。すでに記録された練習時間は練習の記録のまま残り、当時測定していなかった内容の点数に変換されることはありません。",
     "Opens when: {condition}": "利用条件：{condition}",
   },
   "ar": <String, String>{
     "Your practice": "تدريبك",
     "Progress": "التقدم",
-    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.": "يشمل السجل أدناه التدريب بالكاميرا فقط. تُحفظ تدريبات الدورات النصية والتقارير الذاتية بشكل منفصل في كل دورة، ولا تدخل في أعداد الجلسات هذه.",
+    "The session history below covers camera practice only. Written-course practice and self reports are kept separately in each course; they are not included in these session counts.":
+        "يشمل السجل أدناه التدريب بالكاميرا فقط. تُحفظ تدريبات الدورات النصية والتقارير الذاتية بشكل منفصل في كل دورة، ولا تدخل في أعداد الجلسات هذه.",
     "Camera-session records": "سجلات جلسات الكاميرا",
-    "Saved session measurements, not dance-skill grades.": "قياسات الجلسات المحفوظة، وليست درجات لمهارة الرقص.",
+    "Saved session measurements, not dance-skill grades.":
+        "قياسات الجلسات المحفوظة، وليست درجات لمهارة الرقص.",
     "Evaluated": "التقييم",
-    "Judgements about how you did. Graded lessons only.": "تقييمات أدائك. للدروس التي تخضع للتقييم فقط.",
-    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.": "لا تُعرض هنا درجات لجلسات الكاميرا. لا يُحفظ حكم على الأداء في سجلات هذه الجلسات، ولذلك لا تتحول إلى نقاط. تدريبات الدورات النصية والتقارير الذاتية سجلات تعلم منفصلة، وليست قياسًا لمهارة الرقص. غياب الدرجة لا يعني الحصول على صفر.",
+    "Judgements about how you did. Graded lessons only.":
+        "تقييمات أدائك. للدروس التي تخضع للتقييم فقط.",
+    "No camera-session grades are shown here. A verdict is not kept in these session records, so they never turn into a score. Written-course practice and self reports are separate learning records, not measured dance skill. An absent grade is not a zero.":
+        "لا تُعرض هنا درجات لجلسات الكاميرا. لا يُحفظ حكم على الأداء في سجلات هذه الجلسات، ولذلك لا تتحول إلى نقاط. تدريبات الدورات النصية والتقارير الذاتية سجلات تعلم منفصلة، وليست قياسًا لمهارة الرقص. غياب الدرجة لا يعني الحصول على صفر.",
     "What we cannot check": "ما لا يمكننا التحقق منه",
-    "Named, with the reason. We would rather tell you than leave it out.": "نوضح كل ما يتعذر التحقق منه وسببه، بدلًا من إغفاله.",
-    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "تعذرت قراءة جلسة محفوظة واحدة. تشمل الأعداد أدناه ما أمكن قراءته فقط، لذا اعتبرها «على الأقل هذا القدر» وليست إجماليًا كاملًا.",
-    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.": "عدد الجلسات المحفوظة التي تعذرت قراءتها: {count}. تشمل الأعداد أدناه ما أمكن قراءته فقط، لذا اعتبرها «على الأقل هذا القدر» وليست إجماليًا كاملًا.",
-    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.": "عثرنا على جلسة محفوظة واحدة، لكن تعذرت قراءتها. هذا لا يعني أنك لم تتدرب؛ بل لا يمكننا إخبارك بمحتوى السجل.",
-    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.": "عدد الجلسات المحفوظة التي عثرنا عليها: {count}. تعذرت قراءتها جميعًا. هذا لا يعني أنك لم تتدرب؛ بل لا يمكننا إخبارك بمحتوى السجلات.",
-    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.": "لا يحفظ مصدر سجل الجلسات هذا التدريب بالكاميرا، ولذلك لا توجد فيه سجلات لعرضها أو فقدانها. تُحفظ سجلات تعلم الدورات النصية بشكل منفصل.",
-    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.": "تعذر فتح سجل جلسات الكاميرا. لتجنب عرض صفر غير صحيح، لن نعرض أعدادًا حتى نتمكن من قراءة السجل.",
-    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.": "لا توجد جلسات كاميرا محفوظة في هذا السجل. قد تظل تدريبات الدورات النصية مسجلة داخل الدورات.",
-    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.": "لا يمكننا عرض سجلات جلسات الكاميرا هذه لأن قراءة السجل تعذرت. هذا لا يعني أنه فارغ؛ بل لا يمكن تأكيد محتواه. سجلات الدورات النصية منفصلة.",
+    "Named, with the reason. We would rather tell you than leave it out.":
+        "نوضح كل ما يتعذر التحقق منه وسببه، بدلًا من إغفاله.",
+    "One saved session could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "تعذرت قراءة جلسة محفوظة واحدة. تشمل الأعداد أدناه ما أمكن قراءته فقط، لذا اعتبرها «على الأقل هذا القدر» وليست إجماليًا كاملًا.",
+    "{count} saved sessions could not be read back. Everything below counts what we could read, so treat it as \"at least this much\" rather than a full total.":
+        "عدد الجلسات المحفوظة التي تعذرت قراءتها: {count}. تشمل الأعداد أدناه ما أمكن قراءته فقط، لذا اعتبرها «على الأقل هذا القدر» وليست إجماليًا كاملًا.",
+    "We found one saved session but could not read it. That is not the same as you not having practised — we simply cannot tell you what is in it.":
+        "عثرنا على جلسة محفوظة واحدة، لكن تعذرت قراءتها. هذا لا يعني أنك لم تتدرب؛ بل لا يمكننا إخبارك بمحتوى السجل.",
+    "We found {count} saved sessions but could not read any of them. That is not the same as you not having practised — we simply cannot tell you what is in them.":
+        "عدد الجلسات المحفوظة التي عثرنا عليها: {count}. تعذرت قراءتها جميعًا. هذا لا يعني أنك لم تتدرب؛ بل لا يمكننا إخبارك بمحتوى السجلات.",
+    "This session-history source does not save camera practice. There is nothing in this source to show or lose. Written-course learning records are kept separately.":
+        "لا يحفظ مصدر سجل الجلسات هذا التدريب بالكاميرا، ولذلك لا توجد فيه سجلات لعرضها أو فقدانها. تُحفظ سجلات تعلم الدورات النصية بشكل منفصل.",
+    "We could not open your camera-session history. Rather than show you a zero that would be wrong, we are not showing numbers until we can read it.":
+        "تعذر فتح سجل جلسات الكاميرا. لتجنب عرض صفر غير صحيح، لن نعرض أعدادًا حتى نتمكن من قراءة السجل.",
+    "No camera sessions are saved in this history. Written-course practice may still be recorded in the courses.":
+        "لا توجد جلسات كاميرا محفوظة في هذا السجل. قد تظل تدريبات الدورات النصية مسجلة داخل الدورات.",
+    "We cannot show these camera-session records because the history could not be read. That is not the same as an empty history; its contents cannot be confirmed. Written-course records are separate.":
+        "لا يمكننا عرض سجلات جلسات الكاميرا هذه لأن قراءة السجل تعذرت. هذا لا يعني أنه فارغ؛ بل لا يمكن تأكيد محتواه. سجلات الدورات النصية منفصلة.",
     "—": "—",
     "{minutes} min practised": "وقت التدريب — الدقائق: {minutes}",
     "{hours}h practised": "وقت التدريب — الساعات: {hours}",
-    "{hours}h {minutes}m practised": "وقت التدريب — الساعات: {hours}، الدقائق: {minutes}",
+    "{hours}h {minutes}m practised":
+        "وقت التدريب — الساعات: {hours}، الدقائق: {minutes}",
     "{count} cycle read": "عدد الدورات المقروءة: {count}",
     "{count} cycles read": "عدد الدورات المقروءة: {count}",
-    "{completed} of {planned} cycles": "الدورات المقروءة: {completed} من {planned}",
-    "{completed} of {total} sessions finished": "الجلسات المكتملة: {completed} من {total}",
+    "{completed} of {planned} cycles":
+        "الدورات المقروءة: {completed} من {planned}",
+    "{completed} of {total} sessions finished":
+        "الجلسات المكتملة: {completed} من {total}",
     "{count} session": "عدد الجلسات: {count}",
     "{count} sessions": "عدد الجلسات: {count}",
     "Taught, not graded": "يُدرَّس دون تقييم بدرجات",
     "Taught, not graded — {reason}": "يُدرَّس دون تقييم بدرجات — {reason}",
-    "{count} cycle we could not check (framing or lighting)": "عدد الدورات التي تعذر التحقق منها: {count} (بسبب التأطير أو الإضاءة)",
-    "{count} cycles we could not check (framing or lighting)": "عدد الدورات التي تعذر التحقق منها: {count} (بسبب التأطير أو الإضاءة)",
-    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.": "إذا أصبح فحص ما متاحًا لاحقًا، فإنه يسري من ذلك الوقت فقط، ولا يُطبَّق بأثر رجعي على رقص لم نقسه حينها. لا يحفظ مصدر السجل هذا جلسات كاميرا، لذا ليست فيه جلسات سابقة تنتظر إعادة التقييم. سجلات الدورات النصية منفصلة.",
-    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.": "إذا أصبح فحص ما متاحًا لاحقًا، فإنه يسري من ذلك الوقت. تظل مدة التدريب المسجلة سابقًا سجلًا للتدريب، ولا تُحوَّل إلى نقاط لشيء لم نقسه حينها.",
+    "{count} cycle we could not check (framing or lighting)":
+        "عدد الدورات التي تعذر التحقق منها: {count} (بسبب التأطير أو الإضاءة)",
+    "{count} cycles we could not check (framing or lighting)":
+        "عدد الدورات التي تعذر التحقق منها: {count} (بسبب التأطير أو الإضاءة)",
+    "When a check opens up later, it applies from that point on — never backwards over dancing we were not measuring at the time. This history source saves no camera sessions, so it has no past sessions waiting to be re-scored. Written-course records are separate.":
+        "إذا أصبح فحص ما متاحًا لاحقًا، فإنه يسري من ذلك الوقت فقط، ولا يُطبَّق بأثر رجعي على رقص لم نقسه حينها. لا يحفظ مصدر السجل هذا جلسات كاميرا، لذا ليست فيه جلسات سابقة تنتظر إعادة التقييم. سجلات الدورات النصية منفصلة.",
+    "When a check opens up later, it applies from that point on. Practice time already recorded stays a record of practice — it is not converted into a score for something we were not measuring at the time.":
+        "إذا أصبح فحص ما متاحًا لاحقًا، فإنه يسري من ذلك الوقت. تظل مدة التدريب المسجلة سابقًا سجلًا للتدريب، ولا تُحوَّل إلى نقاط لشيء لم نقسه حينها.",
     "Opens when: {condition}": "شرط الإتاحة: {condition}",
   },
 };

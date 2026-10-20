@@ -118,7 +118,8 @@ void main() {
       await tester.pumpWidget(_screen(locale));
       await tester.pumpAndSettle();
       expect(find.text(messages['Progress']!), findsOneWidget);
-      expect(find.text(messages[ProgressStrings.historyScope]!), findsOneWidget);
+      expect(
+          find.text(messages[ProgressStrings.historyScope]!), findsOneWidget);
       expect(
           Directionality.of(
               tester.element(find.byKey(ProgressView.historyScopeKey))),
@@ -128,7 +129,8 @@ void main() {
       await tester.scrollUntilVisible(
           find.byKey(ProgressView.emptyReasonKey), 250,
           scrollable: find.byType(Scrollable).first);
-      expect(find.text(messages[ProgressStrings.emptyHistory]!), findsOneWidget);
+      expect(
+          find.text(messages[ProgressStrings.emptyHistory]!), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
   }
@@ -160,8 +162,9 @@ class _ProgressMessagesDelegate extends LocalizationsDelegate<ChoreiaMessages> {
   bool isSupported(Locale locale) => true;
 
   @override
-  Future<ChoreiaMessages> load(Locale locale) => SynchronousFuture(
-      ChoreiaMessages(ui: progressMessages[ChoreiaLocaleController.tag(locale)]!));
+  Future<ChoreiaMessages> load(Locale locale) =>
+      SynchronousFuture(ChoreiaMessages(
+          ui: progressMessages[ChoreiaLocaleController.tag(locale)]!));
 
   @override
   bool shouldReload(_ProgressMessagesDelegate old) => false;

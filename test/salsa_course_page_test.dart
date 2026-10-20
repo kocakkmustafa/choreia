@@ -203,7 +203,8 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.text('1 / 48 self-reported complete'));
-    expect(find.text('Lessons opened: 1 · Lessons practised: 1'), findsOneWidget);
+    expect(
+        find.text('Lessons opened: 1 · Lessons practised: 1'), findsOneWidget);
     expect(find.byKey(const Key('salsa.weeklyPractice')), findsOneWidget);
     expect(
         find.descendant(
@@ -402,7 +403,8 @@ void main() {
     file.writeAsStringSync(old);
     await pumpApp(tester, SalsaCoursePage(env: env));
     await loaded(tester, find.text('1 / 48 self-reported complete'));
-    expect(find.text('Lessons opened: 1 · Lessons practised: 1'), findsOneWidget);
+    expect(
+        find.text('Lessons opened: 1 · Lessons practised: 1'), findsOneWidget);
     expect(file.readAsStringSync(), old);
     expect(tester.takeException(), isNull);
   });
@@ -514,15 +516,19 @@ void main() {
     await tester.tap(find.byKey(const Key('salsa.continue')));
     await loaded(tester, find.byKey(const ValueKey('salsa.lessonBody.so_01')));
     await tapVisible(tester, const Key('salsa.option.rhythmOnly'));
-    final journal = File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}');
+    final journal =
+        File('${temp.path}/${SalsaProgressStore.fileNameFor(alice)}');
     final before = journal.readAsBytesSync();
     final obstruction = Directory('${journal.path}.tmp')..createSync();
     await tapVisible(tester, const Key('salsa.savePractice'));
     await loaded(tester, find.byKey(const Key('salsa.saveError')));
     expect(journal.readAsBytesSync(), before);
     expect(find.byKey(const Key('salsa.saved')), findsNothing);
-    expect(tester.widget<FilledButton>(find.byKey(const Key('salsa.complete')))
-        .onPressed, isNull);
+    expect(
+        tester
+            .widget<FilledButton>(find.byKey(const Key('salsa.complete')))
+            .onPressed,
+        isNull);
 
     // Remove only the obstruction created by this test, then retry in place.
     obstruction.deleteSync();
@@ -530,8 +536,8 @@ void main() {
     await loaded(tester, find.text('Practice saved · save another attempt'));
     expect(find.byKey(const Key('salsa.saveError')), findsNothing);
     final raw = jsonDecode(journal.readAsStringSync()) as Map<String, dynamic>;
-    expect((raw['events'] as List).map((e) => e['kind']),
-        ['viewed', 'practised']);
+    expect(
+        (raw['events'] as List).map((e) => e['kind']), ['viewed', 'practised']);
     expect((raw['events'] as List).last['option'], 'rhythmOnly');
     await tester.pageBack();
     await loaded(tester, find.text('Lessons opened: 1 · Lessons practised: 1'));

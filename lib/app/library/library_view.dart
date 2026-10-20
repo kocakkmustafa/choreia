@@ -54,23 +54,29 @@ class _LibraryViewState extends State<LibraryView> {
   bool get _tr => UiLanguage.isTurkish(context);
 
   String _text(String value) => UiLanguage.text(context, en: value, tr: value);
-  String _pair(String en, String tr) => UiLanguage.text(context, en: en, tr: tr);
+  String _pair(String en, String tr) =>
+      UiLanguage.text(context, en: en, tr: tr);
 
   String get _cameraNotice => _pair(
       LibraryStrings.sessionNotice(widget.cameraSessionsAvailable),
-      LibraryStrings.sessionNotice(widget.cameraSessionsAvailable, turkish: true));
+      LibraryStrings.sessionNotice(widget.cameraSessionsAvailable,
+          turkish: true));
 
   String _sectionNote(StyleBadge badge) => switch (badge) {
-    StyleBadge.scored || StyleBadge.openUngraded =>
-      '${_pair('Read the written explanations and recorded references.', 'Yazılı açıklamaları ve kayıtlı referansları oku.')} $_cameraNotice',
-    StyleBadge.builtButGated =>
-      '${_pair('Reference notes are written; this style still has incomplete content checks.', 'Referans notları yazılmış; bu stilin içerik kontrolleri tamamlanmamış.')} $_cameraNotice',
-    _ => _pair(LibraryStrings.sectionNote(badge), LibraryStrings.sectionNoteTr(badge)),
-  };
+        StyleBadge.scored ||
+        StyleBadge.openUngraded =>
+          '${_pair('Read the written explanations and recorded references.', 'Yazılı açıklamaları ve kayıtlı referansları oku.')} $_cameraNotice',
+        StyleBadge.builtButGated =>
+          '${_pair('Reference notes are written; this style still has incomplete content checks.', 'Referans notları yazılmış; bu stilin içerik kontrolleri tamamlanmamış.')} $_cameraNotice',
+        _ => _pair(LibraryStrings.sectionNote(badge),
+            LibraryStrings.sectionNoteTr(badge)),
+      };
 
   String _lessonLine(StyleCard card) {
-    final startable = card.offers(widget.library.runnableSteps)
-        .where((offer) => offer.canStart).length;
+    final startable = card
+        .offers(widget.library.runnableSteps)
+        .where((offer) => offer.canStart)
+        .length;
     if (WrittenCourseLink.supports(card.entry.id)) {
       return widget.cameraSessionsAvailable
           ? UiLanguage.format(context,
@@ -144,7 +150,8 @@ class _LibraryViewState extends State<LibraryView> {
                   child: IconButton(
                     key: const Key('study-review-entry'),
                     padding: EdgeInsets.zero,
-                    tooltip: _pair('Written recall and review', 'Yazılı hatırlama ve değerlendirme'),
+                    tooltip: _pair('Written recall and review',
+                        'Yazılı hatırlama ve değerlendirme'),
                     icon: const Icon(Icons.menu_book_outlined, size: 20),
                     onPressed: () => Navigator.of(context).push<void>(
                       MaterialPageRoute<void>(
@@ -172,7 +179,9 @@ class _LibraryViewState extends State<LibraryView> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    _pair('Self-guided lessons are available. Written progress does not verify movement skill.', 'Öz denetimli dersler açık. Yazılı ilerleme, hareket becerisi doğrulaması değildir.'),
+                    _pair(
+                        'Self-guided lessons are available. Written progress does not verify movement skill.',
+                        'Öz denetimli dersler açık. Yazılı ilerleme, hareket becerisi doğrulaması değildir.'),
                     style: ChoreiaType.body(size: 12.5),
                   ),
                   const SizedBox(height: 12),
@@ -221,8 +230,10 @@ class _LibraryViewState extends State<LibraryView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              UiLanguage.format(context, en: '{count} styles are in the catalogue.',
-                  tr: 'Katalogda {count} dans stili var.', values: {'count': t.total}),
+              UiLanguage.format(context,
+                  en: '{count} styles are in the catalogue.',
+                  tr: 'Katalogda {count} dans stili var.',
+                  values: {'count': t.total}),
               style:
                   ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.85)),
             ),
@@ -457,8 +468,9 @@ class _LibraryViewState extends State<LibraryView> {
   /// owns this copy and is tested against leaking technical text.
   String? _reason(StyleCard c) {
     final source = StyleStatusCopy.reason(c, turkish: false);
-    return source == null ? null : _pair(source,
-        StyleStatusCopy.reason(c, turkish: true) ?? source);
+    return source == null
+        ? null
+        : _pair(source, StyleStatusCopy.reason(c, turkish: true) ?? source);
   }
 
   Color _tone(StyleBadge b) => badgeTone(b);
@@ -512,14 +524,13 @@ abstract final class LibraryStrings {
       'Katalogda ${t.total} dans stili var.';
 
   // Content readiness never implies an accessible camera session.
-  static String sessionNotice(bool available, {bool turkish = false}) =>
-      turkish
-          ? (available
-              ? 'Kamera seansları cihaz izni ve erişim kontrolü gerektirir. Puansız canlı pratik seanslarına puan verilmez.'
-              : 'Bu sürümde kamera çalışması ve puanlama kapalı. Referanslar oynatılabilir bir önizleme değildir.')
-          : (available
-              ? 'Camera sessions require device permission and access checks. Demo-only live practice is not scored.'
-              : 'Camera practice and scoring are unavailable in this release. References are not a playable preview.');
+  static String sessionNotice(bool available, {bool turkish = false}) => turkish
+      ? (available
+          ? 'Kamera seansları cihaz izni ve erişim kontrolü gerektirir. Puansız canlı pratik seanslarına puan verilmez.'
+          : 'Bu sürümde kamera çalışması ve puanlama kapalı. Referanslar oynatılabilir bir önizleme değildir.')
+      : (available
+          ? 'Camera sessions require device permission and access checks. Demo-only live practice is not scored.'
+          : 'Camera practice and scoring are unavailable in this release. References are not a playable preview.');
 
   static String availabilityLine(LibraryTally t,
           {bool cameraSessionsAvailable = false}) =>
@@ -574,8 +585,10 @@ abstract final class LibraryStrings {
       };
 
   static String sectionNote(StyleBadge b,
-          {bool cameraSessionsAvailable = false}) => switch (b) {
-        StyleBadge.scored || StyleBadge.openUngraded =>
+          {bool cameraSessionsAvailable = false}) =>
+      switch (b) {
+        StyleBadge.scored ||
+        StyleBadge.openUngraded =>
           'Read the written explanations and recorded references. ${sessionNotice(cameraSessionsAvailable)}',
         StyleBadge.builtButGated =>
           'Reference notes are written; this style still has incomplete content checks. ${sessionNotice(cameraSessionsAvailable)}',
@@ -588,8 +601,10 @@ abstract final class LibraryStrings {
       };
 
   static String sectionNoteTr(StyleBadge b,
-          {bool cameraSessionsAvailable = false}) => switch (b) {
-        StyleBadge.scored || StyleBadge.openUngraded =>
+          {bool cameraSessionsAvailable = false}) =>
+      switch (b) {
+        StyleBadge.scored ||
+        StyleBadge.openUngraded =>
           'Yazılı açıklamaları ve kayıtlı referansları oku. ${sessionNotice(cameraSessionsAvailable, turkish: true)}',
         StyleBadge.builtButGated =>
           'Referans notları yazılmış; bu stilin içerik kontrolleri tamamlanmamış. ${sessionNotice(cameraSessionsAvailable, turkish: true)}',

@@ -50,7 +50,8 @@ void main() {
 
     expect(find.text('KAMERA REFERANSLARI'), findsOneWidget);
     expect(find.text('Hip-Hop Temelleri'), findsWidgets);
-    expect(find.textContaining('kamera çalışması ve puanlama kapalı'), findsOneWidget);
+    expect(find.textContaining('kamera çalışması ve puanlama kapalı'),
+        findsOneWidget);
     expect(find.textContaining('Hip-hop dansının temelindeki parti dansı'),
         findsOneWidget);
     expect(find.textContaining('Siyah Amerikalı gençler'), findsOneWidget);
@@ -64,11 +65,13 @@ void main() {
         findsOneWidget);
     await bringIntoView(tester, find.text('Kamera seansı referans dersleri'));
     expect(find.text('Kamera seansı referans dersleri'), findsOneWidget);
-    final unavailable = find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce'));
+    final unavailable =
+        find.byKey(StyleDetailView.sessionUnavailableKey('hh_l1_bounce'));
     await bringIntoView(tester, unavailable);
     expect(unavailable, findsOneWidget);
     expect(find.text('REFERANS · SEANS KAPALI'), findsOneWidget);
-    expect(find.textContaining('Bu sürümde kamera pratiği kullanılamıyor'), findsOneWidget);
+    expect(find.textContaining('Bu sürümde kamera pratiği kullanılamıyor'),
+        findsOneWidget);
     expect(find.text('Kamera pratiğini başlat'), findsNothing);
     expect(find.text('The Bounce (puanlanmıyor)'), findsOneWidget);
     expect(find.textContaining('Bu adımı yapan üç eğitmeni ölçtük'),

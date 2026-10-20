@@ -67,8 +67,8 @@ void main() {
             supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             home: ProfileView(
-          accountPageBuilder: configured ? (_) => const SizedBox() : null,
-        )));
+              accountPageBuilder: configured ? (_) => const SizedBox() : null,
+            )));
         expect(find.text(language == 'tr' ? 'Lisanslar' : 'Licenses'),
             findsOneWidget);
         await tester.runAsync(() async {

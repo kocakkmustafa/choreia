@@ -38,8 +38,8 @@ class SalsaSessionPreparation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String t(String en, String tr) => UiLanguage.pair(context,
-        turkish: turkish, en: en, tr: tr);
+    String t(String en, String tr) =>
+        UiLanguage.pair(context, turkish: turkish, en: en, tr: tr);
     final steps = [
       t('Clear space; check that shoes and floor neither catch nor slip.',
           'Alanı boşalt; ayakkabı ve zeminin ne takıldığını ne kaydığını kontrol et.'),

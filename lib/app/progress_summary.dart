@@ -133,8 +133,8 @@ enum HistoryFidelity {
 }
 
 final class HistoryIntegrity {
-  const HistoryIntegrity._(this.fidelity, this.unreadableRecords,
-      this.readableRecords);
+  const HistoryIntegrity._(
+      this.fidelity, this.unreadableRecords, this.readableRecords);
 
   /// The store opened. [unreadable] comes from the core; [readable] is what
   /// this reading actually got, and both are needed because "some of it" and
@@ -219,10 +219,10 @@ final class HistoryIntegrity {
 
   String? noteFor({ProgressMessageFormatter? format}) => switch (fidelity) {
         HistoryFidelity.ok => null,
-        HistoryFidelity.unavailable =>
-          _progressMessage(ProgressStrings.historyUnavailable, const {}, format),
-        HistoryFidelity.notRecorded =>
-          _progressMessage(ProgressStrings.historyNotRecorded, const {}, format),
+        HistoryFidelity.unavailable => _progressMessage(
+            ProgressStrings.historyUnavailable, const {}, format),
+        HistoryFidelity.notRecorded => _progressMessage(
+            ProgressStrings.historyNotRecorded, const {}, format),
         // "SOME of it" and "NONE of it" are separate sentences on purpose.
         // Collapsing them would let "your totals are a floor" appear above a
         // screen whose floor is zero — technically true, and useless.
@@ -304,21 +304,24 @@ final class ProgressSummary {
   /// that is not the point of the sentence.
   static String retroactiveCreditNote(HistoryFidelity fidelity,
           {ProgressMessageFormatter? format}) =>
-      _progressMessage(switch (fidelity) {
-        HistoryFidelity.notRecorded =>
-          'When a check opens up later, it applies from that point on — never '
-              'backwards over dancing we were not measuring at the time. '
-              'This history source saves no camera sessions, so it has no '
-              'past sessions waiting to be re-scored. Written-course records '
-              'are separate.',
-        HistoryFidelity.ok ||
-        HistoryFidelity.partial ||
-        HistoryFidelity.unavailable =>
-          'When a check opens up later, it applies from that point on. '
-              'Practice time already recorded stays a record of practice — it '
-              'is not converted into a score for something we were not '
-              'measuring at the time.',
-      }, const {}, format);
+      _progressMessage(
+          switch (fidelity) {
+            HistoryFidelity.notRecorded =>
+              'When a check opens up later, it applies from that point on — never '
+                  'backwards over dancing we were not measuring at the time. '
+                  'This history source saves no camera sessions, so it has no '
+                  'past sessions waiting to be re-scored. Written-course records '
+                  'are separate.',
+            HistoryFidelity.ok ||
+            HistoryFidelity.partial ||
+            HistoryFidelity.unavailable =>
+              'When a check opens up later, it applies from that point on. '
+                  'Practice time already recorded stays a record of practice — it '
+                  'is not converted into a score for something we were not '
+                  'measuring at the time.',
+          },
+          const {},
+          format);
 
   factory ProgressSummary.build({
     required List<SessionRecord> history,
@@ -347,7 +350,8 @@ final class ProgressSummary {
             ? ChoreiaLessonClass.demoOnly
             : ChoreiaLessonClass.scored,
         sessions: rows.length,
-        workedSeconds: rows.fold(0, (int a, SessionRecord r) => a + r.workedSeconds),
+        workedSeconds:
+            rows.fold(0, (int a, SessionRecord r) => a + r.workedSeconds),
         cyclesCompleted:
             rows.fold(0, (int a, SessionRecord r) => a + r.unitsCompleted),
         plannedCycles:
@@ -454,13 +458,14 @@ abstract final class ProgressStrings {
   /// number on that screen was a confident understatement.
   static String historyPartial(int unreadable,
           {ProgressMessageFormatter? format}) =>
-      _progressMessage(unreadable == 1
-      ? 'One saved session could not be read back. Everything below counts '
-          'what we could read, so treat it as "at least this much" rather '
-          'than a full total.'
-      : '{count} saved sessions could not be read back. Everything below '
-          'counts what we could read, so treat it as "at least this much" '
-          'rather than a full total.',
+      _progressMessage(
+          unreadable == 1
+              ? 'One saved session could not be read back. Everything below counts '
+                  'what we could read, so treat it as "at least this much" rather '
+                  'than a full total.'
+              : '{count} saved sessions could not be read back. Everything below '
+                  'counts what we could read, so treat it as "at least this much" '
+                  'rather than a full total.',
           unreadable == 1 ? const <String, Object>{} : {'count': unreadable},
           format);
 
@@ -472,13 +477,14 @@ abstract final class ProgressStrings {
   /// just cannot read it back.
   static String historyNoneReadable(int unreadable,
           {ProgressMessageFormatter? format}) =>
-      _progressMessage(unreadable == 1
-      ? 'We found one saved session but could not read it. That is not the '
-          'same as you not having practised — we simply cannot tell you '
-          'what is in it.'
-      : 'We found {count} saved sessions but could not read any of '
-          'them. That is not the same as you not having practised — we '
-          'simply cannot tell you what is in them.',
+      _progressMessage(
+          unreadable == 1
+              ? 'We found one saved session but could not read it. That is not the '
+                  'same as you not having practised — we simply cannot tell you '
+                  'what is in it.'
+              : 'We found {count} saved sessions but could not read any of '
+                  'them. That is not the same as you not having practised — we '
+                  'simply cannot tell you what is in them.',
           unreadable == 1 ? const <String, Object>{} : {'count': unreadable},
           format);
 
@@ -520,7 +526,8 @@ abstract final class ProgressStrings {
   static String duration(int seconds, {ProgressMessageFormatter? format}) {
     final int m = seconds ~/ 60;
     if (m < 60) {
-      return _progressMessage('{minutes} min practised', {'minutes': m}, format);
+      return _progressMessage(
+          '{minutes} min practised', {'minutes': m}, format);
     }
     final int h = m ~/ 60;
     final int rem = m % 60;
@@ -547,7 +554,8 @@ abstract final class ProgressStrings {
       planned <= 0
           ? _progressMessage(
               completed == 1 ? '{count} cycle read' : '{count} cycles read',
-              {'count': completed}, format)
+              {'count': completed},
+              format)
           : _progressMessage('{completed} of {planned} cycles',
               {'completed': completed, 'planned': planned}, format);
 
@@ -564,8 +572,10 @@ abstract final class ProgressStrings {
       anyTarget
           ? _progressMessage('{completed} of {total} sessions finished',
               {'completed': completed, 'total': total}, format)
-          : _progressMessage(total == 1 ? '{count} session' : '{count} sessions',
-              {'count': total}, format);
+          : _progressMessage(
+              total == 1 ? '{count} session' : '{count} sessions',
+              {'count': total},
+              format);
 
   static String demoOnlyMark(String? reason,
           {ProgressMessageFormatter? format}) =>
@@ -581,8 +591,10 @@ abstract final class ProgressStrings {
   /// silence the core's `unmeasuredUnits` field exists to prevent. Phrased so
   /// the fault is the product's, not the dancer's.
   static String unmeasured(int cycles, {ProgressMessageFormatter? format}) =>
-      _progressMessage(cycles == 1
-          ? '{count} cycle we could not check (framing or lighting)'
-          : '{count} cycles we could not check (framing or lighting)',
-          {'count': cycles}, format);
+      _progressMessage(
+          cycles == 1
+              ? '{count} cycle we could not check (framing or lighting)'
+              : '{count} cycles we could not check (framing or lighting)',
+          {'count': cycles},
+          format);
 }

@@ -128,23 +128,28 @@ void main() {
     await tester.pump();
     final widget = tester.widget(finder);
     if (widget is FilledButton) {
-      expect(widget.onPressed, isNotNull, reason: 'Requested action $key must be enabled before dispatch; save error=${find.byKey(const Key("salsa.saveError")).evaluate().isNotEmpty}');
+      expect(widget.onPressed, isNotNull,
+          reason:
+              'Requested action $key must be enabled before dispatch; save error=${find.byKey(const Key("salsa.saveError")).evaluate().isNotEmpty}');
     }
     await tester.tap(finder);
     await drain(tester);
     if (widget is CheckboxListTile) {
       expect(tester.widget<CheckboxListTile>(finder).value, !widget.value!,
-          reason: 'Each dispatched self-check must toggle its actual selected value.');
+          reason:
+              'Each dispatched self-check must toggle its actual selected value.');
     }
     if (key == const Key('salsa.complete')) {
       final progress = await readSettled(tester);
-      expect(progress.lessonIds(course, SalsaEvidence.selfReportedComplete), isNotEmpty);
+      expect(progress.lessonIds(course, SalsaEvidence.selfReportedComplete),
+          isNotEmpty);
       await tester.pump();
     }
     if (key == const Key('salsa.savePractice')) {
       final progress = await readSettled(tester);
       expect(progress.lessonIds(course, SalsaEvidence.practised), isNotEmpty,
-          reason: 'Enabled practice action must persist before checking completion.');
+          reason:
+              'Enabled practice action must persist before checking completion.');
     }
   }
 
@@ -241,8 +246,8 @@ void main() {
       }
       await tap(tester, const Key('salsa.complete'));
       final progress = await readSettled(tester);
-      expect(progress.lessonIds(course, SalsaEvidence.selfReportedComplete),
-          {id});
+      expect(
+          progress.lessonIds(course, SalsaEvidence.selfReportedComplete), {id});
       await tester.pumpWidget(const SizedBox());
     });
   }
@@ -345,7 +350,8 @@ void main() {
             nowForWeeklyPractice: () => now)));
     await drain(tester);
     expect(find.text('0 / 48 self-reported complete'), findsOneWidget);
-    expect(find.text('Lessons opened: 0 · Lessons practised: 0'), findsOneWidget);
+    expect(
+        find.text('Lessons opened: 0 · Lessons practised: 0'), findsOneWidget);
     expect(find.text('Saved attempts: 0 · Lessons with attempts: 0'),
         findsNWidgets(4));
     await tester.scrollUntilVisible(find.text('Practice history'), 600,

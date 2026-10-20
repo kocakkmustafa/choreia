@@ -15,8 +15,11 @@ final class ReadDeadline {
       timer.cancel();
       _active.remove(timer);
     }
-    timer = Timer(duration, () => finishError(
-        TimeoutException('The local read did not answer in time.', duration)));
+
+    timer = Timer(
+        duration,
+        () => finishError(TimeoutException(
+            'The local read did not answer in time.', duration)));
     _active[timer] = () => finishError(const ReadRetired());
     work.then((value) {
       timer.cancel();

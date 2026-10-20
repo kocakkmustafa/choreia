@@ -7,7 +7,8 @@ class LineDanceDirectionDiagram extends StatelessWidget {
   final bool turkish;
   @override
   Widget build(BuildContext context) => Semantics(
-        label: UiLanguage.pair(context, turkish: turkish,
+        label: UiLanguage.pair(context,
+            turkish: turkish,
             en: 'Top-down direction map: front upward, your own right on the right, left on the left. Not a movement demonstration.',
             tr: 'Üstten yön haritası: ön yukarı, kendi sağın sağda, solun solda. Hareket gösterimi değildir.'),
         image: true,
@@ -15,13 +16,16 @@ class LineDanceDirectionDiagram extends StatelessWidget {
             height: 160,
             width: double.infinity,
             child: CustomPaint(
-                painter: _DirectionPainter(
-                    {
-                      'front': UiLanguage.pair(context, turkish: turkish, en: 'FRONT', tr: 'ÖN'),
-                      'back': UiLanguage.pair(context, turkish: turkish, en: 'BACK', tr: 'ARKA'),
-                      'left': UiLanguage.pair(context, turkish: turkish, en: 'LEFT', tr: 'SOL'),
-                      'right': UiLanguage.pair(context, turkish: turkish, en: 'RIGHT', tr: 'SAĞ'),
-                    }, Directionality.of(context),
+                painter: _DirectionPainter({
+              'front': UiLanguage.pair(context,
+                  turkish: turkish, en: 'FRONT', tr: 'ÖN'),
+              'back': UiLanguage.pair(context,
+                  turkish: turkish, en: 'BACK', tr: 'ARKA'),
+              'left': UiLanguage.pair(context,
+                  turkish: turkish, en: 'LEFT', tr: 'SOL'),
+              'right': UiLanguage.pair(context,
+                  turkish: turkish, en: 'RIGHT', tr: 'SAĞ'),
+            }, Directionality.of(context),
                     Theme.of(context).colorScheme.onSurface))),
       );
 }
@@ -81,8 +85,10 @@ class _DirectionPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _DirectionPainter oldDelegate) =>
-      labels.entries.any((entry) => oldDelegate.labels[entry.key] != entry.value) ||
-      oldDelegate.direction != direction || oldDelegate.color != color;
+      labels.entries
+          .any((entry) => oldDelegate.labels[entry.key] != entry.value) ||
+      oldDelegate.direction != direction ||
+      oldDelegate.color != color;
 }
 
 /// Original room-facing maps. The room labels stay fixed; own-limb axes rotate.
@@ -118,9 +124,14 @@ class LineDanceWallMaps extends StatelessWidget {
                     Text(UiLanguage.format(context,
                         en: 'Front {front} • Right {right} • Left {left} • Back {back}',
                         tr: 'Ön {front} • Sağ {right} • Sol {left} • Arka {back}',
-                        values: {'front': row[1], 'right': row[2],
-                          'left': row[3], 'back': row[4]})),
-                    Text(UiLanguage.pair(context, turkish: turkish,
+                        values: {
+                          'front': row[1],
+                          'right': row[2],
+                          'left': row[3],
+                          'back': row[4]
+                        })),
+                    Text(UiLanguage.pair(context,
+                        turkish: turkish,
                         en: '12/9/6/3 label the floor; they are not beat counts.',
                         tr: '12/9/6/3 zemin etiketidir; vuruş sayısı değildir.')),
                   ]))),
@@ -202,8 +213,10 @@ class LineDanceWeightLedger extends StatelessWidget {
             : const ['RW', 'LW', 'RW', 'LT', 'LW', 'RW', 'LW', 'RT'];
     var support = 'L';
     final rows = <TableRow>[];
-    String foot(String value) => UiLanguage.pair(context, turkish: turkish,
-        en: value == 'R' ? 'Right' : 'Left', tr: value == 'R' ? 'Sağ' : 'Sol');
+    String foot(String value) => UiLanguage.pair(context,
+        turkish: turkish,
+        en: value == 'R' ? 'Right' : 'Left',
+        tr: value == 'R' ? 'Sağ' : 'Sol');
     rows.add(TableRow(children: [
       for (final label in [
         UiLanguage.pair(context, turkish: turkish, en: 'Beat', tr: 'Sayı'),
@@ -221,15 +234,18 @@ class LineDanceWeightLedger extends StatelessWidget {
           '${n + 1}',
           foot(step[0]),
           step[1] == 'W'
-              ? UiLanguage.pair(context, turkish: turkish, en: 'Weight', tr: 'Ağırlık')
-              : UiLanguage.pair(context, turkish: turkish, en: 'Touch', tr: 'Dokun'),
+              ? UiLanguage.pair(context,
+                  turkish: turkish, en: 'Weight', tr: 'Ağırlık')
+              : UiLanguage.pair(context,
+                  turkish: turkish, en: 'Touch', tr: 'Dokun'),
           foot(support)
         ])
           Padding(padding: const EdgeInsets.all(4), child: Text(label))
       ]));
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(UiLanguage.pair(context, turkish: turkish,
+      Text(UiLanguage.pair(context,
+          turkish: turkish,
           en: 'Touch: no weight transfer. Support is the foot AFTER the action.',
           tr: 'Dokun: ağırlık aktarılmaz. Destek, eylemden SONRAKİ ayaktır.')),
       Table(

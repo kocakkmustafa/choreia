@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show ValueListenable, visibleForTesting;
+import 'package:flutter/foundation.dart'
+    show ValueListenable, visibleForTesting;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show AssetBundle;
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -56,18 +57,20 @@ Future<void> launchChoreia({
 }) async {
   final locales = localeController ?? ChoreiaLocaleController.memory();
   var abandoned = false;
-  runApp(ChoreiaAccountStartupFailure(localeController: locales, waiting: true));
+  runApp(
+      ChoreiaAccountStartupFailure(localeController: locales, waiting: true));
   try {
     final hostController = ChoreiaAccountHostController();
-    final pending = initialize?.call() ?? MotionAccountRuntime.initialize(
-      url: url,
-      publishableKey: publishableKey,
-      app: MotionApp.choreia,
-      emailRedirectTo: 'com.yulalab.choreia://auth/callback',
-      onDeletedAccount: (id) => clearLocalHistoryFor(id,
-          onNamespaceFenced: hostController.namespaceFenced),
-      localAccountIds: localHistoryAccountIds,
-    );
+    final pending = initialize?.call() ??
+        MotionAccountRuntime.initialize(
+          url: url,
+          publishableKey: publishableKey,
+          app: MotionApp.choreia,
+          emailRedirectTo: 'com.yulalab.choreia://auth/callback',
+          onDeletedAccount: (id) => clearLocalHistoryFor(id,
+              onNamespaceFenced: hostController.namespaceFenced),
+          localAccountIds: localHistoryAccountIds,
+        );
     // A late initializer must never replace the terminal failure or admit an
     // unverified guest. Dispose only this abandoned attempt's runtime.
     unawaited(pending.then<void>((runtime) {
@@ -76,8 +79,10 @@ Future<void> launchChoreia({
     final MotionAccountRuntime runtime = await pending.timeout(startupTimeout);
     runApp(MotionIdentityGate(
       runtime: runtime,
-      child: ChoreiaApp(accountRuntime: runtime,
-          accountHostController: hostController, localeController: locales),
+      child: ChoreiaApp(
+          accountRuntime: runtime,
+          accountHostController: hostController,
+          localeController: locales),
     ));
   } on Object {
     abandoned = true;
@@ -86,33 +91,36 @@ Future<void> launchChoreia({
 }
 
 class ChoreiaAccountStartupFailure extends StatelessWidget {
-  const ChoreiaAccountStartupFailure({this.localeController,
-    this.waiting = false, super.key});
+  const ChoreiaAccountStartupFailure(
+      {this.localeController, this.waiting = false, super.key});
   final ChoreiaLocaleController? localeController;
   final bool waiting;
 
   @override
   Widget build(BuildContext context) {
     final controller = localeController ?? ChoreiaLocaleController.memory();
-    return ValueListenableBuilder<Locale?>(valueListenable: controller,
-      builder: (_, locale, __) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Choreia',
-        theme: ChoreiaTheme.dark,
-        locale: locale,
-        supportedLocales: ChoreiaLocaleController.supported,
-        localeResolutionCallback: ChoreiaLocaleController.resolve,
-        builder: (_, child) => TranslationFallback(child: child!),
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          ChoreiaMessagesDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        home: waiting ? const Scaffold(body: SafeArea(child: Center(
-            child: _AccountStartupWaiting()))) :
-            const ChoreiaAccountFailureView(),
-      ));
+    return ValueListenableBuilder<Locale?>(
+        valueListenable: controller,
+        builder: (_, locale, __) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Choreia',
+              theme: ChoreiaTheme.dark,
+              locale: locale,
+              supportedLocales: ChoreiaLocaleController.supported,
+              localeResolutionCallback: ChoreiaLocaleController.resolve,
+              builder: (_, child) => TranslationFallback(child: child!),
+              localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+                ChoreiaMessagesDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              home: waiting
+                  ? const Scaffold(
+                      body: SafeArea(
+                          child: Center(child: _AccountStartupWaiting())))
+                  : const ChoreiaAccountFailureView(),
+            ));
   }
 }
 
@@ -120,9 +128,12 @@ class _AccountStartupWaiting extends StatelessWidget {
   const _AccountStartupWaiting();
   @override
   Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.all(24), child: Text(UiLanguage.text(context,
-        en: 'Checking account access…', tr: 'Hesap erişimi kontrol ediliyor…'),
-        key: const Key('choreia.accountStartupWaiting')));
+      padding: const EdgeInsets.all(24),
+      child: Text(
+          UiLanguage.text(context,
+              en: 'Checking account access…',
+              tr: 'Hesap erişimi kontrol ediliyor…'),
+          key: const Key('choreia.accountStartupWaiting')));
 }
 
 /// Only reached when the configured account service cannot start.
@@ -131,20 +142,24 @@ class ChoreiaAccountFailureView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(child: Center(
-          child: SingleChildScrollView(child: Padding(
+        body: SafeArea(
+            child: Center(
+          child: SingleChildScrollView(
+              child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [Text(
-              UiLanguage.text(context,
-                  tr: 'Choreia hesap hizmeti bu sürümde başlatılamadı. '
-                      'Uygulamayı yeniden açmayı dene; sorun sürerse '
-                      'güncel sürümü yükle.',
-                  en: 'Choreia account service could not start in this '
-                      'build. Try reopening the app; if the problem '
-                      'continues, install an updated version.'),
-              key: const Key('choreia.accountStartupFailure'),
-              textAlign: TextAlign.center,
-            ), const SizedBox(height: 16),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text(
+                UiLanguage.text(context,
+                    tr: 'Choreia hesap hizmeti bu sürümde başlatılamadı. '
+                        'Uygulamayı yeniden açmayı dene; sorun sürerse '
+                        'güncel sürümü yükle.',
+                    en: 'Choreia account service could not start in this '
+                        'build. Try reopening the app; if the problem '
+                        'continues, install an updated version.'),
+                key: const Key('choreia.accountStartupFailure'),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
               const SupportAction(surface: SupportSurface.startup),
             ]),
           )),
@@ -153,8 +168,13 @@ class ChoreiaAccountFailureView extends StatelessWidget {
 }
 
 class ChoreiaApp extends StatefulWidget {
-  const ChoreiaApp({super.key, this.accountRuntime, this.accountHostController,
-      this.shellBuilder, this.localeController, this.localeBundle});
+  const ChoreiaApp(
+      {super.key,
+      this.accountRuntime,
+      this.accountHostController,
+      this.shellBuilder,
+      this.localeController,
+      this.localeBundle});
 
   final MotionAccountRuntime? accountRuntime;
   final ChoreiaAccountHostController? accountHostController;
@@ -162,8 +182,9 @@ class ChoreiaApp extends StatefulWidget {
   @visibleForTesting
   final AssetBundle? localeBundle;
   @visibleForTesting
-  final Widget Function(LiveEnvironment environment,
-      WidgetBuilder? accountPageBuilder)? shellBuilder;
+  final Widget Function(
+          LiveEnvironment environment, WidgetBuilder? accountPageBuilder)?
+      shellBuilder;
 
   @override
   State<ChoreiaApp> createState() => _ChoreiaAppState();
@@ -178,14 +199,15 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
   void _bindRuntimeEvents() {
     // Public Auth stream is retirement-only; canonical phase remains the
     // authority for verified or genuinely signed-out guest admission.
-    _authSessionChanges = accountRuntime?.account.authChanges.map((state) =>
-        ChoreiaAuthSessionEvent(state.event.name, state.session));
+    _authSessionChanges = accountRuntime?.account.authChanges.map(
+        (state) => ChoreiaAuthSessionEvent(state.event.name, state.session));
   }
 
   @override
   void initState() {
     super.initState();
-    _hostController = widget.accountHostController ?? ChoreiaAccountHostController();
+    _hostController =
+        widget.accountHostController ?? ChoreiaAccountHostController();
     _locales = widget.localeController ?? ChoreiaLocaleController.memory();
     _bindRuntimeEvents();
   }
@@ -194,7 +216,8 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
   void didUpdateWidget(covariant ChoreiaApp oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.accountHostController != widget.accountHostController) {
-      _hostController = widget.accountHostController ?? ChoreiaAccountHostController();
+      _hostController =
+          widget.accountHostController ?? ChoreiaAccountHostController();
     }
     if (oldWidget.accountRuntime != accountRuntime) _bindRuntimeEvents();
     if (oldWidget.localeController != widget.localeController) {
@@ -239,46 +262,51 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
             );
       final WidgetBuilder? accountBuilder =
           accountRuntime == null ? null : accountPage;
-      return widget.shellBuilder?.call(env, accountBuilder) ?? ChoreiaShell(
-          env: env,
-          // Match the current beforeStart release policy without enabling it.
-          cameraSessionsAvailable: motionPaidFeaturesAvailable,
-          accountPageBuilder: accountBuilder,
-          beforeLessonStart: accountRuntime == null
-              ? null
-              : (lessonContext) => requireMotionPaidAccess(
-                    lessonContext,
-                    account: accountRuntime!.account,
-                    accountPageBuilder: accountPage,
-                  ),
-        );
+      return widget.shellBuilder?.call(env, accountBuilder) ??
+          ChoreiaShell(
+            env: env,
+            // Match the current beforeStart release policy without enabling it.
+            cameraSessionsAvailable: motionPaidFeaturesAvailable,
+            accountPageBuilder: accountBuilder,
+            beforeLessonStart: accountRuntime == null
+                ? null
+                : (lessonContext) => requireMotionPaidAccess(
+                      lessonContext,
+                      account: accountRuntime!.account,
+                      accountPageBuilder: accountPage,
+                    ),
+          );
     }
 
     Widget app(BuildContext context, Key? navigationKey, bool recovery,
-            ValueListenable<int>? ownerEpoch) {
-      return ChoreiaLocaleScope(controller: _locales,
-        child: ValueListenableBuilder<Locale?>(valueListenable: _locales,
-          builder: (_, locale, __) => MaterialApp(
-          key: navigationKey,
-          debugShowCheckedModeBanner: false,
-          title: 'Choreia',
-          theme: ChoreiaTheme.dark,
-          locale: locale,
-          supportedLocales: ChoreiaLocaleController.supported,
-          localeResolutionCallback: ChoreiaLocaleController.resolve,
-          builder: (_, child) => TranslationFallback(child: child!),
-          localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-            ChoreiaMessagesDelegate(bundle: widget.localeBundle),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          home: recovery ||
-                  (accountRuntime != null && _hostController.requiresAccountRoute)
-              ? accountPage(context)
-              : shell(ownerEpoch),
-        )));
+        ValueListenable<int>? ownerEpoch) {
+      return ChoreiaLocaleScope(
+          controller: _locales,
+          child: ValueListenableBuilder<Locale?>(
+              valueListenable: _locales,
+              builder: (_, locale, __) => MaterialApp(
+                    key: navigationKey,
+                    debugShowCheckedModeBanner: false,
+                    title: 'Choreia',
+                    theme: ChoreiaTheme.dark,
+                    locale: locale,
+                    supportedLocales: ChoreiaLocaleController.supported,
+                    localeResolutionCallback: ChoreiaLocaleController.resolve,
+                    builder: (_, child) => TranslationFallback(child: child!),
+                    localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                      ChoreiaMessagesDelegate(bundle: widget.localeBundle),
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    home: recovery ||
+                            (accountRuntime != null &&
+                                _hostController.requiresAccountRoute)
+                        ? accountPage(context)
+                        : shell(ownerEpoch),
+                  )));
     }
+
     final runtime = accountRuntime;
     return runtime == null
         ? app(context, null, false, null)
@@ -289,7 +317,8 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
             authSessionChanges: _authSessionChanges,
             initialSessionIdentity:
                 runtime.account.supabase.auth.currentSession,
-            currentSessionIdentity: () => runtime.account.supabase.auth.currentSession,
+            currentSessionIdentity: () =>
+                runtime.account.supabase.auth.currentSession,
             identityChanges: runtime.phase,
             verificationChanges: runtime.identityVerification,
             canAdmitOwner: () =>

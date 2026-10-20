@@ -9,8 +9,11 @@ import 'package:path_provider/path_provider.dart';
 /// A device display preference. It contains no account or practice data.
 class ChoreiaLocaleController extends ValueNotifier<Locale?> {
   ChoreiaLocaleController.memory([Locale? locale])
-      : _persist = false, super(locale);
-  ChoreiaLocaleController.persisted() : _persist = true, super(null);
+      : _persist = false,
+        super(locale);
+  ChoreiaLocaleController.persisted()
+      : _persist = true,
+        super(null);
 
   final bool _persist;
 
@@ -26,20 +29,33 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
   }
 
   static const supported = <Locale>[
-    Locale('tr'), Locale('en'), Locale('es', '419'), Locale('pt', 'BR'),
-    Locale('de'), Locale('fr'), Locale('ja'), Locale('ar'),
+    Locale('tr'),
+    Locale('en'),
+    Locale('es', '419'),
+    Locale('pt', 'BR'),
+    Locale('de'),
+    Locale('fr'),
+    Locale('ja'),
+    Locale('ar'),
   ];
   static const names = <String, String>{
-    'tr': 'Türkçe', 'en': 'English', 'es-419': 'Español (Latinoamérica)',
-    'pt-BR': 'Português (Brasil)', 'de': 'Deutsch', 'fr': 'Français',
-    'ja': '日本語', 'ar': 'العربية',
+    'tr': 'Türkçe',
+    'en': 'English',
+    'es-419': 'Español (Latinoamérica)',
+    'pt-BR': 'Português (Brasil)',
+    'de': 'Deutsch',
+    'fr': 'Français',
+    'ja': '日本語',
+    'ar': 'العربية',
   };
 
-  static String tag(Locale locale) => switch (locale.languageCode.toLowerCase()) {
-    'es' => 'es-419', 'pt' => 'pt-BR',
-    final code when names.containsKey(code) => code,
-    _ => 'en',
-  };
+  static String tag(Locale locale) =>
+      switch (locale.languageCode.toLowerCase()) {
+        'es' => 'es-419',
+        'pt' => 'pt-BR',
+        final code when names.containsKey(code) => code,
+        _ => 'en',
+      };
 
   static Locale resolve(Locale? requested, Iterable<Locale> _) {
     final wanted = requested == null ? 'en' : tag(requested);
@@ -56,10 +72,13 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
     try {
       final file = await _file().timeout(const Duration(seconds: 2));
       if (!await file.exists().timeout(const Duration(seconds: 2))) return;
-      final raw = jsonDecode(await file.readAsString()
-          .timeout(const Duration(seconds: 2)));
+      final raw = jsonDecode(
+          await file.readAsString().timeout(const Duration(seconds: 2)));
       final saved = raw is Map ? raw['locale'] : null;
-      if (!_disposed && saved is String && names.containsKey(saved) && revision == _revision) {
+      if (!_disposed &&
+          saved is String &&
+          names.containsKey(saved) &&
+          revision == _revision) {
         value = supported.firstWhere((locale) => tag(locale) == saved);
       }
     } on Object {
@@ -79,10 +98,12 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
       final file = await _file();
       await file.parent.create(recursive: true);
       final temporary = File('${file.path}.tmp');
-      await temporary.writeAsString(jsonEncode({
-        'schemaVersion': 1,
-        'locale': selected == null ? null : tag(selected),
-      }), flush: true);
+      await temporary.writeAsString(
+          jsonEncode({
+            'schemaVersion': 1,
+            'locale': selected == null ? null : tag(selected),
+          }),
+          flush: true);
       await temporary.rename(file.path);
     });
     _writes = operation.catchError((Object _) {});
@@ -102,9 +123,13 @@ class ChoreiaLocaleController extends ValueNotifier<Locale?> {
 }
 
 class ChoreiaLocaleScope extends InheritedNotifier<ChoreiaLocaleController> {
-  const ChoreiaLocaleScope({required ChoreiaLocaleController controller,
-    required super.child, super.key}) : super(notifier: controller);
+  const ChoreiaLocaleScope(
+      {required ChoreiaLocaleController controller,
+      required super.child,
+      super.key})
+      : super(notifier: controller);
 
   static ChoreiaLocaleController? maybeOf(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<ChoreiaLocaleScope>()?.notifier;
+      .dependOnInheritedWidgetOfExactType<ChoreiaLocaleScope>()
+      ?.notifier;
 }

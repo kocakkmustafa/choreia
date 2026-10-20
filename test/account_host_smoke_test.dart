@@ -63,8 +63,9 @@ void main() {
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           home: Scaffold(
               body: ProfileView(
-        accountPageBuilder: (_) => const Scaffold(body: Text('Account route')),
-      ))));
+            accountPageBuilder: (_) =>
+                const Scaffold(body: Text('Account route')),
+          ))));
       expect(
           find.textContaining(locale == 'tr'
               ? 'Beş solo dans yolunu hesap veya kamera olmadan'

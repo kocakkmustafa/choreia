@@ -169,17 +169,27 @@ class _WrittenUnitPracticeState extends State<WrittenUnitPractice>
           passwordRecovery: widget.env.passwordRecovery,
           ownerEpoch: widget.env.ownerEpoch),
       if (_retired)
-        Text(UiLanguage.pair(context, turkish: tr, en: 'The account session changed. Reopen the lesson.', tr: 'Hesap oturumu değişti. Derse yeniden gir.'))
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'The account session changed. Reopen the lesson.',
+            tr: 'Hesap oturumu değişti. Derse yeniden gir.'))
       else if (_failed) ...[
-        Text(UiLanguage.pair(context, turkish: tr, en: 'The study record could not be read or saved. Existing records are preserved.', tr: 'Çalışma kaydı okunamadı veya kaydedilemedi. Mevcut kayıtlar korunuyor.')),
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'The study record could not be read or saved. Existing records are preserved.',
+            tr: 'Çalışma kaydı okunamadı veya kaydedilemedi. Mevcut kayıtlar korunuyor.')),
         TextButton(
             key: Key('written.retry.${widget.unitId}'),
             onPressed: _busy ? null : _load,
-            child: Text(UiLanguage.pair(context, turkish: tr, en: 'Reload record', tr: 'Kaydı yeniden oku'))),
+            child: Text(UiLanguage.pair(context,
+                turkish: tr, en: 'Reload record', tr: 'Kaydı yeniden oku'))),
       ] else ...[
         Text(
             _count == null
-                ? (UiLanguage.pair(context, turkish: tr, en: 'Reading study record…', tr: 'Çalışma kaydı okunuyor…'))
+                ? (UiLanguage.pair(context,
+                    turkish: tr,
+                    en: 'Reading study record…',
+                    tr: 'Çalışma kaydı okunuyor…'))
                 : UiLanguage.format(context,
                     en: 'Your study entries: {count}',
                     tr: 'Kendi çalışma kaydın: {count}',
@@ -188,9 +198,15 @@ class _WrittenUnitPracticeState extends State<WrittenUnitPractice>
         OutlinedButton(
             key: Key('written.record.${widget.unitId}'),
             onPressed: _busy || _count == null || !_foreground ? null : _record,
-            child: Text(UiLanguage.pair(context, turkish: tr, en: 'Record my study of this unit', tr: 'Bu birimi çalıştığımı kaydet'))),
+            child: Text(UiLanguage.pair(context,
+                turkish: tr,
+                en: 'Record my study of this unit',
+                tr: 'Bu birimi çalıştığımı kaydet'))),
       ],
-      Text(UiLanguage.pair(context, turkish: tr, en: 'This is your own report. Step, phase, musical timing and mastery are not verified.', tr: 'Bu öz beyanlı kayıttır. Adım/faz, müziğe uyum veya ustalık doğrulanmaz.')),
+      Text(UiLanguage.pair(context,
+          turkish: tr,
+          en: 'This is your own report. Step, phase, musical timing and mastery are not verified.',
+          tr: 'Bu öz beyanlı kayıttır. Adım/faz, müziğe uyum veya ustalık doğrulanmaz.')),
     ]);
   }
 }

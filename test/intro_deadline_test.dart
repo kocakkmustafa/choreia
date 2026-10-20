@@ -10,12 +10,15 @@ import 'package:motion_core/motion_core.dart';
 import 'support/test_catalog.dart';
 
 void main() {
-  testWidgets('unanswered intro read shows intro and a late answer cannot close it',
+  testWidgets(
+      'unanswered intro read shows intro and a late answer cannot close it',
       (tester) async {
     final library = await testLibrary();
     final flag = _Flag();
-    await tester.pumpWidget(MaterialApp(home: ChoreiaShell(
-      flagOverride: flag, bundleOverride: () async => library,
+    await tester.pumpWidget(MaterialApp(
+        home: ChoreiaShell(
+      flagOverride: flag,
+      bundleOverride: () async => library,
       env: LiveEnvironment(storeOpener: () async => _EmptyStore()),
     )));
     await tester.pump();
@@ -27,12 +30,15 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('unanswered marker write does not block continuing to the library',
+  testWidgets(
+      'unanswered marker write does not block continuing to the library',
       (tester) async {
     final library = await testLibrary();
     final flag = _Flag()..read.complete(false);
-    await tester.pumpWidget(MaterialApp(home: ChoreiaShell(
-      flagOverride: flag, bundleOverride: () async => library,
+    await tester.pumpWidget(MaterialApp(
+        home: ChoreiaShell(
+      flagOverride: flag,
+      bundleOverride: () async => library,
       env: LiveEnvironment(storeOpener: () async => _EmptyStore()),
     )));
     await tester.pump();
@@ -51,7 +57,10 @@ class _Flag implements FirstRunFlag {
   @override
   Future<bool> hasSeenIntro() => read.future;
   @override
-  Future<void> markSeen() { writes++; return write.future; }
+  Future<void> markSeen() {
+    writes++;
+    return write.future;
+  }
 }
 
 class _EmptyStore implements SessionStore {

@@ -75,7 +75,9 @@ void main() {
   late LibraryCatalog library;
   setUpAll(() async => library = await testLibrary());
 
-  Future<void> show(WidgetTester tester, Widget home, {
+  Future<void> show(
+    WidgetTester tester,
+    Widget home, {
     String language = 'en',
     double scale = 1,
     NavigatorObserver? observer,
@@ -112,8 +114,11 @@ void main() {
   }
 
   test('written access copy is independent of camera reference readiness', () {
-    expect(library.cards.where((c) => WrittenCourseLink.supports(c.entry.id))
-        .map((c) => c.entry.id), unorderedEquals(written));
+    expect(
+        library.cards
+            .where((c) => WrittenCourseLink.supports(c.entry.id))
+            .map((c) => c.entry.id),
+        unorderedEquals(written));
     for (final id in written) {
       final card = library.cardFor(id)!;
       for (final camera in <bool>[false, true]) {
@@ -142,13 +147,19 @@ void main() {
       for (final id in written) {
         final tile = find.byKey(LibraryView.tileKey(id));
         await reach(tester, tile);
-        final copy = tester.widgetList<Text>(find.descendant(
-          of: tile, matching: find.byType(Text),
-        )).map((text) => text.data ?? '').join(' ');
-        expect(copy, contains(language == 'tr' ? 'YAZILI KURS' : 'WRITTEN COURSE'));
-        expect(copy, isNot(contains(language == 'tr' ? 'DERS YOK' : 'NOT BUILT')));
-        final link = find.descendant(of: tile,
-            matching: find.byKey(WrittenCourseLink.startKey(id)));
+        final copy = tester
+            .widgetList<Text>(find.descendant(
+              of: tile,
+              matching: find.byType(Text),
+            ))
+            .map((text) => text.data ?? '')
+            .join(' ');
+        expect(copy,
+            contains(language == 'tr' ? 'YAZILI KURS' : 'WRITTEN COURSE'));
+        expect(
+            copy, isNot(contains(language == 'tr' ? 'DERS YOK' : 'NOT BUILT')));
+        final link = find.descendant(
+            of: tile, matching: find.byKey(WrittenCourseLink.startKey(id)));
         expect(link, findsOneWidget);
         expect(tester.getSize(link).height, greaterThanOrEqualTo(48));
         expect(tester.takeException(), isNull, reason: id);
@@ -158,7 +169,8 @@ void main() {
 
   testWidgets('all five catalogue CTAs load the right written course and Back',
       (tester) async {
-    final directory = Directory.systemTemp.createTempSync('choreia-written-ui-');
+    final directory =
+        Directory.systemTemp.createTempSync('choreia-written-ui-');
     addTearDown(() => directory.deleteSync(recursive: true));
     final bundle = _ReadbackBundle();
     var cameraStarts = 0;
@@ -172,7 +184,8 @@ void main() {
       },
     );
     final observer = _RouteReadback();
-    await show(tester, LibraryView(library: library, env: env), observer: observer);
+    await show(tester, LibraryView(library: library, env: env),
+        observer: observer);
 
     for (final id in written) {
       final link = find.byKey(WrittenCourseLink.startKey(id));
@@ -180,10 +193,11 @@ void main() {
       await tester.tap(link);
       await tester.pump();
       final page = find.byType(courseTypes[id]!);
-      final lessons = find.descendant(of: page, matching: find.byType(ListView));
+      final lessons =
+          find.descendant(of: page, matching: find.byType(ListView));
       for (var n = 0; n < 80 && lessons.evaluate().isEmpty; n++) {
-        await tester.runAsync(() =>
-            Future<void>.delayed(const Duration(milliseconds: 5)));
+        await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 5)));
         await tester.pump(const Duration(milliseconds: 50));
       }
       expect(page, findsOneWidget, reason: id);
@@ -205,23 +219,31 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('written detail never claims that an empty camera list is no course',
+  testWidgets(
+      'written detail never claims that an empty camera list is no course',
       (tester) async {
-    for (final id in <String>['line_dance', 'latin_fusion_fitness', 'tiktok_format']) {
+    for (final id in <String>[
+      'line_dance',
+      'latin_fusion_fitness',
+      'tiktok_format'
+    ]) {
       await show(tester, StyleDetailView(card: library.cardFor(id)!));
       await reach(tester, find.byKey(StyleDetailView.writtenCourseKey));
       expect(find.byKey(WrittenCourseLink.startKey(id)), findsOneWidget);
       await reach(tester, find.byKey(StyleDetailView.noCameraLessonsKey));
       expect(find.byKey(StyleDetailView.noLessonsKey), findsNothing);
       expect(find.text('NOT BUILT'), findsNothing);
-      expect(find.textContaining('The written course is available above'), findsOneWidget);
-      expect(find.widgetWithText(FilledButton, StyleStrings.start), findsNothing);
+      expect(find.textContaining('The written course is available above'),
+          findsOneWidget);
+      expect(
+          find.widgetWithText(FilledButton, StyleStrings.start), findsNothing);
       expect(tester.takeException(), isNull, reason: id);
       await tester.pumpWidget(const SizedBox.shrink());
     }
   });
 
-  testWidgets('review target, filter state and card navigation support keyboard',
+  testWidgets(
+      'review target, filter state and card navigation support keyboard',
       (tester) async {
     final semantics = tester.ensureSemantics();
     addTearDown(semantics.dispose);
@@ -239,8 +261,12 @@ void main() {
     await tester.tap(references);
     await tester.pump();
     expect(tester.widget<ChoiceChip>(references).selected, isTrue);
-    expect(tester.getSemantics(references).getSemanticsData()
-        .hasFlag(SemanticsFlag.isSelected), isTrue);
+    expect(
+        tester
+            .getSemantics(references)
+            .getSemanticsData()
+            .hasFlag(SemanticsFlag.isSelected),
+        isTrue);
 
     final tile = find.byKey(LibraryView.tileKey('hip_hop_foundations'));
     await reach(tester, tile);
@@ -252,7 +278,12 @@ void main() {
     await tester.pump();
     await tester.pump(ChoreiaMotion.screenTransition);
     expect(find.byType(StyleDetailView), findsOneWidget);
-    expect(tester.widget<StyleDetailView>(find.byType(StyleDetailView)).card.entry.id,
+    expect(
+        tester
+            .widget<StyleDetailView>(find.byType(StyleDetailView))
+            .card
+            .entry
+            .id,
         'hip_hop_foundations');
     expect(tester.takeException(), isNull);
   });
@@ -264,24 +295,32 @@ void main() {
     addTearDown(epoch.dispose);
     addTearDown(recovering.dispose);
     final observer = _RouteReadback();
-    await show(tester, Scaffold(body: WrittenCourseLink(
-      styleId: 'line_dance',
-      env: LiveEnvironment(ownerEpoch: epoch, passwordRecovery: recovering),
-    )), observer: observer);
-    final button = tester.widget<FilledButton>(find.byKey(
-        WrittenCourseLink.startKey('line_dance')));
+    await show(
+        tester,
+        Scaffold(
+            body: WrittenCourseLink(
+          styleId: 'line_dance',
+          env: LiveEnvironment(ownerEpoch: epoch, passwordRecovery: recovering),
+        )),
+        observer: observer);
+    final button = tester.widget<FilledButton>(
+        find.byKey(WrittenCourseLink.startKey('line_dance')));
     final initialRoute = observer.lastPushed;
     epoch.value = 2;
     button.onPressed!();
     await tester.pump();
     expect(observer.lastPushed, initialRoute);
     await tester.pumpWidget(const SizedBox.shrink());
-    await show(tester, Scaffold(body: WrittenCourseLink(
-      styleId: 'line_dance',
-      env: LiveEnvironment(ownerEpoch: epoch, passwordRecovery: recovering),
-    )), observer: observer);
-    final freshButton = tester.widget<FilledButton>(find.byKey(
-        WrittenCourseLink.startKey('line_dance')));
+    await show(
+        tester,
+        Scaffold(
+            body: WrittenCourseLink(
+          styleId: 'line_dance',
+          env: LiveEnvironment(ownerEpoch: epoch, passwordRecovery: recovering),
+        )),
+        observer: observer);
+    final freshButton = tester.widget<FilledButton>(
+        find.byKey(WrittenCourseLink.startKey('line_dance')));
     recovering.value = true;
     freshButton.onPressed!();
     await tester.pump();

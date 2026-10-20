@@ -4,6 +4,7 @@ import '../ui_language.dart';
 /// Original symbolic teaching aid; no human motion, sound, sensing or scoring.
 class SupportHoldDemo extends StatefulWidget {
   const SupportHoldDemo({this.turkish, super.key});
+
   /// A lesson's in-page language choice can differ from the device locale.
   final bool? turkish;
   @override
@@ -23,71 +24,122 @@ class _SupportHoldDemoState extends State<SupportHoldDemo>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    clock = AnimationController(vsync: this, duration: const Duration(seconds: 8))
-      ..addListener(() {
-        final next = (clock.value * 8).floor().clamp(0, 7);
-        if (next != slot) setState(() => slot = next);
-      });
+    clock =
+        AnimationController(vsync: this, duration: const Duration(seconds: 8))
+          ..addListener(() {
+            final next = (clock.value * 8).floor().clamp(0, 7);
+            if (next != slot) setState(() => slot = next);
+          });
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     reducedMotion = MediaQuery.disableAnimationsOf(context);
     if (reducedMotion) clock.stop();
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed) clock.stop();
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     clock.dispose();
     super.dispose();
   }
+
   void select(int value) {
     clock.stop();
     clock.value = value / 8;
     setState(() => slot = value);
   }
+
   @override
   Widget build(BuildContext context) {
     final tr = widget.turkish ?? UiLanguage.isTurkish(context);
     final states = extraTransfer ? altered : normal;
     final hold = !extraTransfer && (slot == 3 || slot == 7);
     return Scaffold(
-      appBar: AppBar(title: Text(UiLanguage.pair(context, turkish: tr, en: 'Support and hold diagram', tr: 'Destek ve durak şeması'))),
-      body: SafeArea(child: ListView(padding: const EdgeInsets.all(20), children: [
-        Text(UiLanguage.pair(context, turkish: tr, en: 'Original symbolic timing example. A/B represent two support states; this is not foot placement, real weight transfer or dancer video. Read and describe first. Physical demonstration/review is still missing.', tr: 'Özgün sembolik zaman örneği. A/B iki destek durumunu gösterir; ayak konumu, gerçek ağırlık aktarımı veya dansçı videosu değildir. Önce oku ve anlat. Fiziksel gösterim/inceleme hâlâ eksiktir.')),
-        Text(UiLanguage.pair(context, turkish: tr, en: 'Eight visual intervals, one second each. At 4 and 8 time continues while support stays the same. This silent model does not verify a music beat or tempo matching.', tr: 'Sekiz görsel aralık, her biri bir saniye. 4 ve 8’de zaman devam ederken destek aynı kalır. Bu sessiz model müziğin vuruşunu veya tempo eşleşmesini doğrulamaz.')),
+      appBar: AppBar(
+          title: Text(UiLanguage.pair(context,
+              turkish: tr,
+              en: 'Support and hold diagram',
+              tr: 'Destek ve durak şeması'))),
+      body: SafeArea(
+          child: ListView(padding: const EdgeInsets.all(20), children: [
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'Original symbolic timing example. A/B represent two support states; this is not foot placement, real weight transfer or dancer video. Read and describe first. Physical demonstration/review is still missing.',
+            tr: 'Özgün sembolik zaman örneği. A/B iki destek durumunu gösterir; ayak konumu, gerçek ağırlık aktarımı veya dansçı videosu değildir. Önce oku ve anlat. Fiziksel gösterim/inceleme hâlâ eksiktir.')),
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'Eight visual intervals, one second each. At 4 and 8 time continues while support stays the same. This silent model does not verify a music beat or tempo matching.',
+            tr: 'Sekiz görsel aralık, her biri bir saniye. 4 ve 8’de zaman devam ederken destek aynı kalır. Bu sessiz model müziğin vuruşunu veya tempo eşleşmesini doğrulamaz.')),
         Wrap(spacing: 6, runSpacing: 6, children: [
           for (var i = 0; i < 8; i++)
-            ChoiceChip(key: Key('supportHold.count.${i + 1}'),
-              label: Text('${i + 1}: ${states[i]}'), selected: slot == i,
-              onSelected: (_) => select(i)),
+            ChoiceChip(
+                key: Key('supportHold.count.${i + 1}'),
+                label: Text('${i + 1}: ${states[i]}'),
+                selected: slot == i,
+                onSelected: (_) => select(i)),
         ]),
-        Semantics(liveRegion: false, child: Text(
-          '${slot + 1}/8 — ${states[slot]} — ${hold ? (UiLanguage.pair(context, turkish: tr, en: "same support / hold", tr: "aynı destek / durak")) : (UiLanguage.pair(context, turkish: tr, en: "support state", tr: "destek durumu"))}',
-          key: const Key('supportHold.current'))),
-        Text(UiLanguage.pair(context, turkish: tr, en: 'Select 3→4 and 7→8 individually: the count advances, the symbol does not. Treating a hold as a new transfer changes the next support plan. A hold does not mean time stops.', tr: '3→4 ve 7→8’i tek tek seç: sayı ilerler, sembol değişmez. Durağı yeni aktarım gibi sayarsan sonraki destek planı değişir. “Durak” zamanın durması demek değildir.')),
-        SwitchListTile(key: const Key('supportHold.compare'), value: extraTransfer,
-          title: Text(UiLanguage.pair(context, turkish: tr, en: 'Counterexample: change support at 4 and 8 too', tr: 'Karşı örnek: 4 ve 8’de de desteği değiştir')),
-          onChanged: (value) {
-            clock.stop();
-            setState(() => extraTransfer = value);
-          }),
+        Semantics(
+            liveRegion: false,
+            child: Text(
+                '${slot + 1}/8 — ${states[slot]} — ${hold ? (UiLanguage.pair(context, turkish: tr, en: "same support / hold", tr: "aynı destek / durak")) : (UiLanguage.pair(context, turkish: tr, en: "support state", tr: "destek durumu"))}',
+                key: const Key('supportHold.current'))),
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'Select 3→4 and 7→8 individually: the count advances, the symbol does not. Treating a hold as a new transfer changes the next support plan. A hold does not mean time stops.',
+            tr: '3→4 ve 7→8’i tek tek seç: sayı ilerler, sembol değişmez. Durağı yeni aktarım gibi sayarsan sonraki destek planı değişir. “Durak” zamanın durması demek değildir.')),
+        SwitchListTile(
+            key: const Key('supportHold.compare'),
+            value: extraTransfer,
+            title: Text(UiLanguage.pair(context,
+                turkish: tr,
+                en: 'Counterexample: change support at 4 and 8 too',
+                tr: 'Karşı örnek: 4 ve 8’de de desteği değiştir')),
+            onChanged: (value) {
+              clock.stop();
+              setState(() => extraTransfer = value);
+            }),
         Wrap(spacing: 8, children: [
-          TextButton(key: const Key('supportHold.play'), onPressed: reducedMotion ? null : () {
-            select(0);
-            clock.forward(from: 0);
-          }, child: Text(UiLanguage.pair(context, turkish: tr, en: 'Show once', tr: 'Bir kez göster'))),
-          TextButton(key: const Key('supportHold.pause'), onPressed: clock.stop,
-              child: Text(UiLanguage.pair(context, turkish: tr, en: 'Pause', tr: 'Duraklat'))),
-          TextButton(onPressed: () => select(0), child: Text(UiLanguage.pair(context, turkish: tr, en: 'Reset', tr: 'Başa dön'))),
+          TextButton(
+              key: const Key('supportHold.play'),
+              onPressed: reducedMotion
+                  ? null
+                  : () {
+                      select(0);
+                      clock.forward(from: 0);
+                    },
+              child: Text(UiLanguage.pair(context,
+                  turkish: tr, en: 'Show once', tr: 'Bir kez göster'))),
+          TextButton(
+              key: const Key('supportHold.pause'),
+              onPressed: clock.stop,
+              child: Text(UiLanguage.pair(context,
+                  turkish: tr, en: 'Pause', tr: 'Duraklat'))),
+          TextButton(
+              onPressed: () => select(0),
+              child: Text(UiLanguage.pair(context,
+                  turkish: tr, en: 'Reset', tr: 'Başa dön'))),
         ]),
-        if (reducedMotion) Text(UiLanguage.pair(context, turkish: tr, en: 'Reduced motion is on: select counts manually.', tr: 'Hareket azaltma açık: sayıları elle seç.')),
-        Text(UiLanguage.pair(context, turkish: tr, en: 'Check: at 3→4 what changed and what stayed? Why did the symbol at 5 change in the counterexample? Describe your answer; the app does not score or complete a course. This example is not evidence of groove, musicality or movement mastery.', tr: 'Kontrol sorusu: 3→4’te ne değişti, ne aynı kaldı? Karşı örnekte 5’in sembolü neden değişti? Yanıtı anlat; uygulama puanlamaz veya kurs tamamlamaz. Bu örnek groove, musicality veya hareket ustalığı kanıtı değildir.')),
-        Text(UiLanguage.pair(context, turkish: tr, en: 'Explanation: normally 4 keeps A; the next change at 5 is B. In the counterexample 4 changes to B, so the next change at 5 is A. A/B are symbolic support states only.', tr: 'Açıklama: normal örnekte 4’te A korunur; sonraki değişim 5’te B olur. Karşı örnekte 4’te B’ye geçilir; sonraki değişim 5’te A olur. A/B yalnız sembolik destek durumlarıdır.')),
+        if (reducedMotion)
+          Text(UiLanguage.pair(context,
+              turkish: tr,
+              en: 'Reduced motion is on: select counts manually.',
+              tr: 'Hareket azaltma açık: sayıları elle seç.')),
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'Check: at 3→4 what changed and what stayed? Why did the symbol at 5 change in the counterexample? Describe your answer; the app does not score or complete a course. This example is not evidence of groove, musicality or movement mastery.',
+            tr: 'Kontrol sorusu: 3→4’te ne değişti, ne aynı kaldı? Karşı örnekte 5’in sembolü neden değişti? Yanıtı anlat; uygulama puanlamaz veya kurs tamamlamaz. Bu örnek groove, musicality veya hareket ustalığı kanıtı değildir.')),
+        Text(UiLanguage.pair(context,
+            turkish: tr,
+            en: 'Explanation: normally 4 keeps A; the next change at 5 is B. In the counterexample 4 changes to B, so the next change at 5 is A. A/B are symbolic support states only.',
+            tr: 'Açıklama: normal örnekte 4’te A korunur; sonraki değişim 5’te B olur. Karşı örnekte 4’te B’ye geçilir; sonraki değişim 5’te A olur. A/B yalnız sembolik destek durumlarıdır.')),
       ])),
     );
   }

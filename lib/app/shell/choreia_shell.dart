@@ -305,9 +305,10 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
     unawaited(_flag.markSeen().catchError((Object _) {}));
   }
 
-  Future<LibraryCatalog> _load() => _catalogReads.run(widget.bundleOverride != null
-      ? widget.bundleOverride!()
-      : LibraryCatalog.load(rootBundle));
+  Future<LibraryCatalog> _load() =>
+      _catalogReads.run(widget.bundleOverride != null
+          ? widget.bundleOverride!()
+          : LibraryCatalog.load(rootBundle));
 
   void _refreshProgressWhenCatalogReady(Future<LibraryCatalog> catalog) {
     unawaited(catalog.then<void>(
@@ -486,7 +487,8 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                   summary: _progress!,
                   catalog: library.allCourses,
                   courseEntry: _salsaCourseEntry),
-            ProfileView(accountPageBuilder: widget.accountPageBuilder,
+            ProfileView(
+                accountPageBuilder: widget.accountPageBuilder,
                 cameraSessionsAvailable: widget.cameraSessionsAvailable),
           ],
         ),

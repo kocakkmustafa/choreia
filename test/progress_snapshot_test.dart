@@ -27,8 +27,8 @@ void main() {
     expect(store.recentCalls, 1);
     expect(summary.recorded.single.sessions, 1);
     expect(summary.totals!.sessions, 1);
-    expect(summary.totals!.workedSeconds,
-        summary.recorded.single.workedSeconds);
+    expect(
+        summary.totals!.workedSeconds, summary.recorded.single.workedSeconds);
   });
 
   test('integrity lookup cannot mutate the captured rows and totals', () async {
@@ -53,7 +53,8 @@ void main() {
     expect(summary.recorded.single.completedSessions, 0);
   });
 
-  test('snapshot totals count a single-pass iterable without a second read', () {
+  test('snapshot totals count a single-pass iterable without a second read',
+      () {
     var read = false;
     Iterable<SessionRecord> once() sync* {
       if (read) throw StateError('The records were iterated twice.');

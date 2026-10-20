@@ -58,18 +58,36 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
   Widget build(BuildContext context) {
     final tr = UiLanguage.isTurkish(context);
     final labels = <String, String>{
-      'provenance': UiLanguage.pair(context, turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
-      'reviewNotice': UiLanguage.pair(context, turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
-      'boundaries': UiLanguage.pair(context, turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
-      'startCompetency': UiLanguage.pair(context, turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
-      'endCompetency': UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
-      'prerequisite': UiLanguage.pair(context, turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
-      'outcome': UiLanguage.pair(context, turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
-      'instruction': UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
-      'practice': UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
-      'mistakes': UiLanguage.pair(context, turkish: tr, en: 'Common mistakes and reset', tr: 'Yaygın hatalar ve dönüş'),
-      'adaptation': UiLanguage.pair(context, turkish: tr, en: 'Lower-impact option', tr: 'Daha düşük yük seçeneği'),
-      'check': UiLanguage.pair(context, turkish: tr, en: 'Self-check and revisit', tr: 'Öz kontrol ve tekrar'),
+      'provenance': UiLanguage.pair(context,
+          turkish: tr, en: 'Sources and limits', tr: 'Kaynaklar ve sınırlar'),
+      'reviewNotice': UiLanguage.pair(context,
+          turkish: tr, en: 'Review status', tr: 'İnceleme durumu'),
+      'boundaries': UiLanguage.pair(context,
+          turkish: tr, en: 'Before every attempt', tr: 'Her denemeden önce'),
+      'startCompetency': UiLanguage.pair(context,
+          turkish: tr, en: 'Starting point', tr: 'Başlangıç'),
+      'endCompetency':
+          UiLanguage.pair(context, turkish: tr, en: 'Target', tr: 'Hedef'),
+      'prerequisite': UiLanguage.pair(context,
+          turkish: tr, en: 'Prerequisite', tr: 'Ön koşul'),
+      'outcome': UiLanguage.pair(context,
+          turkish: tr, en: 'Stage target', tr: 'Bu aşamanın hedefi'),
+      'instruction':
+          UiLanguage.pair(context, turkish: tr, en: 'Learn', tr: 'Öğren'),
+      'practice':
+          UiLanguage.pair(context, turkish: tr, en: 'Practise', tr: 'Çalış'),
+      'mistakes': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Common mistakes and reset',
+          tr: 'Yaygın hatalar ve dönüş'),
+      'adaptation': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Lower-impact option',
+          tr: 'Daha düşük yük seçeneği'),
+      'check': UiLanguage.pair(context,
+          turkish: tr,
+          en: 'Self-check and revisit',
+          tr: 'Öz kontrol ve tekrar'),
     };
     Widget section(String field, Map<String, Map<String, String>> copy) =>
         Padding(
@@ -89,8 +107,14 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.skillCourse
-            ? (UiLanguage.pair(context, turkish: tr, en: 'Hip-Hop course candidate', tr: 'Hip-Hop kurs adayı'))
-            : (UiLanguage.pair(context, turkish: tr, en: 'Hip-Hop written path', tr: 'Hip-Hop yazılı yolu'))),
+            ? (UiLanguage.pair(context,
+                turkish: tr,
+                en: 'Hip-Hop course candidate',
+                tr: 'Hip-Hop kurs adayı'))
+            : (UiLanguage.pair(context,
+                turkish: tr,
+                en: 'Hip-Hop written path',
+                tr: 'Hip-Hop yazılı yolu'))),
       ),
       body: FutureBuilder<HipHopCourse>(
         future: _course,
@@ -104,13 +128,17 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      UiLanguage.pair(context, turkish: tr, en: 'The written path could not be read. No progress was recorded.', tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
+                      UiLanguage.pair(context,
+                          turkish: tr,
+                          en: 'The written path could not be read. No progress was recorded.',
+                          tr: 'Yazılı yol okunamadı. İlerleme kaydedilmedi.'),
                     ),
                     TextButton(
                       onPressed: () => setState(() {
                         _course = _load()..ignore();
                       }),
-                      child: Text(UiLanguage.pair(context, turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
+                      child: Text(UiLanguage.pair(context,
+                          turkish: tr, en: 'Retry', tr: 'Tekrar dene')),
                     ),
                   ],
                 ),
@@ -142,7 +170,8 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
                 Card(
                   child: ExpansionTile(
                     key: ValueKey(unit.id),
-                    title: Text(UiLanguage.courseText(context, unit.copy['title']!)),
+                    title: Text(
+                        UiLanguage.courseText(context, unit.copy['title']!)),
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: [

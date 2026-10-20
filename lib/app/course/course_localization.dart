@@ -16,7 +16,8 @@ extension LocalizedCourseLines on CourseLines {
     if (ChoreiaLocaleScope.maybeOf(context) == null && turkish != null) {
       return inLanguage(turkish);
     }
-    return List.generate(en.length, (index) =>
-        UiLanguage.text(context, en: en[index], tr: tr[index]), growable: false);
+    return List.generate(en.length,
+        (index) => UiLanguage.text(context, en: en[index], tr: tr[index]),
+        growable: false);
   }
 }

@@ -17,8 +17,7 @@ List<String> _diagrams(String language) {
   return [
     for (final unit in course['units'] as List<dynamic>)
       if (language == 'ar')
-        arabic[index[(unit as Map<String, dynamic>)['diagram']['en']]]
-            as String
+        arabic[index[(unit as Map<String, dynamic>)['diagram']['en']]] as String
       else
         (unit as Map<String, dynamic>)['diagram'][language] as String,
   ];
@@ -67,7 +66,8 @@ Widget _screen(
 Finder _line(int index) => find.byKey(ValueKey('notation-line-$index'));
 
 List<Text> _texts(WidgetTester tester, int line) => tester
-    .widgetList<Text>(find.descendant(of: _line(line), matching: find.byType(Text)))
+    .widgetList<Text>(
+        find.descendant(of: _line(line), matching: find.byType(Text)))
     .toList();
 
 List<Rect> _rects(WidgetTester tester, int line) => [
@@ -78,7 +78,8 @@ List<Rect> _rects(WidgetTester tester, int line) => [
 void _expectPhysicalOrder(WidgetTester tester, int line) {
   final rects = _rects(tester, line);
   for (var index = 1; index < rects.length; index++) {
-    expect(rects[index].left, greaterThanOrEqualTo(rects[index - 1].right - 0.01),
+    expect(
+        rects[index].left, greaterThanOrEqualTo(rects[index - 1].right - 0.01),
         reason: 'line $line, run $index must follow the previous physical box');
   }
 }
@@ -120,7 +121,8 @@ void main() {
     expect(_runRect(tester, 1, '→').left,
         lessThan(_runRect(tester, 1, 'يمين').left));
     for (final text in _texts(tester, 1)) {
-      expect(text.textDirection,
+      expect(
+          text.textDirection,
           ['يسار', 'أنت', 'يمين'].contains(text.data)
               ? TextDirection.rtl
               : TextDirection.ltr);
@@ -136,15 +138,15 @@ void main() {
       final text = diagrams[unit];
       testWidgets('$language unit ${unit + 1}: RTL does not mirror any token',
           (tester) async {
-        await tester.pumpWidget(_screen(text,
-            language: language, direction: TextDirection.ltr));
+        await tester.pumpWidget(
+            _screen(text, language: language, direction: TextDirection.ltr));
         await tester.pumpAndSettle();
         final before = [
           for (var line = 0; line < text.split('\n').length; line++)
             _rects(tester, line),
         ];
-        await tester.pumpWidget(_screen(text,
-            language: language, direction: TextDirection.rtl));
+        await tester.pumpWidget(
+            _screen(text, language: language, direction: TextDirection.rtl));
         await tester.pumpAndSettle();
         for (var line = 0; line < before.length; line++) {
           expect(_rects(tester, line), before[line]);
@@ -159,12 +161,11 @@ void main() {
       (tester) async {
     await tester.pumpWidget(_screen(arabic[4], language: 'ar'));
     await tester.pumpAndSettle();
-    final phrase = _texts(tester, 0).singleWhere(
-        (text) => text.data == 'القدم\u00A0المتحركة');
+    final phrase = _texts(tester, 0)
+        .singleWhere((text) => text.data == 'القدم\u00A0المتحركة');
     expect(phrase.textDirection, TextDirection.rtl);
     expect(phrase.softWrap, isFalse);
-    final separators = _texts(tester, 0)
-        .where((text) => text.data == '|');
+    final separators = _texts(tester, 0).where((text) => text.data == '|');
     expect(separators, hasLength(4));
     expect(separators.every((text) => text.textDirection == TextDirection.ltr),
         isTrue);
@@ -175,10 +176,10 @@ void main() {
       (tester) async {
     await tester.pumpWidget(_screen(arabic[7], language: 'ar'));
     await tester.pumpAndSettle();
-    expect(_runRect(tester, 0, '9').left,
-        lessThan(_runRect(tester, 0, '3').left));
-    expect(_runRect(tester, 0, '←').left,
-        lessThan(_runRect(tester, 0, '→').left));
+    expect(
+        _runRect(tester, 0, '9').left, lessThan(_runRect(tester, 0, '3').left));
+    expect(
+        _runRect(tester, 0, '←').left, lessThan(_runRect(tester, 0, '→').left));
     final numbers = _texts(tester, 2)
         .where((text) => RegExp(r'^\d+$').hasMatch(text.data!))
         .toList();
@@ -204,16 +205,16 @@ void main() {
       final normalHeight = _rects(tester, 0).first.height;
       await tester.pumpWidget(_screen(text, language: language, scale: 2));
       await tester.pumpAndSettle();
-      expect(_rects(tester, 0).first.height,
-          closeTo(normalHeight * 2, 1));
+      expect(_rects(tester, 0).first.height, closeTo(normalHeight * 2, 1));
       expect(find.bySemanticsLabel(text), findsOneWidget);
-      final scrollView = tester.widget<SingleChildScrollView>(
-          find.byType(SingleChildScrollView));
+      final scrollView = tester
+          .widget<SingleChildScrollView>(find.byType(SingleChildScrollView));
       final controller = scrollView.controller!;
       expect(controller.position.maxScrollExtent, greaterThan(0));
       expect(controller.offset, 0);
       final scrollNode = tester.getSemantics(find.byType(Scrollable));
-      expect(scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollRight),
+      expect(
+          scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollRight),
           isTrue);
       tester.binding.rootPipelineOwner.semanticsOwner!
           .performAction(scrollNode.id, SemanticsAction.scrollRight);
