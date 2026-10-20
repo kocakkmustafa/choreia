@@ -111,8 +111,6 @@ void main() {
             cameraCalls++;
             throw StateError('A semantics check must not request permission');
           });
-      final semantics = tester.ensureSemantics();
-      addTearDown(semantics.dispose);
       await tester.pumpWidget(ChoreiaApp(
         localeController: locales,
         themeController: themes,
@@ -159,7 +157,7 @@ void main() {
             reason: 'Changing presentation must not mutate the study record');
         expect(tester.takeException(), isNull);
       }
-    }, timeout: const Timeout(Duration(seconds: 60)));
+    }, semanticsEnabled: true, timeout: const Timeout(Duration(seconds: 60)));
   }
 }
 
