@@ -28,6 +28,7 @@ import 'package:choreia/app/study_review_content.dart';
 import 'package:choreia/app/theme/theme_picker.dart';
 import 'package:choreia/app/theme/theme_preference.dart';
 import 'package:choreia/main.dart';
+import 'package:flutter/foundation.dart' show debugPrintSynchronously;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey;
@@ -74,6 +75,17 @@ Finder get _verticalScroll => find.byElementPredicate((element) {
 
 Finder _note(int index) => find.byKey(Key('practiceComparison.note.$index'));
 
+// Diagnostic only: real elapsed time and bounded output, no weaker assertions.
+bool _routeTracing = false;
+Stopwatch? _routeClock;
+int _routeTraceLines = 0;
+void _routeTrace(String stage) {
+  if (!_routeTracing || _routeTraceLines >= 300) return;
+  _routeTraceLines++;
+  debugPrintSynchronously(
+      '[CHOREIA-ROUTE ${_routeClock!.elapsedMilliseconds}ms] $stage');
+}
+
 void _clean(WidgetTester tester, String checkpoint) {
   expect(tester.takeException(), isNull, reason: checkpoint);
   expect(find.byType(LiveLessonPage), findsNothing, reason: checkpoint);
@@ -101,9 +113,13 @@ Future<void> _waitFor(WidgetTester tester, Finder finder,
     }
     // Yalnız yerel Salsa dosya IO'sunun gerçek event loop'una fırsat verir.
     // Ağ, SDK, platform izin veya production servis çağrısı yoktur.
+    final traceFrame = frame % 30 == 0 || frame == 119;
+    if (traceFrame) _routeTrace('wait.$frame yield.before $finder');
     await tester
         .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
+    if (traceFrame) _routeTrace('wait.$frame yield.after $finder');
     await tester.pump(const Duration(milliseconds: 50));
+    if (traceFrame) _routeTrace('wait.$frame pump.after $finder');
     _clean(tester, 'bekleme $frame: $finder');
   }
   fail('120 sonlu pompa içinde yüzey hazır olmadı: $finder');
@@ -355,15 +371,25 @@ Future<_Host> _mount(WidgetTester tester, LibraryCatalog library, Locale locale,
           ? Directory.systemTemp.createTempSync('choreia-theme-matrix-')
           : null);
   addTearDown(() async {
+    _routeTrace('teardown.begin');
     await tester.pumpWidget(const SizedBox.shrink());
+    _routeTrace('teardown.unmounted');
     await tester.pump();
-    await tester.runAsync(() => host.owners.retireOwner(null));
+    _routeTrace('teardown.pumped; drain.before');
+    await tester.runAsync(() {
+      _routeTrace('teardown.drain.real.begin');
+      return host.owners.retireOwner(null);
+    });
+    _routeTrace('teardown.drain.returned');
     host.directory?.deleteSync(recursive: true);
+    _routeTrace('teardown.directory.deleted');
     locales.dispose();
     themes.dispose();
     expect(host.cameraCalls, 0);
     expect(host.store.lines, isEmpty,
         reason: 'Yazılı/UI gezintisi kamera oturumu üretmemeli');
+    _routeTrace('teardown.end');
+    _routeTracing = false;
   });
   if (failPreferencesRead) {
     preferences.contents = 'invalid preference';
@@ -616,8 +642,13 @@ void main() {
 
       testWidgets('public rota aileleri $tag ${mode.name} 2x 320px',
           (tester) async {
+        _routeTracing = true;
+        _routeTraceLines = 0;
+        _routeClock = Stopwatch()..start();
+        _routeTrace('body.begin $tag ${mode.name}');
         final host = await _mount(tester, library, locale, mode, 2,
             introSeen: false, localCourseFiles: true);
+        _routeTrace('body.mount.end');
         await _waitFor(tester, find.byType(FirstRunView));
         _surface(tester, find.byType(FirstRunView), host);
         await _scan(tester, 'ilk açılış');
@@ -628,6 +659,7 @@ void main() {
         final forms = <String>{};
         for (final card in library.cards) {
           final id = card.entry.id;
+          _routeTrace('style.$id.begin');
           await _openStyle(tester, id);
           _surface(tester, find.byType(StyleDetailView), host);
           await _scan(tester, 'detay $id');
@@ -644,10 +676,14 @@ void main() {
             final page = find.byType(_writtenTypes[id]!);
             await _waitFor(tester, page);
             if (id == 'salsa_shines') {
+              _routeTrace('salsa.overview.before');
               await _waitFor(tester, find.byKey(const Key('salsa.overview')));
+              _routeTrace('salsa.overview.after');
               await _tap(tester, find.byKey(const Key('salsa.lesson.so_04')));
+              _routeTrace('salsa.lesson.before');
               await _waitFor(
                   tester, find.byKey(const ValueKey('salsa.lessonBody.so_04')));
+              _routeTrace('salsa.lesson.after');
               _surface(tester,
                   find.byKey(const ValueKey('salsa.lessonBody.so_04')), host);
               await _scan(tester, 'Salsa so_04');
@@ -680,7 +716,9 @@ void main() {
             }
           }
           await _back(tester);
+          _routeTrace('style.$id.end');
         }
+        _routeTrace('all.styles.end');
         expect(styles, library.cards.map((card) => card.entry.id).toSet());
         expect(courses, {..._writtenTypes.keys, 'hip_hop_introduction'});
         expect(forms, PracticeComparisonPage.supportedStyles);
@@ -690,6 +728,7 @@ void main() {
         final recalled = <String>{};
         for (final area in studyAreas) {
           for (final lesson in area.lessons) {
+            _routeTrace('recall.${lesson.id}.begin');
             await _tap(tester, find.byKey(Key('study-lesson-${lesson.id}')));
             await _waitFor(tester, find.byType(RecallLessonPage));
             _surface(tester, find.byType(RecallLessonPage), host);
@@ -698,12 +737,14 @@ void main() {
             await _reach(tester, find.byKey(const Key('study-reference')));
             recalled.add(lesson.id);
             await _back(tester);
+            _routeTrace('recall.${lesson.id}.end');
           }
         }
         expect(recalled, {
           for (final area in studyAreas)
             for (final lesson in area.lessons) lesson.id
         });
+        _routeTrace('all.recall.end; support.before');
         await _tap(tester, find.byKey(const Key('study-related-salsa')));
         await _waitFor(tester, find.byType(SupportHoldDemo));
         _surface(tester, find.byType(SupportHoldDemo), host);
@@ -717,6 +758,7 @@ void main() {
         await _scan(tester, 'ilerleme');
         await _tap(tester, find.byKey(ChoreiaShell.profileTabKey));
         await _scan(tester, 'profil');
+        _routeTrace('license.before');
         await _tap(tester, find.byKey(ProfileView.licensesEntryKey));
         await _waitFor(tester, find.byType(LicensePage));
         _surface(tester, find.byType(LicensePage), host);
@@ -724,6 +766,7 @@ void main() {
         expect(find.byType(ProfileView), findsOneWidget);
         expect(host.cameraCalls, 0);
         _clean(tester, 'rota taraması sonu');
+        _routeTrace('body.end');
       }, timeout: const Timeout(Duration(minutes: 4)));
     }
   }
