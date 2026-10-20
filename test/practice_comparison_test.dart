@@ -286,7 +286,12 @@ void main() {
                     find.byType(PracticeComparisonPage))
                 .styleId,
             id);
-        await tester.pageBack();
+        final backLabel = MaterialLocalizations.of(
+                tester.element(find.byType(PracticeComparisonPage)))
+            .backButtonTooltip;
+        final back = find.byTooltip(backLabel);
+        expect(back, findsOneWidget);
+        await tester.tap(back);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 500));
         expect(find.byType(StyleDetailView), findsOneWidget);

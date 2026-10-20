@@ -31,7 +31,7 @@ Widget notBuiltTabBody(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: ChoreiaType.display(size: 24)),
+            Text(title, style: ChoreiaType.of(context).display(size: 24)),
             const SizedBox(height: 12),
             Text(
               UiLanguage.text(
@@ -43,17 +43,17 @@ Widget notBuiltTabBody(
                     'Bu bölüm plandaki yerini gösterir. Burada '
                     'kullanılabilir bir özellik yok.',
               ),
-              style: ChoreiaType.body(
+              style: ChoreiaType.of(context).body(
                 size: 13.5,
-                color: ChoreiaColors.text(0.78),
+                color: ChoreiaPalette.of(context).text(0.78),
               ),
             ),
             const SizedBox(height: 14),
             Text(
               plannedContent,
-              style: ChoreiaType.body(
+              style: ChoreiaType.of(context).body(
                 size: 12.5,
-                color: ChoreiaColors.text(0.55),
+                color: ChoreiaPalette.of(context).text(0.55),
               ),
             ),
           ],

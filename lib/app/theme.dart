@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'theme_palette.dart';
+export 'theme_palette.dart';
 
 /// Choreia's visual language — design panel v1, 2026-08-05
 /// (`docs/design/DESIGN-PANEL-PROMPT.md`; `claude.ai/design` project
@@ -79,6 +82,8 @@ abstract final class ChoreiaColors {
 /// the words are read.
 abstract final class ChoreiaType {
   ChoreiaType._();
+  static ChoreiaTypography of(BuildContext context) => ChoreiaTypography(
+      ChoreiaPalette.of(context), Localizations.maybeLocaleOf(context)?.languageCode ?? 'en');
 
   /// The colours [body] and [label] fall back to when a call site names none.
   ///
@@ -126,6 +131,21 @@ abstract final class ChoreiaType {
         letterSpacing: letterSpacingEm * size,
         color: color ?? labelDefaultColor,
       );
+}
+
+/// Context-bound typography keeps independent app trees and scripts separate.
+class ChoreiaTypography {
+  const ChoreiaTypography(this.palette, this.language);
+  final ChoreiaPalette palette;
+  final String language;
+  bool get untracked => const {'ar', 'hi', 'ja', 'ko', 'zh'}.contains(language);
+  TextStyle display({double size = 34, Color? color, double height = 1.06}) =>
+      ChoreiaType.display(size: size, color: color ?? palette.bright, height: height)
+          .copyWith(letterSpacing: untracked ? 0 : -0.2);
+  TextStyle body({double size = 13.5, Color? color, FontWeight weight = FontWeight.w400, double height = 1.55}) =>
+      ChoreiaType.body(size: size, color: color ?? palette.text(.78), weight: weight, height: height);
+  TextStyle label({double size = 10, Color? color, double letterSpacingEm = .16}) =>
+      ChoreiaType.label(size: size, color: color ?? palette.text(.55), letterSpacingEm: untracked ? 0 : letterSpacingEm);
 }
 
 // ── Motion ───────────────────────────────────────────────────────────────
@@ -318,17 +338,17 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
 
   @override
   Widget build(BuildContext context) => ColoredBox(
-        color: ChoreiaColors.stage,
+        color: ChoreiaPalette.of(context).stage,
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
             _blob(_a,
                 alignment: const Alignment(-0.75, -0.9),
-                color: ChoreiaColors.rose,
+                color: ChoreiaPalette.of(context).rose,
                 size: 460),
             _blob(_b,
                 alignment: const Alignment(0.85, 0.95),
-                color: const Color(0xFFFFBA8A),
+                color: ChoreiaPalette.of(context).glowWarm,
                 size: 420,
                 reverse: true),
             if (widget.child != null) widget.child!,
@@ -368,7 +388,7 @@ class _ChoreiaBackdropState extends State<ChoreiaBackdrop>
                       // floor back down to 0.55 and RAISED the hierarchy
                       // spread from 1.86x to 2.59x — the trade runs the right
                       // way round.
-                      color.withValues(alpha: 0.18),
+                      color.withValues(alpha: ChoreiaPalette.of(context).glowRoseAlpha),
                       color.withValues(alpha: 0),
                     ],
                   ),
@@ -410,7 +430,7 @@ class GlassPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color base = tint ?? ChoreiaColors.rose;
+    final Color base = tint ?? ChoreiaPalette.of(context).rose;
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
@@ -426,15 +446,15 @@ class GlassPanel extends StatelessWidget {
                 // 0.06, not 0.09 — same reasoning as the backdrop blob
                 // (C-157): a panel tint that lightens the surface is paid for
                 // by every string sitting on it.
-                base.withValues(alpha: 0.06),
-                Colors.white.withValues(alpha: 0.02),
+                base.withValues(alpha: ChoreiaPalette.of(context).panelTintAlpha),
+                ChoreiaPalette.of(context).pillFill.withValues(alpha: ChoreiaPalette.of(context).panelWhiteAlpha),
               ],
             ),
             border:
-                Border.all(color: borderColor ?? ChoreiaColors.hairline(0.13)),
+                Border.all(color: borderColor ?? ChoreiaPalette.of(context).hairline(0.13)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.4),
+                color: Colors.black.withValues(alpha: ChoreiaPalette.of(context).shadowAlpha),
                 blurRadius: 30,
                 offset: const Offset(0, 14),
               ),
@@ -467,7 +487,7 @@ class StatusRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color c = tone ?? ChoreiaColors.text(0.7);
+    final Color c = tone ?? ChoreiaPalette.of(context).text(0.7);
     final Widget ring = Container(
       width: size,
       height: size,
@@ -517,12 +537,12 @@ class StatusPill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          color: filled ? Colors.black.withValues(alpha: fillScrim) : null,
+          color: filled ? ChoreiaPalette.of(context).pillFill.withValues(alpha: ChoreiaPalette.of(context).pillFillAlpha) : null,
           border:
               Border.all(color: tone.withValues(alpha: filled ? 0.4 : 0.55)),
         ),
         child: Text(label,
-            style: ChoreiaType.label(
+            style: ChoreiaType.of(context).label(
                 size: 9.5, color: tone, letterSpacingEm: 0.1)),
       );
 }
@@ -560,46 +580,55 @@ class TitleWithPill extends StatelessWidget {
 
 // ── App theme ────────────────────────────────────────────────────────────
 
-/// The MaterialApp theme. Purely cosmetic — no widget in this app depends on
-/// Material's default colours — so swapping this in is exactly what "design
-/// changes the styling" means at the top of the tree.
+/// Material and custom surfaces share the same immutable semantic palette.
 abstract final class ChoreiaTheme {
   ChoreiaTheme._();
-
-  static ThemeData get dark {
-    final TextTheme base = ThemeData.dark().textTheme.apply(
-          fontFamily: 'Manrope',
-          bodyColor: ChoreiaColors.text(0.86),
-          displayColor: ChoreiaColors.bright,
-        );
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: ChoreiaColors.stage,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: ChoreiaColors.rose,
-        brightness: Brightness.dark,
-        surface: ChoreiaColors.stage,
-      ),
-      textTheme: base,
+  static ThemeData get light => _build(Brightness.light, ChoreiaPalette.light);
+  static ThemeData get dark => _build(Brightness.dark, ChoreiaPalette.dark);
+  static ThemeData _build(Brightness brightness, ChoreiaPalette p) {
+    final scheme = ColorScheme.fromSeed(seedColor: p.rose, brightness: brightness).copyWith(
+      primary: p.rose, onPrimary: p.stage, secondary: p.amber, onSecondary: p.stage,
+      surface: p.stage, onSurface: p.ink, surfaceContainerHighest: p.raisedSurface,
+      error: p.error, onError: p.stage, errorContainer: p.errorContainer,
+      onErrorContainer: p.onErrorContainer, outline: p.outline, outlineVariant: p.hairline(.3),
+    );
+    final base = ThemeData(useMaterial3: true, brightness: brightness, colorScheme: scheme);
+    final text = base.textTheme.apply(fontFamily: 'Manrope', bodyColor: p.text(.86), displayColor: p.bright);
+    return base.copyWith(
+      extensions: <ThemeExtension<dynamic>>[p],
+      scaffoldBackgroundColor: p.stage, canvasColor: p.stage,
+      textTheme: text, disabledColor: p.disabledForeground,
+      dividerColor: p.hairline(.2), focusColor: p.focusRing.withValues(alpha: .2),
+      hoverColor: p.rose.withValues(alpha: .08), highlightColor: p.rose.withValues(alpha: .12),
+      splashColor: p.rose.withValues(alpha: .16),
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        titleTextStyle: ChoreiaType.display(size: 22),
-        iconTheme: IconThemeData(color: ChoreiaColors.text(0.8)),
+        backgroundColor: p.stage, foregroundColor: p.bright, surfaceTintColor: Colors.transparent,
+        elevation: 0, titleTextStyle: ChoreiaType.display(size: 22, color: p.bright),
+        iconTheme: IconThemeData(color: p.text(.8)),
+        systemOverlayStyle: brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: ChoreiaColors.rose,
-          foregroundColor: ChoreiaColors.stage,
-          textStyle: ChoreiaType.body(
-              size: 14, weight: FontWeight.w600, color: ChoreiaColors.stage),
-          minimumSize: const Size.fromHeight(50),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        ),
+      filledButtonTheme: FilledButtonThemeData(style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith((states) => states.contains(WidgetState.disabled) ? p.disabledSurface : p.rose),
+        foregroundColor: WidgetStateProperty.resolveWith((states) => states.contains(WidgetState.disabled) ? p.disabledForeground : p.stage),
+        textStyle: WidgetStatePropertyAll(ChoreiaType.body(size: 14, weight: FontWeight.w600, color: p.stage)),
+        minimumSize: const WidgetStatePropertyAll(Size(48, 50)),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+        side: WidgetStateProperty.resolveWith((states) => states.contains(WidgetState.focused) ? BorderSide(color: p.focusRing, width: 2) : BorderSide.none),
+      )),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true, fillColor: p.raisedSurface.withValues(alpha: .5),
+        labelStyle: TextStyle(color: p.text(.85)), hintStyle: TextStyle(color: p.text(.72)),
+        helperStyle: TextStyle(color: p.text(.78)), errorStyle: TextStyle(color: p.error),
+        border: OutlineInputBorder(borderSide: BorderSide(color: p.outline)),
+        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: p.focusRing, width: 2)),
+        errorBorder: OutlineInputBorder(borderSide: BorderSide(color: p.error)),
+        focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: p.error, width: 2)),
       ),
+      textSelectionTheme: TextSelectionThemeData(cursorColor: p.rose, selectionColor: p.rose.withValues(alpha: .25), selectionHandleColor: p.rose),
+      navigationBarTheme: NavigationBarThemeData(backgroundColor: p.raisedSurface, indicatorColor: p.rose.withValues(alpha: .14)),
+      snackBarTheme: SnackBarThemeData(backgroundColor: p.raisedSurface, contentTextStyle: text.bodyMedium, actionTextColor: p.rose),
+      dialogTheme: DialogThemeData(backgroundColor: p.stage, surfaceTintColor: Colors.transparent),
+      popupMenuTheme: PopupMenuThemeData(color: p.stage, textStyle: text.bodyMedium, surfaceTintColor: Colors.transparent),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'not_built_tab_body.dart';
 import '../onboarding/first_run_view.dart';
 import '../theme.dart';
+import '../theme/theme_picker.dart';
 import '../ui_language.dart';
 import '../localization/language_picker.dart';
 import '../support_action.dart';
@@ -43,7 +44,7 @@ class ProfileView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(UiLanguage.text(context, en: 'Profile', tr: 'Profil'),
-                      style: ChoreiaType.display(size: 24)),
+                      style: ChoreiaType.of(context).display(size: 24)),
                   const SizedBox(height: 12),
                   Text(
                     UiLanguage.text(
@@ -51,7 +52,7 @@ class ProfileView extends StatelessWidget {
                       en: 'Explore five solo dance paths without an account or camera. Practice records stay on this device within your guest or account scope and reflect your own study. A Motion account is optional.',
                       tr: 'Beş solo dans yolunu hesap veya kamera olmadan çalışabilirsiniz. Çalışma kayıtları bu cihazda konuk veya hesabınız kapsamında kalır ve kendi çalışmanızı gösterir. Motion hesabı isteğe bağlıdır.',
                     ),
-                    style: ChoreiaType.body(size: 13.5),
+                    style: ChoreiaType.of(context).body(size: 13.5),
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -60,9 +61,10 @@ class ProfileView extends StatelessWidget {
                               cameraSessionsAvailable),
                           tr: IntroStrings.cameraStatus(cameraSessionsAvailable,
                               turkish: true)),
-                      style: ChoreiaType.body(size: 13.5)),
+                      style: ChoreiaType.of(context).body(size: 13.5)),
                   const SizedBox(height: 18),
                   const ChoreiaLanguagePicker(),
+                  const ChoreiaThemePicker(),
                   FilledButton(
                     key: accountEntryKey,
                     onPressed: () => Navigator.of(context).push<void>(
@@ -102,6 +104,7 @@ class ProfileView extends StatelessWidget {
         const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: ChoreiaLanguagePicker()),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 24), child: ChoreiaThemePicker()),
         SafeArea(top: false, child: _licensesButton(context)),
       ],
     );

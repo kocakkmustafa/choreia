@@ -358,5 +358,11 @@
   "This session requests camera permission on your device. It does not produce a score.": "このセッションでは、端末のカメラを使用する許可を求めます。スコアは算出しません。",
   "This session requests camera permission before using the camera.": "このセッションでは、カメラを使用する前に許可を求めます。",
   "REFERENCE · SESSION CLOSED": "参照資料 · セッション停止",
-  "NO SCORING": "採点対象外"
+  "NO SCORING": "採点対象外",
+  "Appearance": "外観",
+  "System theme": "システムのテーマ",
+  "Light theme": "ライトテーマ",
+  "Dark theme": "ダークテーマ",
+  "This theme applies for this session. The device preference could not be saved.": "このテーマは今回のセッションで有効です。端末にテーマ設定を保存できませんでした。",
+  "Your saved theme could not be read. System theme is used until you choose another option.": "保存済みのテーマを読み込めませんでした。別のテーマを選ぶまで、システムのテーマを使用します。"
 }

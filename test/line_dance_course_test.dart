@@ -15,6 +15,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'hip_hop_course_page_test.dart' show WrittenBundle;
 import 'support/test_catalog.dart';
 
+Finder get _verticalCourseScroll => find.byWidgetPredicate(
+    (widget) => widget is Scrollable && widget.axisDirection == AxisDirection.down);
+
 void main() {
   final source =
       File('content/line_dance_beginner_course.json').readAsStringSync();
@@ -78,11 +81,12 @@ void main() {
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
           find.byType(LineDanceDirectionDiagram), 250,
-          maxScrolls: 100);
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       expect(find.byType(LineDanceDirectionDiagram), findsOneWidget);
       for (var n = 1; n <= 9; n++) {
         final unit = find.byKey(ValueKey('ld_0$n'));
-        await tester.scrollUntilVisible(unit, 250, maxScrolls: 100);
+        await tester.scrollUntilVisible(unit, 250,
+            maxScrolls: 100, scrollable: _verticalCourseScroll);
         expect(unit, findsOneWidget);
       }
       final last = find.byKey(const ValueKey('ld_09'));
@@ -93,7 +97,8 @@ void main() {
       final diagram = find.text(lang == 'tr'
           ? 'Özgün sayı ve ayak haritası'
           : 'Original count and foot map');
-      await tester.scrollUntilVisible(diagram, 250, maxScrolls: 100);
+      await tester.scrollUntilVisible(diagram, 250,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       expect(diagram, findsOneWidget);
       expect(find.byType(Checkbox), findsNothing);
       expect(tester.takeException(), isNull);
@@ -107,7 +112,8 @@ void main() {
     expect(card.entry.contentStatus, 'comingSoon');
     await tester.pumpWidget(MaterialApp(home: StyleDetailView(card: card)));
     final link = find.byKey(const Key('style.lineDanceWrittenCourse'));
-    await tester.scrollUntilVisible(link, 200);
+    await tester.scrollUntilVisible(link, 200,
+        scrollable: _verticalCourseScroll);
     await tester.tap(link);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 450));
@@ -225,24 +231,28 @@ void main() {
       }
 
       final walls = find.byType(LineDanceWallMaps);
-      await tester.scrollUntilVisible(walls, 250, maxScrolls: 100);
+      await tester.scrollUntilVisible(walls, 250,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       await tester.pumpAndSettle();
       await capture('wall-map-first');
       final lastWall = find.text(lang == 'tr'
           ? 'Bakış 3: kendi uzuv yönlerin'
           : 'Facing 3: your own-limb directions');
-      await tester.scrollUntilVisible(lastWall, 250, maxScrolls: 100);
+      await tester.scrollUntilVisible(lastWall, 250,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       await tester.pumpAndSettle();
       await capture('wall-map-last');
       final row = find.byKey(const ValueKey('ld_05'));
-      await tester.scrollUntilVisible(row, 250, maxScrolls: 100);
+      await tester.scrollUntilVisible(row, 250,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       await Scrollable.ensureVisible(tester.element(row), alignment: 0.1);
       await tester.pumpAndSettle();
       await tester.tap(row);
       await tester.pumpAndSettle();
       final question =
           find.text(lang == 'tr' ? 'Yeni satırı çöz' : 'Solve a new row');
-      await tester.scrollUntilVisible(question, 220, maxScrolls: 100);
+      await tester.scrollUntilVisible(question, 220,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       await Scrollable.ensureVisible(tester.element(question), alignment: 0.1);
       await tester.pumpAndSettle();
       final answer = find.byKey(const ValueKey('line.answer'));
@@ -255,7 +265,8 @@ void main() {
         expect(find.text(answerText, skipOffstage: false), findsNothing);
         expect(find.bySemanticsLabel(answerText), findsNothing);
         await capture('new-row');
-        await tester.scrollUntilVisible(answer, 180, maxScrolls: 100);
+        await tester.scrollUntilVisible(answer, 180,
+            maxScrolls: 100, scrollable: _verticalCourseScroll);
         await tester.tap(answer);
         await tester.pumpAndSettle();
         await Scrollable.ensureVisible(tester.element(answer), alignment: 0.1);
@@ -267,13 +278,15 @@ void main() {
       }
       await capture('answer');
       final turn = find.byKey(const ValueKey('ld_08'));
-      await tester.scrollUntilVisible(turn, 250, maxScrolls: 100);
+      await tester.scrollUntilVisible(turn, 250,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       await Scrollable.ensureVisible(tester.element(turn), alignment: 0.1);
       await tester.pumpAndSettle();
       await tester.tap(turn);
       await tester.pumpAndSettle();
       final ledger = find.byType(LineDanceWeightLedger);
-      await tester.scrollUntilVisible(ledger, 200, maxScrolls: 100);
+      await tester.scrollUntilVisible(ledger, 200,
+          maxScrolls: 100, scrollable: _verticalCourseScroll);
       await Scrollable.ensureVisible(tester.element(ledger), alignment: 0.1);
       await tester.pumpAndSettle();
       await capture('turn-weight-ledger');

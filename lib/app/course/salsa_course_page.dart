@@ -38,11 +38,16 @@ String _salsaNumber(BuildContext context, num value, bool turkish,
 String _salsaDate(BuildContext context, DateTime value, bool turkish,
     {bool includeTime = false}) {
   final locale = _salsaLocale(context, turkish);
-  if (DateFormat.localeExists(locale) ||
-      DateFormat.localeExists(locale.split('_').first)) {
-    final format = DateFormat.yMMMd(locale);
-    if (includeTime) format.add_jm();
-    return format.format(value);
+  try {
+    if (DateFormat.localeExists(locale) ||
+        DateFormat.localeExists(locale.split('_').first)) {
+      final format = DateFormat.yMMMd(locale);
+      if (includeTime) format.add_jm();
+      return format.format(value);
+    }
+  } on Exception {
+    // intl can throw while checking localeExists before any date symbols have
+    // been initialized. An isolated reader must still reach the fallback below.
   }
   // An isolated TR/EN reader may not install Flutter's localization delegates.
   // Preserve its usable numeric date until those date symbols are available.
@@ -94,9 +99,9 @@ class SalsaCourseEntry extends StatelessWidget {
     final entryEpoch = env.ownerEpoch?.value;
     return GlassPanel(
       radius: 18,
-      tint: ChoreiaColors.amber,
+      tint: ChoreiaPalette.of(context).amber,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Salsa On1 · Solo', style: ChoreiaType.display(size: 25)),
+        Text('Salsa On1 · Solo', style: ChoreiaType.of(context).display(size: 25)),
         const SizedBox(height: 8),
         Text(
             _salsaFormat(
@@ -108,7 +113,7 @@ class SalsaCourseEntry extends StatelessWidget {
               'lessons': 48,
               'languages': ChoreiaLocaleController.supported.length
             }),
-            style: ChoreiaType.body()),
+            style: ChoreiaType.of(context).body()),
         const SizedBox(height: 8),
         FilledButton.tonalIcon(
           key: const Key('salsa.open'),
@@ -386,7 +391,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                     : t('The course or progress could not be read. Existing records were not replaced. Retry to reopen them.',
                         'Kurs veya ilerleme okunamadı. Mevcut kayıtların üzerine yazılmadı. Yeniden açmak için tekrar dene.'),
                 key: const Key('salsa.loadError'),
-                style: ChoreiaType.body()),
+                style: ChoreiaType.of(context).body()),
             if (!_integrityFailure)
               TextButton(
                   onPressed: _load, child: Text(t('Retry', 'Tekrar dene'))),
@@ -410,18 +415,18 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
         children: [
           Text(course.title.localized(context, turkish: tr),
-              style: ChoreiaType.display(size: 34)),
+              style: ChoreiaType.of(context).display(size: 34)),
           const SizedBox(height: 10),
           Text(course.subtitle.localized(context, turkish: tr),
-              style: ChoreiaType.body()),
+              style: ChoreiaType.of(context).body()),
           const SizedBox(height: 18),
           GlassPanel(
-              tint: ChoreiaColors.amber,
+              tint: ChoreiaPalette.of(context).amber,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(t('Your learning record', 'Öğrenme kaydın'),
-                        style: ChoreiaType.display(size: 25)),
+                        style: ChoreiaType.of(context).display(size: 25)),
                     const SizedBox(height: 10),
                     Text(
                         fmt('{completed} / {total} self-reported complete',
@@ -430,11 +435,11 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                           'total': course.lessons.length
                         }),
                         key: const Key('salsa.completedCount'),
-                        style: ChoreiaType.body(size: 16)),
+                        style: ChoreiaType.of(context).body(size: 16)),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
                         value: completed.length / course.lessons.length,
-                        color: ChoreiaColors.amber,
+                        color: ChoreiaPalette.of(context).amber,
                         semanticsLabel: t('Self-reported completion',
                             'Öz beyanla tamamlanma'),
                         semanticsValue: NumberFormat.percentPattern(
@@ -449,14 +454,14 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                               'opened': opened.length,
                               'practised': practised.length
                             }),
-                        style: ChoreiaType.body()),
+                        style: ChoreiaType.of(context).body()),
                     Text(
                         _store!.owner == 'guest'
                             ? t('Saved on this device for a guest. No camera mastery score.',
                                 'Bu cihazda misafir için kayıtlı. Kamera ustalık puanı yok.')
                             : t('Saved on this device for the current account. No camera mastery score.',
                                 'Bu cihazda geçerli hesap için kayıtlı. Kamera ustalık puanı yok.'),
-                        style: ChoreiaType.body()),
+                        style: ChoreiaType.of(context).body()),
                     const SizedBox(height: 12),
                     FilledButton.tonal(
                         onPressed: () => _open(next),
@@ -470,12 +475,12 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
           const SizedBox(height: 16),
           GlassPanel(
               key: const Key('salsa.weeklyPractice'),
-              tint: ChoreiaColors.rose,
+              tint: ChoreiaPalette.of(context).rose,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(t('Practice by week', 'Haftalık pratik'),
-                        style: ChoreiaType.display(size: 22)),
+                        style: ChoreiaType.of(context).display(size: 22)),
                     const SizedBox(height: 6),
                     Text(
                         fmt(
@@ -486,7 +491,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                                 'Kayıtlı kurs denemelerine yalnız ritim çalışması da dahildir; '
                                 'bunlar hareket veya kamera becerisini kanıtlamaz.',
                             {'date': _shortDate(weeklyPractice.asOf)}),
-                        style: ChoreiaType.body()),
+                        style: ChoreiaType.of(context).body()),
                     const SizedBox(height: 12),
                     for (var i = 0; i < weeklyPractice.weeks.length; i++)
                       _weeklyPracticeRow(weeklyPractice.weeks[i], i),
@@ -501,33 +506,33 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                                   'bu haftalara eklenmez. Cihaz saatini kontrol et.',
                               {'count': weeklyPractice.futureDatedAttempts}),
                           key: const Key('salsa.weeklyPractice.futureDateNote'),
-                          style: ChoreiaType.body(size: 12)),
+                          style: ChoreiaType.of(context).body(size: 12)),
                   ])),
           const SizedBox(height: 16),
           Text(course.outcome.localized(context, turkish: tr),
-              style: ChoreiaType.body()),
+              style: ChoreiaType.of(context).body()),
           const SizedBox(height: 8),
           Text(
               t('Lessons are open to revisit. Prerequisites suggest a learning order. Completion records the option you used.',
                   'Dersleri istediğin zaman yeniden açabilirsin. Önkoşullar önerilen sırayı gösterir. Tamamlanma, kullandığın seçenekle kaydedilir.'),
-              style: ChoreiaType.body()),
+              style: ChoreiaType.of(context).body()),
           const SizedBox(height: 18),
           PracticeMusicNotice(turkish: tr),
           for (final module in course.modules) ...[
             Text(
                 '${_salsaNumber(context, module.order, tr, minimumDigits: 2)} · ${module.title.localized(context, turkish: tr)}',
-                style: ChoreiaType.display(size: 26)),
+                style: ChoreiaType.of(context).display(size: 26)),
             const SizedBox(height: 8),
             for (final lesson
                 in course.lessons.where((l) => l.moduleId == module.id))
               Card(
-                  color: ChoreiaColors.oxblood.withValues(alpha: .7),
+                  color: ChoreiaPalette.of(context).oxblood.withValues(alpha: .7),
                   child: ListTile(
                     key: Key('salsa.lesson.${lesson.id}'),
                     leading: Text(
                         _salsaNumber(context, lesson.order, tr,
                             minimumDigits: 2),
-                        style: ChoreiaType.label(size: 12)),
+                        style: ChoreiaType.of(context).label(size: 12)),
                     title: Text(lesson.title.localized(context, turkish: tr)),
                     subtitle: Text(completed.contains(lesson.id)
                         ? t('Self-reported complete · revisit',
@@ -544,7 +549,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                         completed.contains(lesson.id)
                             ? Icons.check_circle_outline
                             : Icons.chevron_right,
-                        color: ChoreiaColors.amber),
+                        color: ChoreiaPalette.of(context).amber),
                     onTap: () => _open(lesson),
                   )),
             const SizedBox(height: 22),
@@ -586,7 +591,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                     padding: const EdgeInsets.all(16),
                     child: Text(
                         course.selectionBasis.localized(context, turkish: tr),
-                        style: ChoreiaType.body()))
+                        style: ChoreiaType.of(context).body()))
               ]),
           _safetyPanel(context, course, tr),
         ]);
@@ -602,7 +607,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(dates, style: ChoreiaType.label(size: 11)),
+          Text(dates, style: ChoreiaType.of(context).label(size: 11)),
           const SizedBox(height: 3),
           Text(
               fmt('Saved attempts: {attempts} · Lessons with attempts: {lessons}',
@@ -610,7 +615,7 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                 'attempts': week.practiceAttempts,
                 'lessons': week.distinctLessons
               }),
-              style: ChoreiaType.body(size: 13)),
+              style: ChoreiaType.of(context).body(size: 13)),
         ],
       ),
     );
@@ -988,13 +993,13 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                 : t('The account changed. Return to the course to use the current account’s progress.',
                                     'Hesap değişti. Geçerli hesabın ilerlemesi için kursa geri dön.'),
                             key: const Key('salsa.accountChanged'),
-                            style: ChoreiaType.body()),
+                            style: ChoreiaType.of(context).body()),
                         TextButton(
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text(t('Back to course', 'Kursa dön'))),
                       ])),
                     Text(lesson.title.localized(context, turkish: tr),
-                        style: ChoreiaType.display(size: 34)),
+                        style: ChoreiaType.of(context).display(size: 34)),
                     LessonMediaSlot.empty(
                       key: ValueKey('salsa.mediaSlot.${lesson.id}'),
                       bundle: widget.env.bundle ?? rootBundle,
@@ -1021,14 +1026,14 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                     ],
                     const SizedBox(height: 12),
                     Text(lesson.goal.localized(context, turkish: tr),
-                        style: ChoreiaType.body(size: 16)),
+                        style: ChoreiaType.of(context).body(size: 16)),
                     const SizedBox(height: 8),
                     Text(
                         fmt(
                             'Suggested {minutes} minutes, including pauses. Take the time you need.',
                             'Molalar dahil öneri {minutes} dakika. Süreyi kendine göre ayarla.',
                             {'minutes': lesson.minutes}),
-                        style: ChoreiaType.body()),
+                        style: ChoreiaType.of(context).body()),
                     if (lesson.prerequisites.isNotEmpty) ...[
                       const SizedBox(height: 8),
                       Text(
@@ -1039,7 +1044,7 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                 .title
                                 .localized(context, turkish: tr)
                           }),
-                          style: ChoreiaType.body()),
+                          style: ChoreiaType.of(context).body()),
                     ],
                     _sectionTitle(t('Learn', 'Öğren')),
                     for (final (index, instruction) in lesson.teaching
@@ -1049,12 +1054,12 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                           padding: const EdgeInsets.only(bottom: 14),
                           child: Text(
                               '${_salsaNumber(context, index + 1, tr)}. $instruction',
-                              style: ChoreiaType.body(size: 15))),
+                              style: ChoreiaType.of(context).body(size: 15))),
                     if (lesson.id == 'so_04') ...[
                       Text(
                           t('A silent symbolic example for reading and description. It is not a physical demonstration, measured music beat or completion task.',
                               'Okuma ve anlatım için sessiz sembolik örnek. Fiziksel gösterim, ölçülmüş müzik vuruşu veya tamamlama görevi değildir.'),
-                          style: ChoreiaType.body(size: 14)),
+                          style: ChoreiaType.of(context).body(size: 14)),
                       TextButton(
                           key: const Key('salsa.supportHoldDemo'),
                           onPressed: _admitted && _ownerMatches
@@ -1067,24 +1072,24 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                     Text(
                         t('Keep movement comfortable. Stop for pain, dizziness or feeling unwell.',
                             'Hareketi rahat sınırında tut. Ağrı, baş dönmesi veya kötü hissetmede dur.'),
-                        style: ChoreiaType.body(color: ChoreiaColors.amber)),
+                        style: ChoreiaType.of(context).body(color: ChoreiaPalette.of(context).amber)),
                     const SizedBox(height: 10),
                     if (_needsPreparation)
                       Text(
                           t('Prepare above before moving, or choose rhythm / spoken only below.',
                               'Harekete geçmeden önce yukarıdaki hazırlığı yap veya aşağıdan yalnız ritim / sözlü seçeneğini seç.'),
                           key: const Key('salsa.preparation.required'),
-                          style: ChoreiaType.body())
+                          style: ChoreiaType.of(context).body())
                     else ...[
                       if (_option == SalsaPracticeOption.rhythmOnly)
                         Text(
                             t('Read this lesson’s sequence and describe it in your own words. If useful, speak 1-2-3, 5-6-7 with the silent guide. Keep this attempt to reading and voice; leave footwork, weight transfer, turns and crossings untried. Record only this spoken option.',
                                 'Bu dersin sırasını oku ve kendi sözlerinle anlat. İstersen sessiz rehberle 1-2-3, 5-6-7 sayımını sesli söyle. Bu denemeyi okuma ve sesle sınırla; ayak çalışması, ağırlık aktarımı, dönüş ve çapraz adımlar denenmedi olarak kalsın. Yalnız bu sözlü seçeneği kaydet.'),
                             key: const Key('salsa.spokenPractice'),
-                            style: ChoreiaType.body(size: 15))
+                            style: ChoreiaType.of(context).body(size: 15))
                       else
                         Text(lesson.practice.localized(context, turkish: tr),
-                            style: ChoreiaType.body(size: 15)),
+                            style: ChoreiaType.of(context).body(size: 15)),
                       const SizedBox(height: 16),
                       _counter(),
                     ],
@@ -1097,7 +1102,7 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                     _sectionTitle(t('Choose your practice option',
                         'Pratik seçeneğini seç')),
                     Text(lesson.adaptation.localized(context, turkish: tr),
-                        style: ChoreiaType.body()),
+                        style: ChoreiaType.of(context).body()),
                     const SizedBox(height: 10),
                     Wrap(spacing: 8, runSpacing: 8, children: [
                       for (final option in SalsaPracticeOption.values)
@@ -1130,12 +1135,12 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                           t('This spoken option saves practice only. Physical self-checks remain untried and do not count as completion.',
                               'Bu sözlü seçenek yalnız pratiği kaydeder. Fiziksel öz değerlendirmeler denenmedi olarak kalır; tamamlanma sayılmaz.'),
                           key: const Key('salsa.practiceOnly'),
-                          style: ChoreiaType.body()),
+                          style: ChoreiaType.of(context).body()),
                     if (selection.completionAllowed)
                       Text(
                           t('Tick each statement only if it matches your chosen practice option. These are your observations.',
                               'Her ifadeyi yalnız seçtiğin pratik seçeneğinde sana uyuyorsa işaretle. Bunlar senin gözlemlerin.'),
-                          style: ChoreiaType.body()),
+                          style: ChoreiaType.of(context).body()),
                     for (final (index, statement) in selection.indices
                         .map((index) => statements[index])
                         .indexed)
@@ -1150,14 +1155,14 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                   () => _checks[index] = value ?? false)),
                     const SizedBox(height: 8),
                     Text(lesson.repeat.localized(context, turkish: tr),
-                        style: ChoreiaType.body()),
+                        style: ChoreiaType.of(context).body()),
                     const SizedBox(height: 16),
                     if (_saveFailed)
                       Text(
                           t('Could not save. Your earlier records were not replaced. Return to the course and retry.',
                               'Kaydedilemedi. Önceki kayıtların üzerine yazılmadı. Kursa dönüp tekrar dene.'),
                           key: const Key('salsa.saveError'),
-                          style: ChoreiaType.body(color: ChoreiaColors.amber)),
+                          style: ChoreiaType.of(context).body(color: ChoreiaPalette.of(context).error)),
                     FilledButton(
                         onPressed: _busy ||
                                 _accountChanged ||
@@ -1182,7 +1187,7 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                               'Öz beyanla tamamlandı · {option} olarak kaydedildi. Bu bir kamera beceri değerlendirmesi değildir.',
                               {'option': _optionLabel(context, _option, tr)}),
                           key: const Key('salsa.saved'),
-                          style: ChoreiaType.body()),
+                          style: ChoreiaType.of(context).body()),
                       if (lesson.order < widget.course.lessons.length)
                         TextButton(
                             key: const Key('salsa.next'),
@@ -1206,22 +1211,22 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(source.title,
-                                          style: ChoreiaType.body()),
+                                          style: ChoreiaType.of(context).body()),
                                       SelectableText(source.url,
-                                          style: ChoreiaType.body()),
+                                          style: ChoreiaType.of(context).body()),
                                       if (source.supports case final support?)
                                         Text(
                                             '${t('Supports only:', 'Yalnız destekler:')} ${support.localized(context, turkish: tr)}',
                                             key: Key(
                                                 'salsa.sourceScope.${source.id}'),
-                                            style: ChoreiaType.body()),
+                                            style: ChoreiaType.of(context).body()),
                                       if (source.doesNotSupport
                                           case final limit?)
                                         Text(
                                             '${t('Does not establish:', 'Kanıtlamaz:')} ${limit.localized(context, turkish: tr)}',
                                             key: Key(
                                                 'salsa.sourceLimit.${source.id}'),
-                                            style: ChoreiaType.body()),
+                                            style: ChoreiaType.of(context).body()),
                                       TextButton.icon(
                                           icon: const Icon(Icons.copy_outlined),
                                           onPressed: () => Clipboard.setData(
@@ -1251,15 +1256,15 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
 
   Widget _sectionTitle(String title) => Padding(
       padding: const EdgeInsets.only(top: 24, bottom: 12),
-      child: Text(title, style: ChoreiaType.display(size: 25)));
+      child: Text(title, style: ChoreiaType.of(context).display(size: 25)));
   Widget _counter() => GlassPanel(
-      tint: ChoreiaColors.amber,
+      tint: ChoreiaPalette.of(context).amber,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(t('Silent count guide', 'Sessiz sayım rehberi'),
-            style: ChoreiaType.display(size: 24)),
+            style: ChoreiaType.of(context).display(size: 24)),
         const SizedBox(height: 8),
         Text(widget.course.musicCopy.localized(context, turkish: tr),
-            style: ChoreiaType.body()),
+            style: ChoreiaType.of(context).body()),
         const SizedBox(height: 14),
         PracticeMusicNotice(turkish: tr),
         Wrap(spacing: 6, runSpacing: 8, children: [
@@ -1271,20 +1276,20 @@ class _SalsaLessonPageState extends State<SalsaLessonPage>
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                         color: _count == number
-                            ? ChoreiaColors.amber
-                            : ChoreiaColors.text(.55))),
+                            ? ChoreiaPalette.of(context).amber
+                            : ChoreiaPalette.of(context).text(.55))),
                 child: Text(_salsaNumber(context, number, tr),
-                    style: ChoreiaType.label(
+                    style: ChoreiaType.of(context).label(
                         size: 16,
                         color: _count == number
-                            ? ChoreiaColors.amber
-                            : ChoreiaColors.bright))),
+                            ? ChoreiaPalette.of(context).amber
+                            : ChoreiaPalette.of(context).bright))),
         ]),
         const SizedBox(height: 8),
         Text(
             fmt('{pace} visual pulses / minute', '{pace} görsel nabız / dakika',
                 {'pace': _pace.round()}),
-            style: ChoreiaType.body()),
+            style: ChoreiaType.of(context).body()),
         Slider(
             value: _pace,
             min: 40,
@@ -1327,14 +1332,14 @@ Widget _safetyPanel(BuildContext context, SalsaCourse course, bool tr) =>
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(course.safety.localized(context, turkish: tr),
-                  style: ChoreiaType.body()),
+                  style: ChoreiaType.of(context).body()),
               const SizedBox(height: 12),
               for (final source in course.sources.where((s) =>
                   ['health', 'pregnancy', 'pregnancySignals'].contains(s.id)))
                 Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child:
-                        SelectableText(source.url, style: ChoreiaType.body())),
+                        SelectableText(source.url, style: ChoreiaType.of(context).body())),
             ]))
       ],
     );

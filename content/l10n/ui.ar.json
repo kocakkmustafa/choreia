@@ -358,5 +358,11 @@
   "This session requests camera permission on your device. It does not produce a score.": "تطلب هذه الجلسة إذن استخدام الكاميرا على جهازك. ولا تُنتج درجة تقييم.",
   "This session requests camera permission before using the camera.": "تطلب هذه الجلسة الإذن قبل استخدام الكاميرا.",
   "REFERENCE · SESSION CLOSED": "مرجع · الجلسة معطّلة",
-  "NO SCORING": "دون تقييم بالدرجات"
+  "NO SCORING": "دون تقييم بالدرجات",
+  "Appearance": "المظهر",
+  "System theme": "سمة النظام",
+  "Light theme": "السمة الفاتحة",
+  "Dark theme": "السمة الداكنة",
+  "This theme applies for this session. The device preference could not be saved.": "تُطبَّق هذه السمة خلال هذه الجلسة. تعذّر حفظ تفضيلك على الجهاز.",
+  "Your saved theme could not be read. System theme is used until you choose another option.": "تعذّرت قراءة السمة المحفوظة. ستُستخدم سمة النظام إلى أن تختار خيارًا آخر."
 }

@@ -17,8 +17,8 @@ void main() {
 
   Future<void> show(WidgetTester tester, RecordOutcome outcome) =>
       tester.pumpWidget(MaterialApp(
-        locale: const Locale('tr'),
-        supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+        locale: Locale('tr'),
+        supportedLocales: <Locale>[Locale('en'), Locale('tr')],
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         home: SessionResultView(
           lessonName: 'Test',
@@ -58,8 +58,8 @@ void main() {
         'for this movement, so calling your starting foot wrong would be a '
         'coin flip presented as a judgement.';
     await tester.pumpWidget(const MaterialApp(
-      locale: const Locale('tr'),
-      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      locale: Locale('tr'),
+      supportedLocales: <Locale>[Locale('en'), Locale('tr')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: SessionResultView(
         lessonId: 'hh_l1_bounce',

@@ -358,5 +358,11 @@
   "This session requests camera permission on your device. It does not produce a score.": "Bu seans cihazında kamera izni ister. Sayısal puan üretmez.",
   "This session requests camera permission before using the camera.": "Bu seans kamerayı kullanmadan önce cihaz izni ister.",
   "REFERENCE · SESSION CLOSED": "REFERANS · SEANS KAPALI",
-  "NO SCORING": "PUAN YOK"
+  "NO SCORING": "PUAN YOK",
+  "Appearance": "Görünüm",
+  "System theme": "Sistem teması",
+  "Light theme": "Açık tema",
+  "Dark theme": "Koyu tema",
+  "This theme applies for this session. The device preference could not be saved.": "Bu tema bu oturumda geçerli. Cihaz tercihi kaydedilemedi.",
+  "Your saved theme could not be read. System theme is used until you choose another option.": "Kayıtlı temanız okunamadı. Başka bir seçenek belirleyene kadar sistem teması kullanılır."
 }

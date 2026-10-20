@@ -139,6 +139,15 @@ void main() {
     await _loaded(tester, find.byKey(const ValueKey('salsa.lessonBody.so_01')));
     await tester.scrollUntilVisible(check, 400,
         scrollable: find.byType(Scrollable).first);
+    // The body can render before its real viewed-record write finishes.
+    // Wait for the enabled control, not merely for the row to exist.
+    for (var i = 0; i < 60; i++) {
+      if (tester.widget<CheckboxListTile>(check).onChanged != null) break;
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 5)));
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(tester.widget<CheckboxListTile>(check).onChanged, isNotNull);
     await tester.tap(check);
     await tester.pump();
     expect(tester.widget<CheckboxListTile>(check).value, isTrue);

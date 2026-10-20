@@ -130,9 +130,9 @@ class _LibraryViewState extends State<LibraryView> {
           children: <Widget>[
             Text(
               _pair('What you can learn', 'ÖĞRENEBİLECEKLERİN'),
-              style: ChoreiaType.label(
+              style: ChoreiaType.of(context).label(
                 size: 10,
-                color: ChoreiaColors.text(0.42),
+                color: ChoreiaPalette.of(context).text(0.42),
               ),
             ),
             const SizedBox(height: 8),
@@ -141,7 +141,7 @@ class _LibraryViewState extends State<LibraryView> {
                 Expanded(
                   child: Text(
                     _pair('Styles', 'Stiller'),
-                    style: ChoreiaType.display(size: 33),
+                    style: ChoreiaType.of(context).display(size: 33),
                   ),
                 ),
                 SizedBox(
@@ -175,14 +175,14 @@ class _LibraryViewState extends State<LibraryView> {
                   Semantics(
                     header: true,
                     child: Text(_pair('Written courses', 'Yazılı kurslar'),
-                        style: ChoreiaType.display(size: 25)),
+                        style: ChoreiaType.of(context).display(size: 25)),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     _pair(
                         'Self-guided lessons are available. Written progress does not verify movement skill.',
                         'Öz denetimli dersler açık. Yazılı ilerleme, hareket becerisi doğrulaması değildir.'),
-                    style: ChoreiaType.body(size: 12.5),
+                    style: ChoreiaType.of(context).body(size: 12.5),
                   ),
                   const SizedBox(height: 12),
                   for (final StyleCard c in written)
@@ -235,7 +235,7 @@ class _LibraryViewState extends State<LibraryView> {
                   tr: 'Katalogda {count} dans stili var.',
                   values: {'count': t.total}),
               style:
-                  ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.85)),
+                  ChoreiaType.of(context).body(size: 13.5, color: ChoreiaPalette.of(context).text(0.85)),
             ),
             const SizedBox(height: 10),
             Text(
@@ -246,7 +246,7 @@ class _LibraryViewState extends State<LibraryView> {
                   tr: 'Kamera referans notları: {count} stil. {status} Rehberli dersler için aşağıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.',
                   values: {'count': t.openable, 'status': _cameraNotice}),
               style:
-                  ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.62)),
+                  ChoreiaType.of(context).body(size: 12.5, color: ChoreiaPalette.of(context).text(0.62)),
             ),
           ],
         ),
@@ -278,14 +278,14 @@ class _LibraryViewState extends State<LibraryView> {
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.standard,
       showCheckmark: false,
-      selectedColor: ChoreiaColors.rose.withValues(alpha: 0.14),
-      side: BorderSide(color: ChoreiaColors.hairline(on ? 0.32 : 0.13)),
+      selectedColor: ChoreiaPalette.of(context).rose.withValues(alpha: 0.14),
+      side: BorderSide(color: ChoreiaPalette.of(context).hairline(on ? 0.32 : 0.13)),
       label: Text(
         '$label · ${UiLanguage.number(context, count)}',
-        style: ChoreiaType.label(
+        style: ChoreiaType.of(context).label(
           size: 9.5,
           letterSpacingEm: 0.1,
-          color: on ? ChoreiaColors.rose : ChoreiaColors.text(0.55),
+          color: on ? ChoreiaPalette.of(context).rose : ChoreiaPalette.of(context).text(0.55),
         ),
       ),
     );
@@ -297,7 +297,7 @@ class _LibraryViewState extends State<LibraryView> {
           _tr
               ? 'Bu filtreye uyan stil yok. Hiçbir şey gizlenmedi.'
               : LibraryStrings.emptyFilter,
-          style: ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.65)),
+          style: ChoreiaType.of(context).body(size: 13, color: ChoreiaPalette.of(context).text(0.65)),
         ),
       );
 
@@ -320,14 +320,14 @@ class _LibraryViewState extends State<LibraryView> {
                 child: Text(
                   _pair(LibraryStrings.sectionTitle(badge),
                       LibraryStrings.sectionTitleTr(badge)),
-                  style: ChoreiaType.display(size: 19),
+                  style: ChoreiaType.of(context).display(size: 19),
                 ),
               ),
               Text(
                 UiLanguage.number(context, cards.length),
-                style: ChoreiaType.label(
+                style: ChoreiaType.of(context).label(
                   size: 11,
-                  color: ChoreiaColors.text(0.4),
+                  color: ChoreiaPalette.of(context).text(0.4),
                 ),
               ),
             ],
@@ -335,7 +335,7 @@ class _LibraryViewState extends State<LibraryView> {
           const SizedBox(height: 4),
           Text(
             _sectionNote(badge),
-            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+            style: ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.55)),
           ),
           const SizedBox(height: 12),
           for (final StyleCard c in cards)
@@ -361,7 +361,7 @@ class _LibraryViewState extends State<LibraryView> {
               TitleWithPill(
                 title: Text(
                   _text(StyleContentCopy.styleName(c.entry, turkish: _tr)),
-                  style: ChoreiaType.display(size: 25),
+                  style: ChoreiaType.of(context).display(size: 25),
                 ),
                 pill: StatusPill(
                   label: writtenCourse
@@ -378,16 +378,16 @@ class _LibraryViewState extends State<LibraryView> {
               // reach. Both are shown, worded to say which is which.
               Text(
                 _lessonLine(c),
-                style: ChoreiaType.label(
-                    size: 10, color: ChoreiaColors.text(0.48)),
+                style: ChoreiaType.of(context).label(
+                    size: 10, color: ChoreiaPalette.of(context).text(0.48)),
               ),
               if (!writtenCourse && _reason(c) != null) ...<Widget>[
                 const SizedBox(height: 12),
                 Text(
                   _reason(c)!,
-                  style: ChoreiaType.body(
+                  style: ChoreiaType.of(context).body(
                     size: 12.5,
-                    color: ChoreiaColors.text(0.72),
+                    color: ChoreiaPalette.of(context).text(0.72),
                   ),
                 ),
               ],
@@ -396,12 +396,12 @@ class _LibraryViewState extends State<LibraryView> {
                 if (c.badge == StyleBadge.builtButGated && _reason(c) != null)
                   Text(
                     '${_pair('Camera references', 'Kamera referansları')}: ${_reason(c)}',
-                    style: ChoreiaType.body(size: 12.5),
+                    style: ChoreiaType.of(context).body(size: 12.5),
                   ),
                 Text(
                   LibraryStrings.sessionNotice(widget.cameraSessionsAvailable,
                       turkish: _tr),
-                  style: ChoreiaType.body(size: 12.5),
+                  style: ChoreiaType.of(context).body(size: 12.5),
                 ),
                 const SizedBox(height: 12),
                 WrittenCourseLink(styleId: c.entry.id, env: widget.env),
@@ -418,13 +418,13 @@ class _LibraryViewState extends State<LibraryView> {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: ChoreiaColors.hairline(0.10)),
+            border: Border.all(color: ChoreiaPalette.of(context).hairline(0.10)),
           ),
           child: TitleWithPill(
             title: Text(
               _text(StyleContentCopy.styleName(c.entry, turkish: _tr)),
               style:
-                  ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.8)),
+                  ChoreiaType.of(context).body(size: 13.5, color: ChoreiaPalette.of(context).text(0.8)),
             ),
             pill: StatusPill(
               label: _tr
@@ -473,7 +473,7 @@ class _LibraryViewState extends State<LibraryView> {
         : _pair(source, StyleStatusCopy.reason(c, turkish: true) ?? source);
   }
 
-  Color _tone(StyleBadge b) => badgeTone(b);
+  Color _tone(StyleBadge b) => badgeTone(b, palette: ChoreiaPalette.of(context));
 }
 
 /// The badge tone map — ONE copy.
@@ -489,7 +489,7 @@ class _LibraryViewState extends State<LibraryView> {
 /// when `contrast_test.dart` needed to measure these tones and found two
 /// candidates for the truth — the same "two copies of a truth drift" rule this
 /// app applies to derived data (C-091), reaching styling.
-Color badgeTone(StyleBadge b) => switch (b) {
+Color badgeTone(StyleBadge b, {ChoreiaPalette palette = ChoreiaPalette.dark}) => switch (b) {
       // roseBright, not rose (C-159). Raising the demo-only badge to the
       // legibility floor in C-156 pushed it PAST the graded one — 9.59 against
       // 8.08, so "not graded" was reading louder than "graded". The brief's
@@ -497,15 +497,15 @@ Color badgeTone(StyleBadge b) => switch (b) {
       // and a ceiling (it must not look FIRST class either). Using the
       // palette's existing brighter rose puts them level at 1.017x, which
       // leaves the distinction where it belongs — in the HUE, not the volume.
-      StyleBadge.scored => ChoreiaColors.roseBright,
-      StyleBadge.openUngraded => ChoreiaColors.amber,
-      StyleBadge.builtButGated => ChoreiaColors.amber,
-      StyleBadge.onHold => ChoreiaColors.amberDeep,
+      StyleBadge.scored => palette.roseBright,
+      StyleBadge.openUngraded => palette.amber,
+      StyleBadge.builtButGated => palette.amber,
+      StyleBadge.onHold => palette.amberDeep,
       // 0.65, not 0.35. At 0.35 this measured 2.58:1 — below even the 3.0
       // WCAG asks of non-text, on the badge worn by 31 of the 34 tiles. An
       // honest state nobody can see is the same as saying nothing (C-156).
       // It is still the quietest tone here; quiet is not the same as invisible.
-      StyleBadge.inPreparation => ChoreiaColors.text(0.65),
+      StyleBadge.inPreparation => palette.text(0.65),
     };
 
 /// Every user-facing string on the catalogue screen.

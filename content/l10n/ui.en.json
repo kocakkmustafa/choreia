@@ -358,5 +358,11 @@
   "This session requests camera permission on your device. It does not produce a score.": "This session requests camera permission on your device. It does not produce a score.",
   "This session requests camera permission before using the camera.": "This session requests camera permission before using the camera.",
   "REFERENCE · SESSION CLOSED": "REFERENCE · SESSION CLOSED",
-  "NO SCORING": "NO SCORING"
+  "NO SCORING": "NO SCORING",
+  "Appearance": "Appearance",
+  "System theme": "System theme",
+  "Light theme": "Light theme",
+  "Dark theme": "Dark theme",
+  "This theme applies for this session. The device preference could not be saved.": "This theme applies for this session. The device preference could not be saved.",
+  "Your saved theme could not be read. System theme is used until you choose another option.": "Your saved theme could not be read. System theme is used until you choose another option."
 }

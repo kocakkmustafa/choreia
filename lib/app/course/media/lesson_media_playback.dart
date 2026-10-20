@@ -451,7 +451,7 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
               ? 'Gösterim oynatılamadı. Yazılı derse devam edebilirsin.'
               : 'The demonstration could not play. You can continue with the written lesson.',
           key: const Key('choreia.mediaPlaybackFailure'),
-          style: ChoreiaType.body(),
+          style: ChoreiaType.of(context).body(),
         ),
       );
     }
@@ -462,7 +462,7 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(tr ? 'Gösterim' : 'Demonstration',
-              style: ChoreiaType.label(color: ChoreiaColors.amber)),
+              style: ChoreiaType.of(context).label(color: ChoreiaPalette.of(context).amber)),
           const SizedBox(height: 10),
           if (!_ready || video == null || frame == null)
             const AspectRatio(
@@ -486,7 +486,7 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
                         child: Text(
                           frame.caption,
                           textAlign: TextAlign.center,
-                          style: ChoreiaType.body(color: ChoreiaColors.bright),
+                          style: ChoreiaType.of(context).body(color: ChoreiaPalette.onVideoCaption),
                         ),
                       ),
                     ),
@@ -524,7 +524,7 @@ class _LessonMediaPlaybackState extends State<LessonMediaPlayback> {
             tr
                 ? 'Gösterimi izlemek ders ilerlemesini değiştirmez.'
                 : 'Watching the demonstration does not change lesson progress.',
-            style: ChoreiaType.body(size: 12),
+            style: ChoreiaType.of(context).body(size: 12),
           ),
         ],
       ),

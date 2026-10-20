@@ -358,5 +358,11 @@
   "This session requests camera permission on your device. It does not produce a score.": "Cette séance demande l’autorisation d’utiliser la caméra de ton appareil. Elle ne produit aucun score.",
   "This session requests camera permission before using the camera.": "Cette séance demande ton autorisation avant d’utiliser la caméra.",
   "REFERENCE · SESSION CLOSED": "RÉFÉRENCE · SÉANCE FERMÉE",
-  "NO SCORING": "NON NOTÉ"
+  "NO SCORING": "NON NOTÉ",
+  "Appearance": "Apparence",
+  "System theme": "Thème du système",
+  "Light theme": "Thème clair",
+  "Dark theme": "Thème sombre",
+  "This theme applies for this session. The device preference could not be saved.": "Ce thème s’applique à la session actuelle. La préférence de l’appareil n’a pas pu être enregistrée.",
+  "Your saved theme could not be read. System theme is used until you choose another option.": "Le thème enregistré n’a pas pu être lu. Le thème du système est utilisé en attendant le choix d’une autre option."
 }

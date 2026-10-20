@@ -52,19 +52,19 @@ class SalsaSessionPreparation extends StatelessWidget {
     ];
     return GlassPanel(
       key: const Key('salsa.preparation'),
-      tint: ChoreiaColors.amber,
+      tint: ChoreiaPalette.of(context).amber,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(t('Prepare for this session', 'Bu oturuma hazırlan'),
-            style: ChoreiaType.display(size: 25)),
+            style: ChoreiaType.of(context).display(size: 25)),
         const SizedBox(height: 12),
         for (final (index, step) in steps.indexed)
           Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: Text('${index + 1}. $step', style: ChoreiaType.body())),
+              child: Text('${index + 1}. $step', style: ChoreiaType.of(context).body())),
         Text(
             t('Take the time you need; reading this card is not warming up. Stop for pain, dizziness or feeling unwell. You may read or count aloud without dancing.',
                 'Gereken zamanı ayır; kartı okumak ısınmak değildir. Ağrı, baş dönmesi veya kötü hissetmede dur. Dans etmeden okuyabilir veya sesli sayabilirsin.'),
-            style: ChoreiaType.body()),
+            style: ChoreiaType.of(context).body()),
         const SizedBox(height: 12),
         FilledButton.tonal(
             key: const Key('salsa.preparation.acknowledge'),
@@ -74,7 +74,7 @@ class SalsaSessionPreparation extends StatelessWidget {
         Text(
             t('Your report only; the app has not checked readiness or medical suitability.',
                 'Yalnız senin beyanın; uygulama hazır oluşunu veya sağlık açısından uygunluğu kontrol etmez.'),
-            style: ChoreiaType.body()),
+            style: ChoreiaType.of(context).body()),
         TextButton(
             key: const Key('salsa.preparation.spokenOnly'),
             onPressed: onSpokenOnly,
@@ -90,7 +90,7 @@ class SalsaSessionPreparation extends StatelessWidget {
               Text(
                   t('IADMS · The Importance of a Good Warm-Up (2025). Salsa examples are original course drills.',
                       'IADMS · The Importance of a Good Warm-Up (2025). Salsa örnekleri özgün kurs alıştırmalarıdır.'),
-                  style: ChoreiaType.body()),
+                  style: ChoreiaType.of(context).body()),
             ]),
       ]),
     );

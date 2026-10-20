@@ -198,7 +198,7 @@ class StyleDetailView extends StatelessWidget {
             // whether content fits, never whether it starts where it should.
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
             children: <Widget>[
-              _header(copy),
+              _header(context, copy),
               const SizedBox(height: 20),
               if (card.entry.description != null) ...<Widget>[
                 Text(
@@ -207,14 +207,14 @@ class StyleDetailView extends StatelessWidget {
                     turkish: copy.turkish,
                   )!),
                   key: descriptionKey,
-                  style: ChoreiaType.body(
+                  style: ChoreiaType.of(context).body(
                     size: 14.5,
-                    color: ChoreiaColors.text(0.82),
+                    color: ChoreiaPalette.of(context).text(0.82),
                   ),
                 ),
                 const SizedBox(height: 20),
               ],
-              _attributionSection(copy),
+              _attributionSection(context, copy),
               if (WrittenCourseLink.supports(card.entry.id)) ...<Widget>[
                 const SizedBox(height: 16),
                 GlassPanel(
@@ -223,7 +223,7 @@ class StyleDetailView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(copy.writtenCourseMeaning,
-                          style: ChoreiaType.body()),
+                          style: ChoreiaType.of(context).body()),
                       const SizedBox(height: 12),
                       WrittenCourseLink(styleId: card.entry.id, env: env),
                     ],
@@ -271,7 +271,7 @@ class StyleDetailView extends StatelessWidget {
                 ),
               if (card.prose?.tempo != null) ...<Widget>[
                 const SizedBox(height: 14),
-                _tempoSection(
+                _tempoSection(context,
                   copy.turkish
                       ? card.prose!.tempoTr ?? card.prose!.tempo!
                       : card.prose!.tempo!,
@@ -280,21 +280,21 @@ class StyleDetailView extends StatelessWidget {
               ],
               if (card.entry.stepGlossary.isNotEmpty) ...<Widget>[
                 const SizedBox(height: 20),
-                _glossarySection(copy),
+                _glossarySection(context, copy),
               ],
               if (_cautions(copy).isNotEmpty) ...<Widget>[
                 const SizedBox(height: 16),
-                _cautionSection(copy),
+                _cautionSection(context, copy),
               ],
               const SizedBox(height: 24),
               _lessonsSection(offers, context, copy),
               if (card.prose != null && !card.prose!.isEmpty) ...<Widget>[
                 const SizedBox(height: 24),
-                _honestySection(card.prose!, copy),
+                _honestySection(context, card.prose!, copy),
               ],
               if (card.entry.cameraLimits.isNotEmpty) ...<Widget>[
                 const SizedBox(height: 24),
-                _cameraLimitsSection(copy),
+                _cameraLimitsSection(context, copy),
               ],
             ],
           ),
@@ -305,13 +305,13 @@ class StyleDetailView extends StatelessWidget {
 
   // ── Header ───────────────────────────────────────────────────────────
 
-  Widget _header(StyleDetailCopy copy) => Column(
+  Widget _header(BuildContext context, StyleDetailCopy copy) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (WrittenCourseLink.supports(card.entry.id))
             StatusPill(
               label: copy._pick('WRITTEN COURSE', 'YAZILI KURS'),
-              tone: ChoreiaColors.amber,
+              tone: ChoreiaPalette.of(context).amber,
             ),
           if (!WrittenCourseLink.supports(card.entry.id) ||
               card.badge != StyleBadge.inPreparation) ...<Widget>[
@@ -321,7 +321,7 @@ class StyleDetailView extends StatelessWidget {
               label: copy.authored(copy.turkish
                   ? LibraryStrings.badgeTr(card.badge)
                   : LibraryStrings.badge(card.badge)),
-              tone: _badgeTone(),
+              tone: _badgeTone(context),
             ),
           ],
           const SizedBox(height: 12),
@@ -330,7 +330,7 @@ class StyleDetailView extends StatelessWidget {
             child: Text(
               copy.authored(StyleContentCopy.styleName(card.entry,
                   turkish: copy.turkish)),
-              style: ChoreiaType.display(size: 34),
+              style: ChoreiaType.of(context).display(size: 34),
             ),
           ),
           if (card.entry.subDances.isNotEmpty) ...<Widget>[
@@ -339,18 +339,18 @@ class StyleDetailView extends StatelessWidget {
             Text(
               card.entry.subDances.join(' · '),
               style:
-                  ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.6)),
+                  ChoreiaType.of(context).body(size: 12.5, color: ChoreiaPalette.of(context).text(0.6)),
             ),
           ],
           if (_statusSentence(copy) != null) ...<Widget>[
             const SizedBox(height: 14),
             GlassPanel(
-              tint: ChoreiaColors.amber,
-              borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
+              tint: ChoreiaPalette.of(context).amber,
+              borderColor: ChoreiaPalette.of(context).amber.withValues(alpha: 0.22),
               child: Text(
                 _statusSentence(copy)!,
                 style:
-                    ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.82)),
+                    ChoreiaType.of(context).body(size: 13, color: ChoreiaPalette.of(context).text(0.82)),
               ),
             ),
           ],
@@ -400,7 +400,7 @@ class StyleDetailView extends StatelessWidget {
   // that reason, own guard clause, own key. `StyleProse.tempo` is already a
   // complete reader sentence; this widget only lays it out.
 
-  Widget _tempoSection(String sentence, StyleDetailCopy copy) => GlassPanel(
+  Widget _tempoSection(BuildContext context, String sentence, StyleDetailCopy copy) => GlassPanel(
         key: tempoKey,
         radius: 18,
         padding: const EdgeInsets.all(18),
@@ -410,13 +410,13 @@ class StyleDetailView extends StatelessWidget {
             Text(
               copy.tempoTitle,
               style:
-                  ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.5)),
+                  ChoreiaType.of(context).label(size: 10, color: ChoreiaPalette.of(context).text(0.5)),
             ),
             const SizedBox(height: 10),
             Text(
               copy.authored(sentence),
               style:
-                  ChoreiaType.body(size: 13.5, color: ChoreiaColors.text(0.82)),
+                  ChoreiaType.of(context).body(size: 13.5, color: ChoreiaPalette.of(context).text(0.82)),
             ),
           ],
         ),
@@ -424,7 +424,7 @@ class StyleDetailView extends StatelessWidget {
 
   // ── Attribution ──────────────────────────────────────────────────────
 
-  Widget _attributionSection(StyleDetailCopy copy) {
+  Widget _attributionSection(BuildContext context, StyleDetailCopy copy) {
     final String? attribution = StyleContentCopy.originAttribution(
       card.entry,
       turkish: copy.turkish,
@@ -435,15 +435,15 @@ class StyleDetailView extends StatelessWidget {
       key: attribution == null ? attributionGapKey : attributionKey,
       radius: 18,
       tint: attribution == null
-          ? ChoreiaColors.text(0.2)
-          : ChoreiaColors.roseDeep,
+          ? ChoreiaPalette.of(context).text(0.2)
+          : ChoreiaPalette.of(context).roseDeep,
       padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             copy.attributionTitle,
-            style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.5)),
+            style: ChoreiaType.of(context).label(size: 10, color: ChoreiaPalette.of(context).text(0.5)),
           ),
           const SizedBox(height: 10),
           Text(
@@ -457,20 +457,20 @@ class StyleDetailView extends StatelessWidget {
             // point is not a footnote, but it is smaller than the paragraph
             // directly above it, and the commitment is that credit is not the
             // quieter thing on the page.
-            style: ChoreiaType.body(
+            style: ChoreiaType.of(context).body(
               size: attributionSize,
-              color: ChoreiaColors.text(attribution == null ? 0.62 : 0.85),
+              color: ChoreiaPalette.of(context).text(attribution == null ? 0.62 : 0.85),
             ),
           ),
           if (boundary != null) ...<Widget>[
             const SizedBox(height: 14),
-            Divider(color: ChoreiaColors.hairline(0.10), height: 1),
+            Divider(color: ChoreiaPalette.of(context).hairline(0.10), height: 1),
             const SizedBox(height: 14),
             Text(
               copy.boundaryTitle,
-              style: ChoreiaType.label(
+              style: ChoreiaType.of(context).label(
                 size: 10,
-                color: ChoreiaColors.text(0.45),
+                color: ChoreiaPalette.of(context).text(0.45),
               ),
             ),
             const SizedBox(height: 8),
@@ -484,9 +484,9 @@ class StyleDetailView extends StatelessWidget {
                 boundary,
                 turkish: copy.turkish,
               )!,
-              style: ChoreiaType.body(
+              style: ChoreiaType.of(context).body(
                 size: 12.5,
-                color: ChoreiaColors.text(0.68),
+                color: ChoreiaPalette.of(context).text(0.68),
               ),
             ),
           ],
@@ -503,15 +503,15 @@ class StyleDetailView extends StatelessWidget {
   // against that — no chip is tappable, none carries a status pill, and none
   // is styled like the lesson cards below it.
 
-  Widget _glossarySection(StyleDetailCopy copy) => Column(
+  Widget _glossarySection(BuildContext context, StyleDetailCopy copy) => Column(
         key: glossaryKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(copy.glossaryTitle, style: ChoreiaType.display(size: 21)),
+          Text(copy.glossaryTitle, style: ChoreiaType.of(context).display(size: 21)),
           const SizedBox(height: 4),
           Text(
             copy.glossaryNote,
-            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+            style: ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.55)),
           ),
           const SizedBox(height: 12),
           for (final GlossaryEntry g in card.entry.stepGlossary)
@@ -522,9 +522,9 @@ class StyleDetailView extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     copy.authored(g.name),
-                    style: ChoreiaType.label(
+                    style: ChoreiaType.of(context).label(
                       size: 10.5,
-                      color: ChoreiaColors.text(0.72),
+                      color: ChoreiaPalette.of(context).text(0.72),
                     ),
                   ),
                   const SizedBox(height: 3),
@@ -534,9 +534,9 @@ class StyleDetailView extends StatelessWidget {
                       g,
                       turkish: copy.turkish,
                     )),
-                    style: ChoreiaType.body(
+                    style: ChoreiaType.of(context).body(
                       size: 12.5,
-                      color: ChoreiaColors.text(0.66),
+                      color: ChoreiaPalette.of(context).text(0.66),
                     ),
                   ),
                 ],
@@ -554,15 +554,15 @@ class StyleDetailView extends StatelessWidget {
           copy.needs(card.entry.hardwareRequired),
       ];
 
-  Widget _cautionSection(StyleDetailCopy copy) => GlassPanel(
+  Widget _cautionSection(BuildContext context, StyleDetailCopy copy) => GlassPanel(
         key: cautionKey,
-        tint: ChoreiaColors.amber,
+        tint: ChoreiaPalette.of(context).amber,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               copy.cautionTitle,
-              style: ChoreiaType.label(size: 10, color: ChoreiaColors.amber),
+              style: ChoreiaType.of(context).label(size: 10, color: ChoreiaPalette.of(context).amber),
             ),
             const SizedBox(height: 10),
             for (final String c in _cautions(copy))
@@ -570,9 +570,9 @@ class StyleDetailView extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Text(
                   '· $c',
-                  style: ChoreiaType.body(
+                  style: ChoreiaType.of(context).body(
                     size: 12.5,
-                    color: ChoreiaColors.text(0.78),
+                    color: ChoreiaPalette.of(context).text(0.78),
                   ),
                 ),
               ),
@@ -595,7 +595,7 @@ class StyleDetailView extends StatelessWidget {
             WrittenCourseLink.supports(card.entry.id)
                 ? copy.cameraLessonsTitle
                 : copy.lessonsTitle,
-            style: ChoreiaType.display(size: 21),
+            style: ChoreiaType.of(context).display(size: 21),
           ),
           const SizedBox(height: 12),
           if (offers.isEmpty)
@@ -608,7 +608,7 @@ class StyleDetailView extends StatelessWidget {
                     ? copy.noCameraLessons
                     : copy.noLessons,
                 style:
-                    ChoreiaType.body(size: 13, color: ChoreiaColors.text(0.66)),
+                    ChoreiaType.of(context).body(size: 13, color: ChoreiaPalette.of(context).text(0.66)),
               ),
             )
           else
@@ -627,12 +627,12 @@ class StyleDetailView extends StatelessWidget {
   ) {
     final LessonInfo l = o.lesson;
     final Color tone = switch (l.kind) {
-      LessonKind.scored => ChoreiaColors.rose,
-      LessonKind.demoOnly => ChoreiaColors.amber,
+      LessonKind.scored => ChoreiaPalette.of(context).rose,
+      LessonKind.demoOnly => ChoreiaPalette.of(context).amber,
       // 0.7, not 0.4 — same measurement as the inPreparation badge (C-156).
       // A locked lesson names the measurement it is missing; that sentence is
       // worth nothing if its own label cannot be read.
-      LessonKind.locked => ChoreiaColors.text(0.7),
+      LessonKind.locked => ChoreiaPalette.of(context).text(0.7),
     };
 
     return GlassPanel(
@@ -649,7 +649,7 @@ class StyleDetailView extends StatelessWidget {
             title: Text(
               copy.authored(
                   StyleContentCopy.lessonName(l, turkish: copy.turkish)),
-              style: ChoreiaType.display(size: 19),
+              style: ChoreiaType.of(context).display(size: 19),
             ),
             pill: StatusPill(
               label: copy.kind(l.kind, canStart: o.canStart),
@@ -659,7 +659,7 @@ class StyleDetailView extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             copy.minutes(l.plannedMinutes),
-            style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.45)),
+            style: ChoreiaType.of(context).label(size: 10, color: ChoreiaPalette.of(context).text(0.45)),
           ),
           if (o.contentReason != null) ...<Widget>[
             const SizedBox(height: 12),
@@ -669,9 +669,9 @@ class StyleDetailView extends StatelessWidget {
                 o.contentReason,
                 turkish: copy.turkish,
               )!,
-              style: ChoreiaType.body(
+              style: ChoreiaType.of(context).body(
                 size: 12.5,
-                color: ChoreiaColors.text(0.75),
+                color: ChoreiaPalette.of(context).text(0.75),
               ),
             ),
           ],
@@ -699,7 +699,7 @@ class StyleDetailView extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     copy.permanentTitle,
-                    style: ChoreiaType.label(size: 9.5, color: tone),
+                    style: ChoreiaType.of(context).label(size: 9.5, color: tone),
                   ),
                   const SizedBox(height: 5),
                   Text(
@@ -707,9 +707,9 @@ class StyleDetailView extends StatelessWidget {
                       l,
                       turkish: copy.turkish,
                     )!,
-                    style: ChoreiaType.body(
+                    style: ChoreiaType.of(context).body(
                       size: 12,
-                      color: ChoreiaColors.text(0.7),
+                      color: ChoreiaPalette.of(context).text(0.7),
                     ),
                   ),
                 ],
@@ -719,7 +719,7 @@ class StyleDetailView extends StatelessWidget {
           const SizedBox(height: 14),
           if (o.canStart && cameraSessionsAvailable) ...<Widget>[
             Text(copy.permissionNotice(l.kind),
-                style: ChoreiaType.body(size: 12)),
+                style: ChoreiaType.of(context).body(size: 12)),
             const SizedBox(height: 10),
             FilledButton(
               key: lessonStartKey(l.id),
@@ -756,13 +756,13 @@ class StyleDetailView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ChoreiaColors.hairline(0.12)),
+                border: Border.all(color: ChoreiaPalette.of(context).hairline(0.12)),
               ),
               child: Text(
                 o.canStart ? copy.sessionUnavailable : copy.blocked(o.block!),
-                style: ChoreiaType.body(
+                style: ChoreiaType.of(context).body(
                   size: 12,
-                  color: ChoreiaColors.text(0.6),
+                  color: ChoreiaPalette.of(context).text(0.6),
                 ),
               ),
             ),
@@ -778,19 +778,19 @@ class StyleDetailView extends StatelessWidget {
   // reading "what a camera cannot see" before that could be taken as the
   // caveat on a product that is here, rather than a fact about the dance.
 
-  Widget _cameraLimitsSection(StyleDetailCopy copy) => Column(
+  Widget _cameraLimitsSection(BuildContext context, StyleDetailCopy copy) => Column(
         key: cameraLimitsKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(copy.limitsTitle, style: ChoreiaType.display(size: 21)),
+          Text(copy.limitsTitle, style: ChoreiaType.of(context).display(size: 21)),
           const SizedBox(height: 4),
           Text(
             copy.limitsNote,
-            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+            style: ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.55)),
           ),
           const SizedBox(height: 12),
           GlassPanel(
-            tint: ChoreiaColors.amber,
+            tint: ChoreiaPalette.of(context).amber,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -799,9 +799,9 @@ class StyleDetailView extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
                       copy.authored(line),
-                      style: ChoreiaType.body(
+                      style: ChoreiaType.of(context).body(
                         size: 12.5,
-                        color: ChoreiaColors.text(0.76),
+                        color: ChoreiaPalette.of(context).text(0.76),
                       ),
                     ),
                   ),
@@ -813,24 +813,24 @@ class StyleDetailView extends StatelessWidget {
 
   // ── Honesty ──────────────────────────────────────────────────────────
 
-  Widget _honestySection(StyleProse p, StyleDetailCopy copy) => Column(
+  Widget _honestySection(BuildContext context, StyleProse p, StyleDetailCopy copy) => Column(
         key: honestyKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(copy.honestyTitle, style: ChoreiaType.display(size: 21)),
+          Text(copy.honestyTitle, style: ChoreiaType.of(context).display(size: 21)),
           const SizedBox(height: 4),
           Text(
             copy.honestyNote,
-            style: ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55)),
+            style: ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.55)),
           ),
           const SizedBox(height: 12),
           if (p.measured.isNotEmpty)
-            _honestyBlock(
-                copy, copy.measuredTitle, p.measured, ChoreiaColors.rose),
+            _honestyBlock(context,
+                copy, copy.measuredTitle, p.measured, ChoreiaPalette.of(context).rose),
           if (p.measured.isNotEmpty && p.notMeasured.isNotEmpty)
             const SizedBox(height: 10),
           if (p.notMeasured.isNotEmpty)
-            _honestyBlock(
+            _honestyBlock(context,
                 copy,
                 copy.notMeasuredTitle,
                 <String>[
@@ -841,27 +841,27 @@ class StyleDetailView extends StatelessWidget {
                       turkish: copy.turkish,
                     )),
                 ],
-                ChoreiaColors.amber),
+                ChoreiaPalette.of(context).amber),
         ],
       );
 
-  Widget _honestyBlock(
+  Widget _honestyBlock(BuildContext context,
           StyleDetailCopy copy, String title, List<String> lines, Color tone) =>
       GlassPanel(
         tint: tone,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: ChoreiaType.label(size: 10, color: tone)),
+            Text(title, style: ChoreiaType.of(context).label(size: 10, color: tone)),
             const SizedBox(height: 10),
             for (final String line in lines)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
                   copy.authored(line),
-                  style: ChoreiaType.body(
+                  style: ChoreiaType.of(context).body(
                     size: 12.5,
-                    color: ChoreiaColors.text(0.76),
+                    color: ChoreiaPalette.of(context).text(0.76),
                   ),
                 ),
               ),
@@ -872,7 +872,7 @@ class StyleDetailView extends StatelessWidget {
   /// The SAME map the catalogue tile uses — see `badgeTone`. This used to be a
   /// second copy of the switch, which meant a tile and its page could drift
   /// apart on any one-sided edit.
-  Color _badgeTone() => badgeTone(card.badge);
+  Color _badgeTone(BuildContext context) => badgeTone(card.badge, palette: ChoreiaPalette.of(context));
 }
 
 /// The style page's copy.

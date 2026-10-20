@@ -368,7 +368,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                 key: ChoreiaShell.loadingKey,
                 textAlign: TextAlign.center,
                 style:
-                    ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.6)),
+                    ChoreiaType.of(context).body(size: 14, color: ChoreiaPalette.of(context).text(0.6)),
               ),
             ),
           ),
@@ -391,7 +391,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             ),
             key: ChoreiaShell.historyLoadingKey,
             textAlign: TextAlign.center,
-            style: ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.6)),
+            style: ChoreiaType.of(context).body(size: 14, color: ChoreiaPalette.of(context).text(0.6)),
           ),
         ),
       );
@@ -404,14 +404,14 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                 padding: const EdgeInsets.all(24),
                 child: GlassPanel(
                   key: ChoreiaShell.loadFailureKey,
-                  tint: ChoreiaColors.roseDeep,
+                  tint: ChoreiaPalette.of(context).roseDeep,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       StatusRing(
                         icon: Icons.error_outline,
-                        tone: ChoreiaColors.roseDeep,
+                        tone: ChoreiaPalette.of(context).roseDeep,
                         breathing: false,
                         size: 52,
                       ),
@@ -426,9 +426,9 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
                               'ulaş. Uygulamayı silme; cihazdaki ilerleme '
                               'kaybolabilir.',
                         ),
-                        style: ChoreiaType.body(
+                        style: ChoreiaType.of(context).body(
                           size: 14,
-                          color: ChoreiaColors.text(0.85),
+                          color: ChoreiaPalette.of(context).text(0.85),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -502,16 +502,16 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
             // denies the practice you just did.
             if (i == _progressIndex) _refreshProgress(library);
           },
-          backgroundColor: ChoreiaColors.oxblood.withValues(alpha: 0.55),
-          indicatorColor: ChoreiaColors.rose.withValues(alpha: 0.16),
+          backgroundColor: ChoreiaPalette.of(context).oxblood.withValues(alpha: 0.55),
+          indicatorColor: ChoreiaPalette.of(context).rose.withValues(alpha: 0.16),
           surfaceTintColor: Colors.transparent,
           height: 64,
           labelTextStyle: WidgetStateProperty.resolveWith(
-            (Set<WidgetState> states) => ChoreiaType.label(
+            (Set<WidgetState> states) => ChoreiaType.of(context).label(
               size: 9.5,
               color: states.contains(WidgetState.selected)
-                  ? ChoreiaColors.rose
-                  : ChoreiaColors.text(0.5),
+                  ? ChoreiaPalette.of(context).rose
+                  : ChoreiaPalette.of(context).text(0.5),
             ),
           ),
           destinations: <Widget>[

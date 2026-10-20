@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:ui' show SemanticsAction, SemanticsFlag;
+import 'dart:ui' show SemanticsAction, Tristate;
 
 import 'package:choreia/app/course/hip_hop_course_page.dart';
 import 'package:choreia/app/course/latin_fusion_course_page.dart';
@@ -251,7 +251,7 @@ void main() {
       final review = find.byKey(const Key('study-review-entry'));
       expect(tester.getSize(review), const Size(48, 48));
       final reviewData = tester.getSemantics(review).getSemanticsData();
-      expect(reviewData.hasFlag(SemanticsFlag.isButton), isTrue);
+      expect(reviewData.flagsCollection.isButton, isTrue);
       expect(reviewData.hasAction(SemanticsAction.tap), isTrue);
 
       final references = find.widgetWithText(ChoiceChip,
@@ -265,8 +265,8 @@ void main() {
           tester
               .getSemantics(references)
               .getSemanticsData()
-              .hasFlag(SemanticsFlag.isSelected),
-          isTrue);
+              .flagsCollection.isSelected,
+          Tristate.isTrue);
 
       final tile = find.byKey(LibraryView.tileKey('hip_hop_foundations'));
       await reach(tester, tile);

@@ -212,12 +212,16 @@ void main() {
         final controller = scrollView.controller!;
         expect(controller.position.maxScrollExtent, greaterThan(0));
         expect(controller.offset, 0);
-        final scrollNode = tester.getSemantics(find.byType(Scrollable));
+        // The Scrollable widget's outer semantics boundary need not own the
+        // gesture action. Find the actual accessible horizontal-scroll node.
+        final accessibleScroll =
+            find.semantics.scrollable(axis: Axis.horizontal);
+        expect(accessibleScroll.evaluate(), hasLength(1));
+        final scrollNode = accessibleScroll.evaluate().single;
         expect(
             scrollNode.getSemanticsData().hasAction(SemanticsAction.scrollLeft),
             isTrue);
-        tester.binding.rootPipelineOwner.semanticsOwner!
-            .performAction(scrollNode.id, SemanticsAction.scrollLeft);
+        tester.semantics.scrollLeft(scrollable: accessibleScroll);
         await tester.pumpAndSettle();
         expect(controller.offset, greaterThan(0));
         controller.jumpTo(0);

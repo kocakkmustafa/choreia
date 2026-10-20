@@ -116,8 +116,18 @@ void main() {
         await pump(tester, MemoryFirstRunFlag(), locale: Locale(language));
         expect(
             find.textContaining(language == 'tr'
-                ? 'Kurs hesap veya kamera olmadan çalışır'
-                : 'The course works without an account or camera'),
+                ? 'Beş solo dans yolunu'
+                : 'Explore five solo dance paths'),
+            findsOneWidget);
+        expect(
+            find.textContaining(language == 'tr'
+                ? 'Hesap veya kamera gerekmez'
+                : 'No account or camera is required'),
+            findsOneWidget);
+        expect(
+            find.textContaining(language == 'tr'
+                ? 'Çalışma kaydın bu cihazda kalır'
+                : 'study record stays on this device'),
             findsOneWidget);
         final gate = find.textContaining(language == 'tr'
             ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'

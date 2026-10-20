@@ -84,11 +84,11 @@ class ProgressView extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: <Widget>[
             Text(_text(context, 'Your practice'),
-                style: ChoreiaType.label(
-                    size: 10, color: ChoreiaColors.text(0.42))),
+                style: ChoreiaType.of(context).label(
+                    size: 10, color: ChoreiaPalette.of(context).text(0.42))),
             const SizedBox(height: 8),
             Text(_text(context, 'Progress'),
-                style: ChoreiaType.display(size: 33)),
+                style: ChoreiaType.of(context).display(size: 33)),
             const SizedBox(height: 18),
 
             if (courseEntry != null) ...[
@@ -98,8 +98,8 @@ class ProgressView extends StatelessWidget {
 
             Text(_text(context, ProgressStrings.historyScope),
                 key: historyScopeKey,
-                style: ChoreiaType.body(
-                    size: 12.5, color: ChoreiaColors.text(0.65))),
+                style: ChoreiaType.of(context).body(
+                    size: 12.5, color: ChoreiaPalette.of(context).text(0.65))),
             const SizedBox(height: 16),
 
             // INTEGRITY FIRST, above the numbers it qualifies.
@@ -114,19 +114,19 @@ class ProgressView extends StatelessWidget {
                 key: integrityNoteKey,
                 padding: const EdgeInsets.only(bottom: 16),
                 child: GlassPanel(
-                  tint: ChoreiaColors.amber,
-                  borderColor: ChoreiaColors.amber.withValues(alpha: 0.24),
+                  tint: ChoreiaPalette.of(context).amber,
+                  borderColor: ChoreiaPalette.of(context).amber.withValues(alpha: 0.24),
                   child: Text(integrityNote,
-                      style: ChoreiaType.body(
-                          size: 12.5, color: ChoreiaColors.text(0.8))),
+                      style: ChoreiaType.of(context).body(
+                          size: 12.5, color: ChoreiaPalette.of(context).text(0.8))),
                 ),
               ),
 
-            _section(
+            _section(context: context,
               sectionKey: recordedSectionKey,
               title: _text(context, ProgressStrings.recordedSection),
               subtitle: _text(context, ProgressStrings.recordedSubtitle),
-              accent: ChoreiaColors.rose,
+              accent: ChoreiaPalette.of(context).rose,
               children: summary.recorded.isEmpty
                   ? <Widget>[
                       // WHY it is empty decides what may be SAID about it.
@@ -139,8 +139,8 @@ class ProgressView extends StatelessWidget {
                                   ? ProgressStrings.emptyHistory
                                   : ProgressStrings.unknownHistory),
                           key: emptyReasonKey,
-                          style: ChoreiaType.body(
-                              size: 13, color: ChoreiaColors.text(0.6)))
+                          style: ChoreiaType.of(context).body(
+                              size: 13, color: ChoreiaPalette.of(context).text(0.6)))
                     ]
                   : summary.recorded
                       .map((row) => _recordedRow(context, row))
@@ -148,11 +148,11 @@ class ProgressView extends StatelessWidget {
             ),
             const SizedBox(height: 28),
 
-            _section(
+            _section(context: context,
               sectionKey: evaluatedSectionKey,
               title: _text(context, ProgressStrings.evaluatedSection),
               subtitle: _text(context, ProgressStrings.evaluatedSubtitle),
-              accent: ChoreiaColors.rose,
+              accent: ChoreiaPalette.of(context).rose,
               children: summary.evaluated.isEmpty
                   // The reason goes INSIDE this section: a blank Evaluated section
                   // reads as a statement about the user ("you earned nothing"),
@@ -161,8 +161,8 @@ class ProgressView extends StatelessWidget {
                       Text(
                           _text(context,
                               summary.evaluatedUnavailableReason ?? ''),
-                          style: ChoreiaType.body(
-                              size: 13, color: ChoreiaColors.text(0.6)))
+                          style: ChoreiaType.of(context).body(
+                              size: 13, color: ChoreiaPalette.of(context).text(0.6)))
                     ]
                   : summary.evaluated
                       .map((row) => _evaluatedRow(context, row))
@@ -170,11 +170,11 @@ class ProgressView extends StatelessWidget {
             ),
             const SizedBox(height: 28),
 
-            _section(
+            _section(context: context,
               sectionKey: blockedSectionKey,
               title: _text(context, ProgressStrings.blockedSection),
               subtitle: _text(context, ProgressStrings.blockedSubtitle),
-              accent: ChoreiaColors.amber,
+              accent: ChoreiaPalette.of(context).amber,
               children: <Widget>[
                 for (final BlockedGate g in summary.blockedGates)
                   _blockedRow(context, g),
@@ -188,8 +188,8 @@ class ProgressView extends StatelessWidget {
                       ProgressSummary.retroactiveCreditNote(
                           summary.integrity.fidelity,
                           format: message),
-                      style: ChoreiaType.body(
-                          size: 11.5, color: ChoreiaColors.text(0.48))),
+                      style: ChoreiaType.of(context).body(
+                          size: 11.5, color: ChoreiaPalette.of(context).text(0.48))),
                 ),
               ],
             ),
@@ -204,14 +204,14 @@ class ProgressView extends StatelessWidget {
         _format(context, template, values);
     final LessonInfo? info = catalog?.lessonById(row.lessonId);
     final Color tone =
-        row.isDemoOnly ? ChoreiaColors.amber : ChoreiaColors.rose;
+        row.isDemoOnly ? ChoreiaPalette.of(context).amber : ChoreiaPalette.of(context).rose;
     return Padding(
       key: Key('progress.recorded.${row.lessonId}'),
       padding: const EdgeInsets.only(bottom: 10),
       child: GlassPanel(
         radius: 16,
         tint: tone,
-        borderColor: ChoreiaColors.hairline(0.11),
+        borderColor: ChoreiaPalette.of(context).hairline(0.11),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -226,18 +226,18 @@ class ProgressView extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(_text(context, row.displayName),
-                      style: ChoreiaType.body(
+                      style: ChoreiaType.of(context).body(
                           size: 14,
                           weight: FontWeight.w600,
-                          color: ChoreiaColors.bright)),
+                          color: ChoreiaPalette.of(context).bright)),
                 ),
               ],
             ),
             const SizedBox(height: 8),
             // Units live in the strings, so no caller can emit a bare number.
             Text(ProgressStrings.duration(row.workedSeconds, format: message),
-                style: ChoreiaType.label(
-                    size: 10.5, color: ChoreiaColors.text(0.5))),
+                style: ChoreiaType.of(context).label(
+                    size: 10.5, color: ChoreiaPalette.of(context).text(0.5))),
             Text(
                 ProgressStrings.cycles(
                     row.cyclesCompleted,
@@ -247,20 +247,20 @@ class ProgressView extends StatelessWidget {
                         ? row.plannedCycles
                         : 0,
                     format: message),
-                style: ChoreiaType.label(
-                    size: 10.5, color: ChoreiaColors.text(0.5))),
+                style: ChoreiaType.of(context).label(
+                    size: 10.5, color: ChoreiaPalette.of(context).text(0.5))),
             Text(
                 ProgressStrings.sessionsCompleted(0, row.sessions,
                     anyTarget: false, format: message),
-                style: ChoreiaType.label(
-                    size: 10.5, color: ChoreiaColors.text(0.5))),
+                style: ChoreiaType.of(context).label(
+                    size: 10.5, color: ChoreiaPalette.of(context).text(0.5))),
             if (row.targetedSessions > 0)
               Text(
                   ProgressStrings.sessionsCompleted(
                       row.completedSessions, row.targetedSessions,
                       anyTarget: true, format: message),
-                  style: ChoreiaType.label(
-                      size: 10.5, color: ChoreiaColors.text(0.5))),
+                  style: ChoreiaType.of(context).label(
+                      size: 10.5, color: ChoreiaPalette.of(context).text(0.5))),
             // Unmeasured work is named on the row it happened in — an aggregate
             // elsewhere would tell the user something went unchecked without
             // saying where.
@@ -270,8 +270,8 @@ class ProgressView extends StatelessWidget {
                 child: Text(
                     ProgressStrings.unmeasured(row.unmeasuredCycles,
                         format: message),
-                    style: ChoreiaType.body(
-                        size: 11.5, color: ChoreiaColors.amberDeep)),
+                    style: ChoreiaType.of(context).body(
+                        size: 11.5, color: ChoreiaPalette.of(context).amberDeep)),
               ),
             // A demo-only lesson EARNS the completion mark and shows `—` where a
             // band would be. Both halves matter: the mark because completion is a
@@ -293,13 +293,13 @@ class ProgressView extends StatelessWidget {
                                 ? null
                                 : _text(context, info!.reason!),
                             format: message),
-                        style: ChoreiaType.body(
-                            size: 11.5, color: ChoreiaColors.text(0.62))),
+                        style: ChoreiaType.of(context).body(
+                            size: 11.5, color: ChoreiaPalette.of(context).text(0.62))),
                   ),
                   const SizedBox(width: 10),
                   Text(ProgressStrings.noBand,
-                      style: ChoreiaType.display(
-                          size: 15, color: ChoreiaColors.text(0.5))),
+                      style: ChoreiaType.of(context).display(
+                          size: 15, color: ChoreiaPalette.of(context).text(0.5))),
                 ],
               ),
             ],
@@ -313,21 +313,21 @@ class ProgressView extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10),
         child: GlassPanel(
           radius: 16,
-          tint: ChoreiaColors.rose,
+          tint: ChoreiaPalette.of(context).rose,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
                 child: Text(_text(context, row.displayName),
-                    style: ChoreiaType.body(
+                    style: ChoreiaType.of(context).body(
                         size: 14,
                         weight: FontWeight.w600,
-                        color: ChoreiaColors.bright)),
+                        color: ChoreiaPalette.of(context).bright)),
               ),
               const SizedBox(width: 10),
               Text(_text(context, row.band),
-                  style: ChoreiaType.display(
-                      size: 17, color: ChoreiaColors.roseBright)),
+                  style: ChoreiaType.of(context).display(
+                      size: 17, color: ChoreiaPalette.of(context).roseBright)),
             ],
           ),
         ),
@@ -364,36 +364,36 @@ class ProgressView extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10),
         child: GlassPanel(
           radius: 14,
-          tint: ChoreiaColors.amber,
-          borderColor: ChoreiaColors.amber.withValues(alpha: 0.2),
+          tint: ChoreiaPalette.of(context).amber,
+          borderColor: ChoreiaPalette.of(context).amber.withValues(alpha: 0.2),
           padding: const EdgeInsets.all(13),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(_text(context, _gateLabel(g)),
-                  style: ChoreiaType.label(
+                  style: ChoreiaType.of(context).label(
                       size: 9.5,
-                      color: ChoreiaColors.amberDeep,
+                      color: ChoreiaPalette.of(context).amberDeep,
                       letterSpacingEm: 0.1)),
               const SizedBox(height: 6),
               Text(_text(context, g.why),
-                  style: ChoreiaType.body(
-                      size: 12.5, color: ChoreiaColors.text(0.78))),
+                  style: ChoreiaType.of(context).body(
+                      size: 12.5, color: ChoreiaPalette.of(context).text(0.78))),
               if (g.unblockedBy != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                       _format(context, 'Opens when: {condition}',
                           {'condition': _text(context, g.unblockedBy!)}),
-                      style: ChoreiaType.body(
-                          size: 11.5, color: ChoreiaColors.text(0.5))),
+                      style: ChoreiaType.of(context).body(
+                          size: 11.5, color: ChoreiaPalette.of(context).text(0.5))),
                 ),
             ],
           ),
         ),
       );
 
-  Widget _section({
+  Widget _section({required BuildContext context,
     required Key sectionKey,
     required String title,
     required String subtitle,
@@ -413,7 +413,7 @@ class ProgressView extends StatelessWidget {
             // strings: at large system text-scaling (accessibility) the
             // same Row-without-Flexible overflow this section's demo-only
             // row just failed on would reappear here first.
-            Expanded(child: Text(title, style: ChoreiaType.display(size: 20))),
+            Expanded(child: Text(title, style: ChoreiaType.of(context).display(size: 20))),
           ],
         ),
         const SizedBox(height: 4),
@@ -421,7 +421,7 @@ class ProgressView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 11),
           child: Text(subtitle,
               style:
-                  ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.55))),
+                  ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.55))),
         ),
         const SizedBox(height: 12),
         ...children,

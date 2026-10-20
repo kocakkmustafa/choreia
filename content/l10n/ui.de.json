@@ -358,5 +358,11 @@
   "This session requests camera permission on your device. It does not produce a score.": "Diese Einheit bittet um die Kameraberechtigung auf deinem Gerät. Sie vergibt keine Punktzahl.",
   "This session requests camera permission before using the camera.": "Diese Einheit bittet vor der Kameranutzung um deine Erlaubnis.",
   "REFERENCE · SESSION CLOSED": "REFERENZ · SITZUNG AUS",
-  "NO SCORING": "NICHT BEWERTET"
+  "NO SCORING": "NICHT BEWERTET",
+  "Appearance": "Erscheinungsbild",
+  "System theme": "Systemdesign",
+  "Light theme": "Helles Design",
+  "Dark theme": "Dunkles Design",
+  "This theme applies for this session. The device preference could not be saved.": "Dieses Design gilt für die aktuelle Sitzung. Die Gerätepräferenz konnte nicht gespeichert werden.",
+  "Your saved theme could not be read. System theme is used until you choose another option.": "Dein gespeichertes Design konnte nicht gelesen werden. Bis du eine andere Option wählst, wird das Systemdesign verwendet."
 }

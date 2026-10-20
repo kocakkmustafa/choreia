@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:choreia/app/course_catalog.dart';
+import 'package:choreia/app/localization/progress_messages.dart';
 import 'package:choreia/app/progress_summary.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:motion_core/motion_core.dart';
@@ -207,8 +208,32 @@ void main() {
       // idi — sabit kaynakta ÜÇ BİTİŞİK LİTERAL olarak yazılı, birleşmiş dizge
       // kaynakta hiç GEÇMİYOR ⇒ `replaceAll` sessizce hiçbir şey yapmadı.
       const String marker = '<durum-eslemesi/ulasilamaz>';
-      final String app = appCode().replaceAll(
+      // The same unreachable state now also has a localization dictionary
+      // entry. Exempt only that exact key/value entry in its named dictionary;
+      // other dictionary messages and every user-facing call remain scanned.
+      final String dictionary =
+          code('lib/app/localization/progress_messages.dart');
+      final stateEntry = RegExp(
+          '${RegExp.escape(jsonEncode(ProgressStrings.historyNotRecorded))}'
+          r'\s*:\s*"(?:\\.|[^"\\])*",');
+      expect(stateEntry.allMatches(dictionary).length, progressMessages.length,
+          reason: 'each locale must retain exactly one mapping of this state');
+      final String maskedDictionary = dictionary.replaceAll(stateEntry, marker);
+      expect(maskedDictionary, isNot(contains('does not save')),
+          reason: 'no other dictionary message may deny saving');
+      final String allCode = appCode();
+      expect(allCode.split(dictionary), hasLength(2),
+          reason: 'the named dictionary must be present exactly once');
+      final String app = allCode
+          .replaceFirst(dictionary, maskedDictionary)
+          .replaceAll(
           RegExp(r'static const String historyNotRecorded =[\s\S]*?;'), marker);
+      final String unconditional =
+          'Text(${jsonEncode(ProgressStrings.historyNotRecorded)});';
+      expect(stateEntry.hasMatch(unconditional), isFalse,
+          reason: 'a real surface must not receive the dictionary exemption');
+      expect(deniesSaving.any(unconditional.contains), isTrue,
+          reason: 'the same text on a real surface must still be detected');
 
       // POZİTİF KONTROL ⓪ — VE SIRASI KONTROLÜN PARÇASI. Bunu ilk yazışımda
       // döngüden SONRA koymuştum; döngü önce düştü, kontrol hiç koşmadı ve

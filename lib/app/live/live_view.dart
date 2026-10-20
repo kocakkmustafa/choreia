@@ -301,7 +301,7 @@ class LiveView extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: 20),
-              _gatedSection(tr),
+              _gatedSection(context, tr),
               const SizedBox(height: 14),
               Center(
                 child: Text(
@@ -309,8 +309,8 @@ class LiveView extends StatelessWidget {
                       turkish: tr),
                   key: notMeasuredKey,
                   textAlign: TextAlign.center,
-                  style: ChoreiaType.label(
-                      size: 10.5, color: ChoreiaColors.text(0.4)),
+                  style: ChoreiaType.of(context).label(
+                      size: 10.5, color: ChoreiaPalette.of(context).text(0.4)),
                 ),
               ),
             ],
@@ -323,14 +323,14 @@ class LiveView extends StatelessWidget {
   /// The compiler enforces exhaustiveness here — adding an eighth state
   /// breaks the build rather than silently rendering nothing.
   List<Widget> _forState(bool tr) => switch (state) {
-        LiveIdle() => <Widget>[_idleCard(tr)],
+        LiveIdle() => <Widget>[_idleCard(context, tr)],
         LiveInterrupted(:final accountChanged) => <Widget>[
-            _interruptedCard(tr, accountChanged: accountChanged)
+            _interruptedCard(context, tr, accountChanged: accountChanged)
           ],
         LiveObservationUnavailable(:final reason) => <Widget>[
             _AttentionCard(
               icon: Icons.info_outline,
-              tone: ChoreiaColors.amber,
+              tone: ChoreiaPalette.of(context).amber,
               body: switch (reason) {
                 ObservationBlocker.unsupported => tr
                     ? 'Bu hareket için kamera değerlendirmesi desteklenmiyor. Yazılı derse devam edebilirsin.'
@@ -344,24 +344,24 @@ class LiveView extends StatelessWidget {
               },
             ),
           ],
-        LivePermissionDenied() => <Widget>[_permissionCard(tr)],
+        LivePermissionDenied() => <Widget>[_permissionCard(context, tr)],
         LiveCameraUnavailable(:final CameraFailure failure) => <Widget>[
-            _cameraProblemCard(failure, tr)
+            _cameraProblemCard(context, failure, tr)
           ],
         LiveNoPerson(:final Set<QualityIssue> issues) => <Widget>[
-            _noPersonCard(issues, tr),
+            _noPersonCard(context, issues, tr),
           ],
         LiveWatching(:final int cyclesSeen) => <Widget>[
-            _watchingCard(cyclesSeen, tr)
+            _watchingCard(context, cyclesSeen, tr)
           ],
         // DEMO-ONLY: measurements only. This branch has no band to render
         // because `LiveMeasured` has no band FIELD — the guarantee is the
         // type, not this code remembering.
         LiveMeasured(:final Map<String, double> measurements) => <Widget>[
-            _measuredCard(measurements, tr),
+            _measuredCard(context, measurements, tr),
           ],
         LiveJudged(:final JudgeResult result) => <Widget>[
-            _judgedCard(result, tr)
+            _judgedCard(context, result, tr)
           ],
       };
 
@@ -370,22 +370,22 @@ class LiveView extends StatelessWidget {
   // The design's own rule for its LOADING edge state: "no spinner tricks ·
   // plain wait" (§10 states gallery). Honoured literally — no ring, no
   // shimmer, just the sentence, centred and unhurried.
-  Widget _idleCard(bool tr) => Padding(
+  Widget _idleCard(BuildContext context, bool tr) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 48),
         child: Center(
           child: Text(
             tr ? 'Kamera hazırlanıyor.' : LiveStrings.idle,
             textAlign: TextAlign.center,
             style:
-                ChoreiaType.body(size: 14.5, color: ChoreiaColors.text(0.65)),
+                ChoreiaType.of(context).body(size: 14.5, color: ChoreiaPalette.of(context).text(0.65)),
           ),
         ),
       );
 
-  Widget _interruptedCard(bool tr, {bool accountChanged = false}) =>
+  Widget _interruptedCard(BuildContext context, bool tr, {bool accountChanged = false}) =>
       _AttentionCard(
         icon: Icons.pause_circle_outline,
-        tone: ChoreiaColors.amber,
+        tone: ChoreiaPalette.of(context).amber,
         body: accountChanged
             ? (tr
                 ? 'Hesap değişti. Bu deneme durduruldu. Yeni bir deneme için derse dön.'
@@ -409,11 +409,11 @@ class LiveView extends StatelessWidget {
   // must differ between the two flavours, and it is the same widget/key
   // either way — only its label and callback change (M-F-268: a "try again"
   // that cannot work is worse than no button).
-  Widget _permissionCard(bool tr) => _AttentionCard(
+  Widget _permissionCard(BuildContext context, bool tr) => _AttentionCard(
         icon: permissionPermanentlyDenied
             ? Icons.videocam_off_outlined
             : Icons.videocam_outlined,
-        tone: ChoreiaColors.amber,
+        tone: ChoreiaPalette.of(context).amber,
         body: permissionPermanentlyDenied
             ? (tr
                 ? 'Choreia için kamera erişimi kapalı. Buradan tekrar izin isteyemiyoruz; telefon ayarlarından açabilirsiniz.'
@@ -440,9 +440,9 @@ class LiveView extends StatelessWidget {
   // and music, not a model/hardware fault) — closest borrowed tone is the
   // gallery's ERROR entry, since this IS a fault rather than a status. NO
   // DEAD END (M-F-268): the action button is always present here.
-  Widget _cameraProblemCard(CameraFailure failure, bool tr) => _AttentionCard(
+  Widget _cameraProblemCard(BuildContext context, CameraFailure failure, bool tr) => _AttentionCard(
         icon: Icons.error_outline,
-        tone: ChoreiaColors.roseDeep,
+        tone: ChoreiaPalette.of(context).roseDeep,
         body:
             tr ? _cameraProblemTr(failure) : LiveStrings.cameraProblem(failure),
         action: FilledButton(
@@ -467,9 +467,9 @@ class LiveView extends StatelessWidget {
   // same visual shape (ring + title + reasons), REAL issues and REAL copy —
   // nothing invented to fill a design slot the engine cannot back. Named in
   // the giydirme report rather than silently reconciled.
-  Widget _noPersonCard(Set<QualityIssue> issues, bool tr) => _AttentionCard(
+  Widget _noPersonCard(BuildContext context, Set<QualityIssue> issues, bool tr) => _AttentionCard(
         icon: Icons.person_search_outlined,
-        tone: ChoreiaColors.amber,
+        tone: ChoreiaPalette.of(context).amber,
         body: tr
             ? 'Şu anda sizi değerlendirecek kadar iyi göremiyoruz.'
             : LiveStrings.noPerson,
@@ -479,7 +479,7 @@ class LiveView extends StatelessWidget {
         ],
         trailing: Text(
             tr ? _cyclesTr(cyclesRead) : LiveStrings.cycles(cyclesRead),
-            style: ChoreiaType.label(size: 10, color: ChoreiaColors.text(0.4))),
+            style: ChoreiaType.of(context).label(size: 10, color: ChoreiaPalette.of(context).text(0.4))),
       );
 
   // ── Watching ─────────────────────────────────────────────────────────
@@ -494,7 +494,7 @@ class LiveView extends StatelessWidget {
   // by: LiveWatching (or the step config it is built from) carrying a
   // planned-cycle count the live surface can read; today it carries
   // cyclesSeen alone. See docs/design/PLACEHOLDER-REGISTER.md.
-  Widget _watchingCard(int cyclesSeen, bool tr) {
+  Widget _watchingCard(BuildContext context, int cyclesSeen, bool tr) {
     final int? shown = cyclesSeen == 0 ? null : cyclesSeen;
     return GlassPanel(
       radius: 22,
@@ -513,7 +513,7 @@ class LiveView extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: ChoreiaColors.rose.withValues(alpha: 0.35),
+                          color: ChoreiaPalette.of(context).rose.withValues(alpha: 0.35),
                           width: 1.2),
                     ),
                   ),
@@ -523,14 +523,14 @@ class LiveView extends StatelessWidget {
                   height: 172,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: ChoreiaColors.hairline(0.08)),
+                    border: Border.all(color: ChoreiaPalette.of(context).hairline(0.08)),
                   ),
                 ),
                 SlowBreath(
                   child: Text(
                     shown?.toString() ?? '—',
-                    style: ChoreiaType.display(
-                        size: 76, color: ChoreiaColors.bright),
+                    style: ChoreiaType.of(context).display(
+                        size: 76, color: ChoreiaPalette.of(context).bright),
                   ),
                 ),
               ],
@@ -542,12 +542,12 @@ class LiveView extends StatelessWidget {
                   ? 'İzliyoruz. Devam edin; her tam tekrarı ayrı okuyoruz.'
                   : LiveStrings.watching,
               textAlign: TextAlign.center,
-              style: ChoreiaType.body(
-                  size: 13.5, color: ChoreiaColors.text(0.68))),
+              style: ChoreiaType.of(context).body(
+                  size: 13.5, color: ChoreiaPalette.of(context).text(0.68))),
           const SizedBox(height: 10),
           Text(tr ? _cyclesTr(shown) : LiveStrings.cycles(shown),
-              style: ChoreiaType.label(
-                  size: 10.5, color: ChoreiaColors.text(0.5))),
+              style: ChoreiaType.of(context).label(
+                  size: 10.5, color: ChoreiaPalette.of(context).text(0.5))),
         ],
       ),
     );
@@ -559,16 +559,16 @@ class LiveView extends StatelessWidget {
   // language is always Plex Mono, never the serif or the sans body face) —
   // and nothing else, on purpose: `LiveMeasured` has no findings field, so
   // there is no verdict section to style even by mistake.
-  Widget _measuredCard(Map<String, double> measurements, bool tr) => GlassPanel(
-        tint: ChoreiaColors.amber,
+  Widget _measuredCard(BuildContext context, Map<String, double> measurements, bool tr) => GlassPanel(
+        tint: ChoreiaPalette.of(context).amber,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(tr ? 'Ölçtüklerimiz' : LiveStrings.measuredTitle,
-                style: ChoreiaType.body(
+                style: ChoreiaType.of(context).body(
                     size: 13,
                     weight: FontWeight.w600,
-                    color: ChoreiaColors.bright)),
+                    color: ChoreiaPalette.of(context).bright)),
             const SizedBox(height: 10),
             for (final MapEntry<String, double> m in measurements.entries)
               Padding(
@@ -581,22 +581,22 @@ class LiveView extends StatelessWidget {
                           LiveLessonCopy.measurementLabel(
                               lessonId, m.key, _measurementLabel(m.key),
                               turkish: tr),
-                          style: ChoreiaType.body(
-                              size: 12.5, color: ChoreiaColors.text(0.68))),
+                          style: ChoreiaType.of(context).body(
+                              size: 12.5, color: ChoreiaPalette.of(context).text(0.68))),
                     ),
                     const SizedBox(width: 8),
                     Text('${m.value.toStringAsFixed(1)}°',
-                        style: ChoreiaType.label(
+                        style: ChoreiaType.of(context).label(
                             size: 12.5,
-                            color: ChoreiaColors.amberDeep,
+                            color: ChoreiaPalette.of(context).amberDeep,
                             letterSpacingEm: 0)),
                   ],
                 ),
               ),
             const SizedBox(height: 10),
             Text(tr ? _cyclesTr(cyclesRead) : LiveStrings.cycles(cyclesRead),
-                style: ChoreiaType.label(
-                    size: 10, color: ChoreiaColors.text(0.42))),
+                style: ChoreiaType.of(context).label(
+                    size: 10, color: ChoreiaPalette.of(context).text(0.42))),
           ],
         ),
       );
@@ -610,16 +610,16 @@ class LiveView extends StatelessWidget {
   // `noVerdict` finding here duplicates what `gated` already names is a
   // structural question this pass did not resolve — flagged in the giydirme
   // report, not decided unilaterally.
-  Widget _judgedCard(JudgeResult result, bool tr) => GlassPanel(
+  Widget _judgedCard(BuildContext context, JudgeResult result, bool tr) => GlassPanel(
         radius: 22,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(tr ? 'Fark ettiklerimiz' : LiveStrings.findingsTitle,
-                style: ChoreiaType.body(
+                style: ChoreiaType.of(context).body(
                     size: 13,
                     weight: FontWeight.w600,
-                    color: ChoreiaColors.bright)),
+                    color: ChoreiaPalette.of(context).bright)),
             const SizedBox(height: 12),
             // SINGLE-CORRECTION DISCIPLINE (C-136 (a)+(b), ruled 2026-08-07).
             //
@@ -637,10 +637,10 @@ class LiveView extends StatelessWidget {
                   tr
                       ? 'Kontrol ettiğimiz alanlarda bu kez bir hata görmedik.'
                       : LiveStrings.nothingWrong,
-                  style: ChoreiaType.body(
-                      size: 13, color: ChoreiaColors.text(0.7)))
+                  style: ChoreiaType.of(context).body(
+                      size: 13, color: ChoreiaPalette.of(context).text(0.7)))
             else ...<Widget>[
-              _findingRow(result.correction!),
+              _findingRow(context, result.correction!),
               if (result.otherFiredCount > 0) ...<Widget>[
                 const SizedBox(height: 8),
                 Text(
@@ -648,24 +648,24 @@ class LiveView extends StatelessWidget {
                       ? _alsoSawTr(result.otherFiredCount)
                       : LiveStrings.alsoSaw(result.otherFiredCount),
                   key: alsoSawKey,
-                  style: ChoreiaType.body(
-                      size: 12, color: ChoreiaColors.text(0.55)),
+                  style: ChoreiaType.of(context).body(
+                      size: 12, color: ChoreiaPalette.of(context).text(0.55)),
                 ),
               ],
             ],
             const SizedBox(height: 10),
             Text(tr ? _cyclesTr(cyclesRead) : LiveStrings.cycles(cyclesRead),
-                style: ChoreiaType.label(
-                    size: 10, color: ChoreiaColors.text(0.42))),
+                style: ChoreiaType.of(context).label(
+                    size: 10, color: ChoreiaPalette.of(context).text(0.42))),
           ],
         ),
       );
 
-  Widget _findingRow(ErrorFinding f) {
+  Widget _findingRow(BuildContext context, ErrorFinding f) {
     final Color tone = switch (f.verdict) {
-      Verdict.error => ChoreiaColors.rose,
-      Verdict.ok => ChoreiaColors.text(0.4),
-      Verdict.noVerdict => ChoreiaColors.amber,
+      Verdict.error => ChoreiaPalette.of(context).rose,
+      Verdict.ok => ChoreiaPalette.of(context).text(0.4),
+      Verdict.noVerdict => ChoreiaPalette.of(context).amber,
     };
     final IconData glyph = switch (f.verdict) {
       Verdict.error => Icons.circle,
@@ -683,7 +683,7 @@ class LiveView extends StatelessWidget {
             child: Text(
               '${f.code}${f.why == null ? '' : ' — ${f.why}'}',
               style:
-                  ChoreiaType.body(size: 12.5, color: ChoreiaColors.text(0.72)),
+                  ChoreiaType.of(context).body(size: 12.5, color: ChoreiaPalette.of(context).text(0.72)),
             ),
           ),
         ],
@@ -697,17 +697,17 @@ class LiveView extends StatelessWidget {
   /// thing a learner would otherwise assume passed (kalem-4, C-117). Styled
   /// with the same hollow-amber language the design uses for "in
   /// preparation" / "not open yet" — a named absence, not an error.
-  Widget _gatedSection(bool tr) => GlassPanel(
+  Widget _gatedSection(BuildContext context, bool tr) => GlassPanel(
         key: gatedKey,
-        tint: ChoreiaColors.amber,
-        borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
+        tint: ChoreiaPalette.of(context).amber,
+        borderColor: ChoreiaPalette.of(context).amber.withValues(alpha: 0.22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(tr ? 'Kontrol etmediklerimiz' : LiveStrings.gatedTitle,
-                style: ChoreiaType.label(
+                style: ChoreiaType.of(context).label(
                     size: 9.5,
-                    color: ChoreiaColors.amberDeep,
+                    color: ChoreiaPalette.of(context).amberDeep,
                     letterSpacingEm: 0.12)),
             for (final GatedCheck g in gated)
               Padding(
@@ -715,8 +715,8 @@ class LiveView extends StatelessWidget {
                 child: Text(
                     LiveLessonCopy.gatedReason(lessonId, g.code, g.why,
                         turkish: tr),
-                    style: ChoreiaType.body(
-                        size: 12, color: ChoreiaColors.text(0.7))),
+                    style: ChoreiaType.of(context).body(
+                        size: 12, color: ChoreiaPalette.of(context).text(0.7))),
               ),
           ],
         ),
@@ -759,15 +759,15 @@ class _AttentionCard extends StatelessWidget {
               body,
               textAlign: TextAlign.center,
               style:
-                  ChoreiaType.body(size: 14, color: ChoreiaColors.text(0.85)),
+                  ChoreiaType.of(context).body(size: 14, color: ChoreiaPalette.of(context).text(0.85)),
             ),
             for (final String r in reasons)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(r,
                     textAlign: TextAlign.center,
-                    style: ChoreiaType.body(
-                        size: 12.5, color: ChoreiaColors.text(0.6))),
+                    style: ChoreiaType.of(context).body(
+                        size: 12.5, color: ChoreiaPalette.of(context).text(0.6))),
               ),
             if (action != null) ...<Widget>[
               const SizedBox(height: 18),

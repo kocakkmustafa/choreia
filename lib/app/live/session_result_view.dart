@@ -103,19 +103,19 @@ class SessionResultView extends StatelessWidget {
             key: bodyKey,
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
             children: <Widget>[
-              Text(lessonName, style: ChoreiaType.display(size: 24)),
+              Text(lessonName, style: ChoreiaType.of(context).display(size: 24)),
               const SizedBox(height: 16),
-              _outcomeCard(tr),
+              _outcomeCard(context, tr),
               const SizedBox(height: 16),
-              _gatedSection(tr),
+              _gatedSection(context, tr),
               const SizedBox(height: 14),
               Center(
                 child: Text(
                   LiveLessonCopy.identityLimit(lessonId, notMeasuredNote,
                       turkish: tr),
                   textAlign: TextAlign.center,
-                  style: ChoreiaType.label(
-                      size: 10.5, color: ChoreiaColors.text(0.4)),
+                  style: ChoreiaType.of(context).label(
+                      size: 10.5, color: ChoreiaPalette.of(context).text(0.4)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -131,12 +131,12 @@ class SessionResultView extends StatelessWidget {
     );
   }
 
-  Widget _outcomeCard(bool tr) => switch (outcome) {
-        RecordWritten(:final SessionRecord record) => _storedCard(record, tr),
+  Widget _outcomeCard(BuildContext context, bool tr) => switch (outcome) {
+        RecordWritten(:final SessionRecord record) => _storedCard(context, record, tr),
         RecordNothingToStore() => _AttentionPanel(
             key: notStoredKey,
             icon: Icons.videocam_off_outlined,
-            tone: ChoreiaColors.amber,
+            tone: ChoreiaPalette.of(context).amber,
             body: tr
                 ? 'Bu seans için kayıt oluşmadı: kameradan değerlendirilebilir hareket okunmadı. Bu sıfır tekrarlı bir seans değil; ölçüm olmadığı için geçmişinize eklenmedi.'
                 : ResultStrings.nothingToStore,
@@ -144,7 +144,7 @@ class SessionResultView extends StatelessWidget {
         RecordFailed(:final String detail) => _AttentionPanel(
             key: failedKey,
             icon: Icons.error_outline,
-            tone: ChoreiaColors.roseDeep,
+            tone: ChoreiaPalette.of(context).roseDeep,
             body: tr
                 ? 'Çalıştınız ama seansı kaydedemedik. Sorun bizim kayıt işlemimizde; önceki çalışmalarınız etkilenmedi.'
                 : ResultStrings.storeFailed,
@@ -152,7 +152,7 @@ class SessionResultView extends StatelessWidget {
           ),
       };
 
-  Widget _storedCard(SessionRecord record, bool tr) => GlassPanel(
+  Widget _storedCard(BuildContext context, SessionRecord record, bool tr) => GlassPanel(
         key: storedKey,
         radius: 22,
         child: Column(
@@ -162,10 +162,10 @@ class SessionResultView extends StatelessWidget {
                 tr
                     ? 'Çalışma geçmişinize kaydedildi'
                     : ResultStrings.storedTitle,
-                style: ChoreiaType.body(
+                style: ChoreiaType.of(context).body(
                     size: 13,
                     weight: FontWeight.w600,
-                    color: ChoreiaColors.bright)),
+                    color: ChoreiaPalette.of(context).bright)),
             const SizedBox(height: 12),
             // FACTS ONLY, and no ratio: this lesson declares no cycle target,
             // so "6 of 6" would report a target that was never set. Same rule
@@ -175,18 +175,18 @@ class SessionResultView extends StatelessWidget {
                 tr
                     ? '${record.unitsCompleted} tam tekrar okundu'
                     : ResultStrings.cycles(record.unitsCompleted),
-                style: ChoreiaType.label(
+                style: ChoreiaType.of(context).label(
                     size: 12.5,
-                    color: ChoreiaColors.text(0.72),
+                    color: ChoreiaPalette.of(context).text(0.72),
                     letterSpacingEm: 0)),
             const SizedBox(height: 4),
             Text(
                 tr
                     ? _workedTr(record.workedSeconds)
                     : ResultStrings.worked(record.workedSeconds),
-                style: ChoreiaType.label(
+                style: ChoreiaType.of(context).label(
                     size: 12.5,
-                    color: ChoreiaColors.text(0.72),
+                    color: ChoreiaPalette.of(context).text(0.72),
                     letterSpacingEm: 0)),
             const SizedBox(height: 12),
             Text(
@@ -194,7 +194,7 @@ class SessionResultView extends StatelessWidget {
                     ? 'Bu seans bu telefona kaydedildi ve İlerleme bölümünde görünür. Hiçbir şey yüklenmedi ve video saklanmadı; yalnızca bu sayılar kaydedildi.'
                     : ResultStrings.storedNote,
                 style:
-                    ChoreiaType.body(size: 12, color: ChoreiaColors.text(0.6))),
+                    ChoreiaType.of(context).body(size: 12, color: ChoreiaPalette.of(context).text(0.6))),
             // The one thing the counts above cannot say. Shown only when it
             // happened, and worded as a limit of ours rather than a shortfall
             // of theirs.
@@ -205,8 +205,8 @@ class SessionResultView extends StatelessWidget {
                       ? 'Çalışmanızın bir kısmını okuyamadık; kadrajdan çıkmış veya ışık yetersiz kalmış olabilir. Bu tekrarlar yukarıdaki sayıya dahil değil ve kaç tane olduklarını söyleyemiyoruz.'
                       : ResultStrings.partial,
                   key: partialKey,
-                  style: ChoreiaType.body(
-                      size: 12, color: ChoreiaColors.amberDeep)),
+                  style: ChoreiaType.of(context).body(
+                      size: 12, color: ChoreiaPalette.of(context).amberDeep)),
             ],
           ],
         ),
@@ -215,17 +215,17 @@ class SessionResultView extends StatelessWidget {
   /// The same always-on section the live screen carries, for the same reason:
   /// a check the app cannot make is exactly the thing a learner would
   /// otherwise assume passed.
-  Widget _gatedSection(bool tr) => GlassPanel(
+  Widget _gatedSection(BuildContext context, bool tr) => GlassPanel(
         key: gatedKey,
-        tint: ChoreiaColors.amber,
-        borderColor: ChoreiaColors.amber.withValues(alpha: 0.22),
+        tint: ChoreiaPalette.of(context).amber,
+        borderColor: ChoreiaPalette.of(context).amber.withValues(alpha: 0.22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(tr ? 'Kontrol etmediklerimiz' : ResultStrings.gatedTitle,
-                style: ChoreiaType.label(
+                style: ChoreiaType.of(context).label(
                     size: 9.5,
-                    color: ChoreiaColors.amberDeep,
+                    color: ChoreiaPalette.of(context).amberDeep,
                     letterSpacingEm: 0.12)),
             for (final GatedCheck g in gated)
               Padding(
@@ -233,8 +233,8 @@ class SessionResultView extends StatelessWidget {
                 child: Text(
                     LiveLessonCopy.gatedReason(lessonId, g.code, g.why,
                         turkish: tr),
-                    style: ChoreiaType.body(
-                        size: 12, color: ChoreiaColors.text(0.7))),
+                    style: ChoreiaType.of(context).body(
+                        size: 12, color: ChoreiaPalette.of(context).text(0.7))),
               ),
           ],
         ),
@@ -327,14 +327,14 @@ class _AttentionPanel extends StatelessWidget {
             const SizedBox(height: 16),
             Text(body,
                 textAlign: TextAlign.center,
-                style: ChoreiaType.body(
-                    size: 14, color: ChoreiaColors.text(0.85))),
+                style: ChoreiaType.of(context).body(
+                    size: 14, color: ChoreiaPalette.of(context).text(0.85))),
             if (detail != null && detail!.isNotEmpty) ...<Widget>[
               const SizedBox(height: 8),
               Text(detail!,
                   textAlign: TextAlign.center,
-                  style: ChoreiaType.label(
-                      size: 11, color: ChoreiaColors.text(0.4))),
+                  style: ChoreiaType.of(context).label(
+                      size: 11, color: ChoreiaPalette.of(context).text(0.4))),
             ],
           ],
         ),

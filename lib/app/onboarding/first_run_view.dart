@@ -64,9 +64,9 @@ class FirstRunView extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         IntroStrings.title,
-                        style: ChoreiaType.display(
+                        style: ChoreiaType.of(context).display(
                           size: 34,
-                          color: ChoreiaColors.text(0.92),
+                          color: ChoreiaPalette.of(context).text(0.92),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -79,16 +79,16 @@ class FirstRunView extends StatelessWidget {
                               'On1, Line Dance, Latin Fusion ve özgün kısa dans. '
                               'Hesap veya kamera gerekmez. Çalışma kaydın bu cihazda kalır.',
                         ),
-                        style: ChoreiaType.body(
+                        style: ChoreiaType.of(context).body(
                           size: 15,
-                          color: ChoreiaColors.text(0.78),
+                          color: ChoreiaPalette.of(context).text(0.78),
                         ),
                       ),
                       const SizedBox(height: 26),
-                      _panel(
+                      _panel(context: context,
                         key: cameraKey,
                         icon: Icons.videocam_outlined,
-                        tone: ChoreiaColors.rose,
+                        tone: ChoreiaPalette.of(context).rose,
                         title: UiLanguage.text(
                           context,
                           en: IntroStrings.cameraTitle,
@@ -102,9 +102,9 @@ class FirstRunView extends StatelessWidget {
                                 turkish: true)),
                       ),
                       const SizedBox(height: 14),
-                      _panel(
+                      _panel(context: context,
                         icon: Icons.music_note_outlined,
-                        tone: ChoreiaColors.amber,
+                        tone: ChoreiaPalette.of(context).amber,
                         title: UiLanguage.text(
                           context,
                           en: IntroStrings.musicTitle,
@@ -120,9 +120,9 @@ class FirstRunView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 14),
-                      _panel(
+                      _panel(context: context,
                         icon: Icons.straighten_outlined,
-                        tone: ChoreiaColors.amber,
+                        tone: ChoreiaPalette.of(context).amber,
                         title: UiLanguage.text(
                           context,
                           en: IntroStrings.limitsTitle,
@@ -137,10 +137,10 @@ class FirstRunView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 14),
-                      _panel(
+                      _panel(context: context,
                         key: stateKey,
                         icon: Icons.inventory_2_outlined,
-                        tone: ChoreiaColors.roseDeep,
+                        tone: ChoreiaPalette.of(context).roseDeep,
                         title: UiLanguage.text(
                           context,
                           en: IntroStrings.todayTitle,
@@ -180,7 +180,7 @@ class FirstRunView extends StatelessWidget {
         ),
       );
 
-  Widget _panel({
+  Widget _panel({required BuildContext context,
     Key? key,
     required IconData icon,
     required Color tone,
@@ -199,13 +199,13 @@ class FirstRunView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(title, style: ChoreiaType.label(size: 9.5, color: tone)),
+                  Text(title, style: ChoreiaType.of(context).label(size: 9.5, color: tone)),
                   const SizedBox(height: 6),
                   Text(
                     body,
-                    style: ChoreiaType.body(
+                    style: ChoreiaType.of(context).body(
                       size: 13,
-                      color: ChoreiaColors.text(0.75),
+                      color: ChoreiaPalette.of(context).text(0.75),
                     ),
                   ),
                 ],

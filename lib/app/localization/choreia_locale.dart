@@ -2,15 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// A device display preference. It contains no account or practice data.
 class ChoreiaLocaleController extends ValueNotifier<Locale?> {
-  ChoreiaLocaleController.memory([Locale? locale])
-      : _persist = false,
-        super(locale);
+  ChoreiaLocaleController.memory([super.value]) : _persist = false;
   ChoreiaLocaleController.persisted()
       : _persist = true,
         super(null);
