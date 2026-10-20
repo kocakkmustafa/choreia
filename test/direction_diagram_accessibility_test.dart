@@ -105,9 +105,20 @@ Future<void> _accessibleScroll(WidgetTester tester, String id) async {
   expect(controller.position.axisDirection, AxisDirection.right);
   expect(controller.offset, 0);
   expect(controller.position.maxScrollExtent, greaterThan(0));
-  // Other wall maps may have scroll semantics while vertically offscreen.
-  // Exercise this keyed viewport, including its actual assistive action.
-  final target = tester.getSemantics(_scroll(id));
+  // Scroll chrome can resolve to a semantics ancestor without scroll actions.
+  // Find the action owner within this keyed viewport, excluding sibling maps.
+  final actionOwner = find.descendant(
+    of: _scroll(id),
+    matching: find.byElementPredicate((element) {
+      if (element is! RenderObjectElement) {
+        return false;
+      }
+      final data = element.renderObject.debugSemantics?.getSemanticsData();
+      return data?.hasAction(SemanticsAction.scrollLeft) ?? false;
+    }),
+  );
+  expect(actionOwner, findsOneWidget);
+  final target = tester.getSemantics(actionOwner);
   final accessible = find.semantics.byPredicate((node) => node.id == target.id);
   expect(accessible.evaluate(), hasLength(1));
   expect(target.getSemanticsData().flagsCollection.isHidden, isFalse);
