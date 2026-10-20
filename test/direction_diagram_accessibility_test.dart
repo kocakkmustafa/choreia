@@ -105,8 +105,12 @@ Future<void> _accessibleScroll(WidgetTester tester, String id) async {
   expect(controller.position.axisDirection, AxisDirection.right);
   expect(controller.offset, 0);
   expect(controller.position.maxScrollExtent, greaterThan(0));
-  final accessible = find.semantics.scrollable(axis: Axis.horizontal);
+  // Other wall maps may have scroll semantics while vertically offscreen.
+  // Exercise this keyed viewport, including its actual assistive action.
+  final target = tester.getSemantics(_scroll(id));
+  final accessible = find.semantics.byPredicate((node) => node.id == target.id);
   expect(accessible.evaluate(), hasLength(1));
+  expect(target.getSemanticsData().flagsCollection.isHidden, isFalse);
   expect(
       accessible
           .evaluate()
