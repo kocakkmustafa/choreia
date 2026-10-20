@@ -331,12 +331,12 @@ Future<_Host> _mount(WidgetTester tester, LibraryCatalog library, Locale locale,
     DiskBundle? bundle}) async {
   tester.view.physicalSize = _viewport;
   tester.view.devicePixelRatio = 1;
-  tester.platformDispatcher.localeTestValue = locale;
+  tester.platformDispatcher.localesTestValue = [locale];
   tester.platformDispatcher.platformBrightnessTestValue =
       mode == ThemeMode.light ? Brightness.light : Brightness.dark;
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
   addTearDown(tester.view.reset);
-  addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
   addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
   final preferences = MemoryAppearanceStore()..failWrite = failThemeSave;
   final themes = ChoreiaThemeController.persisted(store: preferences);
