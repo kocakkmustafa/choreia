@@ -9,9 +9,9 @@ import 'package:motion_content/motion_content.dart';
 const String _manifestPath = 'content/motion_content/manifest.json';
 const String _coursePath = 'content/salsa_on1_course.json';
 // Current reviewed working-tree asset; an authored change requires a repin.
-const int _courseByteLength = 402293;
+const int _courseByteLength = 402342;
 const String _courseSha256 =
-    'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc';
+    '284d429656ec8ca56fd10674685cf61069d157a6ee985eb764818ae9db11907d';
 
 final class _ManifestOverlayBundle extends CachingAssetBundle {
   _ManifestOverlayBundle(this.manifestBytes);

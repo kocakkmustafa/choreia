@@ -22,7 +22,8 @@ from generate_bases import check_bases, load_string_map
 APP = Path(__file__).resolve().parents[2]
 LOCALES = ('en', 'tr', 'es-419', 'pt-BR', 'de', 'fr', 'ja', 'ar', 'it', 'ko', 'id', 'pl', 'hi', 'zh-Hans')
 # UI grows with app-owned copy; its English asset defines the current key set.
-EXPECTED_COUNTS = {'course': 1054, 'ui': None, 'catalog': 430}
+# Course count comes from the six actual source assets, never from an overlay.
+EXPECTED_COUNTS = {'course': None, 'ui': None, 'catalog': 430}
 PLACEHOLDER = re.compile(r'\{([A-Za-z][A-Za-z0-9_]*)\}')
 # RFC 3986 URI characters. In particular, Japanese prose/full-width punctuation
 # may immediately follow an ASCII URI without whitespace; it is not URL text.
@@ -93,12 +94,150 @@ def _sample(values, limit=5):
     return sorted(values)[:limit]
 
 
+COURSE_SOURCES = (
+    ('hip_hop_foundations_course.json', 'hip_hop_foundations_beginner', 'units', 6),
+    ('hip_hop_foundations_skill_course.json', 'hip_hop_foundations_skill_course', 'units', 8),
+    ('line_dance_beginner_course.json', 'line_dance_beginner_written', 'units', 9),
+    ('latin_fusion_beginner_course.json', 'latin_fusion_beginner_written', 'units', 8),
+    ('original_short_form_beginner_course.json', 'original_short_form_beginner_written', 'units', 7),
+    ('salsa_on1_course.json', 'salsa_on1_solo', 'lessons', 48),
+)
+_UNIT_TEXT_FIELDS = ('title', 'prerequisite', 'outcome', 'instruction',
+                     'practice', 'mistakes', 'adaptation', 'check')
+_SALSA_TEXT_FIELDS = ('title', 'goal', 'teaching', 'practice', 'selfCheck',
+                      'repeat', 'adaptation')
+
+
+def harvest_course_sources(app):
+    """Harvest exact EN/TR text pairs, not course/unit/progress identifiers.
+
+    Six declared assets and 86 units must exist. String-pair and equal-length
+    string-list-pair objects are the only harvested shapes. Missing/ambiguous
+    pairs fail rather than shrinking the expected overlay count into a PASS.
+    This does not replace the app parsers' physical/count/policy contracts.
+    """
+    app = Path(app)
+    errors, files, pairs, origins = [], [], {}, {}
+    occurrences, total_units = 0, 0
+
+    def error(code, **details):
+        errors.append({'code': code, **details})
+
+    def unique_object(rows):
+        result = {}
+        for key, value in rows:
+            if key in result:
+                raise ValueError(f'duplicate JSON key: {key!r}')
+            result[key] = value
+        return result
+
+    def add(english, turkish, path):
+        nonlocal occurrences
+        if not english.strip() or not turkish.strip():
+            error('course_source_pair_shape', path=path,
+                  detail='empty bilingual source text')
+            return
+        occurrences += 1
+        if english in pairs and pairs[english] != turkish:
+            error('course_source_translation_conflict', english=english,
+                  first_path=origins[english], conflicting_path=path)
+            return
+        pairs[english], origins[english] = turkish, origins.get(english, path)
+
+    def walk(value, path):
+        if isinstance(value, dict):
+            if 'en' in value or 'tr' in value:
+                if set(value) != {'en', 'tr'}:
+                    error('course_source_pair_shape', path=path,
+                          detail='a bilingual object must contain exactly en and tr')
+                    return
+                en, tr = value['en'], value['tr']
+                if isinstance(en, str) and isinstance(tr, str):
+                    add(en, tr, path)
+                elif (isinstance(en, list) and isinstance(tr, list)
+                      and en and len(en) == len(tr)
+                      and all(isinstance(text, str) for text in en + tr)):
+                    for index, (english, turkish) in enumerate(zip(en, tr)):
+                        add(english, turkish, f'{path}[{index}]')
+                else:
+                    error('course_source_pair_shape', path=path,
+                          detail='expected two strings or equal nonempty string lists')
+                return
+            for key, child in value.items():
+                walk(child, f'{path}/{key}')
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                walk(child, f'{path}[{index}]')
+
+    for name, course_id, collection, expected_units in COURSE_SOURCES:
+        path = app / 'content' / name
+        relative = str(path.relative_to(app))
+        try:
+            if path.is_symlink() or not path.is_file():
+                raise ValueError('expected an existing regular source asset')
+            value = json.loads(path.read_text(encoding='utf-8'),
+                               object_pairs_hook=unique_object)
+        except (OSError, UnicodeError, ValueError) as problem:
+            error('course_source_unavailable', path=relative, detail=str(problem))
+            continue
+        if (not isinstance(value, dict) or value.get('schemaVersion') != 1
+                or value.get('id') != course_id):
+            error('course_source_identity', path=relative, expected_id=course_id)
+            continue
+        units = value.get(collection)
+        if not isinstance(units, list) or len(units) != expected_units:
+            error('course_source_unit_count', path=relative,
+                  expected=expected_units,
+                  actual=len(units) if isinstance(units, list) else None)
+            continue
+        identities = [unit.get('id') if isinstance(unit, dict) else None
+                      for unit in units]
+        if (not all(isinstance(identity, str) and identity.strip()
+                    for identity in identities)
+                or len(set(identities)) != len(identities)):
+            error('course_source_unit_identity', path=relative)
+            continue
+        required = _SALSA_TEXT_FIELDS if collection == 'lessons' else _UNIT_TEXT_FIELDS
+        if name == 'line_dance_beginner_course.json':
+            required = (*required, 'diagram')
+        for index, unit in enumerate(units):
+            for key in required:
+                if (key not in unit or not isinstance(unit[key], dict)
+                        or set(unit[key]) != {'en', 'tr'}):
+                    error('course_source_unit_text_field',
+                          path=f'{relative}/{collection}[{index}]/{key}')
+        if (not isinstance(value.get('title'), dict)
+                or set(value['title']) != {'en', 'tr'}):
+            error('course_source_title', path=relative)
+        total_units += len(units)
+        files.append({'path': relative, 'course_id': course_id,
+                      'collection': collection, 'units': len(units)})
+        walk(value, relative)
+    if len(files) != len(COURSE_SOURCES) or total_units != 86:
+        error('course_source_total_units', expected_files=6, actual_files=len(files),
+              expected_units=86, actual_units=total_units)
+    if not pairs:
+        error('course_source_empty', detail='zero source pairs cannot define a valid catalog')
+    return pairs, {
+        'status': 'PASS' if not errors else 'FAIL',
+        'files': files, 'expected_files': 6, 'total_units': total_units,
+        'expected_units': 86, 'pair_occurrences': occurrences,
+        'unique_english': len(pairs),
+        'identifiers_count_as_messages': False,
+    }, errors
+
+
 def validate(app=APP):
     app = Path(app)
     assets_dir = app / 'content/l10n'
     errors = []
     counts = {}
     catalogs = {}
+    source_pairs, source_inventory, source_errors = harvest_course_sources(app)
+    errors.extend(source_errors)
+    expected_counts = dict(EXPECTED_COUNTS)
+    expected_counts['course'] = (len(source_pairs)
+                                 if source_inventory['status'] == 'PASS' else None)
 
     def error(code, **details):
         errors.append({'code': code, **details})
@@ -111,7 +250,7 @@ def validate(app=APP):
             error('invalid_asset', path=relative, detail=str(problem))
             return None
 
-    for kind, expected_count in EXPECTED_COUNTS.items():
+    for kind, expected_count in expected_counts.items():
         found = {path.name[len(kind) + 1:-5]
                  for path in assets_dir.glob(f'{kind}.*.json')
                  if path.name != 'course.index.json'}
@@ -174,9 +313,17 @@ def validate(app=APP):
     counts['course_index'] = len(index) if index is not None else None
     course_english = catalogs['course'].get('en')
     if index is not None:
-        if len(index) != EXPECTED_COUNTS['course']:
-            error('course_index_count', expected=EXPECTED_COUNTS['course'],
+        if (expected_counts['course'] is not None
+                and len(index) != expected_counts['course']):
+            error('course_index_count', expected=expected_counts['course'],
                   actual=len(index))
+        source_keys = set(source_pairs)
+        if set(index) != source_keys:
+            error('course_source_index_parity',
+                  missing_count=len(source_keys - set(index)),
+                  extra_count=len(set(index) - source_keys),
+                  missing_examples=_sample(source_keys - set(index)),
+                  extra_examples=_sample(set(index) - source_keys))
         ids = set(index.values())
         if len(ids) != len(index):
             error('course_index_id_collision', source_count=len(index),
@@ -203,6 +350,30 @@ def validate(app=APP):
             if mismatch:
                 error('course_index_english_identity', count=len(mismatch),
                       examples=_sample(mismatch))
+
+
+    expected_source_ids = {
+        'course.' + hashlib.sha256(english.encode('utf-8')).hexdigest()[:16]: english
+        for english in source_pairs
+    }
+    if len(expected_source_ids) != len(source_pairs):
+        error('course_source_id_collision')
+    for tag, rows in catalogs['course'].items():
+        wanted, actual = set(expected_source_ids), set(rows)
+        if actual != wanted:
+            error('course_source_locale_key_parity', locale=tag,
+                  missing_count=len(wanted - actual), extra_count=len(actual - wanted),
+                  missing_examples=_sample(wanted - actual),
+                  extra_examples=_sample(actual - wanted))
+        if tag not in ('en', 'tr'):
+            continue
+        mismatch = [identity for identity, english in expected_source_ids.items()
+                    if identity in rows and rows[identity] !=
+                    (english if tag == 'en' else source_pairs[english])]
+        if mismatch:
+            error('course_source_english_identity' if tag == 'en'
+                  else 'course_source_turkish_identity',
+                  count=len(mismatch), examples=_sample(mismatch))
 
     available = (set(catalogs['ui'].get('en', {}))
                  | set(catalogs['catalog'].get('en', {}))
@@ -244,12 +415,13 @@ def validate(app=APP):
         'read_only': True,
         'dependencies': 'Python standard library and checked-in app sources only',
         'expected_counts': {
-            kind: (expected if expected is not None
+            kind: (expected if kind == 'course' or expected is not None
                    else len(catalogs[kind]['en'])
                    if 'en' in catalogs[kind] else None)
-            for kind, expected in EXPECTED_COUNTS.items()
+            for kind, expected in expected_counts.items()
         },
         'counts': counts,
+        'course_sources': source_inventory,
         'inventory': inventory_result,
         'generated_bases': bases,
         'error_count': len(errors),

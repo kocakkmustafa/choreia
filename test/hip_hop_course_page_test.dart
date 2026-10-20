@@ -54,7 +54,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
           find.textContaining(
-              lang == 'tr' ? 'Yerel içerik adayı' : 'Local content candidate'),
+              lang == 'tr' ? 'Hazırlanma, sayım' : 'A six-stage introduction'),
           findsOneWidget);
       for (var n = 1; n <= 6; n++) {
         final key = find.byKey(ValueKey('hhf_0$n'));
@@ -86,7 +86,7 @@ void main() {
     bundle.fail = false;
     await tester.tap(find.text('Retry'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Local content candidate'), findsOneWidget);
+    expect(find.textContaining('A six-stage introduction'), findsOneWidget);
     expect(find.text('Retry'), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -124,7 +124,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
         find.text('Hip-Hop Foundations: written introduction'), findsOneWidget);
-    expect(find.textContaining('Local content candidate'), findsOneWidget);
+    expect(find.textContaining('A six-stage introduction'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(tester.takeException(), isNull);
   });

@@ -79,8 +79,8 @@ class _PracticeComparisonPageState extends State<PracticeComparisonPage>
     final tips = <String, String>{
       'hip_hop_foundations': UiLanguage.pair(context,
           turkish: tr,
-          en: 'Choose one reading/listening question from the introduction or skill candidate, such as separating step and touch in a step-touch row. Running Man/Roger Rabbit demonstrations and physical review remain open.',
-          tr: 'Giriş veya beceri adayından tek okuma/dinleme sorusu seç. Örneğin step-touch satırında adım ile dokunuşu ayır. Running Man/Roger Rabbit gösterim ve fiziksel incelemesi açıktır.'),
+          en: "Choose one step or transition from your Hip-Hop lesson. Describe its count, supporting foot and the cue you want to compare. Use these notes to compare your own observations; the form does not automatically verify the movement.",
+          tr: "Hip-Hop dersinden tek adım veya geçiş seç. Sayımını, destek ayağını ve karşılaştırmak istediğin ipucunu anlat. Bu notlarla kendi gözlemlerini karşılaştır; form hareketi otomatik doğrulamaz."),
       'salsa_shines': UiLanguage.pair(context,
           turkish: tr,
           en: 'For example, describe the support/hold choice at 3→4. Do not treat the silent visual counter as a music beat. This page is separate from Salsa lesson completion records.',
@@ -95,8 +95,8 @@ class _PracticeComparisonPageState extends State<PracticeComparisonPage>
           tr: 'M/S/T/C sırasını ve seçtiğin değiştirmeyi belirt. Ayrı pulse çalışmasını 32 sayıya katma. Değiştirilmiş C ritim taslağı cumbia drag başarısı değildir.'),
       'tiktok_format': UiLanguage.pair(context,
           turkish: tr,
-          en: 'Choose one transition in your own 16-count score; use your choices rather than rename a worked example. Body roll, sharp Hit and full Arm run acceptance remain open.',
-          tr: 'Kendi 16 sayımlı notasyonundan tek geçiş seç; gösterilmiş örneği yeniden adlandırmak yerine kendi seçimlerini kullan. Body roll, sert Hit ve tam Arm run kabulü açıktır.'),
+          en: "Choose one transition in your own 16-count score and use your own choices rather than rename a worked example. Compare your observations at that point; this form does not automatically verify technique.",
+          tr: "Kendi 16 sayımlı hareket planından tek geçiş seç; hazır örneğin adını değiştirmek yerine kendi seçimlerini kullan. O noktadaki gözlemlerini karşılaştır; bu form tekniği otomatik doğrulamaz."),
     };
 
     return Scaffold(

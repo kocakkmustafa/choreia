@@ -109,8 +109,8 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
         title: Text(widget.skillCourse
             ? (UiLanguage.pair(context,
                 turkish: tr,
-                en: 'Hip-Hop course candidate',
-                tr: 'Hip-Hop kurs adayı'))
+                en: "Hip-Hop beginner course",
+                tr: "Hip-Hop başlangıç kursu"))
             : (UiLanguage.pair(context,
                 turkish: tr,
                 en: 'Hip-Hop written path',

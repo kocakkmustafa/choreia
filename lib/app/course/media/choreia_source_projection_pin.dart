@@ -1,5 +1,6 @@
-/// App-owned authored revision using the v2l wire format. Matching these bytes does not authorize
-/// release media or a learner-skill verdict.
+/// App-local text-revision byte evidence using the v2l wire format.
+/// Historical opaque refs remain unresolved in the separate evidence record.
+/// No media, expert/physical/model approval or learner-skill verdict follows.
 abstract final class ChoreiaSourceProjectionPin {
   static const appId = 'choreia';
   static const coursePath = 'content/salsa_on1_course.json';
@@ -9,16 +10,16 @@ abstract final class ChoreiaSourceProjectionPin {
       'content/motion_content/choreia.source-projection.v1.json';
 
   static const courseSha256 =
-      'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc';
+      '284d429656ec8ca56fd10674685cf61069d157a6ee985eb764818ae9db11907d';
   static const sliceSha256 =
-      '7c62bacdfee106acc06dba4a950ecf6b23f5a0d0ea976f56ec309ea15bc077fb';
+      'a0b73771ef94639988c83ced2621338ccc12b75204e876216bf71f4a2e0c698d';
   static const projectionSha256 =
-      'af0e7bb0a865914722774e7b806e2236e963dcdd2cda1ddf3e6664eac556a69c';
+      '7f41392feb363e27902d6061e4ba99c58ef10823e6f4e35e0b0f17f5639046b3';
   static const sourceCatalogSha256 =
-      'a6072c7e16edf43c812b508a8904ae0bf4cd0ce70842b0affc51e7514f751982';
+      '6a1a1ebf201b05e72562b447373a907639896e2327d1d2c1eef9f8c6c44fc54f';
   // Preproduction source manifest, not an independently approved release root.
   static const sourceManifestSha256 =
-      'c98bde343ed0529d0717ca70b56cae529e0fbededecdbaf4ef6934230c324b64';
+      'ef6eaa2ba38d0b3abdc7300e6bbf7af419ec9484c1fbd7dca8de174ddadb0adc';
 
   static const lessonCount = 48;
   static const sceneCount = 436;

@@ -376,7 +376,7 @@ void main() {
         expect(
           find.text(
             path.key == 'style.hipHopSkillCourse'
-                ? 'Hip-Hop Foundations: beginner course candidate'
+                ? 'Hip-Hop Foundations: beginner course'
                 : 'Hip-Hop Foundations: written introduction',
           ),
           findsOneWidget,

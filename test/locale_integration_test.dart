@@ -129,6 +129,19 @@ void main() {
       final raw = jsonDecode(File('content/hip_hop_foundations_course.json')
           .readAsStringSync()) as Map<String, dynamic>;
       final title = (raw['title'] as Map).cast<String, String>();
+      final skill = jsonDecode(
+          File('content/hip_hop_foundations_skill_course.json')
+              .readAsStringSync()) as Map<String, dynamic>;
+      final salsa = jsonDecode(File('content/salsa_on1_course.json')
+          .readAsStringSync()) as Map<String, dynamic>;
+      final salsaCheck = (salsa['lessons'] as List)[31]['selfCheck'] as Map;
+      final revisedPairs = <Map<String, String>>[
+        (raw['reviewNotice'] as Map).cast<String, String>(),
+        ((skill['units'] as List)[2]['instruction'] as Map)
+            .cast<String, String>(),
+        {'en': salsaCheck['en'][0] as String,
+         'tr': salsaCheck['tr'][0] as String},
+      ];
       final index =
           (jsonDecode(File('content/l10n/course.index.json').readAsStringSync())
                   as Map)
@@ -143,14 +156,24 @@ void main() {
         localeBundle: DiskBundle(),
         shellBuilder: (_, __) => Builder(
             builder: (context) => Scaffold(
-                    body: Column(children: [
+                    body: SingleChildScrollView(child: Column(children: [
                   Text(UiLanguage.courseText(context, title),
                       key: const Key('course.title')),
+                  for (var i = 0; i < revisedPairs.length; i++)
+                    Text(UiLanguage.courseText(context, revisedPairs[i]),
+                        key: ValueKey('course.revised.$i')),
                   const ChoreiaLanguagePicker(),
-                ]))),
+                ])))),
       ));
       await tester.pumpAndSettle();
       expect(find.text(expected), findsOneWidget);
+      for (var i = 0; i < revisedPairs.length; i++) {
+        final expectedRevision = translated[index[revisedPairs[i]['en']]]!;
+        expect(
+            tester.widget<Text>(find.byKey(ValueKey('course.revised.$i'))).data,
+            expectedRevision,
+            reason: '$tag revised source pair $i must use its matching copy');
+      }
       expect(
           Directionality.of(
               tester.element(find.byKey(const Key('course.title')))),

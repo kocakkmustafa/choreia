@@ -349,7 +349,7 @@ void main() {
         findsOneWidget);
     expect(tester.widget<FilledButton>(link).onPressed, isNotNull);
     expect(
-        find.textContaining('Demonstration and instructor review remain open'),
+        find.textContaining('This is your own report and does not verify movement skill'),
         findsOneWidget);
     await tester.tap(link);
     await tester.pump();

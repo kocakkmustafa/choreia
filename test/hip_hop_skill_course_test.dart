@@ -74,7 +74,7 @@ void main() {
       ));
       await tester.pumpAndSettle();
       final notice = find.textContaining(
-          lang == 'tr' ? 'İnceleme adayı.' : 'Review candidate.');
+          lang == 'tr' ? 'Müzikle sayım' : 'An eight-stage beginner Hip-Hop');
       await tester.scrollUntilVisible(notice, 200);
       expect(notice, findsOneWidget);
       for (var n = 1; n <= 8; n++) {
@@ -111,9 +111,9 @@ void main() {
         rootBundle.loadString('content/hip_hop_foundations_skill_course.json'));
     expect(HipHopCourse.decode(bundled!, skillCourse: true).units.length, 8);
     await tester.pumpAndSettle();
-    expect(find.text('Hip-Hop Foundations: beginner course candidate'),
+    expect(find.text('Hip-Hop Foundations: beginner course'),
         findsOneWidget);
-    expect(find.textContaining('Review candidate.'), findsOneWidget);
+    expect(find.textContaining('An eight-stage beginner Hip-Hop'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -135,14 +135,14 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     next.pending!.complete(source);
     await tester.pumpAndSettle();
-    expect(find.text('Hip-Hop Foundations: beginner course candidate'),
+    expect(find.text('Hip-Hop Foundations: beginner course'),
         findsOneWidget);
     final replacement = WrittenBundle(introSource)
       ..pending = Completer<String>();
     await tester.pumpWidget(
         MaterialApp(home: HipHopCoursePage(key: key, bundle: replacement)));
     await tester.pump();
-    expect(find.text('Hip-Hop Foundations: beginner course candidate'),
+    expect(find.text('Hip-Hop Foundations: beginner course'),
         findsNothing);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     replacement.pending!.complete(introSource);

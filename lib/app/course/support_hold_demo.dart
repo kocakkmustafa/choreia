@@ -72,8 +72,8 @@ class _SupportHoldDemoState extends State<SupportHoldDemo>
           child: ListView(padding: const EdgeInsets.all(20), children: [
         Text(UiLanguage.pair(context,
             turkish: tr,
-            en: 'Original symbolic timing example. A/B represent two support states; this is not foot placement, real weight transfer or dancer video. Read and describe first. Physical demonstration/review is still missing.',
-            tr: 'Özgün sembolik zaman örneği. A/B iki destek durumunu gösterir; ayak konumu, gerçek ağırlık aktarımı veya dansçı videosu değildir. Önce oku ve anlat. Fiziksel gösterim/inceleme hâlâ eksiktir.')),
+            en: "Original symbolic timing example. A/B represent two support states; this is not foot placement, real weight transfer or dancer video. Read and describe first. This example does not automatically verify your movement.",
+            tr: "Özgün sembolik zaman örneği. A/B iki destek durumunu gösterir; ayak konumu, gerçek ağırlık aktarımı veya dansçı videosu değildir. Önce oku ve anlat. Bu örnek hareketini otomatik doğrulamaz.")),
         Text(UiLanguage.pair(context,
             turkish: tr,
             en: 'Eight visual intervals, one second each. At 4 and 8 time continues while support stays the same. This silent model does not verify a music beat or tempo matching.',

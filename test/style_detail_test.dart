@@ -771,7 +771,7 @@ void main() {
       // Ölçülen kusur: not "these are the parts" diyordu (kapalı küme) ve
       // hemen ÜSTÜNDE 5 maddelik adım sözlüğü vardı. Birlikte okununca:
       // "işte adımlar · işte göremediklerimiz" → geri kalanı kontrol ediliyor.
-      expect(StyleStrings.limitsNote, contains('not a full list'),
+      expect(StyleStrings.limitsNote, contains('The list is not complete'),
           reason: 'sınırlar örneklem; kapalı küme gibi sunmak, adlandırılmayan '
               'her şeyin kontrol edildiği iddiasını üretir');
       expect(StyleStrings.limitsNote, isNot(contains('these are the parts')));

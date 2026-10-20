@@ -1,14 +1,14 @@
 {
-  "scope": "New staged Salsa version-two regression fixture based on accepted authored version-one source; NOT shipped version-two or release acceptance",
-  "origin": "Exact accepted course46bc plus same five existing version-two selfCheckByPractice maps and unchanged unmappedSelfChecks",
-  "sha256": "3ec9ca3cf12bacaed6e4454ad769b9c1c3a3300643d50e7de2252601e782d52c",
-  "bytes": 404494,
+  "scope": "Current staged v2 regression fixture, not shipped v2 or policy activation; text-revision evidence only",
+  "origin": "New live v1 source plus exactly the same five pre-existing policy maps and legacyV1 unmapped scope",
+  "sha256": "a6280241362c596091c7e3667e857463230d94011508a9f94f7942efc52d60e2",
+  "bytes": 404543,
   "copied_byte_identically": false,
   "historical_evidence_modified": false,
   "supersedesHistoricalFixtureSHA256": "028ad5809999fc8d289364d5a5c5e90560e48ed984d249ad636b166edd4bad4a",
   "supersedesHistoricalFixtureBytes": 367724,
   "historicalFixtureOrigin": "core-adoption-v4/course-version2-candidate.json; preserved historical records and base/diff-base unchanged",
-  "authoredCourseSHA256": "d04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc",
+  "authoredCourseSHA256": "284d429656ec8ca56fd10674685cf61069d157a6ee985eb764818ae9db11907d",
   "policyMapLessonIds": [
     "so_16",
     "so_19",
@@ -18,7 +18,13 @@
   ],
   "allFivePolicyMapsUnchanged": true,
   "strippedFixtureMatchesAuthoredCourse": true,
-  "runtimeVersionOneUnchanged": true,
   "helperAndAssertionsWeakened": false,
-  "review": "PENDING"
+  "review": "PENDING_ROOT_DIFF_REVIEW_AND_EXACT_SDK_ACCEPTANCE",
+  "supersedesPriorStagedFixtureSHA256": "3ec9ca3cf12bacaed6e4454ad769b9c1c3a3300643d50e7de2252601e782d52c",
+  "runtimeCourseVersion": 1,
+  "runtimeAuthoredBytesChanged": true,
+  "runtimeCriterionPolicyChanged": false,
+  "textRevisionEvidenceProofSHA256": "1e461b23043b30fbae0c2cfc326d93b0252370d7fc4204b82ae7c55b64682824",
+  "expertApproved": false,
+  "physicalAccuracyVerified": false
 }

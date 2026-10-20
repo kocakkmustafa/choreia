@@ -244,8 +244,8 @@ class StyleDetailView extends StatelessWidget {
                   ),
                   child: Text(
                     copy._pick(
-                        'Written beginner path · instructor review pending',
-                        'Yazılı başlangıç yolu · eğitmen incelemesi bekleniyor'),
+                        "Open Hip-Hop introduction",
+                        "Hip-Hop girişini aç"),
                   ),
                 ),
               if (PracticeComparisonPage.supportedStyles
@@ -974,10 +974,7 @@ abstract final class StyleStrings {
   /// a reader concludes the other three are checked. A true sentence in the
   /// wrong frame is read wrong.
   static const String limitsNote =
-      'About this dance and a phone camera — not about lessons. Nothing is '
-      'built for this style. These are examples, not a full list: plenty more '
-      'would be out of reach too, and naming a few is not a promise about the '
-      'rest.';
+      "These examples concern the limits of phone-camera assessment, not the availability of written lessons. The list is not complete, and naming a few limits does not mean other movements are measured.";
 
   static const String tempoTitle = 'TEMPO';
 
@@ -1137,10 +1134,8 @@ final class StyleDetailCopy {
   String get cameraLessonsTitle => _pick(
       'Camera-session reference lessons', 'Kamera seansı referans dersleri');
   String get writtenCourseMeaning => _pick(
-        'A self-guided written course is available. Demonstration and instructor '
-            'review remain open; completing a written unit does not verify movement skill.',
-        'Öz denetimli yazılı kurs açık. Gösterim ve eğitmen incelemesi tamamlanmadı; '
-            'yazılı birimi tamamlamak hareket becerisini doğrulamaz.',
+        "A self-guided beginner course is available. You can optionally record that you studied a unit. This is your own report and does not verify movement skill.",
+        "Kendi başına çalışabileceğin başlangıç kursu açık. Birimi çalıştığını isteğe bağlı kaydedebilirsin. Bu kendi beyanındır; hareket becerisini doğrulamaz.",
       );
   String get noCameraLessons => _pick(
         'There are no camera-session reference lessons for this style. '
@@ -1156,9 +1151,7 @@ final class StyleDetailCopy {
       _pick(StyleStrings.limitsTitle, 'Kameranın bu dansta göremedikleri');
   String get limitsNote => _pick(
         StyleStrings.limitsNote,
-        'Bunlar dans ve telefon kamerası hakkındaki örnek sınırlardır; '
-        'açık dersler hakkında değildir. Bu stil için ders hazırlanmadı. '
-        'Liste tam değildir ve başka hareketlerin ölçüldüğünü vaat etmez.',
+        "Bu örnekler telefon kamerasıyla değerlendirmenin sınırlarını anlatır; yazılı derslerin açık olup olmadığını değil. Liste tam değildir; birkaç sınırın sayılması diğer hareketlerin ölçüldüğü anlamına gelmez.",
       );
   String get tempoTitle => _pick(StyleStrings.tempoTitle, 'TEMPO');
   String get honestyTitle =>
