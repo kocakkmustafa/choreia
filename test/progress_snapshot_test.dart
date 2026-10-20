@@ -130,5 +130,5 @@ final class _ChangingStore implements SessionStore {
   @override
   Future<int> workedSecondsFor(String lessonId) async => records
       .where((record) => record.lessonId == lessonId)
-      .fold(0, (seconds, record) => seconds + record.workedSeconds);
+      .fold<int>(0, (seconds, record) => seconds + record.workedSeconds);
 }
