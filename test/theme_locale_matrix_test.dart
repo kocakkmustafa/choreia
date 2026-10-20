@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui' show Tristate;
 
@@ -345,6 +346,8 @@ Future<_Host> _mount(WidgetTester tester, LibraryCatalog library, Locale locale,
     bool introSeen = true,
     bool localCourseFiles = false,
     DiskBundle? bundle}) async {
+  // The registered teardown is not automatically run in this test's fake zone.
+  final fixtureZone = Zone.current;
   tester.view.physicalSize = _viewport;
   tester.view.devicePixelRatio = 1;
   tester.platformDispatcher.localesTestValue = [locale];
@@ -376,10 +379,30 @@ Future<_Host> _mount(WidgetTester tester, LibraryCatalog library, Locale locale,
     _routeTrace('teardown.unmounted');
     await tester.pump();
     _routeTrace('teardown.pumped; drain.before');
-    await tester.runAsync(() {
-      _routeTrace('teardown.drain.real.begin');
-      return host.owners.retireOwner(null);
+    var drained = false;
+    Object? drainError;
+    StackTrace? drainStack;
+    // Owner operations were registered in the fake test zone. Observe their
+    // real Future there while separately allowing real IO and fake callbacks.
+    fixtureZone.run<void>(() {
+      _routeTrace('teardown.drain.fixture.begin');
+      unawaited(host.owners.retireOwner(null).then<void>((_) {
+        drained = true;
+      }, onError: (Object error, StackTrace stack) {
+        drainError = error;
+        drainStack = stack;
+        drained = true;
+      }));
     });
+    for (var turn = 0; turn < 300 && !drained; turn++) {
+      await tester
+          .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(drained, isTrue,
+        reason: 'Owner drain must finish before deleting the fixture directory');
+    final failure = drainError;
+    if (failure != null) Error.throwWithStackTrace(failure, drainStack!);
     _routeTrace('teardown.drain.returned');
     host.directory?.deleteSync(recursive: true);
     _routeTrace('teardown.directory.deleted');
