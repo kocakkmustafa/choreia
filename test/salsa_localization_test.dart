@@ -162,7 +162,14 @@ void main() {
     final before = file.readAsBytesSync();
 
     await controller.select(const Locale('ar'), persist: false);
-    await tester.pumpAndSettle();
+    // The backdrop repeats; wait for applied resources rather than idle frames.
+    for (var i = 0; i < 60; i++) {
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 5)));
+      await tester.pump(const Duration(milliseconds: 50));
+      if (ChoreiaMessages.of(tester.element(check)).localeTag == 'ar') break;
+    }
+    expect(ChoreiaMessages.of(tester.element(check)).localeTag, 'ar');
     expect(tester.widget<CheckboxListTile>(check).value, isTrue);
     expect(Directionality.of(tester.element(check)), TextDirection.rtl);
     await tester.scrollUntilVisible(
