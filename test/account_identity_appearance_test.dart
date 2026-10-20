@@ -262,7 +262,7 @@ void _expectClosedBlocker(WidgetTester tester, _ClosedFixture fixture,
 }
 
 class _TrackedLocales extends ChoreiaLocaleController {
-  _TrackedLocales(Locale? locale) : super.memory(locale);
+  _TrackedLocales(super.value) : super.memory();
   int additions = 0;
   int removals = 0;
   int disposeCalls = 0;
@@ -288,7 +288,7 @@ class _TrackedLocales extends ChoreiaLocaleController {
 }
 
 class _TrackedThemes extends ChoreiaThemeController {
-  _TrackedThemes(ThemeMode mode) : super.memory(mode);
+  _TrackedThemes(super.value) : super.memory();
   int additions = 0;
   int removals = 0;
   int disposeCalls = 0;
