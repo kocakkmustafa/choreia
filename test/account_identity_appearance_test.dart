@@ -14,7 +14,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 const _adapterKey = ValueKey<String>('test.identity.appearance');
 
 void main() {
-  testWidgets('real closed Core blocker uses explicit app Arabic and dark theme',
+  testWidgets(
+      'real closed Core blocker uses explicit app Arabic and dark theme',
       (tester) async {
     final fixture = _ClosedFixture();
     final locales = _TrackedLocales(const Locale('ar'));
@@ -31,7 +32,8 @@ void main() {
     expect(themes.liveListeners, 1);
   });
 
-  testWidgets('live locale and theme keep the same closed gate runtime and child',
+  testWidgets(
+      'live locale and theme keep the same closed gate runtime and child',
       (tester) async {
     final fixture = _ClosedFixture();
     final locales = _TrackedLocales(const Locale('tr'));
@@ -125,15 +127,16 @@ void main() {
     expect(tester.element(find.byType(MotionIdentityGate)), same(gateElement));
   });
 
-  testWidgets('controller replacement detaches old listeners and unmount detaches new',
+  testWidgets(
+      'controller replacement detaches old listeners and unmount detaches new',
       (tester) async {
     final fixture = _ClosedFixture();
     final oldLocales = _TrackedLocales(const Locale('tr'));
     final oldThemes = _TrackedThemes(ThemeMode.light);
     final newLocales = _TrackedLocales(const Locale('ar'));
     final newThemes = _TrackedThemes(ThemeMode.dark);
-    _tearDownFixture(tester, fixture,
-        [oldLocales, newLocales], [oldThemes, newThemes]);
+    _tearDownFixture(
+        tester, fixture, [oldLocales, newLocales], [oldThemes, newThemes]);
     _narrowView(tester);
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);
 
@@ -334,8 +337,8 @@ class _ClosedFixture {
 
   Never reject(Invocation invocation) {
     unexpectedClientCalls++;
-    throw StateError('Unexpected Supabase operation: ' +
-        invocation.memberName.toString());
+    throw StateError(
+        'Unexpected Supabase operation: ' + invocation.memberName.toString());
   }
 
   void expectNoEffects() {

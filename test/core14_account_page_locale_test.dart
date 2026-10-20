@@ -85,8 +85,11 @@ Future<void> _exerciseAccountRoute(WidgetTester tester,
   final strings = MotionAccountLocalizations(locale);
   final profileError =
       find.text(strings.text(MotionAccountString.profileReadFailed));
-  await _waitFor(tester, () => pageFinder.evaluate().length == 1 &&
-      _readyInLocale(tester, profileError, locale),
+  await _waitFor(
+      tester,
+      () =>
+          pageFinder.evaluate().length == 1 &&
+          _readyInLocale(tester, profileError, locale),
       'The generated account route must show the real Core profile read error');
   final pageElement = tester.element(pageFinder);
   final page = tester.widget<MotionAccountPage>(pageFinder);
@@ -96,7 +99,8 @@ Future<void> _exerciseAccountRoute(WidgetTester tester,
   expect(page.clearLocalData, isNotNull);
   expect(page.initialPasswordRecovery, isFalse);
   expect(find.byType(MotionMembershipPage), findsNothing);
-  expect(find.text(strings.text(MotionAccountString.membershipOptions)), findsNothing);
+  expect(find.text(strings.text(MotionAccountString.membershipOptions)),
+      findsNothing);
   expect(fixture.profileReadStarts, 1);
   _expectFallbackAndAppearance(tester.element(profileError), locale, mode);
   _expectUntouchedSaveDisabled(tester, strings);
@@ -108,8 +112,10 @@ Future<void> _exerciseAccountRoute(WidgetTester tester,
   final retry = find.widgetWithText(
       TextButton, strings.text(MotionAccountString.retryProfile));
   await _tap(tester, retry);
-  await _waitFor(tester,
-      () => fixture.profileReadStarts == 2 &&
+  await _waitFor(
+      tester,
+      () =>
+          fixture.profileReadStarts == 2 &&
           _readyInLocale(tester, profileError, locale),
       'Profile Retry must start a separate read and report its controlled failure');
   expect(tester.element(pageFinder), same(pageElement));
@@ -118,20 +124,26 @@ Future<void> _exerciseAccountRoute(WidgetTester tester,
   expect(fixture.identityReads, 1,
       reason: 'Profile Retry must not silently become an identity refresh');
 
-  await _tap(tester, find.widgetWithText(
-      TextButton, strings.text(MotionAccountString.deleteMotionAccount)));
+  await _tap(
+      tester,
+      find.widgetWithText(
+          TextButton, strings.text(MotionAccountString.deleteMotionAccount)));
   final dialog = find.byType(AlertDialog);
   final explanation = find.descendant(
       of: dialog,
       matching: find.text(strings.text(MotionAccountString.deleteExplanation)));
-  await _waitFor(tester, () => dialog.evaluate().length == 1 &&
-      _readyInLocale(tester, explanation, locale),
+  await _waitFor(
+      tester,
+      () =>
+          dialog.evaluate().length == 1 &&
+          _readyInLocale(tester, explanation, locale),
       'The actual Core confirmation dialog must open in the selected locale');
   expect(explanation, findsOneWidget);
   _expectFallbackAndAppearance(tester.element(explanation), locale, mode);
   final cancel = find.descendant(
       of: dialog,
-      matching: find.widgetWithText(TextButton, strings.text(MotionAccountString.cancel)));
+      matching: find.widgetWithText(
+          TextButton, strings.text(MotionAccountString.cancel)));
   await _tap(tester, cancel);
   await _waitFor(tester, () => dialog.evaluate().isEmpty,
       'Cancel must close the dialog without dispatch or local cleanup');
@@ -159,13 +171,16 @@ void _expectFallbackAndAppearance(
   expect(Localizations.localeOf(context), locale);
   // Choreia's production delegates are deliberately untouched. A copied Core
   // MaterialApp/delegate harness would miss the consumer fallback contract.
-  expect(Localizations.of<MotionAccountLocalizations>(
-      context, MotionAccountLocalizations), isNull);
+  expect(
+      Localizations.of<MotionAccountLocalizations>(
+          context, MotionAccountLocalizations),
+      isNull);
   expect(MotionAccountLocalizations.of(context).locale, locale);
   expect(Directionality.of(context),
       locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr);
   final actual = Theme.of(context);
-  final expected = mode == ThemeMode.dark ? ChoreiaTheme.dark : ChoreiaTheme.light;
+  final expected =
+      mode == ThemeMode.dark ? ChoreiaTheme.dark : ChoreiaTheme.light;
   expect(actual.brightness, expected.brightness);
   expect(actual.scaffoldBackgroundColor, expected.scaffoldBackgroundColor);
   expect(actual.colorScheme.primary, expected.colorScheme.primary);
@@ -192,11 +207,11 @@ Future<void> _tap(WidgetTester tester, Finder target) async {
   expect(tester.takeException(), isNull);
 }
 
-Future<void> _waitFor(WidgetTester tester, bool Function() ready,
-    String witness) async {
+Future<void> _waitFor(
+    WidgetTester tester, bool Function() ready, String witness) async {
   for (var turn = 0; turn < 120 && !ready(); turn++) {
-    await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 2)));
+    await tester
+        .runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
     await tester.pump(const Duration(milliseconds: 50));
     expect(tester.takeException(), isNull, reason: witness);
   }
@@ -302,7 +317,8 @@ class _AccountPresentationFixture {
 
   void expectNoUnexpectedEffects() {
     expect(unexpected, isEmpty,
-        reason: 'Core catches read errors; an unexpected fake call must still fail');
+        reason:
+            'Core catches read errors; an unexpected fake call must still fail');
     expect(deletionCallbacks, 0);
     expect(identityReads, 1);
   }
