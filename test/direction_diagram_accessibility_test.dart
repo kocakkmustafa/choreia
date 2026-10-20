@@ -101,6 +101,10 @@ int _frontLabelHeight(Uint8List pixels, Size size, double scale) {
 }
 
 Future<void> _accessibleScroll(WidgetTester tester, String id) async {
+  // A tall wall map can be only partly visible inside the vertical reader.
+  await Scrollable.ensureVisible(tester.element(_scroll(id)));
+  await tester.pumpAndSettle();
+  expect(_scroll(id).hitTestable(), findsOneWidget);
   final controller = _controller(tester, id);
   expect(controller.position.axisDirection, AxisDirection.right);
   expect(controller.offset, 0);
