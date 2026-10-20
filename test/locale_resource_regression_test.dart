@@ -395,8 +395,9 @@ class _ControlledBundle extends CachingAssetBundle {
   bool requested(String tag) => _requested.contains(tag);
 
   void hold(String tag) {
-    if (_gates.containsKey(tag))
+    if (_gates.containsKey(tag)) {
       throw StateError('Duplicate fixture gate: $tag');
+    }
     _gates[tag] = Completer<String>();
   }
 
