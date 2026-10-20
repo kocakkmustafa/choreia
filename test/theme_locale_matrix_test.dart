@@ -205,7 +205,11 @@ void _scriptRun(WidgetTester tester, Finder scope, Locale locale) {
       reason: '${locale.toLanguageTag()} gerçek yüzeyde hedef yazı yok');
   final paragraph = tester.renderObject<RenderParagraph>(rich.first);
   final value = paragraph.text.toPlainText();
-  final span = script.firstMatch(value)!;
+  // A partial matra/conjunct glyph selection can legitimately have no boxes.
+  // Select the complete word containing the target script, including joiners.
+  final span = RegExp(r'[\p{L}\p{M}\p{N}\u200C\u200D]+', unicode: true)
+      .allMatches(value)
+      .firstWhere((match) => script.hasMatch(match.group(0)!));
   final boxes = paragraph.getBoxesForSelection(
       TextSelection(baseOffset: span.start, extentOffset: span.end));
   expect(boxes, isNotEmpty);
