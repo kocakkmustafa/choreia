@@ -5,7 +5,6 @@
 // Controlled local assets only; no native provider, account or network.
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:choreia/app/localization/choreia_locale.dart';
 import 'package:choreia/app/localization/choreia_messages.dart';
