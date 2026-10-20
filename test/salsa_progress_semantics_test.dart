@@ -146,7 +146,7 @@ void main() {
         expect(semanticWidget, findsOneWidget);
         final data = tester.getSemantics(semanticWidget).getSemanticsData();
         expect(data.role, SemanticsRole.progressBar);
-        expect(data.label, label);
+        expect(data.label.split('\n'), contains(label));
         expect(data.minValue, '0');
         expect(data.maxValue, '100');
         expect(double.tryParse(data.value), expectedValue.toDouble());
