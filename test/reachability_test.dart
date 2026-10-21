@@ -373,7 +373,7 @@ home: waiting
             'content/hip_hop_foundations_skill_course.json',
       }.entries) {
         final link = find.byKey(Key(path.key));
-        await _scrollTo(tester, link);
+        await _revealStyleControl(tester, link, path.key);
         await tester.ensureVisible(link);
         await _settle(tester);
         // Start the large real asset read outside the widget fake-clock zone.
@@ -414,7 +414,8 @@ home: waiting
       await tester.tap(lineCard);
       await _settle(tester);
       final lineLink = find.byKey(const Key('style.lineDanceWrittenCourse'));
-      await _scrollTo(tester, lineLink);
+      await _revealStyleControl(
+          tester, lineLink, 'style.lineDanceWrittenCourse');
       await tester.ensureVisible(lineLink);
       await _settle(tester);
       await tester.tap(lineLink);
@@ -438,7 +439,8 @@ home: waiting
       await tester.tap(latinCard);
       await _settle(tester);
       final latinLink = find.byKey(const Key('style.latinFusionWrittenCourse'));
-      await _scrollTo(tester, latinLink);
+      await _revealStyleControl(
+          tester, latinLink, 'style.latinFusionWrittenCourse');
       await tester.ensureVisible(latinLink);
       await _settle(tester);
       // Real asset preflight outside fake-clock widget frames.
@@ -469,7 +471,8 @@ home: waiting
       await tester.tap(shortCard);
       await _settle(tester);
       final shortLink = find.byKey(const Key('style.shortFormWrittenCourse'));
-      await _scrollTo(tester, shortLink);
+      await _revealStyleControl(
+          tester, shortLink, 'style.shortFormWrittenCourse');
       await tester.ensureVisible(shortLink);
       await _settle(tester);
       // Real asset preflight outside fake-clock widget frames.
@@ -1016,6 +1019,42 @@ Set<String> _structuralTargets(Iterable<String> sources) {
             .map((match) => match.group(1)!),
     },
   };
+}
+
+/// Written controls may be above the retained list position after a reader pop.
+/// Reset the active style list with gestures, then search from its start. Both
+/// phases share the original 25-drag budget; a missing control must still fail.
+Future<void> _revealStyleControl(
+  WidgetTester tester,
+  Finder target,
+  String key,
+) async {
+  final page = find.byType(StyleDetailView);
+  expect(page, findsOneWidget, reason: '$key: active style page is missing');
+  final list = find.descendant(of: page, matching: find.byType(ListView));
+  expect(list, findsOneWidget, reason: '$key: style list is not unique');
+  final scrollable =
+      find.descendant(of: list, matching: find.byType(Scrollable));
+  expect(scrollable, findsOneWidget,
+      reason: '$key: style scroll is not unique');
+  final position = tester.state<ScrollableState>(scrollable).position;
+  var drags = 0;
+  while (drags < 25 && position.pixels > position.minScrollExtent + 1) {
+    await tester.drag(list, const Offset(0, 260));
+    await _settle(tester);
+    drags++;
+  }
+  expect(position.pixels, closeTo(position.minScrollExtent, 1),
+      reason: '$key: style list did not return to its start within the budget');
+  final control = find.descendant(of: page, matching: target);
+  for (; drags < 25 && control.evaluate().isEmpty; drags++) {
+    await tester.drag(list, const Offset(0, -260));
+    await _settle(tester);
+  }
+  expect(control, findsOneWidget,
+      reason: '$key: expected control is absent from the active style page');
+  expect(target, findsOneWidget,
+      reason: '$key: expected control is not unique before ensureVisible');
 }
 
 /// Bounded scroll. `scrollUntilVisible` never returns for the same reason
