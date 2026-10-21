@@ -103,9 +103,9 @@ void main() {
     expect(tester.takeException(), isNull);
   }
 
-  test('seven bilingual stages and original independent endpoint', () {
+  test('ten bilingual stages and original independent endpoint', () {
     expect(course.units.map((u) => u.id),
-        ['sf_01', 'sf_02', 'sf_03', 'sf_04', 'sf_05', 'sf_06', 'sf_07']);
+        ['sf_01', 'sf_02', 'sf_03', 'sf_04', 'sf_05', 'sf_06', 'sf_07', 'sf_08', 'sf_09', 'sf_10']);
     expect(course.patterns.keys, ['A', 'A-var', 'B']);
     for (final pair in course.copy.values) {
       expect(pair['en'], isNotEmpty);
@@ -280,7 +280,7 @@ void main() {
             true);
         expect(tester.takeException(), isNull);
       }
-      final last = find.byKey(const ValueKey('sf_07'));
+      final last = find.byKey(const ValueKey('sf_10'));
       await reach(tester, last);
       await tester.tap(last);
       await tester.pumpAndSettle();
@@ -357,7 +357,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     final bundled = await tester.runAsync(() => rootBundle
         .loadString('content/original_short_form_beginner_course.json'));
-    expect(ShortFormCourse.decode(bundled!).units.length, 7);
+    expect(ShortFormCourse.decode(bundled!).units.length, 10);
     await tester.pumpAndSettle();
     expect(find.byType(ShortFormCoursePage), findsOneWidget);
     expect(spy.lastPushed, 'course/original-short-form-written');

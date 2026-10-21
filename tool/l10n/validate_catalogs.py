@@ -97,9 +97,9 @@ def _sample(values, limit=5):
 COURSE_SOURCES = (
     ('hip_hop_foundations_course.json', 'hip_hop_foundations_beginner', 'units', 6),
     ('hip_hop_foundations_skill_course.json', 'hip_hop_foundations_skill_course', 'units', 8),
-    ('line_dance_beginner_course.json', 'line_dance_beginner_written', 'units', 9),
-    ('latin_fusion_beginner_course.json', 'latin_fusion_beginner_written', 'units', 8),
-    ('original_short_form_beginner_course.json', 'original_short_form_beginner_written', 'units', 7),
+    ('line_dance_beginner_course.json', 'line_dance_beginner_written', 'units', 12),
+    ('latin_fusion_beginner_course.json', 'latin_fusion_beginner_written', 'units', 10),
+    ('original_short_form_beginner_course.json', 'original_short_form_beginner_written', 'units', 10),
     ('salsa_on1_course.json', 'salsa_on1_solo', 'lessons', 48),
 )
 _UNIT_TEXT_FIELDS = ('title', 'prerequisite', 'outcome', 'instruction',
@@ -111,7 +111,7 @@ _SALSA_TEXT_FIELDS = ('title', 'goal', 'teaching', 'practice', 'selfCheck',
 def harvest_course_sources(app):
     """Harvest exact EN/TR text pairs, not course/unit/progress identifiers.
 
-    Six declared assets and 86 units must exist. String-pair and equal-length
+    Six declared assets and 94 units must exist. String-pair and equal-length
     string-list-pair objects are the only harvested shapes. Missing/ambiguous
     pairs fail rather than shrinking the expected overlay count into a PASS.
     This does not replace the app parsers' physical/count/policy contracts.
@@ -213,15 +213,15 @@ def harvest_course_sources(app):
         files.append({'path': relative, 'course_id': course_id,
                       'collection': collection, 'units': len(units)})
         walk(value, relative)
-    if len(files) != len(COURSE_SOURCES) or total_units != 86:
+    if len(files) != len(COURSE_SOURCES) or total_units != 94:
         error('course_source_total_units', expected_files=6, actual_files=len(files),
-              expected_units=86, actual_units=total_units)
+              expected_units=94, actual_units=total_units)
     if not pairs:
         error('course_source_empty', detail='zero source pairs cannot define a valid catalog')
     return pairs, {
         'status': 'PASS' if not errors else 'FAIL',
         'files': files, 'expected_files': 6, 'total_units': total_units,
-        'expected_units': 86, 'pair_occurrences': occurrences,
+        'expected_units': 94, 'pair_occurrences': occurrences,
         'unique_english': len(pairs),
         'identifiers_count_as_messages': False,
     }, errors

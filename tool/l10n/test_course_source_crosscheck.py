@@ -106,10 +106,10 @@ class CourseSourceCrosscheckTest(unittest.TestCase):
         self.assertIn(expected_code, {row['code'] for row in result['errors']})
         return result
 
-    def test_six_source_eighty_six_units_are_the_count_authority(self):
+    def test_six_source_ninety_four_units_are_the_count_authority(self):
         result = self.validate()
         self.assertEqual(result['status'], 'PASS', result['errors'])
-        self.assertEqual(result['course_sources']['total_units'], 86)
+        self.assertEqual(result['course_sources']['total_units'], 94)
         self.assertEqual(len(result['course_sources']['files']), 6)
         self.assertEqual(result['expected_counts']['course'],
                          result['course_sources']['unique_english'])

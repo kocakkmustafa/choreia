@@ -79,7 +79,7 @@ void main() {
 
   test('bilingual endpoint, authored ledgers and recorded attempt order', () {
     final course = LatinFusionCourse.decode(source);
-    expect(course.units.length, 8);
+    expect(course.units.length, 10);
     expect(course.patterns.keys, ['M', 'S', 'T', 'C', 'M-side', 'P']);
     for (final pair in course.copy.values) {
       expect(pair['en'], isNotEmpty);
@@ -181,7 +181,7 @@ void main() {
         } finally {
           semantics.dispose();
         }
-        final last = find.byKey(const ValueKey('lf_08'));
+        final last = find.byKey(const ValueKey('lf_10'));
         await tester.scrollUntilVisible(last, 250,
             maxScrolls: 500, scrollable: find.byType(Scrollable).first);
         await tester.ensureVisible(last);
@@ -219,7 +219,7 @@ void main() {
     final bundled = await tester.runAsync(
       () => rootBundle.loadString('content/latin_fusion_beginner_course.json'),
     );
-    expect(LatinFusionCourse.decode(bundled!).units.length, 8);
+    expect(LatinFusionCourse.decode(bundled!).units.length, 10);
     await tester.pumpAndSettle();
     expect(find.byType(LatinFusionCoursePage), findsOneWidget);
     expect(card.entry.contentStatus, 'comingSoon');

@@ -53,11 +53,12 @@ class LatinFusionCourse {
     final units = (raw['units'] as List<dynamic>)
         .map((u) => LatinFusionUnit(u as Map<String, dynamic>))
         .toList();
-    require(units.length == 8);
+    require(units.length == 10);
+    String unitId(int number) => 'lf_${number.toString().padLeft(2, '0')}';
     for (var n = 0; n < units.length; n++) {
       require(
-        units[n].id == 'lf_0${n + 1}' &&
-            units[n].prerequisiteIds.join(',') == (n == 0 ? '' : 'lf_0$n'),
+        units[n].id == unitId(n + 1) &&
+            units[n].prerequisiteIds.join(',') == (n == 0 ? '' : unitId(n)),
       );
     }
     require(

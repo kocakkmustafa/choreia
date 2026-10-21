@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 r=json.loads((Path(__file__).resolve().parents[1]/'content/line_dance_beginner_course.json').read_text())
 assert r['id']=='line_dance_beginner_written' and r['schemaVersion']==1 and r['version']==2
-assert len(r['units'])==9 and all(v is False for v in r['acceptance'].values())
+assert len(r['units'])==12 and all(v is False for v in r['acceptance'].values())
 for n,u in enumerate(r['units'],1):
  assert u['id']==f'ld_{n:02}' and u['prerequisiteIds']==([] if n==1 else [f'ld_{n-1:02}'])
  for key in ['title','prerequisite','outcome','instruction','practice','mistakes','adaptation','check','diagram']:

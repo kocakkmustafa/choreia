@@ -32,11 +32,12 @@ class ShortFormCourse {
     final units = (raw['units'] as List<dynamic>)
         .map((u) => ShortFormUnit(u as Map<String, dynamic>))
         .toList();
-    require(units.length == 7);
+    require(units.length == 10);
+    String unitId(int number) => 'sf_${number.toString().padLeft(2, '0')}';
     for (var n = 0; n < units.length; n++) {
       require(
-        units[n].id == 'sf_0${n + 1}' &&
-            units[n].prerequisiteIds.join(',') == (n == 0 ? '' : 'sf_0$n'),
+        units[n].id == unitId(n + 1) &&
+            units[n].prerequisiteIds.join(',') == (n == 0 ? '' : unitId(n)),
       );
     }
     require(
@@ -75,7 +76,7 @@ class ShortFormCourse {
       jsonEncode(units[1].copy['exercise']) == "{\"en\":\"Start support R, L free, FRONT. 1: L takes a small weighted forward step. 2: no new step. 3: R touches near without weight. 4: R takes a small weighted step to your right. Write W/T/H, support after each row and next available foot. Does 3 add a transfer?\",\"tr\":\"Sağ destek/sol boş, ÖN başla. 1: sol küçük ağırlıklı ön adım. 2: yeni adım yok. 3: sağ ağırlıksız yakına dokunur. 4: sağ kendi sağına küçük ağırlıklı adım. W/T/H, her satır sonrası destek ve sonraki hazır ayağı yaz. 3 aktarım ekler mi?\"}" &&
       jsonEncode(units[1].copy['answer']) == "{\"en\":\"Actions W/H/T/W; support L/L/L/R; next L. Count 3 adds no transfer. If it takes weight, R is not free for 4; revisit 2–3 without inventing a new step.\",\"tr\":\"Eylemler W/H/T/W; destek sol/sol/sol/sağ; sonraki sol. 3 aktarım eklemez. Ağırlık alırsa 4 için sağ boş değildir; yeni adım uydurmadan 2–3e dön.\"}");
     final sources = raw['sources'] as List<dynamic>;
-    require(sources.length == 5);
+    require(sources.length == 7);
     require(sources[0]['id'] == "choreography_education" && sources[0]['url'] == "https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography" && sources[0]['mediaCopied'] == false && sources[0]['endorsement'] == false);
     require(sources[1]['id'] == "rehearsal_education" && sources[1]['url'] == "https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance" && sources[1]['mediaCopied'] == false && sources[1]['endorsement'] == false);
     require(sources[2]['id'] == "touch_primary" && sources[2]['url'] == "https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/" && sources[2]['mediaCopied'] == false && sources[2]['endorsement'] == false);
@@ -88,18 +89,23 @@ class ShortFormCourse {
     require((raw['units'][4]['sourceIds'] as List).join(',') == "rehearsal_education,hold_primary,safe_dance_primary" && units[4].patternIds.join(',') == "A,B");
     require((raw['units'][5]['sourceIds'] as List).join(',') == "choreography_education,touch_primary,hold_primary" && units[5].patternIds.join(',') == "");
     require((raw['units'][6]['sourceIds'] as List).join(',') == "rehearsal_education,safe_dance_primary" && units[6].patternIds.join(',') == "");
+    require(sources[5]['id'] == "ticking_primary" && sources[5]['url'] == "http://www.howcast.com/videos/499518-How-to-Do-the-Ticking-Dance-Move-HipHop-Howto" && sources[5]['mediaCopied'] == false && sources[5]['endorsement'] == false);
+    require(sources[6]['id'] == "body_roll_primary" && sources[6]['url'] == "http://www.howcast.com/videos/505195-How-to-Do-Body-Rolls-HipHop-Dancing" && sources[6]['mediaCopied'] == false && sources[6]['endorsement'] == false);
+    require((raw['units'][7]['sourceIds'] as List).join(',') == "ticking_primary,hold_primary,safe_dance_primary" && units[7].patternIds.join(',') == "A");
+    require((raw['units'][8]['sourceIds'] as List).join(',') == "ticking_primary,choreography_education,safe_dance_primary" && units[8].patternIds.join(',') == "B");
+    require((raw['units'][9]['sourceIds'] as List).join(',') == "body_roll_primary,rehearsal_education,safe_dance_primary" && units[9].patternIds.join(',') == "");
     require(units.where((u) => u.copy.containsKey('answer')).length == 1);
     final gestures = pairs(raw['gestureLegend'] as Map<String, dynamic>, ShortFormPattern.gestureNames);
     final directions = pairs(
       raw['notation']['directions'] as Map<String, dynamic>,
       ShortFormPattern.directionNames,
     );
-    require(raw['openTeachingComponents'][0]['id'] == "body_roll" && raw['openTeachingComponents'][0]['status'] == "demonstration_and_qualified_physical_review_required");
-    require(raw['openTeachingComponents'][1]['id'] == "sharp_hit" && raw['openTeachingComponents'][1]['status'] == "demonstration_and_qualified_physical_review_required");
-    require(raw['openTeachingComponents'][2]['id'] == "arm_run_coordination" && raw['openTeachingComponents'][2]['status'] == "full_catalog_skill_not_accepted");
+    require(raw['openTeachingComponents'][0]['id'] == "body_roll" && raw['openTeachingComponents'][0]['status'] == "written_bounded_unit_physical_review_open");
+    require(raw['openTeachingComponents'][1]['id'] == "sharp_hit" && raw['openTeachingComponents'][1]['status'] == "written_bounded_unit_physical_review_open");
+    require(raw['openTeachingComponents'][2]['id'] == "arm_run_coordination" && raw['openTeachingComponents'][2]['status'] == "written_bounded_unit_physical_review_open");
     require(raw['openTeachingComponents'][3]['id'] == "media_and_cultural_context" && raw['openTeachingComponents'][3]['status'] == "rights_and_context_open");
     final gaps = (raw['openTeachingComponents'] as List<dynamic>).map((gap) {
-      require(gap['status'] == 'demonstration_and_qualified_physical_review_required' || gap['status'] == 'full_catalog_skill_not_accepted' || gap['status'] == 'rights_and_context_open');
+      require(gap['status'] == 'written_bounded_unit_physical_review_open' || gap['status'] == 'rights_and_context_open');
       return pairs(gap as Map<String, dynamic>, ['copy'])['copy']!;
     }).toList();
     require(gaps.length == 4);

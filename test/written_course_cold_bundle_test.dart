@@ -21,9 +21,9 @@ void main() {
           .timeout(const Duration(seconds: 8));
       expect(loaded, File(asset).readAsStringSync());
       if (asset.contains('latin_fusion')) {
-        expect(LatinFusionCourse.decode(loaded).units.length, 8);
+        expect(LatinFusionCourse.decode(loaded).units.length, 10);
       } else {
-        expect(ShortFormCourse.decode(loaded).units.length, 7);
+        expect(ShortFormCourse.decode(loaded).units.length, 10);
       }
       rootBundle.evict(asset);
     }, timeout: const Timeout(Duration(seconds: 15)));

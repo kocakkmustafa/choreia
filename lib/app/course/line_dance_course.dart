@@ -38,12 +38,13 @@ class LineDanceCourse {
     final units = (raw['units'] as List<dynamic>)
         .map((u) => LineDanceUnit(u as Map<String, dynamic>))
         .toList(growable: false);
-    if (units.length != 9) {
+    if (units.length != 12) {
       throw const FormatException('Incomplete written endpoint');
     }
+    String unitId(int number) => 'ld_${number.toString().padLeft(2, '0')}';
     for (var n = 0; n < units.length; n++) {
-      if (units[n].id != 'ld_0${n + 1}' ||
-          units[n].prerequisiteIds.join(',') != (n == 0 ? '' : 'ld_0$n')) {
+      if (units[n].id != unitId(n + 1) ||
+          units[n].prerequisiteIds.join(',') != (n == 0 ? '' : unitId(n))) {
         throw const FormatException('Broken ordered prerequisites');
       }
     }

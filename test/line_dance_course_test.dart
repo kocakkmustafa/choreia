@@ -23,7 +23,7 @@ void main() {
       File('content/line_dance_beginner_course.json').readAsStringSync();
   test('bilingual endpoint, diagrams and same-condition task decode', () {
     final course = LineDanceCourse.decode(source);
-    expect(course.units.length, 9);
+    expect(course.units.length, 12);
     for (final u in course.units) {
       for (final pair in u.copy.values) {
         expect(pair['en'], isNotEmpty);
@@ -83,13 +83,14 @@ void main() {
           find.byType(LineDanceDirectionDiagram), 250,
           maxScrolls: 100, scrollable: _verticalCourseScroll);
       expect(find.byType(LineDanceDirectionDiagram), findsOneWidget);
-      for (var n = 1; n <= 9; n++) {
-        final unit = find.byKey(ValueKey('ld_0$n'));
+      for (var n = 1; n <= 12; n++) {
+        final unit =
+            find.byKey(ValueKey('ld_${n.toString().padLeft(2, '0')}'));
         await tester.scrollUntilVisible(unit, 250,
             maxScrolls: 100, scrollable: _verticalCourseScroll);
         expect(unit, findsOneWidget);
       }
-      final last = find.byKey(const ValueKey('ld_09'));
+      final last = find.byKey(const ValueKey('ld_12'));
       await Scrollable.ensureVisible(tester.element(last), alignment: 0.2);
       await tester.pumpAndSettle();
       await tester.tap(last);
@@ -119,7 +120,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 450));
     final text = await tester.runAsync(
         () => rootBundle.loadString('content/line_dance_beginner_course.json'));
-    expect(LineDanceCourse.decode(text!).units.length, 9);
+    expect(LineDanceCourse.decode(text!).units.length, 12);
     await tester.pumpAndSettle();
     expect(find.text('Line Dance: beginner written course'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);

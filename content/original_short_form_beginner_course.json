@@ -62,6 +62,28 @@
       "access": "Public primary educational/instructor text read; videos not observed",
       "mediaCopied": false,
       "endorsement": false
+    },
+    {
+      "id": "ticking_primary",
+      "url": "http://www.howcast.com/videos/499518-How-to-Do-the-Ticking-Dance-Move-HipHop-Howto",
+      "publisher": "Matt Steffanina / Howcast",
+      "supports": "Arms brought up one at a time, alternating right/left, each arriving and stopping (hit and stick); practised in any direction",
+      "limit": "Watched 0–84 s. Jerking, strong tension and popping are not adopted; no copied routine, media or licence; no endorsement.",
+      "checkedAt": "2026-10-21",
+      "access": "Public publisher video played in the normal player; captions/transcript read, audio not analysed",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "body_roll_primary",
+      "url": "http://www.howcast.com/videos/505195-How-to-Do-Body-Rolls-HipHop-Dancing",
+      "publisher": "Charlene “Chi-Chi” Smith / Howcast",
+      "supports": "Body roll as a downward wave from chest to hips finishing with a knee settle; a front version kept to the torso",
+      "limit": "Watched 0–165 s. Head pokes and pushing through discomfort are not adopted; no spinal range validation, copied routine, media or endorsement.",
+      "checkedAt": "2026-10-21",
+      "access": "Public publisher video played in the normal player; captions/transcript read, audio not analysed",
+      "mediaCopied": false,
+      "endorsement": false
     }
   ],
   "acceptance": {
@@ -77,20 +99,20 @@
     "modelVerified": false
   },
   "scope": {
-    "en": "Create a short original movement phrase through seven stages: read a count-and-support score, choose a motif, develop repetition and contrast, plan transitions, rehearse at a comfortable level and compare a specific correction. Use your own choices and the lesson movement boundaries.",
-    "tr": "Yedi aşamada kısa ve özgün bir hareket dizisi oluştur: sayım ve destek notasyonunu oku, motif seç, tekrar ve karşıtlığı geliştir, geçişleri planla, rahat düzeyde prova yap ve belirli bir düzeltmeyi karşılaştır. Kendi seçimlerini ve dersteki hareket sınırlarını kullan."
+    "en": "Create a short original movement phrase through ten stages: read a count-and-support score, choose a motif, develop repetition and contrast, plan transitions, rehearse at a comfortable level and compare a specific correction, then add a controlled hit, an arm run or a small body wave and revise again. Use your own choices and the lesson movement boundaries.",
+    "tr": "On aşamada kısa ve özgün bir hareket dizisi oluştur: sayım ve destek notasyonunu oku, motif seç, tekrar ve karşıtlığı geliştir, geçişleri planla, rahat düzeyde prova yap ve belirli bir düzeltmeyi karşılaştır; ardından kontrollü bir hit, bir arm run veya küçük bir gövde dalgası ekleyip yeniden düzelt. Kendi seçimlerini ve dersteki hareket sınırlarını kullan."
   },
   "startCompetency": {
     "en": "No social account, camera, upload, dance background or purchased music needed. Standing study requires comfortable ordinary small steps, own left/right and a prepared space. If standing support is uncertain, choose paper/spoken work; it cannot clear physical prerequisites. Do not add arm timing until the selected foot rows and next free foot are clear.",
     "tr": "Sosyal hesap, kamera, yükleme, dans geçmişi veya satın alınmış müzik gerekmez. Ayakta çalışma rahat sıradan küçük adım, kendi sol/sağını bilme ve hazırlanmış alan gerektirir. Ayakta destek belirsizse kâğıt/sözlü çalış; fiziksel ön koşulu karşılamaz. Seçilen ayak satırları ve sonraki boş ayak açık olmadan kol zamanını ekleme."
   },
   "endCompetency": {
-    "en": "Written exit: decode an unfamiliar phrase row, explain support before/after an eight-count boundary, distinguish literal repetition from one documented gesture variation and a contrasting rhythm, then author an original sixteen-row phrase with a four-count motif, intentional development, clear start/end and a specific correction plan. Selected standing exit, only with the selected small actions, comfortable control and the lesson boundaries: read the authored phrase, practise chunks slowly, perform one recorded attempt without hidden transition steps, rest, revisit one error location/type, and compare a second same-condition attempt. Paper success, counts or remembered sensations do not establish physical mastery, authentic style, camera appearance or music/edit alignment.",
-    "tr": "Yazılı çıkış: bilinmeyen cümle satırını çöz, sekiz sayı sınırında önce/sonra desteği açıkla, birebir tekrarı belgeli tek jest varyasyonu ve karşıt ritimden ayır; dört sayılı motif, bilinçli geliştirme, açık başlangıç/son ve belirli düzeltme planıyla özgün on altı satırlı cümle kur. Seçilmiş ayakta çıkış yalnız seçilmiş küçük hareketler rahat ve kontrollü olduğunda ve ders sınırları içinde: kurulan cümleyi oku, parçaları yavaş çalış, gizli geçiş adımı olmadan bir kayıtlı deneme yap, dinlen, bir hata yer/türüne dön, aynı koşullu ikinci denemeyi karşılaştır. Kâğıt başarısı, sayı veya hatırlanan his fiziksel ustalığı, özgün stili, kamera görünümünü ya da müzik/kurgu hizasını kanıtlamaz."
+    "en": "Written exit: decode an unfamiliar phrase row, explain support before/after an eight-count boundary, distinguish literal repetition from one documented gesture variation and a contrasting rhythm, then author an original sixteen-row phrase with a four-count motif, intentional development, clear start/end and a specific correction plan. Selected standing exit, only with the selected small actions, comfortable control and the lesson boundaries: read the authored phrase, practise chunks slowly, perform one recorded attempt without hidden transition steps, rest, revisit one error location/type, and compare a second same-condition attempt. Extension: arrive and hold an arm shape on a chosen count with soft joints, run four arm shapes on consecutive counts with still feet, perform or describe a small front torso wave, and add one of these to your phrase with a same-condition comparison. Paper success, counts or remembered sensations do not establish physical mastery, authentic style, camera appearance or music/edit alignment.",
+    "tr": "Yazılı çıkış: bilinmeyen cümle satırını çöz, sekiz sayı sınırında önce/sonra desteği açıkla, birebir tekrarı belgeli tek jest varyasyonu ve karşıt ritimden ayır; dört sayılı motif, bilinçli geliştirme, açık başlangıç/son ve belirli düzeltme planıyla özgün on altı satırlı cümle kur. Seçilmiş ayakta çıkış yalnız seçilmiş küçük hareketler rahat ve kontrollü olduğunda ve ders sınırları içinde: kurulan cümleyi oku, parçaları yavaş çalış, gizli geçiş adımı olmadan bir kayıtlı deneme yap, dinlen, bir hata yer/türüne dön, aynı koşullu ikinci denemeyi karşılaştır. Genişletme: seçilen sayıda eklemler yumuşakken bir kol biçimine var ve dur, ayaklar hareketsizken ardışık sayılarda dört kol biçimi yap, küçük bir önden gövde dalgası yap ya da anlat ve bunlardan birini aynı koşullu karşılaştırmayla cümlene ekle. Kâğıt başarısı, sayı veya hatırlanan his fiziksel ustalığı, özgün stili, kamera görünümünü ya da müzik/kurgu hizasını kanıtlamaz."
   },
   "catalogBoundary": {
-    "en": "Actual catalog tiktok_format / Short-Form Dance remains comingSoon, amber, eight-count/pose. Its eight-count block and arm-shape vocabulary inform a small format, but catalog Hit and Body roll are not silently passed by our gentle holds or ordinary gestures. No platform affiliation, virality, audience growth or upload goal. Existing Hip-Hop, Line Dance and Salsa curricula are not reproduced; shared basic step/touch reasoning serves composition rather than groove, rotating walls or a full style syllabus.",
-    "tr": "Gerçek katalog tiktok_format / Short-Form Dance comingSoon, amber, sekiz sayı/pose olarak kalır. Sekiz sayı bloğu ve kol biçimi sözlüğü küçük biçime bilgi sağlar; katalog Hit ve Body roll, nazik durak/ sıradan jestlerle gizlice karşılanmaz. Platform bağlantısı, viral olma, izleyici artışı veya yükleme hedefi yok. Hip-Hop, Line Dance ve Salsa kursları çoğaltılmaz; ortak adım/dokunuş düşüncesi groove, dönen duvarlar veya tam stil müfredatı yerine cümle kurmaya hizmet eder."
+    "en": "Actual catalog tiktok_format / Short-Form Dance remains comingSoon, amber, eight-count/pose. Its eight-count block and arm-shape vocabulary inform a small format. Lessons 8–10 teach bounded beginner versions — a soft arrive-and-hold hit, an arm run below shoulder height and a small torso wave — but these are not the catalog’s sharp full-body Hit or Body roll mastery. No platform affiliation, virality, audience growth or upload goal. Existing Hip-Hop, Line Dance and Salsa curricula are not reproduced; shared basic step/touch reasoning serves composition rather than groove, rotating walls or a full style syllabus.",
+    "tr": "Gerçek katalog tiktok_format / Short-Form Dance comingSoon, amber, sekiz sayı/pose olarak kalır. Sekiz sayı bloğu ve kol biçimi sözlüğü küçük biçime bilgi sağlar. 8–10. dersler sınırlı başlangıç sürümlerini öğretir — yumuşak var-ve-dur hit, omuz altında arm run ve küçük gövde dalgası — ama bunlar katalogdaki keskin tüm beden Hit'i veya Body roll ustalığı değildir. Platform bağlantısı, viral olma, izleyici artışı veya yükleme hedefi yok. Hip-Hop, Line Dance ve Salsa kursları çoğaltılmaz; ortak adım/dokunuş düşüncesi groove, dönen duvarlar veya tam stil müfredatı yerine cümle kurmaya hizmet eder."
   },
   "boundaries": {
     "en": "Clear obstacles/loose rugs, check secure comfortable footwear and enough room for your chosen small ordinary steps. Begin with familiar easy movement and gradually prepare before new rows; neither a count target nor sweat certifies readiness. Use FRONT facing, no crossing/turn, jump, deep bend, floorwork or forced spine/pelvis. Keep optional hand gestures small, within an easy low range, without snapping joints. H keeps counting and comfortable support, not locked knees or breath-holding. Rest/recheck after interruption. Pain, dizziness or instability means stop; gradual reduction applies only to ordinary comfortable activity.",
@@ -745,6 +767,142 @@
         "en": "For EACH mark observed/uncertain/unattempted and mode: intention/motif, independent score reading, repeat/variation/contrast, W/T/H, support at boundaries, optional gesture timing, ending, recovery and same-condition correction. Keep physical teaching, authentic style, rights, software and camera/music/edit appearance separate.",
         "tr": "HER biri için gözlendi/belirsiz/denenmedi ve biçim yaz: niyet/motif, bağımsız notasyon okuma, tekrar/varyasyon/karşıtlık, W/T/H, sınır desteği, isteğe bağlı jest zamanı, son, toparlanma ve aynı koşullu düzeltme. Fiziksel öğretim, özgün stil, haklar, yazılım ve kamera/müzik/kurgu görünümü ayrı."
       }
+    },
+    {
+      "id": "sf_08",
+      "prerequisiteIds": [
+        "sf_07"
+      ],
+      "sourceIds": [
+        "ticking_primary",
+        "hold_primary",
+        "safe_dance_primary"
+      ],
+      "patternIds": [
+        "A"
+      ],
+      "title": {
+        "en": "Controlled hit: arrive on a count and hold",
+        "tr": "Kontrollü hit: sayıda var ve dur"
+      },
+      "prerequisite": {
+        "en": "Your sixteen-count phrase from lesson 7 and a comfortable low arm gesture.",
+        "tr": "7. dersteki on altı sayılık cümlen ve rahat, alçak bir kol jesti."
+      },
+      "outcome": {
+        "en": "Move one arm from a start shape to an end shape so it arrives exactly on a chosen count and stays still until the next count, with soft joints.",
+        "tr": "Bir kolu başlangıç biçiminden bitiş biçimine öyle taşı ki seçtiğin sayıda tam olarak varsın ve sonraki sayıya kadar hareketsiz kalsın; eklemler yumuşak."
+      },
+      "instruction": {
+        "en": "Choose an H count in your phrase, where the feet keep comfortable support. Start shape: hand resting at your side. End shape: forearm forward at waist height, elbow bent. On the count, move the arm to the end shape and stop it there — arrive and hold — then stay still until the next count. Make the stop by gently firming the arm muscles, not by locking or snapping the elbow; the joint stays slightly bent. Begin slowly, arriving on time without rushing; make it crisper only if it stays comfortable. Optional: on the same count let both knees settle very slightly, so the arm and knees arrive together. The feet do not add a step.",
+        "tr": "Cümlende ayakların rahat desteği koruduğu bir H sayısı seç. Başlangıç biçimi: el yanda dinlenir. Bitiş biçimi: dirsek bükük, önkol bel hizasında öne. Sayıda kolu bitiş biçimine götür ve orada durdur — var ve dur — sonra sonraki sayıya kadar hareketsiz kal. Durmayı dirseği kilitleyerek ya da birden gererek değil, kol kaslarını hafifçe sıkılaştırarak yap; eklem hafif bükük kalır. Yavaş başla, acele etmeden zamanında var; yalnız rahat kalırsa daha keskin yap. İsteğe bağlı: aynı sayıda iki dize de çok hafifçe yerleşme izni ver; böylece kol ve dizler birlikte varır. Ayaklar adım eklemez."
+      },
+      "practice": {
+        "en": "Without feet: say the counts and do four arm hits on 1, 3, 5 and 7, resting the arm on the even counts. Rest. Then place one hit on your chosen H count inside the phrase, once, slowly. Rest, and repeat once only if the feet stayed unchanged.",
+        "tr": "Ayaksız: sayıları söyle ve 1, 3, 5 ve 7'de dört kol hit'i yap; çift sayılarda kolu dinlendir. Dinlen. Sonra cümlenin içinde seçtiğin H sayısına bir hit'i bir kez, yavaşça yerleştir. Dinlen; yalnız ayaklar değişmeden kaldıysa bir kez tekrarla."
+      },
+      "mistakes": {
+        "en": "Snapping the elbow straight; jerking the shoulder; arriving early and drifting; holding the breath; adding a foot transfer on the hit. Fix: smaller range, slower arrival, breathe out on the hit, check the feet first.",
+        "tr": "Dirseği birden düz germek; omzu silkmek; erken varıp sonra kaymak; nefesi tutmak; hit sırasında ayak aktarımı eklemek. Düzeltme: daha küçük aralık, daha yavaş varış, hit'te nefes ver, önce ayakları kontrol et."
+      },
+      "adaptation": {
+        "en": "A slow arrive-and-hold without firmness is a valid timing study. Seated arm hits practise timing and stillness only. Sharp popping contractions and full-body impact hits are not taught.",
+        "tr": "Sıkılaştırmadan yavaş var-ve-dur geçerli bir zamanlama çalışmasıdır. Oturarak kol hit'i yalnız zamanlamayı ve hareketsizliği çalıştırır. Sert popping kasılmaları ve tüm bedenle darbeli hit'ler öğretilmez."
+      },
+      "check": {
+        "en": "State which count the arm arrived on and whether it stayed still until the next count. Record the hit as self-observed, uncertain or unattempted. Your hit is not an authenticated popping technique or a camera-judged stop.",
+        "tr": "Kolun hangi sayıda vardığını ve sonraki sayıya kadar hareketsiz kalıp kalmadığını söyle. Hit'i öz gözlem, belirsiz veya denenmedi olarak kaydet. Senin hit'in doğrulanmış bir popping tekniği ya da kamerayla değerlendirilmiş bir duruş değildir."
+      }
+    },
+    {
+      "id": "sf_09",
+      "prerequisiteIds": [
+        "sf_08"
+      ],
+      "sourceIds": [
+        "ticking_primary",
+        "choreography_education",
+        "safe_dance_primary"
+      ],
+      "patternIds": [
+        "B"
+      ],
+      "title": {
+        "en": "Arm run: four shapes on consecutive counts",
+        "tr": "Arm run: ardışık sayılarda dört biçim"
+      },
+      "prerequisite": {
+        "en": "A controlled arrive-and-hold from lesson 8.",
+        "tr": "8. dersteki kontrollü var-ve-dur."
+      },
+      "outcome": {
+        "en": "Perform or describe four arm shapes, one per count, each arriving and holding, while the feet stay still, then return in reverse.",
+        "tr": "Her sayıya bir tane olmak üzere dört kol biçimini, her biri varıp durarak, ayaklar hareketsizken yap ya da anlat; sonra ters sırayla geri dön."
+      },
+      "instruction": {
+        "en": "Stand with both feet comfortably supporting (no step). 1: R hand to the centre of your chest. 2: L hand to the centre of your chest. 3: R forearm forward at waist height. 4: L forearm forward at waist height. 5–8: reverse the order back to rest — L, then R, then L, then R. Each shape arrives on its count and holds until the next, as in lesson 8. Keep all shapes at or below chest height unless raising an arm is comfortable; then one shape may rise to shoulder height. Alternating right and left like this follows a common beginner drill. Afterwards, design your own four shapes and write them as four rows.",
+        "tr": "İki ayak da rahatça desteklerken dur (adım yok). 1: sağ el göğsün ortasına. 2: sol el göğsün ortasına. 3: sağ önkol bel hizasında öne. 4: sol önkol bel hizasında öne. 5–8: sırayı tersine çevirerek dinlenmeye dön — sol, sonra sağ, sonra sol, sonra sağ. Her biçim 8. dersteki gibi kendi sayısında varır ve sonrakine kadar durur. Kolu kaldırmak rahat değilse tüm biçimleri göğüs hizasında ya da altında tut; rahatsa bir biçim omuz hizasına çıkabilir. Böyle sağ ve solu sırayla değiştirmek yaygın bir başlangıç alıştırmasını izler. Sonra kendi dört biçimini tasarla ve dört satır olarak yaz."
+      },
+      "practice": {
+        "en": "Seated or standing: say the shape names on counts 1–4 slowly, then do them. Rest. Do 1–8 once slowly. Rest. Do your own four shapes for one eight. Only then try placing the arm run over B's opening hold and the next counts while the feet keep their written support; if the feet get unclear, take the arms out.",
+        "tr": "Oturarak ya da ayakta: 1–4 sayılarında biçim adlarını yavaşça söyle, sonra yap. Dinlen. 1–8'i bir kez yavaş yap. Dinlen. Kendi dört biçimini bir sekizlik yap. Ancak bundan sonra, ayaklar yazılı desteklerini korurken arm run'ı B'nin açılış durağı ve sonraki sayılar üzerine yerleştirmeyi dene; ayaklar belirsizleşirse kolları çıkar."
+      },
+      "mistakes": {
+        "en": "Shapes blurring into one continuous movement; two shapes on one count; shoulders lifting toward the ears; feet drifting. Fix: say each shape name, slow down, hold every shape for its full count.",
+        "tr": "Biçimlerin tek bir sürekli harekete karışması; bir sayıda iki biçim; omuzların kulaklara doğru kalkması; ayakların kayması. Düzeltme: her biçimin adını söyle, yavaşla, her biçimi tam sayısı boyunca tut."
+      },
+      "adaptation": {
+        "en": "Two shapes (one per arm) on 1 and 3 with holds on 2 and 4 is a shorter valid study. Seated work keeps order and timing only. Any shape that is uncomfortable is replaced, not pushed.",
+        "tr": "1 ve 3'te iki biçim (her kola bir), 2 ve 4'te durakla daha kısa, geçerli bir çalışmadır. Oturarak çalışma yalnız sırayı ve zamanlamayı korur. Rahatsız eden biçim zorlanmaz, değiştirilir."
+      },
+      "check": {
+        "en": "Write your four shapes and their counts. Mark whether each arrived on its count and held. Record the arm run as self-observed, uncertain or unattempted; it is not catalog arm-run mastery or a camera-measured joint range.",
+        "tr": "Dört biçimini ve sayılarını yaz. Her birinin kendi sayısında varıp durup durmadığını işaretle. Arm run'ı öz gözlem, belirsiz veya denenmedi olarak kaydet; bu katalog arm run ustalığı ya da kamerayla ölçülmüş eklem aralığı değildir."
+      }
+    },
+    {
+      "id": "sf_10",
+      "prerequisiteIds": [
+        "sf_09"
+      ],
+      "sourceIds": [
+        "body_roll_primary",
+        "rehearsal_education",
+        "safe_dance_primary"
+      ],
+      "patternIds": [],
+      "title": {
+        "en": "Small front body wave, then revise your phrase",
+        "tr": "Küçük önden gövde dalgası, ardından cümleni düzelt"
+      },
+      "prerequisite": {
+        "en": "Lessons 8–9, and an upper body that moves comfortably forward and back.",
+        "tr": "8–9. dersler ve öne-arkaya rahat hareket eden bir üst gövde."
+      },
+      "outcome": {
+        "en": "Perform or describe a small front-facing torso wave — chest, then middle, then a slight knee settle — and add one hit, arm run or wave to your own phrase with a same-condition comparison.",
+        "tr": "Küçük, öne bakan bir gövde dalgasını — önce göğüs, sonra orta gövde, sonra hafif diz yerleşmesi — yap ya da anlat; kendi cümlene bir hit, arm run veya dalga ekleyip aynı koşullu karşılaştırma yap."
+      },
+      "instruction": {
+        "en": "Face FRONT, feet hip-width, knees soft. Over four counts: 1 let the chest move a little forward; 2 let the middle of the torso follow as the chest returns; 3 let the hips follow slightly while the knees bend a little (a small settle); 4 return upright. This is a small torso-only wave — the head stays neutral and does not poke or whip. Keep every part within an easy range: if the back or neck feels any strain, make it smaller or stop. Unlike some teaching, discomfort is not something to push through here. Then revise your phrase: choose ONE of hit, arm run or wave, place it on specific counts where the feet support it, write the new rows, and compare one corrected attempt under the same conditions as in lesson 7.",
+        "tr": "ÖN'e bak, ayaklar kalça genişliğinde, dizler yumuşak. Dört sayıda: 1 göğsün biraz öne gitmesine izin ver; 2 göğüs geri dönerken orta gövdenin izlemesine izin ver; 3 dizler biraz bükülürken kalçanın hafifçe izlemesine izin ver (küçük bir yerleşme); 4 dik konuma dön. Bu yalnız gövdeyle yapılan küçük bir dalgadır — baş nötr kalır, öne uzanmaz, savrulmaz. Her bölümü kolay aralıkta tut: sırtta veya boyunda bir zorlanma hissedersen küçült ya da dur. Bazı anlatımların aksine burada rahatsızlığı zorlayarak geçmek yok. Ardından cümleni düzelt: hit, arm run veya dalgadan YALNIZ birini seç, ayakların desteklediği belirli sayılara yerleştir, yeni satırları yaz ve 7. dersteki gibi aynı koşullarda düzeltilmiş bir denemeyi karşılaştır."
+      },
+      "practice": {
+        "en": "Seated first: move only the chest forward and back for one eight. Standing: four slow four-count waves, rest. If comfortable, two more, a little smoother. Rest. Then perform your revised phrase once, rest, name one specific difference by count and type, rehearse that chunk, and compare one second attempt under the same conditions.",
+        "tr": "Önce oturarak: bir sekizlik yalnız göğsü öne ve geri hareket ettir. Ayakta: dört yavaş, dört sayılık dalga, dinlen. Rahatsa iki tane daha, biraz daha akıcı. Dinlen. Sonra düzeltilmiş cümleni bir kez uygula, dinlen, bir farkı sayı ve tür olarak adlandır, o parçayı çalış ve aynı koşullarda ikinci bir denemeyi karşılaştır."
+      },
+      "mistakes": {
+        "en": "Leading with the head; pushing the hips far forward or arching the lower back; sinking deep in the knees; adding the wave somewhere the feet are stepping. Fix: smaller range, chest-only version, place the wave on a hold.",
+        "tr": "Hareketi başla başlatmak; kalçayı fazla öne itmek ya da beli çukurlaştırmak; dizlerde derine inmek; dalgayı ayakların adım attığı bir yere eklemek. Düzeltme: daha küçük aralık, yalnız göğüs sürümü, dalgayı bir durağa yerleştir."
+      },
+      "adaptation": {
+        "en": "The seated chest-only wave keeps the sequence idea, not the standing wave. Choosing the hit or arm run instead of the wave for your revision is a valid complete choice for this lesson.",
+        "tr": "Oturarak yalnız göğüs dalgası dizilim fikrini korur, ayakta dalgayı değil. Düzeltmende dalga yerine hit veya arm run seçmek bu ders için geçerli ve tam bir seçimdir."
+      },
+      "check": {
+        "en": "Record the wave as self-observed, uncertain or unattempted, and name which element you added to which counts. Report the correction as consistent or inconsistent under unchanged conditions. A small wave is not catalog body-roll mastery, spinal assessment or a camera-judged style.",
+        "tr": "Dalgayı öz gözlem, belirsiz veya denenmedi olarak kaydet; hangi öğeyi hangi sayılara eklediğini adlandır. Düzeltmeyi değişmeyen koşullarda tutarlı ya da tutarsız olarak bildir. Küçük bir dalga katalog body roll ustalığı, omurga değerlendirmesi veya kamerayla değerlendirilen stil değildir."
+      }
     }
   ],
   "finalTaskContract": {
@@ -771,28 +929,28 @@
     {
       "id": "body_roll",
       "catalogTerm": "Body roll",
-      "status": "demonstration_and_qualified_physical_review_required",
+      "status": "written_bounded_unit_physical_review_open",
       "copy": {
-        "en": "Chest/ribs/pelvis sequencing and safe spinal range/contact have not been observed or validated. No body-roll instruction or completion is claimed; ordinary low gesture is not a substitute proof.",
-        "tr": "Göğüs/kaburga/pelvis sırası ve güvenli omurga aralığı/teması gözlenmedi/doğrulanmadı. Body-roll öğretimi/tamamlanması iddia edilmez; sıradan alçak jest yerine geçen kanıt değildir."
+        "en": "Lesson 10 teaches a small front torso wave within an easy range, based on a watched source. Spinal range, contact and full chest/ribs/pelvis sequencing are not validated; no catalog body-roll mastery is claimed.",
+        "tr": "10. ders, izlenen bir kaynağa dayanarak kolay aralıkta küçük bir önden gövde dalgası öğretir. Omurga aralığı, temas ve tam göğüs/kaburga/pelvis sırası doğrulanmadı; katalog body roll ustalığı iddia edilmez."
       }
     },
     {
       "id": "sharp_hit",
       "catalogTerm": "Hit",
-      "status": "demonstration_and_qualified_physical_review_required",
+      "status": "written_bounded_unit_physical_review_open",
       "copy": {
-        "en": "Joint loading and a controlled simultaneous full-body stop cannot be validated from count text. Our H is a gentle no-transfer count, not an authenticated sharp Hit, popping contraction or impact technique.",
-        "tr": "Eklem yükü ve kontrollü eşzamanlı tüm beden duruşu sayı metninden doğrulanamaz. H nazik aktarım olmayan sayıdır; doğrulanmış sert Hit, popping kasılması veya darbe tekniği değil."
+        "en": "Lesson 8 teaches a soft arrive-and-hold on a count. Joint loading, popping contractions and a sharp simultaneous full-body stop are not taught or validated; our hit is not the catalog sharp Hit.",
+        "tr": "8. ders sayıda yumuşak bir var-ve-dur öğretir. Eklem yükü, popping kasılmaları ve keskin, eşzamanlı tüm beden duruşu öğretilmez ve doğrulanmaz; bizim hit'imiz katalogdaki keskin Hit değildir."
       }
     },
     {
       "id": "arm_run_coordination",
       "catalogTerm": "Arm run",
-      "status": "full_catalog_skill_not_accepted",
+      "status": "written_bounded_unit_physical_review_open",
       "copy": {
-        "en": "One optional ordinary low forearm cue teaches a simple planning choice only. Consecutive full arm shapes, exact joint ranges and stable coordination need observed demonstration/review; no catalog Arm run mastery is inferred.",
-        "tr": "Tek isteğe bağlı sıradan alçak önkol ipucu yalnız basit plan seçimi öğretir. Ardışık tam kol biçimleri, tam eklem aralığı ve kararlı koordinasyon gözlenmiş gösterim/inceleme ister; katalog Arm run ustalığı çıkarılmaz."
+        "en": "Lesson 9 teaches four arm shapes on consecutive counts with still feet, mostly below shoulder height. Exact joint ranges, speed and stable coordination are self-observed only; no catalog arm-run mastery is inferred.",
+        "tr": "9. ders, ayaklar hareketsizken ve çoğunlukla omuz altında ardışık sayılarda dört kol biçimi öğretir. Tam eklem aralıkları, hız ve kararlı koordinasyon yalnız öz gözlemdir; katalog arm run ustalığı çıkarılmaz."
       }
     },
     {
@@ -806,15 +964,15 @@
   ],
   "schemaVersion": 1,
   "reviewNotice": {
-    "en": "A seven-stage beginner course in composing and practising a short original movement phrase. Make your own choices, follow the movement boundaries and compare your attempts. You may choose to record that you studied a unit; it is your own report, not verified technique, mastery or permission to use someone else’s music or choreography.",
-    "tr": "Kısa ve özgün bir hareket dizisi oluşturup çalışmak için yedi aşamalı başlangıç kursu. Kendi seçimlerini yap, hareket sınırlarını izle ve denemelerini karşılaştır. Birimi çalıştığını isteğe bağlı kaydedebilirsin; bu kendi beyanındır, doğrulanmış teknik, ustalık veya başkasının müziğini ya da koreografisini kullanma izni değildir."
+    "en": "A ten-stage beginner course in composing and practising a short original movement phrase, with a controlled hit, an arm run and a small body wave. Make your own choices, follow the movement boundaries and compare your attempts. You may choose to record that you studied a unit; it is your own report, not verified technique, mastery or permission to use someone else’s music or choreography.",
+    "tr": "Kontrollü bir hit, bir arm run ve küçük bir gövde dalgasıyla kısa ve özgün bir hareket dizisi oluşturup çalışmak için on aşamalı başlangıç kursu. Kendi seçimlerini yap, hareket sınırlarını izle ve denemelerini karşılaştır. Birimi çalıştığını isteğe bağlı kaydedebilirsin; bu kendi beyanındır, doğrulanmış teknik, ustalık veya başkasının müziğini ya da koreografisini kullanma izni değildir."
   },
   "diagramNotice": {
     "en": "L/R mean YOUR left/right, never a screen-mirrored limb. All example tables face FRONT, start support R with L available, and end R with L available. W means a small weighted ordinary step to the named direction; T means a light touch without loading; H means no new regular transfer, not freezing the body. Support is AFTER the row action; the free foot may still lightly touch the floor—no single-leg balance test. Near means comfortable starting-stance distance, not force feet together. Gesture labels are optional planning cues, not validated joint/contact instruction.",
     "tr": "L/R SENİN sol/sağındır, ekrandaki aynalanmış uzuv değil. Tüm örnek tablolar ÖN bakar; sağ destek/sol hazır başlar, sağ destek/sol hazır biter. W adı verilen yöne küçük ağırlıklı sıradan adım; T ağırlıksız hafif dokunuş; H yeni düzenli aktarım yok demektir, bedeni dondurmak değil. Destek satır eyleminden SONRA gösterilir; boş ayak yere hafifçe dokunabilir—tek ayak denge testi yok. Yakın, ayakları zorla birleştirmek değil rahat başlangıç duruşu mesafesidir. Jest etiketleri isteğe bağlı plan ipuçlarıdır, doğrulanmış eklem/temas öğretimi değil."
   },
   "provenance": {
-    "en": "AQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography\nEducational categories: gesture/stillness/weight transfer, motif development, repetition/contrast, transitions and choreographic intention; silence/spoken word as possible settings\nVocabulary/categories only. No AQA set phrase, prescribed examination choreography, marking grid, duration, certification or endorsement adopted.\n\nAQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance\nPlanning rehearsal, systematic repetition, mental rehearsal and response to feedback as distinct learning processes\nNo set performance material, exam tempo, qualification outcomes or validated physical teaching of our phrase.\n\nRobert Royston / Howcast — https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/\nCommon touch ingredient has no weight; distinction from a weighted step\nNo copied named routine, Monterey turn, media or licence; general ingredient adapted into our own compositional exercises, not a Line Dance course.\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\nDeliberate hold adds no regular transfer and preserves available next foot\nGeneric support reasoning only; not salsa rhythm, an endorsement or compulsory body freeze.\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\nGradual preparation and ordinary gradual reduction, within general safe-dance context\nNo timer proves readiness; no individual health clearance, temperature target or guaranteed injury/soreness benefit.",
-    "tr": "AQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography\nEğitsel kategoriler: jest, hareketsizlik, ağırlık aktarımı; motif geliştirme, tekrar ve karşıtlık, geçişler ve koreografik niyet; olası ortamlar olarak sessizlik ve sözlü anlatım.\nYalnızca terimler ve kategoriler kullanılır. AQA’nın belirlenmiş hareket cümlesi, sınav koreografisi, puanlama çizelgesi, süresi, sertifikası veya desteği benimsenmez.\n\nAQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance\nÇalışmayı planlama, sistemli tekrar, zihinsel prova ve geri bildirime yanıt verme ayrı öğrenme süreçleridir.\nBelirlenmiş performans malzemesi, sınav temposu, yeterlilik sonucu veya bu cümlenin doğrulanmış fiziksel öğretimi kullanılmaz.\n\nRobert Royston / Howcast — https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/\nSıradan dokunuş ağırlık almaz; ağırlıklı adımdan ayrılır.\nAdlandırılmış rutin, Monterey dönüşü veya medya kopyalanmaz; lisans alındığı iddia edilmez. Genel öğe özgün kompozisyon alıştırmalarına uyarlanır; bu bir Line Dance kursu değildir.\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\nBilinçli durak yeni düzenli ağırlık aktarımı eklemez ve sıradaki hazır ayağı korur.\nYalnızca genel destek mantığı kullanılır; Salsa ritmi, kaynak desteği veya zorunlu beden dondurma anlamına gelmez.\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\nGenel güvenli dans bağlamında aşamalı hazırlık ve sıradan hareketle aşamalı yavaşlama.\nBir süreölçer hazır oluşu kanıtlamaz; bireysel sağlık onayı, sıcaklık hedefi veya garantili yaralanma/ağrı önleme yararı iddia edilmez."
+    "en": "AQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography\nEducational categories: gesture/stillness/weight transfer, motif development, repetition/contrast, transitions and choreographic intention; silence/spoken word as possible settings\nVocabulary/categories only. No AQA set phrase, prescribed examination choreography, marking grid, duration, certification or endorsement adopted.\n\nAQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance\nPlanning rehearsal, systematic repetition, mental rehearsal and response to feedback as distinct learning processes\nNo set performance material, exam tempo, qualification outcomes or validated physical teaching of our phrase.\n\nRobert Royston / Howcast — https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/\nCommon touch ingredient has no weight; distinction from a weighted step\nNo copied named routine, Monterey turn, media or licence; general ingredient adapted into our own compositional exercises, not a Line Dance course.\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\nDeliberate hold adds no regular transfer and preserves available next foot\nGeneric support reasoning only; not salsa rhythm, an endorsement or compulsory body freeze.\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\nGradual preparation and ordinary gradual reduction, within general safe-dance context\nNo timer proves readiness; no individual health clearance, temperature target or guaranteed injury/soreness benefit.\n\nMatt Steffanina / Howcast — http://www.howcast.com/videos/499518-How-to-Do-the-Ticking-Dance-Move-HipHop-Howto\nArms brought up one at a time, right and left, each arriving and stopping (“hit and stick”) as a beginner drill\nWatched interval recorded separately. Jerking, strong muscle tension and popping are not adopted; our soft arrive-and-hold and arm-run shapes are original.\n\nCharlene “Chi-Chi” Smith / Howcast — http://www.howcast.com/videos/505195-How-to-Do-Body-Rolls-HipHop-Dancing\nA body roll as a chest-to-hips wave finishing with a knee settle; a front “flat” version kept to the torso\nWatched interval recorded separately. Head pokes and “uncomfortable is fine” advice are not adopted; our small front wave is an original bounded study, not body-roll mastery.",
+    "tr": "AQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/choreography\nEğitsel kategoriler: jest, hareketsizlik, ağırlık aktarımı; motif geliştirme, tekrar ve karşıtlık, geçişler ve koreografik niyet; olası ortamlar olarak sessizlik ve sözlü anlatım.\nYalnızca terimler ve kategoriler kullanılır. AQA’nın belirlenmiş hareket cümlesi, sınav koreografisi, puanlama çizelgesi, süresi, sertifikası veya desteği benimsenmez.\n\nAQA, GCSE Dance specification — https://www.aqa.org.uk/subjects/dance/gcse/dance-8236/specification/subject-content/performance\nÇalışmayı planlama, sistemli tekrar, zihinsel prova ve geri bildirime yanıt verme ayrı öğrenme süreçleridir.\nBelirlenmiş performans malzemesi, sınav temposu, yeterlilik sonucu veya bu cümlenin doğrulanmış fiziksel öğretimi kullanılmaz.\n\nRobert Royston / Howcast — https://howcast.com/videos/497833-how-to-do-touch-steps-line-dancing/\nSıradan dokunuş ağırlık almaz; ağırlıklı adımdan ayrılır.\nAdlandırılmış rutin, Monterey dönüşü veya medya kopyalanmaz; lisans alındığı iddia edilmez. Genel öğe özgün kompozisyon alıştırmalarına uyarlanır; bu bir Line Dance kursu değildir.\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\nBilinçli durak yeni düzenli ağırlık aktarımı eklemez ve sıradaki hazır ayağı korur.\nYalnızca genel destek mantığı kullanılır; Salsa ritmi, kaynak desteği veya zorunlu beden dondurma anlamına gelmez.\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\nGenel güvenli dans bağlamında aşamalı hazırlık ve sıradan hareketle aşamalı yavaşlama.\nBir süreölçer hazır oluşu kanıtlamaz; bireysel sağlık onayı, sıcaklık hedefi veya garantili yaralanma/ağrı önleme yararı iddia edilmez.\n\nMatt Steffanina / Howcast — http://www.howcast.com/videos/499518-How-to-Do-the-Ticking-Dance-Move-HipHop-Howto\nBaşlangıç alıştırması olarak kolların sağ ve sol sırayla, tek tek kaldırılıp her birinin varıp durması (“hit and stick”)\nİzlenen aralık ayrıca kayıtlıdır. Sert çekme, güçlü kas gerginliği ve popping alınmaz; yumuşak var-ve-dur ve arm run biçimlerimiz özgündür.\n\nCharlene “Chi-Chi” Smith / Howcast — http://www.howcast.com/videos/505195-How-to-Do-Body-Rolls-HipHop-Dancing\nGöğüsten kalçaya ilerleyip diz yerleşmesiyle biten gövde dalgası; gövdeyle sınırlı önden “düz” sürüm\nİzlenen aralık ayrıca kayıtlıdır. Baş uzatma ve “rahatsızlık sorun değil” önerisi alınmaz; küçük önden dalgamız özgün, sınırlı bir çalışmadır, body roll ustalığı değildir."
   }
 }

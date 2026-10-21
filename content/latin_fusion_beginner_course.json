@@ -87,19 +87,41 @@
       "checkedAt": "2026-10-04",
       "mediaCopied": false,
       "endorsement": false
+    },
+    {
+      "id": "cumbia_video_primary",
+      "url": "https://www.youtube.com/watch?v=lVXmXdIh400",
+      "publisher": "ExpertVillage (Leaf Group); cumbia instructor teaching at Silhouettes, Burbank",
+      "access": "Public publisher video played in the normal player, 0–152.75 s; captions read, audio not analysed",
+      "supports": "Back/in-place/together with a pause on 4 and 8; small angled pivot on the back step; bent arms between hip and shoulder height",
+      "doesNotSupport": "No drag/sliding contact observed; no friction, angle size, traditional Colombian context or endorsement",
+      "checkedAt": "2026-10-21",
+      "mediaCopied": false,
+      "endorsement": false
+    },
+    {
+      "id": "reggaeton_video_primary",
+      "url": "https://www.youtube.com/watch?v=pfml5qilCfI",
+      "publisher": "Urban Movement Arts Philly; Laurel Card",
+      "access": "Public studio video played in the normal player, 0–122.93 s; captions read, audio not analysed",
+      "supports": "Wide stance with toes slightly out, knees bouncing down to the beat, relaxed arms, bounce kept under leg actions",
+      "doesNotSupport": "Squat holds and knee in/out rotation not adopted; no hip styling, exertion, fitness claim or endorsement",
+      "checkedAt": "2026-10-21",
+      "mediaCopied": false,
+      "endorsement": false
     }
   ],
   "scope": {
-    "en": "Build a small solo practice from contrasting count and weight-transfer patterns. Work through eight stages of preparation, selected ordinary footwork, transitions, load adaptation, recovery and correction. The course uses original beginner combinations and keeps the separate Salsa course distinct.",
-    "tr": "Farklı sayım ve ağırlık aktarımı örüntülerinden küçük bir solo pratik oluştur. Hazırlık, seçilmiş sıradan ayak çalışması, geçişler, yükü uyarlama, toparlanma ve düzeltme için sekiz aşamayı izle. Kurs özgün başlangıç birleşimlerini kullanır; ayrı Salsa kursuyla karıştırılmaz."
+    "en": "Build a small solo practice from contrasting count and weight-transfer patterns. Work through ten stages of preparation, selected ordinary footwork, transitions, load adaptation, recovery and correction, then an angled cumbia back step with an arm frame and a grounded knee bounce under a step-touch. The course uses original beginner combinations and keeps the separate Salsa course distinct.",
+    "tr": "Farklı sayım ve ağırlık aktarımı örüntülerinden küçük bir solo pratik oluştur. Hazırlık, seçilmiş sıradan ayak çalışması, geçişler, yükü uyarlama, toparlanma ve düzeltme için on aşamayı izle; ardından kol duruşlu açılı cumbia geri adımı ve adım–dokunuş altında yere yakın diz yaylanmasını çalış. Kurs özgün başlangıç birleşimlerini kullanır; ayrı Salsa kursuyla karıştırılmaz."
   },
   "startCompetency": {
     "en": "No prior Latin dance course required. For standing trials, comfortably stand and take a few ordinary small steps in the prepared space; distinguish your left/right. If this is not comfortable or clear, use verbal/table work only and leave standing skills unattempted. Before new blocks, show the preceding support/free-foot and pause check; reading does not clear a physical prerequisite.",
     "tr": "Önceden Latin dans kursu gerekmez. Ayakta deneme için hazırlanmış alanda rahat durup birkaç sıradan küçük adım atabil ve kendi sol/sağını ayır. Rahat veya açık değilse yalnız sözlü/tablo çalış, ayakta becerileri denenmemiş bırak. Yeni bloktan önce önceki destek/boş ayak ve durak kontrolünü göster; okumak fiziksel ön koşulu karşılamaz."
   },
   "endCompetency": {
-    "en": "Written exit: reconstruct all four selected eight-count ledgers, contrast every-beat transfer with three-transfers-and-hold and step-touch, solve an unseen row, explain the L-ready transition at each boundary, design and revise an original 32-count plan with adaptation labels and a recovery route. Selected standing exit, when each selected small movement and transition is comfortable and controlled: carry out the chosen plan twice under unchanged conditions, name where a transfer/hold/transition differed, revisit the exact drill, compare a second attempt and deliberately reduce/stop. Counts alone do not prove musicality, sustainable workload, authentic style or physical mastery.",
-    "tr": "Yazılı çıkış: seçilmiş dört sekiz sayımlı destek tablosunu yeniden kur, her vuruşta aktarımı üç aktarım–durak ve adım–dokunuş ile ayır, yeni satırı çöz, her sınırda solun neden hazır olduğunu açıkla, uyarlama etiketli özgün 32 sayımlı plan ve toparlanma yolu düzenleyip düzelt. Seçilmiş ayakta çıkış seçilmiş her küçük hareket ve geçiş rahat ve kontrollüyse: aynı koşullarda seçilen planı iki kez uygula, aktarım/durak/geçişin nerede değiştiğini adlandır, tam ilgili çalışmaya dön, ikinci denemeyi karşılaştır ve bilinçli azalt/dur. Sayılar müzikaliteyi, sürdürülebilir yükü, özgün stil karakterini veya fiziksel ustalığı kanıtlamaz."
+    "en": "Written exit: reconstruct all four selected eight-count ledgers, contrast every-beat transfer with three-transfers-and-hold and step-touch, solve an unseen row, explain the L-ready transition at each boundary, design and revise an original 32-count plan with adaptation labels and a recovery route. Selected standing exit, when each selected small movement and transition is comfortable and controlled: carry out the chosen plan twice under unchanged conditions, name where a transfer/hold/transition differed, revisit the exact drill, compare a second attempt and deliberately reduce/stop. Extension: keep the C rhythm with a small body opening and bent-arm frame, and keep a small grounded knee bounce under T without changing its support ledger. Counts alone do not prove musicality, sustainable workload, authentic style or physical mastery.",
+    "tr": "Yazılı çıkış: seçilmiş dört sekiz sayımlı destek tablosunu yeniden kur, her vuruşta aktarımı üç aktarım–durak ve adım–dokunuş ile ayır, yeni satırı çöz, her sınırda solun neden hazır olduğunu açıkla, uyarlama etiketli özgün 32 sayımlı plan ve toparlanma yolu düzenleyip düzelt. Seçilmiş ayakta çıkış seçilmiş her küçük hareket ve geçiş rahat ve kontrollüyse: aynı koşullarda seçilen planı iki kez uygula, aktarım/durak/geçişin nerede değiştiğini adlandır, tam ilgili çalışmaya dön, ikinci denemeyi karşılaştır ve bilinçli azalt/dur. Genişletme: C ritmini küçük bir gövde açılması ve bükük kol duruşuyla koru; T'nin destek tablosunu değiştirmeden altında küçük, yere yakın bir diz yaylanması sürdür. Sayılar müzikaliteyi, sürdürülebilir yükü, özgün stil karakterini veya fiziksel ustalığı kanıtlamaz."
   },
   "salsaSeparation": {
     "en": "The app already has salsa_on1_solo: 8 modules/48 lessons. This proposal does not reproduce those lessons, shines, turns, history sequence or course completion. Its S block is one compact rhythm contrast for fusion transitions. Existing lessons so_03/so_04/so_07 can be revisited for pulse, support and side basic; this is a content reference, not a new route or automatic prerequisite/progress award.",
@@ -1024,6 +1046,99 @@
         "en": "Record observed/uncertain/unattempted plus mode for EACH: preparation, M every-beat pattern, S holds, T unweighted touches, selected C/adaptation, support at transitions, optional arm preservation, planned reduction, recovery, specific error and same-condition comparison. Written success does not close physical, cultural/style, app integration or software acceptance.",
         "tr": "HER biri için gözlendi/belirsiz/denenmedi ve biçim yaz: hazırlık, M her vuruş örüntüsü, S durak, T ağırlıksız dokunuş, seçilen C/uyarlama, geçiş desteği, isteğe bağlı kol korunması, planlı azaltma, toparlanma, belirli hata ve aynı koşul karşılaştırması. Yazılı başarı fiziksel, kültür/stil, app entegrasyonu veya yazılım kabulünü kapatmaz."
       }
+    },
+    {
+      "id": "lf_09",
+      "prerequisiteIds": [
+        "lf_08"
+      ],
+      "sourceIds": [
+        "cumbia_video_primary",
+        "cumbia_primary",
+        "hold_primary"
+      ],
+      "patternIds": [
+        "C"
+      ],
+      "title": {
+        "en": "Cumbia back step with a small angle and arm frame",
+        "tr": "Küçük açılı cumbia geri adımı ve kol duruşu"
+      },
+      "prerequisite": {
+        "en": "The C ledger from lesson 5 at a comfortable pace, and clear space behind you.",
+        "tr": "5. dersteki C tablosu rahat bir hızda ve arkanda boş alan."
+      },
+      "outcome": {
+        "en": "Keep the C rhythm — back, in place, together, hold — while letting the body open slightly toward the back-stepping side, with a relaxed bent-arm frame.",
+        "tr": "C ritmini — geri, yerinde, birleş, dur — korurken gövdenin geri adım atılan tarafa hafifçe açılmasına izin ver; kollar dirsekten bükük ve rahat."
+      },
+      "instruction": {
+        "en": "Start weight on R, L free, facing FRONT. 1: L takes a small step back with weight, placed slightly angled, and the body opens a little toward the left — a small angle, not a full turn. 2: R takes weight back in place. 3: L closes beside R with weight and you face FRONT again. 4: hold. 5–8: the same with R stepping back and the body opening slightly right. In the watched source the supporting foot pivots a little as the other foot steps back; here no foot swivels while it carries weight — the angle comes from where you place the stepping foot and from the whole body following it. Never twist a knee over a planted foot. Arms: elbows bent, hands between hip and shoulder height; small easy circles are optional. The foot is lifted and placed, not dragged: the catalog “cumbia drag” (sliding contact while turning) is not taught here because that contact was not observed in our sources.",
+        "tr": "Ağırlık sağda, sol boşta, ÖN'e bakarak başla. 1: sol, hafif açılı yerleştirilen küçük, ağırlıklı bir geri adım atar ve gövde sola biraz açılır — tam dönüş değil, küçük bir açı. 2: sağ yerinde ağırlığı geri alır. 3: sol sağın yanında ağırlıkla birleşir ve yeniden ÖN'e bakarsın. 4: dur. 5–8: aynısı; bu kez sağ geri adım atar ve gövde sağa hafifçe açılır. İzlenen kaynakta öbür ayak geri adım atarken destek ayağı biraz döner; burada ağırlık taşıyan hiçbir ayak dönmez — açı, adım atan ayağı nereye koyduğundan ve tüm bedenin onu izlemesinden gelir. Yere basan ayağın üzerinde dizi asla burma. Kollar: dirsekler bükük, eller kalça ile omuz yüksekliği arasında; küçük, kolay daireler isteğe bağlı. Ayak kaldırılıp konur, sürüklenmez: katalogdaki “cumbia drag” (dönerken kayan temas) burada öğretilmez, çünkü bu temas kaynaklarımızda gözlenmedi."
+      },
+      "practice": {
+        "en": "Read C1–4 and C5–8 aloud with “open” on 1 and 5. First do C without the angle for one eight. Then add the small opening on one side only, rest, then the other side. Add arms last, and only if your feet stay clear. Join eight counts twice, then rest.",
+        "tr": "C1–4 ve C5–8'i sesli oku; 1 ve 5'te “aç” de. Önce açısız C'yi bir sekizlik yap. Sonra küçük açılmayı yalnız bir tarafa ekle, dinlen, sonra öbür tarafa. Kolları en son ve yalnız ayakların net kalırsa ekle. Sekiz sayıyı iki kez bağla, sonra dinlen."
+      },
+      "mistakes": {
+        "en": "Turning so far that you lose FRONT; twisting the knee instead of opening the body; sliding the sole along the floor; arms flying above the shoulders. Fix: smaller angle, lift and place the foot, return to the straight-back C.",
+        "tr": "ÖN'ü kaybedecek kadar dönmek; gövdeyi açmak yerine dizi burmak; tabanı yerde kaydırmak; kolların omuz üstüne savrulması. Düzeltme: daha küçük açı, ayağı kaldırıp koy, düz geri C'ye dön."
+      },
+      "adaptation": {
+        "en": "The straight-back C from lesson 5 keeps the rhythm without the angle. Arms resting is valid. Paper work identifies support and facing only.",
+        "tr": "5. dersteki düz geri C ritmi açısız korur. Kolların dinlenmesi geçerlidir. Kâğıt çalışması yalnız desteği ve bakışı belirler."
+      },
+      "check": {
+        "en": "Name support and facing after 1, 3, 5 and 7. Record the angled version as self-observed, uncertain or unattempted. Explain why this lifted, angled back step is not the catalog cumbia drag.",
+        "tr": "1, 3, 5 ve 7'den sonra desteği ve bakışı adlandır. Açılı sürümü öz gözlem, belirsiz veya denenmedi olarak kaydet. Bu kaldırılıp konan açılı geri adımın neden katalogdaki cumbia drag olmadığını açıkla."
+      }
+    },
+    {
+      "id": "lf_10",
+      "prerequisiteIds": [
+        "lf_09"
+      ],
+      "sourceIds": [
+        "reggaeton_video_primary",
+        "reggaeton_primary",
+        "safe_dance_primary"
+      ],
+      "patternIds": [
+        "T",
+        "P"
+      ],
+      "title": {
+        "en": "Grounded knee bounce under a step-touch",
+        "tr": "Adım–dokunuş altında yere yakın diz yaylanması"
+      },
+      "prerequisite": {
+        "en": "The T bridge and the separate P pulse from lesson 6, at a comfortable level.",
+        "tr": "6. dersteki T köprüsü ve ayrı P vuruşu, rahat düzeyde."
+      },
+      "outcome": {
+        "en": "Keep a small grounded knee bounce on every beat in a comfortable wide stance, then keep it under the T step-touch without changing T's support ledger.",
+        "tr": "Rahat, geniş duruşta her vuruşta küçük, yere yakın bir diz yaylanmasını koru; sonra T'nin destek tablosunu değiştirmeden bunu T adım–dokunuşunun altında sürdür."
+      },
+      "instruction": {
+        "en": "Stance: feet a little wider than hips, toes turned slightly out so each knee points the same way as its toes. Bounce: on each beat let both knees bend a little down, then rebound up, heels staying on the floor — the movement goes down into the floor rather than springing up from the toes. Arms hang loose. Keep it small: no deep squat, no holding a low position, no knees turning inward. Then rest, reset weight to R with L free, and try T (step-touch) while keeping the same small down-bounce on every beat. The bounce adds no extra weight transfer. The catalog reggaeton bounce is described as driven from the hips; hip or pelvis styling is not taught here.",
+        "tr": "Duruş: ayaklar kalçadan biraz geniş, ayak uçları hafif dışa; her diz kendi ayak ucuyla aynı yöne bakar. Yaylanma: her vuruşta iki diz de biraz aşağı bükülsün, sonra yukarı geri gelsin; topuklar yerde kalır — hareket ayak uçlarından yukarı sıçramak yerine aşağı, yere doğrudur. Kollar gevşek sarkar. Küçük tut: derin çömelme, aşağıda bekleme, dizlerin içe dönmesi yok. Sonra dinlen, ağırlığı sağa al ve sol boşken T'yi (adım–dokunuş) dene; her vuruştaki aynı küçük aşağı yaylanmayı sürdür. Yaylanma ek ağırlık aktarımı eklemez. Katalogdaki reggaeton bounce kalçadan sürülen bir hareket olarak tanımlanır; kalça veya pelvis stili burada öğretilmez."
+      },
+      "practice": {
+        "en": "Stand in the wide stance and bounce for one eight, rest. Bounce one more eight while checking that the knees follow the toes. Rest, reset R-supported/L-free, then do T4 without the bounce, then T4 with it. Rest before joining a full T8 with the bounce. Stop at once for knee discomfort.",
+        "tr": "Geniş duruşta bir sekizlik yaylan, dinlen. Dizlerin ayak uçlarını izlediğini kontrol ederek bir sekizlik daha yaylan. Dinlen, sağ destek/sol boş sıfırla, sonra yaylanmasız T4, ardından yaylanmalı T4 yap. Yaylanmalı tam T8'e geçmeden önce dinlen. Dizde rahatsızlık olursa hemen dur."
+      },
+      "mistakes": {
+        "en": "Knees collapsing inward; bouncing from the toes so the heels lift; sinking deeper each beat; letting the bounce add an extra step to T. Fix: narrower stance, smaller bend, return to the separate P pulse.",
+        "tr": "Dizlerin içe çökmesi; topukların kalkacağı şekilde ayak uçlarından yaylanmak; her vuruşta daha derine inmek; yaylanmanın T'ye fazladan adım eklemesi. Düzeltme: daha dar duruş, daha küçük bükülme, ayrı P vuruşuna dön."
+      },
+      "adaptation": {
+        "en": "The separate P pulse or T without the bounce are valid choices. Seated, you can nod or tap the beat to practise timing only; that is not standing bounce evidence.",
+        "tr": "Ayrı P vuruşu ya da yaylanmasız T geçerli seçeneklerdir. Oturarak yalnız zamanlamayı çalışmak için vuruşu baş ya da elle verebilirsin; bu ayakta yaylanma kanıtı değildir."
+      },
+      "check": {
+        "en": "State T's support after each count with and without the bounce, and whether the knees followed the toes. Record the bounce as self-observed, uncertain or unattempted; a comfortable bounce does not prove reggaeton style, exertion or fitness.",
+        "tr": "T'nin her sayıdan sonraki desteğini yaylanmalı ve yaylanmasız söyle; dizlerin ayak uçlarını izleyip izlemediğini belirt. Yaylanmayı öz gözlem, belirsiz veya denenmedi olarak kaydet; rahat bir yaylanma reggaeton stilini, eforu veya kondisyonu kanıtlamaz."
+      }
     }
   ],
   "openTeachingComponents": [
@@ -1032,8 +1147,8 @@
       "catalogTerm": "Cumbia drag",
       "status": "demonstration_and_physical_review_required",
       "copy": {
-        "en": "No safe exact drag/friction/contact or turned-path instruction is claimed. C is an explicitly altered rhythm scaffold; do not infer the missing skill.",
-        "tr": "Güvenli tam sürükleme/sürtünme/temas veya dönüşlü yol öğretimi iddia edilmez. C açıkça değişmiş ritim taslağıdır; eksik beceriyi çıkarma."
+        "en": "Lesson 9 teaches a lifted, slightly angled cumbia back step observed in a watched source. The catalog drag — sliding contact while turning — was not observed, so its friction/contact or turned-path instruction is not claimed; do not infer it from C or lesson 9.",
+        "tr": "9. ders, izlenen bir kaynakta gözlenen, kaldırılıp konan ve hafif açılı cumbia geri adımını öğretir. Katalogdaki drag — dönerken kayan temas — gözlenmedi; bu yüzden sürtünme/temas ya da dönüşlü yol öğretimi iddia edilmez; C'den veya 9. dersten çıkarma."
       },
       "physicalAccepted": false
     },
@@ -1042,8 +1157,8 @@
       "catalogTerm": "Merengue hip / reggaeton bounce",
       "status": "demonstration_and_qualified_style_review_required",
       "copy": {
-        "en": "Natural comfortable hip response is optional; no forced hip drop, pelvis drive, isolation or body roll is taught as authentic technique. Generic pulse is not the catalog reggaeton bounce.",
-        "tr": "Doğal rahat kalça tepkisi isteğe bağlı; zorlanmış kalça düşüşü, pelvis itişi, izolasyon veya gövde roll özgün teknik diye öğretilmez. Genel vuruş katalogdaki reggaeton bounce değildir."
+        "en": "Lesson 10 teaches a small grounded knee bounce in a wide stance. Hip-driven reggaeton styling, forced hip drop, pelvis drive, isolation or body roll are not taught as authentic technique; a knee bounce is not the catalog hip-driven bounce.",
+        "tr": "10. ders geniş duruşta küçük, yere yakın bir diz yaylanması öğretir. Kalçadan sürülen reggaeton stili, zorlanmış kalça düşüşü, pelvis itişi, izolasyon veya gövde roll özgün teknik olarak öğretilmez; diz yaylanması katalogdaki kalçadan sürülen bounce değildir."
       },
       "physicalAccepted": false
     },
@@ -1086,8 +1201,8 @@
   "proposalId": "latin_fusion_fitness_beginner_foundations_proposal",
   "sourceProposalSha256": "eb2871397e1762754ded51e79a50ce5c1d403361a5096c938d430591617b3b61",
   "reviewNotice": {
-    "en": "An eight-stage independent beginner practice using selected count and weight-transfer patterns. Follow the preparation, movement and recovery instructions at a comfortable level. You may choose to record that you studied a unit; that entry is self-reported practice, not a score or verified movement skill.",
-    "tr": "Seçilmiş sayım ve ağırlık aktarımı örüntülerini kullanan sekiz aşamalı bağımsız başlangıç pratiği. Hazırlık, hareket ve toparlanma yönergelerini rahat düzeyde izle. Birimi çalıştığını isteğe bağlı kaydedebilirsin; bu öz beyanlı pratiktir, puan veya doğrulanmış hareket becerisi değildir."
+    "en": "A ten-stage independent beginner practice using selected count and weight-transfer patterns, an angled cumbia back step and a grounded knee bounce. Follow the preparation, movement and recovery instructions at a comfortable level. You may choose to record that you studied a unit; that entry is self-reported practice, not a score or verified movement skill.",
+    "tr": "Seçilmiş sayım ve ağırlık aktarımı örüntülerini, açılı bir cumbia geri adımını ve yere yakın bir diz yaylanmasını kullanan on aşamalı bağımsız başlangıç pratiği. Hazırlık, hareket ve toparlanma yönergelerini rahat düzeyde izle. Birimi çalıştığını isteğe bağlı kaydedebilirsin; bu öz beyanlı pratiktir, puan veya doğrulanmış hareket becerisi değildir."
   },
   "boundaries": {
     "en": "Before every standing trial: clear obstacles and loose rugs, check secure footing/clothing and room for YOUR chosen small steps; choose facing FRONT and do not rotate on a planted foot. Begin with familiar small walking/side movements at an easy pace and gradually prepare for the selected action; a fixed timer or sweat is not clearance. Rest and recheck after interruptions. Use short phrases with optional rests, not mandatory nonstop work. If pain, dizziness or instability occurs, stop; gradual reduction applies only to ordinary comfortable activity, not a reason to continue through symptoms. No jumps, deep squats, forced hips/spine, turns or floorwork.",
@@ -1098,7 +1213,7 @@
     "tr": "M/S/T/C ve M-side ÖN bakışla, ağırlık sağda ve sol hazırken başlar. Ayrı P iki ayak desteğiyle başlar; otomatik tek-ayak çıkışı yoktur. L/R SENİN sol/sağ uzuvlarındır, aynalanmış eğitmen değildir. W desteği adı verilen ayağa aktarır, T ağırlıksız dokunur, H yeni aktarım eklemez. B iki ayağın desteğidir, yalnız ayrı isteğe bağlı vuruş çalışmasında kullanılır; tek ayak dengesi hedefi DEĞİLDİR. P_bend/P_release yalnız ayrı iki-ayaklı P tablosunda yeni aktarım eklemeyen çok küçük isteğe bağlı harekettir. Destek satır eyleminden SONRA gösterilir. Yakın, ayakları zorla birleştirmek değil arada alan olan rahat duruşa dönmektir. Her sayı sözlü bir vuruştur."
   },
   "provenance": {
-    "en": "Mil Pasos Dance Studio, Dominican Republic — https://milpasos.com.do/merengue\n\nDance Dojo, Robin Campbell / Patrick and Scarlet — https://thedancedojo.com/how-to-salsa-dance-for-beginners/\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\n\nDennis PaSamba Dance Company; Dennis PaSamba — https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips\n\nDance Flow Fort Myers studio — https://danceflowfortmyers.com/reggaeton-dance-basics/\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\n\nSources inform ingredients, not this authored sequence or a licence/endorsement. The selected practice uses ordinary straight-back and in-place patterns; exact cumbia drag, turned paths and style-specific pelvis technique are outside that scope.",
-    "tr": "Mil Pasos Dance Studio, Dominican Republic — https://milpasos.com.do/merengue\n\nDance Dojo, Robin Campbell / Patrick and Scarlet — https://thedancedojo.com/how-to-salsa-dance-for-beginners/\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\n\nDennis PaSamba Dance Company; Dennis PaSamba — https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips\n\nDance Flow Fort Myers studio — https://danceflowfortmyers.com/reggaeton-dance-basics/\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\n\nKaynaklar öğelere bilgi sağlar; bu özgün diziye lisans/onay vermez. Seçilmiş pratik sıradan düz arka adım ve yerinde örüntüler kullanır; tam cumbia drag, dönüşlü yollar ve stile özgü pelvis tekniği bu kapsamın dışında."
+    "en": "Mil Pasos Dance Studio, Dominican Republic — https://milpasos.com.do/merengue\n\nDance Dojo, Robin Campbell / Patrick and Scarlet — https://thedancedojo.com/how-to-salsa-dance-for-beginners/\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\n\nDennis PaSamba Dance Company; Dennis PaSamba — https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips\n\nDance Flow Fort Myers studio — https://danceflowfortmyers.com/reggaeton-dance-basics/\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\n\nSources inform ingredients, not this authored sequence or a licence/endorsement. Lessons 1–8 use ordinary straight-back and in-place patterns; lesson 9 adds a small angled back step and lesson 10 a grounded knee bounce. Exact cumbia drag, turned paths and style-specific pelvis technique remain outside that scope.\n\nAdded 2026-10-21 (watched intervals recorded separately): ExpertVillage (Leaf Group), cumbia instructor teaching at Silhouettes, Burbank — https://www.youtube.com/watch?v=lVXmXdIh400 ; Urban Movement Arts Philly, Laurel Card — https://www.youtube.com/watch?v=pfml5qilCfI . They support a back/in-place/together/pause cumbia basic with a small angled opening and bent-arm frame between hip and shoulder height, and a wide-stance knee bounce with toes and knees pointing the same way. No drag contact was observed, and squat holds, knee rotation and hip styling were not adopted.",
+    "tr": "Mil Pasos Dance Studio, Dominican Republic — https://milpasos.com.do/merengue\n\nDance Dojo, Robin Campbell / Patrick and Scarlet — https://thedancedojo.com/how-to-salsa-dance-for-beginners/\n\nMathias Ellmann, Salsa Movement Lexicon — https://www.mathiasellmann.de/en/salsa/movement-lexicon/pause-hold.html\n\nDennis PaSamba Dance Company; Dennis PaSamba — https://dennispasamba.com/blog/how-to-dance-cumbia-for-beginners-easy-basic-steps-tips\n\nDance Flow Fort Myers studio — https://danceflowfortmyers.com/reggaeton-dance-basics/\n\nAusdance National — https://ausdance.org.au/articles/details/warm-up-and-cool-down-rules-for-safe-dance\n\nKaynaklar öğelere bilgi sağlar; bu özgün diziye lisans/onay vermez. 1–8. dersler sıradan düz arka adım ve yerinde örüntüler kullanır; 9. ders küçük açılı bir geri adım, 10. ders yere yakın bir diz yaylanması ekler. Tam cumbia drag, dönüşlü yollar ve stile özgü pelvis tekniği bu kapsamın dışında kalır.\n\n2026-10-21'de eklendi (izlenen aralıklar ayrıca kayıtlı): ExpertVillage (Leaf Group), Burbank Silhouettes'te ders veren cumbia eğitmeni — https://www.youtube.com/watch?v=lVXmXdIh400 ; Urban Movement Arts Philly, Laurel Card — https://www.youtube.com/watch?v=pfml5qilCfI . Bunlar küçük açılı açılma ve kalça ile omuz arasında bükük kol duruşuyla geri/yerinde/birleş/duraklama cumbia temelini ve ayak uçlarıyla dizlerin aynı yöne baktığı geniş duruşlu diz yaylanmasını destekler. Sürükleme teması gözlenmedi; çömelmede bekleme, diz döndürme ve kalça stili alınmadı."
   }
 }
