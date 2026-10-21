@@ -95,7 +95,8 @@ void main() {
     await _settle(tester);
   }
 
-  test('source inventory separates framework builders from app destinations', () {
+  test('source inventory separates framework builders from app destinations',
+      () {
     const source = '''
 class VisiblePage extends StatelessWidget {}
 builder: (_, locale, delegate) => AnimatedBuilder(
