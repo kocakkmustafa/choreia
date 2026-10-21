@@ -113,7 +113,30 @@ void main() {
     await tester.pump(const Duration(milliseconds: 450));
     final page = tester.widget<HipHopCoursePage>(find.byType(HipHopCoursePage));
     expect(page.skillCourse, isTrue);
+    void recordReadiness(String phase) {
+      final readerContext = tester.element(find.byType(HipHopCoursePage));
+      debugPrint(jsonEncode(<String, Object>{
+        'fixtureEvent': 'skill_navigation_readiness',
+        'phase': phase,
+        'locale': Localizations.localeOf(readerContext).toLanguageTag(),
+        'bodyTitleCount':
+            find.text('Hip-Hop Foundations: beginner course').evaluate().length,
+        'loadingCount':
+            find.byType(CircularProgressIndicator).evaluate().length,
+        'readErrorCount':
+            find.textContaining('No progress was recorded').evaluate().length +
+                find.textContaining('İlerleme kaydedilmedi.').evaluate().length,
+      }));
+    }
+
+    recordReadiness('before_asset_observation');
+    // Observe the real cached asset in the real async zone after navigation.
+    // This is not a UI retry; the loaded reader must satisfy every assertion.
+    final observed = await tester.runAsync(() =>
+        rootBundle.loadString('content/hip_hop_foundations_skill_course.json'));
+    expect(observed, bundled);
     await tester.pumpAndSettle();
+    recordReadiness('after_asset_observation');
     expect(find.text('Hip-Hop Foundations: beginner course'), findsOneWidget);
     expect(
         find.textContaining('An eight-stage beginner Hip-Hop'), findsOneWidget);
