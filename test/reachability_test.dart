@@ -530,9 +530,12 @@ home: waiting
                 e.key.endsWith('shell/choreia_shell.dart'),
           )
           .value;
+      // Line breaks do not change profile mounting or argument forwarding.
+      // Keep the constructor, named argument and exact widget field together.
       expect(
         shellSrc,
-        contains('ProfileView(accountPageBuilder: widget.accountPageBuilder,'),
+        contains(RegExp(r'\bProfileView\s*\(\s*accountPageBuilder\s*:\s*'
+            r'widget\s*\.\s*accountPageBuilder\s*,')),
         reason: 'Profil artık kabukta değilse rota sayımı bayatladı',
       );
       final File looseWalk = File('test/reachability_test.dart');
