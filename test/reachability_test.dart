@@ -95,6 +95,45 @@ void main() {
     await _settle(tester);
   }
 
+  test('source inventory separates framework builders from app destinations', () {
+    const source = '''
+class VisiblePage extends StatelessWidget {}
+builder: (_, locale, delegate) => AnimatedBuilder(
+  builder: (_, __) => MaterialApp(
+    builder: (_) => VisiblePage(),
+  ),
+)
+''';
+    final raw = _structuralTargets(<String>[source]);
+    expect(raw, <String>{'AnimatedBuilder', 'MaterialApp', 'VisiblePage'});
+    expect(raw.intersection(_declaredAppWidgets(<String>[source])),
+        <String>{'VisiblePage'});
+  });
+
+  test('source inventory preserves unnamed routes and conditional home', () {
+    const source = '''
+class ExerciseFlow extends StatefulWidget {}
+class WelcomePage extends StatelessWidget {}
+class FailurePage extends StatelessWidget {}
+final routes = {
+  'practice': ('course/practice', (env) => ExerciseFlow(env: env)),
+};
+home: waiting
+    ? const WelcomePage()
+    : const FailurePage(),
+''';
+    final mounted = _structuralTargets(<String>[source])
+        .intersection(_declaredAppWidgets(<String>[source]));
+    final named = RegExp(
+      r'^class ([A-Za-z_]+(?:View|Page|Demo)) extends Stat',
+      multiLine: true,
+    ).allMatches(source).map((m) => m.group(1)!).toSet();
+    expect(mounted, <String>{'ExerciseFlow', 'WelcomePage', 'FailurePage'});
+    expect(mounted.difference(named), <String>{'ExerciseFlow'},
+        reason: 'a local destination without a screen suffix must still expose '
+            'a gap in the independent name channel');
+  });
+
   group('kaç ekrana GİDİLEBİLİR — ölçüm, iddia değil', () {
     testWidgets('KATI okuma: ayrı rota sayısı', (WidgetTester tester) async {
       final _RouteSpy spy = _RouteSpy();
@@ -224,38 +263,12 @@ void main() {
           multiLine: true,
         ),
       );
-      final Set<String> byStructure = <String>{
-        ...matches(
-          RegExp(
-            r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
-            r'([A-Z][A-Za-z_]*)\(',
-          ),
-        ),
-        // MaterialApp.home also mounts a real destination without a builder.
-        ...matches(
-          RegExp(r'home:\s*(?:const\s+)?([A-Z][A-Za-z_]*(?:View|Page))\('),
-        ),
-        // ⚠️ Kabuk sekmeleri BLOKTAN okunuyor, satır girintisinden DEĞİL.
-        // İlk yazımım `^\s{10,}X\(\s*$` deseniydi ve `ProgressView`i
-        // görüp `LibraryView`i KAÇIRDI — çünkü birinin argümanları alt
-        // satırda, ötekininki aynı satırda. *Bir desenin kapsamı, yazarının
-        // BİÇİMLENDİRME alışkanlığı kadardı* — (a)'nın uyarısının boşluk
-        // karakteri hâli, ve testin kendisi yakaladı.
-        for (final String src in lib.values)
-          for (final RegExpMatch blok in RegExp(
-            r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
-            r'([\s\S]*?)\n\s*\],',
-          ).allMatches(src))
-            ...RegExp(r'\b([A-Z][A-Za-z_]*)\(')
-                .allMatches(blok.group(1)!)
-                .map((RegExpMatch m) => m.group(1)!),
-        ...matches(
-          RegExp(
-            r'_introSeen == false[\s\S]{0,200}?return\s+'
-            r'([A-Z][A-Za-z_]*)\(',
-          ),
-        ),
-      };
+      // Rebuild infrastructure is not an app destination. Ownership is derived
+      // from all local widget declarations, independently of View/Page/Demo.
+      // Intersecting with byName here would hide the very gap checked below.
+      final Set<String> rawByStructure = _structuralTargets(lib.values);
+      final Set<String> byStructure =
+          rawByStructure.intersection(_declaredAppWidgets(lib.values));
       final Set<String> candidates = byName.union(byStructure);
 
       expect(
@@ -362,12 +375,19 @@ void main() {
         await _scrollTo(tester, link);
         await tester.ensureVisible(link);
         await _settle(tester);
+        // Start the large real asset read outside the widget fake-clock zone.
+        // Keep the post-route read and UI title checks; this is a warm-bundle
+        // route walk, not cold-device acceptance.
+        final bundled = await tester.runAsync(
+          () => rootBundle.loadString(path.value),
+        );
         await tester.tap(link);
         await _settle(tester);
         final source = await tester.runAsync(
           () => rootBundle.loadString(path.value),
         );
         expect(source, isNotEmpty);
+        expect(source, bundled);
         await _settle(tester);
         expect(
           find.text(
@@ -949,6 +969,52 @@ void main() {
       expect(library.cards, isNotEmpty);
     });
   });
+}
+
+Set<String> _declaredAppWidgets(Iterable<String> sources) => <String>{
+      for (final source in sources)
+        for (final match in RegExp(
+          r'^class ([A-Za-z_][A-Za-z_0-9]*) extends '
+          r'(?:StatelessWidget|StatefulWidget)\b',
+          multiLine: true,
+        ).allMatches(source))
+          match.group(1)!,
+    };
+
+/// Conservative source inventory for this app's mounting forms. It does not
+/// execute Dart or prove reachability; the independent UI walk does that.
+Set<String> _structuralTargets(Iterable<String> sources) {
+  final patterns = <RegExp>[
+    RegExp(r'builder:\s*\([^)]*\)\s*=>\s*(?:const\s+)?'
+        r'([A-Z][A-Za-z_]*)\('),
+    RegExp(r'home:\s*(?:const\s+)?([A-Z][A-Za-z_]*(?:View|Page))\('),
+    // Both branches of the current multiline conditional home form.
+    RegExp(r'home:[\s\S]{0,400}?\?\s*(?:const\s+)?'
+        r'([A-Z][A-Za-z_]*)\('),
+    RegExp(r'home:[\s\S]{0,400}?\n\s*:\s*(?:const\s+)?'
+        r'([A-Z][A-Za-z_]*)\('),
+    // WrittenCourseLink registers (route name, widget factory) records and
+    // passes the selected factory to its route builder indirectly.
+    RegExp(r"\(\s*'[^']+'\s*,\s*\([^)]*\)\s*=>\s*(?:const\s+)?"
+        r'([A-Z][A-Za-z_]*)\('),
+    RegExp(r'_introSeen == false[\s\S]{0,200}?return\s+'
+        r'([A-Z][A-Za-z_]*)\('),
+  ];
+  return <String>{
+    for (final source in sources) ...<String>{
+      for (final pattern in patterns)
+        for (final match in pattern.allMatches(source)) match.group(1)!,
+      // Read the IndexedStack block, not indentation: the library and progress
+      // constructors use different line wrapping.
+      for (final block in RegExp(
+        r'IndexedStack\([\s\S]{0,400}?children:\s*<Widget>\['
+        r'([\s\S]*?)\n\s*\],',
+      ).allMatches(source))
+        ...RegExp(r'\b([A-Z][A-Za-z_]*)\(')
+            .allMatches(block.group(1)!)
+            .map((match) => match.group(1)!),
+    },
+  };
 }
 
 /// Bounded scroll. `scrollUntilVisible` never returns for the same reason
