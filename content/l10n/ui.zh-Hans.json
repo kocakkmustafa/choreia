@@ -365,5 +365,8 @@
   "Dark theme": "深色主题",
   "This theme applies for this session. The device preference could not be saved.": "本次会话会使用此主题，但无法保存设备上的主题偏好。",
   "Your saved theme could not be read. System theme is used until you choose another option.": "无法读取已保存的主题。选择其他选项之前，将使用系统主题。",
-  "Your saved language could not be read. System language is used until you choose another option.": "无法读取已保存的语言设置。在你选择其他选项之前，将使用系统语言。"
+  "Your saved language could not be read. System language is used until you choose another option.": "无法读取已保存的语言设置。在你选择其他选项之前，将使用系统语言。",
+  "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} style has camera-session reference notes. {status} {storage}": "从课程库打开五门文字课程中的任意一门：Hip-Hop、Salsa On1、Line Dance、Latin Fusion 和原创短舞。完整目录共列出 {total} 个风格页面；{count} 种风格有摄像头练习参考笔记。{status} {storage}",
+  "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} styles have camera-session reference notes. {status} {storage}": "从课程库打开五门文字课程中的任意一门：Hip-Hop、Salsa On1、Line Dance、Latin Fusion 和原创短舞。完整目录共列出 {total} 个风格页面；{count} 种风格有摄像头练习参考笔记。{status} {storage}",
+  "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "你的练习内容保存在本设备上，因此“进度”标签页可以显示你实际完成的内容。这些内容只留在这里——与你练习相关的任何信息都不会被发送到任何地方。"
 }

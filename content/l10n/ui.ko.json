@@ -365,5 +365,8 @@
   "Dark theme": "어두운 테마",
   "This theme applies for this session. The device preference could not be saved.": "이 테마는 이번 세션에 적용됩니다. 기기 설정은 저장하지 못했습니다.",
   "Your saved theme could not be read. System theme is used until you choose another option.": "저장한 테마를 읽을 수 없습니다. 다른 옵션을 선택할 때까지 시스템 테마를 사용합니다.",
-  "Your saved language could not be read. System language is used until you choose another option.": "저장된 언어 설정을 읽을 수 없습니다. 다른 옵션을 선택할 때까지 시스템 언어를 사용합니다."
+  "Your saved language could not be read. System language is used until you choose another option.": "저장된 언어 설정을 읽을 수 없습니다. 다른 옵션을 선택할 때까지 시스템 언어를 사용합니다.",
+  "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} style has camera-session reference notes. {status} {storage}": "라이브러리에서 5가지 글 강좌 중 아무거나 열어 보세요: Hip-Hop, Salsa On1, Line Dance, Latin Fusion, 자체 제작 짧은 형식 춤. 전체 카탈로그에는 스타일 페이지 {total}개가 있으며, 스타일 {count}개에 카메라 세션 참고 메모가 있습니다. {status} {storage}",
+  "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} styles have camera-session reference notes. {status} {storage}": "라이브러리에서 5가지 글 강좌 중 아무거나 열어 보세요: Hip-Hop, Salsa On1, Line Dance, Latin Fusion, 자체 제작 짧은 형식 춤. 전체 카탈로그에는 스타일 페이지 {total}개가 있으며, 스타일 {count}개에 카메라 세션 참고 메모가 있습니다. {status} {storage}",
+  "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "연습한 내용은 이 기기에 저장되므로 진도 탭에서 실제로 해낸 것을 확인할 수 있습니다. 기록은 여기에 남으며, 연습에 관한 어떤 정보도 다른 곳으로 전송되지 않습니다."
 }

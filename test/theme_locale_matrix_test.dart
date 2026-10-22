@@ -537,6 +537,38 @@ void main() {
     });
   }
 
+  // The first-run "where this is today" panel was an interpolated English
+  // sentence, so translate() never matched it outside EN/TR.
+  for (final locale in ChoreiaLocaleController.supported) {
+    final tag = ChoreiaLocaleController.tag(locale);
+    if (tag == 'en' || tag == 'tr') continue;
+    testWidgets('ilk açılış bugünkü durum paneli $tag', (tester) async {
+      final ui =
+          jsonDecode(File('content/l10n/ui.$tag.json').readAsStringSync())
+              as Map<String, dynamic>;
+      final tally = LibraryTally.from(library.cards);
+      final english =
+          IntroStrings.todayTemplate(tally.scored + tally.openUngraded);
+      final template = ui[english] as String;
+      final opening = template.substring(0, template.indexOf('{')).trim();
+      expect(opening, isNotEmpty);
+      await _mount(tester, library, locale, ThemeMode.light, 1,
+          introSeen: false);
+      await _waitFor(tester, find.byType(FirstRunView));
+      final panel = find.byKey(FirstRunView.stateKey);
+      await _reach(tester, panel);
+      expect(find.descendant(of: panel, matching: find.textContaining(opening)),
+          findsOneWidget);
+      expect(
+          find.descendant(
+              of: panel,
+              matching: find.textContaining('Open any of the five written')),
+          findsNothing);
+      expect(find.descendant(of: panel, matching: find.textContaining('{')),
+          findsNothing);
+    });
+  }
+
   for (final locale in ChoreiaLocaleController.supported) {
     for (final mode in _modes) {
       for (final scale in _scales) {

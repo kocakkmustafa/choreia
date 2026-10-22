@@ -365,5 +365,8 @@
   "Dark theme": "ダークテーマ",
   "This theme applies for this session. The device preference could not be saved.": "このテーマは今回のセッションで有効です。端末にテーマ設定を保存できませんでした。",
   "Your saved theme could not be read. System theme is used until you choose another option.": "保存済みのテーマを読み込めませんでした。別のテーマを選ぶまで、システムのテーマを使用します。",
-  "Your saved language could not be read. System language is used until you choose another option.": "保存済みの言語設定を読み込めませんでした。別の言語を選ぶまで、システムの言語を使用します。"
+  "Your saved language could not be read. System language is used until you choose another option.": "保存済みの言語設定を読み込めませんでした。別の言語を選ぶまで、システムの言語を使用します。",
+  "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} style has camera-session reference notes. {status} {storage}": "ライブラリから5つの文章コースのどれでも開けます：Hip-Hop、Salsa On1、Line Dance、Latin Fusion、独自のショートフォームダンス。カタログ全体には{total}件のスタイルページがあり、{count}スタイルにカメラセッションの参照メモがあります。{status} {storage}",
+  "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} styles have camera-session reference notes. {status} {storage}": "ライブラリから5つの文章コースのどれでも開けます：Hip-Hop、Salsa On1、Line Dance、Latin Fusion、独自のショートフォームダンス。カタログ全体には{total}件のスタイルページがあり、{count}スタイルにカメラセッションの参照メモがあります。{status} {storage}",
+  "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "練習した内容はこの端末に保存されるため、進捗タブで実際に取り組んだことを確認できます。記録はここにとどまり、練習に関する情報がどこかへ送信されることはありません。"
 }

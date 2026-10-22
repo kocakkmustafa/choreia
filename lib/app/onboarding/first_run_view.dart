@@ -150,12 +150,22 @@ class FirstRunView extends StatelessWidget {
                           en: IntroStrings.todayTitle,
                           tr: 'BUGÜNKÜ DURUM',
                         ),
-                        body: UiLanguage.text(
+                        body: UiLanguage.format(
                           context,
-                          en: IntroStrings.today(tally,
-                              cameraSessionsAvailable: cameraSessionsAvailable),
-                          tr: IntroStrings.todayTr(tally,
-                              cameraSessionsAvailable: cameraSessionsAvailable),
+                          en: IntroStrings.todayTemplate(
+                              tally.scored + tally.openUngraded),
+                          tr: IntroStrings.todayTemplateTr,
+                          values: IntroStrings.todayValues(
+                              tally,
+                              UiLanguage.text(context,
+                                  en: LibraryStrings.sessionNotice(
+                                      cameraSessionsAvailable),
+                                  tr: LibraryStrings.sessionNotice(
+                                      cameraSessionsAvailable,
+                                      turkish: true)),
+                              UiLanguage.text(context,
+                                  en: IntroStrings.storage,
+                                  tr: IntroStrings.storageTr)),
                         ),
                       ),
                     ],
@@ -309,25 +319,54 @@ abstract final class IntroStrings {
 
   static const String todayTitle = 'WHERE THIS IS TODAY';
 
-  /// Counted from the real catalogue every time this screen is built.
+  /// Counted from the real catalogue every time this screen is built. The
+  /// counts are placeholders so every locale translates the same sentence
+  /// instead of falling back to English for an interpolated string.
+  static String todayTemplate(int openable) => openable == 1
+      ? 'Open any of the five written courses from the library: Hip-Hop, Salsa '
+          'On1, Line Dance, Latin Fusion and original short-form dance. The '
+          'wider catalogue lists {total} style pages; {count} style has '
+          'camera-session reference notes. {status} {storage}'
+      : 'Open any of the five written courses from the library: Hip-Hop, Salsa '
+          'On1, Line Dance, Latin Fusion and original short-form dance. The '
+          'wider catalogue lists {total} style pages; {count} styles have '
+          'camera-session reference notes. {status} {storage}';
+
+  static const String todayTemplateTr =
+      'Kütüphaneden beş yazılı kurstan birini aç: Hip-Hop, Salsa On1, Line '
+      'Dance, Latin Fusion ve özgün kısa dans. Geniş katalogda {total} stil '
+      'sayfası var; {count} stilde kamera seansı referans notları bulunur. '
+      '{status} {storage}';
+
+  static Map<String, Object> todayValues(
+          LibraryTally tally, String status, String storage) =>
+      <String, Object>{
+        'total': tally.total,
+        'count': tally.scored + tally.openUngraded,
+        'status': status,
+        'storage': storage,
+      };
+
+  static String _fill(String template, Map<String, Object> values) =>
+      values.entries.fold(template,
+          (text, entry) => text.replaceAll('{${entry.key}}', '${entry.value}'));
+
   static String today(LibraryTally tally,
-      {bool cameraSessionsAvailable = false}) {
-    final int openable = tally.scored + tally.openUngraded;
-    return 'Open the Salsa On1 learning path from the library. The legacy '
-        'dance catalogue has ${tally.total} style pages, including $openable '
-        'styles with camera-session reference notes. '
-        '${LibraryStrings.sessionNotice(cameraSessionsAvailable)} '
-        '$_storage';
-  }
+          {bool cameraSessionsAvailable = false}) =>
+      _fill(
+          todayTemplate(tally.scored + tally.openUngraded),
+          todayValues(tally,
+              LibraryStrings.sessionNotice(cameraSessionsAvailable), storage));
 
   static String todayTr(LibraryTally tally,
-      {bool cameraSessionsAvailable = false}) {
-    final int openable = tally.scored + tally.openUngraded;
-    return 'Salsa On1 öğrenme yolunu kütüphaneden aç. Önceki dans kataloğunda '
-        '${tally.total} stil sayfası ve $openable stilde kamera seansı referans notları var. '
-        '${LibraryStrings.sessionNotice(cameraSessionsAvailable, turkish: true)} Kendi çalışma kaydın '
-        'bu cihazda saklanır; hesabına yüklenmez.';
-  }
+          {bool cameraSessionsAvailable = false}) =>
+      _fill(
+          todayTemplateTr,
+          todayValues(
+              tally,
+              LibraryStrings.sessionNotice(cameraSessionsAvailable,
+                  turkish: true),
+              storageTr));
 
   /// What happens to a finished session — and it used to say the OPPOSITE.
   ///
@@ -353,10 +392,13 @@ abstract final class IntroStrings {
   /// sentence that IS derived live from the catalogue (`tally`). A stale claim
   /// glued to a fresh one borrows its look of freshness — so it is split out
   /// here, as its own named thing that a gate can point at.
-  static const String _storage =
+  static const String storage =
       'What you practise is kept on this phone, so the progress tab can show '
       'you what you have actually done. It stays here — nothing about your '
       'practice is sent anywhere.';
+
+  static const String storageTr =
+      'Kendi çalışma kaydın bu cihazda saklanır; hesabına yüklenmez.';
 
   static const String continueLabel = 'Open the catalogue';
 }
