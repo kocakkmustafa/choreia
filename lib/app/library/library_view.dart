@@ -404,8 +404,7 @@ class _LibraryViewState extends State<LibraryView> {
                     style: ChoreiaType.of(context).body(size: 12.5),
                   ),
                 Text(
-                  LibraryStrings.sessionNotice(widget.cameraSessionsAvailable,
-                      turkish: _tr),
+                  _cameraNotice,
                   style: ChoreiaType.of(context).body(size: 12.5),
                 ),
                 const SizedBox(height: 12),

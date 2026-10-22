@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' show Tristate;
 
@@ -513,6 +514,28 @@ void main() {
         });
     expect(_writtenTypes.keys.toSet(), PracticeComparisonPage.supportedStyles);
   });
+
+  // Written-course cards once printed the camera notice through a TR/EN-only
+  // helper, leaking English into the other twelve catalogues.
+  for (final locale in ChoreiaLocaleController.supported) {
+    final tag = ChoreiaLocaleController.tag(locale);
+    if (tag == 'en' || tag == 'tr') continue;
+    testWidgets('yazılı kurs kartı kamera notu $tag', (tester) async {
+      final english = LibraryStrings.sessionNotice(false);
+      final localized =
+          (jsonDecode(File('content/l10n/ui.$tag.json').readAsStringSync())
+              as Map<String, dynamic>)[english] as String;
+      expect(localized, isNot(english));
+      await _mount(tester, library, locale, ThemeMode.light, 1);
+      await _waitFor(tester, find.byType(LibraryView));
+      final tile = find.byKey(LibraryView.tileKey('hip_hop_foundations'));
+      await _reach(tester, tile);
+      expect(find.descendant(of: tile, matching: find.text(localized)),
+          findsOneWidget);
+      expect(find.descendant(of: tile, matching: find.text(english)),
+          findsNothing);
+    });
+  }
 
   for (final locale in ChoreiaLocaleController.supported) {
     for (final mode in _modes) {
