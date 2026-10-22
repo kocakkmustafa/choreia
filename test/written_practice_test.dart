@@ -271,6 +271,8 @@ void main() {
               .byWidgetPredicate((w) =>
                   w is Scrollable && w.axisDirection == AxisDirection.down)
               .first);
+      await tester.ensureVisible(tile);
+      await tester.pumpAndSettle();
       await tester.tap(tile);
       await tester.pumpAndSettle();
       await ioPump(tester);
