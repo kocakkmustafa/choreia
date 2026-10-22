@@ -264,7 +264,13 @@ void main() {
       }
       final id = '${entry.value.prefix}01';
       final tile = find.byKey(ValueKey(id));
-      await tester.scrollUntilVisible(tile, 400);
+      // Course pages also build horizontal wall-map/table scrollers; drive the
+      // reader's vertical list explicitly.
+      await tester.scrollUntilVisible(tile, 400,
+          scrollable: find
+              .byWidgetPredicate((w) =>
+                  w is Scrollable && w.axisDirection == AxisDirection.down)
+              .first);
       await tester.tap(tile);
       await tester.pumpAndSettle();
       await ioPump(tester);
