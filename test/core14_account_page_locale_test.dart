@@ -299,6 +299,7 @@ class _AccountPresentationFixture {
   late final MotionAccountRuntime runtime;
   int identityReads = 0;
   int profileReadStarts = 0;
+  int ageReadStarts = 0;
   int deletionCallbacks = 0;
   final unexpected = <String>[];
 
@@ -334,6 +335,12 @@ class _PresentationSupabase implements SupabaseClient {
 
   @override
   SupabaseQueryBuilder from(String table) {
+    if (table == 'motion_age_declarations') {
+      // Core 5832031 reads the age/consent state when the page opens. Answer
+      // with the same controlled read failure; no transport is constructed.
+      fixture.ageReadStarts++;
+      throw const _ExpectedProfileReadFailure();
+    }
     if (table != 'motion_profiles') return fixture.reject('from($table)');
     fixture.profileReadStarts++;
     // The actual Core loadProfile Future observes this controlled read failure.
