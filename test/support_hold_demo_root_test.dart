@@ -184,6 +184,14 @@ Future<T> ioStage<T>(String label, Future<T> Function() operation) async {
   }
 }
 
+// `WidgetTester.pageBack` finds the Material back button by its English
+// 'Back' tooltip; the real locale picker localizes it (e.g. 'Geri').
+Future<void> tapBack(WidgetTester tester) async {
+  final back = find.byType(BackButton);
+  expect(back, findsOneWidget, reason: 'One back button expected on screen');
+  await tester.tap(back);
+}
+
 // Keep route operations in their original fake-time test zone. Post-entry
 // pumps/scans stay finite; the outer 45s test deadline bounds a framework stall.
 Future<T> routeStage<T>(String label, Future<T> Function() operation) async {
@@ -396,7 +404,7 @@ void main() {
         await reach(tester, find.byKey(const Key('supportHold.current')));
         expect(tester.widget<Text>(find.byKey(const Key('supportHold.current'))).data,
             mode == 'back-tr' ? '4/8 — A — aynı destek / durak' : '4/8 — A — same support / hold');
-        await routeStage('Back', tester.pageBack);
+        await routeStage('Back', () => tapBack(tester));
         await advance(tester);
         expect(oldDemoState.mounted, isFalse);
         expect(find.byKey(const ValueKey('salsa.lessonBody.so_04')), findsOneWidget);
@@ -412,7 +420,7 @@ void main() {
         await advance(tester);
         await reach(tester, find.byKey(const Key('supportHold.current')));
         expect(tester.widget<Text>(find.byKey(const Key('supportHold.current'))).data, startsWith('1/8'));
-        await routeStage('Back', tester.pageBack);
+        await routeStage('Back', () => tapBack(tester));
         await advance(tester);
       } else {
         if (mode.endsWith('playing')) {
