@@ -418,6 +418,9 @@ home: waiting
           tester, lineLink, 'style.lineDanceWrittenCourse');
       await tester.ensureVisible(lineLink);
       await _settle(tester);
+      // Real asset preflight outside fake-clock widget frames (now > 50 KB).
+      await tester.runAsync(() =>
+          rootBundle.loadString('content/line_dance_beginner_course.json'));
       await tester.tap(lineLink);
       await _settle(tester);
       await tester.runAsync(
