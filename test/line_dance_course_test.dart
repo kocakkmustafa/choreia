@@ -81,12 +81,12 @@ void main() {
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
           find.byType(LineDanceDirectionDiagram), 250,
-          maxScrolls: 100, scrollable: _verticalCourseScroll);
+          maxScrolls: 200, scrollable: _verticalCourseScroll);
       expect(find.byType(LineDanceDirectionDiagram), findsOneWidget);
       for (var n = 1; n <= 12; n++) {
         final unit = find.byKey(ValueKey('ld_${n.toString().padLeft(2, '0')}'));
         await tester.scrollUntilVisible(unit, 250,
-            maxScrolls: 100, scrollable: _verticalCourseScroll);
+            maxScrolls: 200, scrollable: _verticalCourseScroll);
         expect(unit, findsOneWidget);
       }
       final last = find.byKey(const ValueKey('ld_12'));
@@ -110,6 +110,12 @@ void main() {
     final library = await tester.runAsync(testLibrary);
     final card = library!.cardFor('line_dance')!;
     expect(card.entry.contentStatus, 'comingSoon');
+    // Prime the real bundled asset outside the fake clock. Above 50 KB,
+    // AssetBundle.loadString uses compute; starting that read inside a widget
+    // frame can leave its isolate waiting on the test's fake clock.
+    final primed = await tester.runAsync(
+        () => rootBundle.loadString('content/line_dance_beginner_course.json'));
+    expect(primed, isNotEmpty);
     await tester.pumpWidget(MaterialApp(home: StyleDetailView(card: card)));
     final link = find.byKey(const Key('style.lineDanceWrittenCourse'));
     await tester.scrollUntilVisible(link, 200,
