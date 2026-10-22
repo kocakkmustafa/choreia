@@ -175,7 +175,7 @@ void main() {
         ShortFormCourse.decode(const JsonEncoder.withIndent(' ').convert(raw))
             .units
             .length,
-        7);
+        10);
     final outer =
         Map<String, dynamic>.fromEntries(raw.entries.toList().reversed);
     expect(ShortFormCourse.decode(jsonEncode(outer)).patterns.length, 3);
