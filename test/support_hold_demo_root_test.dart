@@ -358,10 +358,19 @@ void main() {
       final courseFile = File('${temp.path}/${SalsaProgressStore.fileNameFor(_alice)}');
       final journalBefore = journal.readAsBytesSync();
       final courseBefore = courseFile.readAsBytesSync();
+      // The production root provides ChoreiaLocaleScope, so the lesson app bar
+      // shows the 14-language picker rather than the legacy bilingual toggle.
+      final language = find.byKey(const Key('profile.language'));
+      expect(language, findsOneWidget);
       if (mode == 'back-tr') {
-        await tester.tap(find.text('Türkçe'));
-        await tester.pump();
+        await tester.tap(language);
+        await advance(tester);
+        await tester.tap(find.text('Türkçe').last);
+        await advance(tester);
       }
+      final languageBefore =
+          tester.widget<PopupMenuButton<String>>(language).initialValue;
+      if (mode == 'back-tr') expect(languageBefore, 'tr');
       final entry = find.byKey(const Key('salsa.supportHoldDemo'));
       await reach(tester, entry);
       final staleEntry = tester.widget<TextButton>(entry).onPressed!;
@@ -391,7 +400,12 @@ void main() {
         await advance(tester);
         expect(oldDemoState.mounted, isFalse);
         expect(find.byKey(const ValueKey('salsa.lessonBody.so_04')), findsOneWidget);
-        expect(find.text(mode == 'back-tr' ? 'English' : 'Türkçe'), findsOneWidget);
+        expect(
+            tester
+                .widget<PopupMenuButton<String>>(
+                    find.byKey(const Key('profile.language')))
+                .initialValue,
+            languageBefore);
         expect(oldTicket.isActive, isTrue);
         expect(courseFile.readAsBytesSync(), orderedEquals(courseBefore));
         await tapKey(tester, const Key('salsa.supportHoldDemo'));
