@@ -80,6 +80,11 @@ final class _HeldAccount extends MotionAccountClient {
     } else if (request.method == 'GET' &&
         request.url.path == '/rest/v1/motion_profiles') {
       return _json(<Object>[]);
+    } else if (request.method == 'GET' &&
+        (request.url.path == '/rest/v1/motion_age_declarations' ||
+            request.url.path == '/rest/v1/motion_parental_consents')) {
+      // Core 5832031 MotionAccountPage reads the age/consent state on open.
+      return _json(<Object>[]);
     } else if (request.method == 'POST' &&
         request.url.path == '/functions/v1/motion-delete-account') {
       final body = jsonDecode(request.body) as Map<String, dynamic>;

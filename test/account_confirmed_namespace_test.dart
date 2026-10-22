@@ -98,6 +98,12 @@ final class _AccountFixture {
         request.method == 'GET') {
       return _json(<Object>[]);
     }
+    // Core 5832031 MotionAccountPage reads the age/consent state on open.
+    if ((request.url.path == '/rest/v1/motion_age_declarations' ||
+            request.url.path == '/rest/v1/motion_parental_consents') &&
+        request.method == 'GET') {
+      return _json(<Object>[]);
+    }
     final endpoint = '${request.method} ${request.url.path}';
     unexpected.add(endpoint);
     throw StateError('Unexpected local fixture endpoint: $endpoint');
