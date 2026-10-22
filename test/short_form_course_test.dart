@@ -104,8 +104,18 @@ void main() {
   }
 
   test('ten bilingual stages and original independent endpoint', () {
-    expect(course.units.map((u) => u.id),
-        ['sf_01', 'sf_02', 'sf_03', 'sf_04', 'sf_05', 'sf_06', 'sf_07', 'sf_08', 'sf_09', 'sf_10']);
+    expect(course.units.map((u) => u.id), [
+      'sf_01',
+      'sf_02',
+      'sf_03',
+      'sf_04',
+      'sf_05',
+      'sf_06',
+      'sf_07',
+      'sf_08',
+      'sf_09',
+      'sf_10'
+    ]);
     expect(course.patterns.keys, ['A', 'A-var', 'B']);
     for (final pair in course.copy.values) {
       expect(pair['en'], isNotEmpty);

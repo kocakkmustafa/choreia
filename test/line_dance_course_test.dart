@@ -84,8 +84,7 @@ void main() {
           maxScrolls: 100, scrollable: _verticalCourseScroll);
       expect(find.byType(LineDanceDirectionDiagram), findsOneWidget);
       for (var n = 1; n <= 12; n++) {
-        final unit =
-            find.byKey(ValueKey('ld_${n.toString().padLeft(2, '0')}'));
+        final unit = find.byKey(ValueKey('ld_${n.toString().padLeft(2, '0')}'));
         await tester.scrollUntilVisible(unit, 250,
             maxScrolls: 100, scrollable: _verticalCourseScroll);
         expect(unit, findsOneWidget);
