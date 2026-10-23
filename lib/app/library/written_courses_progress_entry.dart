@@ -39,6 +39,9 @@ class WrittenCoursesProgressEntry extends StatelessWidget {
     'tiktok_format': 10,
   };
 
+  static int get totalLessons =>
+      lessonCounts.values.fold<int>(0, (int a, int b) => a + b);
+
   @override
   Widget build(BuildContext context) {
     final List<LibraryEntry> others = entries
@@ -61,7 +64,7 @@ class WrittenCoursesProgressEntry extends StatelessWidget {
               tr: '{courses} yazılı kurs · {lessons} ders · {languages} dil',
               values: <String, Object>{
                 'courses': lessonCounts.length,
-                'lessons': lessonCounts.values.fold(0, (a, b) => a + b),
+                'lessons': totalLessons,
                 'languages': languages,
               }),
           key: summaryKey,
