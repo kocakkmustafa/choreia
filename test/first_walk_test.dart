@@ -145,7 +145,8 @@ void main() {
   SessionRecord? walkedRecord;
 
   group('A1 — the whole flow, once', () {
-    testWidgets('fresh install → intro → style → lesson → result → a line on '
+    testWidgets(
+        'fresh install → intro → style → lesson → result → a line on '
         'disk', (WidgetTester tester) async {
       final RoundTripStore store = RoundTripStore();
 
@@ -159,8 +160,7 @@ void main() {
           ReplayPoseSource(make: dancingBody(), count: 120);
       final _RouteSpy spy = _RouteSpy();
 
-      await tester.pumpWidget(
-          app(spy, store: store, source: () => replay));
+      await tester.pumpWidget(app(spy, store: store, source: () => replay));
       await _settle(tester);
       await walkToLesson(tester);
 
@@ -278,7 +278,8 @@ void main() {
       // memory: the store round-trips through the same `jsonEncode` /
       // `SessionRecord.fromJson` pair the real one uses. The line itself is
       // handed to the real `JsonlSessionStore` in `disk round trip` below.
-      expect(store.lines.single, contains('"v":${JsonlSessionStore.schemaVersion}'));
+      expect(store.lines.single,
+          contains('"v":${JsonlSessionStore.schemaVersion}'));
       walkedRecord = r;
 
       // ── back out, and the progress surface now has something ──────────
@@ -307,7 +308,15 @@ void main() {
       // `ProgressSummary.build` falls back to the raw key when
       // `lessonById` misses, so a record carrying `hh_bounce` renders as
       // "hh_bounce" — a row that looks present and names nothing a learner
-      // recognises.
+      // recognises. The written-course entry sits above the history, so the
+      // row may be below the first screen: scroll to it before asserting.
+      await tester.scrollUntilVisible(
+          find.text('The bounce (not graded)').first, 200,
+          scrollable: find
+              .descendant(
+                  of: find.byType(ProgressView),
+                  matching: find.byType(Scrollable))
+              .first);
       expect(find.text('The bounce (not graded)'), findsWidgets,
           reason: 'ilerleme ekranı az önce yapılan pratiği içerikteki ADIYLA '
               'göstermiyor');
@@ -316,7 +325,8 @@ void main() {
               'taşıyor');
     });
 
-    testWidgets('SABOTAGE — a store that refuses says so, and does NOT draw '
+    testWidgets(
+        'SABOTAGE — a store that refuses says so, and does NOT draw '
         'the numbers', (WidgetTester tester) async {
       // WITHOUT THIS THE WALK ABOVE PROVES NOTHING ABOUT THE WRITE. A result
       // screen that always renders `storedKey` would pass it. Here the store
@@ -357,7 +367,8 @@ void main() {
               'yokluğundan ötürü olurdu');
     });
 
-    testWidgets('SABOTAGE TWIN — a camera that never starts writes NOTHING, '
+    testWidgets(
+        'SABOTAGE TWIN — a camera that never starts writes NOTHING, '
         'and the record stays empty', (WidgetTester tester) async {
       // "Never started" is not zero (M-F-268). A refused camera produced no
       // practice, so a 0-cycle row would put a session in the learner's
@@ -431,7 +442,8 @@ void main() {
   });
 
   group('the fixture is a valid probe of this lesson', () {
-    test('POSITIVE CONTROL ② — the walked lesson is the only startable one, '
+    test(
+        'POSITIVE CONTROL ② — the walked lesson is the only startable one, '
         'and it is the one the record names', () async {
       // If the startable set ever changes, the walk above is silently walking
       // a different product. Pinned here rather than assumed, and the same
