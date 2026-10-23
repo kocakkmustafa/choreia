@@ -50,7 +50,9 @@ class WrittenCoursesProgressEntry extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text(UiLanguage.text(context, en: 'Written courses', tr: 'Yazılı kurslar'),
+        Text(
+            UiLanguage.text(context,
+                en: 'Written courses', tr: 'Yazılı kurslar'),
             style: ChoreiaType.of(context).display(size: 22)),
         const SizedBox(height: 4),
         Text(
