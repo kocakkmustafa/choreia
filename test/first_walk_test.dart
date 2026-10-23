@@ -310,13 +310,16 @@ void main() {
       // "hh_bounce" — a row that looks present and names nothing a learner
       // recognises. The written-course entry sits above the history, so the
       // row may be below the first screen: scroll to it before asserting.
-      await tester.scrollUntilVisible(
-          find.text('The bounce (not graded)').first, 200,
-          scrollable: find
-              .descendant(
-                  of: find.byType(ProgressView),
-                  matching: find.byType(Scrollable))
-              .first);
+      final progressList = find
+          .descendant(
+              of: find.byType(ProgressView), matching: find.byType(Scrollable))
+          .first;
+      for (var i = 0;
+          i < 30 && find.text('The bounce (not graded)').evaluate().isEmpty;
+          i++) {
+        await tester.drag(progressList, const Offset(0, -200));
+        await tester.pump();
+      }
       expect(find.text('The bounce (not graded)'), findsWidgets,
           reason: 'ilerleme ekranı az önce yapılan pratiği içerikteki ADIYLA '
               'göstermiyor');
