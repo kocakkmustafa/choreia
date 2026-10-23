@@ -458,6 +458,10 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
   // Profile. The progress index also controls its arrival-time refresh.
   static const int _progressIndex = 1;
 
+  // A component of the Progress tab, not a destination of its own.
+  Widget _writtenCoursesEntry(LibraryCatalog library) =>
+      WrittenCoursesProgressEntry(entries: library.entries, env: widget.env);
+
   Widget _shell(LibraryCatalog library) => Scaffold(
         body: IndexedStack(
           index: _index,
@@ -485,8 +489,7 @@ class _ChoreiaShellState extends State<ChoreiaShell> {
               ProgressView(
                   summary: _progress!,
                   catalog: library.allCourses,
-                  courseEntry: WrittenCoursesProgressEntry(
-                      entries: library.entries, env: widget.env)),
+                  courseEntry: _writtenCoursesEntry(library)),
             ProfileView(
                 accountPageBuilder: widget.accountPageBuilder,
                 cameraSessionsAvailable: widget.cameraSessionsAvailable),
