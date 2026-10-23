@@ -15,6 +15,7 @@ import 'package:choreia/app/history/account_store_lifetime.dart';
 import 'package:choreia/app/library/library_catalog.dart';
 import 'package:choreia/app/library/library_view.dart';
 import 'package:choreia/app/library/style_detail_view.dart';
+import 'package:choreia/app/library/written_courses_progress_entry.dart';
 import 'package:choreia/app/live/live_environment.dart';
 import 'package:choreia/app/live/live_lesson_page.dart';
 import 'package:choreia/app/localization/choreia_locale.dart';
@@ -566,6 +567,53 @@ void main() {
           findsNothing);
       expect(find.descendant(of: panel, matching: find.textContaining('{')),
           findsNothing);
+    });
+  }
+
+  // The camera card and the Progress tab spoke about Salsa alone after the
+  // other four written courses shipped.
+  for (final locale in ChoreiaLocaleController.supported) {
+    final tag = ChoreiaLocaleController.tag(locale);
+    testWidgets('ilk açılış kamera kartı beş kurs $tag', (tester) async {
+      final ui =
+          jsonDecode(File('content/l10n/ui.$tag.json').readAsStringSync())
+              as Map<String, dynamic>;
+      final expected = ui[IntroStrings.currentCamera] as String;
+      await _mount(tester, library, locale, ThemeMode.light, 1,
+          introSeen: false);
+      await _waitFor(tester, find.byType(FirstRunView));
+      await _reach(tester, find.text(expected));
+      expect(find.text(expected), findsOneWidget);
+      expect(find.textContaining('Salsa course does not'), findsNothing);
+    });
+
+    testWidgets('ilerleme beş yazılı kurs $tag', (tester) async {
+      final ui =
+          jsonDecode(File('content/l10n/ui.$tag.json').readAsStringSync())
+              as Map<String, dynamic>;
+      await _mount(tester, library, locale, ThemeMode.light, 1);
+      await _waitFor(tester, find.byType(LibraryView));
+      await _tap(tester, find.byKey(ChoreiaShell.progressTabKey));
+      await _waitFor(tester, find.byType(ProgressView));
+      final summary = find.byKey(WrittenCoursesProgressEntry.summaryKey);
+      await _reach(tester, summary);
+      final shown = tester.widget<Text>(summary).data!;
+      final template = ui['{courses} written courses · {lessons} lessons · '
+          '{languages} languages'] as String;
+      for (final piece in template.split(RegExp(r'\{[a-zA-Z]+\}'))) {
+        if (piece.trim().isNotEmpty) expect(shown, contains(piece.trim()));
+      }
+      expect(shown, isNot(contains('{')));
+      for (final id in <String>[
+        'hip_hop_foundations',
+        'line_dance',
+        'latin_fusion_fitness',
+        'tiktok_format',
+      ]) {
+        expect(find.byKey(WrittenCoursesProgressEntry.openKey(id)),
+            findsOneWidget);
+      }
+      expect(find.byKey(const Key('salsa.open')), findsOneWidget);
     });
   }
 

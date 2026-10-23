@@ -406,8 +406,12 @@ const baseUiMessages = <String, Map<String, String>>{
         "{count} style has camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.",
     "{count} styles have camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.":
         "{count} styles have camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.",
-    "Live camera practice and subscription sales are closed in this release. The Salsa course does not capture video; it uses your own practice record and self-checks.":
-        "Live camera practice and subscription sales are closed in this release. The Salsa course does not capture video; it uses your own practice record and self-checks.",
+    "Live camera practice and subscription sales are closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks.":
+        "Live camera practice and subscription sales are closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks.",
+    "{courses} written courses · {lessons} lessons · {languages} languages":
+        "{courses} written courses · {lessons} lessons · {languages} languages",
+    "{lessons} lessons · {languages} languages":
+        "{lessons} lessons · {languages} languages",
     "Your study entries: {count}": "Your study entries: {count}",
     "Study and specific count/transition":
         "Study and specific count/transition",
@@ -950,8 +954,12 @@ const baseUiMessages = <String, Map<String, String>>{
         "{count} stilde kamera seansı referans notları var. {status} Rehberli dersler için aşağıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.",
     "{count} styles have camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.":
         "{count} stilde kamera seansı referans notları var. {status} Rehberli dersler için aşağıdaki yazılı kursları kullan. Diğer girdiler mevcut durumlarıyla gösterilir.",
-    "Live camera practice and subscription sales are closed in this release. The Salsa course does not capture video; it uses your own practice record and self-checks.":
-        "Bu sürümde canlı kamera pratiği ve abonelik satışı kapalıdır. Salsa kursu video yakalamaz; kendi çalışma kaydını ve öz denetimlerini kullanır.",
+    "Live camera practice and subscription sales are closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks.":
+        "Bu sürümde canlı kamera pratiği ve abonelik satışı kapalıdır. Beş yazılı kursun hiçbiri video yakalamaz; her biri kendi çalışma kaydını ve öz denetimlerini kullanır.",
+    "{courses} written courses · {lessons} lessons · {languages} languages":
+        "{courses} yazılı kurs · {lessons} ders · {languages} dil",
+    "{lessons} lessons · {languages} languages":
+        "{lessons} ders · {languages} dil",
     "Your study entries: {count}": "Kendi çalışma kaydın: {count}",
     "Study and specific count/transition": "Çalışma ve belirli sayı/geçiş",
     "Condition: mode, adaptation, side, facing and range":

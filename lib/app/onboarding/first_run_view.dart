@@ -247,21 +247,21 @@ abstract final class IntroStrings {
 
   static const String currentCamera =
       'Live camera practice and subscription sales are closed in this release. '
-      'The Salsa course does not capture video; it uses your own practice '
-      'record and self-checks.';
+      'None of the five written courses captures video; each uses your own '
+      'practice record and self-checks.';
 
   static String cameraStatus(bool available, {bool turkish = false}) {
     if (!available) {
       return turkish
           ? 'Bu sürümde canlı kamera pratiği ve abonelik satışı kapalıdır. '
-              'Salsa kursu video yakalamaz; kendi çalışma kaydını ve öz denetimlerini kullanır.'
+              'Beş yazılı kursun hiçbiri video yakalamaz; her biri kendi çalışma kaydını ve öz denetimlerini kullanır.'
           : currentCamera;
     }
     return turkish
         ? '${LibraryStrings.sessionNotice(true, turkish: true)} Abonelik satışı kapalı kalır. '
-            'Salsa kursu video yakalamaz; kendi çalışma kaydını ve öz denetimlerini kullanır.'
+            'Beş yazılı kursun hiçbiri video yakalamaz; her biri kendi çalışma kaydını ve öz denetimlerini kullanır.'
         : '${LibraryStrings.sessionNotice(true)} Subscription sales remain closed. '
-            'The Salsa course does not capture video; it uses your own practice record and self-checks.';
+            'None of the five written courses captures video; each uses your own practice record and self-checks.';
   }
 
   static const String cameraTitle = 'THE CAMERA';

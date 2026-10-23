@@ -27,11 +27,16 @@ class WrittenCourseLink extends StatelessWidget {
   const WrittenCourseLink({
     required this.styleId,
     this.env = const LiveEnvironment(),
+    this.buttonKey,
     super.key,
   });
 
   final String styleId;
   final LiveEnvironment env;
+
+  /// Overrides [startKey] where a second surface (the Progress tab) shows the
+  /// same route, so a finder never matches two buttons for one course.
+  final Key? buttonKey;
 
   static final Map<String, (String, Widget Function(LiveEnvironment))> _routes =
       <String, (String, Widget Function(LiveEnvironment))>{
@@ -71,7 +76,7 @@ class WrittenCourseLink extends StatelessWidget {
     if (route == null) return const SizedBox.shrink();
     final int? entryEpoch = env.ownerEpoch?.value;
     return FilledButton.tonalIcon(
-      key: startKey(styleId),
+      key: buttonKey ?? startKey(styleId),
       style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
       icon: const Icon(Icons.menu_book_outlined),
       onPressed: () {

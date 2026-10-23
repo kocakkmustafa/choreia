@@ -283,7 +283,6 @@
   "Left": "左",
   "{count} style has camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.": "{count} 种风格有摄像头练习参考笔记。{status} 如需引导课程，请使用下方文字课程。其他目录项目显示其当前状态。",
   "{count} styles have camera-session reference notes. {status} Use the written courses below for guided lessons. Other catalogue entries show their current status.": "{count} 种风格有摄像头练习参考笔记。{status} 如需引导课程，请使用下方文字课程。其他目录项目显示其当前状态。",
-  "Live camera practice and subscription sales are closed in this release. The Salsa course does not capture video; it uses your own practice record and self-checks.": "本版本关闭实时摄像头练习和订阅销售。Salsa 课程不拍摄视频，而是使用你自己的练习记录和自查。",
   "Your study entries: {count}": "你的学习条目：{count}",
   "Study and specific count/transition": "学习内容与具体计数／衔接点",
   "Condition: mode, adaptation, side, facing and range": "条件：方式、调整、侧别、朝向与幅度",
@@ -368,5 +367,8 @@
   "Your saved language could not be read. System language is used until you choose another option.": "无法读取已保存的语言设置。在你选择其他选项之前，将使用系统语言。",
   "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} style has camera-session reference notes. {status} {storage}": "从课程库打开五门文字课程中的任意一门：Hip-Hop、Salsa On1、Line Dance、Latin Fusion 和原创短舞。完整目录共列出 {total} 个风格页面；{count} 种风格有摄像头练习参考笔记。{status} {storage}",
   "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} styles have camera-session reference notes. {status} {storage}": "从课程库打开五门文字课程中的任意一门：Hip-Hop、Salsa On1、Line Dance、Latin Fusion 和原创短舞。完整目录共列出 {total} 个风格页面；{count} 种风格有摄像头练习参考笔记。{status} {storage}",
-  "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "你的练习内容保存在本设备上，因此“进度”标签页可以显示你实际完成的内容。这些内容只留在这里——与你练习相关的任何信息都不会被发送到任何地方。"
+  "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "你的练习内容保存在本设备上，因此“进度”标签页可以显示你实际完成的内容。这些内容只留在这里——与你练习相关的任何信息都不会被发送到任何地方。",
+  "Live camera practice and subscription sales are closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks.": "本版本关闭实时摄像头练习和订阅销售。五门文字课程都不拍摄视频，而是各自使用你自己的练习记录和自查。",
+  "{courses} written courses · {lessons} lessons · {languages} languages": "{courses} 门文字课程 · {lessons} 课 · {languages} 种语言",
+  "{lessons} lessons · {languages} languages": "{lessons} 课 · {languages} 种语言"
 }
