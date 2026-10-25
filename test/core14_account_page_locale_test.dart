@@ -278,7 +278,7 @@ class _AccountPresentationFixture {
     );
     // Getter reads must retain this exact object, not rebuild equal Sessions.
     session = Session(
-        accessToken: 'synthetic-presentation-token',
+        accessToken: 'synthetic presentation token',
         tokenType: 'bearer',
         user: user);
     client = _PresentationSupabase(this);
