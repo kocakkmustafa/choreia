@@ -36,9 +36,10 @@ yükleme onayı** alınacak. Şimdi TestFlight dahil store upload/push/ücretli 
 ## Ulaşılabilen güncel hesap akışı
 
 `MotionAccountPage` profil, giriş/kayıt, doğrulama/parola kurtarma, çıkış ve
-ortak hesap silmeyi içerir. Üyelik ve geri yükleme girişi
-`motionPaidFeaturesAvailable=false` nedeniyle güncel uygulamada kapalıdır.
-Bu kapı test kolaylığı için açılmadı. Yazılı kurslar hesapsız kullanılabilir.
+ortak hesap silmeyi içerir. **25 Ekim 2026 güncellemesi:** abonelik satışı ilk
+sürümde açık (kurucu kararı 23 Ekim, paywall A); üyelik ve geri yükleme girişi
+hesap sayfasında ve kilitli derslerde görünür (`choreiaSubscriptionSalesOpen`).
+Canlı kamera ve puanlama kapalı kalır. Ücretsiz dersler hesapsız kullanılabilir.
 Üyelik durumunu sormayan “Hesabı yenile” akışı, restore sayılmaz.
 
 Uzak silme `motion-delete-account` üzerinden yakalanan hesaba gider;
@@ -106,6 +107,11 @@ hesabı/erişim veya ürün oluşturulacaksa ayrıca özel onay gerekir.
 | SB-02 | Test satın alma, çıkış/yeniden giriş ve Restore | Store olayı server'da mevcut Motion sahibine doğrulanır; aynı hak geri gelir, iki hak/çift satın alma oluşmaz. |
 | SB-03 | Başka Motion hesabı; yanlış uygulama/ürün; Individual/Motion+ ayrımı | Başka sahibin veya scope'un hakkı açılmaz; Motion+ ayrı kabul matrisiyle beş uygulamada doğrulanır. |
 | SB-04 | Cancel/pending, offline/server hata, expired/refund/revoke ve account-switch | Doğrulanmamış olay hak vermez; terminal red yetkiyi kapatır; mağaza completion/ack yalnız doğrulanmış olaydan sonra olur; yeniden deneme mümkün kalır. |
+| SB-05 | Her kursta son ücretsiz ve ilk ücretli ders (Salsa so_18/so_19, Hip-Hop 3/4, Line Dance 4/5, Latin Fusion 4/5, kısa form 4/5) | Ücretsiz ders hesapsız açılır; ücretli ders kilit + "Üyelikle aç" gösterir; ilerleme geçmişi okunur kalır. |
+| SB-06 | Üyelikle açtıktan sonra çıkış / başka hesap | Kilit geri gelir; önceki sahibin hakkı yeni sahibe geçmez. |
+| SB-07 | 13 altı misafir | Ücretsiz dersler açık; hesap oluşturma ve satın alma kapalı; yaş bloğu cihazda kalıcı. |
+| SB-08 | Veli onayı bekleyen genç hesap | Satın alma teklifleri gizli (Core WIP); ücretsiz dersler açık. |
+| SB-09 | 14 gün deneme: uygun yeni üye, deneme sonu iptal, yenileme | Deneme metni ve fiyat mağazadan; iptalde dönem sonunda kilit geri gelir, ilerleme okunur. Android denemesi Core Play teklif desteğine bağlı. |
 
 Hiçbiri bu bakımda çalıştırılmadı. Test sonucu yalnız testi yapılan gerçek
 store ortamı/cihazı/ürünü için geçerli olacaktır.

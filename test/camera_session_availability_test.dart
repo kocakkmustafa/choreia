@@ -261,19 +261,19 @@ void main() {
                     ? 'cihaz izni ve erişim kontrolü'
                     : 'device permission and access checks')
                 : (language == 'tr'
-                    ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
-                    : 'Live camera practice and subscription sales are closed')));
+                    ? 'Bu sürümde canlı kamera pratiği kapalıdır'
+                    : 'Live camera practice is closed in this release')));
         if (available) {
           expect(
               cameraText,
               contains(language == 'tr'
-                  ? 'Abonelik satışı kapalı kalır'
-                  : 'Subscription sales remain closed'));
+                  ? 'Beş yazılı kursun hiçbiri'
+                  : 'None of the five written courses'));
           expect(
               cameraText,
               isNot(contains(language == 'tr'
-                  ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
-                  : 'Live camera practice and subscription sales are closed')));
+                  ? 'Bu sürümde canlı kamera pratiği kapalıdır'
+                  : 'Live camera practice is closed in this release')));
         }
         await reveal(tester, find.byKey(FirstRunView.stateKey));
         final stateText = tester
@@ -320,8 +320,8 @@ void main() {
                     ? 'cihaz izni ve erişim kontrolü'
                     : 'device permission and access checks')
                 : (language == 'tr'
-                    ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
-                    : 'Live camera practice and subscription sales are closed')),
+                    ? 'Bu sürümde canlı kamera pratiği kapalıdır'
+                    : 'Live camera practice is closed in this release')),
             findsOneWidget);
         expect(find.byKey(ProfileView.accountEntryKey), findsOneWidget);
         expect(find.byKey(ProfileView.licensesEntryKey), findsOneWidget);
@@ -354,8 +354,8 @@ void main() {
                     ? 'cihaz izni ve erişim kontrolü'
                     : 'device permission and access checks')
                 : (language == 'tr'
-                    ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
-                    : 'Live camera practice and subscription sales are closed')));
+                    ? 'Bu sürümde canlı kamera pratiği kapalıdır'
+                    : 'Live camera practice is closed in this release')));
         expect(find.byKey(ProfileView.licensesEntryKey), findsOneWidget);
         expect(find.byKey(ProfileView.accountEntryKey), findsNothing);
         expect(tester.takeException(), isNull);

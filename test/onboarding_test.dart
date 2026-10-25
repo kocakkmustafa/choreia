@@ -130,8 +130,8 @@ void main() {
                 : 'study record stays on this device'),
             findsOneWidget);
         final gate = find.textContaining(language == 'tr'
-            ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
-            : 'Live camera practice and subscription sales are closed');
+            ? 'Bu sürümde canlı kamera pratiği kapalıdır'
+            : 'Live camera practice is closed in this release');
         for (var i = 0; i < 12 && gate.evaluate().isEmpty; i++) {
           await tester.drag(find.byType(ListView), const Offset(0, -160));
           await tester.pump(const Duration(milliseconds: 300));

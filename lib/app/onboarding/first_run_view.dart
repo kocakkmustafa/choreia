@@ -246,21 +246,23 @@ abstract final class IntroStrings {
       'study record stays on this device.';
 
   static const String currentCamera =
-      'Live camera practice and subscription sales are closed in this release. '
-      'None of the five written courses captures video; each uses your own '
-      'practice record and self-checks.';
+      'Live camera practice is closed in this release. None of the five '
+      'written courses captures video; each uses your own practice record '
+      'and self-checks. The first lessons of every course are free; a '
+      'Choreia or Motion+ membership opens the rest.';
 
   static String cameraStatus(bool available, {bool turkish = false}) {
     if (!available) {
       return turkish
-          ? 'Bu sürümde canlı kamera pratiği ve abonelik satışı kapalıdır. '
-              'Beş yazılı kursun hiçbiri video yakalamaz; her biri kendi çalışma kaydını ve öz denetimlerini kullanır.'
+          ? 'Bu sürümde canlı kamera pratiği kapalıdır. '
+              'Beş yazılı kursun hiçbiri video yakalamaz; her biri kendi çalışma kaydını ve öz denetimlerini kullanır. '
+              'Her kursun ilk dersleri ücretsizdir; kalanını Choreia veya Motion+ üyeliği açar.'
           : currentCamera;
     }
     return turkish
-        ? '${LibraryStrings.sessionNotice(true, turkish: true)} Abonelik satışı kapalı kalır. '
+        ? '${LibraryStrings.sessionNotice(true, turkish: true)} '
             'Beş yazılı kursun hiçbiri video yakalamaz; her biri kendi çalışma kaydını ve öz denetimlerini kullanır.'
-        : '${LibraryStrings.sessionNotice(true)} Subscription sales remain closed. '
+        : '${LibraryStrings.sessionNotice(true)} '
             'None of the five written courses captures video; each uses your own practice record and self-checks.';
   }
 

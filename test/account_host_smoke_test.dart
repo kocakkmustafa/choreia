@@ -35,7 +35,8 @@ void main() {
             'Explore five solo dance paths without an account or camera'),
         findsOneWidget);
     expect(
-        find.textContaining('subscription sales are closed'), findsOneWidget);
+        find.textContaining('Live camera practice is closed in this release'),
+        findsOneWidget);
     await tester.tap(find.byKey(ProfileView.accountEntryKey));
     await tester.pumpAndSettle();
     expect(find.byType(MotionAccountPage), findsOneWidget);
@@ -73,8 +74,8 @@ void main() {
           findsOneWidget);
       expect(
           find.textContaining(locale == 'tr'
-              ? 'canlı kamera pratiği ve abonelik satışı kapalıdır'
-              : 'Live camera practice and subscription sales are closed'),
+              ? 'Bu sürümde canlı kamera pratiği kapalıdır'
+              : 'Live camera practice is closed in this release'),
           findsOneWidget);
       expect(find.textContaining('requires a Motion account'), findsNothing);
       expect(find.textContaining('üyeliği gerekir'), findsNothing);

@@ -330,6 +330,12 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
 
   Future<void> _open(SalsaLesson lesson) async {
     if (!_admitted || _course == null || _store == null) return;
+    final access = widget.env.courseAccess;
+    if (!access.canOpen('salsa_shines', lesson.order) &&
+        !await access.unlock(context)) {
+      return;
+    }
+    if (!mounted) return;
     final course = _course!;
     final store = _store!;
     await Navigator.of(context).push(ChoreiaPageRoute<void>(
@@ -535,17 +541,20 @@ class _SalsaCoursePageState extends State<SalsaCoursePage>
                             minimumDigits: 2),
                         style: ChoreiaType.of(context).label(size: 12)),
                     title: Text(lesson.title.localized(context, turkish: tr)),
-                    subtitle: Text(completed.contains(lesson.id)
-                        ? t('Self-reported complete · revisit',
-                            'Öz beyanla tamamlandı · tekrar aç')
-                        : practised.contains(lesson.id)
-                            ? t('Practised', 'Çalışıldı')
-                            : opened.contains(lesson.id)
-                                ? t('Opened', 'Açıldı')
-                                : fmt(
-                                    'Suggested {minutes} min · adjust freely',
-                                    'Öneri {minutes} dk · kendine göre ayarla',
-                                    {'minutes': lesson.minutes})),
+                    subtitle: Text(!widget.env.courseAccess
+                            .canOpen('salsa_shines', lesson.order)
+                        ? t('Included with membership', 'Üyeliğe dahil')
+                        : completed.contains(lesson.id)
+                            ? t('Self-reported complete · revisit',
+                                'Öz beyanla tamamlandı · tekrar aç')
+                            : practised.contains(lesson.id)
+                                ? t('Practised', 'Çalışıldı')
+                                : opened.contains(lesson.id)
+                                    ? t('Opened', 'Açıldı')
+                                    : fmt(
+                                        'Suggested {minutes} min · adjust freely',
+                                        'Öneri {minutes} dk · kendine göre ayarla',
+                                        {'minutes': lesson.minutes})),
                     trailing: Icon(
                         completed.contains(lesson.id)
                             ? Icons.check_circle_outline

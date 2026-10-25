@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'paid_lesson_lock.dart';
 
 import '../ui_language.dart';
 import '../live/live_environment.dart';
@@ -187,49 +188,62 @@ class _LatinFusionCoursePageState extends State<LatinFusionCoursePage> {
                   child: Text(UiLanguage.courseText(context, gap)),
                 ),
               const SizedBox(height: 16),
-              for (final unit in course.units)
+              for (final (index, unit) in course.units.indexed)
                 Card(
                   child: ExpansionTile(
                     key: ValueKey(unit.id),
+                    subtitle: !widget.env.courseAccess
+                            .canOpen('latin_fusion_fitness', index + 1)
+                        ? Text(UiLanguage.text(context,
+                            en: 'Included with membership',
+                            tr: 'Üyeliğe dahil'))
+                        : null,
                     title: Text(
                         UiLanguage.courseText(context, unit.copy['title']!)),
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      WrittenUnitPractice(
-                        key: ValueKey('written.practice.${unit.id}'),
-                        courseId: 'latin_fusion_beginner_written',
-                        version: 1,
-                        unitId: unit.id,
-                        bundle: widget.bundle ?? rootBundle,
-                        env: widget.env,
-                      ),
-                      const SizedBox(height: 12),
-                      for (final id in unit.patternIds)
-                        _PatternTable(
-                          pattern: course.patterns[id]!,
-                          course: course,
-                          lang: lang,
-                        ),
-                      const SizedBox(height: 12),
-                      for (final field in unit.displayFields.where(
-                        (f) => f != 'title',
-                      ))
-                        if (field == 'answer')
-                          ExpansionTile(
-                            key: const ValueKey('latin.answer'),
-                            title: Text(labels[field]!),
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Text(UiLanguage.courseText(
-                                    context, unit.copy[field]!)),
+                    children: !widget.env.courseAccess
+                            .canOpen('latin_fusion_fitness', index + 1)
+                        ? [
+                            PaidLessonLock(
+                                access: widget.env.courseAccess,
+                                onUnlocked: () => setState(() {}))
+                          ]
+                        : [
+                            WrittenUnitPractice(
+                              key: ValueKey('written.practice.${unit.id}'),
+                              courseId: 'latin_fusion_beginner_written',
+                              version: 1,
+                              unitId: unit.id,
+                              bundle: widget.bundle ?? rootBundle,
+                              env: widget.env,
+                            ),
+                            const SizedBox(height: 12),
+                            for (final id in unit.patternIds)
+                              _PatternTable(
+                                pattern: course.patterns[id]!,
+                                course: course,
+                                lang: lang,
                               ),
-                            ],
-                          )
-                        else
-                          section(field, unit.copy),
-                    ],
+                            const SizedBox(height: 12),
+                            for (final field in unit.displayFields.where(
+                              (f) => f != 'title',
+                            ))
+                              if (field == 'answer')
+                                ExpansionTile(
+                                  key: const ValueKey('latin.answer'),
+                                  title: Text(labels[field]!),
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Text(UiLanguage.courseText(
+                                          context, unit.copy[field]!)),
+                                    ),
+                                  ],
+                                )
+                              else
+                                section(field, unit.copy),
+                          ],
                   ),
                 ),
             ],

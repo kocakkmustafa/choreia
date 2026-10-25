@@ -368,7 +368,10 @@
   "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} style has camera-session reference notes. {status} {storage}": "ライブラリから5つの文章コースのどれでも開けます：Hip-Hop、Salsa On1、Line Dance、Latin Fusion、独自のショートフォームダンス。カタログ全体には{total}件のスタイルページがあり、{count}スタイルにカメラセッションの参照メモがあります。{status} {storage}",
   "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} styles have camera-session reference notes. {status} {storage}": "ライブラリから5つの文章コースのどれでも開けます：Hip-Hop、Salsa On1、Line Dance、Latin Fusion、独自のショートフォームダンス。カタログ全体には{total}件のスタイルページがあり、{count}スタイルにカメラセッションの参照メモがあります。{status} {storage}",
   "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "練習した内容はこの端末に保存されるため、進捗タブで実際に取り組んだことを確認できます。記録はここにとどまり、練習に関する情報がどこかへ送信されることはありません。",
-  "Live camera practice and subscription sales are closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks.": "この版ではライブカメラ練習と定期購入の販売を停止しています。5つの文章のコースはどれも動画を撮影せず、それぞれ自分の練習記録と自己確認を使います。",
   "{courses} written courses · {lessons} lessons · {languages} languages": "文章のコース{courses}つ · {lessons}レッスン · {languages}言語",
-  "{lessons} lessons · {languages} languages": "{lessons}レッスン · {languages}言語"
+  "{lessons} lessons · {languages} languages": "{lessons}レッスン · {languages}言語",
+  "Live camera practice is closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks. The first lessons of every course are free; a Choreia or Motion+ membership opens the rest.": "この版ではライブカメラ練習を停止しています。5つの文章のコースはどれも動画を撮影せず、それぞれ自分の練習記録と自己確認を使います。各コースの最初のレッスンは無料で、残りは Choreia または Motion+ のメンバーシップで利用できます。",
+  "This lesson is part of the membership. The first lessons of every course are free; a Choreia or Motion+ membership opens the rest. Eligible new members can start with a 14-day free trial. Your saved progress stays readable.": "このレッスンはメンバーシップに含まれます。各コースの最初のレッスンは無料で、残りは Choreia または Motion+ のメンバーシップで利用できます。対象となる新規メンバーは14日間の無料トライアルから始められます。保存した進捗はいつでも読めます。",
+  "Unlock with membership": "メンバーシップで利用する",
+  "Included with membership": "メンバーシップに含まれます"
 }

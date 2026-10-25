@@ -1,3 +1,34 @@
+# 23 Ekim 2026 güncellemesi · abonelik satışı açık (taslak, konsola yazılmadı)
+
+Kurucu kararları (23 Ekim): satış ilk sürümde açık, kamera/puanlama kapalı;
+paywall A (her kursun ilk modülü/~1/3'ü ücretsiz); fiyat ABD bazı Choreia
+$11,99/ay · $69,99/yıl, Motion+ $19,99/ay · $129,99/yıl; 14 gün ücretsiz
+deneme. Mevcut yazılı içerik: Salsa On1 48 ders, Hip-Hop 8 beceri ünitesi
+(+6 temel), Line Dance 12, Latin Fusion 10, özgün kısa form 10. Aşağıdaki
+"abonelik satışı yoktur" cümlesi bu tarihten itibaren geçersizdir.
+
+## Abonelik metadata taslağı
+
+| Ürün | Görünen ad (EN / TR) | Açıklama (EN / TR) |
+|---|---|---|
+| `com.yulalab.choreia.individual.*` / `choreia_individual` | Choreia Membership / Choreia Üyeliği | Unlocks every lesson in Choreia's five written dance courses. / Choreia'nın beş yazılı dans kursundaki tüm dersleri açar. |
+| `com.yulalab.choreia.motionplus.*` / `choreia_motion_plus` | Motion+ / Motion+ | Unlocks every course in all five Yula Motion apps. / Beş Yula Motion uygulamasının tüm kurslarını açar. |
+
+Açıklama metnine eklenecek paragraf (EN): "The first lessons of every course
+are free. A Choreia or Motion+ subscription opens the rest; eligible new
+members start with a 14-day free trial. Subscriptions renew automatically
+unless cancelled at least 24 hours before the end of the period. Terms:
+https://yulalab.com/terms · Privacy: https://yulalab.com/privacy/motion"
+
+(TR): "Her kursun ilk dersleri ücretsizdir. Kalanını Choreia veya Motion+
+aboneliği açar; uygun yeni üyeler 14 günlük ücretsiz denemeyle başlar.
+Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse otomatik
+yenilenir."
+
+Açık: ASC/Play fiyat + deneme güncellemesi ve SKU'ların konsolda varlığı
+(kullanıcı girdisi); Android'de deneme Core Play teklif desteğine bağlı;
+Schedule 2 (Paid Apps) durumu.
+
 # Güncel mağaza metni girişi · 17 Ekim 2026
 
 Yayıma hazırlanacak TR/EN metinlerin kaynağı [listing.json](listing.json) ve

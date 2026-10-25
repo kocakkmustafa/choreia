@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'paid_lesson_lock.dart';
 
 import '../ui_language.dart';
 import '../live/live_environment.dart';
@@ -166,31 +167,46 @@ class _HipHopCoursePageState extends State<HipHopCoursePage> {
               ))
                 section(field, course.copy),
               PracticeMusicNotice(turkish: tr),
-              for (final unit in course.units)
+              for (final (index, unit) in course.units.indexed)
                 Card(
                   child: ExpansionTile(
                     key: ValueKey(unit.id),
+                    subtitle: widget.skillCourse &&
+                            !widget.env.courseAccess
+                                .canOpen('hip_hop_foundations', index + 1)
+                        ? Text(UiLanguage.text(context,
+                            en: 'Included with membership',
+                            tr: 'Üyeliğe dahil'))
+                        : null,
                     title: Text(
                         UiLanguage.courseText(context, unit.copy['title']!)),
                     childrenPadding: const EdgeInsets.all(16),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      WrittenUnitPractice(
-                        key: ValueKey('written.practice.${unit.id}'),
-                        courseId: widget.skillCourse
-                            ? 'hip_hop_foundations_skill_course'
-                            : 'hip_hop_foundations_beginner',
-                        version: 1,
-                        unitId: unit.id,
-                        bundle: widget.bundle ?? rootBundle,
-                        env: widget.env,
-                      ),
-                      const SizedBox(height: 12),
-                      for (final field in HipHopUnit.fields.where(
-                        (f) => f != 'title',
-                      ))
-                        section(field, unit.copy),
-                    ],
+                    children: widget.skillCourse &&
+                            !widget.env.courseAccess
+                                .canOpen('hip_hop_foundations', index + 1)
+                        ? [
+                            PaidLessonLock(
+                                access: widget.env.courseAccess,
+                                onUnlocked: () => setState(() {}))
+                          ]
+                        : [
+                            WrittenUnitPractice(
+                              key: ValueKey('written.practice.${unit.id}'),
+                              courseId: widget.skillCourse
+                                  ? 'hip_hop_foundations_skill_course'
+                                  : 'hip_hop_foundations_beginner',
+                              version: 1,
+                              unitId: unit.id,
+                              bundle: widget.bundle ?? rootBundle,
+                              env: widget.env,
+                            ),
+                            const SizedBox(height: 12),
+                            for (final field in HipHopUnit.fields.where(
+                              (f) => f != 'title',
+                            ))
+                              section(field, unit.copy),
+                          ],
                   ),
                 ),
             ],

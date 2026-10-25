@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../course/course_access.dart';
 
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart' show AssetBundle, VoidCallback;
@@ -27,6 +28,7 @@ import 'camera_pose_source.dart';
 /// that is handed nothing behaves exactly as it did before this type existed.
 class LiveEnvironment {
   const LiveEnvironment({
+    this.courseAccess = const OpenCourseAccess(),
     this.bundle,
     this.source,
     this.storeOpener,
@@ -48,6 +50,10 @@ class LiveEnvironment {
   /// the plain disk-reading fake it replaced produced a Start button no phone
   /// would ever paint.
   final AssetBundle? bundle;
+
+  /// Free/paid written lessons; every lesson open unless the app wires a
+  /// membership check (`main.dart`).
+  final CourseAccess courseAccess;
 
   /// Where poses come from. `null` = the device camera.
   ///

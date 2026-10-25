@@ -319,6 +319,8 @@ void main() {
         accountHostController: controller,
         shellBuilder: (environment, accountBuilder) {
           epoch = environment.ownerEpoch;
+          // Sales are open: the real shell guards paid written lessons.
+          expect(environment.courseAccess.allOpen, isFalse);
           final ticket = appStoreOwners.currentTicket(environment.accountUserId?.value)!;
           final sourceFactory = cameraFactories.putIfAbsent(ticket, () {
             final camera = _Camera();

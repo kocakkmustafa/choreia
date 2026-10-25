@@ -9,8 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_account/motion_account.dart';
 
 import 'app/account_bridge.dart';
+import 'app/age_block_store.dart';
 import 'app/account_identity_appearance.dart';
 import 'app/account_recovery_host.dart';
+import 'app/course/course_access.dart';
 import 'app/history/account_store_lifetime.dart';
 import 'app/font_licenses.dart';
 import 'app/live/live_environment.dart';
@@ -241,12 +243,16 @@ class ChoreiaApp extends StatefulWidget {
       this.shellBuilder,
       this.localeController,
       this.themeController,
+      this.ageBlocks,
       this.localeBundle});
 
   final MotionAccountRuntime? accountRuntime;
   final ChoreiaAccountHostController? accountHostController;
   final ChoreiaLocaleController? localeController;
   final ChoreiaThemeController? themeController;
+
+  /// Device-local under-age block for the shared account page.
+  final AgeBlockStore? ageBlocks;
   @visibleForTesting
   final AssetBundle? localeBundle;
   @visibleForTesting
@@ -264,6 +270,34 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
   late ChoreiaAccountHostController _hostController;
   late ChoreiaLocaleController _locales;
   late ChoreiaThemeController _themes;
+  late AgeBlockStore _ageBlocks;
+  SubscriptionCourseAccess? _courseAccess;
+  ValueListenable<int>? _courseAccessEpoch;
+  WidgetBuilder? _accountPageBuilder;
+
+  /// One membership check per owner epoch; a new epoch (sign-out, other
+  /// account) gets a fresh, locked access object.
+  CourseAccess _courseAccessFor(ValueListenable<int>? ownerEpoch) {
+    if (_courseAccess == null || !identical(_courseAccessEpoch, ownerEpoch)) {
+      _courseAccess?.dispose();
+      _courseAccessEpoch = ownerEpoch;
+      _courseAccess = SubscriptionCourseAccess(
+        ownerEpoch: ownerEpoch,
+        gate: (lessonContext) {
+          final runtime = accountRuntime;
+          final builder = _accountPageBuilder;
+          if (runtime == null || builder == null) return Future.value(false);
+          return requireMotionPaidAccess(
+            lessonContext,
+            account: runtime.account,
+            accountPageBuilder: builder,
+            paidFeaturesAvailable: choreiaSubscriptionSalesOpen,
+          );
+        },
+      );
+    }
+    return _courseAccess!;
+  }
 
   void _bindRuntimeEvents() {
     // Public Auth stream is retirement-only; canonical phase remains the
@@ -279,6 +313,12 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
         widget.accountHostController ?? ChoreiaAccountHostController();
     _locales = widget.localeController ?? ChoreiaLocaleController.memory();
     _themes = widget.themeController ?? ChoreiaThemeController.memory();
+    _ageBlocks = widget.ageBlocks ?? AgeBlockStore();
+    if (widget.ageBlocks == null) {
+      unawaited(_ageBlocks.load().then((_) {
+        if (mounted) setState(() {});
+      }));
+    }
     _bindRuntimeEvents();
   }
 
@@ -302,6 +342,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
 
   @override
   void dispose() {
+    _courseAccess?.dispose();
     if (widget.localeController == null) _locales.dispose();
     if (widget.themeController == null) _themes.dispose();
     super.dispose();
@@ -324,8 +365,13 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
         initialPasswordRecovery: runtime.passwordRecovery.value,
         clearLocalData: (id) => clearLocalHistoryFor(id,
             onNamespaceFenced: _hostController.namespaceFenced),
+        paidFeaturesAvailable: choreiaSubscriptionSalesOpen,
+        ageBlocked: _ageBlocks.blocked,
+        onAgeBlocked: () => unawaited(_ageBlocks.markBlocked()),
       );
     }
+
+    _accountPageBuilder = accountRuntime == null ? null : accountPage;
 
     Widget shell(ValueListenable<int>? ownerEpoch) {
       final env = accountRuntime == null
@@ -334,6 +380,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
               accountUserId: accountRuntime!.userId,
               passwordRecovery: accountRuntime!.passwordRecovery,
               ownerEpoch: ownerEpoch,
+              courseAccess: _courseAccessFor(ownerEpoch),
             );
       final WidgetBuilder? accountBuilder =
           accountRuntime == null ? null : accountPage;

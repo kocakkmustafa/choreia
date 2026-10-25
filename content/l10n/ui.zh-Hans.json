@@ -368,7 +368,10 @@
   "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} style has camera-session reference notes. {status} {storage}": "从课程库打开五门文字课程中的任意一门：Hip-Hop、Salsa On1、Line Dance、Latin Fusion 和原创短舞。完整目录共列出 {total} 个风格页面；{count} 种风格有摄像头练习参考笔记。{status} {storage}",
   "Open any of the five written courses from the library: Hip-Hop, Salsa On1, Line Dance, Latin Fusion and original short-form dance. The wider catalogue lists {total} style pages; {count} styles have camera-session reference notes. {status} {storage}": "从课程库打开五门文字课程中的任意一门：Hip-Hop、Salsa On1、Line Dance、Latin Fusion 和原创短舞。完整目录共列出 {total} 个风格页面；{count} 种风格有摄像头练习参考笔记。{status} {storage}",
   "What you practise is kept on this phone, so the progress tab can show you what you have actually done. It stays here — nothing about your practice is sent anywhere.": "你的练习内容保存在本设备上，因此“进度”标签页可以显示你实际完成的内容。这些内容只留在这里——与你练习相关的任何信息都不会被发送到任何地方。",
-  "Live camera practice and subscription sales are closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks.": "本版本关闭实时摄像头练习和订阅销售。五门文字课程都不拍摄视频，而是各自使用你自己的练习记录和自查。",
   "{courses} written courses · {lessons} lessons · {languages} languages": "{courses} 门文字课程 · {lessons} 课 · {languages} 种语言",
-  "{lessons} lessons · {languages} languages": "{lessons} 课 · {languages} 种语言"
+  "{lessons} lessons · {languages} languages": "{lessons} 课 · {languages} 种语言",
+  "Live camera practice is closed in this release. None of the five written courses captures video; each uses your own practice record and self-checks. The first lessons of every course are free; a Choreia or Motion+ membership opens the rest.": "本版本关闭实时摄像头练习。五门文字课程都不拍摄视频，而是各自使用你自己的练习记录和自查。每门课程的前几课免费；其余内容需 Choreia 或 Motion+ 会员解锁。",
+  "This lesson is part of the membership. The first lessons of every course are free; a Choreia or Motion+ membership opens the rest. Eligible new members can start with a 14-day free trial. Your saved progress stays readable.": "本课属于会员内容。每门课程的前几课免费；其余内容需 Choreia 或 Motion+ 会员解锁。符合条件的新会员可先享受 14 天免费试用。你已保存的进度始终可以查看。",
+  "Unlock with membership": "通过会员解锁",
+  "Included with membership": "会员内容"
 }
