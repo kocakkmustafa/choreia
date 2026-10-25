@@ -149,7 +149,7 @@ release öncesi gerçek ortamda doğrulanmalı; fontlar paketlidir.
 | Location: Coarse Location | Collected, linked, app functionality | Provider edge günlüklerinde IP tabanlı yaklaşık konum; GPS izni/kesin konum yok |
 | Other Data Types | Collected, linked, app functionality | Parola doğrulama/hash ve hesap silme makbuzu kimlik bağı; Apple parola eşlemesi proje çıkarımı olarak `account-data-safety-draft.md` içinde açıklanır |
 | Identifiers: account ID | Collected, linked, app functionality | Motion hesabı; reklam/tracking ID yok |
-| Purchases: purchase history | Not collected (mevcut ilk sürüm) | Satış/işlem doğrulaması kapalı; güncel `PrivacyInfo.xcprivacy` purchase-history türü içermez. Satış açılırsa yeniden değerlendirilir |
+| Purchases: purchase history | Collected, linked, app functionality (satış açık, 26 Ekim 2026) | Mağaza satın alma kanıtı `motion-verify-purchase` ile Motion sunucusunda doğrulanır ve hesaba bağlı hak (entitlement) olarak tutulur; Motion+ deneme defteri hesap başına (Core R3). `PrivacyInfo.xcprivacy` `NSPrivacyCollectedDataTypePurchaseHistory` içerir. Play: Financial info → Purchase history (collected, not shared). Konsol formları Yönetim'de |
 | Usage Data | Not collected (yerel kurs/seans yolu) | Kurs JSON'u ve seans JSONL'i cihazda kalır; sunucudaki hesap/güvenlik günlükleri yukarıdaki ayrı türlerde değerlendirilir. Final paket/SDK davranışı ayrıca denetlenir |
 
 [Apple App Privacy](https://developer.apple.com/app-store/app-privacy-details/)

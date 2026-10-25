@@ -150,7 +150,7 @@ akışı ve son paket/SDK gizlilik raporu ayrı kabul kapılarıdır.
 | Seans geçmişi | Kullanıcıya ayrılmış yerel JSONL dosyasında kalır; guest geçmişi girişte devralınmaz | Sunucuya aktarılmadığı sürece Apple/Play “collected” tanımına girmez; eski yerel dosya = collected varsayımı `data-safety-matrix.md` içinde tarihsel düzeltme olarak tutulur |
 | Mikrofon/ses | İlk kurs mikrofon kullanmaz; iOS mikrofon gerekçesi ve Android `RECORD_AUDIO` yoktur | Ses collected beyanı yoktur; Ostinato'nun isteğe bağlı mikrofon kararı Choreia'ya uygulanmaz |
 
-Kaynakta iOS `PrivacyInfo.xcprivacy` altı hesap/sağlayıcı veri tipini `Linked=true`, `Tracking=false`, `PurposeAppFunctionality` ile beyan eder; Android INTERNET ve exact `com.yulalab.choreia://auth/callback` kaydı var. Tracking false kalır. Mikrofon API'si kullanılmadığı sürece mikrofon izni eklenmez. Supabase ve native eklentilerin birleşik Xcode privacy raporu, Android manifest merge ve gerçek mağaza formları ayrı release kapısıdır. Hesap silme uzakta doğrulandıktan sonra ilgili hesabın seans, Salsa ve çalışma günlükleri ile kendi `.tmp` dosyaları temizlenir; uzak hata halinde bu geçmiş korunur.
+Kaynakta iOS `PrivacyInfo.xcprivacy` yedi hesap/sağlayıcı veri tipini (26 Ekim 2026'dan beri satın alma geçmişi dahil) `Linked=true`, `Tracking=false`, `PurposeAppFunctionality` ile beyan eder; Android INTERNET ve exact `com.yulalab.choreia://auth/callback` kaydı var. Tracking false kalır. Mikrofon API'si kullanılmadığı sürece mikrofon izni eklenmez. Supabase ve native eklentilerin birleşik Xcode privacy raporu, Android manifest merge ve gerçek mağaza formları ayrı release kapısıdır. Hesap silme uzakta doğrulandıktan sonra ilgili hesabın seans, Salsa ve çalışma günlükleri ile kendi `.tmp` dosyaları temizlenir; uzak hata halinde bu geçmiş korunur.
 
 2026-09-26 kontrolde hesap silme yerel kurs JSON'u ve seans JSONL'i için
 `account_bridge.dart` kapsamını kullanır. Çözümlenen `motion_account`
@@ -158,7 +158,13 @@ paketindeki `motion_release_policy.dart` değeri
 `motionPaidFeaturesAvailable=false`; hesap/üyelik ve paid-session yolları
 bu kapıyla satışa açılmaz. Apple manifestinde purchase-history türü yoktur.
 Matristeki eski satın alma “collected” satırı sonraki satış planıydı;
-mevcut ilk sürümde toplanmıyor olarak uzlaştırıldı. Hesap e-posta/ID'si ve
+mevcut ilk sürümde toplanmıyor olarak uzlaştırıldı.
+**26 Ekim 2026 güncellemesi:** satış ilk sürümde açık (kurucu kararı 23 Ekim)
+ve Core R3 pin'i `motionSubscriptionSalesAvailable=true` kullanır; satın alma
+kanıtı `motion-verify-purchase` ile sunucuda doğrulanıp hesaba bağlı hak olarak
+tutulur. Bu yüzden manifest `NSPrivacyCollectedDataTypePurchaseHistory`
+(linked, tracking yok, app functionality) beyan eder; Play karşılığı Financial
+info → Purchase history. Yukarıdaki 26 Eylül paragrafı tarihsel kayıttır. Hesap e-posta/ID'si ve
 isteğe bağlı görünen adın sağlayıcıya gönderimi bundan ayrı kalır.
 
 [Apple](https://developer.apple.com/app-store/app-privacy-details/) ve
