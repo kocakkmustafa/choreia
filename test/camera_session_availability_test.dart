@@ -370,12 +370,12 @@ void main() {
       var checks = 0, permissions = 0, factories = 0;
       final identity = ValueNotifier<String?>(user);
       addTearDown(identity.dispose);
-      expect(motionPaidFeaturesAvailable, isFalse);
+      expect(motionCameraCoachingAvailable, isFalse);
       await tester.pumpWidget(MaterialApp(
           home: StyleDetailView(
         card: library.cardFor('hip_hop_foundations')!,
         runnableSteps: const {'hh_bounce'},
-        cameraSessionsAvailable: motionPaidFeaturesAvailable,
+        cameraSessionsAvailable: motionCameraCoachingAvailable,
         beforeStart: (_) async {
           checks++;
           return true;

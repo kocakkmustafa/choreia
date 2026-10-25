@@ -95,7 +95,7 @@ Future<void> _exerciseAccountRoute(WidgetTester tester,
   final page = tester.widget<MotionAccountPage>(pageFinder);
   expect(page.account, isA<OwnerBoundMotionAccountClient>());
   expect(page.account.supabase, same(fixture.client));
-  expect(page.paidFeaturesAvailable, isTrue); // sales open
+  expect(page.membershipAvailable, isTrue); // sales open
   expect(page.clearLocalData, isNotNull);
   expect(page.initialPasswordRecovery, isFalse);
   expect(find.byType(MotionMembershipPage), findsNothing);

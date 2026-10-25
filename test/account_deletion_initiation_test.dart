@@ -261,7 +261,7 @@ void main() {
             builder: (context, value, child) => MotionAccountPage(
               account: OwnerBoundMotionAccountClient(account,
                   expectedOwner: owners.currentTicket(_alice), owners: owners),
-              paidFeaturesAvailable: false,
+              membershipAvailable: false,
               clearLocalData: (id) => clearFixtureFiles(id, null),
             ),
           ),
@@ -392,7 +392,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: ValueListenableBuilder<MotionAccountClient>(
       valueListenable: wrapper,
       builder: (context, value, child) => MotionAccountPage(account: value,
-        paidFeaturesAvailable: false,
+        membershipAvailable: false,
         clearLocalData: (id) async {
           if (identical(value, opening)) { openingCalls++; } else { replacementCalls++; }
           await clearFixtureFiles(id, null);
@@ -422,7 +422,7 @@ void main() {
       var cleanupCalls = 0;
       Widget page(MotionAccountClient client) => MaterialApp(home: MotionAccountPage(
         account: client,
-        paidFeaturesAvailable: false,
+        membershipAvailable: false,
         clearLocalData: (id) async { cleanupCalls++; await clearFixtureFiles(id, null); },
       ));
       await tester.pumpWidget(page(account));
@@ -492,7 +492,7 @@ void main() {
     final file = sessionFileFor(directory, _alice)..writeAsStringSync('fresh recovered A');
     var cleanupCalls = 0;
     Widget page(MotionAccountClient client) => MaterialApp(home: MotionAccountPage(
-      account: client, paidFeaturesAvailable: false,
+      account: client, membershipAvailable: false,
       clearLocalData: (id) async { cleanupCalls++; await clearFixtureFiles(id, null); },
     ));
     // Open AFTER silent recovery. Core's dialog captures the new Session, so
@@ -551,7 +551,7 @@ void main() {
           home: ValueListenableBuilder<bool>(valueListenable: visible,
             builder: (context, show, child) => show ? MotionAccountPage(
               account: OwnerBoundMotionAccountClient(account, expectedOwner: ticket, owners: owners),
-              paidFeaturesAvailable: false,
+              membershipAvailable: false,
               clearLocalData: (_) async { cleanupCalls++; },
             ) : const Scaffold(body: Text('REPLACEMENT_PAGE')),
           ),

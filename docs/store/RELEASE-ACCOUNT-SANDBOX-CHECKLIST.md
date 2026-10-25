@@ -110,8 +110,10 @@ hesabı/erişim veya ürün oluşturulacaksa ayrıca özel onay gerekir.
 | SB-05 | Her kursta son ücretsiz ve ilk ücretli ders (Salsa so_18/so_19, Hip-Hop 3/4, Line Dance 4/5, Latin Fusion 4/5, kısa form 4/5) | Ücretsiz ders hesapsız açılır; ücretli ders kilit + "Üyelikle aç" gösterir; ilerleme geçmişi okunur kalır. |
 | SB-06 | Üyelikle açtıktan sonra çıkış / başka hesap | Kilit geri gelir; önceki sahibin hakkı yeni sahibe geçmez. |
 | SB-07 | 13 altı misafir | Ücretsiz dersler açık; hesap oluşturma ve satın alma kapalı; yaş bloğu cihazda kalıcı. |
-| SB-08 | Veli onayı bekleyen genç hesap | Satın alma teklifleri gizli (Core WIP); ücretsiz dersler açık. |
-| SB-09 | 14 gün deneme: uygun yeni üye, deneme sonu iptal, yenileme | Deneme metni ve fiyat mağazadan; iptalde dönem sonunda kilit geri gelir, ilerleme okunur. Android denemesi Core Play teklif desteğine bağlı. |
+| SB-08 | Veli onayı bekleyen genç hesap | Satın alma teklifleri gizli (Core R3 pin, `c530309`); ücretsiz dersler açık. |
+| SB-09 | 14 gün deneme: uygun yeni üye, deneme sonu iptal, yenileme | Deneme metni ve fiyat mağazadan; iptalde dönem sonunda kilit geri gelir, ilerleme okunur. iOS: SK2 tanıtım teklifi; Android: Play `free-trial` teklifi (Core R2+, konsolda P14D teklif kurulmalı). |
+| SB-10 | Hesap başına tek Motion+ denemesi (Core R3 K3): başka Motion app'te deneme alınmış hesap | Choreia Motion+ satırında deneme iddiası yok; bireysel plan denemesi etkilenmez. iOS 15 sınırı ve Play tespiti: `scratch/2026-10-25-motion-core-packages/CORE-R3-KABUL-KONTROLLERI.tr.md` S12–S16. |
+| SB-11 | Mağaza yaş sinyali (Core R3 K1; iOS 26+ Declared Age Range, Play Age Signals) | 13 altı aralık → kalıcı yaş bloğu; uyuşmaz beyan reddedilir; sinyal yoksa beyan akışı aynı (S18). Entitlement App ID capability ister. |
 
 Hiçbiri bu bakımda çalıştırılmadı. Test sonucu yalnız testi yapılan gerçek
 store ortamı/cihazı/ürünü için geçerli olacaktır.

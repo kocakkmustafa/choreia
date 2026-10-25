@@ -291,7 +291,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
             lessonContext,
             account: runtime.account,
             accountPageBuilder: builder,
-            paidFeaturesAvailable: choreiaSubscriptionSalesOpen,
+            salesAvailable: choreiaSubscriptionSalesOpen,
           );
         },
       );
@@ -365,7 +365,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
         initialPasswordRecovery: runtime.passwordRecovery.value,
         clearLocalData: (id) => clearLocalHistoryFor(id,
             onNamespaceFenced: _hostController.namespaceFenced),
-        paidFeaturesAvailable: choreiaSubscriptionSalesOpen,
+        membershipAvailable: choreiaSubscriptionSalesOpen,
         ageBlocked: _ageBlocks.blocked,
         onAgeBlocked: () => unawaited(_ageBlocks.markBlocked()),
       );
@@ -387,12 +387,13 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
       return widget.shellBuilder?.call(env, accountBuilder) ??
           ChoreiaShell(
             env: env,
-            // Match the current beforeStart release policy without enabling it.
-            cameraSessionsAvailable: motionPaidFeaturesAvailable,
+            // Camera practice follows Core's camera flag (closed in this
+            // release); paid written lessons go through courseAccess instead.
+            cameraSessionsAvailable: motionCameraCoachingAvailable,
             accountPageBuilder: accountBuilder,
             beforeLessonStart: accountRuntime == null
                 ? null
-                : (lessonContext) => requireMotionPaidAccess(
+                : (lessonContext) => requireMotionCameraAccess(
                       lessonContext,
                       account: accountRuntime!.account,
                       accountPageBuilder: accountPage,

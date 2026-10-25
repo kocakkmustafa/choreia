@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionSubscriptionSalesAvailable;
 
 /// Subscription sales are open in the first release (owner decision,
-/// 23 Oct 2026) while live camera practice and scoring stay closed. Core is
-/// splitting `motionPaidFeaturesAvailable` into the same two flags; until that
-/// pin lands, Choreia passes this value where only sales are meant.
-const bool choreiaSubscriptionSalesOpen = true;
+/// 23 Oct 2026) while live camera practice and scoring stay closed
+/// (`motionCameraCoachingAvailable`). Choreia follows Core's sales flag.
+const bool choreiaSubscriptionSalesOpen = motionSubscriptionSalesAvailable;
 
 /// Which written lessons are free and how a paid one is unlocked.
 ///
