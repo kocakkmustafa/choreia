@@ -73,33 +73,39 @@ class WrittenCoursesProgressEntry extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         SalsaCourseEntry(env: env),
-        for (final LibraryEntry e in others) ...<Widget>[
+        if (others.isNotEmpty) ...<Widget>[
           const SizedBox(height: 10),
+          // One compact panel for the four flat courses, so the history
+          // below is not pushed a screen further down (CHO-10).
           GlassPanel(
             radius: 18,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  UiLanguage.text(context,
-                      en: StyleContentCopy.styleName(e, turkish: false),
-                      tr: StyleContentCopy.styleName(e, turkish: tr)),
-                  style: ChoreiaType.of(context).display(size: 21),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  UiLanguage.format(context,
-                      en: '{lessons} lessons · {languages} languages',
-                      tr: '{lessons} ders · {languages} dil',
-                      values: <String, Object>{
-                        'lessons': lessonCounts[e.id] ?? 0,
-                        'languages': languages,
-                      }),
-                  style: ChoreiaType.of(context).body(),
-                ),
-                const SizedBox(height: 8),
-                WrittenCourseLink(
-                    styleId: e.id, env: env, buttonKey: openKey(e.id)),
+                for (final (int i, LibraryEntry e)
+                    in others.indexed) ...<Widget>[
+                  if (i > 0) const Divider(height: 24),
+                  Text(
+                    UiLanguage.text(context,
+                        en: StyleContentCopy.styleName(e, turkish: false),
+                        tr: StyleContentCopy.styleName(e, turkish: tr)),
+                    style: ChoreiaType.of(context).display(size: 19),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    UiLanguage.format(context,
+                        en: '{lessons} lessons · {languages} languages',
+                        tr: '{lessons} ders · {languages} dil',
+                        values: <String, Object>{
+                          'lessons': lessonCounts[e.id] ?? 0,
+                          'languages': languages,
+                        }),
+                    style: ChoreiaType.of(context).body(size: 13),
+                  ),
+                  const SizedBox(height: 6),
+                  WrittenCourseLink(
+                      styleId: e.id, env: env, buttonKey: openKey(e.id)),
+                ],
               ],
             ),
           ),
