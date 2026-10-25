@@ -100,6 +100,11 @@ void main() {
       asked++;
       return true;
     });
+    // The unit list sits below the course sections in a lazy ListView; a tall
+    // view builds all ten units so the free/paid split is counted whole.
+    tester.view.physicalSize = const Size(800, 20000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(MaterialApp(
         home: ShortFormCoursePage(
             bundle: WrittenBundle(source),

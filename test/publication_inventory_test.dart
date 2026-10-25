@@ -354,7 +354,8 @@ void main() {
       // implements progression — the only references are doc comments citing
       // it as the derivation basis for `correctionPriority`.
       //
-      // That is legal today ONLY because no surface mentions unlocking. This
+      // That is legal today ONLY because no surface mentions progression
+      // unlocking. This
       // is precisely the shape JabLab found (a progression gate described to
       // the user with no producer anywhere), caught here before it is spoken
       // rather than after.
@@ -363,12 +364,25 @@ void main() {
           reason: 'if content stops declaring it, this guard is measuring '
               'nothing');
 
-      final String code = appCode();
-      expect(code,
+      // The one unlock that IS implemented: a paid lesson opens with a
+      // membership (sales open, 23 Oct 2026). Its words live only in
+      // PaidLessonLock, and only while that lock calls the real producer.
+      const String lockPath = 'lib/app/course/paid_lesson_lock.dart';
+      final String lock = code(lockPath);
+      expect(lock, contains('await access.unlock(context)'),
+          reason: 'the membership button must drive CourseAccess.unlock');
+      expect(code('lib/app/course/course_access.dart'),
+          contains('Future<bool> unlock(BuildContext context)'));
+      expect(lock, isNot(contains('unlockRule')));
+
+      final String rest = appCode().replaceFirst(lock, '');
+      expect(rest.length, lessThan(appCode().length),
+          reason: 'the exempted lock must be found in the whole-app scan');
+      expect(rest,
           isNot(matches(RegExp(r"'[^'\n]*\bunlock", caseSensitive: false))),
           reason: 'a user-facing string mentions unlocking, and nothing '
               'implements it — the talkative-absence class');
-      expect(code, isNot(contains("json['unlockRule']")),
+      expect(appCode(), isNot(contains("json['unlockRule']")),
           reason: 'nothing parses it, so nothing can render it by accident');
     });
 

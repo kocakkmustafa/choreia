@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:choreia/app/account_bridge.dart';
 import 'package:choreia/app/account_recovery_host.dart';
+import 'package:choreia/app/age_block_store.dart';
 import 'package:choreia/app/course/media/lesson_media_playback.dart';
 import 'package:choreia/app/course/media/lesson_media_slot.dart';
 import 'package:choreia/app/course/salsa_progress.dart';
@@ -103,6 +104,11 @@ final class _AccountFixture {
             request.url.path == '/rest/v1/motion_parental_consents') &&
         request.method == 'GET') {
       return _json(<Object>[]);
+    }
+    // Sales are open: the account page reads the membership on open.
+    if (request.url.path == '/functions/v1/motion-check-membership' &&
+        request.method == 'POST') {
+      return _json(<String, Object>{'active': false, 'anyActive': false});
     }
     final endpoint = '${request.method} ${request.url.path}';
     unexpected.add(endpoint);
@@ -317,6 +323,8 @@ void main() {
       await tester.pumpWidget(MotionIdentityGate(runtime: account.runtime, child: ChoreiaApp(
         accountRuntime: account.runtime,
         accountHostController: controller,
+        // Injected so the age-block read stays off the counted path channel.
+        ageBlocks: AgeBlockStore(directory: () async => Directory.systemTemp),
         shellBuilder: (environment, accountBuilder) {
           epoch = environment.ownerEpoch;
           // Sales are open: the real shell guards paid written lessons.
@@ -467,6 +475,9 @@ void main() {
       if (controller.requiresAccountRoute) {
         expect(find.byType(LiveLessonPage), findsNothing);
         expect(find.byType(MotionAccountPage), findsOneWidget);
+        // Sales are open: the page's membership read keeps Core's 10 s read
+        // deadline until it settles (Core R1 fixture note).
+        await tester.pump(const Duration(seconds: 11));
       }
       expect(tester.takeException(), isNull);
     });
@@ -509,6 +520,7 @@ void main() {
     await tester.runAsync(account.initialize);
     await tester.pumpWidget(MotionIdentityGate(runtime: account.runtime, child: ChoreiaApp(
       accountRuntime: account.runtime, accountHostController: controller,
+      ageBlocks: AgeBlockStore(directory: () async => Directory.systemTemp),
       shellBuilder: (environment, accountBuilder) => Scaffold(body: Column(children: <Widget>[
         LessonMediaSlot.testingPlayback(lessonId: 'so_01', locale: 'en',
             fixture: const LessonMediaPlaybackFixture(lessonId: 'so_01',

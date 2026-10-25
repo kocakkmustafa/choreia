@@ -95,12 +95,13 @@ Future<void> _exerciseAccountRoute(WidgetTester tester,
   final page = tester.widget<MotionAccountPage>(pageFinder);
   expect(page.account, isA<OwnerBoundMotionAccountClient>());
   expect(page.account.supabase, same(fixture.client));
-  expect(page.paidFeaturesAvailable, isFalse);
+  expect(page.paidFeaturesAvailable, isTrue); // sales open
   expect(page.clearLocalData, isNotNull);
   expect(page.initialPasswordRecovery, isFalse);
   expect(find.byType(MotionMembershipPage), findsNothing);
+  // Sales are open: the localized membership entry is offered, not opened.
   expect(find.text(strings.text(MotionAccountString.membershipOptions)),
-      findsNothing);
+      findsOneWidget);
   expect(fixture.profileReadStarts, 1);
   _expectFallbackAndAppearance(tester.element(profileError), locale, mode);
   _expectUntouchedSaveDisabled(tester, strings);
@@ -300,6 +301,7 @@ class _AccountPresentationFixture {
   int identityReads = 0;
   int profileReadStarts = 0;
   int ageReadStarts = 0;
+  int membershipReadStarts = 0;
   int deletionCallbacks = 0;
   final unexpected = <String>[];
 
@@ -345,6 +347,14 @@ class _PresentationSupabase implements SupabaseClient {
     fixture.profileReadStarts++;
     // The actual Core loadProfile Future observes this controlled read failure.
     // No query builder, HTTP transport or mutation is constructed/dispatched.
+    throw const _ExpectedProfileReadFailure();
+  }
+
+  @override
+  FunctionsClient get functions {
+    // Sales are open: the page reads the membership on open. Answer with the
+    // same controlled read failure; no transport is constructed.
+    fixture.membershipReadStarts++;
     throw const _ExpectedProfileReadFailure();
   }
 

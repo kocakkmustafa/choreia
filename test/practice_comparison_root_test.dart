@@ -99,6 +99,11 @@ final class _AccountFixture {
         request.method == 'GET') {
       return _json(<Object>[]);
     }
+    // Sales are open: the account page reads the membership on open.
+    if (request.url.path == '/functions/v1/motion-check-membership' &&
+        request.method == 'POST') {
+      return _json(<String, Object>{'active': false, 'anyActive': false});
+    }
     final endpoint = '${request.method} ${request.url.path}';
     unexpected.add(endpoint);
     throw StateError('Unexpected local fixture endpoint: $endpoint');

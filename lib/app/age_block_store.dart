@@ -24,10 +24,11 @@ class AgeBlockStore {
   Future<File> _file() async =>
       File('${(await _directory()).path}${Platform.pathSeparator}$fileName');
 
-  /// Bounded read before the first frame; any failure leaves it unblocked.
-  Future<void> load({Duration timeout = const Duration(seconds: 2)}) async {
+  /// Reads the flag once; any failure leaves it unblocked. No timer: a read
+  /// that never answers simply keeps the device unblocked for this run.
+  Future<void> load() async {
     try {
-      _blocked = await (await _file()).exists().timeout(timeout);
+      _blocked = await (await _file()).exists();
     } on Object {
       _blocked = false;
     }
