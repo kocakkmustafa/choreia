@@ -292,6 +292,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
             account: runtime.account,
             accountPageBuilder: builder,
             salesAvailable: choreiaSubscriptionSalesOpen,
+            teenPurchasePolicy: choreiaTeenPurchasePolicy,
           );
         },
       );
@@ -366,6 +367,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
         clearLocalData: (id) => clearLocalHistoryFor(id,
             onNamespaceFenced: _hostController.namespaceFenced),
         membershipAvailable: choreiaSubscriptionSalesOpen,
+        teenPurchasePolicy: choreiaTeenPurchasePolicy,
         ageBlocked: _ageBlocks.blocked,
         onAgeBlocked: () => unawaited(_ageBlocks.markBlocked()),
       );
@@ -397,6 +399,7 @@ class _ChoreiaAppState extends State<ChoreiaApp> {
                       lessonContext,
                       account: accountRuntime!.account,
                       accountPageBuilder: accountPage,
+                      teenPurchasePolicy: choreiaTeenPurchasePolicy,
                     ),
           );
     }

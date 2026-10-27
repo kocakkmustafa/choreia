@@ -1,12 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionSubscriptionSalesAvailable;
+    show MotionTeenPurchasePolicy, motionSubscriptionSalesAvailable;
 
 /// Subscription sales are open in the first release (owner decision,
 /// 23 Oct 2026) while live camera practice and scoring stay closed
 /// (`motionCameraCoachingAvailable`). Choreia follows Core's sales flag.
 const bool choreiaSubscriptionSalesOpen = motionSubscriptionSalesAvailable;
+
+/// Owner decision (27 Oct 2026, K-2: all five Motion apps): a 13–17 account
+/// still waiting for parental consent sees the subscription offers, and the
+/// purchase itself is left to the store's family controls (Ask to Buy /
+/// Google Play parental approval). Core R4 keeps `parentalConsentRequired` as
+/// its default, so every Core purchase entry point in `main.dart` passes this.
+/// Account features stay closed until consent; under-13 accounts cannot buy.
+const MotionTeenPurchasePolicy choreiaTeenPurchasePolicy =
+    MotionTeenPurchasePolicy.storeFamilyControls;
 
 /// Which written lessons are free and how a paid one is unlocked.
 ///
