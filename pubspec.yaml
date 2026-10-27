@@ -1,7 +1,7 @@
 name: choreia
 description: Choreia — Learn to Dance. Camera-based dance coaching, on device.
 publish_to: none
-version: 1.0.0+5
+version: 1.0.0+6
 
 environment:
   sdk: ^3.6.0
