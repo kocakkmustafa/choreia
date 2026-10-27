@@ -93,6 +93,15 @@ kaydedildiği veya taleplerin uçtan uca sonuçlandığı kanıtlanmadı. Politi
 silme makbuzu ile sağlayıcı log/yedek döngülerini ayrı açıklar; sayısal bir
 saklama süresi bu kaynak kontrolünden türetilmez.
 
+**2026-10-27 güncellemesi:** beş Motion app'i için ortak hesap silme sayfası
+hazırlandı (YUL-14): `https://yulalab.com/en/delete-account/motion` (14 dil;
+TR kökü `/delete-account/motion`). Sayfa uygulamasız silme talebini (3 adım,
+support@yulalab.com, konu "Motion account deletion"), uygulama içi yolu
+(Hesap > Hesabı sil), silinen ve saklanan verileri süreleriyle ve aboneliğin
+ayrıca iptal edildiğini anlatır. Durum **pending_live**: YUL-09 site
+deploy'uyla canlıya çıkar; o zamana kadar Play'de kayıtlı URL değişmez. Canlı
+teyitten sonra Play Data deletion alanı bu URL ile güncellenir.
+
 ## Sağlayıcı günlükleri ve kimlik doğrulama — 2026-09-27
 
 Üretim sağlayıcısının 2026-09-26 21:36 UTC tarihli salt okunur alan/sayı
