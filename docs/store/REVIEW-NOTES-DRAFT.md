@@ -75,6 +75,8 @@ mağaza aboneliğini iptal etmez. Canlı kamera ve puanlama bu sürümde yoktur.
   `https://yulalab.com/en/privacy/motion#motion-account-deletion`; veri silme
   ve politika URL'si `https://yulalab.com/en/privacy/motion`. URL kaydı
   doğrulandı; gerçek silme talebi/yerine getirme kabulü çalıştırılmadı.
+  2026-10-27: yeni ortak sayfa `https://yulalab.com/en/delete-account/motion`
+  (YUL-14, pending_live) canlıya çıkınca hesap silme URL'si bununla değişir.
 - Kayıtlı Play veri türleri ad/e-posta/kullanıcı kimliği/diğer kişisel bilgi;
   isteğe bağlı, paylaşım yok, aktarım şifreli. Konum ve uygulama tanılama
   grupları seçilmemiş. Apple manifestindeki yaklaşık konum/tanılama ve

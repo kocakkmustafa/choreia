@@ -149,7 +149,9 @@
         ]
       }
     ],
-    "accountDeletionUrl": "https://yulalab.com/en/privacy/motion#motion-account-deletion",
+    "accountDeletionUrl": "https://yulalab.com/en/delete-account/motion",
+    "accountDeletionUrlStatus": "pending_live",
+    "accountDeletionUrlNote": "YUL-14 shared Motion deletion page (site release branch 98b907b, 14 locales; TR root /delete-account/motion); goes live with the YUL-09 site deploy. Until then Play keeps the registered https://yulalab.com/en/privacy/motion#motion-account-deletion.",
     "partialDataDeletionUrl": "https://yulalab.com/en/privacy/motion",
     "encryptedInTransitDeclared": true,
     "noSharingDeclared": true,
