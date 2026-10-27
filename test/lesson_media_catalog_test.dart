@@ -11,26 +11,27 @@ import 'package:motion_content/motion_content.dart';
 
 import 'support/test_catalog.dart';
 
-// Exact authored revision so_01 row; synthetic QA bytes, no release acceptance.
+// Exact ops v2m so_01 row for the live course; synthetic QA bytes, no release
+// acceptance.
 const _pin = LessonMediaSourcePin(
   assetId: 'choreia.so_01.v6.demo',
   lessonId: 'so_01',
   sceneId: 'choreia:so_01:orientation',
   variantStem:
-      'choreia/so-01--becaa07c/orientation--1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7--master-16x9',
+      'choreia/so-01--becaa07c/orientation--0ca858650586c9d903921063f9206f6230778faf491d0dd17beb68c7a1c38d7d--master-16x9',
   courseSourceSha256:
-      'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc',
+      '284d429656ec8ca56fd10674685cf61069d157a6ee985eb764818ae9db11907d',
   lessonCanonicalSha256:
       '05b4bc7664a0143fd0f75bd4d98ef2934ab9ae9eeb381224d7bbb8f73ffe7a2b',
   productionSpecSha256:
-      '1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
+      '0ca858650586c9d903921063f9206f6230778faf491d0dd17beb68c7a1c38d7d',
   sourceCueSha256:
       '15cc3828f0b88eedff915b7a2277befa358942030e1e3436a97ffe06367a7f18',
   idempotencyKey:
-      'motion-media-v1:1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
+      'motion-media-v1:0ca858650586c9d903921063f9206f6230778faf491d0dd17beb68c7a1c38d7d',
   productionState: 'PREPRODUCTION_UNGENERATED',
   sourcePinSha256:
-      '67cfed6b6266f23a7204887f59f2686a38b67678b63d6e8e277786e9d9061a9d',
+      '61d7ec47bfb2134f913c9d921a869ff402929da322f246b8086b557aea93d16a',
 );
 const _zeroSha =
     '0000000000000000000000000000000000000000000000000000000000000000';
@@ -45,7 +46,7 @@ final class _MediaBundle extends DiskBundle {
   @override
   Future<ByteData> load(String key) async {
     loadedKeys.add(key);
-    if (key == 'content/motion_content/choreia_source_pins_v2k.json') {
+    if (key == 'content/motion_content/choreia_source_pins_v2m.json') {
       pinReads.add(key);
     }
     if (key.startsWith('content/media/') || files.containsKey(key)) {
@@ -150,7 +151,7 @@ final class _Fixture {
         '$prefix.tr.vtt': tr ?? trBytes,
         '$prefix.en.vtt': en ?? enBytes,
         if (sourcePins != null)
-          'content/motion_content/choreia_source_pins_v2k.json': sourcePins,
+          'content/motion_content/choreia_source_pins_v2m.json': sourcePins,
       });
 
   LessonMediaCatalog catalog({
@@ -259,6 +260,24 @@ void main() {
       // The actual frozen predecessor is stale for this authored revision.
       fixture.candidate(courseSha: 'b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7'),
       fixture.candidate(manifestSha: 'd887683c9a9b9bdb8d4ab7c51cdc5a5b4b4de6a918079e4cfd9cf543e9751e60'),
+      // The pre-v2m app-local row: unresolvable course and manifest roots, and
+      // the v2l projection manifest this catalog used to borrow.
+      fixture.candidate(
+          courseSha:
+              'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc'),
+      fixture.candidate(
+          specSha:
+              '1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
+          idempotencyKey:
+              'motion-media-v1:1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
+          sourcePinSha:
+              '67cfed6b6266f23a7204887f59f2686a38b67678b63d6e8e277786e9d9061a9d'),
+      fixture.candidate(
+          manifestSha:
+              'c98bde343ed0529d0717ca70b56cae529e0fbededecdbaf4ef6934230c324b64'),
+      fixture.candidate(
+          manifestSha:
+              'ef6eaa2ba38d0b3abdc7300e6bbf7af419ec9484c1fbd7dca8de174ddadb0adc'),
       fixture.candidate(specSha: '645453e973c9403268dd65bc740e21e304bb1036f52b00ac7006bb10262ee9f3'),
       fixture.candidate(sourcePinSha: '6e5af428a718c6aa135f9049114a7d0b96b5ca73ea2762fcf999bfaf86d7f6fc'),
       fixture.candidate(
@@ -310,7 +329,7 @@ void main() {
 
   test('forged QA source catalog cannot supply its own pin', () async {
     final fixture = _Fixture();
-    final path = File('content/motion_content/choreia_source_pins_v2k.json');
+    final path = File('content/motion_content/choreia_source_pins_v2m.json');
     final original = await path.readAsBytes();
     final decoded = jsonDecode(utf8.decode(original)) as Map<String, dynamic>;
     final lessons = decoded['lessons'] as List;

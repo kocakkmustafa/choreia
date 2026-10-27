@@ -125,7 +125,7 @@ flutter:
     - content/l10n/
     - content/motion_content/manifest.json
     # Code-pinned, closed QA source membership; the production media slot is empty.
-    - content/motion_content/choreia_source_pins_v2k.json
+    - content/motion_content/choreia_source_pins_v2m.json
     # App-owned v2l source identity only; no media is enabled by these assets.
     - content/motion_content/choreia.source-slice.v1.json
     - content/motion_content/choreia.source-projection.v1.json

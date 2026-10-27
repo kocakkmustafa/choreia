@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild Choreia's closed, source-only v2k QA catalog."""
+"""Rebuild Choreia's closed, source-only v2m QA catalog (ops K-4 revision)."""
 
 from __future__ import annotations
 
@@ -11,15 +11,16 @@ from pathlib import Path
 
 APP = Path(__file__).resolve().parents[1]
 ROOT = APP.parents[2]
-SOURCE = ROOT / "ops/tools/motion_courses/contracts/v2k/source_pins_v1/source-pins.json"
-MANIFEST = ROOT / "ops/tools/motion_courses/contracts/v2k/production-manifest.json"
+CONTRACT = ROOT / "ops/tools/motion_courses/contracts/v2m"
+SOURCE = CONTRACT / "source_pins_v1/source-pins.json"
+MANIFEST = CONTRACT / "production-manifest.json"
 COURSE = APP / "content/salsa_on1_course.json"
-OUTPUT = APP / "content/motion_content/choreia_source_pins_v2k.json"
-SOURCE_SHA = "791bfea8e1479307794bcf8799cf703a7a840bcd3058c1a0d7fdf065d32d8594"
-MANIFEST_SHA = "d887683c9a9b9bdb8d4ab7c51cdc5a5b4b4de6a918079e4cfd9cf543e9751e60"
-PROOF_SHA = "dec615e14881b86b7676e1157f63b8bf6269026d856e59f2ee3a65d7f97e512a"
-COURSE_SHA = "b96ba7c9e83c84c229500f2e896dd3641d55833aa53843e94a6f9f90f92d4ca7"
-OUTPUT_SHA = "2b22d69916b0c6dcae2225fb0d78df50598af18d21fcd9376f64a57ba53c5bf2"
+OUTPUT = APP / "content/motion_content/choreia_source_pins_v2m.json"
+SOURCE_SHA = "cdafd13eafa7eddc3735b288fdd14cf3ea8b312831d1fab1a7351ecd55c1cbb2"
+MANIFEST_SHA = "c551d6c91bef39e677f54059b214157aa8d3d253f9c086bfceb21a12c7e52a80"
+PROOF_SHA = "8f108c547afedfdeeb8cfdb79f5a4f911d035ec664f80170a4306a87a81ba987"
+COURSE_SHA = "284d429656ec8ca56fd10674685cf61069d157a6ee985eb764818ae9db11907d"
+OUTPUT_SHA = "fc6e9c0e4a2132877bbf4313e96acb620a7cdf59edf647e642c0c3ab3a1526d1"
 
 
 def require(ok: bool, message: str) -> None:
@@ -59,22 +60,23 @@ def identity(catalog: dict, lesson: dict, scene: dict, variant: dict) -> dict:
     }
 
 
-def expected_bytes() -> bytes:
+def projection_bytes() -> bytes:
     catalog = json.loads(read_exact(SOURCE, SOURCE_SHA))
     manifest = json.loads(read_exact(MANIFEST, MANIFEST_SHA))
     read_exact(COURSE, COURSE_SHA)
-    require(catalog["kind"] == "MOTION_MEDIA_V2K_SOURCE_PINS_V1"
+    require(catalog["kind"] == "MOTION_MEDIA_V2M_SOURCE_PINS_V1"
             and catalog["state"] == "CLOSED_PREPRODUCTION_SOURCE_MEMBERSHIP_ONLY"
             and catalog["manifestSHA256"] == MANIFEST_SHA
             and catalog["sourceProofSHA256"] == PROOF_SHA
+            and catalog["pinIdentityManifestSHA256ByApp"]["choreia"] == MANIFEST_SHA
             and catalog["visible"] is False and catalog["releaseEligible"] is False
             and catalog["progressEffect"] == 0 and catalog["approvedProductionTrustRoot"] is False
             and catalog["counts"]["variants"] == 2456
             and catalog["counts"]["generatedMedia"] == catalog["counts"]["qualifiedMedia"] == 0,
-            "global v2k closed catalog drift")
+            "global v2m closed catalog drift")
     require(manifest["sourceProofReceiptSHA256"] == PROOF_SHA
-            and manifest["liveLissomPromotionVerified"] is True
             and manifest["releaseEligible"] is False
+            and manifest["contractRevision"]["revisedApp"] == "choreia"
             and manifest["courseSourcePins"] == catalog["courseSourcePins"], "manifest/proof/course link")
     require(catalog["courseSourcePins"]["choreia"] == {
         "path": "ventures/choreia/app/content/salsa_on1_course.json", "sha256": COURSE_SHA,
@@ -101,7 +103,7 @@ def expected_bytes() -> bytes:
             and not any(h["app"] == "choreia" for h in catalog["holds"]), "Choreia 436/872/no HOLD")
     projection = {
         "schemaVersion": 1,
-        "kind": "CHOREIA_V2K_SOURCE_PINS_QA_ONLY",
+        "kind": "CHOREIA_V2M_SOURCE_PINS_QA_ONLY",
         "sourceCatalogSHA256": SOURCE_SHA,
         "manifestSHA256": MANIFEST_SHA,
         "sourceProofSHA256": PROOF_SHA,
@@ -113,7 +115,11 @@ def expected_bytes() -> bytes:
         "releaseEligible": False,
         "progressEffect": 0,
     }
-    raw = (json.dumps(projection, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode()
+    return (json.dumps(projection, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode()
+
+
+def expected_bytes() -> bytes:
+    raw = projection_bytes()
     require(sha(raw) == OUTPUT_SHA, "Choreia projection SHA drift")
     return raw
 
@@ -131,7 +137,7 @@ def main() -> None:
     else:
         require(OUTPUT.is_file() and not OUTPUT.is_symlink() and OUTPUT.read_bytes() == raw,
                 "Choreia app projection output drift")
-    print("PASS_CHOREIA_V2K_CLOSED_QA_48_436_872")
+    print("PASS_CHOREIA_V2M_CLOSED_QA_48_436_872")
 
 
 if __name__ == "__main__":

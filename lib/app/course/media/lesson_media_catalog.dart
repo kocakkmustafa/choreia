@@ -8,24 +8,26 @@ import '../../flutter_bundle_content_asset_reader.dart';
 import '../salsa_course_repository.dart';
 import 'choreia_source_projection_pin.dart';
 
-// Closed v2k source identity for QA only. These pins are not media trust roots.
+// Closed ops v2m source identity for QA only. These pins are not media trust
+// roots. They are independent of the v2l projection pins: v2m is the media
+// contract, v2l is text-revision evidence; only the course bytes are shared.
 const String choreiaMediaManifestSha256 =
-    ChoreiaSourceProjectionPin.sourceManifestSha256;
+    'c551d6c91bef39e677f54059b214157aa8d3d253f9c086bfceb21a12c7e52a80';
 const String choreiaMediaSourceCatalogSha256 =
-    'd7ca7827a8b703b2cc420b9fe97c73600a063640ac4cba94617158f477c10267';
+    'fc6e9c0e4a2132877bbf4313e96acb620a7cdf59edf647e642c0c3ab3a1526d1';
 const String _sourceCatalogPath =
-    'content/motion_content/choreia_source_pins_v2k.json';
+    'content/motion_content/choreia_source_pins_v2m.json';
 const String _opsSourceCatalogSha256 =
-    ChoreiaSourceProjectionPin.sourceCatalogSha256;
+    'cdafd13eafa7eddc3735b288fdd14cf3ea8b312831d1fab1a7351ecd55c1cbb2';
 const String _sourceProofSha256 =
-    '8adca6131462048b24f531a2fe9ebcb999794e7fbcd7cad6514e02a8ad7ba8cd';
+    '8f108c547afedfdeeb8cfdb79f5a4f911d035ec664f80170a4306a87a81ba987';
 const String _courseSourceSha256 = ChoreiaSourceProjectionPin.courseSha256;
 const int _maxMediaBytes = 64 * 1024 * 1024;
 const int _maxCaptionBytes = 1024 * 1024;
 const int _maxAppMediaBytes = 512 * 1024 * 1024;
 final RegExp _sha = RegExp(r'^[0-9a-f]{64}$');
 
-/// Exact QA source row from the code-pinned Choreia subset of ops v2k pins.
+/// Exact QA source row from the code-pinned Choreia subset of ops v2m pins.
 /// No media candidates are installed in the shipping catalog.
 final class LessonMediaSourcePin {
   const LessonMediaSourcePin({
@@ -302,7 +304,7 @@ Future<LessonMediaSourcePin?> _pinnedSource(
   final value = jsonDecode(utf8.decode(bytes));
   if (value is! Map<String, dynamic> ||
       value['schemaVersion'] != 1 ||
-      value['kind'] != 'CHOREIA_V2K_SOURCE_PINS_QA_ONLY' ||
+      value['kind'] != 'CHOREIA_V2M_SOURCE_PINS_QA_ONLY' ||
       value['sourceCatalogSHA256'] != _opsSourceCatalogSha256 ||
       value['manifestSHA256'] != choreiaMediaManifestSha256 ||
       value['sourceProofSHA256'] != _sourceProofSha256 ||
