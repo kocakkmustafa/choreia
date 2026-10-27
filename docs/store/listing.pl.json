@@ -1,0 +1,23 @@
+{
+  "$doc": "Local translation draft of listing.json (K-6, 2026-10-27): same facts as the EN source, paragraph for paragraph. Not submitted or provider-accepted. Native-speaker, legal and store review remain UNRUN.",
+  "$storeLocales": {
+    "appStoreConnect": "pl",
+    "playConsole": "pl-PL"
+  },
+  "appStore": {
+    "name": "Choreia: Naucz się tańczyć",
+    "subtitle": "Pięć ścieżek tańca solo",
+    "promotionalText": "Ćwicz solo Salsę On1, podstawy hip-hopu, taniec w linii, Latin Fusion Fitness i oryginalne krótkie kombinacje z pisemnymi lekcjami, liczeniem i samokontrolą.",
+    "keywords": "taniec,tańczyć,hip hop,salsa,taniec w linii,kroki,ćwiczenia,kurs tańca,ruch,choreografia"
+  },
+  "playStore": {
+    "shortDescription": "Pięć ścieżek tańca solo: pisemne lekcje, liczenie i twój zapis ćwiczeń."
+  },
+  "description": "Choreia łączy pięć obszarów ćwiczeń tańca solo: Salsa On1, hip-hop, taniec w linii, Latin Fusion Fitness i oryginalne krótkie kombinacje. Dołączony materiał pisemny obejmuje 48 lekcji Salsy On1 solo w 8 modułach, kurs hip-hopu dla początkujących z 6 jednostkami i 8 jednostek ćwiczenia umiejętności hip-hopu, 12 jednostek tańca w linii, 10 jednostek Latin Fusion i 10 oryginalnych jednostek krótkiej formy. Te 94 pisemne jednostki zawierają zadania praktyczne, struktury liczenia i samokontrole; tekst kursów jest dostępny w 14 językach. Ścieżka salsy jest solowa; nie potwierdza umiejętności prowadzenia ani podążania w tańcu w parze.\n\nCzytaj lekcje, powtórz zadanie i kontynuuj od swojego lokalnego zapisu ćwiczeń. Zapisy opisują twoją własną naukę i samokontrole; ukończenie lekcji nie potwierdza biegłości. Możesz przeglądać bez logowania i opcjonalnie korzystać ze wspólnego konta Motion. Konto używa twojego adresu e-mail, identyfikatora konta i opcjonalnej nazwy wyświetlanej; konto można usunąć w aplikacji. Zapisy kursów pozostają na urządzeniu w bieżącym zakresie gościa lub konta.\n\nTa wersja nie zawiera filmów demonstracyjnych ani katalogu muzyki w aplikacji. Wizualne liczenie nie słucha utworu i nie sprawdza jego tempa. Ćwiczenia z kamerą na żywo i ocenianie są w tej wersji zamknięte; żadna lekcja nie nagrywa wideo.\n\nBezpłatne są pierwsze 18 lekcji salsy (moduły 1–3), cały kurs hip-hopu dla początkujących, pierwsze 3 jednostki umiejętności hip-hopu oraz pierwsze 4 jednostki tańca w linii, Latin Fusion i krótkiej formy: 39 z 94 jednostek. Dalsze jednostki wymagają opcjonalnej, automatycznie odnawianej subskrypcji: Choreia (ta aplikacja) lub Motion+ (wszystkie pięć aplikacji Motion), miesięcznej lub rocznej, z 14-dniowym bezpłatnym okresem próbnym dla uprawnionych nowych subskrybentów. Ceny są pokazywane w aplikacji przed zakupem. Płatność jest pobierana z konta sklepu. Subskrypcja odnawia się automatycznie, chyba że anulujesz ją w ustawieniach konta sklepu przed datą odnowienia. Warunki: https://yulalab.com/terms",
+  "cameraPermissionRationale": {
+    "ios": "Choreia obserwuje twój taniec, aby przekazywać informacje zwrotne o krokach. Wideo nigdy nie opuszcza telefonu — odczytujemy wyłącznie położenia stawów, a żadne wideo nie jest nagrywane ani przesyłane.",
+    "$source": "ios/Runner/pl.lproj/InfoPlist.strings NSCameraUsageDescription (verbatim). Live camera practice is closed in 1.0.0(6); the app does not request camera permission."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
+}

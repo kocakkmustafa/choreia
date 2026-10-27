@@ -1,0 +1,23 @@
+{
+  "$doc": "Local translation draft of listing.json (K-6, 2026-10-27): same facts as the EN source, paragraph for paragraph. Not submitted or provider-accepted. Native-speaker, legal and store review remain UNRUN.",
+  "$storeLocales": {
+    "appStoreConnect": "id",
+    "playConsole": "id"
+  },
+  "appStore": {
+    "name": "Choreia: Belajar Menari",
+    "subtitle": "Lima jalur latihan tari solo",
+    "promotionalText": "Latih Salsa On1 solo, dasar Hip-Hop, Line Dance, Latin Fusion Fitness, dan rangkaian pendek orisinal dengan pelajaran tertulis, hitungan, dan pemeriksaan diri.",
+    "keywords": "tari,menari,dansa,hip hop,salsa,line dance,langkah,latihan,kelas tari,koreografi"
+  },
+  "playStore": {
+    "shortDescription": "Lima jalur tari solo dengan pelajaran tertulis, hitungan, dan catatan latihan."
+  },
+  "description": "Choreia menghimpun lima area latihan tari solo: Salsa On1, Hip-Hop, Line Dance, Latin Fusion Fitness, dan rangkaian pendek orisinal. Materi tertulis yang disertakan berisi 48 pelajaran Salsa On1 solo dalam 8 modul, kursus Hip-Hop pemula 6 unit dan 8 unit latihan keterampilan Hip-Hop, 12 unit Line Dance, 10 unit Latin Fusion, dan 10 unit format pendek orisinal. Ke-94 unit tertulis ini berisi tugas latihan, struktur hitungan, dan pemeriksaan diri; teks kursus tersedia dalam 14 bahasa. Jalur Salsa bersifat solo; jalur ini tidak menetapkan kemampuan memimpin atau mengikuti dalam tari berpasangan.\n\nBaca pelajaran, ulangi tugas, dan lanjutkan dari catatan latihan lokal Anda. Catatan menggambarkan belajar dan pemeriksaan diri Anda sendiri; menyelesaikan pelajaran tidak menyatakan penguasaan. Anda dapat menjelajah tanpa masuk dan memakai akun Motion bersama secara opsional. Akun menggunakan alamat email, ID akun, dan nama tampilan opsional; akun dapat dihapus di aplikasi. Catatan kursus tetap berada di perangkat dalam cakupan tamu atau akun saat ini.\n\nVersi ini tidak menyertakan video demonstrasi atau katalog musik dalam aplikasi. Hitungan visual tidak mendengarkan lagu atau memeriksa temponya. Latihan kamera langsung dan penilaian ditutup dalam versi ini; tidak ada pelajaran yang merekam video.\n\nGratis: 18 pelajaran Salsa pertama (modul 1–3), seluruh kursus Hip-Hop pemula, 3 unit keterampilan Hip-Hop pertama, serta 4 unit pertama Line Dance, Latin Fusion, dan format pendek: 39 dari 94 unit. Unit berikutnya memerlukan langganan opsional yang diperpanjang otomatis: Choreia (aplikasi ini) atau Motion+ (kelima aplikasi Motion), bulanan atau tahunan, dengan uji coba gratis 14 hari untuk pelanggan baru yang memenuhi syarat. Harga ditampilkan di aplikasi sebelum pembelian. Pembayaran ditagihkan ke akun toko Anda. Langganan diperpanjang otomatis kecuali Anda membatalkannya di pengaturan akun toko sebelum tanggal perpanjangan. Ketentuan: https://yulalab.com/terms",
+  "cameraPermissionRationale": {
+    "ios": "Choreia mengamati tarian Anda untuk memberi masukan tentang langkah Anda. Video tidak pernah meninggalkan ponsel Anda — kami hanya membaca posisi sendi, dan tidak ada video yang direkam atau diunggah.",
+    "$source": "ios/Runner/id.lproj/InfoPlist.strings NSCameraUsageDescription (verbatim). Live camera practice is closed in 1.0.0(6); the app does not request camera permission."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
+}

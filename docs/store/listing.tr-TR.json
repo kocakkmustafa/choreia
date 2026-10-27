@@ -1,5 +1,9 @@
 {
   "$doc": "Türkçe mağaza metni taslağı. İngilizce kaynak: listing.json. Sağlayıcıya gönderilmedi; mağaza ve cihaz kabulü açık.",
+  "$storeLocales": {
+    "appStoreConnect": "tr",
+    "playConsole": "tr-TR"
+  },
   "appStore": {
     "name": "Choreia: Dans Pratiği",
     "subtitle": "Beş solo dans çalışma yolu",
@@ -9,7 +13,7 @@
   "playStore": {
     "shortDescription": "Beş solo dans yolu: yazılı dersler, sayım ve kendi çalışma kaydın."
   },
-  "description": "Choreia beş solo dans çalışma yolunu bir araya getirir: HipHop Foundations, Salsa Shines, Line Dance, Latin Fusion Fitness ve özgün kısa-form kombinasyonları. Türkçe ve İngilizce paketli içerikte 6 HipHop temel birimi ve 8 beceri çalışma birimi, 8 modülde 48 solo Salsa On1 dersi, 12 Line Dance, 10 Latin Fusion ve 10 özgün kısa-form birimi bulunur. Toplam 94 yazılı birim uygulama görevleri, sayım yapıları ve öz denetimler içerir. Salsa yolu solodur; eşli dansta yönlendirme veya takip yeterliği vermez.\n\nDersleri oku, bir görevi yeniden çalış ve cihazındaki çalışma kaydından devam et. Kayıtlar kendi çalışmanı ve öz denetimini anlatır; ders tamamlama ustalığı belgelemez. Hesapsız gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır.\n\nBu adayda gösterim videosu ve uygulama içi müzik kataloğu bulunmaz. Görsel sayım parçayı dinlemez veya temposunu doğrulamaz. Kamera gözlemleri adım kimliğini, müziğe uyumu, gerçek ağırlık aktarımını veya doğru dans tekniğini doğrulamaz. Bağımsız kalibrasyonu tamamlanmış kamera değerlendirmesi ve abonelik satışı açık değildir.",
+  "description": "Choreia beş solo dans çalışma alanını bir araya getirir: Salsa On1, Hip-Hop, Line Dance, Latin Fusion Fitness ve özgün kısa-form kombinasyonları. Paketli yazılı içerikte 8 modülde 48 solo Salsa On1 dersi, 6 birimlik Hip-Hop başlangıç kursu ve 8 Hip-Hop beceri çalışma birimi, 12 Line Dance, 10 Latin Fusion ve 10 özgün kısa-form birimi bulunur. Toplam 94 yazılı birim uygulama görevleri, sayım yapıları ve öz denetimler içerir; kurs metni 14 dilde sunulur. Salsa yolu solodur; eşli dansta yönlendirme veya takip yeterliği vermez.\n\nDersleri oku, bir görevi yeniden çalış ve cihazındaki çalışma kaydından devam et. Kayıtlar kendi çalışmanı ve öz denetimini anlatır; ders tamamlama ustalığı belgelemez. Hesapsız gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır.\n\nBu sürümde gösterim videosu ve uygulama içi müzik kataloğu bulunmaz. Görsel sayım parçayı dinlemez veya temposunu doğrulamaz. Canlı kamera pratiği ve puanlama bu sürümde kapalıdır; hiçbir ders video kaydetmez.\n\nİlk 18 Salsa dersi (modül 1–3), Hip-Hop başlangıç kursunun tamamı, ilk 3 Hip-Hop beceri birimi ve Line Dance, Latin Fusion ile kısa-form kurslarının ilk 4 birimi ücretsizdir: 94 birimin 39'u. Sonraki birimler isteğe bağlı, otomatik yenilenen bir abonelik gerektirir: Choreia (bu uygulama) veya Motion+ (beş Motion uygulamasının tümü), aylık veya yıllık; uygun yeni abonelere 14 günlük ücretsiz deneme. Fiyatlar satın almadan önce uygulamada gösterilir. Ödeme mağaza hesabından alınır. Abonelik, yenileme tarihinden önce mağaza hesabı ayarlarından iptal edilmedikçe otomatik olarak yenilenir. Koşullar: https://yulalab.com/terms",
   "cameraPermissionRationale": {
     "ios": "Choreia, dans adımlarına ilişkin geri bildirim vermek için kamerayı kullanır. Video telefonundan çıkmaz; yalnızca eklem konumları okunur ve video kaydedilmez veya yüklenmez."
   },
@@ -84,5 +88,12 @@
     "newBuild": false,
     "storeWritten": false,
     "publicationGate": "Separate final user upload approval after first three groups and product acceptance gates; training/calibration later"
+  },
+  "$k6Revision20261027": {
+    "status": "LOCAL_DRAFT_NOT_UPLOADED",
+    "decision": "K-6 (founder, 2026-10-27): the five Motion apps list in all 14 app languages",
+    "candidate": "1.0.0(6) @ 5be053a: subscription sales open (paywall A), live camera practice and scoring closed, K-2 store family controls for 13-17",
+    "changed": "description only (camera/sales paragraph replaced, free-lesson paragraph added from lib/app/course/course_access.dart); appStore/playStore fields unchanged",
+    "historicalNotes": "Older $ notes in this file describe earlier candidates and are kept as history; they do not describe 1.0.0(6)."
   }
 }

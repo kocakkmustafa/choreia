@@ -1,0 +1,23 @@
+{
+  "$doc": "Local translation draft of listing.json (K-6, 2026-10-27): same facts as the EN source, paragraph for paragraph. Not submitted or provider-accepted. Native-speaker, legal and store review remain UNRUN.",
+  "$storeLocales": {
+    "appStoreConnect": "zh-Hans",
+    "playConsole": "zh-CN"
+  },
+  "appStore": {
+    "name": "Choreia：学跳舞",
+    "subtitle": "五条单人舞蹈练习路径",
+    "promotionalText": "通过文字课程、节拍计数和自查，练习单人 Salsa On1、Hip-Hop 基础、Line Dance、Latin Fusion Fitness 和原创短舞组合。",
+    "keywords": "舞蹈,跳舞,街舞,嘻哈,萨尔萨,排舞,舞步,练习,舞蹈课,编舞"
+  },
+  "playStore": {
+    "shortDescription": "五条单人舞蹈路径：文字课程、节拍计数和你的练习记录。"
+  },
+  "description": "Choreia 汇集五个单人舞蹈练习领域：Salsa On1、Hip-Hop、Line Dance、Latin Fusion Fitness 和原创短舞组合。内置文字教材包括 8 个模块共 48 节单人 Salsa On1 课、6 个单元的 Hip-Hop 入门课程和 8 个 Hip-Hop 技能学习单元、12 个 Line Dance 单元、10 个 Latin Fusion 单元以及 10 个原创短舞单元。这 94 个文字单元包含练习任务、节拍结构和自查，课程文字提供 14 种语言。Salsa 路径为单人练习，不证明双人舞中的引领或跟随能力。\n\n阅读课程、重做练习任务，并从设备上的练习记录继续。记录描述的是你自己的学习和自查；完成课程不代表已经掌握。无需登录即可浏览，也可选择使用通用的 Motion 账户。账户使用你的电子邮件地址、账户 ID 和可选的显示名称；可在应用内删除账户。课程记录保存在设备上，归属于当前访客或账户范围。\n\n本版本不包含示范视频，也没有应用内音乐库。视觉节拍不会收听歌曲或核对其速度。本版本关闭实时摄像头练习和评分；所有课程都不拍摄视频。\n\n免费内容包括：前 18 节 Salsa 课（模块 1–3）、完整的 Hip-Hop 入门课程、前 3 个 Hip-Hop 技能单元，以及 Line Dance、Latin Fusion 和短舞课程各自的前 4 个单元，即 94 个单元中的 39 个。之后的单元需要可选的自动续订订阅：Choreia（本应用）或 Motion+（全部五款 Motion 应用），按月或按年订阅，符合条件的新订阅者可享 14 天免费试用。价格会在购买前于应用内显示。费用由你的商店账户支付。除非你在续订日期前于商店账户设置中取消，否则订阅将自动续订。条款：https://yulalab.com/terms",
+  "cameraPermissionRationale": {
+    "ios": "Choreia 会观察你的舞蹈，为你的脚步提供反馈。视频始终留在你的手机上——我们只读取关节位置，不会录制或上传视频。",
+    "$source": "ios/Runner/zh-Hans.lproj/InfoPlist.strings NSCameraUsageDescription (verbatim). Live camera practice is closed in 1.0.0(6); the app does not request camera permission."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
+}

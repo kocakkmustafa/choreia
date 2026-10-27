@@ -1,0 +1,23 @@
+{
+  "$doc": "Local translation draft of listing.json (K-6, 2026-10-27): same facts as the EN source, paragraph for paragraph. Not submitted or provider-accepted. Native-speaker, legal and store review remain UNRUN.",
+  "$storeLocales": {
+    "appStoreConnect": "ko",
+    "playConsole": "ko-KR"
+  },
+  "appStore": {
+    "name": "Choreia: 춤 배우기",
+    "subtitle": "솔로 댄스 연습 과정 5가지",
+    "promotionalText": "솔로 Salsa On1, 힙합 기초, 라인댄스, Latin Fusion Fitness, 자체 제작 짧은 콤비네이션을 글 수업, 카운트, 자가 점검으로 연습하세요.",
+    "keywords": "댄스,춤,힙합,살사,라인댄스,스텝,연습,댄스 수업,안무"
+  },
+  "playStore": {
+    "shortDescription": "글 수업, 카운트, 연습 기록으로 배우는 솔로 댄스 과정 5가지."
+  },
+  "description": "Choreia는 다섯 가지 솔로 댄스 연습 분야를 한곳에 모았습니다: Salsa On1, 힙합, 라인댄스, Latin Fusion Fitness, 자체 제작 짧은 콤비네이션. 포함된 글 자료는 8개 모듈의 솔로 Salsa On1 수업 48개, 6단원 힙합 초급 강좌와 8단원 힙합 기술 학습, 라인댄스 12단원, Latin Fusion 10단원, 자체 제작 짧은 형식 10단원으로 구성됩니다. 이 94개 글 단원에는 연습 과제, 카운트 구조, 자가 점검이 들어 있으며 강좌 글은 14개 언어로 제공됩니다. Salsa 과정은 솔로이며, 커플 댄스에서 리드하거나 팔로우하는 능력을 인증하지 않습니다.\n\n수업을 읽고 과제를 다시 해 보며 기기에 저장된 연습 기록에서 이어서 진행하세요. 기록은 자신의 학습과 자가 점검을 보여 줄 뿐이며, 수업 완료가 숙달을 인증하지는 않습니다. 로그인하지 않고 둘러볼 수 있고, 선택적으로 공용 Motion 계정을 사용할 수 있습니다. 계정은 이메일 주소, 계정 ID, 선택적 표시 이름을 사용하며 앱에서 계정을 삭제할 수 있습니다. 강좌 기록은 현재 게스트 또는 계정 범위 안에서 기기에 남습니다.\n\n이번 버전에는 시범 영상과 앱 내 음악 카탈로그가 포함되지 않습니다. 시각적 카운트는 노래를 듣거나 템포를 확인하지 않습니다. 실시간 카메라 연습과 채점은 이번 버전에서 닫혀 있으며, 어떤 수업도 영상을 촬영하지 않습니다.\n\n무료로 제공되는 것은 Salsa 첫 18개 수업(모듈 1–3), 힙합 초급 강좌 전체, 힙합 기술 학습 첫 3단원, 라인댄스·Latin Fusion·짧은 형식 강좌의 각 첫 4단원으로 94단원 중 39단원입니다. 이후 단원에는 자동 갱신되는 선택형 구독이 필요합니다: Choreia(이 앱) 또는 Motion+(Motion 앱 5개 모두), 월간 또는 연간이며, 자격이 있는 신규 구독자에게는 14일 무료 체험이 제공됩니다. 가격은 구매 전에 앱에 표시됩니다. 결제는 스토어 계정으로 청구됩니다. 구독은 갱신일 전에 스토어 계정 설정에서 취소하지 않으면 자동으로 갱신됩니다. 약관: https://yulalab.com/terms",
+  "cameraPermissionRationale": {
+    "ios": "Choreia는 춤추는 모습을 관찰하여 스텝에 대한 피드백을 제공합니다. 영상은 휴대폰 밖으로 나가지 않습니다. 관절의 위치만 읽으며 영상을 녹화하거나 업로드하지 않습니다.",
+    "$source": "ios/Runner/ko.lproj/InfoPlist.strings NSCameraUsageDescription (verbatim). Live camera practice is closed in 1.0.0(6); the app does not request camera permission."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
+}

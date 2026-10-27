@@ -1,3 +1,36 @@
+# 27 Ekim 2026 · K-6: 14 mağaza dili (taslak, konsola yazılmadı)
+
+Kurucu kararı K-6 (27 Ekim): beş Motion uygulaması 14 uygulama dilinde listelenir.
+EN `listing.json` ve TR `listing.tr-TR.json` açıklaması 1.0.0(6) adayına göre
+yenilendi: "abonelik satışı açık değil" cümlesi çıktı (satış 23 Ekim'den beri
+açık), canlı kamera ve puanlama kapalı, ücretsiz bölüm koddaki
+`CourseAccess.freeLessons` ile birebir: Salsa ilk 18 ders (modül 1–3), Hip-Hop
+başlangıç kursu 6/6, Hip-Hop beceri 3/8, Line Dance / Latin Fusion / kısa form
+4'er → 94 birimin 39'u. Ad, alt başlık, tanıtım, anahtar kelime ve kısa açıklama
+değişmedi. Eski `$` notları tarihseldir (`$k6Revision20261027`).
+
+12 çeviri `listing.<dil>.json`: de, es-419, pt-BR, fr, it, pl, id, ja, ko,
+zh-Hans, ar, hi. Her dosya EN olgularını paragraf paragraf taşır; kamera izin
+metni o dilin `ios/Runner/<dil>.lproj/InfoPlist.strings` satırından birebir
+alınır (1.0.0(6) kamera izni istemez). Konsol kodları 14 dosyanın hepsinde
+`$storeLocales` alanında (Ostinato/Gravita ile aynı eşleme):
+
+| Dosya | App Store Connect | Play Console |
+|---|---|---|
+| listing.json | en-US | en-US |
+| listing.tr-TR.json | tr | tr-TR |
+| de · fr · pt-BR | de-DE · fr-FR · pt-BR | de-DE · fr-FR · pt-BR |
+| es-419 | es-MX | es-419 |
+| it · pl · id | it · pl · id | it-IT · pl-PL · id |
+| ja · ko · zh-Hans | ja · ko · zh-Hans | ja-JP · ko-KR · zh-CN |
+| ar · hi | ar-SA · hi | ar · hi-IN |
+
+`test/store_listing_locales_test.dart`: 14 dosya, kodlar, alan sınırları
+(ad/alt başlık 30, tanıtım 170, anahtar kelime 100, kısa açıklama 80, açıklama
+4000), paragraf eşliği, sayılı olgular (kurs dosyaları ve `CourseAccess` ile
+bağlı), URL'ler ve kamera metni. Ana dil, hukuk ve mağaza incelemesi UNRUN;
+konsol girişi Yönetim/kurucuda.
+
 # 23 Ekim 2026 güncellemesi · abonelik satışı açık (taslak, konsola yazılmadı)
 
 Kurucu kararları (23 Ekim): satış ilk sürümde açık, kamera/puanlama kapalı;

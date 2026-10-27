@@ -1,0 +1,23 @@
+{
+  "$doc": "Local translation draft of listing.json (K-6, 2026-10-27): same facts as the EN source, paragraph for paragraph. Not submitted or provider-accepted. Native-speaker, legal and store review remain UNRUN.",
+  "$storeLocales": {
+    "appStoreConnect": "es-MX",
+    "playConsole": "es-419"
+  },
+  "appStore": {
+    "name": "Choreia: Aprende a bailar",
+    "subtitle": "Cinco rutas de baile solo",
+    "promotionalText": "Practica Salsa On1 en solo, bases de Hip-Hop, Line Dance, Latin Fusion Fitness y combinaciones cortas originales con lecciones escritas, conteos y autoevaluación.",
+    "keywords": "baile,bailar,hip hop,salsa,line dance,pasos,práctica,clases de baile,movimiento,coreografía"
+  },
+  "playStore": {
+    "shortDescription": "Cinco rutas de baile en solo con lecciones escritas, conteos y tu registro."
+  },
+  "description": "Choreia reúne cinco áreas de práctica de baile en solitario: Salsa On1, Hip-Hop, Line Dance, Latin Fusion Fitness y combinaciones originales de formato corto. El material escrito incluido tiene 48 lecciones de Salsa On1 en solitario en 8 módulos, un curso de Hip-Hop para principiantes de 6 unidades y 8 unidades de práctica de habilidades de Hip-Hop, 12 unidades de Line Dance, 10 de Latin Fusion y 10 unidades originales de formato corto. Estas 94 unidades escritas incluyen tareas de práctica, estructuras de conteo y autoevaluaciones; el texto del curso está disponible en 14 idiomas. La ruta de Salsa es en solitario; no acredita la capacidad de guiar o seguir en el baile en pareja.\n\nLee las lecciones, repite una tarea y continúa desde tu registro de práctica local. Los registros describen tu propio estudio y tus autoevaluaciones; completar una lección no certifica dominio. Puedes explorar sin iniciar sesión y usar una cuenta compartida de Motion opcional. La cuenta usa tu correo electrónico, un ID de cuenta y, si quieres, un nombre visible; puedes eliminar la cuenta desde la app. Los registros del curso permanecen en el dispositivo dentro del ámbito actual de invitado o de cuenta.\n\nEsta versión no incluye videos de demostración ni un catálogo de música en la app. Los conteos visuales no escuchan una canción ni verifican su tempo. La práctica en vivo con cámara y la puntuación están desactivadas en esta versión; ninguna lección captura video.\n\nSon gratis las primeras 18 lecciones de Salsa (módulos 1–3), todo el curso de Hip-Hop para principiantes, las primeras 3 unidades de habilidades de Hip-Hop y las primeras 4 unidades de Line Dance, Latin Fusion y formato corto: 39 de las 94 unidades. Las unidades posteriores requieren una suscripción opcional con renovación automática: Choreia (esta app) o Motion+ (las cinco apps de Motion), mensual o anual, con una prueba gratuita de 14 días para nuevos suscriptores elegibles. Los precios se muestran en la app antes de la compra. El pago se cobra a tu cuenta de la tienda. La suscripción se renueva automáticamente a menos que la canceles en la configuración de tu cuenta de la tienda antes de la fecha de renovación. Términos: https://yulalab.com/terms",
+  "cameraPermissionRationale": {
+    "ios": "Choreia usa la cámara para darte comentarios sobre tus pasos de baile. El video nunca sale de tu teléfono: solo se leen las posiciones de tus articulaciones y no se graba ni se sube ningún video.",
+    "$source": "ios/Runner/es-419.lproj/InfoPlist.strings NSCameraUsageDescription (verbatim). Live camera practice is closed in 1.0.0(6); the app does not request camera permission."
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
+}
