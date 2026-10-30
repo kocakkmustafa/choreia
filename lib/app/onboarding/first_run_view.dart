@@ -275,8 +275,8 @@ abstract final class IntroStrings {
   /// privacy promise drift, and the one that drifts is always the one nobody
   /// is looking at — `content_claims_test` pins them equal so an edit to
   /// either fails the build.
-  /// ⚠️ `Video … is not recorded` — naming video carries the whole point, and
-  /// it was added because THIS FIX BROKE THE SCREEN (C-277, H-10 / Lissom's
+  /// ⚠️ `no video is recorded` — the two words carry the whole point, and they
+  /// were added because THIS FIX BROKE THE SCREEN (C-277, H-10 / Lissom's
   /// class read from the other direction).
   ///
   /// The card used to end *"nothing is recorded or uploaded"*. True on its own
@@ -302,8 +302,8 @@ abstract final class IntroStrings {
   static const String camera =
       'Live camera practice is closed in this release. If it is separately '
       'enabled in a later release, Choreia uses the camera only to read the '
-      'positions of your joints on this device. Video never leaves your phone '
-      'and is not recorded or uploaded.';
+      'positions of your joints on this device. Video never leaves your phone, '
+      'and no video is recorded or uploaded.';
 
   static const String musicTitle = 'YOUR OWN MUSIC';
 

@@ -168,7 +168,7 @@ ATT (App Tracking Transparency): **GEREKMEZ** — `NSPrivacyTracking: false`,
 
 | İzin | Platform | Gerekçe cümlesi | Kaynak |
 |---|---|---|---|
-| Camera | iOS + Android | "Live camera practice is closed in this release. If it is separately enabled in a later release, Choreia uses the camera only to read the positions of your joints on this device. Video never leaves your phone and is not recorded or uploaded." | `NSCameraUsageDescription` (Info.plist) — Android'de eşdeğer metin store listing'de |
+| Camera | iOS + Android | "Live camera practice is closed in this release. If it is separately enabled in a later release, Choreia uses the camera only to read the positions of your joints on this device. Video never leaves your phone, and no video is recorded or uploaded." | `NSCameraUsageDescription` (Info.plist) — Android'de eşdeğer metin store listing'de |
 
 2026-08-19 “yalnız CAMERA” açıklaması hesap öncesi tarihsel durumdur.
 2026-09-26 manifestte `CAMERA`, hesap ağı için `INTERNET` ve optional camera
