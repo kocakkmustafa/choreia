@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "Choreia usa la cámara para darte comentarios sobre tus pasos de baile. El video nunca sale de tu teléfono: solo se leen las posiciones de tus articulaciones y no se graba ni se sube ningún video.";
+"NSCameraUsageDescription" = "La práctica en vivo con cámara está desactivada en esta versión. Si se habilita por separado en una versión posterior, Choreia usará la cámara solo para leer la posición de tus articulaciones en este dispositivo. El video nunca sale de tu teléfono y no se graba ni se sube.";

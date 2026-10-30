@@ -12,7 +12,7 @@
 		</dict>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Choreia watches your dancing to give you feedback on your steps. Video never leaves your phone — we only read the positions of your joints, and no video is recorded or uploaded.</string>
+	<string>Live camera practice is closed in this release. If it is separately enabled in a later release, Choreia uses the camera only to read the positions of your joints on this device. Video never leaves your phone and is not recorded or uploaded.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

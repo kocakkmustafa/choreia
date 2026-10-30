@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "O Choreia usa a câmera para dar retorno sobre seus passos de dança. O vídeo nunca sai do seu celular: apenas as posições das articulações são lidas, e nenhum vídeo é gravado ou enviado.";
+"NSCameraUsageDescription" = "A prática ao vivo com câmera não está disponível nesta versão. Se for habilitada separadamente em uma versão futura, o Choreia usará a câmera apenas para ler a posição das suas articulações neste dispositivo. O vídeo nunca sai do seu celular e não é gravado nem enviado.";

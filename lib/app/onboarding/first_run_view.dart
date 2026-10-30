@@ -275,8 +275,8 @@ abstract final class IntroStrings {
   /// privacy promise drift, and the one that drifts is always the one nobody
   /// is looking at — `content_claims_test` pins them equal so an edit to
   /// either fails the build.
-  /// ⚠️ `no video is recorded` — the two words carry the whole point, and they
-  /// were added because THIS FIX BROKE THE SCREEN (C-277, H-10 / Lissom's
+  /// ⚠️ `Video … is not recorded` — naming video carries the whole point, and
+  /// it was added because THIS FIX BROKE THE SCREEN (C-277, H-10 / Lissom's
   /// class read from the other direction).
   ///
   /// The card used to end *"nothing is recorded or uploaded"*. True on its own
@@ -293,10 +293,17 @@ abstract final class IntroStrings {
   ///
   /// ⇒ ***COHERENCE IS A PROPERTY OF THE SET, NOT OF THE MEMBERS — SO FIXING
   /// ONE SENTENCE CAN BREAK A SCREEN THAT EVERY TEST STILL PASSES.***
+  ///
+  /// 30 Oct 2026: live camera practice is closed
+  /// (`motionCameraCoachingAvailable`), so the string says that first and
+  /// describes the camera only for a later release that enables it. The old
+  /// "feedback on your steps" promise is gone; the intro card itself shows
+  /// [cameraStatus], not this sentence.
   static const String camera =
-      'Choreia watches your dancing to give you feedback on your steps. '
-      'Video never leaves your phone — we only read the positions of your '
-      'joints, and no video is recorded or uploaded.';
+      'Live camera practice is closed in this release. If it is separately '
+      'enabled in a later release, Choreia uses the camera only to read the '
+      'positions of your joints on this device. Video never leaves your phone '
+      'and is not recorded or uploaded.';
 
   static const String musicTitle = 'YOUR OWN MUSIC';
 

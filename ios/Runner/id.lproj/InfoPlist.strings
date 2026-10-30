@@ -1,2 +1,2 @@
 /* Camera remains unavailable in this release. Native permission acceptance is separate. */
-"NSCameraUsageDescription" = "Choreia mengamati tarian Anda untuk memberi masukan tentang langkah Anda. Video tidak pernah meninggalkan ponsel Anda — kami hanya membaca posisi sendi, dan tidak ada video yang direkam atau diunggah.";
+"NSCameraUsageDescription" = "Latihan kamera langsung ditutup dalam rilis ini. Jika diaktifkan secara terpisah pada rilis mendatang, Choreia hanya menggunakan kamera untuk membaca posisi sendi Anda di perangkat ini. Video tidak pernah keluar dari ponsel Anda dan tidak direkam atau diunggah.";

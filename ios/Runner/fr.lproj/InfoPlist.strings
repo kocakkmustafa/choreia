@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "Choreia utilise la caméra pour te donner un retour sur tes pas de danse. La vidéo ne quitte jamais ton téléphone : seules les positions de tes articulations sont lues et aucune vidéo n’est enregistrée ni envoyée.";
+"NSCameraUsageDescription" = "La pratique caméra en direct est fermée dans cette version. Si elle est activée séparément dans une version ultérieure, Choreia utilisera la caméra uniquement pour lire la position de tes articulations sur cet appareil. La vidéo ne quitte jamais ton téléphone et n’est ni enregistrée ni envoyée.";
