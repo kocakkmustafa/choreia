@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "Choreia, dans adımlarına ilişkin geri bildirim vermek için kamerayı kullanır. Video telefonundan çıkmaz; yalnızca eklem konumları okunur ve video kaydedilmez veya yüklenmez.";
+"NSCameraUsageDescription" = "Bu sürümde canlı kamera pratiği kapalıdır. Daha sonraki bir sürümde ayrıca etkinleştirilirse Choreia kamerayı yalnızca bu cihazda eklem konumlarını okumak için kullanır. Video telefonundan çıkmaz; kaydedilmez veya yüklenmez.";

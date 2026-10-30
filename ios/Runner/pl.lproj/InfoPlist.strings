@@ -1,2 +1,2 @@
 /* Camera remains unavailable in this release. Native permission acceptance is separate. */
-"NSCameraUsageDescription" = "Choreia obserwuje twój taniec, aby przekazywać informacje zwrotne o krokach. Wideo nigdy nie opuszcza telefonu — odczytujemy wyłącznie położenia stawów, a żadne wideo nie jest nagrywane ani przesyłane.";
+"NSCameraUsageDescription" = "Ćwiczenia z kamerą na żywo są zamknięte w tym wydaniu. Jeśli zostaną osobno włączone w późniejszym wydaniu, Choreia użyje kamery wyłącznie do odczytu pozycji twoich stawów na tym urządzeniu. Wideo nigdy nie opuszcza telefonu i nie jest nagrywane ani przesyłane.";
