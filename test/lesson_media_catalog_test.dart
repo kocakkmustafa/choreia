@@ -41,7 +41,7 @@ const _pin = LessonMediaSourcePin(
 // v2k pin dosyası + test pinleri yeniden üretilince; o zamana dek bu 6 test
 // atlanır (CI'da kırmızı koşmasın). Bkz. PR açıklaması.
 const _skipStaleSourcePin =
-    "kaynak pini eskimiş: v2k pin dosyası lib'deki ChoreiaSourceProjectionPin ile uyuşmuyor; pinler yenilenince açılır";
+    "ChoreiaSourceProjectionPin ilerledi (kurs 284d4296, manifest ef6eaa2b); content/motion_content/choreia_source_pins_v2k.json ve test pinleri eski (kurs d04ef4c4, manifest c98bde34); pin yenilenince skip kaldırılacak";
 const _zeroSha =
     '0000000000000000000000000000000000000000000000000000000000000000';
 
