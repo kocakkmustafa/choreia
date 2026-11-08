@@ -1,2 +1,2 @@
 /* Camera remains unavailable in this release. Native permission acceptance is separate. */
-"NSCameraUsageDescription" = "Choreia 会观察你的舞蹈，为你的脚步提供反馈。视频始终留在你的手机上——我们只读取关节位置，不会录制或上传视频。";
+"NSCameraUsageDescription" = "本版本关闭实时摄像头练习。如果在后续版本中另行启用，Choreia 只会使用摄像头在本设备上读取你的关节位置。视频绝不会离开你的手机，也不会被录制或上传。";

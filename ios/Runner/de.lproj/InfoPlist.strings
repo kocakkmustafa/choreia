@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "Choreia verwendet die Kamera, um dir Rückmeldung zu deinen Tanzschritten zu geben. Das Video verlässt dein Telefon nie: Es werden nur die Positionen deiner Gelenke gelesen. Es wird kein Video aufgezeichnet oder hochgeladen.";
+"NSCameraUsageDescription" = "Live-Kameraübung ist in dieser Version geschlossen. Falls sie in einer späteren Version separat freigeschaltet wird, verwendet Choreia die Kamera nur, um auf diesem Gerät die Positionen deiner Gelenke zu lesen. Das Video verlässt dein Telefon nie und wird weder aufgezeichnet noch hochgeladen.";

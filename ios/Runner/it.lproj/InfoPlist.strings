@@ -1,2 +1,2 @@
 /* Camera remains unavailable in this release. Native permission acceptance is separate. */
-"NSCameraUsageDescription" = "Choreia osserva la tua danza per darti un riscontro sui passi. Il video non lascia mai il telefono: leggiamo solo le posizioni delle articolazioni e nessun video viene registrato o caricato.";
+"NSCameraUsageDescription" = "L'esercitazione con videocamera in diretta è chiusa in questa versione. Se verrà abilitata separatamente in una versione successiva, Choreia userà la videocamera solo per leggere la posizione delle tue articolazioni su questo dispositivo. Il video non lascia mai il tuo telefono e non viene registrato né caricato.";
