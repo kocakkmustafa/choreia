@@ -30,6 +30,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.47.9"
           channel: stable
 
       - name: Poz modeli (pinli SHA-256 doğrulamalı)
@@ -55,7 +56,7 @@ jobs:
         run: |
           git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
 
-      - run: flutter pub get
+      - run: flutter pub get --enforce-lockfile
 
       - name: Pinli içerik sözleşmesi için tarihsel Core Git kaynağı
         # Uses the existing repository-specific Git authentication configuration.
@@ -90,6 +91,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.47.9"
           channel: stable
 
       - name: Poz modeli (pinli SHA-256 doğrulamalı)
@@ -106,7 +108,7 @@ jobs:
         run: |
           git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
 
-      - run: flutter pub get
+      - run: flutter pub get --enforce-lockfile
 
       - name: Android release build — imzasız, KOD YOLU kanıtı
         # Gerçek keystore kurucuda (~/.secrets/yula/), CI'da YOK.
@@ -125,6 +127,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.47.9"
           channel: stable
 
       - name: Poz modeli (pinli SHA-256 doğrulamalı)
@@ -140,7 +143,7 @@ jobs:
         run: |
           git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
 
-      - run: flutter pub get
+      - run: flutter pub get --enforce-lockfile
 
       - name: iOS release build, imzasız
         # `--no-codesign`: CI runner'ında imzalama sertifikası yok ve
