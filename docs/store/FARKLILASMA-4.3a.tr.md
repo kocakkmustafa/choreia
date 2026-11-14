@@ -47,7 +47,7 @@ Ortak kalan: Core çatısı, ücretsiz-önce erişim kalıbı, hesap/abonelik gr
 
 ## 3. Boşluk listesi ve düzeltme tahmini
 
-Beden: S ≈ metin/not, M ≈ küçük kod+mağaza varlığı, L ≈ ürün farklılığı. Hiçbiri bu bilette uygulanmaz. Toplam: **S=3, M=2, L=1 (6 boşluk).**
+Beden: S ≈ metin/not, M ≈ küçük kod+mağaza varlığı, L ≈ ürün farklılığı. Hiçbiri bu bilette uygulanmaz. Toplam: **S=4, M=1, L=1 (6 boşluk).**
 
 | # | Boşluk | Kanıt | Önerilen düzeltme | Beden |
 |---|---|---|---|---|
@@ -62,7 +62,7 @@ Beden: S ≈ metin/not, M ≈ küçük kod+mağaza varlığı, L ≈ ürün fark
 
 > Merhaba,
 > Choreia, beş Motion uygulamasından biri olarak benzer dönemde incelemeye gönderildi; bu yüzden benzer bir paket gibi göründüğünü anlıyoruz. Gönderimleri artık zamana yayıyoruz.
-> Choreia yalnız solo dansa yöneliktir: 14 dilde yazılı derslerle beş kurs (Salsa On1 48 ders, Hip-Hop 8, Line Dance 12, Latin Fusion 10, özgün kısa-form 10). Her derste uygulama görevi ve öz-kontrol vardır; sonuçlar kendi bildirimli çalışma kaydıdır, beceri belgelemesi değildir. Diğer Motion uygulamaları başka alanlara (gitar, yoga, calisthenics, boks) aittir.
+> Choreia yalnız solo dansa yöneliktir: 14 dilde yazılı derslerle beş kurs (Salsa On1 48 ders, Hip-Hop 6 temel + 8 beceri, Line Dance 12, Latin Fusion 10, özgün kısa-form 10). Her derste uygulama görevi ve öz-kontrol vardır; sonuçlar kendi bildirimli çalışma kaydıdır, beceri belgelemesi değildir. Diğer Motion uygulamaları başka alanlara (gitar, yoga, calisthenics, boks) aittir.
 > Hesap, abonelik ve güvenlik altyapısı ile ücretsiz-önce erişim kalıbı ortaktır; içerik, ad, ikon ve alan ayrıdır. Bu sürümde canlı kamera kapalıdır ve farklılık olarak öne sürülmemektedir.
 > Ek bilgi isterseniz memnuniyetle sağlarız.
 
