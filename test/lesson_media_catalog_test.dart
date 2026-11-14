@@ -19,7 +19,7 @@ const _pin = LessonMediaSourcePin(
   variantStem:
       'choreia/so-01--becaa07c/orientation--1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7--master-16x9',
   courseSourceSha256:
-      'd04ef4c413c6db0ca8858c1cf11d231cd9614adecff71aa41cc752481007cbfc',
+      '284d429656ec8ca56fd10674685cf61069d157a6ee985eb764818ae9db11907d',
   lessonCanonicalSha256:
       '05b4bc7664a0143fd0f75bd4d98ef2934ab9ae9eeb381224d7bbb8f73ffe7a2b',
   productionSpecSha256:
@@ -30,18 +30,8 @@ const _pin = LessonMediaSourcePin(
       'motion-media-v1:1ed099b8a8d6dcaa4fd41ed0d54c69c3b4fdbc3fc297bc96ce7643a8aa60daa7',
   productionState: 'PREPRODUCTION_UNGENERATED',
   sourcePinSha256:
-      '67cfed6b6266f23a7204887f59f2686a38b67678b63d6e8e277786e9d9061a9d',
+      'd0a4196842964e72c8bb5f296d201143d0b2be54a64c192f0b662ac33a4386e4',
 );
-// Kök neden (2026-11-05): lib'deki `ChoreiaSourceProjectionPin` (kurs
-// 284d4296…, katalog 6a1a1ebf…, manifest ef6eaa2b…) v2k kaynak-pin
-// dosyasından sonra ilerledi; `content/motion_content/choreia_source_pins_v2k.json`
-// ise eski kaynağı (kurs d04ef4c4…, manifest c98bde34…) taşıyor. Bu yüzden
-// `LessonMediaCatalog.inspect` kaynak pinini eşleştiremez ve hep null döner;
-// sentetik fixture bunu aşamaz (dosyanın SHA-256'sı koda sabitli). Kalıcı çözüm
-// v2k pin dosyası + test pinleri yeniden üretilince; o zamana dek bu 6 test
-// atlanır (CI'da kırmızı koşmasın). Bkz. PR açıklaması.
-const _skipStaleSourcePin =
-    "ChoreiaSourceProjectionPin ilerledi (kurs 284d4296, manifest ef6eaa2b); content/motion_content/choreia_source_pins_v2k.json ve test pinleri eski (kurs d04ef4c4, manifest c98bde34); pin yenilenince skip kaldırılacak";
 const _zeroSha =
     '0000000000000000000000000000000000000000000000000000000000000000';
 
@@ -200,7 +190,7 @@ void main() {
   });
 
   test('exact authored source row, video bytes, two VTT hashes and locale inspect',
-      skip: _skipStaleSourcePin, () async {
+      () async {
     final fixture = _Fixture();
     for (final locale in ['tr', 'en']) {
       final result = await fixture.inspect(locale: locale);
@@ -214,7 +204,7 @@ void main() {
   });
 
   test('caption metadata stays fixed while the duration probe is pending',
-      skip: _skipStaleSourcePin, () async {
+      () async {
     final fixture = _Fixture();
     final suppliedCaptions = <LessonMediaCaption>[
       fixture.caption('tr'),
@@ -527,7 +517,7 @@ void main() {
     'null variant'
   ]) {
     testWidgets('pending inspection is revoked by $revocation on the same slot',
-        skip: true, // _skipStaleSourcePin nedeni (yukarı)
+        
         (tester) async {
       final fixture = _Fixture();
       final catalog = fixture.catalog();
@@ -598,7 +588,7 @@ void main() {
   }
 
   testWidgets('slot remains absent and closes after account/lifecycle change',
-      skip: true, // _skipStaleSourcePin nedeni (yukarı)
+      
       (tester) async {
     final fixture = _Fixture();
     final owner = ValueNotifier<String?>('alice');
