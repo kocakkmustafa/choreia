@@ -72,7 +72,10 @@ Bunlar yerel kayıt/hesap ayrımıdır; yeni sunucu collection türü değildir.
 
 IPA'daki 9 privacy manifestin tamamında tracking=false. Runner'ın 6
 collected-data beyanı kaynak plist ile anlamsal olarak aynı; SDK required-reason
-kayıtları da paket içinden okundu. Android merged manifestte INTERNET/CAMERA'ya
+kayıtları da paket içinden okundu. CHO-P1-02 sonrası: kamera kapalı sürümde
+Android merged manifest CAMERA beyan etmez (kamera açılınca geri eklenir:
+`docs/camera/ANDROID-MANIFEST-CAMERA.md`); aşağıdaki cümledeki CAMERA bu PR
+öncesi durumdur. Android merged manifestte INTERNET/CAMERA'ya
 SDK'ların ACCESS_NETWORK_STATE, WAKE_LOCK ve BILLING izinleri ile uygulamanın
 receiver izni eklenir; mikrofon/konum izni yoktur. Aşağıdaki kaynak manifest
 satırları bu nedenle birleşik paket envanteri diye okunmamalı.
@@ -171,6 +174,10 @@ ATT (App Tracking Transparency): **GEREKMEZ** — `NSPrivacyTracking: false`,
 | Camera | iOS + Android | "Live camera practice is closed in this release. If it is separately enabled in a later release, Choreia uses the camera only to read the positions of your joints on this device. Video never leaves your phone, and no video is recorded or uploaded." | `NSCameraUsageDescription` (Info.plist) — Android'de eşdeğer metin store listing'de |
 
 2026-08-19 “yalnız CAMERA” açıklaması hesap öncesi tarihsel durumdur.
+CHO-P1-02 sonrası (2026-11-15): kamera kapalı sürümde CAMERA ve camera
+uses-feature beyan edilmez; kamera açılınca geri eklenir
+(`docs/camera/ANDROID-MANIFEST-CAMERA.md`). Aşağıdaki 2026-09-26 satırı
+tarihsel durumdur.
 2026-09-26 manifestte `CAMERA`, hesap ağı için `INTERNET` ve optional camera
 feature vardır; mikrofon/depolama/konum izni yoktur. Native izin kaynağı
 `android/app/src/main/AndroidManifest.xml` bu tur tekrar okundu.

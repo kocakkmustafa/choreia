@@ -11,7 +11,7 @@ Kaynak kuralı: yollar bu depo köküne göredir; `../../motion-core/…` Core d
 | # | Özgü öğe | Kanıt (dosya:satır) |
 |---|---|---|
 | 1 | Beş solo dans kursu (yazılı ders): Salsa On1 8 modül / 48 ders; Hip-Hop: 6 ünitelik temel kurs + 8 ünitelik beceri kursu (toplam 14); Line Dance 12; Latin Fusion 10; özgün kısa-form 10 = toplam 94 yazılı ünite (`docs/store/listing.json:16`: 48+6+8+12+10+10) | `lib/app/course/salsa_course.dart:143-144`; `hip_hop_course.dart:63-65` (beceri kursu 8; temel kurs 6 JSON'da sayıldı, kodda sabit sayı denetimi yok); `line_dance_course.dart:41`; `latin_fusion_course.dart:56`; `short_form_course.dart:35`; veri: `content/salsa_on1_course.json`, `hip_hop_foundations_course.json` (6 ünite), `hip_hop_foundations_skill_course.json` (8), `line_dance_beginner_course.json`, `latin_fusion_beginner_course.json`, `original_short_form_beginner_course.json`; mağaza anlatımı `docs/store/REVIEW-NOTES-DRAFT.md:10-14` |
-| 2 | Hip-Hop için iki içerik sürümü (temel kurs `hip_hop_foundations_course.json` 6 ünite, beceri kursu `hip_hop_foundations_skill_course.json` 8 ünite) | `lib/app/course/hip_hop_course_page.dart:14,48-55`; `REVIEW-NOTES-DRAFT.md:10-14` yalnız "Hip-Hop Foundations (8)" diyor, temel kursu saymıyor (listing.json:16 ile tutarsız, not edildi, bu bilette düzeltilmedi) |
+| 2 | Hip-Hop için iki içerik sürümü (temel kurs `hip_hop_foundations_course.json` 6 ünite, beceri kursu `hip_hop_foundations_skill_course.json` 8 ünite) | `lib/app/course/hip_hop_course_page.dart:14,48-55`; `REVIEW-NOTES-DRAFT.md:10-14` CHO-P1-02 sonrası temel kursu (6) ve beceri kursunu (8) sayıyor, toplam 94 / ücretsiz 39 (listing.json:16 ile tutarlı) |
 | 3 | Salsa ders yapısı: `teaching`, `practice`, `selfCheck`, `adaptation`, `mediaBrief`, `minutes`; sayım/müzik sınırı (`music.provided=false`, `assessment=selfCheck`) | `content/salsa_on1_course.json` (ders anahtarları okundu); `lib/app/course/salsa_course.dart:140-144` |
 | 4 | Yazılı birim pratiği: kendi bildirimli çalışma, kurs tamamlama/ölçüm/ustalık vermez | `lib/app/course/written_unit_practice.dart:9-11` |
 | 5 | Salsa öz-kontrol politikası (mevcut ölçüt dizinleri seçilir, yeni metin yok) | `lib/app/course/salsa_self_check_policy.dart:5` |
@@ -52,7 +52,7 @@ Beden: S ≈ metin/not, M ≈ küçük kod+mağaza varlığı, L ≈ ürün fark
 | # | Boşluk | Kanıt | Önerilen düzeltme | Beden |
 |---|---|---|---|---|
 | G1 | Beş Motion uygulaması aynı dönemde gönderildi; çatı ve erişim kalıbı ortak | §2; Lissom G1 | Gönderimleri zamana yay; Resolution Center'da olgusal açıklama | S |
-| G2 | Android bildirimi `CAMERA` iznini ve kamera özelliğini bildiriyor, oysa kamera kapalı ve notlar "kamera izni istenmez" diyor | `android/app/src/main/AndroidManifest.xml:3-4`; `REVIEW-NOTES-DRAFT.md:38-39`; iOS `Info.plist:14-15` açıklaması "bu sürümde kapalı" | Bildirimden izni kaldırmak ya da notu "çalışma zamanında istenmez" diye daraltmak; kod/manifest değişikliği ayrı bilet (bu bilette yapılmadı) | M |
+| G2 | ÇÖZÜLDÜ (CHO-P1-02): kamera kapalıyken Android'de CAMERA izni ve kamera özelliği yok; `motion_camera` eklentisinin eklediği iki öğe `tools:node="remove"` ile sökülür. Birleşik debug ve release manifest'te `android.permission.CAMERA` / `android.hardware.camera` yok (yalnız androidx.camera servis üst verisi var) | `android/app/src/main/AndroidManifest.xml`; `test/android_manifest_camera_closed_test.dart`; `docs/camera/ANDROID-MANIFEST-CAMERA.md`; iOS `Info.plist:14-15` açıklaması "bu sürümde kapalı" | Kapandı | - |
 | G3 | Choreia'nın tek gerçek farklılaştırıcısı olan kamera kapalı; canlı ders kodu bayrak arkasında | §1 kamera notu | Kamerayı gerekçe gösterme; bayrağı açmak kurucu kararı | L (karar kurucuda) |
 | G4 | Mağaza metni ve ekran görüntüleri ortak kabuğu gösterebilir; dansa özgü içerik öne çıkmalı | `docs/store/listing.json:8-9`; `docs/store/feature-graphics`, `icon-candidates` | Ekran görüntülerinde 5 farklı dans stilinin yazılı ders sayfaları, 48 ders/14 dil vurgusu | S |
 | G5 | İçeriğin özgünlüğü/kaynağı hakem için kanıtlanmalı | `content/*_course.json` (`provenance`, `sources`); `REVIEW-NOTES-DRAFT.md:10-14` | Reviewer notuna kaynak kapsamı ve yazılı ders yapısı cümlesi; üretim yöntemi kanıtı gelmeden iddia yok | S |
@@ -73,11 +73,11 @@ Notlar: (a) Ret metni okununca yeniden yazılmalı. (b) "Diğer uygulamalarda da
 Sonuç: **TEMİZ.** Taslak kapalı kamerayı doğru anlatıyor; hiçbir kamera özelliğine "var" diye atıf yok.
 - `docs/store/REVIEW-NOTES-DRAFT.md:5-6` ("canlı kamera ve puanlama kapalı"), `:38-39` ("Live camera practice and scoring are not part of this release; no camera permission is requested"), `:52` (TR karşılığı "…bu sürümde yoktur"), `:91` ("Kamera izin gerekçesi mağaza açıklamasına eklenmez").
 - Ayrı reviewer-notes dosyası yok (`find` ile `*reviewer*`, `*review-notes*`, `release-review*` yalnız bu dosyayı verdi); değişiklik yapılmadı.
-- Dikkat: `:38-39` "kamera izni istenmez" çalışma zamanı için doğrudur; Android bildiriminde izin satırı durduğu için G2'ye bakın.
+- Not: "kamera izni istenmez" ifadesi CHO-P1-02 sonrası manifest için de doğrudur (G2 çözüldü).
 
 ## 6. Doğrulanmayanlar
 
 - Resmî ret metni ve güncel 4.3(a) yönerge metni.
 - İlk-çalıştırma (onboarding) adım yapısı; paywall ekran düzeni; Core `motion_account` pin'inin Choreia derlemesindeki değeri (bayrak değeri Core deposunda okundu).
 - Diğer uygulamaların ders şeması ve metinleri; ders JSON'larında alan kümesi farkı.
-- Android `CAMERA` izninin derlenmiş pakette fiilen görünüp görünmediği (yalnız manifest kaynağı okundu).
+- (Kapandı, CHO-P1-02) Android `CAMERA` izni birleşik debug ve release manifest'te yok; AAB/APK içinden ayrıca okunmadı.
