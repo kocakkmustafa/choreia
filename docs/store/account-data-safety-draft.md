@@ -75,6 +75,10 @@ satın alma veya gerçek hesap silme yapılmadı. Ayrıntılı kabul adımları
   dönüştürdüğünden dosya hashlerinin aynı olması beklenmez. Bütün paket
   manifestlerinde tracking=false; SDK required-reason API kayıtları ayrıca
   envanterlenmiştir. Bu liste ağ trafiği veya Apple birleşik privacy raporu değildir.
+- CHO-P1-02 sonrası: kamera kapalı sürümde Android birleştirilmiş manifest
+  CAMERA beyan etmez (`tools:node="remove"`; kamera açılınca geri eklenir:
+  `docs/camera/ANDROID-MANIFEST-CAMERA.md`). Aşağıdaki satır bu PR öncesi
+  durumu anlatır, kamera hariç okunmalıdır.
 - Android birleştirilmiş pakette INTERNET, CAMERA, ACCESS_NETWORK_STATE,
   WAKE_LOCK, BILLING ve uygulamanın DYNAMIC_RECEIVER_NOT_EXPORTED izni var.
   Mikrofon ve konum izni yok. BILLING varlığı satış/restore yolunun açık

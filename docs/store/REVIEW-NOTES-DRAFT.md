@@ -9,14 +9,16 @@ sürümde açık, canlı kamera ve puanlama kapalı. Tam öğretim hedefi korunu
 
 Choreia contains five solo dance courses as bundled written lessons with
 practice tasks and self-checks: Salsa On1 (48 lessons in 8 modules), Hip-Hop
-Foundations (8), Line Dance (12), Latin Fusion (10) and original short-form
-dance (10). These are study records and self-checks, not certification of
+Foundations (a 6-unit basic course plus an 8-unit skill course), Line Dance (12),
+Latin Fusion (10) and original short-form dance (10), 94 units in total. These are study records and self-checks, not certification of
 dance skill. Demonstration videos and an in-app music catalogue are not
 included.
 
 1. Complete the first-run introduction and continue without an account.
 2. Open STYLES and a course. The first lessons of every course are free
-   (Salsa On1 modules 1–3; the first third of the other four courses).
+   (Salsa On1 modules 1–3; the whole Hip-Hop basic course and the first 3 of 8
+   Hip-Hop skill units; the first 4 units of Line Dance, Latin Fusion and
+   short-form; 39 of 94 units in total).
    Open a free lesson, read it and record your own practice. Check PROGRESS.
 3. Open a later lesson and tap "Unlock with membership". You are asked to sign
    in or register (Motion account, 13+), then the membership screen shows the
@@ -44,8 +46,10 @@ fabricated entitlement is used.
 
 ## Türkçe — karşılık
 
-Hesapsız devam edin; her kursun ilk dersleri ücretsizdir (Salsa modül 1–3,
-diğer dört kursun ilk üçte biri). Sonraki bir derste "Üyelikle aç" → Motion
+Hesapsız devam edin; her kursun ilk dersleri ücretsizdir (Salsa modül 1–3;
+Hip-Hop temel kursu tamamen ücretsiz, Hip-Hop beceri kursunda ilk 3 ünite;
+Line Dance, Latin Fusion ve kısa-form kurslarında ilk 4'er ünite; toplam 94
+üniteden 39'u). Sonraki bir derste "Üyelikle aç" → Motion
 hesabı (13+) → üyelik ekranı: mağazadan gelen Choreia Bireysel ve Motion+
 aylık/yıllık teklifleri (ABD bazı: Choreia $11,99/ay · $69,99/yıl; Motion+ $19,99/ay · $129,99/yıl; uygun yeni üyelere 14 gün ücretsiz deneme), otomatik yenileme metni, Satın alımları geri yükle,
 Aboneliği yönet, Kullanım Koşulları ve Gizlilik bağlantıları. Hesap silmek
