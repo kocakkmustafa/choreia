@@ -12,7 +12,7 @@ import 'choreia_source_projection_pin.dart';
 const String choreiaMediaManifestSha256 =
     ChoreiaSourceProjectionPin.sourceManifestSha256;
 const String choreiaMediaSourceCatalogSha256 =
-    'd7ca7827a8b703b2cc420b9fe97c73600a063640ac4cba94617158f477c10267';
+    '59f84616528a605612c550dfd7a882f19d3512421e56a6cf7d2a49e2fabe1c39';
 const String _sourceCatalogPath =
     'content/motion_content/choreia_source_pins_v2k.json';
 const String _opsSourceCatalogSha256 =
