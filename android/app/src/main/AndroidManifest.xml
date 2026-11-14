@@ -1,7 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- Camera is closed in this release; the motion_camera plugin adds these, so remove them. -->
+    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
+    <uses-feature android:name="android.hardware.camera" tools:node="remove" />
     <application
         android:label="choreia"
         android:name="${applicationName}"

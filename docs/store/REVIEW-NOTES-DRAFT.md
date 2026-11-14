@@ -9,14 +9,14 @@ sürümde açık, canlı kamera ve puanlama kapalı. Tam öğretim hedefi korunu
 
 Choreia contains five solo dance courses as bundled written lessons with
 practice tasks and self-checks: Salsa On1 (48 lessons in 8 modules), Hip-Hop
-Foundations (8), Line Dance (12), Latin Fusion (10) and original short-form
-dance (10). These are study records and self-checks, not certification of
+Foundations (a 6-unit basic course plus an 8-unit skill course), Line Dance (12),
+Latin Fusion (10) and original short-form dance (10), 94 units in total. These are study records and self-checks, not certification of
 dance skill. Demonstration videos and an in-app music catalogue are not
 included.
 
 1. Complete the first-run introduction and continue without an account.
 2. Open STYLES and a course. The first lessons of every course are free
-   (Salsa On1 modules 1–3; the first third of the other four courses).
+   (Salsa On1 modules 1–3; the whole Hip-Hop basic course; the first lessons of the other courses; 39 of 94 units in total).
    Open a free lesson, read it and record your own practice. Check PROGRESS.
 3. Open a later lesson and tap "Unlock with membership". You are asked to sign
    in or register (Motion account, 13+), then the membership screen shows the
