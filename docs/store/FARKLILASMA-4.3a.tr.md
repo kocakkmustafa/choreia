@@ -38,8 +38,8 @@ Atıf: Lissom `docs/store/FARKLILASMA-4.3a.tr.md` §2. Choreia sütununun her h�
 | İkon | koyu bordo, krem/pembe dansçı | DOĞRU | ikon dosyası, §1-14 |
 | Ana düzen | `NavigationBar`, 3 sekme, `choreia_shell.dart:498` | DOĞRU (`NavigationBar` bu dosyada :498 civarı; sekmeler 523/533/543) | `lib/app/shell/choreia_shell.dart:498,523-547` |
 | Onboarding | "ayrı dosya bulunamadı" | **DÜZELTME:** dosya var | `lib/app/onboarding/first_run_view.dart:33`, `first_run_flag.dart`; adım yapısı bu bilette okunmadı (`DOĞRULANMADI`) |
-| Paywall / erişim | `course_access.dart:20-29` | **SATIR DÜZELTME:** ücretsiz kural `:36-42`; `:20-29` ders-erişim doc yorumu ve teen politikası | `lib/app/course/course_access.dart:36-42`, `paid_lesson_lock.dart:20-21` |
-| Abonelik düzeni | ~ilk üçte bir ücretsiz; Choreia ya da Motion+ | DOĞRU | `course_access.dart:26-29`; `paid_lesson_lock.dart:20-21` |
+| Paywall / erişim | `course_access.dart:20-29` | **SATIR DÜZELTME:** ücretsiz kural `:36-42`; `:20-29` teen politikası ve sınıf başlangıcı | `lib/app/course/course_access.dart:36-42`, `paid_lesson_lock.dart:20-21` |
+| Abonelik düzeni | ~ilk üçte bir ücretsiz; Choreia ya da Motion+ | DOĞRU | `course_access.dart:22-26`; `paid_lesson_lock.dart:20-21` |
 | ASC metni | "Choreia: Learn to Dance" / "Five solo dance practice paths" | DOĞRU | `docs/store/listing.json:8-9` |
 | Core | 13 dosya | DOĞRU (`grep -rl "package:motion_core/motion_core.dart" lib` = 13) | `lib/` |
 
